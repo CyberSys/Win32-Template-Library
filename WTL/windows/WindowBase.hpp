@@ -27,6 +27,9 @@ namespace wtl
 
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<ENC>;
+    
+    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
+    using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
 
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
@@ -47,7 +50,7 @@ namespace wtl
     using ActiveWindowCollection = WindowHandleCollection;
 
     //! \alias ChildWindowCollection - Define child window collection type
-    using ChildWindowCollection = WindowHandleCollection;
+    using ChildWindowCollection = WindowIdCollection;
     
     //! \alias SubClassCollection - Define subclassed windows collection
     using SubClassCollection = std::list<SubClass>;
@@ -113,6 +116,15 @@ namespace wtl
     {
       // Ensure we always have a WM_PAINT handler
       *this += new PaintWindowEventHandler<encoding>( this, &WindowBase::onPaint );
+    }
+    
+  public:
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::~WindowBase
+    //! Virtual d-tor
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual ~WindowBase()
+    {
     }
 
     // ------------------------ STATIC -------------------------
@@ -212,10 +224,10 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     static LRESULT WINAPI  WndProc(HWND hWnd, uint32 message, WPARAM wParam, LPARAM lParam)
     {
+      WindowBase* wnd(nullptr);   //!< Window object associated with message, if any
+       
       try
       {
-        WindowBase* wnd(nullptr);   //!< Window object associated with message, if any
-       
         // Attempt to lookup window object 
         switch (static_cast<WindowMessage>(message))
         {
@@ -257,24 +269,21 @@ namespace wtl
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
-      msg.Result = getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
-      msg.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
+      LRESULT result = getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
       
-      // [CREATE/NCCREATE] Cleanup temporary handle
-      switch (static_cast<WindowMessage>(message))
+      // [CREATE/NCCREATE] Cleanup
+      switch (auto msg = static_cast<WindowMessage>(message))
       {
       case WindowMessage::CREATE:
       case WindowMessage::NCCREATE:
-        // Remove temporary handle
-        *wnd->Handle = HWnd::npos;    // Overwritten by strong reference returned from ::CreateWindow over message is processed
-
-        // Add to 'Active Windows' collection
-        ActiveWindows.erase(hWnd);
+        // [FAILED] Remove from 'Active Windows' collection
+        if (result == -1)
+          ActiveWindows.erase(hWnd);
         break;
       }
 
       // [UNHANDLED/ERROR] Return result
-      return msg.Result;
+      return result;
     }
 
     // ---------------------- ACCESSORS ------------------------			
@@ -385,9 +394,9 @@ namespace wtl
       try
       {
         // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-        *Handle = HWnd(instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), menu->handle());
+        *Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), menu->handle());
       }
-      catch (platform_error& )
+      catch (platform_error& e)
       {
         // Log & rethrow
         cdebug.log(HERE, e);
@@ -401,6 +410,8 @@ namespace wtl
     //! 
     //! \tparam ENC - Text string encoding
     //! \tparam LEN - Text buffer capacity
+    //! \tparam IDENT - Child window identifier type
+    //! \tparam STYLE - Window style type
     //!
     //! \param[in,out] &parent - Parent window
     //! \param[in] const& text - Window text
@@ -413,8 +424,8 @@ namespace wtl
     //! \throw wtl::logic_error - Window already exists
     //! \throw wtl::platform_error - Unable to create window
     ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    void create(WindowBase& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, WindowId id, WindowStyle style, WindowStyleEx exStyle)
+    template <Encoding ENC, unsigned LEN, typename IDENT = WindowId, typename STYLE = WindowStyle>
+    void create(WindowBase& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
     {
       // Ensure doesn't already exist
       if (Handle)
@@ -426,15 +437,15 @@ namespace wtl
       try
       {
         // Create handle, assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow
-        *Handle = HWnd(instance, Class.Name, this, id, style, exStyle, CharArray<encoding,LEN>(text), rc, parent->handle());
+        *Handle = HWnd(Class.Instance, Class.Name, this, static_cast<WindowId>(id), static_cast<WindowStyle>(style), exStyle, CharArray<encoding,LEN>(text), rc, parent.handle());
 
         // Add to parent's child windows collection
-        parent.Children[id] = this;
+        parent.Children[static_cast<WindowId>(id)] = this;
       }
       catch (platform_error& e)
       {
         // Remove parent's child windows collection
-        parent.Children.erase(id);
+        parent.Children.erase(static_cast<WindowId>(id));
 
         // Log & rethrow
         cdebug.log(HERE, e);
@@ -459,12 +470,32 @@ namespace wtl
     // WindowBase::find
     //! Find a child window
     //! 
+    //! \tparam WINDOW - Child window type
+    //! \tparam IDENT - Window id type
+    //! 
     //! \param[in] child - Child window Id
-    //! \return WindowBase* - Base window class
+    //! \return WINDOW& - Reference to child window
+    //! 
+    //! \throw wtl::domain_error - Mismatched child window type
+    //! \throw wtl::logic_error - Missing child window
     ///////////////////////////////////////////////////////////////////////////////
-    WindowBase* find(WindowId child) 
+    template <typename WINDOW, typename IDENT>
+    WINDOW& find(IDENT child) 
     {
-      return Children[child];
+      // Lookup child window
+      auto pos = Children.find(static_cast<WindowId>(child));
+      if (pos != Children.end())
+      {
+        // [FOUND] Convert & return
+        if (WINDOW* wnd = dynamic_cast<WINDOW*>(pos->second))
+          return *wnd;
+
+        // [ERROR] Incorrect window type
+        throw domain_error(HERE, "Mismatched child window type");
+      }
+
+      // [ERROR] Unable to find child window
+      throw logic_error(HERE, "Missing child window");
     }
     
     ///////////////////////////////////////////////////////////////////////////////
