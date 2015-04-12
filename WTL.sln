@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WTL", "WTL\WTL.vcxproj", "{99999AE7-854C-4791-9836-5156D71551C0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{67525329-8CCD-46CE-BF50-E79C275E7C32} = {67525329-8CCD-46CE-BF50-E79C275E7C32}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PugiXml", "pugixml\PugiXml.vcxproj", "{67525329-8CCD-46CE-BF50-E79C275E7C32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99999AE7-854C-4791-9836-5156D71551C0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{99999AE7-854C-4791-9836-5156D71551C0}.Debug|Win32.Build.0 = Debug|Win32
+		{99999AE7-854C-4791-9836-5156D71551C0}.Release|Win32.ActiveCfg = Release|Win32
+		{99999AE7-854C-4791-9836-5156D71551C0}.Release|Win32.Build.0 = Release|Win32
+		{67525329-8CCD-46CE-BF50-E79C275E7C32}.Debug|Win32.ActiveCfg = Debug|Win32
+		{67525329-8CCD-46CE-BF50-E79C275E7C32}.Debug|Win32.Build.0 = Debug|Win32
+		{67525329-8CCD-46CE-BF50-E79C275E7C32}.Release|Win32.ActiveCfg = Release|Win32
+		{67525329-8CCD-46CE-BF50-E79C275E7C32}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

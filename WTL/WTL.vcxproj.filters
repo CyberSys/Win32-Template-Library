@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{e2486fdc-5298-4f39-b503-bc61bf0d12e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{a02a3a5f-af08-4dbc-ac6b-20fa6f443c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{df38b074-ef85-4bc7-85de-b4a99bfc714c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Traits">
+      <UniqueIdentifier>{ce523859-5ee2-43f8-b21f-3af9d6e09960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Casts">
+      <UniqueIdentifier>{c87566f0-4061-4044-8441-c57018917086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threads">
+      <UniqueIdentifier>{cde9f3cb-9a04-4059-b294-8046d022bc5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GDI">
+      <UniqueIdentifier>{3be69926-4c2b-4187-8395-0db5ed982161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{e7f2565f-c4b3-4b98-9cde-ca1f7a7b3d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Controls">
+      <UniqueIdentifier>{2c8faf7f-6cc2-42e3-bc97-397a2b7818be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Events">
+      <UniqueIdentifier>{cde07ef2-4070-4f6e-94a4-31cce50156af}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="io\BinaryReader.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\BinaryWriter.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\LocalFileStream.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\LogFileWriter.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\MemoryStream.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\RichTextWriter.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\StreamIterator.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\TextReader.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\TextWriter.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\XmlReader.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="io\XmlWriter.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="WTL.hpp">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Adapters.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Bitset.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\chararray.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\console.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\DynamicArray.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Exception.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\FixedArray.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\FormatSpec.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Helpers.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Lazy.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Policies.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Range.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\widget.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Zero.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Handle.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\EnumTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\FileSearchTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\PenTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\ResourceTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\EncodingTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\GlobalTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\WindowTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowBase.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowClass.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="casts\OpaqueCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
+    <ClInclude Include="casts\StaticPtrCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\WindowClassTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\MessageThread.hpp">
+      <Filter>Threads</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\WorkerThread.hpp">
+      <Filter>Threads</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\Resources.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\LocaleTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\DialogResource.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\StringResource.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\MenuTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\BrushTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\CursorTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\Menu.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\IconTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="casts\EnumCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\AcceleratorTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\WindowMessageTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\MessageBox.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="gdi\DeviceContext.hpp">
+      <Filter>GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\DeviceContextTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gdi\StockObjects.hpp">
+      <Filter>GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\FontTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Random.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\SystemVersion.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\EventHandler.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\DrawingFlags.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Colours.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\WindowFlags.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\MessageHandler.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\EventDelegate.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\EventArgs.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\ControlStyles.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\Window.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\Button.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\CommandEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\ControlEvents.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\CreateWindowEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\CustomDrawEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\DestroyWindowEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\notifyevent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\NotifyEventData.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\PaintWindowEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\ShowWindowEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="casts\BooleanCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\FileSearch.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Path.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Shapes.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Traits.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
