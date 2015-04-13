@@ -159,7 +159,7 @@
 // Resources
 #include "resources/Resources.hpp"
 #include "resources/StringResource.hpp"
-#include "resources/Menu.hpp"
+#include "resources/WindowMenu.hpp"
 
 // GDI
 #include "gdi/StockObjects.hpp"
@@ -169,21 +169,21 @@
 #include "windows/EventArgs.hpp"
 #include "windows/EventHandler.hpp"
 #include "windows/EventDelegate.hpp"
-#include "events/CreateWindowEvent.hpp"
-#include "events/DestroyWindowEvent.hpp"
-#include "events/PaintWindowEvent.hpp"
-#include "events/ShowWindowEvent.hpp"
-#include "events/OwnerDrawEvent.hpp"
+#include "windows/events/CreateWindowEvent.hpp"
+#include "windows/events/DestroyWindowEvent.hpp"
+#include "windows/events/PaintWindowEvent.hpp"
+#include "windows/events/ShowWindowEvent.hpp"
+#include "windows/events/OwnerDrawEvent.hpp"
 
 // Windows
 #include "windows/WindowClass.hpp"
 #include "windows/WindowBase.hpp"
 
 // Events
-#include "events/CommandEvent.hpp"
-#include "events/NotifyEventData.hpp"
-#include "events/NotifyEvent.hpp"
-#include "events/ControlEvents.hpp"
+#include "windows/events/CommandEvent.hpp"
+#include "windows/events/NotifyEventData.hpp"
+#include "windows/events/NotifyEvent.hpp"
+#include "windows/events/ControlEvents.hpp"
 
 // Threads
 #include "threads/WorkerThread.hpp"

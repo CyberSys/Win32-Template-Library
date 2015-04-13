@@ -48,14 +48,14 @@ namespace wtl
     //! \param[in] l - Not used
     ///////////////////////////////////////////////////////////////////////////////
     EventArgs(const HWnd& wnd, ::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
-                                                         Graphics(Data.hdc),
+                                                         Graphics(Data.hDC),
                                                          Rect(Data.rcItem),
                                                          Item(Data.itemID), 
                                                          Ident(static_cast<WindowId>(Data.CtlID)), 
                                                          Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
                                                          CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType)), 
                                                          Ctrl(CtrlType != OwnerDrawControl::Menu ? Data.hwndItem : handle_alloc<::HWND>::npos, AllocType::WeakRef), 
-                                                         Menu(CtrlType == OwnerDrawControl::Menu ? (HMENU)Data.hwndItem : handle_alloc<::HMENU>::npos, AllocType::WeakRef), 
+                                                         Menu(CtrlType == OwnerDrawControl::Menu ? (HMENU)Data.hwndItem : handle_alloc<::HMENU>::npos, AllocType::WeakRef)
     {}
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -14,6 +14,7 @@
 namespace wtl
 {
   //! \struct WindowMenu - Encapsulates a window menu
+  template <Encoding ENC>
   struct WindowMenu
   {
     // ------------------- TYPES & CONSTANTS -------------------

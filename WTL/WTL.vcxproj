@@ -38,7 +38,7 @@
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
     <ClInclude Include="resources\DialogResource.hpp" />
-    <ClInclude Include="resources\Menu.hpp" />
+    <ClInclude Include="resources\WindowMenu.hpp" />
     <ClInclude Include="resources\Resources.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessageThread.hpp" />

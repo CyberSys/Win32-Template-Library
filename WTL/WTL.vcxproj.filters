@@ -191,9 +191,6 @@
     <ClInclude Include="traits\CursorTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
-    <ClInclude Include="resources\Menu.hpp">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="traits\IconTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
@@ -298,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="windows\events\OwnerDrawEvent.hpp">
       <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\WindowMenu.hpp">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
