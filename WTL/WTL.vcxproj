@@ -88,6 +88,7 @@
     <ClInclude Include="windows\events\DestroyWindowEvent.hpp" />
     <ClInclude Include="windows\events\notifyevent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
+    <ClInclude Include="windows\events\OwnerDrawEvent.hpp" />
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />

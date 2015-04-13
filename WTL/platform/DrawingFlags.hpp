@@ -85,7 +85,7 @@ namespace wtl
   
 
   
-  // ----------------------------------- DRAWING MODES ----------------------------------
+  // ---------------------------- DEVICE CONTEXT DRAWING MODES --------------------------
   
 
   //! \enum DrawingMode - Defines background drawing modes
@@ -103,8 +103,75 @@ namespace wtl
   template <> struct max_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Opaque>       {};
   template <> struct min_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Transparent>  {};
   
+  
+  // ----------------------------------- OWNER DRAW ----------------------------------
 
-  // ----------------------------------- BRUSH STYLES ----------------------------------
+  
+  //! \enum OwnerDrawAction - Defines owner drawing requests
+  enum class OwnerDrawAction : uint32
+  {
+    Entire = ODA_DRAWENTIRE, 			//!< Entire control
+    Focus = ODA_FOCUS, 	          //!< Focus rectange
+    Select = ODA_SELECT, 	        //!< Selection status has changed
+  };
+  
+  //! Define traits: Non-Contiguous attribute
+  template <> struct is_attribute<OwnerDrawAction>  : std::true_type  {};
+  template <> struct is_contiguous<OwnerDrawAction> : std::false_type {};
+
+  //! Define limits traits
+  template <> struct max_value<OwnerDrawAction>     : std::integral_constant<OwnerDrawAction,OwnerDrawAction::Select>  {};
+  template <> struct min_value<OwnerDrawAction>     : std::integral_constant<OwnerDrawAction,OwnerDrawAction::Entire>  {};
+  
+
+
+  //! \enum OwnerDrawControl - Defines controls that support owner draw
+  enum class OwnerDrawControl : uint32
+  {
+    Button = ODT_BUTTON,      //!< Button control
+    ComboBox = ODT_COMBOBOX,  //!< ComboBox control
+    ListBox = ODT_LISTBOX,    //!< ListBox control
+    ListView = ODT_LISTVIEW,  //!< ListView control
+    Menu = ODT_MENU,          //!< Window Menu 
+    Static = ODT_STATIC,      //!< Static control
+    Tab = ODT_TAB,            //!< Tab control
+  };
+  
+  //! Define traits: Non-Contiguous attribute
+  template <> struct is_attribute<OwnerDrawControl>  : std::true_type  {};
+  template <> struct is_contiguous<OwnerDrawControl> : std::false_type {};
+
+  //! Define limits traits
+  template <> struct max_value<OwnerDrawControl>     : std::integral_constant<OwnerDrawControl,OwnerDrawControl::Tab>     {};
+  template <> struct min_value<OwnerDrawControl>     : std::integral_constant<OwnerDrawControl,OwnerDrawControl::Button>  {};
+  
+  
+  //! \enum OwnerDrawState - Defines controls that support owner draw
+  enum class OwnerDrawState : uint16
+  {
+    Checked = ODS_CHECKED,              //!< The menu item is to be checked. This bit is used only in a menu.
+    ComboBoxEdit = ODS_COMBOBOXEDIT,    //!< The drawing takes place in the selection field (edit control) of an owner-drawn combo box.
+    Default = ODS_DEFAULT,              //!< The item is the default item.
+    Disabled = ODS_DISABLED,            //!< The item is to be drawn as disabled.
+    Focus = ODS_FOCUS,                  //!< The item has the keyboard focus.
+    Grayed = ODS_GRAYED,                //!< The item is to be grayed. This bit is used only in a menu.
+    Hotlight = ODS_HOTLIGHT,            //!< The item is being hot-tracked, that is, the item will be highlighted when the mouse is on the item.
+    Inactive = ODS_INACTIVE,            //!< The item is inactive and the window associated with the menu is inactive.
+    NoAccel = ODS_NOACCEL,              //!< The control is drawn without the keyboard accelerator cues.
+    NoFocusRect = ODS_NOFOCUSRECT,      //!< The control is drawn without focus indicator cues.
+    Selected = ODS_SELECTED,            //!< The menu item's status is selected.
+  };
+  
+  //! Define traits: Non-Contiguous attribute
+  template <> struct is_attribute<OwnerDrawState>  : std::true_type  {};
+  template <> struct is_contiguous<OwnerDrawState> : std::false_type {};
+
+  //! Define limits traits
+  template <> struct max_value<OwnerDrawState>     : std::integral_constant<OwnerDrawState,OwnerDrawState::Selected> {};
+  template <> struct min_value<OwnerDrawState>     : std::integral_constant<OwnerDrawState,OwnerDrawState::Checked>  {};
+  
+  
+  // ---------------------------------- BRUSH STYLES ---------------------------------
   
   
   //! \enum HatchStyle - Defines brush hatch styles

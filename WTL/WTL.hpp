@@ -173,6 +173,7 @@
 #include "events/DestroyWindowEvent.hpp"
 #include "events/PaintWindowEvent.hpp"
 #include "events/ShowWindowEvent.hpp"
+#include "events/OwnerDrawEvent.hpp"
 
 // Windows
 #include "windows/WindowClass.hpp"

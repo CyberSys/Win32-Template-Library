@@ -296,6 +296,9 @@
     <ClInclude Include="platform\Shapes.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="windows\events\OwnerDrawEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Traits.cpp">
