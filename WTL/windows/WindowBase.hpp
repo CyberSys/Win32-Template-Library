@@ -382,7 +382,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to create window
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
-    void createEx(const WindowBase* parent, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, WindowStyle style, WindowStyleEx exStyle = WindowStyleEx::None, const WindowMenu<ENC>* menu = nullptr)
+    void createEx(const WindowBase* parent, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, WindowStyle style, WindowStyleEx exStyle = WindowStyleEx::None, const WindowMenu* menu = nullptr)
     {
       // Ensure doesn't already exist
       if (Handle)
