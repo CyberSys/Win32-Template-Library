@@ -42,6 +42,9 @@
     <Filter Include="Windows\Commands">
       <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{822d32d8-6b48-4e4e-b249-2cf7dba0b501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="io\BinaryReader.hpp">
@@ -310,6 +313,27 @@
     </ClInclude>
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp">
       <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Queue.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Stack.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\GuiCommandQueue.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\ModuleTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\Application.hpp">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\Module.hpp">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\MessagePump.hpp">
+      <Filter>Threads</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

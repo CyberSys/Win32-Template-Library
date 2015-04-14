@@ -19,13 +19,13 @@ namespace wtl
   //! 
   //! \tparam ENC - Character encoding type
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC = Encoding::UTF16>
+  //template <Encoding ENC = Encoding::UTF16>
   struct Resources
   {      
     // ------------------- TYPES & CONSTANTS -------------------
   
     //! \alias char_t - Defines encoding character type
-    using char_t = encoding_char_t<ENC>;
+    //using char_t = encoding_char_t<ENC>;
 
     // --------------------- CONSTRUCTION ----------------------
 
@@ -40,6 +40,8 @@ namespace wtl
     //! \param[in] module - Module containing resource
     //! \param[in] res - Resource handle
     //! \return DATA* - Resource data block
+    //! 
+    //! \throw platform_error - Unable to load resource
     ///////////////////////////////////////////////////////////////////////////////
     template <typename DATA = uint8>
     static DATA* load(HMODULE module, const HResource& res)
@@ -56,7 +58,7 @@ namespace wtl
       }
       
       // Not found
-      throw platform_error(HERE, "Missing resource");
+      throw platform_error(HERE, "Cannot find resource");
     }
 
     // ---------------------- ACCESSORS ------------------------			

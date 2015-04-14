@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\GuiCommand.hpp
+//! \file wtl\windows\GuiCommand.hpp
 //! \brief Encapsulates commands in the Gui using the 'Command' pattern
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -21,9 +21,31 @@ namespace wtl
     Hidden = 0,       //!< Command should be hidden
   };
 
+  //! \enum CommandState - Defines GUI Command Ids
+  enum class CommandId : int32
+  {
+    // TODO: Import ID_FILE_OPEN, ... etc. from Win32 definitions if possible, otherwise MFC or WTL
+  };
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! wtl::command_id
+  //! Creates a strongly typed command id from any integral or enumeration type
+  //!
+  //! \tparam TYPE - Integral or enumeration type
+  //! 
+  //! \param[in] id - Value representing command id
+  //! \return CommandId - CommandId representation of 'id'
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
+  CommandId  command_id(VALUE id)
+  {
+    // Convert into underlying type then cast to enumeration
+    return enum_cast<CommandId>( static_cast<std::underlying_type_t<CommandId>>(id) );
+  }
+  
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct GuiCommand - Base for all Gui commands
+  //! \struct GuiCommand - Encapsulates a single application command. Base class for all commands.
   //! 
   //! \tparam ENC - Message character encoding 
   //! \tparam CMD - Command Id
@@ -35,6 +57,9 @@ namespace wtl
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
+    
+    //! \alias resource_t - Define resource ident type
+    using resource_t = ResourceId<ENC>;
 
     //! \var encoding - Define encoding type
     static constexpr Encoding encoding = ENC;
@@ -43,11 +68,28 @@ namespace wtl
   protected:
     ///////////////////////////////////////////////////////////////////////////////
     // GuiCommand::GuiCommand
-    //! Derived c-tor
+    //! Create from a single id which is used for name/description string id and icon id
+    //! 
+    //! \param[in] id - Command identifier
     ///////////////////////////////////////////////////////////////////////////////
     GuiCommand(CommandId id) : Ident(id),
-                               Name(wtl::StringResource(id)),
-                               Description(id)
+                               Name(resource_id(id)),
+                               Description(resource_id(id)),
+                               Icon(resource_id(id)),
+    {}
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // GuiCommand::GuiCommand
+    //! Create command from individual properties
+    //! 
+    //! \param[in] id - Command identifier
+    //! \param[in] name - Name/description string resource id
+    //! \param[in] icon - Icon resource id
+    ///////////////////////////////////////////////////////////////////////////////
+    GuiCommand(CommandId id, resource_t name, resource_t icon) : Ident(id),
+                                                                 Name(name),
+                                                                 Description(name),
+                                                                 Icon(icon)
     {}
     
   public:
@@ -61,12 +103,12 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::canUndo const
-    //! Query the whether the command can be undone
+    // GuiCommand::permanent const
+    //! Query the whether the command can be reverted
     //! 
-    //! \return bool - True iff command can be undone
+    //! \return bool - True iff command is permanent (cannot be undone)
     ///////////////////////////////////////////////////////////////////////////////
-    virtual bool  canUndo() const
+    virtual bool  permanent() const
     {
       return true;
     }
@@ -129,12 +171,12 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::undo
-    //! Undo the command
+    // GuiCommand::revert
+    //! Reverts the command
     //! 
     //! \throw logic_error - Command has not been implemented
     ///////////////////////////////////////////////////////////////////////////////
-    virtual void undo() 
+    virtual void revert() 
     {
       throw logic_error(HERE, "Command has not been implemented");
     }
@@ -143,14 +185,15 @@ namespace wtl
   };
   
 
+
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct CommandGroup - Base for all Gui commands
+  //! \struct GuiCommandGroup - Base for all Gui commands
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct CommandGroup
+  struct GuiCommandGroup
   {
     // ------------------- TYPES & CONSTANTS -------------------
 
@@ -163,16 +206,16 @@ namespace wtl
     // --------------------- CONSTRUCTION ----------------------
 
     ///////////////////////////////////////////////////////////////////////////////
-    // CommandGroup::~CommandGroup
+    // GuiCommandGroup::~GuiCommandGroup
     //! Virtual d-tor
     ///////////////////////////////////////////////////////////////////////////////
-    virtual ~CommandGroup() 
+    virtual ~GuiCommandGroup() 
     {}
     
     // ---------------------- ACCESSORS ------------------------			
 
     ///////////////////////////////////////////////////////////////////////////////
-    // CommandGroup::canUndo const
+    // GuiCommandGroup::canUndo const
     //! Query the whether the command can be undone
     //! 
     //! \return bool - True iff command can be undone
@@ -185,25 +228,25 @@ namespace wtl
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
-    // CommandGroup::operator +=
+    // GuiCommandGroup::operator +=
     //! Add a command to the group
     //! 
     //! \param[in] const& cmd - Command 
-    //! \return CommandGroup& - Reference to self
+    //! \return GuiCommandGroup& - Reference to self
     ///////////////////////////////////////////////////////////////////////////////
-    CommandGroup& operator += (const GuiCommand<ENC>& cmd)
+    GuiCommandGroup& operator += (const GuiCommand<ENC>& cmd)
     {
       return *this;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // CommandGroup::operator -=
+    // GuiCommandGroup::operator -=
     //! Remove a command from the group
     //! 
     //! \param[in] const& cmd - Command 
-    //! \return CommandGroup& - Reference to self
+    //! \return GuiCommandGroup& - Reference to self
     ///////////////////////////////////////////////////////////////////////////////
-    CommandGroup& operator -= (const GuiCommand<ENC>& cmd)
+    GuiCommandGroup& operator -= (const GuiCommand<ENC>& cmd)
     {
       return *this;
     }

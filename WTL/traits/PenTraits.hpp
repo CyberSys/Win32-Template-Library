@@ -44,11 +44,6 @@ namespace wtl
       throw platform_error(HERE, "Unable to create geometric pen");
     }
 
-    
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HPEN>::clone
-    //! Clone handle
     ///////////////////////////////////////////////////////////////////////////////
     // handle_alloc<HPEN>::create
     //! Accquire stock pen handle
@@ -74,6 +69,11 @@ namespace wtl
       // Error: Failed  
       throw platform_error(HERE, "Unable to accquire stock pen");
     }
+    
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // handle_alloc<HPEN>::clone
+    //! Clone handle
     //! 
     //! \param[in] pen - Handle
     //! \return HAlloc<HPEN> - Duplicate of handle

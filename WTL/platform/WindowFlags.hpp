@@ -142,7 +142,7 @@ namespace wtl
 
 
   //! \enum ShowWindowFlags - Defines flags for the Win32 API function ::ShowWindow(..) 
-  enum class ShowWindowFlags : ulong32
+  enum class ShowWindowFlags : int32
   {
     Hide = 0,			          //!< 
     ShowNormal = 1,			    //!< 

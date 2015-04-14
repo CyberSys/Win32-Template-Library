@@ -29,6 +29,7 @@ namespace wtl
   const ::HBRUSH      handle_alloc<::HBRUSH>::npos = (const ::HBRUSH)INVALID_HANDLE_VALUE;
   const ::HFONT       handle_alloc<::HFONT>::npos = (const ::HFONT)INVALID_HANDLE_VALUE;
   const ::HICON       handle_alloc<::HICON>::npos = (const ::HICON)INVALID_HANDLE_VALUE;
+  const ::HMODULE     handle_alloc<::HMODULE>::npos = (const ::HMODULE)INVALID_HANDLE_VALUE;
   const ::HDC         handle_alloc<::HDC>::npos = (const ::HDC)INVALID_HANDLE_VALUE;
   const ::ATOM        handle_alloc<::ATOM>::npos = INVALID_ATOM;
   const ::HACCEL      handle_alloc<::HACCEL>::npos = (const ::HACCEL)INVALID_HANDLE_VALUE;
@@ -39,10 +40,11 @@ namespace wtl
   const HBrush         HBrush::npos(handle_alloc<::HBRUSH>::npos, AllocType::WeakRef);
   const HDeviceContext HDeviceContext::npos(handle_alloc<::HDC>::npos, AllocType::WeakRef);
   const HFont          HFont::npos(handle_alloc<::HFONT>::npos, AllocType::WeakRef);
-  const HWnd           HWnd::npos(handle_alloc<::HWND>::npos, AllocType::WeakRef);
   const HIcon          HIcon::npos(handle_alloc<::HICON>::npos, AllocType::WeakRef);
   const HMenu          HMenu::npos(handle_alloc<::HMENU>::npos, AllocType::WeakRef);
+  const HModule        HModule::npos(handle_alloc<::HMODULE>::npos, AllocType::WeakRef);
   const HPen           HPen::npos(handle_alloc<::HPEN>::npos, AllocType::WeakRef);
+  const HWnd           HWnd::npos(handle_alloc<::HWND>::npos, AllocType::WeakRef);
   
   
   //! \var format_spec<...>::value - Defines narrow string formatting type specifications

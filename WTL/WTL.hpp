@@ -119,6 +119,7 @@
 #include "platform/Shapes.hpp"
 
 // Platform Traits:
+#include "traits/ModuleTraits.hpp"
 #include "traits/LocaleTraits.hpp"
 #include "traits/ResourceTraits.hpp"
 #include "traits/WindowClassTraits.hpp"
@@ -188,6 +189,10 @@
 // Threads
 #include "threads/WorkerThread.hpp"
 #include "threads/MessageThread.hpp"
+
+// Modules
+#include "modules/Module.hpp"
+#include "modules/Application.hpp"
 
 // Controls
 #include "windows/Window.hpp"

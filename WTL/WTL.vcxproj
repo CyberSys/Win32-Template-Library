@@ -29,6 +29,8 @@
     <ClInclude Include="io\XmlReader.hpp" />
     <ClInclude Include="io\XmlWriter.hpp" />
     <ClInclude Include="Macros.h" />
+    <ClInclude Include="modules\Application.hpp" />
+    <ClInclude Include="modules\Module.hpp" />
     <ClInclude Include="platform\Colours.hpp" />
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
@@ -41,6 +43,7 @@
     <ClInclude Include="resources\WindowMenu.hpp" />
     <ClInclude Include="resources\Resources.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
+    <ClInclude Include="threads\MessagePump.hpp" />
     <ClInclude Include="threads\MessageThread.hpp" />
     <ClInclude Include="threads\WorkerThread.hpp" />
     <ClInclude Include="traits\AcceleratorTraits.hpp" />
@@ -55,6 +58,7 @@
     <ClInclude Include="traits\IconTraits.hpp" />
     <ClInclude Include="traits\LocaleTraits.hpp" />
     <ClInclude Include="traits\MenuTraits.hpp" />
+    <ClInclude Include="traits\ModuleTraits.hpp" />
     <ClInclude Include="traits\PenTraits.hpp" />
     <ClInclude Include="traits\ResourceTraits.hpp" />
     <ClInclude Include="traits\WindowClassTraits.hpp" />
@@ -62,6 +66,7 @@
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="utils\Handle.hpp" />
+    <ClInclude Include="utils\Queue.hpp" />
     <ClInclude Include="utils\Random.hpp" />
     <ClInclude Include="utils\Adapters.hpp" />
     <ClInclude Include="utils\Bitset.hpp" />
@@ -75,6 +80,7 @@
     <ClInclude Include="utils\Lazy.hpp" />
     <ClInclude Include="utils\Policies.hpp" />
     <ClInclude Include="utils\Range.hpp" />
+    <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\widget.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
     <ClInclude Include="windows\commands\CloseProgramCommand.hpp" />
@@ -94,6 +100,7 @@
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
     <ClInclude Include="windows\GuiCommand.hpp" />
+    <ClInclude Include="windows\GuiCommandQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageHandler.hpp" />
     <ClInclude Include="windows\Window.hpp" />

@@ -19,30 +19,45 @@ namespace wtl
   //! 
   //! \tparam ENC - Character encoding type
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC = Encoding::UTF16>
-  struct StringResource : Resources<ENC>
+  //template <Encoding ENC = Encoding::UTF16>
+  struct StringResource : Resources //<ENC>
   {      
     // ------------------- TYPES & CONSTANTS -------------------
   
     //! \alias base - Define base class
-    using base = Resources<ENC>;
-
-    //! \alias string_t - String buffer type
-    using string_t = const typename base::char_t* const;
+    using base = Resources;
 
     ///////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
     ///////////////////////////////////////////////////////////////////////////////
     struct StringTableEntry
     {
-      // Advance beyond this variable length entry to the next
-      StringTableEntry* next(StringTableEntry* entry)
+      // ------------------- TYPES & CONSTANTS -------------------
+
+      //! \alias string_t - String buffer type
+      using string_t = const wchar_t*;
+
+      // --------------------- CONSTRUCTION ----------------------
+      
+      // ---------------------- ACCESSORS ------------------------			
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // StringTableEntry::next
+      //! Advance beyond this variable length entry to the next
+      //! 
+      //! \return const StringTableEntry* - Immutable pointer to next string in table
+      ///////////////////////////////////////////////////////////////////////////////
+      const StringTableEntry* next() const
       {
-        return reinterpret_cast<StringTableEntry*>(Text + Length);
+        return reinterpret_cast<const StringTableEntry*>(Text + Length);
       }
+      
+      // ----------------------- MUTATORS ------------------------
+
+      // -------------------- REPRESENTATION ---------------------
 
       uint16   Length;      //!< Length of current entry, in characters
-      string_t Text;        //!< Text 
+      string_t Text;        //!< String Text in UTF16
     };
 
     // --------------------- CONSTRUCTION ----------------------
@@ -53,19 +68,18 @@ namespace wtl
     // StringResource::load
     //! Loads a string resource
     //! 
-    //! \tparam IdEncoding - Id encoding 
-    //! \tparam OutEncoding- Output encoding
-    //! \tparam OutLength - Output buffer length
+    //! \tparam LEN - Output buffer capacity
+    //! \tparam ENC - Output string character encoding (Also resource id encoding)
     //! 
     //! \param[in] module - Module containing string
     //! \param[in] id - String identifier
     //! \param[in,out] &str - Output buffer
     //! \return bool - True iff was found 
     //! 
-    //! \throw wtl::domain_error - Insufficient buffer capacity
+    //! \throw wtl::domain_error - Insufficient buffer capacity to store string
     ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding IdEncoding, Encoding OutEncoding, unsigned OutLength>
-    static bool load(HMODULE module, ResourceId<IdEncoding> id, CharArray<OutEncoding,OutLength>& str) 
+    template <unsigned LEN, Encoding ENC = Encoding::UTF16>
+    static bool load(HMODULE module, ResourceId<ENC> id, CharArray<ENC,LEN>& str) 
     {
       decltype(id)  table(id.Value.Numeral / 16 + 1);  //!< String table resource
       int32         index = id.Value.Numeral % 16;     //!< Index of desired string within table
@@ -81,12 +95,17 @@ namespace wtl
       for (int32 idx = 0; item && idx < index; idx++)
         item = item->next();
 
-      // Ensure sufficient space is available
-      if (item && item->Length > OutLength)
-        throw domain_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)OutLength);
+      // [NOT-FOUND] Return false & empty string 
+      if (!item)
+        return (str.clear(), false);
 
-      // Extract + convert string if found, otherwise return false
-      return item ? (str = CharArray<Encoding::UTF16,OutLength>(item->Text), true) : false;
+      // [FOUND] Ensure sufficient space is available
+      if (item->Length > LEN)
+        throw domain_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)LEN);
+
+      // Convert from UTF16 if necessary
+      str = CharArray<Encoding::UTF16,LEN>(item->Text);
+      return true;
     }
     
     // ---------------------- ACCESSORS ------------------------			

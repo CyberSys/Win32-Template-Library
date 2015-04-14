@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\win32\SystemVersion.hpp
+//! \file wtl\platform\SystemVersion.hpp
 //! \brief Provides Windows OS version info
 //! \date 6 March 2015
 //! \author Nick Crowley
