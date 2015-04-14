@@ -77,6 +77,8 @@
     <ClInclude Include="utils\Range.hpp" />
     <ClInclude Include="utils\widget.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
+    <ClInclude Include="windows\commands\CloseProgramCommand.hpp" />
+    <ClInclude Include="windows\commands\PasteClipboardCommand.hpp" />
     <ClInclude Include="windows\controls\Button.hpp" />
     <ClInclude Include="windows\EventArgs.hpp" />
     <ClInclude Include="windows\EventDelegate.hpp" />
@@ -91,6 +93,7 @@
     <ClInclude Include="windows\events\OwnerDrawEvent.hpp" />
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
+    <ClInclude Include="windows\GuiCommand.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageHandler.hpp" />
     <ClInclude Include="windows\Window.hpp" />

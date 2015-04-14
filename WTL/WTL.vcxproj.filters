@@ -39,6 +39,9 @@
     <Filter Include="Windows\Events">
       <UniqueIdentifier>{cde07ef2-4070-4f6e-94a4-31cce50156af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\Commands">
+      <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="io\BinaryReader.hpp">
@@ -298,6 +301,15 @@
     </ClInclude>
     <ClInclude Include="resources\WindowMenu.hpp">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\GuiCommand.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\CloseProgramCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\PasteClipboardCommand.hpp">
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
