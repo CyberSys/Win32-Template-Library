@@ -122,7 +122,7 @@ namespace wtl
     //! \throw wtl::logic_error - [Debug only] String exceeds capacity
     ///////////////////////////////////////////////////////////////////////////////
     template <typename E, unsigned L>
-    explicit CharArray(array_ptr_t<const E,L> str) : CharArray()
+    explicit CharArray(array_ref_t<const E,L> str) : CharArray()
     {
       REQUIRED_PARAM(str);
 
@@ -134,16 +134,13 @@ namespace wtl
     // CharArray::CharArray 
     //! Create from statically allocated formatting string of equal type and weakly-typed arguments
     //! 
-    //! \tparam LEN - Formatting string capacity 
-    //! 
-    //! \param[in] format - Null terminated formatting string
+    //! \param[in] const* format - Null terminated formatting string
     //! \param[in] args - Weakly typed variadic-arguments list
     //!
     //! \throw wtl::invalid_argument - [Debug only] Formatting string is nullptr
     //! \throw wtl::logic_error - Formatted output exceeds array capacity
     ///////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN>
-    CharArray(array_ptr_t<const char_t,LEN> format, va_list args) : CharArray()
+    CharArray(const char_t* format, va_list args) : CharArray()
     {
       REQUIRED_PARAM(format);
 
@@ -497,7 +494,7 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     int32 assign(const CharArray& r)
     {
-      return CharArray::assign<encoding>(r.c_arr());
+      return CharArray::assign<encoding>(r.c_str());
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -516,7 +513,7 @@ namespace wtl
     int32 assign(const CharArray<N,L>& r) 
     {
       // Assign from foreign array
-      return CharArray::assign<N>(r.c_arr()); 
+      return CharArray::assign<N>(r.c_str()); 
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -534,17 +531,17 @@ namespace wtl
     //! \throw wtl::logic_error - [Debug only] String would be truncated
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename = std::enable_if_t<ENC==encoding>>
-    int32 assign(array_ptr_t<const char_t,LEN> str)
+    int32 assign(array_ref_t<const char_t,LEN> str)
     {
       REQUIRED_PARAM(str);
-      LOGIC_INVARIANT(strlen_t(*str) <= length);
+      LOGIC_INVARIANT(strlen_t(str) <= length);
 
       // Avoid self-assignment 
       if (static_cast<const void*>(str) < static_cast<void*>(Data)
        || static_cast<const void*>(str) >= static_cast<void*>(Data+length))
       {
         // Assign string until (after) null terminator detected or capacity reached
-        for (uint32 in=0, &out = (Count = 0); (out < std::min((unsigned)length,LEN)) && (Data[out] = static_cast<char_t>((*str)[in])); ++in, ++out) 
+        for (uint32 in=0, &out = (Count = 0); (out < std::min((unsigned)length,LEN)) && (Data[out] = static_cast<char_t>((str)[in])); ++in, ++out) 
           /* no-op */;
 
         // Null terminate when truncating input string
@@ -571,7 +568,7 @@ namespace wtl
     //! \throw wtl::logic_error - [Debug only] String will be truncated
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename = std::enable_if_t<ENC!=encoding>>
-    int32 assign(array_ptr_t<const encoding_char_t<ENC>, LEN> str)
+    int32 assign(array_ref_t<const encoding_char_t<ENC>, LEN> str)
     {
       REQUIRED_PARAM(str);
       LOGIC_INVARIANT(strlen_t(*str) <= length);

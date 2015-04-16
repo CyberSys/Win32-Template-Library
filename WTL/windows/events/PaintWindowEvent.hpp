@@ -25,6 +25,18 @@ namespace wtl
   {  
     // ------------------- TYPES & CONSTANTS -------------------
   
+    //! \alias char_t - Define character type
+    using char_t = encoding_char_t<ENC>;
+    
+    //! \var encoding - Define message character encoding 
+    static constexpr Encoding  encoding = ENC;
+    
+    //! \var message - Define message identifier
+    static constexpr WindowMessage  message = WindowMessage::PAINT;
+
+    //! \alias resource_t - Define resource id type
+    using resource_t = ResourceId<ENC>;
+    
     //! \struct PaintCycle - Encapsulates the paint cycle for a window's client area
     struct PaintCycle : PAINTSTRUCT
     {

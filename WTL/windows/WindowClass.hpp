@@ -190,6 +190,37 @@ namespace wtl
     static const char_t name[];    
   };
 
+  
+  //! \var system_class<wchar_t>::value - Defines standard controls window class names
+  template <> struct system_class<wchar_t,SystemClass::Animate>       { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::DateTime>      { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::HotKey>        { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Calendar>      { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ProgressBar>   { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::CoolBar>       { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::StatusBar>     { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ToolBar>       { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ToolTip>       { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::TrackBar>      { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Spin>          { static const wchar_t name[];     };
+
+  //! \var system_class<wchar_t>::value - Defines common control window class names
+  template <> struct system_class<wchar_t,SystemClass::Button>        { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ComboBox>      { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ComboBoxEx>    { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Edit>          { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Header>        { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ListBox>       { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::IpAddress>     { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Link>          { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ListView>      { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::NativeFont>    { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::PageScroller>  { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::ScrollBar>     { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Static>        { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::Tab>           { static const wchar_t name[];     };
+  template <> struct system_class<wchar_t,SystemClass::TreeView>      { static const wchar_t name[];     };
+
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct system_class - Defines the names of system window classes

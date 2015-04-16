@@ -15,18 +15,23 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct StringResource - Provides access to application resources
+  //! \struct StringResource - Encapsulates loading a string from the resource table
   //! 
   //! \tparam ENC - Character encoding type
+  //! \tparam LEN - Buffer capacity
   ///////////////////////////////////////////////////////////////////////////////
-  //template <Encoding ENC = Encoding::UTF16>
-  struct StringResource : Resources //<ENC>
+  template <Encoding ENC, unsigned LEN>
+  struct StringResource : CharArray<ENC,LEN>, 
+                          Resource
   {      
     // ------------------- TYPES & CONSTANTS -------------------
   
-    //! \alias base - Define base class
-    using base = Resources;
+    //! \alias resource_base - Define resource base class
+    using resource_base = Resource;
 
+    //! \alias string_base - Define character array base class
+    using string_base = CharArray<ENC,LEN>;
+    
     ///////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
     ///////////////////////////////////////////////////////////////////////////////
@@ -61,35 +66,24 @@ namespace wtl
     };
 
     // --------------------- CONSTRUCTION ----------------------
-
-    // ------------------------ STATIC -------------------------
-
+    
     ///////////////////////////////////////////////////////////////////////////////
-    // StringResource::load
+    // StringResource::StringResource
     //! Loads a string resource
     //! 
-    //! \tparam LEN - Output buffer capacity
-    //! \tparam ENC - Output string character encoding (Also resource id encoding)
-    //! 
-    //! \param[in] module - Module containing string
     //! \param[in] id - String identifier
-    //! \param[in,out] &str - Output buffer
-    //! \return bool - True iff was found 
+    //! \param[in] lang - String language
     //! 
-    //! \throw wtl::domain_error - Insufficient buffer capacity to store string
+    //! \throw wtl::logic_error - Missing string -or- Insufficient buffer capacity to store string
+    //! \throw wtl::platform_error - Unable to load resource
     ///////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN, Encoding ENC = Encoding::UTF16>
-    static bool load(HMODULE module, ResourceId<ENC> id, CharArray<ENC,LEN>& str) 
+    StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) 
+      : resource_base(LoadedModules.findString(id,lang))
     {
-      decltype(id)  table(id.Value.Numeral / 16 + 1);  //!< String table resource
-      int32         index = id.Value.Numeral % 16;     //!< Index of desired string within table
+      const int32  index = id.Value.Numeral % 16;                   //!< Index of desired string within table
       
-      // Lookup string table handle
-      HResource resource(module, table, ResourceType::String, LanguageId());
-      int32 size = ::SizeofResource(module, resource);
-
       // Load string table
-      StringTableEntry* item = load<StringTableEntry>(module, resource);
+      const StringTableEntry* item = get<StringTableEntry>();
 
       // Find desired string
       for (int32 idx = 0; item && idx < index; idx++)
@@ -97,17 +91,19 @@ namespace wtl
 
       // [NOT-FOUND] Return false & empty string 
       if (!item)
-        return (str.clear(), false);
+        return logic_error(HERE, "String resource %d does not exist", id.Value.Numeral);
 
       // [FOUND] Ensure sufficient space is available
       if (item->Length > LEN)
-        throw domain_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)LEN);
+        throw logic_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)LEN);
 
       // Convert from UTF16 if necessary
-      str = CharArray<Encoding::UTF16,LEN>(item->Text);
+      assign<Encoding::UTF16>(item->Text);
       return true;
     }
-    
+
+    // ------------------------ STATIC -------------------------
+
     // ---------------------- ACCESSORS ------------------------			
 
     // ----------------------- MUTATORS ------------------------

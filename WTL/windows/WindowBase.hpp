@@ -40,7 +40,7 @@ namespace wtl
     //! \alias WindowCollection - Window collection type
     using WindowCollection = std::list<WindowBase*>;
     
-    //! \alias WindowHandleCollection - Provides an association between window handles and WindowBase objects
+    //! \alias WindowHandleCollection - Provides an association between native window handles and WindowBase objects
     using WindowHandleCollection = std::map<HWND,WindowBase*>;
 
     //! \alias WindowIdCollection - Provides an association between window Ids and WindowBase objects
@@ -262,7 +262,19 @@ namespace wtl
         // [HANDLED/REFLECTED] Return result
         if (msg.Route != MsgRoute::Unhandled)
           return msg.Result;
+
+        // [UNHANDLED GUI-COMMAND] Search for a handler
+        for (window_t* parent = wnd->parent(); parent; parent = parent->parent())
+        {
+          // Delegate to parent's instance procedure
+          msg = wnd->onMessage(static_cast<WindowMessage>(message), wParam, lParam);
+
+          // [PARENT HANDLED/REFLECTED] Return result
+          if (msg.Route != MsgRoute::Unhandled)
+            return msg.Result;
+        }
       }
+      // [ERROR] Exception thrown by handler
       catch (wtl::exception& e)
       {
         cdebug.log(HERE, e);
@@ -339,6 +351,32 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::parent const
+    //! Get the parent window
+    //! 
+    //! \return window_t* - Parent window if any, otherwise nullptr
+    //!
+    //! \throw wtl::domain_error - Parent is native window
+    ///////////////////////////////////////////////////////////////////////////////
+    window_t* parent() const
+    {
+      // Query parent
+      if (HWND wnd = ::GetParent(*Handle))
+      {
+        // Lookup window in 'Active Windows' collection
+        auto pos = ActiveWindows.find(wnd);
+        if (pos != ActiveWindows.end())
+          pos->second;
+
+        // [ERROR] Parent is native window
+        throw domain_error(HERE, "Parent is native window");
+      }
+      
+      // Top level window
+      return nullptr;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::windowRect const
     //! Get the window rectangle
     //! 
@@ -385,7 +423,7 @@ namespace wtl
     void createEx(const WindowBase* parent, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, WindowStyle style, WindowStyleEx exStyle = WindowStyleEx::None, const WindowMenu* menu = nullptr)
     {
       // Ensure doesn't already exist
-      if (Handle)
+      if (Handle.exists())
         throw logic_error(HERE, "Window already exists");
 
       // Create handle object, insert dummy
@@ -428,7 +466,7 @@ namespace wtl
     void create(WindowBase& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
     {
       // Ensure doesn't already exist
-      if (Handle)
+      if (Handle.exists())
         throw logic_error(HERE, "Window already exists");
 
       // Create handle object, insert dummy
@@ -462,7 +500,7 @@ namespace wtl
     void destroy()
     {
       // Ensure doesn't already exist
-      if (Handle)
+      if (Handle.exists())
         Handle.destroy();
     }
     
@@ -613,17 +651,31 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::operator +=
+    //! Add a gui command handler
+    //!
+    //! \param[in] *ptr - Pointer to event handler
+    //! \return window_t& - Reference to self
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC, typename CMD>
+    window_t& operator += (GuiCommandDelegate<ENC,CMD>* ptr)
+    {
+      Handlers += ptr;
+      return *this;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::operator -=
     //! Remove an event handler
     //!
     //! \param[in] *ptr - Pointer to event handler
     //! \return window_t& - Reference to self
     ///////////////////////////////////////////////////////////////////////////////
-    window_t& operator -= (IEventHandler<ENC>* ptr)
+    /*window_t& operator -= (IEventHandler<ENC>* ptr)
     {
       Handlers -= ptr;
       return *this;
-    }
+    }*/
 
     // -------------------- REPRESENTATION ---------------------
   protected:

@@ -263,9 +263,6 @@
     <ClInclude Include="windows\events\CommandEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
-    <ClInclude Include="windows\events\ControlEvents.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
     <ClInclude Include="windows\events\CreateWindowEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
@@ -302,9 +299,6 @@
     <ClInclude Include="windows\events\OwnerDrawEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
-    <ClInclude Include="resources\WindowMenu.hpp">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="windows\GuiCommand.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -335,9 +329,27 @@
     <ClInclude Include="threads\MessagePump.hpp">
       <Filter>Threads</Filter>
     </ClInclude>
+    <ClInclude Include="windows\events\ControlEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\StandardControls.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\CommandIds.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\GuiCommandGroup.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowMenu.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Traits.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Module.cpp">
       <Filter>Library</Filter>
     </ClCompile>
   </ItemGroup>

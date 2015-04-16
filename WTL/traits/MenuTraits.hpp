@@ -15,31 +15,49 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HMENU> - Encapsulates menu handle allocation
+  //! \struct handle_alloc<::HMENU> - Encapsulates menu handle allocation
   ///////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<HMENU>
+  struct handle_alloc<::HMENU>
   {
     //! \var npos - Invalid handle sentinel value
-    static const HMENU npos; 
-
+    static const ::HMENU npos; 
+    
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HMENU>::create
+    // handle_alloc<::HMENU>::create
+    //! Create empty menu
+    //! 
+    //! \return HAlloc<::HMENU> - Created handle
+    //! 
+    //! \throw wtl::platform_error - Failed to create handle
+    ///////////////////////////////////////////////////////////////////////////////
+    static HAlloc<::HMENU> create() 
+    { 
+      // Load menu 
+      if (::HMENU menu = ::CreateMenu())
+        return { menu, AllocType::Create };
+
+      // Error: Failed  
+      throw platform_error(HERE, "Unable to create menu");
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // handle_alloc<::HMENU>::create
     //! Load menu from resource
     //! 
     //! \tparam ENC - Character encoding 
     //! 
     //! \param[in] instance - Instance containing menu
     //! \param[in] ident - Menu identifier
-    //! \return HAlloc<HMENU> - Accquired handle
+    //! \return HAlloc<::HMENU> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<HMENU> create(HINSTANCE instance, ResourceId<ENC> ident) 
+    static HAlloc<::HMENU> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       // Load menu 
-      if (HMENU menu = getFunc<ENC>(::LoadMenuA,::LoadMenuW)(instance, ident))
+      if (::HMENU menu = getFunc<ENC>(::LoadMenuA,::LoadMenuW)(instance, ident))
         return { menu, AllocType::Accquire };
 
       // Error: Failed  
@@ -47,30 +65,31 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HMENU>::clone
+    // handle_alloc<::HMENU>::clone
     //! Clone handle
     //! 
     //! \param[in] menu - Menu handle
-    //! \return HAlloc<HMENU> - Duplicate of handle
+    //! \return HAlloc<::HMENU> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     ///////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HMENU> clone(HAlloc<HMENU> menu);
+    static HAlloc<::HMENU> clone(HAlloc<::HMENU> menu);
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HMENU>::destroy noexcept
+    // handle_alloc<::HMENU>::destroy noexcept
     //! Release Menu handle
     //! 
     //! \param[in] menu - Menu handle
     //! \return bool - True iff closed successfully
     ///////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HMENU> menu) noexcept
+    static bool destroy(HAlloc<::HMENU> menu) noexcept
     {
       // Delete without checking if handle is valid
       switch (menu.Method)
       {
       case AllocType::Accquire: return ::DestroyMenu(menu.Handle) != FALSE;
-      case AllocType::Create:   return false;
+      case AllocType::Create:   return ::DestroyMenu(menu.Handle) != FALSE;
+      case AllocType::WeakRef:  return true;
       }
       return false;
     }
@@ -78,7 +97,7 @@ namespace wtl
 
 
   //! \alias HMenu - Shared menu handle
-  using HMenu = Handle<HMENU>;
+  using HMenu = Handle<::HMENU>;
 
   
 } //namespace wtl

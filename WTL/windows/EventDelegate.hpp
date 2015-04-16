@@ -32,7 +32,7 @@ namespace wtl
   //! \tparam EVENT - Notification identifier type
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
-  /*[[__depreciated__]]*/ using delegate_signature_t = typename delegate_signature<ENC,WM>::type; 
+/*  [[__depreciated__]]*/ using delegate_signature_t = typename delegate_signature<ENC,WM>::type; 
   
 
   
@@ -91,6 +91,18 @@ namespace wtl
       return m == message;
     }
     
+    ///////////////////////////////////////////////////////////////////////////////
+    // MessageDelegate::ident const
+    //! Query the window message consumed by delegate
+    //! 
+    //! \return HandlerIdent - Message consumed by delegate
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual HandlerIdent ident() const 
+    {
+      // Return message
+      return message;
+    }
+    
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -110,14 +122,13 @@ namespace wtl
   protected:
     delegate_t  Impl;    //!< Handler routine
   };
-
+  
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct EventDelegate - Calls an event handler of signature: LResult ()
   //! 
   //! \tparam ENC - Message character encoding 
   //! \tparam WM - Window message
-  //! \tparam SIG - [optional] Handler function signature
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
   struct EventDelegate : MessageDelegate<ENC,WM,LResult ()>

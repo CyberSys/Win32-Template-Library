@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\library\Main.cpp
-//! \brief Entry point
+//! \file wtl\library\Traits.cpp
+//! \brief Provides static storage for traits for compilers that dont fully support constexpr
 //! \date 7 March 2015
 //! \author Nick Crowley
 //! \copyright © Nick Crowley. All rights reserved.
@@ -13,26 +13,29 @@ namespace wtl
 {
   
   //! \var enum_values<...>::value - Defines Colour values
-  const Colour enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
-                                                  Colour::Leaves, Colour::Forest, Colour::Yellow, Colour::Gold, Colour::Orange, Colour::Honey, Colour::Brown, Colour::Red, Colour::Rose,
-                                                  Colour::Pink, Colour::Purple, Colour::Magenta, Colour::Beige, Colour::Wheat, Colour::Snow, Colour::White, Colour::Invalid };
+  const Colour  enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
+                                                   Colour::Leaves, Colour::Forest, Colour::Yellow, Colour::Gold, Colour::Orange, Colour::Honey, Colour::Brown, Colour::Red, Colour::Rose,
+                                                   Colour::Pink, Colour::Purple, Colour::Magenta, Colour::Beige, Colour::Wheat, Colour::Snow, Colour::White, Colour::Invalid };
   
   //! \var enum_values<...>::value - Defines HatchStyle values
-  const HatchStyle enum_values<HatchStyle>::values[6] = { HatchStyle::Horizontal, HatchStyle::Vertical, HatchStyle::ForwardDiagonal, 
-                                                          HatchStyle::BackwardDiagonal, HatchStyle::Cross, HatchStyle::CrossDiagonal };
+  const HatchStyle  enum_values<HatchStyle>::values[6] = { HatchStyle::Horizontal, HatchStyle::Vertical, HatchStyle::ForwardDiagonal, 
+                                                           HatchStyle::BackwardDiagonal, HatchStyle::Cross, HatchStyle::CrossDiagonal };
 
   //! \var npos - Define 'Invalid handle' sentinel values
   const ::HFILESEARCH handle_alloc<::HFILESEARCH>::npos = (const ::HFILESEARCH)INVALID_HANDLE_VALUE;
-  const ::HPEN        handle_alloc<::HPEN>::npos = (const ::HPEN)INVALID_HANDLE_VALUE;
-  const ::HMENU       handle_alloc<::HMENU>::npos = (const ::HMENU)INVALID_HANDLE_VALUE;
-  const ::HWND        handle_alloc<::HWND>::npos = (const ::HWND)INVALID_HANDLE_VALUE;
-  const ::HBRUSH      handle_alloc<::HBRUSH>::npos = (const ::HBRUSH)INVALID_HANDLE_VALUE;
-  const ::HFONT       handle_alloc<::HFONT>::npos = (const ::HFONT)INVALID_HANDLE_VALUE;
-  const ::HICON       handle_alloc<::HICON>::npos = (const ::HICON)INVALID_HANDLE_VALUE;
-  const ::HMODULE     handle_alloc<::HMODULE>::npos = (const ::HMODULE)INVALID_HANDLE_VALUE;
-  const ::HDC         handle_alloc<::HDC>::npos = (const ::HDC)INVALID_HANDLE_VALUE;
   const ::ATOM        handle_alloc<::ATOM>::npos = INVALID_ATOM;
   const ::HACCEL      handle_alloc<::HACCEL>::npos = (const ::HACCEL)INVALID_HANDLE_VALUE;
+  const ::HBRUSH      handle_alloc<::HBRUSH>::npos = (const ::HBRUSH)INVALID_HANDLE_VALUE;
+  const ::HDC         handle_alloc<::HDC>::npos = (const ::HDC)INVALID_HANDLE_VALUE;
+  const ::HFONT       handle_alloc<::HFONT>::npos = (const ::HFONT)INVALID_HANDLE_VALUE;
+  const ::HGLOBAL     handle_alloc<::HGLOBAL>::npos = (const ::HGLOBAL)INVALID_HANDLE_VALUE;
+  const ::HICON       handle_alloc<::HICON>::npos = (const ::HICON)INVALID_HANDLE_VALUE;
+  const ::HMENU       handle_alloc<::HMENU>::npos = (const ::HMENU)INVALID_HANDLE_VALUE;
+  const ::HMODULE     handle_alloc<::HMODULE>::npos = (const ::HMODULE)INVALID_HANDLE_VALUE;
+  const ::HPEN        handle_alloc<::HPEN>::npos = (const ::HPEN)INVALID_HANDLE_VALUE;
+  const ::HRSRC       handle_alloc<::HRSRC>::npos = (const ::HRSRC)INVALID_HANDLE_VALUE;
+  const ::HWND        handle_alloc<::HWND>::npos = (const ::HWND)INVALID_HANDLE_VALUE;
+  
   
   //! \var npos - Define 'No handle' sentinel values
   const HAtom          HAtom::npos(handle_alloc<::ATOM>::npos, AllocType::WeakRef);
@@ -40,13 +43,16 @@ namespace wtl
   const HBrush         HBrush::npos(handle_alloc<::HBRUSH>::npos, AllocType::WeakRef);
   const HDeviceContext HDeviceContext::npos(handle_alloc<::HDC>::npos, AllocType::WeakRef);
   const HFont          HFont::npos(handle_alloc<::HFONT>::npos, AllocType::WeakRef);
+  const HGlobal        HGlobal::npos(handle_alloc<::HGLOBAL>::npos, AllocType::WeakRef);
   const HIcon          HIcon::npos(handle_alloc<::HICON>::npos, AllocType::WeakRef);
   const HMenu          HMenu::npos(handle_alloc<::HMENU>::npos, AllocType::WeakRef);
   const HModule        HModule::npos(handle_alloc<::HMODULE>::npos, AllocType::WeakRef);
   const HPen           HPen::npos(handle_alloc<::HPEN>::npos, AllocType::WeakRef);
+  const HResource      HResource::npos(handle_alloc<::HRSRC>::npos, AllocType::WeakRef);
   const HWnd           HWnd::npos(handle_alloc<::HWND>::npos, AllocType::WeakRef);
   
-  
+//! \if CONSTEXPR_CAP - Define here if compiler does not support static storage
+#ifndef CONSTEXPR_CAP
   //! \var format_spec<...>::value - Defines narrow string formatting type specifications
   const char format_spec<char,double>::value[] = "%llf";
   const char format_spec<char,uint64>::value[] = "%llu";
@@ -84,6 +90,7 @@ namespace wtl
   const wchar_t format_spec<wchar_t,uint16*>::value[] = L"%s";
   const wchar_t format_spec<wchar_t,const wchar_t*>::value[] = L"%s";
   const wchar_t format_spec<wchar_t,const uint16*>::value[] = L"%s";
+#endif
 
   //! \var system_class<...>::value - Defines standard controls window class names
   const wchar_t system_class<wchar_t,SystemClass::Animate>::name[] = ANIMATE_CLASSW;
@@ -123,7 +130,14 @@ namespace wtl
   const ResourceId<Encoding::ANSI>  NoResource<Encoding::ANSI>::value(zero<uint16>::value);
   const ResourceId<Encoding::UTF16> NoResource<Encoding::UTF16>::value(zero<uint16>::value);
 
-  /*const ResourceId<Encoding::ANSI> NoResourceA = ResourceId<Encoding::ANSI>::npos;
+  //! \var Neutral - Define neutral language id
+  const LanguageId  LanguageId::Neutral(LANG_NEUTRAL,SUBLANG_NEUTRAL);
+
+  //! \var npos - Define 'Resource not found' sentinel value
+  const Resource  Resource::npos;
+
+  //! \var npos - Define 'Resource not found' sentinel value
+  /*const ResourceId<Encoding::ANSI>  NoResourceA = ResourceId<Encoding::ANSI>::npos;
   const ResourceId<Encoding::UTF16> NoResourceW = ResourceId<Encoding::UTF16>::npos;*/
 
   //! \var value - Define 'Unhandled message' sentinel values

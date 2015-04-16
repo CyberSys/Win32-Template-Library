@@ -32,6 +32,7 @@
     <ClInclude Include="modules\Application.hpp" />
     <ClInclude Include="modules\Module.hpp" />
     <ClInclude Include="platform\Colours.hpp" />
+    <ClInclude Include="platform\CommandIds.hpp" />
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
     <ClInclude Include="platform\FileSearch.hpp" />
@@ -40,7 +41,6 @@
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
     <ClInclude Include="resources\DialogResource.hpp" />
-    <ClInclude Include="resources\WindowMenu.hpp" />
     <ClInclude Include="resources\Resources.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessagePump.hpp" />
@@ -90,7 +90,8 @@
     <ClInclude Include="windows\EventDelegate.hpp" />
     <ClInclude Include="windows\EventHandler.hpp" />
     <ClInclude Include="windows\events\CommandEvent.hpp" />
-    <ClInclude Include="windows\events\ControlEvents.hpp" />
+    <ClInclude Include="windows\events\ControlEvent.hpp" />
+    <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />
     <ClInclude Include="windows\events\CustomDrawEvent.hpp" />
     <ClInclude Include="windows\events\DestroyWindowEvent.hpp" />
@@ -100,15 +101,18 @@
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
     <ClInclude Include="windows\GuiCommand.hpp" />
+    <ClInclude Include="windows\GuiCommandGroup.hpp" />
     <ClInclude Include="windows\GuiCommandQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageHandler.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />
+    <ClInclude Include="windows\WindowMenu.hpp" />
     <ClInclude Include="WTL.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Module.cpp" />
     <ClCompile Include="Traits.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

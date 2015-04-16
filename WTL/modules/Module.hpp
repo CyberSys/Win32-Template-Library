@@ -14,7 +14,9 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  ///////////////////////////////////////////////////////////////////////////////
   //! \struct Module - Encapsulates a module (.dll, .exe)
+  ///////////////////////////////////////////////////////////////////////////////
   struct Module
   {
     // ------------------- TYPES & CONSTANTS -------------------
@@ -23,12 +25,11 @@ namespace wtl
 
     ///////////////////////////////////////////////////////////////////////////////
     // Module::Module
-    //! Create from native module handle
+    //! Create from native module handle. Adds module to 'Loaded Modules' collection.
     //!
     //! \param[in] m - Native module handle
     ///////////////////////////////////////////////////////////////////////////////
-    Module(::HMODULE m) : Handle(m, AllocType::WeakRef)
-    {}
+    Module(::HMODULE m);
     
     ///////////////////////////////////////////////////////////////////////////////
     // Module::Module
@@ -36,40 +37,88 @@ namespace wtl
     //!
     //! \param[in] m - Shared module handle
     ///////////////////////////////////////////////////////////////////////////////
-    Module(const HModule& m) : Handle(m)
-    {}
+    /*Module(const HModule& m) : Handle(m)
+    {}*/
 
     ///////////////////////////////////////////////////////////////////////////////
     // Module::Module
-    //! Virtual d-tor
+    //! Virtual d-tor. Removes module from 'Loaded Modules' collection.
     ///////////////////////////////////////////////////////////////////////////////
-    virtual ~Module()
-    {}
+    virtual ~Module();
+
+    NO_COPY(Module);
+    NO_MOVE(Module);
     
     // ------------------------ STATIC -------------------------
 
     // ---------------------- ACCESSORS ------------------------			
     
     // TODO: Execute functor
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Module::findResource
+    //! Find a resource 
+    //! 
+    //! \tparam ENC - Resource name character encoding 
+    //!
+    //! \param[in] type - Resource type
+    //! \param[in] name - Resource identifier
+    //! \param[in] lang - Resource language
+    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
+    { 
+      // Load resource handle
+      if (::HRSRC res = getFunc<ENC>(::FindResourceExA,::FindResourceExW)(Handle, ResourceId<ENC>(type), name, language))
+        return Resource(Handle, HResource(res, AllocType::Accquire));
+
+      // [NOT FOUND] Return sentinel
+      return Resource::npos;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Module::findString
+    //! Find a string resource 
+    //! 
+    //! \tparam ENC - Resource name character encoding 
+    //!
+    //! \param[in] id - String identifier
+    //! \param[in] lang - Resource language
+    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    //!
+    //! \throw wtl::invalid_argument - String ids must be numeric constants
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    Resource  findString(ResourceId<ENC> id, LanguageId language = LanguageId::Neutral) const
+    { 
+      if (!id.isOrdinal())
+        throw invalid_argument(HERE, "String ids must be numeric constants");
+
+      // Load string table handle
+      return findResource(ResourceType::String, (id.Value.Numeral/16)+1, language);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // Module::load
     //! Loads a string resource from the module
     //! 
     //! \tparam LEN - Output buffer capacity
-    //! \tparam ENC - Output string character encoding (Also resource id encoding)
+    //! \tparam ENC - Output string character encoding 
     //! 
-    //! \param[in] id - String identifier
+    //! \param[in] id - Resource id
     //! \param[in,out] &str - Output buffer
-    //! \return bool - True iff was found 
+    //! \param[in] lang - [optional] String language
     //! 
-    //! \throw wtl::domain_error - Insufficient buffer capacity to store string
+    //! \throw wtl::domain_error - Missing string -or- Insufficient buffer capacity to store string
+    //! \throw wtl::platform_error - Unable to load resource
     ///////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN, Encoding ENC = Encoding::UTF16>
-    bool load(ResourceId<ENC> id, CharArray<ENC,LEN>& str) 
-    {
-      return StringResource::load(Handle, id, str);
-    }
+    //template <unsigned LEN, Encoding ENC = Encoding::UTF16>
+    //void load(ResourceId<ENC> id, CharArray<ENC,LEN>& str, LanguageId lang = LanguageId::Neutral) const
+    //{
+    //  // Load string from module
+    //  str = StringResource(Handle, id, lang);
+    //}
 
     // ----------------------- MUTATORS ------------------------
 
@@ -77,6 +126,106 @@ namespace wtl
   protected:
     HModule   Handle;       //!< Module handle
   };
+
+
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \struct ModuleCollection - Hosts all loaded modules
+  ///////////////////////////////////////////////////////////////////////////////
+  struct ModuleCollection : protected std::list<std::reference_wrapper<const Module>>
+  {
+    //! \alias base - Define base type
+    using base = std::list<std::reference_wrapper<const Module>>;
+
+    //! \alias element_t - Define collection element type
+    using element_t = std::reference_wrapper<const Module>;
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // ModuleCollection::findResource
+    //! Find a resource from any module in the collection
+    //! 
+    //! \tparam ENC - Resource name character encoding 
+    //!
+    //! \param[in] type - Resource type
+    //! \param[in] name - Resource identifier
+    //! \param[in] lang - Resource language
+    //! \return Resource - Resource if found, otherwise 'npos'
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
+    {
+      Resource res = Resource::npos;
+
+      // Search all modules for resource
+      for (const element_t& m : *this)
+        if ((res = m.get().findResource(type, name, language)) != Resource::npos)
+          // [FOUND] Return resource
+          return res;
+      
+      // [NOT FOUND] Return 'npos'
+      return Resource::npos;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // ModuleCollection::findString
+    //! Find a string resource from any module in the collection
+    //! 
+    //! \tparam ENC - Resource name character encoding 
+    //!
+    //! \param[in] id - String identifier
+    //! \param[in] lang - Resource language
+    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    //!
+    //! \throw wtl::invalid_argument - String ids must be numeric constants
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    Resource  findString(ResourceId<ENC> id, LanguageId language = LanguageId::Neutral) const
+    { 
+      if (!id.isOrdinal())
+        throw invalid_argument(HERE, "String ids must be numeric constants");
+
+      // Load string table handle
+      return findResource(ResourceType::String, (id.Value.Numeral/16)+1, language);
+    }
+
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // ModuleCollection::add
+    //! Add a module to the collection
+    //!
+    //! \param[in] const& m - Module
+    ///////////////////////////////////////////////////////////////////////////////
+    void  add(const Module& m)
+    {
+      base::emplace_back(m);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // ModuleCollection::remove
+    //! Remove a module to the collection
+    //!
+    //! \param[in] const& m - Module
+    ///////////////////////////////////////////////////////////////////////////////
+    void  remove(const Module& m)
+    {
+      base::remove_if( [&m] (const element_t& w) { return &w.get() == &m; } );
+    }
+  };
+
+  ///////////////////////////////////////////////////////////////////////////////
+  // wtl::operator == 
+  //! Global equality operator Remove a module to the collection
+  //!
+  //! \param[in] const& m - Module
+  ///////////////////////////////////////////////////////////////////////////////
+  /*bool operator == (const std::reference_wrapper<const Module>& a, const std::reference_wrapper<const Module>& b)
+  {
+    return &a == &b;
+  }*/
+
+  //! \var LoadedModules - Loaded modules collection
+  extern ModuleCollection  LoadedModules;
+
 }
 
 #endif // WTL_MODULE_HPP

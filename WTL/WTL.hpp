@@ -109,6 +109,7 @@
 
 // Platform Constants:
 #include "platform/Colours.hpp"
+#include "platform/CommandIds.hpp"
 #include "platform/DrawingFlags.hpp"
 #include "platform/WindowFlags.hpp"
 #include "platform/ControlStyles.hpp"
@@ -160,7 +161,6 @@
 // Resources
 #include "resources/Resources.hpp"
 #include "resources/StringResource.hpp"
-#include "resources/WindowMenu.hpp"
 
 // GDI
 #include "gdi/StockObjects.hpp"
@@ -175,16 +175,22 @@
 #include "windows/events/PaintWindowEvent.hpp"
 #include "windows/events/ShowWindowEvent.hpp"
 #include "windows/events/OwnerDrawEvent.hpp"
+#include "windows/events/CommandEvent.hpp"
+
+// Commands
+#include "windows/GuiCommand.hpp"
+//#include "windows/GuiCommandQueue.hpp"
 
 // Windows
+#include "windows/WindowMenu.hpp"
 #include "windows/WindowClass.hpp"
 #include "windows/WindowBase.hpp"
 
 // Events
-#include "windows/events/CommandEvent.hpp"
+#include "windows/events/ControlEvent.hpp"
 #include "windows/events/NotifyEventData.hpp"
 #include "windows/events/NotifyEvent.hpp"
-#include "windows/events/ControlEvents.hpp"
+#include "windows/events/StandardControls.hpp"
 
 // Threads
 #include "threads/WorkerThread.hpp"
@@ -200,8 +206,10 @@
 
 // Windows & Dialogs
 
-// Convenience
-#include "windows/MessageHandler.hpp"
+// Commands
+#include "windows/commands/CloseProgramCommand.hpp"
+//#include "windows/commands/PasteClipboardCommand.hpp"
+
 
 #endif // WTL_HEADER_HPP
 

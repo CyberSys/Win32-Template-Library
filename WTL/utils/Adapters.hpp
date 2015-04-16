@@ -369,6 +369,11 @@ namespace wtl
   template <typename RESULT, typename TYPE, typename PARAM>
   struct execute_upon_t : public std::unary_function<PARAM, RESULT>
   {
+    using base = std::unary_function<PARAM, RESULT>;
+
+    using argument_type = typename base::argument_type;
+    using result_type = typename base::result_type;
+
     //! \typedef function_type - Defines the method type
     typedef result_type (TYPE::*function_type)(argument_type);
 

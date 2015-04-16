@@ -18,7 +18,9 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   struct LanguageId 
   {
-    LanguageId() : LanguageId(LANG_NEUTRAL,SUBLANG_NEUTRAL) {}
+    //! \var Neutral - Define neutral language id
+    static const LanguageId Neutral;
+
     LanguageId(uint8 pri, uint8 sub) : Value(MAKELANGID(pri,sub)) {}
     LanguageId(LANGID lang) : Value(lang) {}
     

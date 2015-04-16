@@ -13,7 +13,48 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \struct HandlerIdent - Identifies the messages consumed by a handler
+  ///////////////////////////////////////////////////////////////////////////////
+  struct HandlerIdent
+  {
+    ///////////////////////////////////////////////////////////////////////////////
+    // HandlerIdent::HandlerIdent
+    //! Create identifier from message 
+    //! 
+    //! \param[in] m - Window message
+    ///////////////////////////////////////////////////////////////////////////////
+    HandlerIdent(WindowMessage m) : Message(m), Code(0)
+    {}
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // HandlerIdent::HandlerIdent
+    //! Create identifier from message and another identifier of any type
+    //! 
+    //! \param[in] m - Window message
+    //! \param[in] c - Notification/command code
+    ///////////////////////////////////////////////////////////////////////////////
+    template <typename CODE>
+    HandlerIdent(WindowMessage m, CODE c) : Message(m), Code(static_cast<int32>(c))
+    {}
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // HandlerIdent::operator == 
+    //! Equality operator for identifiers
+    //! 
+    //! \param[in] const& r - Another identifier
+    //! \return bool - True iff equal
+    ///////////////////////////////////////////////////////////////////////////////
+    bool operator == (const HandlerIdent& r) const
+    {
+      return Message == r.Message 
+          && Code == r.Code;
+    }
+
+    WindowMessage  Message;   //!< Window message
+    int32          Code;      //!< [optional] Notification/Command code
+  };
+
   ///////////////////////////////////////////////////////////////////////////////
   //! \interface IEventHandler - Interface for all Win32 message handlers
   //! 
@@ -57,9 +98,9 @@ namespace wtl
     // IEventHandler::ident const
     //! Query the window message consumed by handler at runtime
     //! 
-    //! \return WindowMessage - Message consumed by handler
+    //! \return HandlerIdent - Identifier of message consumed by handler
     ///////////////////////////////////////////////////////////////////////////////
-    virtual WindowMessage ident() const = 0;
+    virtual HandlerIdent ident() const = 0;
     
     // ----------------------- MUTATORS ------------------------
 
@@ -144,11 +185,12 @@ namespace wtl
     // EventHandler::ident const
     //! Query the window message consumed by handler at runtime
     //! 
-    //! \return WindowMessage - Message consumed by handler
+    //! \return HandlerIdent - Identifier of message consumed by handler
     ///////////////////////////////////////////////////////////////////////////////
-    virtual WindowMessage ident() const 
+    virtual HandlerIdent ident() const 
     {
-      return message;
+      // Query delegate identifier
+      return Delegate.ident();
     }
     
     // ----------------------- MUTATORS ------------------------
@@ -203,21 +245,19 @@ namespace wtl
 
     //! \alias handler_t - Event handler interface
     using handler_t = IEventHandler<ENC>;
+  
+    //! \alias encoding - Define encoding type
+    static constexpr Encoding encoding = ENC;
 
+  protected:
     //! \alias handler_ptr_t - Shared Event handler pointer
     using handler_ptr_t = std::shared_ptr<IEventHandler<ENC>>;
     
     //! \alias collection_t - Define internal storage type (List of shared pointers)
     using collection_t = std::list<handler_ptr_t>;
 
-    //! \alias encoding - Define encoding type
-    static constexpr Encoding encoding = ENC;
-
-    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
-    //using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
-
     // --------------------- CONSTRUCTION ----------------------
-
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // EventHanderCollection::~EventHanderCollection
     //! Virtual d-tor

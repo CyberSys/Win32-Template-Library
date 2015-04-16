@@ -20,71 +20,37 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ExitProgramCommand : GuiCommand<ENC>
+  struct ExitProgramCommand : GuiCommand<ENC,CommandId::FILE_EXIT>
   {
     // ------------------- TYPES & CONSTANTS -------------------
 
-    //! \alias char_t - Define character type
-    using char_t = encoding_char_t<ENC>;
-    
-    //! \alias resource_t - Define resource id type
-    using resource_t = ResourceId<ENC>;
+    //! \typedef base - Define base type
+    using base = GuiCommand<ENC,CommandId::FILE_EXIT>;
 
-    //! \var encoding - Define encoding type
-    static constexpr Encoding  encoding = ENC;
-    
     // --------------------- CONSTRUCTION ----------------------
-  protected:
+    
     ///////////////////////////////////////////////////////////////////////////////
     // ExitProgramCommand::ExitProgramCommand
-    //! Derived c-tor
+    //! Create command
+    //! 
+    //! \param[in] appWnd - Main application window
     ///////////////////////////////////////////////////////////////////////////////
-    ExitProgramCommand() : base(ID_FILE_EXIT)
-    {}
-    
-  public:
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::~ExitProgramCommand
-    //! Virtual d-tor
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual ~ExitProgramCommand() 
+    ExitProgramCommand(WindowBase<ENC>& appWnd) : AppWindow(appWnd)
     {}
     
     // ---------------------- ACCESSORS ------------------------			
 
     ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::canUndo const
-    //! Query the whether the command can be undone
+    // GuiCommand::permanent const
+    //! Query the whether the command can be reverted
     //! 
-    //! \return bool - True iff command can be undone
+    //! \return bool - True iff command is permanent (cannot be undone)
     ///////////////////////////////////////////////////////////////////////////////
-    virtual bool canUndo() const
-    {
-      return false;
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::description const
-    //! Get the command description
-    //! 
-    //! \return char_t* - Command description
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  description() const
-    {
-      return "Exit the program";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::icon const
-    //! Get the command icon
-    //! 
-    //! \return HIcon - Shared icon handle
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual HIcon icon() const
+    bool  permanent() const override
     {
       return true;
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////////
     // ExitProgramCommand::state const
     //! Query the current state of the command 
@@ -96,64 +62,34 @@ namespace wtl
       return CommandState::Enabled;
     }
     
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::name const
-    //! Get the command name
-    //! 
-    //! \return char_t* - Command name
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t* name() const
-    {
-      return "Exit";
-    }
-    
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
     // ExitProgramCommand::execute 
     //! Executes the command
-    //! 
-    //! \param[in] &&... args - [optional] Strongly typed variadic arguments
+    //!
+    //! \param[in] src - Source of command
     ///////////////////////////////////////////////////////////////////////////////
-    /*template <typename... ARGS>
-    virtual void execute(ARGS&&...) */
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::execute 
-    //! Executes the command
-    //! 
-    //! \throw logic_error - Command has not been implemented
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual void execute() 
+    void execute(CommandSource src) override
     {
-      throw logic_error(HERE, "Command has not been implemented");
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::undo
-    //! Undo the command
-    //! 
-    //! \throw logic_error - Command has not been implemented
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual void undo() 
-    {
-      throw logic_error(HERE, "Command has not been implemented");
+      AppWindow.post(WindowMessage::CLOSE);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::undo
-    //! Undo the command
-    //! 
-    //! \param[in] &&... args - [optional] Strongly typed variadic arguments
-    ///////////////////////////////////////////////////////////////////////////////
-    /*template <typename... ARGS>
-    virtual void undo(ARGS&&...) 
-    {
-    }*/
-    
+    // ----------------------- REPRESENTATION ------------------------
+  protected:
+    WindowBase<ENC>&  AppWindow;     //!< Main program window
   };
   
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias ExitProgramCommandHandler - Handler for gui command 'FILE_EXIT'
+  //! 
+  //! \tparam ENC - Window character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using ExitProgramCommandHandler = GuiCommandHandler<ENC,ExitProgramCommand<ENC>>;
 
+  
 }
 
 #endif // WTL_CLOSE_PROGRAM_HPP

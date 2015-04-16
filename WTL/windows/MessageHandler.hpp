@@ -16,26 +16,26 @@ namespace wtl
   
   
   //! \struct Window - Window class
-  template <Encoding ENC>
-  struct IEventHandlers
-  {
-    // ------------------- TYPES & CONSTANTS -------------------
-    
-    //! Define convenience typedefs for standard event handlers
-    using CreateWindowEventHandler_t = CreateWindowEventHandler<ENC>;
-    using CreateWindowEventArgs_t = CreateWindowEventArgs<ENC>;
-    using DestroyWindowEventHandler_t = DestroyWindowEventHandler<ENC>;
-    using ShowWindowEventHandler_t = ShowWindowEventHandler<ENC>;
-    using ShowWindowEventArgs_t = ShowWindowEventArgs<ENC>;
-    using PaintWindowEventHandler_t = PaintWindowEventHandler<ENC>;
-    using PaintWindowEventArgs_t = PaintWindowEventArgs<ENC>;
+  //template <Encoding ENC>
+  //struct IEventHandlers
+  //{
+  //  // ------------------- TYPES & CONSTANTS -------------------
+  //  
+  //  //! Define convenience typedefs for standard event handlers
+  //  using CreateWindowEventHandler_t = CreateWindowEventHandler<ENC>;
+  //  using CreateWindowEventArgs_t = CreateWindowEventArgs<ENC>;
+  //  using DestroyWindowEventHandler_t = DestroyWindowEventHandler<ENC>;
+  //  using ShowWindowEventHandler_t = ShowWindowEventHandler<ENC>;
+  //  using ShowWindowEventArgs_t = ShowWindowEventArgs<ENC>;
+  //  using PaintWindowEventHandler_t = PaintWindowEventHandler<ENC>;
+  //  using PaintWindowEventArgs_t = PaintWindowEventArgs<ENC>;
 
-    //! \using Button_t - Define button type
-    using Button_t = Button<ENC>;
+  //  //! \using Button_t - Define button type
+  //  using Button_t = Button<ENC>;
 
-    template <typename SENDER>
-    using ButtonClickEventHandler_t = ButtonClickEventHandler<ENC,SENDER>;
-  };
+  //  template <typename SENDER>
+  //  using ButtonClickEventHandler_t = ButtonClickEventHandler<ENC,SENDER>;
+  //};
 
 
 
