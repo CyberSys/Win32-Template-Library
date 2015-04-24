@@ -85,9 +85,7 @@ namespace wtl
     // ----------------------- MUTATORS ------------------------
 
     using base::begin;
-    using base::begin const;
     using base::end;
-    using base::end const;
 
     ///////////////////////////////////////////////////////////////////////////////
     // Stack::clear
@@ -125,7 +123,7 @@ namespace wtl
     template <typename... ARGS>
     void push(ARGS&&... args)
     {
-      base::emplace_front(std::forward<ARGS>(args)...)
+      base::emplace_front(std::forward<ARGS>(args)...);
     }
     
     

@@ -11,18 +11,37 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  //! \var enum_values<...>::value - Defines Colour values
-  const Colour  enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
-                                                   Colour::Leaves, Colour::Forest, Colour::Yellow, Colour::Gold, Colour::Orange, Colour::Honey, Colour::Brown, Colour::Red, Colour::Rose,
-                                                   Colour::Pink, Colour::Purple, Colour::Magenta, Colour::Beige, Colour::Wheat, Colour::Snow, Colour::White, Colour::Invalid };
-  
-  //! \var enum_values<...>::value - Defines HatchStyle values
-  const HatchStyle  enum_values<HatchStyle>::values[6] = { HatchStyle::Horizontal, HatchStyle::Vertical, HatchStyle::ForwardDiagonal, 
-                                                           HatchStyle::BackwardDiagonal, HatchStyle::Cross, HatchStyle::CrossDiagonal };
+  ////////////////////////////////////////////////////////////////////////////////
+  // Console::flush 
+  //! Flushes the log-file output to disc
+  ////////////////////////////////////////////////////////////////////////////////
+  void Console::flush()
+  {
+    // Flush log-file
+    //logFile.flush();
+  }
 
+  ////////////////////////////////////////////////////////////////////////////////
+  // Console::log
+  //! Write string to log with current attributes
+  //! 
+  //! \param[in] *str - String
+  ////////////////////////////////////////////////////////////////////////////////
+  void Console::log(const char* str)
+  {
+    // Write to log-file
+    //logFile.write(str, getAttributes());
+  }
+  
+  //! \var cdebug - Debug output
+  Console cdebug;
+}
+
+//! \namespace wtl - Windows template library
+namespace wtl
+{
   //! \var npos - Define 'Invalid handle' sentinel values
-  const ::HFILESEARCH handle_alloc<::HFILESEARCH>::npos = (const ::HFILESEARCH)INVALID_HANDLE_VALUE;
+  //const ::HFILESEARCH handle_alloc<::HFILESEARCH>::npos = (const ::HFILESEARCH)INVALID_HANDLE_VALUE;
   const ::ATOM        handle_alloc<::ATOM>::npos = INVALID_ATOM;
   const ::HACCEL      handle_alloc<::HACCEL>::npos = (const ::HACCEL)INVALID_HANDLE_VALUE;
   const ::HBRUSH      handle_alloc<::HBRUSH>::npos = (const ::HBRUSH)INVALID_HANDLE_VALUE;
@@ -36,23 +55,41 @@ namespace wtl
   const ::HRSRC       handle_alloc<::HRSRC>::npos = (const ::HRSRC)INVALID_HANDLE_VALUE;
   const ::HWND        handle_alloc<::HWND>::npos = (const ::HWND)INVALID_HANDLE_VALUE;
   
+  //! \var handle_alloc<T>::npos - 'Invalid handle' sentinel value 
+  /*template <typename T>
+  const T handle_alloc<T>::npos = (const T)INVALID_HANDLE_VALUE;*/
+
   
   //! \var npos - Define 'No handle' sentinel values
-  const HAtom          HAtom::npos(handle_alloc<::ATOM>::npos, AllocType::WeakRef);
-  const HAccelerator   HAccelerator::npos(handle_alloc<::HACCEL>::npos, AllocType::WeakRef);
-  const HBrush         HBrush::npos(handle_alloc<::HBRUSH>::npos, AllocType::WeakRef);
-  const HDeviceContext HDeviceContext::npos(handle_alloc<::HDC>::npos, AllocType::WeakRef);
-  const HFont          HFont::npos(handle_alloc<::HFONT>::npos, AllocType::WeakRef);
-  const HGlobal        HGlobal::npos(handle_alloc<::HGLOBAL>::npos, AllocType::WeakRef);
-  const HIcon          HIcon::npos(handle_alloc<::HICON>::npos, AllocType::WeakRef);
-  const HMenu          HMenu::npos(handle_alloc<::HMENU>::npos, AllocType::WeakRef);
-  const HModule        HModule::npos(handle_alloc<::HMODULE>::npos, AllocType::WeakRef);
-  const HPen           HPen::npos(handle_alloc<::HPEN>::npos, AllocType::WeakRef);
-  const HResource      HResource::npos(handle_alloc<::HRSRC>::npos, AllocType::WeakRef);
-  const HWnd           HWnd::npos(handle_alloc<::HWND>::npos, AllocType::WeakRef);
-  
+  /*template <typename T>
+  const Handle<T>   Handle<T>::npos = Handle<T>(handle_alloc<T>::npos, AllocType::WeakRef);*/
+
+  /*const HAccelerator   HAccelerator::npos = HAccelerator(handle_alloc<::HACCEL>::npos, AllocType::WeakRef);
+  const HAtom          HAtom::npos = HAtom(handle_alloc<::ATOM>::npos, AllocType::WeakRef);
+  const HBrush         HBrush::npos = HBrush(handle_alloc<::HBRUSH>::npos, AllocType::WeakRef);
+  const HDeviceContext HDeviceContext::npos = HDeviceContext(handle_alloc<::HDC>::npos, AllocType::WeakRef);
+  const HFont          HFont::npos = HFont(handle_alloc<::HFONT>::npos, AllocType::WeakRef);
+  const HGlobal        HGlobal::npos = HGlobal(handle_alloc<::HGLOBAL>::npos, AllocType::WeakRef);
+  const HIcon          HIcon::npos = HIcon(handle_alloc<::HICON>::npos, AllocType::WeakRef);
+  const HMenu          HMenu::npos = HMenu(handle_alloc<::HMENU>::npos, AllocType::WeakRef);
+  const HModule        HModule::npos = HModule(handle_alloc<::HMODULE>::npos, AllocType::WeakRef);
+  const HPen           HPen::npos = HPen(handle_alloc<::HPEN>::npos, AllocType::WeakRef);
+  const HResource      HResource::npos = HResource(handle_alloc<::HRSRC>::npos, AllocType::WeakRef);
+  const HWnd           HWnd::npos = HWnd(handle_alloc<::HWND>::npos, AllocType::WeakRef);*/
+}
+
 //! \if CONSTEXPR_CAP - Define here if compiler does not support static storage
 #ifndef CONSTEXPR_CAP
+//! \namespace wtl - Windows template library
+namespace wtl
+{
+  //! \var enum_values<...>::values - Defines HatchStyle values
+  const char* enum_names<Encoding>::values[] = { "ANSI", "ASCII", "OEM", "MAC", "THREAD_ANSI", "SYMBOL", "UTF7", "UTF8", "UTF16" };
+
+  //! \var enum_values<...>::values - Defines HatchStyle values
+  const Encoding enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
+                                                      Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
+
   //! \var format_spec<...>::value - Defines narrow string formatting type specifications
   const char format_spec<char,double>::value[] = "%llf";
   const char format_spec<char,uint64>::value[] = "%llu";
@@ -90,77 +127,24 @@ namespace wtl
   const wchar_t format_spec<wchar_t,uint16*>::value[] = L"%s";
   const wchar_t format_spec<wchar_t,const wchar_t*>::value[] = L"%s";
   const wchar_t format_spec<wchar_t,const uint16*>::value[] = L"%s";
+}
 #endif
 
-  //! \var system_class<...>::value - Defines standard controls window class names
-  const wchar_t system_class<wchar_t,SystemClass::Animate>::name[] = ANIMATE_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::DateTime>::name[] = DATETIMEPICK_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::HotKey>::name[] = HOTKEY_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::Calendar>::name[] = MONTHCAL_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::ProgressBar>::name[] = PROGRESS_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::CoolBar>::name[] = REBARCLASSNAMEW;
-  const wchar_t system_class<wchar_t,SystemClass::StatusBar>::name[] = STATUSCLASSNAMEW;
-  const wchar_t system_class<wchar_t,SystemClass::ToolBar>::name[] = TOOLBARCLASSNAMEW;
-  const wchar_t system_class<wchar_t,SystemClass::ToolTip>::name[] = TOOLTIPS_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::TrackBar>::name[] = TRACKBAR_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::Spin>::name[] = UPDOWN_CLASSW;
 
-  //! \var system_class<...>::value - Defines common control window class names
-  const wchar_t system_class<wchar_t,SystemClass::Button>::name[] = WC_BUTTONW;
-  const wchar_t system_class<wchar_t,SystemClass::ComboBox>::name[] = WC_COMBOBOXW;
-  const wchar_t system_class<wchar_t,SystemClass::ComboBoxEx>::name[] = WC_COMBOBOXEXW;
-  const wchar_t system_class<wchar_t,SystemClass::Edit>::name[] = WC_EDITW;
-  const wchar_t system_class<wchar_t,SystemClass::Header>::name[] = WC_HEADERW;
-  const wchar_t system_class<wchar_t,SystemClass::ListBox>::name[] = WC_LISTBOXW;
-  const wchar_t system_class<wchar_t,SystemClass::IpAddress>::name[] = WC_IPADDRESSW;
-  const wchar_t system_class<wchar_t,SystemClass::Link>::name[] = L"SysLink";
-  const wchar_t system_class<wchar_t,SystemClass::ListView>::name[] = WC_LISTVIEWW;
-  const wchar_t system_class<wchar_t,SystemClass::NativeFont>::name[] = WC_NATIVEFONTCTLW;
-  const wchar_t system_class<wchar_t,SystemClass::PageScroller>::name[] = WC_PAGESCROLLERW;
-  const wchar_t system_class<wchar_t,SystemClass::ScrollBar>::name[] = WC_SCROLLBARW;
-  const wchar_t system_class<wchar_t,SystemClass::Static>::name[] = WC_STATICW;
-  const wchar_t system_class<wchar_t,SystemClass::Tab>::name[] = WC_TABCONTROLW;
-  const wchar_t system_class<wchar_t,SystemClass::TreeView>::name[] = WC_TREEVIEWW;
-
-  //! \var npos - Define 'No resource' sentinel value
-  const ResourceId<Encoding::ANSI>  ResourceId<Encoding::ANSI>::npos = ResourceId<Encoding::ANSI>(zero<uint16>::value);
-  const ResourceId<Encoding::UTF16> ResourceId<Encoding::UTF16>::npos = ResourceId<Encoding::UTF16>(zero<uint16>::value);
-
-  //! \var npos - Define 'No resource' sentinel value
-  const ResourceId<Encoding::ANSI>  NoResource<Encoding::ANSI>::value(zero<uint16>::value);
-  const ResourceId<Encoding::UTF16> NoResource<Encoding::UTF16>::value(zero<uint16>::value);
-
-  //! \var Neutral - Define neutral language id
-  const LanguageId  LanguageId::Neutral(LANG_NEUTRAL,SUBLANG_NEUTRAL);
-
-  //! \var npos - Define 'Resource not found' sentinel value
-  const Resource  Resource::npos;
-
-  //! \var npos - Define 'Resource not found' sentinel value
-  /*const ResourceId<Encoding::ANSI>  NoResourceA = ResourceId<Encoding::ANSI>::npos;
-  const ResourceId<Encoding::UTF16> NoResourceW = ResourceId<Encoding::UTF16>::npos;*/
-
-  //! \var value - Define 'Unhandled message' sentinel values
-  const LResult  unhandled<WindowMessage::CLOSE>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::CLOSE>::value);
-  const LResult  unhandled<WindowMessage::CREATE>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::CREATE>::value);
-  const LResult  unhandled<WindowMessage::DESTROY>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::DESTROY>::value);
-  const LResult  unhandled<WindowMessage::COMMAND>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::COMMAND>::value);
-  const LResult  unhandled<WindowMessage::NOTIFY>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::NOTIFY>::value);
-  const LResult  unhandled<WindowMessage::PAINT>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::PAINT>::value);
-  const LResult  unhandled<WindowMessage::GETMINMAXINFO>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::GETMINMAXINFO>::value);
-  const LResult  unhandled<WindowMessage::KILLFOCUS>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::KILLFOCUS>::value);
-  const LResult  unhandled<WindowMessage::SETFOCUS>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::SETFOCUS>::value);
-  const LResult  unhandled<WindowMessage::TIMER>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::TIMER>::value);
-  const LResult  unhandled<WindowMessage::HSCROLL>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::HSCROLL>::value);
-  const LResult  unhandled<WindowMessage::VSCROLL>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::VSCROLL>::value);
-  const LResult  unhandled<WindowMessage::SIZE>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::SIZE>::value);
-  const LResult  unhandled<WindowMessage::CHAR>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::CHAR>::value);
-  const LResult  unhandled<WindowMessage::KEYUP>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::KEYUP>::value);
-  const LResult  unhandled<WindowMessage::KEYDOWN>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::KEYDOWN>::value);
-  const LResult  unhandled<WindowMessage::SHOWWINDOW>::value(MsgRoute::Unhandled, unhandled_result<WindowMessage::SHOWWINDOW>::value);
+//! \namespace wtl - Windows template library
+namespace wtl
+{
+  //! \var enum_values<...>::value - Defines Colour values
+  const Colour  enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
+                                                   Colour::Leaves, Colour::Forest, Colour::Yellow, Colour::Gold, Colour::Orange, Colour::Honey, Colour::Brown, Colour::Red, Colour::Rose,
+                                                   Colour::Pink, Colour::Purple, Colour::Magenta, Colour::Beige, Colour::Wheat, Colour::Snow, Colour::White, Colour::Invalid };
   
-  //! \var ScreenDC - Screen device context
-  DeviceContext  ScreenDC = HDeviceContext(HWND(0));
+  //! \var enum_values<...>::value - Defines HatchStyle values
+  const HatchStyle  enum_values<HatchStyle>::values[6] = { HatchStyle::Horizontal, HatchStyle::Vertical, HatchStyle::ForwardDiagonal, 
+                                                           HatchStyle::BackwardDiagonal, HatchStyle::Cross, HatchStyle::CrossDiagonal };
+
+  //! \var DeviceContext::ScreenDC - Screen device context
+  DeviceContext  ScreenDC = HDeviceContext::npos;
 
   //! Stock brushes
   const HBrush  StockBrush::Black(Colour::Black);       //!< Black brush
@@ -220,33 +204,46 @@ namespace wtl
   const HPen  StockPen::Snow(PenStyle::Solid, 1, Colour::Snow);       //!< Snow pen
   const HPen  StockPen::White(PenStyle::Solid, 1, Colour::White);       //!< White pen
   const HPen  StockPen::Null(StockObject::NullPen);                                     //!< Special: Null pen
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Console::flush 
-  //! Flushes the log-file output to disc
-  ////////////////////////////////////////////////////////////////////////////////
-  void Console::flush()
-  {
-    // Flush log-file
-    //logFile.flush();
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Console::log
-  //! Write string to log with current attributes
-  //! 
-  //! \param[in] *str - String
-  ////////////////////////////////////////////////////////////////////////////////
-  void Console::log(const char* str)
-  {
-    // Write to log-file
-    //logFile.write(str, getAttributes());
-  }
   
-  //! \var cdebug - Debug output
-  Console cdebug;
+  //! \var LanguageId::Neutral - Define neutral language id
+  const LanguageId  LanguageId::Neutral(LANG_NEUTRAL,SUBLANG_NEUTRAL);
 
-  //! \var ActiveWindows - Map of active window handles
-  WindowBase<Encoding::ANSI>::WindowHandleCollection   WindowBase<Encoding::ANSI>::ActiveWindows;
-  WindowBase<Encoding::UTF16>::WindowHandleCollection  WindowBase<Encoding::UTF16>::ActiveWindows;
+  //! \var Resource::npos - Define 'Resource not found' sentinel value
+  const Resource  Resource::npos;
 }
+
+
+//! \namespace wtl - Windows template library
+namespace wtl
+{
+  //! \var system_class<...>::value - Defines standard controls window class names
+  const wchar_t system_class<wchar_t,SystemClass::Animate>::name[] = ANIMATE_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::DateTime>::name[] = DATETIMEPICK_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::HotKey>::name[] = HOTKEY_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::Calendar>::name[] = MONTHCAL_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::ProgressBar>::name[] = PROGRESS_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::CoolBar>::name[] = REBARCLASSNAMEW;
+  const wchar_t system_class<wchar_t,SystemClass::StatusBar>::name[] = STATUSCLASSNAMEW;
+  const wchar_t system_class<wchar_t,SystemClass::ToolBar>::name[] = TOOLBARCLASSNAMEW;
+  const wchar_t system_class<wchar_t,SystemClass::ToolTip>::name[] = TOOLTIPS_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::TrackBar>::name[] = TRACKBAR_CLASSW;
+  const wchar_t system_class<wchar_t,SystemClass::Spin>::name[] = UPDOWN_CLASSW;
+  
+  //! \var system_class<...>::value - Defines common control window class names
+  const wchar_t system_class<wchar_t,SystemClass::Button>::name[] = WC_BUTTONW;
+  const wchar_t system_class<wchar_t,SystemClass::ComboBox>::name[] = WC_COMBOBOXW;
+  const wchar_t system_class<wchar_t,SystemClass::ComboBoxEx>::name[] = WC_COMBOBOXEXW;
+  const wchar_t system_class<wchar_t,SystemClass::Edit>::name[] = WC_EDITW;
+  const wchar_t system_class<wchar_t,SystemClass::Header>::name[] = WC_HEADERW;
+  const wchar_t system_class<wchar_t,SystemClass::ListBox>::name[] = WC_LISTBOXW;
+  const wchar_t system_class<wchar_t,SystemClass::IpAddress>::name[] = WC_IPADDRESSW;
+  const wchar_t system_class<wchar_t,SystemClass::Link>::name[] = L"SysLink";
+  const wchar_t system_class<wchar_t,SystemClass::ListView>::name[] = WC_LISTVIEWW;
+  const wchar_t system_class<wchar_t,SystemClass::NativeFont>::name[] = WC_NATIVEFONTCTLW;
+  const wchar_t system_class<wchar_t,SystemClass::PageScroller>::name[] = WC_PAGESCROLLERW;
+  const wchar_t system_class<wchar_t,SystemClass::ScrollBar>::name[] = WC_SCROLLBARW;
+  const wchar_t system_class<wchar_t,SystemClass::Static>::name[] = WC_STATICW;
+  const wchar_t system_class<wchar_t,SystemClass::Tab>::name[] = WC_TABCONTROLW;
+  const wchar_t system_class<wchar_t,SystemClass::TreeView>::name[] = WC_TREEVIEWW;
+}
+

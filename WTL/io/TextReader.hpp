@@ -185,7 +185,7 @@ namespace wtl
       return *this;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     stream_t   Stream;     //!< Input stream
   };

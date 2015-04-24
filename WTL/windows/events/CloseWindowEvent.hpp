@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\DestroyWindowEvent.hpp
-//! \brief Encapsulates the WM_DESTROY message in the 'DestroyWindow' event
+//! \file wtl\windows\events\CloseWindowEvent.hpp
+//! \brief Encapsulates the WM_CLOSE message in the 'CloseWindow' event
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_DESTROY_WINDOW_EVENT_HPP
-#define WTL_DESTROY_WINDOW_EVENT_HPP
+#ifndef WTL_CLOSE_WINDOW_EVENT_HPP
+#define WTL_CLOSE_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -15,30 +15,30 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::DESTROY> - Defines function signature of 'DestroyWindow' handlers
+  //! \struct delegate_signature<WindowMessage::CLOSE> - Defines function signature of 'CloseWindow' handlers
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::DESTROY>  { using type = LResult (); };
+  struct delegate_signature<ENC,WindowMessage::CLOSE>  { using type = LResult (); };
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias DestroyWindowEvent - Defines 'DestroyWindow' event (ie. WM_DESTROY)
+  //! \alias CloseWindowEvent - Defines 'CloseWindow' event (ie. WM_CLOSE)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using DestroyWindowEvent = MessageEvent<ENC,WindowMessage::DESTROY>;
+  using CloseWindowEvent = MessageEvent<ENC,WindowMessage::CLOSE>;
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias DestroyWindowEventHandler - Handler for 'DestroyWindow' event (ie. WM_DESTROY)
+  //! \alias CloseWindowEventHandler - Handler for 'CloseWindow' event (ie. WM_CLOSE)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using DestroyWindowEventHandler = typename DestroyWindowEvent<ENC>::delegate_t;
+  using CloseWindowEventHandler = typename CloseWindowEvent<ENC>::delegate_t;
 
 
 }
 
-#endif // WTL_DESTROY_WINDOW_EVENT_HPP
+#endif // WTL_CLOSE_WINDOW_EVENT_HPP

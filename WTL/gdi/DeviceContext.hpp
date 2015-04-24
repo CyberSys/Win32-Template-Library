@@ -27,7 +27,7 @@ namespace wtl
     using handle_t = OBJ;
 
     //! \typedef native_t - Native handle type
-    using native_t = typename handle_t::handle_t;
+    using native_t = typename handle_t::native_t;
 
     //! \typedef stack_t - Define handle stack type
     using stack_t = std::deque<OBJ>;

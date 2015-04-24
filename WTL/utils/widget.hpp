@@ -137,7 +137,7 @@ namespace GLM
       bottom = r.bottom;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
   };
 

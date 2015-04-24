@@ -101,7 +101,7 @@ namespace wtl
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowMenu::getSubMenu
+    // WindowMenu::getSubMenu const
     //! Retrieves the handle of a sub-menu
     //! 
     //! \return HMENU - Native sub-menu handle
@@ -116,22 +116,21 @@ namespace wtl
     //! Inserts an item representing a gui command
     //! 
     //! \tparam ENC - Message character encoding 
-    //! \tparam CMD - Command Id
     //! 
     //! \param[in] const &cmd - Gui command
     //! \param[in] idx - Zero-based position index
     //! \param[in] &item - Item properties
     //! 
-    //! \throw 
+    //! \throw wtl::platform_error - Unable to insert menu item
     ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, CommandId CMD>
-    void insert(GuiCommand<ENC,CMD>& cmd, int32 idx)
-    {
-      MenuItemInfo item(cmd.name());
-      // Insert item
-      if (!getFunc<ENC>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, FALSE, &item))
-        throw platform_error(HERE, "Unable to insert menu item");
-    }
+    //template <Encoding ENC>
+    //void insert(GuiCommand<ENC>& cmd, int32 idx)
+    //{
+    //  MenuItemInfo item(cmd.name());
+    //  // Insert item
+    //  if (!getFunc<ENC>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, FALSE, &item))
+    //    throw platform_error(HERE, "Unable to insert menu item");
+    //}
 
     ///////////////////////////////////////////////////////////////////////////////
     // WindowMenu::operator HMENU

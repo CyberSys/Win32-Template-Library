@@ -21,26 +21,26 @@ namespace wtl
   //! \tparam LEN - Buffer capacity
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, unsigned LEN>
-  struct StringResource : CharArray<ENC,LEN>, 
-                          Resource
+  struct StringResource : Resource
   {      
     // ------------------- TYPES & CONSTANTS -------------------
   
-    //! \alias resource_base - Define resource base class
-    using resource_base = Resource;
+    //! \alias base - Define base type
+    using base = Resource;
 
-    //! \alias string_base - Define character array base class
-    using string_base = CharArray<ENC,LEN>;
+    //! \alias string_t - Define string type
+    using string_t = CharArray<ENC,LEN>;
     
+    //! \var encoding - Define character encoding
+    static constexpr Encoding encoding = ENC;
+    
+  protected:
     ///////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
     ///////////////////////////////////////////////////////////////////////////////
     struct StringTableEntry
     {
       // ------------------- TYPES & CONSTANTS -------------------
-
-      //! \alias string_t - String buffer type
-      using string_t = const wchar_t*;
 
       // --------------------- CONSTRUCTION ----------------------
       
@@ -61,9 +61,13 @@ namespace wtl
 
       // -------------------- REPRESENTATION ---------------------
 
-      uint16   Length;      //!< Length of current entry, in characters
-      string_t Text;        //!< String Text in UTF16
+      uint16         Length;      //!< Length of current entry, in characters
+      const wchar_t* Text;        //!< String Text in UTF16
     };
+
+    // -------------------- REPRESENTATION ---------------------
+  public:
+    string_t   Text;     //!< String resource text
 
     // --------------------- CONSTRUCTION ----------------------
     
@@ -77,8 +81,7 @@ namespace wtl
     //! \throw wtl::logic_error - Missing string -or- Insufficient buffer capacity to store string
     //! \throw wtl::platform_error - Unable to load resource
     ///////////////////////////////////////////////////////////////////////////////
-    StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) 
-      : resource_base(LoadedModules.findString(id,lang))
+    explicit StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) : base(LoadedModules.findString(id,lang))
     {
       const int32  index = id.Value.Numeral % 16;                   //!< Index of desired string within table
       
@@ -91,15 +94,14 @@ namespace wtl
 
       // [NOT-FOUND] Return false & empty string 
       if (!item)
-        return logic_error(HERE, "String resource %d does not exist", id.Value.Numeral);
+        throw logic_error(HERE, "String resource %d does not exist", id.Value.Numeral);
 
       // [FOUND] Ensure sufficient space is available
       if (item->Length > LEN)
         throw logic_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)LEN);
 
       // Convert from UTF16 if necessary
-      assign<Encoding::UTF16>(item->Text);
-      return true;
+      Text.assign<Encoding::UTF16>(item->Text);
     }
 
     // ------------------------ STATIC -------------------------
@@ -107,8 +109,6 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
 
     // ----------------------- MUTATORS ------------------------
-
-    // -------------------- REPRESENTATION ---------------------
 
   };
 

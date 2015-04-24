@@ -14,12 +14,12 @@
 namespace wtl
 {
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_traits - Defines handle traits
+  //! \struct native_traits - Defines handle traits
   //!
   //! \tparam T - Any handle type
   ///////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct handle_traits
+  struct native_traits
   {
     static constexpr bool cloneable = false;
   };
@@ -37,13 +37,13 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct HAlloc - Associates handle and allocation method
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename handle_t>
+  template <typename native_t>
   struct HAlloc
   {
-    HAlloc(handle_t h, AllocType at) : Handle(h), Method(at)
+    HAlloc(native_t h, AllocType at) : Handle(h), Method(at)
     {}
 
-    handle_t   Handle;      //!< Handle
+    native_t   Handle;      //!< Handle
     AllocType  Method;      //!< Allocation method
   };
 
@@ -55,11 +55,16 @@ namespace wtl
   template <typename T>
   struct handle_alloc
   {
+    static const T npos;
+
     static HAlloc<T> create();
     static HAlloc<T> clone(HAlloc<T>);
     static void      destroy(HAlloc<T>);
   };
-
+  
+  //! \var handle_alloc<T>::npos - 'Invalid handle' sentinel value 
+  template <typename T>
+  const T handle_alloc<T>::npos = (const T)INVALID_HANDLE_VALUE;
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct Handle - Encapsulates any handle
@@ -77,26 +82,31 @@ namespace wtl
     //! \typedef alloc_t - Define handle allocator type
     using alloc_t = handle_alloc<T>;
 
-    //! \typedef handle_t - Defines handle type
-    using handle_t = T;
+    //! \typedef native_t - Defines handle type
+    using native_t = T;
 
     //! \typedef halloc_t - Define allocation handle type
     using halloc_t = HAlloc<T>;
 
     //! \typedef pointer_t - Defines internal representation used to store handle
-    using pointer_t = handle_t*;
+    using pointer_t = native_t*;
 
     //! \typedef shared_ptr_t - Define shared pointer type
-    using shared_ptr_t = std::shared_ptr<handle_t>;
+    using shared_ptr_t = std::shared_ptr<native_t>;
     
     //! \typedef traits_t - Define handle traits type
-    using traits_t = handle_traits<handle_t>; 
+    using traits_t = native_traits<native_t>; 
 
     //! \var npos - 'No handle' sentinel value
-    static const Handle<T> npos;
+    static const Handle<T> npos; 
+    
+    // -------------------- REPRESENTATION ----------------------
+  protected:
+    halloc_t      Allocation;  //!< Allocated handle & method storage
+    shared_ptr_t  Storage;     //!< Handle
 
     // ---------------- CONSTRUCTION / DESTRUCTION ----------------
-
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // Handle::Handle
     //! Create shared handle using appropriate allocator
@@ -121,7 +131,7 @@ namespace wtl
     //! \param[in] h - Native handle
     //! \param[in] t - Allocation type
     ///////////////////////////////////////////////////////////////////////////////
-    Handle(handle_t h, AllocType t) : Allocation(h, t),
+    Handle(native_t h, AllocType t) : Allocation(h, t),
                                       Storage(toPointer(h), [this](pointer_t ptr) { safeDelete(ptr); } )
     {}
     
@@ -163,9 +173,9 @@ namespace wtl
     // Handle::npos
     //! Get the 'Invalid handle' sentinel value
     //! 
-    //! \return handle_t - 'Invalid handle' sentinel value
+    //! \return native_t - 'Invalid handle' sentinel value
     ///////////////////////////////////////////////////////////////////////////////
-    /*static handle_t npos()
+    /*static native_t npos()
     {
       return alloc_t::npos;
     }*/
@@ -176,11 +186,11 @@ namespace wtl
     //! Convert pointer to handle
     //! 
     //! \param[in] ptr - Pointer
-    //! \return handle_t - 'ptr' as handle
+    //! \return native_t - 'ptr' as handle
     ///////////////////////////////////////////////////////////////////////////////
-    static handle_t toHandle(pointer_t ptr)
+    static native_t toHandle(pointer_t ptr)
     {
-      return (handle_t)(long32)ptr;
+      return (native_t)(long32)ptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -190,7 +200,7 @@ namespace wtl
     //! \param[in] h - Handle
     //! \return pointer_t - 'h' as pointer
     ///////////////////////////////////////////////////////////////////////////////
-    static pointer_t toPointer(handle_t h)
+    static pointer_t toPointer(native_t h)
     {
       return (pointer_t)(long32)h;
     }
@@ -212,9 +222,9 @@ namespace wtl
     // Handle::get const
     //! Get the handle value
     //! 
-    //! \return handle_t - Handle
+    //! \return native_t - Handle
     ///////////////////////////////////////////////////////////////////////////////
-    handle_t get() const
+    native_t get() const
     {
       return toHandle(Storage.get());
     }
@@ -231,14 +241,39 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // Handle::operator handle_t const
+    // Handle::operator native_t const
     //! Implicit user conversion to underlying handle
     //! 
-    //! \return handle_t - Handle
+    //! \return native_t - Handle
     ///////////////////////////////////////////////////////////////////////////////
-    operator handle_t() const
+    operator native_t() const
     {
       return get();
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Handle::operator == const
+    //! Equality operator 
+    //! 
+    //! \param[in] const &r - Another handle
+    //! \return bool - True iff handle & method are equal
+    ///////////////////////////////////////////////////////////////////////////////
+    bool operator == (const Handle<T>& r) const
+    {
+      return Allocation.Handle == r.Allocation.Handle
+          && Allocation.Method == r.Allocation.Method;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Handle::operator != const
+    //! Inequality operator 
+    //! 
+    //! \param[in] const &r - Another handle
+    //! \return bool - True iff handle or method are different
+    ///////////////////////////////////////////////////////////////////////////////
+    bool operator != (const Handle<T>& r) const
+    {
+      return !operator==(r);
     }
 
     // ------------------------- MUTATORS -------------------------
@@ -279,13 +314,12 @@ namespace wtl
       // Succeed if invalid
       return true;
     }
-
-    // ---------------------- REPRESENTATION -----------------------
-  protected:
-    halloc_t      Allocation;  //!< Allocated handle & method storage
-    shared_ptr_t  Storage;     //!< Handle
   };
-  
+
+  //! \var Handle<T>::npos - 'No handle' sentinel value
+  template <typename T>
+  const Handle<T>   Handle<T>::npos = Handle<T>(handle_alloc<T>::npos, AllocType::WeakRef);
+
 } // GDK namespace
 
 

@@ -26,6 +26,20 @@ namespace wtl
     UTF8 = CP_UTF8,               //!< UTF-8
     UTF16 = 1200,                 //!< UTF-16
   };
+  
+  //! Define traits: Non-Contiguous Enumeration
+  template <> struct is_attribute<Encoding>  : std::false_type  {};
+  template <> struct is_contiguous<Encoding> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<Encoding>     : std::integral_constant<Encoding,Encoding::UTF16>   {};
+  template <> struct min_value<Encoding>     : std::integral_constant<Encoding,Encoding::ANSI>    {};
+  
+  //! Define names and values
+  template <> struct enum_names<Encoding>  { static const char* values[];    };
+  template <> struct enum_values<Encoding> { static const Encoding values[]; };
+
+
 
   /////////////////////////////////////////////////////////////
   //! \struct encoding_traits - Defines encoding traits
@@ -54,7 +68,37 @@ namespace wtl
   template <>           struct default_encoding<char>    : std::integral_constant<Encoding,Encoding::ANSI>   {};
   template <>           struct default_encoding<wchar_t> : std::integral_constant<Encoding,Encoding::UTF16>  {};
 
+  
+  /////////////////////////////////////////////////////////////
+  //! \struct enable_if_encoding_t - Defines an SFINAE expression requiring an equal character encoding
+  //! 
+  //! \tparam VAR - Encoding to test
+  //! \tparam ENC - Required encoding
+  //! \tparam RET - Return type
+  /////////////////////////////////////////////////////////////
+  template <Encoding VAR, Encoding ENC, typename RET = void>
+  using enable_if_encoding_t = std::enable_if_t<VAR == ENC, RET>;
 
+  
+  /////////////////////////////////////////////////////////////
+  //! \struct enable_if_not_encoding_t - Defines an SFINAE expression requiring a different character encoding
+  //! 
+  //! \tparam VAR - Encoding to test
+  //! \tparam ENC - Required encoding
+  //! \tparam RET - Return type
+  /////////////////////////////////////////////////////////////
+  template <Encoding VAR, Encoding ENC, typename RET = void>
+  using enable_if_not_encoding_t = std::enable_if_t<VAR != ENC, RET>;
+  
+  /////////////////////////////////////////////////////////////
+  //! \alias enable_if_attribute_t - Defines an SFINAE expression requiring an attribute enumeration
+  //! 
+  //! \tparam E - Input type
+  //! \tparam RET - Return type
+  /////////////////////////////////////////////////////////////
+  /*template <typename E, typename RET = void>
+  using enable_if_encoding_t = typename enable_if_encoding<E,RET>::type;*/
+  
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias getType_t - Defines the narrow/wide character declaration of a type from an encoding
@@ -86,11 +130,6 @@ namespace wtl
     return getFunc<encoding_char_t<ENC>>(narrow, wide);
   };
   
-  template <typename T>
-  struct NonTypeArg
-  {
-    //NonTypeArg(4>;
-  };
 
   ///////////////////////////////////////////////////////////////////////////////
   //! wtl::getValue

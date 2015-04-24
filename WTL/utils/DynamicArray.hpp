@@ -38,6 +38,15 @@ namespace wtl
   struct Array
   { /*Undefined*/ };
 
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias DynamicArray - Statically allocated fixed capacity array with variable runtime length 
+  //! 
+  //! \tparam DATA - Type of each element
+  //! \tparam LENGTH - Maximum number of elements within the array
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename DATA, uint32 LENGTH>
+  using DynamicArray = Array<DATA,LENGTH,true>;
 
 
   ///////////////////////////////////////////////////////////////////////////////

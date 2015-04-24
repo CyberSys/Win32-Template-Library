@@ -106,6 +106,9 @@
 #include "utils/Bitset.hpp"
 #include "utils/Handle.hpp"
 #include "utils/Random.hpp"
+#include "utils/Stack.hpp"
+#include "utils/Queue.hpp"
+#include "utils/toString.hpp"
 
 // Platform Constants:
 #include "platform/Colours.hpp"
@@ -120,12 +123,11 @@
 #include "platform/Shapes.hpp"
 
 // Platform Traits:
-#include "traits/ModuleTraits.hpp"
 #include "traits/LocaleTraits.hpp"
 #include "traits/ResourceTraits.hpp"
+#include "traits/GlobalTraits.hpp"
 #include "traits/WindowClassTraits.hpp"
 #include "traits/WindowTraits.hpp"
-#include "traits/GlobalTraits.hpp"
 #include "traits/PenTraits.hpp"
 #include "traits/BrushTraits.hpp"
 #include "traits/CursorTraits.hpp"
@@ -135,6 +137,9 @@
 #include "traits/AcceleratorTraits.hpp"
 #include "traits/WindowMessageTraits.hpp"
 #include "traits/DeviceContextTraits.hpp"
+
+// Platform
+#include "platform/CommonApi.hpp"
 
 // IO: Streams
 #include "io/MemoryStream.hpp"
@@ -167,19 +172,23 @@
 #include "gdi/DeviceContext.hpp"
 
 // Events
+#include "windows/Event.hpp"
 #include "windows/EventArgs.hpp"
-#include "windows/EventHandler.hpp"
-#include "windows/EventDelegate.hpp"
+#include "windows/MessageEvent.hpp"
+//#include "windows/ChildControlEvent.hpp"
 #include "windows/events/CreateWindowEvent.hpp"
 #include "windows/events/DestroyWindowEvent.hpp"
+#include "windows/events/CloseWindowEvent.hpp"
 #include "windows/events/PaintWindowEvent.hpp"
 #include "windows/events/ShowWindowEvent.hpp"
-#include "windows/events/OwnerDrawEvent.hpp"
+//#include "windows/events/OwnerDrawEvent.hpp"
 #include "windows/events/CommandEvent.hpp"
+#include "windows/events/ControlEvent.hpp"
+#include "windows/events/ControlNotification.hpp"
 
 // Commands
 #include "windows/GuiCommand.hpp"
-//#include "windows/GuiCommandQueue.hpp"
+#include "windows/GuiCommandQueue.hpp"
 
 // Windows
 #include "windows/WindowMenu.hpp"
@@ -187,10 +196,10 @@
 #include "windows/WindowBase.hpp"
 
 // Events
-#include "windows/events/ControlEvent.hpp"
-#include "windows/events/NotifyEventData.hpp"
-#include "windows/events/NotifyEvent.hpp"
-#include "windows/events/StandardControls.hpp"
+
+//#include "windows/events/NotifyEventData.hpp"
+//#include "windows/events/NotifyEvent.hpp"
+//#include "windows/events/StandardControls.hpp"
 
 // Threads
 #include "threads/WorkerThread.hpp"
@@ -207,7 +216,7 @@
 // Windows & Dialogs
 
 // Commands
-#include "windows/commands/CloseProgramCommand.hpp"
+#include "windows/commands/ExitProgramCommand.hpp"
 //#include "windows/commands/PasteClipboardCommand.hpp"
 
 

@@ -48,12 +48,13 @@ namespace wtl
       
     ////////////////////////////////////////////////////////////////////////////////
     //! \struct loop - Unfurls the high bits of the mask into a variable length array
+    //!
     //! \tparam IDX - Zero-based iteration index
     ////////////////////////////////////////////////////////////////////////////////
     template <int32 IDX>
     struct loop
     {
-      static_assert(IDX >= 0 && IDX < BITS, "Invalid loop index");
+      static_assert((IDX >= 0) && (IDX < BITS), "Invalid loop index");
 
       ////////////////////////////////////////////////////////////////////////////////
       // Bitset::flatten
@@ -316,7 +317,7 @@ namespace wtl
       return *this;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     mask_t  Mask;   //!< Underlying representation
   };

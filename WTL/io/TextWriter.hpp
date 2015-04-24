@@ -307,7 +307,7 @@ namespace wtl
       return *this;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     STREAM   Stream;     //!< Output stream
   };

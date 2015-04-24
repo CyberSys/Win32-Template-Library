@@ -14,12 +14,6 @@
 namespace wtl
 {
   
-  //! \alias HWnd - Window handle
-  using HWnd = Handle<HWND>;
-
-  //! \alias WindowId - Window Id
-  //using WindowId = uint16;
-
   //! \enum WindowId - Represents a Window Id
   enum class WindowId : uint16
   {
@@ -64,16 +58,16 @@ namespace wtl
   }
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HWND> - Encapsulates window handle allocation
+  //! \struct handle_alloc<::HWND> - Encapsulates window handle allocation
   ///////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<HWND>
+  struct handle_alloc<::HWND>
   {
     //! \var npos - Invalid handle sentinel value
-    static const HWND npos; 
+    static const ::HWND npos; 
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HWND>::create
+    // handle_alloc<::HWND>::create
     //! Create window handle
     //! 
     //! \tparam ENC - String encoding
@@ -89,12 +83,12 @@ namespace wtl
     //! \param[in] const& rc - Initial position
     //! \param[in] parent - Parent window
     //! \param[in] menu - Window Menu
-    //! \return HAlloc<HWND> - Created handle
+    //! \return HAlloc<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<HWND> create(HINSTANCE instance, const ResourceId<ENC>& wndClass, OBJ* object, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, HWND parent, HMENU menu)
+    static HAlloc<::HWND> create(HINSTANCE instance, const ResourceId<ENC>& wndClass, OBJ* object, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, ::HWND parent, HMENU menu)
     { 
       using char_t = encoding_char_t<ENC>;    //!< Character encoding type
 
@@ -102,7 +96,7 @@ namespace wtl
       auto createWindow = getFunc<char_t>(::CreateWindowExA,::CreateWindowExW);
 
       // Create window
-      HWND hwnd = createWindow(enum_cast(ext), 
+      ::HWND hwnd = createWindow(enum_cast(ext), 
                                wndClass.toString(), 
                                title, 
                                enum_cast(style), 
@@ -121,7 +115,7 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HWND>::create
+    // handle_alloc<::HWND>::create
     //! Create child window handle
     //! 
     //! \tparam ENC - String encoding
@@ -137,36 +131,36 @@ namespace wtl
     //! \param[in] const& title - Window title
     //! \param[in] const& rc - Initial position
     //! \param[in] parent - Parent window
-    //! \return HAlloc<HWND> - Created handle
+    //! \return HAlloc<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<HWND> create(HINSTANCE instance, const ResourceId<ENC>& wndClass, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, HWND parent)
+    static HAlloc<::HWND> create(HINSTANCE instance, const ResourceId<ENC>& wndClass, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, ::HWND parent)
     { 
       // Create child window
       return create(instance, wndClass, object, style, ext, title, rc, parent, reinterpret_cast<HMENU>(enum_cast(id)));
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HWND>::clone
+    // handle_alloc<::HWND>::clone
     //! Clone handle
     //! 
-    //! \param[in] pen - Handle
-    //! \return HAlloc<HWND> - Duplicate of handle
+    //! \param[in] wnd - Handle
+    //! \return HAlloc<::HWND> - Duplicate of handle
     //!
     //! \throw wtl::platform_error - Failed to clone handle
     ///////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HWND> clone(HAlloc<HWND> pen);
+    static HAlloc<::HWND> clone(HAlloc<::HWND> wnd);
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HWND>::destroy noexcept
+    // handle_alloc<::HWND>::destroy noexcept
     //! Release handle 
     //! 
     //! \param[in] wnd - Handle
     //! \return bool - True iff closed successfully
     ///////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HWND> wnd) noexcept
+    static bool destroy(HAlloc<::HWND> wnd) noexcept
     {
       // Delete without checking if handle is valid
       switch (wnd.Method)
@@ -177,6 +171,11 @@ namespace wtl
       return false;
     }
   };
+
+  
+  //! \alias HWnd - Window handle
+  using HWnd = Handle<HWND>;
+
 
 } //namespace wtl
 #endif // WTL_WINDOW_TRAITS_HPP

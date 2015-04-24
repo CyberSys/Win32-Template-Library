@@ -131,7 +131,7 @@ namespace wtl
       Stream.read(arr);
     }
     
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     stream_t  Stream;     //!< Input stream
   };

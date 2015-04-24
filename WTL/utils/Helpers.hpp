@@ -10,6 +10,44 @@
 
 #include "wtl/WTL.hpp"
 
+//! \namespace std - Namespace injection
+namespace std
+{
+  // -------------- ARRAY BOUNDS --------------
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // std::begin
+  //! Get the start of a statically allocated array of unspecified length
+  //! 
+  //! \tparam ELEMENT - Element type
+  //!
+  //! \param[in] r - Statically allocated array of unspecified length
+  //! \return ELEMENT* - Position of first element
+  ////////////////////////////////////////////////////////////////////////////////
+  template <class ELEMENT> 
+	ELEMENT* begin(ELEMENT (&r)[]) noexcept
+	{	
+	  return &r[0];
+	}
+  
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // std::end
+  //! Get the end of a statically allocated array of unspecified length
+  //! 
+  //! \tparam ELEMENT - Element type
+  //!
+  //! \param[in] r - Statically allocated array of unspecified length
+  //! \return ELEMENT* - Position beyond final element
+  ////////////////////////////////////////////////////////////////////////////////
+  template <class ELEMENT> 
+	ELEMENT* end(ELEMENT (&r)[]) noexcept
+	{	
+    // Return position beyond last element
+	  return &r[sizeof(&r) / sizeof(ELEMENT)];
+	}
+}
+
 //! \namespace wtl - Windows template library
 namespace wtl
 {
@@ -172,32 +210,6 @@ namespace wtl
     return NameValuePair<VALUE>(name, value);
   }
   
-  // ------------------ SFINAE -----------------
-
-  /////////////////////////////////////////////////////////////
-  //! \struct enable_if_enum_t - Provides a convenient SFINAE expression for specifying enumeration types
-  /////////////////////////////////////////////////////////////
-  template <typename E, typename... ARGS>
-  struct enable_if_enum_t; // Undefined
-
-  /////////////////////////////////////////////////////////////
-  //! \struct enable_if_enum_t - Provides an SFINAE expression for a single enumeration type
-  //! 
-  //! \tparam E - Enumeration type
-  /////////////////////////////////////////////////////////////
-  template <typename E>
-  struct enable_if_enum_t<E> : std::enable_if_t<std::is_enum<E>::value>
-  {};
-
-  /////////////////////////////////////////////////////////////
-  //! \struct enable_if_enum_t - Provides an SFINAE expression for two enumeration types
-  //! 
-  //! \tparam E1 - Enumeration type
-  //! \tparam E2 - Another enumeration type
-  /////////////////////////////////////////////////////////////
-  template <typename E1, typename E2>
-  struct enable_if_enum_t<E1,E2> : std::enable_if_t<std::is_enum<E1>::value && std::is_enum<E2>::value>
-  {};
 
   // ------------------ POWER OF -----------------
 

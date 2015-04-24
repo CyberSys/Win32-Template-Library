@@ -378,7 +378,7 @@ namespace wtl
       return Handle ? fwrite(buffer, sizeof(element_t), length, Handle) : zero<distance_t>::value;
     }
     
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     FileAccess  Access;    //!< Access privileges
     ::FILE*     Handle;    //!< File system handle

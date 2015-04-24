@@ -32,6 +32,20 @@ namespace wtl
 
     //! \alias native_t - Type accessor for native ::WNDCLASSEX type
     using native_t = getType<char_t,::WNDCLASSEXA,::WNDCLASSEXW>;
+    
+    // -------------------- REPRESENTATION ---------------------
+    
+    HINSTANCE   Instance;          //!< Registered module
+    ClassStyle  Style;             //!< Class styles
+    HAtom       Atom;              //!< Registered class atom
+    HBrush      Background;        //!< Background brush
+    HCursor     Cursor;            //!< Cursor 
+    resource_t  Name,              //!< Class name
+                Menu;              //!< Window menu name
+    HIcon       SmallIcon,         //!< Small icon
+                LargeIcon;         //!< Large icon
+    int32       ClassStorage,      //!< Size of class storage, in bytes
+                WindowStorage;     //!< Size of window storage, in bytes
 
     // --------------------- CONSTRUCTION ----------------------
     
@@ -158,19 +172,6 @@ namespace wtl
     
     // ----------------------- MUTATORS ------------------------
     
-    // -------------------- REPRESENTATION ---------------------
-    
-    HINSTANCE   Instance;          //!< Registered module
-    ClassStyle  Style;             //!< Class styles
-    HAtom       Atom;              //!< Registered class atom
-    HBrush      Background;        //!< Background brush
-    HCursor     Cursor;            //!< Cursor 
-    resource_t  Name,              //!< Class name
-                Menu;              //!< Window menu name
-    HIcon       SmallIcon,         //!< Small icon
-                LargeIcon;         //!< Large icon
-    int32       ClassStorage,      //!< Size of class storage, in bytes
-                WindowStorage;     //!< Size of window storage, in bytes
   };
 
   
@@ -178,9 +179,9 @@ namespace wtl
   //! \struct system_class - Defines the names of system window classes
   //! 
   //! \tparam CHAR - Character type
-  //! \tparam S - System class
+  //! \tparam CLS - System class
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, SystemClass S> 
+  template <typename CHAR, SystemClass CLS> 
   struct system_class 
   { 
     //! \alias char_t - Define character type
@@ -190,7 +191,9 @@ namespace wtl
     static const char_t name[];    
   };
 
-  
+  /*template <SystemClass CLS> const char    system_class<char,CLS>::name[] = "";
+  template <SystemClass CLS> const wchar_t system_class<wchar_t,CLS>::name[] = L"";*/
+
   //! \var system_class<wchar_t>::value - Defines standard controls window class names
   template <> struct system_class<wchar_t,SystemClass::Animate>       { static const wchar_t name[];     };
   template <> struct system_class<wchar_t,SystemClass::DateTime>      { static const wchar_t name[];     };
@@ -231,9 +234,15 @@ namespace wtl
   template <Encoding ENC, SystemClass CLS> 
   struct SystemWindowClass : WindowClass<ENC>
   { 
+    // ------------------- TYPES & CONSTANTS -------------------
+  
     //! \alias base - Define base type
     using base = WindowClass<ENC>;
 
+    // -------------------- REPRESENTATION ---------------------
+  
+    // --------------------- CONSTRUCTION ----------------------
+    
     ///////////////////////////////////////////////////////////////////////////////
     // SystemWindowClass::SystemWindowClass
     //! Create a weak reference to a system window class 
@@ -245,6 +254,14 @@ namespace wtl
     SystemWindowClass() : base(system_class<encoding_char_t<ENC>,CLS>::name)
     {}
 
+    // ------------------------ STATIC -------------------------
+  protected:
+
+
+    // ---------------------- ACCESSORS ------------------------			
+
+    // ----------------------- MUTATORS ------------------------
+    
   };
 
 

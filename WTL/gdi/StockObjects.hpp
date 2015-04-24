@@ -44,8 +44,9 @@ namespace wtl
                         Snow,        //!< Snow brush
                         White,       //!< White brush
                         Null;        //!< Special: Null brush
-                        
   };
+
+
 
   //! \struct StockFont - Provides stock fonts
   struct StockFont

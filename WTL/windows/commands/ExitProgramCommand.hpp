@@ -20,35 +20,41 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ExitProgramCommand : GuiCommand<ENC,CommandId::FILE_EXIT>
+  struct ExitProgramCommand : GuiCommand<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
 
     //! \typedef base - Define base type
-    using base = GuiCommand<ENC,CommandId::FILE_EXIT>;
+    using base = GuiCommand<ENC>;
+
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    WindowBase<ENC>&  AppWnd;
 
     // --------------------- CONSTRUCTION ----------------------
-    
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // ExitProgramCommand::ExitProgramCommand
     //! Create command
     //! 
     //! \param[in] appWnd - Main application window
     ///////////////////////////////////////////////////////////////////////////////
-    ExitProgramCommand(WindowBase<ENC>& appWnd) : AppWindow(appWnd)
+    ExitProgramCommand(WindowBase<ENC>& appWnd) 
+      : base(CommandId::FILE_EXIT, [&appWnd] () { appWnd.post(WindowMessage::CLOSE); } ),
+        AppWnd(appWnd)
     {}
     
     // ---------------------- ACCESSORS ------------------------			
-
+    
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::permanent const
-    //! Query the whether the command can be reverted
+    // ExitProgramCommand::clone const
+    //! Create a new instance of the command
     //! 
-    //! \return bool - True iff command is permanent (cannot be undone)
+    //! \return interface_t* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
-    bool  permanent() const override
+    typename base::interface_t*  clone() const 
     {
-      return true;
+      return new ExitProgramCommand(AppWnd);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -57,38 +63,16 @@ namespace wtl
     //! 
     //! \return CommandState - Current state of command
     ///////////////////////////////////////////////////////////////////////////////
-    virtual CommandState state() const
+    CommandState state() const override
     {
+      // Always enabled
       return CommandState::Enabled;
     }
     
     // ----------------------- MUTATORS ------------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
-    // ExitProgramCommand::execute 
-    //! Executes the command
-    //!
-    //! \param[in] src - Source of command
-    ///////////////////////////////////////////////////////////////////////////////
-    void execute(CommandSource src) override
-    {
-      AppWindow.post(WindowMessage::CLOSE);
-    }
-
-    // ----------------------- REPRESENTATION ------------------------
-  protected:
-    WindowBase<ENC>&  AppWindow;     //!< Main program window
   };
   
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias ExitProgramCommandHandler - Handler for gui command 'FILE_EXIT'
-  //! 
-  //! \tparam ENC - Window character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using ExitProgramCommandHandler = GuiCommandHandler<ENC,ExitProgramCommand<ENC>>;
-
   
 }
 

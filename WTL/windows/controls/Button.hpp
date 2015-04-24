@@ -108,6 +108,25 @@ namespace wtl
       int32 dummy;
       Button_SetImageList(this->Handle, &dummy);
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Button::onControlEvent
+    //! Called in response to events from child controls (ie. WM_COMMAND)
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onControlEvent(ControlEventArgs<encoding>& args) 
+    { 
+      switch (static_cast<ButtonEvent>(args.Message))
+      {
+      case ButtonEvent::Click:      return Click.raise();
+      case ButtonEvent::Disabled:
+      case ButtonEvent::Pushed:
+      }
+
+      return args.unhandled();
+    }
 
     // -------------------- REPRESENTATION ---------------------
     

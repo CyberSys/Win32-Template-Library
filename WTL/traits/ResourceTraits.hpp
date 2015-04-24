@@ -9,6 +9,7 @@
 #define WTL_RESOURCE_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/ModuleTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -69,6 +70,10 @@ namespace wtl
       const char_t* Name;       //!< Resource name
       uint32        Numeral;    //!< Resource ID
     };
+    
+    // -------------------- REPRESENTATION ---------------------
+
+    Ident  Value;     //!< Resource identifier value
 
     // --------------------- CONSTRUCTION ----------------------
 
@@ -169,9 +174,6 @@ namespace wtl
 
     // ----------------------- MUTATORS ------------------------
 
-    // -------------------- REPRESENTATION ---------------------
-
-    Ident  Value;     //!< Resource identifier value
   };
 
   //! \alias ResourceIdA - ANSI Resource identifier
@@ -179,13 +181,11 @@ namespace wtl
 
   //! \alias ResourceIdW - UTF16 Resource identifier
   using ResourceIdW = ResourceId<Encoding::UTF16>;
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct NoResource - Defines 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> struct NoResource                  {                /* Undefined */                  };
-  template <>             struct NoResource<Encoding::ANSI>  { static const ResourceId<Encoding::ANSI> value;  };
-  template <>             struct NoResource<Encoding::UTF16> { static const ResourceId<Encoding::UTF16> value; };
+  
+  //! \var npos - Define 'No resource' sentinel value
+  template <Encoding ENC>
+  const ResourceId<ENC>  ResourceId<ENC>::npos = ResourceId<ENC>(zero<uint16>::value);
+  
   
   ///////////////////////////////////////////////////////////////////////////////
   //! wtl::resource_id

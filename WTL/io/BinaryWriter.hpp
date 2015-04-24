@@ -144,7 +144,7 @@ namespace wtl
       Stream.put(b ? 1 : 0);
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     stream_t   Stream;     //!< Output stream
   };

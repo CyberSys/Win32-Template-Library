@@ -28,15 +28,18 @@ namespace wtl
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
+    //! \alias resource_t - Define resource id type
+    using resource_t = ResourceId<ENC>;
+    
     //! \var encoding - Define message character encoding 
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::PAINT;
-
-    //! \alias resource_t - Define resource id type
-    using resource_t = ResourceId<ENC>;
     
+    //! \var unhandled - Define unhandled result
+    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
+
     //! \struct PaintCycle - Encapsulates the paint cycle for a window's client area
     struct PaintCycle : PAINTSTRUCT
     {
@@ -114,29 +117,38 @@ namespace wtl
   };
   
   
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias PaintWindowEvent - Defines 'PaintWindow' event (ie. WM_PAINT)
+  //! 
+  //! \tparam ENC - Window character encoding
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using PaintWindowEvent = MessageEvent<ENC,WindowMessage::PAINT>;
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias PaintWindowEventHandler - Handler for 'PaintWindow' event (ie. WM_PAINT)
+  //! 
+  //! \tparam ENC - Window character encoding
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using PaintWindowEventHandler = typename PaintWindowEvent<ENC>::delegate_t;
+
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias PaintWindowEventArgs - Arguments for 'PaintWindow' Event (ie. WM_PAINT)
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using PaintWindowEventArgs = EventArgs<ENC,WindowMessage::PAINT>;
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias PaintWindowEventDelegate - Delegate for 'PaintWindow' event (ie. WM_PAINT)
-  //! 
-  //! \tparam ENC - Window character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using PaintWindowEventDelegate = EventArgsDelegate<ENC,WindowMessage::PAINT>;
+  using PaintWindowEventArgs = typename PaintWindowEvent<ENC>::arguments_t;
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias PaintWindowEventHandler - Handler for 'PaintWindow' event (ie. WM_PAINT)
+  //! \struct delegate_signature<WindowMessage::PAINT> - Defines function signature of 'PaintWindow' handlers
   //! 
-  //! \tparam ENC - Window character encoding 
+  //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using PaintWindowEventHandler = EventHandler<ENC,WindowMessage::PAINT,PaintWindowEventDelegate<ENC>>;
+  /*template <Encoding ENC> 
+  struct delegate_signature<ENC,WindowMessage::PAINT>  { using type = LResult (PaintWindowEventArgs<ENC>&); };*/
 
 }
 

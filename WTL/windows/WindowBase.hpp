@@ -13,8 +13,11 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  //! \struct WindowBase - Base window class
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \struct WindowBase - Base for all window types
+  //! 
+  //! \tparam ENC - Window character encoding
+  ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct WindowBase 
   {
@@ -24,6 +27,9 @@ namespace wtl
   
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<ENC>;
+    
+    //! \alias command_t - Define gui command base type
+    using command_t = IGuiCommand<ENC>;
 
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<ENC>;
@@ -31,12 +37,33 @@ namespace wtl
     //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
     using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
 
-    //! \var encoding - Define window character encoding
-    static constexpr Encoding encoding = ENC;
+    //! \alias CommandQueue - Define gui command queue type
+    using CommandQueue = GuiCommandQueue<ENC>;
+    
+    //! \alias CommandCollection - Provides an association between command id and gui commands
+    //using CommandCollection = std::map<CommandId,std::shared_ptr<command_t>>;
 
-    //! \alias HandlerCollection - Define event handler collection type
-    using HandlerCollection = EventHanderCollection<ENC>;
+    //! \struct CommandCollection - Provides a collection of Gui Commands, indexed by Command Id
+    struct CommandCollection : std::map<CommandId,std::shared_ptr<command_t>>
+    {
+      //! \alias base - Define base type
+      using base = std::map<CommandId,std::shared_ptr<command_t>>;
 
+      ///////////////////////////////////////////////////////////////////////////////
+      // CommandCollection::operator +=
+      //! Add a command to the collection
+      //!
+      //! \param[in] *ptr - Gui command
+      //! \return CommandCollection& - Reference to self
+      ///////////////////////////////////////////////////////////////////////////////
+      CommandCollection& operator += (command_t* ptr)
+      {
+        // Insert/overwrite
+        emplace(ptr->ident(), std::shared_ptr<command_t>(ptr));
+        return *this;
+      }
+    };
+    
     //! \alias WindowCollection - Window collection type
     using WindowCollection = std::list<WindowBase*>;
     
@@ -56,7 +83,7 @@ namespace wtl
     using SubClassCollection = std::list<SubClass>;
 
     //! \alias wndclass_t - Window class type
-    using wndclass_t = WindowClass<encoding>;
+    using wndclass_t = WindowClass<ENC>;
 
     //! \alias wndproc_t - Win32 Window procedure type
     using wndproc_t = LRESULT (__stdcall*)(HWND, uint32, WPARAM, LPARAM);
@@ -66,6 +93,9 @@ namespace wtl
 
     //! \alias window_t - Define own type
     using window_t = WindowBase;
+    
+    //! \var encoding - Define window character encoding
+    static constexpr Encoding encoding = ENC;
 
     //! \enum WindowType - Define window types
     enum class WindowType
@@ -101,11 +131,33 @@ namespace wtl
       WindowType  Type;       //!< Window type
     };
 
-    //! \var ActiveWindows - Static collection of all Windows Template Library windows that currently exist for the current process
+    // -------------------- REPRESENTATION ---------------------
+  public:
+    //! \var ActiveWindows - Static collection of all existing WTL windows for the current process
     static WindowHandleCollection  ActiveWindows;
+
+    //! \var ActiveCommands - Static collection of all existing gui commands for the current process
+    static CommandCollection  ActiveCommands;
     
-    // --------------------- CONSTRUCTION ----------------------
+  public:
+    CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
+    CloseWindowEvent<encoding>       Close;         //!< Raised in response to WM_CLOSE
+    DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
+    PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
+    ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
+    CommandEvent<encoding>           Command;       //!< Raised in response to WM_COMMAND from menu/accelerators
+    ControlEvent<encoding>           CtrlEvent;     //!< Raised in response to WM_COMMAND from child controls
+    ControlNotification<encoding>    CtrlNotify;    //!< Raised in response to WM_NOTIFY from child controls
+
   protected:
+    wndclass_t&            Class;         //!< Window class 
+    ChildWindowCollection  Children;      //!< Child window collection
+    CommandQueue           Actions;       //!< Command queue
+    Lazy<HWnd>             Handle;        //!< Window handle
+    SubClassCollection     SubClasses;    //!< Sub-classed windows collection
+
+    // --------------------- CONSTRUCTION ----------------------
+  public: 
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::WindowBase
     //! Creates the window object (but not window handle) for an instance of a registered window class
@@ -114,8 +166,19 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     WindowBase(wndclass_t& cls) : Class(cls)
     {
-      // Ensure we always have a WM_PAINT handler
-      *this += new PaintWindowEventHandler<encoding>( this, &WindowBase::onPaint );
+      // Accept window creation by default
+      Create += new CreateWindowEventHandler<encoding>(std::bind(&WindowBase::onCreate, this, std::placeholders::_1));
+      
+
+      // Paint window background by default
+      //Paint += new PaintWindowEventHandler<encoding>(std::bind(&WindowBase::onPaint, this, std::placeholders::_1));
+      
+      // Reflect control events/notifications by default
+      //CtrlEvent += new ControlEventHandler<encoding>(std::bind(&WindowBase::onControlEvent, this, std::placeholders::_1));
+      //CtrlNotify += new ControlNotificationHandler<encoding>(std::bind(&WindowBase::onControlNotify, this, std::placeholders::_1));
+
+      // Execute gui commands by default
+      Command += new CommandEventHandler<encoding>(std::bind(&WindowBase::onCommand, this, std::placeholders::_1));
     }
     
   public:
@@ -153,27 +216,39 @@ namespace wtl
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onMessage
-    //! Instance window procedure 
+    // WindowBase::routeMessage
+    //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
     //!
     //! \param[in] message - Window message identifier
-    //! \param[in] wParam - [optional] First message parameter
-    //! \param[in] lParam - [optional] Second message parameter
+    //! \param[in] w - [optional] First message parameter
+    //! \param[in] l - [optional] Second message parameter
     //! \return LResult - Message routing and result 
     ///////////////////////////////////////////////////////////////////////////////
-    LResult onMessage(WindowMessage message, WPARAM wParam, LPARAM lParam)
+    LResult routeMessage(WindowMessage message, WPARAM w, LPARAM l)
     {
       try
       {
         LResult ret;       //!< Message result, defaults to unhandled
 
-        // [INSTANCE] Offer message to the each of the instance's event handlers
-        for (auto& ev : Handlers)
-          // [ACCEPT/INVOKE] Pass to handle if it accepts the message 
-          if (ev->accept(*Handle, message, wParam, lParam))
-            if ((ret = ev->invoke(*Handle, message, wParam, lParam)).Route == MsgRoute::Handled)
-              // [HANDLED] Return message result & routing
-              return ret;
+        // [EVENT] Raise event associated with message
+        switch (message)
+        {
+        case WindowMessage::CREATE:         ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
+        case WindowMessage::CLOSE:          ret = Close.raise();                                                  break;
+        case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
+        case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+        case WindowMessage::PAINT:          ret = Paint.raise(PaintWindowEventArgs<encoding>(*Handle,w,l));       break;
+        case WindowMessage::NOTIFY:         ret = CtrlNotify.raise(ControlNotificationArgs<encoding>(w,l));       break;
+        case WindowMessage::COMMAND:  
+          // [CTRL-EVENT] Default implementation reflects message to child window
+          if (l != 0)
+            ret = CtrlEvent.raise(ControlEventArgs<encoding>(w,l));  
+
+          // [MENU/ACCELERATOR] Default implemenation executes the appropriate command object
+          else
+            ret = Command.raise(CommandEventArgs<encoding>(w,l));
+          break;
+        }
 
         // [SUB-CLASS] Offer message to each subclass in turn (if any)
         for (auto& wnd : SubClasses)
@@ -182,7 +257,7 @@ namespace wtl
           // [WTL WINDOW] Delegate to window object 
           case WindowType::Library:
             // Delegate to instance window procedure
-            ret = wnd.WndProc.Library(message, wParam, lParam);
+            ret = wnd.WndProc.Library(message, w, l);
 
             // [HANDLED/REFLECTED] Return result & routing
             if (ret.Route == MsgRoute::Handled || ret.Route == MsgRoute::Reflected)
@@ -192,7 +267,7 @@ namespace wtl
           // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
           case WindowType::Native:
             // Delegate to native class window procedure and infer routing
-            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, *Handle, enum_cast(message), wParam, lParam);
+            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, *Handle, enum_cast(message), w, l);
             ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
           
             // [HANDLED] Return result & routing
@@ -244,7 +319,7 @@ namespace wtl
           ActiveWindows[hWnd] = wnd;
           break;
 
-        // [WINDOW EXTENT] Unable to handle on first call
+        // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
         case WindowMessage::GETMINMAXINFO:
           return getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
 
@@ -255,24 +330,26 @@ namespace wtl
             wnd = ActiveWindows[hWnd];
           break;
         }
-      
+        
         // Delegate to instance procedure
-        LResult msg = wnd->onMessage(static_cast<WindowMessage>(message), wParam, lParam);
+        LResult msg = wnd->routeMessage(static_cast<WindowMessage>(message), wParam, lParam);
 
         // [HANDLED/REFLECTED] Return result
         if (msg.Route != MsgRoute::Unhandled)
           return msg.Result;
 
-        // [UNHANDLED GUI-COMMAND] Search for a handler
-        for (window_t* parent = wnd->parent(); parent; parent = parent->parent())
-        {
-          // Delegate to parent's instance procedure
-          msg = wnd->onMessage(static_cast<WindowMessage>(message), wParam, lParam);
+        // TODO: Gui Commands
 
-          // [PARENT HANDLED/REFLECTED] Return result
-          if (msg.Route != MsgRoute::Unhandled)
-            return msg.Result;
-        }
+        //// [UNHANDLED GUI-COMMAND] Search for a handler
+        //for (window_t* parent = wnd->parent(); parent; parent = parent->parent())
+        //{
+        //  // Delegate to parent's instance procedure
+        //  msg = wnd->routeMessage(static_cast<WindowMessage>(message), wParam, lParam);
+
+        //  // [PARENT HANDLED/REFLECTED] Return result
+        //  if (msg.Route != MsgRoute::Unhandled)
+        //    return msg.Result;
+        //}
       }
       // [ERROR] Exception thrown by handler
       catch (wtl::exception& e)
@@ -508,8 +585,8 @@ namespace wtl
     // WindowBase::find
     //! Find a child window
     //! 
-    //! \tparam WINDOW - Child window type
-    //! \tparam IDENT - Window id type
+    //! \tparam WINDOW - [optional] Child window type (If unspecified a base window pointer is returned)
+    //! \tparam IDENT - [optional] Window id type (If unspecified, WindowId is used)
     //! 
     //! \param[in] child - Child window Id
     //! \return WINDOW& - Reference to child window
@@ -517,7 +594,7 @@ namespace wtl
     //! \throw wtl::domain_error - Mismatched child window type
     //! \throw wtl::logic_error - Missing child window
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename WINDOW, typename IDENT>
+    template <typename WINDOW = window_t, typename IDENT = WindowId>
     WINDOW& find(IDENT child) 
     {
       // Lookup child window
@@ -537,15 +614,72 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onCreate
+    //! Called during window creation or accept, decline, or modify window parameters
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
+    { 
+      // [Handled] Accept parameters
+      return 0; 
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onControlEvent
+    //! Called in response to events from child controls (ie. WM_COMMAND)
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onControlEvent(ControlEventArgs<encoding>& args) 
+    { 
+      // [Reflected] Reflect message to sender
+      return args.reflect(); 
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onControlNotify
+    //! Called in response to notifications from child controls (ie. WM_NOTIFY)
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onControlNotify(ControlNotificationArgs<encoding>& args) 
+    { 
+      // [Reflected] Reflect message to sender
+      return args.reflect(); 
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onCommand
+    //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    //! 
+    //! \throw wtl::logic_error - Gui command not recognised
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onCommand(CommandEventArgs<encoding>& args) 
+    { 
+      // Lookup & Execute associated command
+      Actions.execute( ActiveCommands[args.Ident]->clone() );
+
+      // Handled
+      return 0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::onPaint
     //! Called to paint the client area of the window
     //! 
     //! \param[in,out] args - Message arguments containing drawing data
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
+    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
     { 
-      // Handled
+      // [Handled] Validate client area
       return 0; 
     }
   
@@ -636,57 +770,17 @@ namespace wtl
     {
       ::UpdateWindow(*Handle);
     }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::operator +=
-    //! Add an event handler
-    //!
-    //! \param[in] *ptr - Pointer to event handler
-    //! \return window_t& - Reference to self
-    ///////////////////////////////////////////////////////////////////////////////
-    window_t& operator += (IEventHandler<ENC>* ptr)
-    {
-      Handlers += ptr;
-      return *this;
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::operator +=
-    //! Add a gui command handler
-    //!
-    //! \param[in] *ptr - Pointer to event handler
-    //! \return window_t& - Reference to self
-    ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, typename CMD>
-    window_t& operator += (GuiCommandDelegate<ENC,CMD>* ptr)
-    {
-      Handlers += ptr;
-      return *this;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::operator -=
-    //! Remove an event handler
-    //!
-    //! \param[in] *ptr - Pointer to event handler
-    //! \return window_t& - Reference to self
-    ///////////////////////////////////////////////////////////////////////////////
-    /*window_t& operator -= (IEventHandler<ENC>* ptr)
-    {
-      Handlers -= ptr;
-      return *this;
-    }*/
-
-    // -------------------- REPRESENTATION ---------------------
-  protected:
-    wndclass_t&            Class;         //!< Window class 
-    ChildWindowCollection  Children;      //!< Child window collection
-    HandlerCollection      Handlers;      //!< Event handlers
-    Lazy<HWnd>             Handle;        //!< Window handle
-    SubClassCollection     SubClasses;    //!< Sub-classed windows collection
   };
 
   
+  //! \var ActiveCommands - Collection of all existing gui commands for the current process
+  template <Encoding ENC>
+  typename WindowBase<ENC>::CommandCollection   WindowBase<ENC>::ActiveCommands;
+  
+  //! \var ActiveWindows - Collection of all existing WTL windows for the current process
+  template <Encoding ENC>
+  typename WindowBase<ENC>::WindowHandleCollection   WindowBase<ENC>::ActiveWindows;
+
 
 }
 

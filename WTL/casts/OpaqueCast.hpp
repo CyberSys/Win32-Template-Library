@@ -21,7 +21,7 @@ namespace wtl
   //! \param[in] const& value - Reference to value too large to fit within an LPARAM
   //! \return LPARAM - 32-bit opaque data
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename = std::enable_if_t<sizeof(T) <= sizeof(LPARAM) && !std::is_same<T,LPARAM>::value>>
+  template <typename T, typename = std::enable_if_t<(sizeof(T) > sizeof(LPARAM)) && !std::is_same<T,LPARAM>::value>>
   LPARAM  opaque_cast(const T& value)
   {
     // Encode address of object
@@ -35,11 +35,27 @@ namespace wtl
   //! \param[in] value - Value of type small enough to fit within an LPARAM
   //! \return LPARAM - 32-bit opaque data
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename = std::enable_if_t<(sizeof(T) > sizeof(LPARAM)) && !std::is_same<T,LPARAM>::value>>
+  template <typename T, typename = std::enable_if_t<(sizeof(T) <= sizeof(LPARAM)) && !std::is_same<T,LPARAM>::value>>
   LPARAM  opaque_cast(T value)
   {
     // Encode value 
-    return static_cast<LPARAM>(value);
+    //return static_cast<LPARAM>(value);
+    return LPARAM(value);
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  //! gdk::opaque_cast
+  //! Encodes two WORDs into an LPARAM
+  //! 
+  //! \param[in] low - Low word
+  //! \param[in] high - High word
+  //! \return LPARAM - 32-bit opaque data
+  ////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U>   //typename = std::enable_if_t<(sizeof(T) == sizeof(LPARAM)/2)>>
+  LPARAM  opaque_cast(T low, U high)
+  {
+    // Encode value 
+    return MAKELPARAM(low,high);
   }
 
   ////////////////////////////////////////////////////////////////////////////////

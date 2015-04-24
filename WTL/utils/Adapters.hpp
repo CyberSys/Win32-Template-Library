@@ -149,7 +149,7 @@ namespace wtl
 
     // ------------------------- MUTATORS -------------------------
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     FIRST  g;    //!< First operation function object representing g(x)
     SECOND f;    //!< Second operation function object representing f(x)
@@ -256,7 +256,7 @@ namespace wtl
 
     // ------------------------- MUTATORS -------------------------
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     OPERATION f;     //!< Function object representing f(g(x), h(x))
     LEFT      g;     //!< Function object representing g(x)
@@ -330,7 +330,7 @@ namespace wtl
 
     // ------------------------- MUTATORS -------------------------
   
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     MethodPtr Method;         //!< Method pointer to execute
     PARAM     Argument;       //!< Argument to use as input
@@ -406,7 +406,7 @@ namespace wtl
 
     // ------------------------- MUTATORS -------------------------
   
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     function_type Method;     //!< method pointer
     TYPE&         Object;     //!< Object instance
@@ -504,7 +504,7 @@ namespace wtl
 
     // ------------------------- MUTATORS -------------------------
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     PRED p;     //!< Predicate
     FUNC f;     //!< Operation
@@ -602,7 +602,7 @@ namespace wtl
       return s.*FieldPtr;   // Dereference field pointer 
     }
   
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     const FIELD STRUCT::* FieldPtr;     //!< Class field pointer
   };

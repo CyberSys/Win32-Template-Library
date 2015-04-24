@@ -686,7 +686,7 @@ namespace wtl
       return *this;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     bool         Closed;        // Whether writer is closed
     ColourTable  Colours;       // Colours in the RTF colour table

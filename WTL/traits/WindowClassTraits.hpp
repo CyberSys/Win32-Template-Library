@@ -43,20 +43,20 @@ namespace wtl
 
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<ATOM> - Encapsulates window class registration
+  //! \struct handle_alloc<::ATOM> - Encapsulates window class registration
   ///////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<ATOM>
+  struct handle_alloc<::ATOM>
   {
     //! \var npos - Invalid handle sentinel value
-    static const ATOM npos; 
+    static const ::ATOM npos; 
 
     //! \alias WndClassEx - Window class data type
     template <Encoding ENC>
     using WndClassEx = getType<encoding_char_t<ENC>,::WNDCLASSEXA,::WNDCLASSEXW>;
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<ATOM>::create
+    // handle_alloc<::ATOM>::create
     //! Create from individual properties
     //! 
     //! \tparam ENC - String encoding
@@ -72,12 +72,12 @@ namespace wtl
     //! \param[in] bgIcon - Large icon handle
     //! \param[in] clsBytes - Size of class storage, if any
     //! \param[in] wndBytes - Size of handle storage, if any
-    //! \return HAlloc<ATOM> - Accquired handle
+    //! \return HAlloc<::ATOM> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<ATOM> create(HINSTANCE instance, 
+    static HAlloc<::ATOM> create(HINSTANCE instance, 
                                ResourceId<ENC> name,
                                ClassStyle style, 
                                WNDPROC proc, 
@@ -105,7 +105,7 @@ namespace wtl
       wndCls.hCursor = cursor;*/
 
       // Register class
-      if (ATOM atom = getFunc<ENC>(::RegisterClassExA,::RegisterClassExW)(&wndCls))
+      if (::ATOM atom = getFunc<ENC>(::RegisterClassExA,::RegisterClassExW)(&wndCls))
         return { atom, AllocType::Accquire };
 
       // Error: Failed  
@@ -113,22 +113,22 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<ATOM>::clone
+    // handle_alloc<::ATOM>::clone
     //! Clone window class atom
     //! 
     //! \param[in] atom - Window class atom
-    //! \return HAlloc<ATOM> - Duplicate of handle
+    //! \return HAlloc<::ATOM> - Duplicate of handle
     ///////////////////////////////////////////////////////////////////////////////
-    static HAlloc<ATOM> clone(HAlloc<ATOM> atom);
+    static HAlloc<::ATOM> clone(HAlloc<::ATOM> atom);
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<ATOM>::destroy noexcept
+    // handle_alloc<::ATOM>::destroy noexcept
     //! Unregister window class
     //! 
     //! \param[in] atom - Registered window class atom
     //! \return bool - True iff unregistered successfully
     ///////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<ATOM> atom) noexcept
+    static bool destroy(HAlloc<::ATOM> atom) noexcept
     {
       // Delete without checking if handle is valid
       return ::UnregisterClassW((const wchar_t*)atom.Handle, nullptr) != FALSE;
@@ -137,7 +137,7 @@ namespace wtl
 
 
   //! \alias Atom - Window class atom
-  using HAtom = Handle<ATOM>;
+  using HAtom = Handle<::ATOM>;
 
 
 } //namespace wtl

@@ -21,6 +21,10 @@ namespace wtl
   {
     // ------------------- TYPES & CONSTANTS -------------------
   
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    HModule   Handle;       //!< Module handle
+
     // --------------------- CONSTRUCTION ----------------------
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -32,16 +36,7 @@ namespace wtl
     Module(::HMODULE m);
     
     ///////////////////////////////////////////////////////////////////////////////
-    // Module::Module
-    //! Create from shared module handle
-    //!
-    //! \param[in] m - Shared module handle
-    ///////////////////////////////////////////////////////////////////////////////
-    /*Module(const HModule& m) : Handle(m)
-    {}*/
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // Module::Module
+    // Module::~Module
     //! Virtual d-tor. Removes module from 'Loaded Modules' collection.
     ///////////////////////////////////////////////////////////////////////////////
     virtual ~Module();
@@ -122,9 +117,6 @@ namespace wtl
 
     // ----------------------- MUTATORS ------------------------
 
-    // -------------------- REPRESENTATION ---------------------
-  protected:
-    HModule   Handle;       //!< Module handle
   };
 
 
@@ -134,12 +126,22 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   struct ModuleCollection : protected std::list<std::reference_wrapper<const Module>>
   {
+    // ------------------- TYPES & CONSTANTS -------------------
+  
     //! \alias base - Define base type
     using base = std::list<std::reference_wrapper<const Module>>;
 
     //! \alias element_t - Define collection element type
     using element_t = std::reference_wrapper<const Module>;
     
+    // -------------------- REPRESENTATION ---------------------
+  
+    // --------------------- CONSTRUCTION ----------------------
+
+    // ------------------------ STATIC -------------------------
+
+    // ---------------------- ACCESSORS ------------------------
+
     ///////////////////////////////////////////////////////////////////////////////
     // ModuleCollection::findResource
     //! Find a resource from any module in the collection
@@ -185,9 +187,10 @@ namespace wtl
         throw invalid_argument(HERE, "String ids must be numeric constants");
 
       // Load string table handle
-      return findResource(ResourceType::String, (id.Value.Numeral/16)+1, language);
+      return findResource<ENC>(ResourceType::String, (id.Value.Numeral/16)+1, language);
     }
-
+    
+    // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
     // ModuleCollection::add
@@ -211,17 +214,6 @@ namespace wtl
       base::remove_if( [&m] (const element_t& w) { return &w.get() == &m; } );
     }
   };
-
-  ///////////////////////////////////////////////////////////////////////////////
-  // wtl::operator == 
-  //! Global equality operator Remove a module to the collection
-  //!
-  //! \param[in] const& m - Module
-  ///////////////////////////////////////////////////////////////////////////////
-  /*bool operator == (const std::reference_wrapper<const Module>& a, const std::reference_wrapper<const Module>& b)
-  {
-    return &a == &b;
-  }*/
 
   //! \var LoadedModules - Loaded modules collection
   extern ModuleCollection  LoadedModules;

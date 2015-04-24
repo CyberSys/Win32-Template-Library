@@ -23,6 +23,15 @@ namespace wtl
   
     //! \var npos - Sentinel value for 'Resource not found'
     static const Resource npos;
+    
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    HModule     Module;     //!< Module containing resource
+    HGlobal     Block;      //!< Resource block handle
+    HResource   Handle;     //!< Resource data handle
+  
+  private:
+    const void* Data;       //!< Resource data
 
     // --------------------- CONSTRUCTION ----------------------
   protected:
@@ -62,6 +71,9 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual ~Resource()
     {}
+
+    DEFAULT_COPY(Resource);
+    //DEFAULT_COPY_ASSIGN(Resource);
     
     // ------------------------ STATIC -------------------------
   
@@ -91,74 +103,36 @@ namespace wtl
     {
       return ::SizeofResource(Module, Handle);
     }
-
-    // ----------------------- MUTATORS ------------------------
     
-    // -------------------- REPRESENTATION ---------------------
-  protected:
-    HModule     Module;     //!< Module containing resource
-    HGlobal     Block;      //!< Resource block handle
-    HResource   Handle;     //!< Resource data handle
-  
-  private:
-    const void* Data;       //!< Resource data
-  };
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct Resources - Provides access to application resources
-  //! 
-  //! \tparam ENC - Character encoding type
-  ///////////////////////////////////////////////////////////////////////////////
-  //template <Encoding ENC = Encoding::UTF16>
-  struct Resources
-  {      
-    // ------------------- TYPES & CONSTANTS -------------------
-  
-    //! \alias char_t - Defines encoding character type
-    //using char_t = encoding_char_t<ENC>;
-
-    // --------------------- CONSTRUCTION ----------------------
-    
-    // ------------------------ STATIC -------------------------
-  protected:
     ///////////////////////////////////////////////////////////////////////////////
-    // Resources::load
-    //! Find the resource data block associated with a resource handle
+    // Resource::operator == const
+    //! Equality operator 
     //! 
-    //! \tparam DATA - Resource storage format
-    //! 
-    //! \param[in] module - Module containing resource
-    //! \param[in] res - Resource handle
-    //! \return DATA* - Resource data block
-    //! 
-    //! \throw platform_error - Unable to load resource
+    //! \param[in] const &r - Another handle
+    //! \return bool - True iff handles are to the same resource
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename DATA = uint8>
-    static DATA* load(HMODULE module, const HResource& res)
+    bool operator == (const Resource& r) const
     {
-      // Load resource
-      if (HGLOBAL block = ::LoadResource(module, res))
-      {
-        // Retrieve data
-        if (DATA* data = reinterpret_cast<DATA*>(::LockResource(block)))
-          return data;
-
-        // Failed
-        throw platform_error(HERE, "Unable to lock resource");
-      }
-      
-      // Not found
-      throw platform_error(HERE, "Cannot find resource");
+      return this->Handle == r.Handle
+          && this->Module == r.Module;
     }
 
-    // ---------------------- ACCESSORS ------------------------			
+    ///////////////////////////////////////////////////////////////////////////////
+    // Resource::operator != const
+    //! Inequality operator 
+    //! 
+    //! \param[in] const &r - Another resource
+    //! \return bool - False iff handles are to the same resource
+    ///////////////////////////////////////////////////////////////////////////////
+    bool operator != (const Resource& r) const
+    {
+      return !operator==(r);
+    }
 
     // ----------------------- MUTATORS ------------------------
-
-    // -------------------- REPRESENTATION ---------------------
-  
   };
+
+
 
   
 } //namespace wtl

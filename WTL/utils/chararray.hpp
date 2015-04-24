@@ -37,6 +37,7 @@ namespace wtl
     return wcslen(str);
   }
 
+  
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct CharArray - Fixed capacity character array with a dynamic runtime length, supporting any character type and encoding 
   //!
@@ -44,14 +45,14 @@ namespace wtl
   //! \tparam LENGTH - Array capacity excluding null terminator
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENCODING, unsigned LENGTH>
-  struct CharArray : public Array<encoding_char_t<ENCODING>, LENGTH+1, true>
+  struct CharArray : public DynamicArray<encoding_char_t<ENCODING>, LENGTH+1>
   {
     friend CharArray;   // Unbound friend of itself
 
     // ---------------------- TYPES & CONSTANTS -------------------
 
     //! \alias base - Defines base type
-    using base = Array<encoding_char_t<ENCODING>, LENGTH+1, true>;
+    using base = DynamicArray<encoding_char_t<ENCODING>, LENGTH+1>;
     
     //! \alias char_t - Character type
     using char_t = encoding_char_t<ENCODING>;
@@ -63,10 +64,88 @@ namespace wtl
     static const char_t null_t = zero<char_t>::value;
 
     //! \var EMPTY - Empty character array sentinel value
-    static const CharArray EMPTY;
+    static const CharArray<ENCODING,LENGTH> EMPTY;
+    
+  protected:
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct conversion_proxy - Handles conversion between character encoding types
+    //! 
+    //! \tparam FROM - Input character encoding
+    //! \tparam TO - Output character encoding
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding FROM, Encoding TO, typename>
+    struct conversion_proxy;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct conversion_proxy<FROM,Encoding::UTF16> - Handles narrow character -> wide character conversion
+    //! 
+    //! \tparam FROM - Input character encoding
+    //! \tparam TO - Output character encoding
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding FROM>
+    struct conversion_proxy<FROM,Encoding::UTF16,enable_if_not_encoding_t<FROM,Encoding::UTF16>>
+    {
+      template <unsigned L>
+      static int32  convert(const encoding_char_t<FROM>* input, CharArray<Encoding::UTF16,L>& output)
+      {
+        return MultiByteToWideChar(enum_cast(FROM), enum_cast(MultiByteFlags::PreComposed), input, strlen(input), output, L);
+      }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct conversion_proxy<Encoding::UTF16,TO> - Handles wide character -> narrow character conversion
+    //! 
+    //! \tparam FROM - Input character encoding
+    //! \tparam TO - Output character encoding
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding TO>
+    struct conversion_proxy<Encoding::UTF16,TO,enable_if_not_encoding_t<TO,Encoding::UTF16>>
+    {
+      template <unsigned L>
+      static int32  convert(const encoding_char_t<Encoding::UTF16>* input, CharArray<TO,L>& output)
+      {
+        int32  useDefault = TRUE;
+        return WideCharToMultiByte(enum_cast(TO), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), input, strlen(input), output, L, "?", &useDefault);
+      }
+    };
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct conversion_proxy<E,E> - Handles no conversion required
+    //! 
+    //! \tparam EN - Character encoding of both strings
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding EN>
+    struct conversion_proxy<EN,EN,void>
+    {
+      template <unsigned L>
+      static int32 convert(const encoding_char_t<EN>* input, CharArray<EN,L>& output)
+      {
+        using dest_t = encoding_char_t<EN>;
+
+        // Avoid self-assignment 
+        if (static_cast<const void*>(input) < static_cast<void*>(output.Data)
+         || static_cast<const void*>(input) >= static_cast<void*>(output.Data+L))
+        {
+          output.clear();
+
+          // Assign string until (after) null terminator detected or capacity reached
+          for (uint32 in=0, &out = output.Count; (out < L) && (output.Data[out] = static_cast<dest_t>(input[in])); ++in, ++out) 
+            /* no-op */;
+
+          // Null terminate when truncating input string
+          if (output.Count == L)
+            output.back() = CharArray<EN,L>::null_t;
+        }
+
+        // Return new length
+        return output.Count;
+      }
+    };
+
+    // -------------------- REPRESENTATION ---------------------
 
     // --------------------- CONSTRUCTION ----------------------   
-  
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // CharArray::CharArray 
     //! Create an empty (null-terminated) character array
@@ -155,7 +234,7 @@ namespace wtl
     //! 
     //! \param[in] const& r - Character array of equal type
     ///////////////////////////////////////////////////////////////////////////////
-     CharArray(const CharArray& r) : CharArray()
+    CharArray(const CharArray& r) : CharArray()
     {
       // Copy from input buffer, truncate if necessary
       CharArray::assign(r);
@@ -171,7 +250,7 @@ namespace wtl
     //! \param[in] const& r - Character array of dissimilar type
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding N, unsigned L>
-     CharArray(const CharArray<N,L>& r) : CharArray()
+    CharArray(const CharArray<N,L>& r) : CharArray()
     {
       // Copy from input buffer, truncate if necessary, convert encoding if necessary.
       CharArray::assign<N>(r);
@@ -183,7 +262,7 @@ namespace wtl
     //! 
     //! \param[in] && r - Character array of equal type (unaffected)
     ///////////////////////////////////////////////////////////////////////////////
-     CharArray(CharArray&& r) : CharArray()
+    CharArray(CharArray&& r) : CharArray()
     {
       // Copy from input buffer
       CharArray::assign(r);
@@ -199,7 +278,7 @@ namespace wtl
     //! \param[in] && r - Character array of dissimilar type (unaffected)
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding N, unsigned L>
-     CharArray(CharArray<N,L>&& r) : CharArray()
+    CharArray(CharArray<N,L>&& r) : CharArray()
     {
       // Copy from input buffer, truncate if necessary, convert encoding if necessary.
       CharArray::assign<N>(r);
@@ -245,7 +324,7 @@ namespace wtl
     //! Copy and null-terminate all characters to an output range of sufficient capacity.
     //! If there is insufficient capacity, the results are undefined
     //! 
-    //! \tparam OUTPUT - Type of output iterator
+    //! \tparam OUTPUT - Output iterator type
     //! 
     //! \param[in] dest - Position of beginning of destination range
     //! \return iterator - Output iterator positioned one element beyond last element copied
@@ -454,37 +533,6 @@ namespace wtl
     
     ///////////////////////////////////////////////////////////////////////////////
     // CharArray::assign
-    //! Assign from null-terminated decay type string of equal encoding
-    //!
-    //! \param[in] const* str - Null-terminated string of equal encoding
-    //! \return int32 - New length of string
-    //!
-    //! \throw wtl::logic_error - [Debug only] String would be truncated
-    ///////////////////////////////////////////////////////////////////////////////
-    int32 assign(const char_t* const str)
-    {
-      REQUIRED_PARAM(str);
-      LOGIC_INVARIANT(strlen_t(str) <= length);
-
-      // Avoid self-assignment 
-      if (static_cast<const void*>(str) < static_cast<void*>(Data)
-       || static_cast<const void*>(str) >= static_cast<void*>(Data+length))
-      {
-        // Assign string until (after) null terminator detected or capacity reached
-        for (uint32 in=0, &out = (Count = 0); (out < length) && (Data[out] = str[in]); ++in, ++out) 
-          /* no-op */;
-
-        // Null terminate when truncating input string
-        if (Count == length)
-          back() = null_t;
-      }
-
-      // Return new length
-      return Count;
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // CharArray::assign
     //! Assign from a character array of equal type
     //!
     //! \param[in] &r - Another array of same type and length
@@ -494,106 +542,62 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     int32 assign(const CharArray& r)
     {
-      return CharArray::assign<encoding>(r.c_str());
+      // Assign from foreign array
+      return CharArray::assign<encoding,char_t>( static_cast<const char_t*>(r.c_str()) );
     }
     
     ///////////////////////////////////////////////////////////////////////////////
     // CharArray::assign
     //! Assign from a character array of different type
     //!
-    //! \tparam N - Character encoding
-    //! \tparam L - Character array length
+    //! \tparam E - Foreign character encoding
+    //! \tparam L - Foreign character array length
     //! 
     //! \param[in] &r - Another array
     //! \return int32 - New length of string
     //! 
     //! \throw wtl::logic_error - [Debug only] String would be truncated
     ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding N, unsigned L>
-    int32 assign(const CharArray<N,L>& r) 
+    template <Encoding E, unsigned L>
+    int32 assign(const CharArray<E,L>& r) 
     {
       // Assign from foreign array
-      return CharArray::assign<N>(r.c_str()); 
+      return CharArray::assign<E,encoding_char_t<E>>( static_cast<const encoding_char_t<E>*>(r.c_str()) ); 
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // CharArray::assign
-    //! Assign from a null-terminated string of any type with equivalent encoding.
-    //! Self-assignment has no affect.
+    //! Assign from a null-terminated string of any encoding
     //! 
-    //! \tparam ENC - Foreign character encoding
-    //! \tparam LEN - Capacity of foreign character array
+    //! \tparam E - Foreign character encoding, if unspecified then equal encoding is assumed
+    //! \tparam CHR - Foreign character type
     //!
-    //! \param[in] const *str - Statically allocated null-terminated string. If terminator is missing the results are undefined.
-    //! \return int32 - New length of string
-    //! 
-    //! \throw wtl::invalid_argument - [Debug only] String is nullptr
-    //! \throw wtl::logic_error - [Debug only] String would be truncated
-    ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN, typename = std::enable_if_t<ENC==encoding>>
-    int32 assign(array_ref_t<const char_t,LEN> str)
-    {
-      REQUIRED_PARAM(str);
-      LOGIC_INVARIANT(strlen_t(str) <= length);
-
-      // Avoid self-assignment 
-      if (static_cast<const void*>(str) < static_cast<void*>(Data)
-       || static_cast<const void*>(str) >= static_cast<void*>(Data+length))
-      {
-        // Assign string until (after) null terminator detected or capacity reached
-        for (uint32 in=0, &out = (Count = 0); (out < std::min((unsigned)length,LEN)) && (Data[out] = static_cast<char_t>((str)[in])); ++in, ++out) 
-          /* no-op */;
-
-        // Null terminate when truncating input string
-        if (Count == std::min((unsigned)length,LEN))
-          back() = null_t;
-      }
-
-      return Count;
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // CharArray::assign
-    //! Assign from a null-terminated string of any type with dissimilar encoding.
-    //! Self-assignment has no affect.
-    //! 
-    //! \tparam ENC - Foreign character encoding
-    //! \tparam LEN - Capacity of foreign character array
-    //!
-    //! \param[in] const *str - Statically allocated null-terminated string. If terminator is missing the results are undefined.
-    //! \return int32 - New length of string
+    //! \param[in] const *str - Null-terminated string of encoding-defined character type  (If terminator is missing the results are undefined)
+    //! \return int32 - New length of string, in characters
     //! 
     //! \throw wtl::platform_error - Unable to perform conversion
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
     //! \throw wtl::logic_error - [Debug only] String will be truncated
     ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN, typename = std::enable_if_t<ENC!=encoding>>
-    int32 assign(array_ref_t<const encoding_char_t<ENC>, LEN> str)
+    template <Encoding E = encoding, typename CHR = encoding_char_t<E>>
+    int32 assign(const CHR* str)
     {
       REQUIRED_PARAM(str);
-      LOGIC_INVARIANT(strlen_t(*str) <= length);
+      LOGIC_INVARIANT(strlen_t(str) <= length);
       
-      static_assert(sizeof(char_t) != sizeof(encoding_char_t<ENC>), "Conversion between equal sized encodings not yet supported");
-
-      //char_t  buffer[std::max((unsigned)length,LEN)];    //!< Conversion buffer large enough to hold input
-      char_t  buffer[length > LEN ? length : LEN];    //!< Conversion buffer large enough to hold input
-      int32   useDefault = TRUE,
-              inputLength = strlen_t(*str);
-
-      // Convert narrow input to wide output
-      if (sizeof(encoding_char_t<ENC>) < sizeof(char_t))
-        Count = MultiByteToWideChar(enum_cast(ENC), enum_cast(MultiByteFlags::PreComposed), *str, inputLength, Data, length);
-
-      // Convert wide input to narrow output
-      else if (sizeof(encoding_char_t<ENC>) > sizeof(char_t))
-        Count = WideCharToMultiByte(enum_cast(encoding), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), *str, inputLength, Data, length, "?", &useDefault);
+      // Convert/Assign input string
+      conversion_proxy<E,encoding,void>::convert(str, *this);
 
       // Ensure succeeded
-      if (!Count && inputLength)
-        throw platform_error(HERE, "Cannot convert to %s encoding: '%s'", toString(ENC), str);
+      if (str[0] && !Count)
+        throw platform_error(HERE, "Unable to convert character encoding");  //throw platform_error(HERE, "Cannot convert to %s encoding: '%s'", toString(E), str);
 
+      // Return new length
       return Count;
     }
+
+
+    // ----------------------------------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
     // CharArray::c_str() 
@@ -659,7 +663,7 @@ namespace wtl
     //! \throw wtl::logic_error - Incorrect number of arguments
     ///////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>		
-    uint32 format(string_literal_t str, ARGS&&... args) 
+    uint32 format(const char_t* str, ARGS&&... args) 
     {
       // Clear & format
       clear();
@@ -679,7 +683,7 @@ namespace wtl
     //! 
     //! \throw std::invalid_argument - [Debug only] Missing formatting string
     ///////////////////////////////////////////////////////////////////////////////
-    uint32 formatv(string_literal_t format, va_list args) 
+    uint32 formatv(const char_t* format, va_list args) 
     {
       REQUIRED_PARAM(format);
 
@@ -848,10 +852,11 @@ namespace wtl
         // Advance until null-terminator (or capacity reached)
         while (*str++ && Count < length);
 	  }
-
-  
-    // ---------------------- REPRESENTATION ----------------------
   };
+
+  //! \var CharArray<ENC,LEN>::EMPTY - Empty character array
+  template <Encoding ENC, unsigned LEN>
+  const CharArray<ENC,LEN>  CharArray<ENC,LEN>::EMPTY;
   
   ///////////////////////////////////////////////////////////////////////////////
   // wtl::c_arr
@@ -886,9 +891,9 @@ namespace wtl
 
     ///////////////////////////////////////////////////////////////////////////////
     // LastErrorString::LastErrorString
-    //! Create string from ::GetLastError()
+    //! Create from last system error
     ///////////////////////////////////////////////////////////////////////////////
-    explicit LastErrorString()
+    LastErrorString()
     {
       //! \var formatMsg - Format message
       static const auto formatMsg = getFunc<encoding_char_t<ENC>>(::FormatMessageA,::FormatMessageW);

@@ -207,7 +207,7 @@ namespace wtl
       return *this;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
 
   };
   
@@ -499,7 +499,7 @@ namespace wtl
     ////////////////////////////////////////////////////////////////////////////////
     void log(const char* str);
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     HANDLE   Handle;     //!< Console handle
     IoManip  Mode;       //!< Output mode
@@ -624,7 +624,7 @@ namespace wtl
   //! \param[in] const* str - String
   //! \return Console& - Reference to 'c'
   ////////////////////////////////////////////////////////////////////////////////
-  inline Console& operator<< (Console& c, string_literal_t str)
+  inline Console& operator<< (Console& c, const char* str)
   { 
     c.Write(str);
     return c;

@@ -277,6 +277,11 @@ namespace wtl
     PENWINFIRST = 0x0380,					              //!< 
     PENWINLAST = 0x038F,					              //!< 
 
+    REFLECT = 0x2000,					            		  //!< 
+    REFLECT_COMMAND = REFLECT + COMMAND,				//!< 
+    REFLECT_NOTIFY = REFLECT + NOTIFY,					//!< 
+    REFLECT_DRAWITEM = REFLECT + DRAWITEM,			//!< 
+
     APP = 0x8000,					            		      //!< 
   };
   
@@ -291,15 +296,22 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct unhandled_result - Defines the 'Unhandled' result value for any window message
   //! 
-  //! \tparam M - Window message identifier
+  //! \tparam WM - Window message identifier
   ///////////////////////////////////////////////////////////////////////////////
-  template <WindowMessage M> 
+  template <WindowMessage WM> 
   struct unhandled_result //: std::integral_constant<LRESULT,static_cast<LRESULT>(-1)> 
   {
-    static constexpr LRESULT value = -1; 
+    static constexpr ::LRESULT value = -1; 
   };
 
+  /*template <WindowMessage WM> 
+  struct unhandled_result<WM>::value = -1;*/
+
+  ///////////////////////////////////////////////////////////////////////////////
   //! \struct MsgResult - Encapsulates the result of any windows message 
+  //! 
+  //! \tparam RESULT - Message result type
+  ///////////////////////////////////////////////////////////////////////////////
   template <typename RESULT>
   struct MsgResult
   {
@@ -337,13 +349,16 @@ namespace wtl
 
   
   //! \struct unhandled - Encapsulates unhandled message results
-  template <WindowMessage M> 
+  template <WindowMessage WM> 
   struct unhandled
   {
     static const LResult value;   //(MsgRoute::Unhandled, unhandled_result<M>::value);
   };
 
-
+  
+  //! \struct unhandled - Encapsulates unhandled message results
+  template <WindowMessage WM> 
+  const LResult  unhandled<WM>::value = LResult(MsgRoute::Unhandled, unhandled_result<WM>::value);
   
 } //namespace wtl
 #endif // WTL_WINDOW_MESSAGE_TRAITS_HPP

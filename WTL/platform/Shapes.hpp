@@ -147,7 +147,7 @@ namespace wtl
       return *reinterpret_cast<::POINT*>(this);
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
 
     value_t  x,       //!< X co-ordinate
              y;       //!< Y co-ordinate
@@ -256,7 +256,7 @@ namespace wtl
 
     // ------------------------- MUTATORS -------------------------
     
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
 
     value_t  width,        //!< Width extent
              height;       //!< Height extent
@@ -525,7 +525,7 @@ namespace wtl
     }
     
     
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
 
     value_t  left,        //!< Left extent
              top,         //!< Top extent
@@ -651,7 +651,7 @@ namespace wtl
       return reinterpret_cast<const ::POINT*>(Points);
     }
     
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
 
     point_t  Points[3];     //!< Points
   };

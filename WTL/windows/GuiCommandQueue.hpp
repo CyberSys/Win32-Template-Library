@@ -30,15 +30,15 @@ namespace wtl
     //! \var encoding - Define command character encoding 
     static constexpr Encoding encoding = ENC;
 
-    //! \alias command_t - Define command type
-    using command_t = GuiCommand<ENC>;
+    //! \alias command_t - Define command base type
+    using command_t = IGuiCommand<ENC>;
 
   protected:
-    //! \alias command_ptr_t - Define storage type
-    using command_ptr_t = std::shared_ptr<command_t*>;
+    //! \alias storage_t - Define storage type
+    using storage_t = std::shared_ptr<command_t>;
 
     //! \alias collection_t - Define collection type
-    using collection_t = Stack<command_ptr_t>;
+    using collection_t = Stack<storage_t>;
 
     // --------------------- CONSTRUCTION ----------------------
   public:

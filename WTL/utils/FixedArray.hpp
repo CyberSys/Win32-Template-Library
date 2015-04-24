@@ -14,7 +14,16 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias FixedArray - Statically allocated loop unfurling array of fixed capacity & runtime length 
+  //! 
+  //! \tparam DATA - Type of each element
+  //! \tparam LENGTH - Maximum number of elements within the array
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename DATA, uint32 LENGTH>
+  using FixedArray = Array<DATA,LENGTH,false>;
+
+
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct Array<DATA,LENGTH,true> - Partial specialization for fixed arrays
   //! 
@@ -509,9 +518,12 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Array(std::initializer_list<value_type>&& list) : Array(Unique::Signature)
     {
+      // Assign from initializer list
+      assign(list.begin(), list.end());
+      
       // Copy-construct all elements
-      for (uint32 i = 0; i < length; ++i)
-        traits::alloc_t::construct(&Data[i], list[i]);
+      /*for (uint32 i = 0; i < length; ++i)
+        traits::alloc_t::construct(&Data[i], list.[i]);*/
     }
     
     ////////////////////////////////////////////////////////////////////////////////

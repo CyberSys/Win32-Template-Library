@@ -158,7 +158,7 @@ namespace wtl
       base::write(txt);
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
   };
   

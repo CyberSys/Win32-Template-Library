@@ -173,7 +173,7 @@ namespace wtl
       return this->Data;
     }
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
 
   };
   

@@ -11,29 +11,31 @@
 #include "WTL.hpp"
 
 // Fundamental types
-typedef signed char         int8;    
-typedef unsigned char       uint8;
-typedef signed short        int16;
-typedef unsigned short      uint16;
-typedef signed int          int32;
-typedef unsigned int        uint32;
-typedef signed long         long32;
-typedef unsigned long       ulong32;
-typedef signed long long    int64;
-typedef unsigned long long  uint64;
-typedef float               float32;
-typedef double              float64;
+using int8    = int8_t;
+using uint8   = uint8_t;
+using int16   = int16_t;
+using uint16  = uint16_t;
+using int32   = int32_t;
+using uint32  = uint32_t;
+using long32  = signed long int;
+using ulong32 = unsigned long int;
+using int64   = int64_t;
+using uint64  = uint64_t;
+using float32 = float_t;
+using float64 = double_t;
 
-// Aliases
-typedef uint8             byte;
-typedef uint8             Byte;
-typedef ulong32           dword;
-typedef uint64            dword64;
-typedef uint16            word;
+// Integers of data-bus width
+//using intptr_t;
+//using uintptr_t;
+
+// Convenience aliases
+using byte  = uint8;
+using word  = uint16;
+using dword = ulong32;
 
 // Handles
-typedef UINT_PTR          Socket;
-typedef HMODULE           Module;
+//using Socket = intptr_t;
+//typedef HMODULE           Module;
 
 
 #endif // WTL_TYPES_HPP

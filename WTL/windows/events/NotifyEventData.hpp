@@ -21,8 +21,8 @@ namespace wtl
   //! \tparam EVENT - Notification identifier type
   //! \tparam CODE - Notification
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT, EVENT CODE>
-  struct notify_data { using type = ::NMHDR; };
+  /*template <Encoding ENC, typename EVENT, EVENT CODE>
+  struct notify_data { using type = ::NMHDR; };*/
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias notify_data_t - Type accessor for notify message data-types
@@ -31,8 +31,8 @@ namespace wtl
   //! \tparam EVENT - Notification identifier type
   //! \tparam CODE - Notification
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT, EVENT CODE>
-  using notify_data_t = typename notify_data<ENC,EVENT,CODE>::type;
+  /*template <Encoding ENC, typename EVENT, EVENT CODE>
+  using notify_data_t = typename notify_data<ENC,EVENT,CODE>::type;*/
 
 
   
@@ -42,14 +42,14 @@ namespace wtl
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::Click>       { using type = ::NMCLICK;      };
+  /*template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::Click>       { using type = ::NMCLICK;      };
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::RClick>      { using type = ::NMCLICK;      };
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::NcHitTest>   { using type = ::NMMOUSE;      };
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::SetCursor>   { using type = ::NMCLICK;      };
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::KeyDown>     { using type = ::NMKEY;        };
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::Char>        { using type = ::NMCHAR;       };
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::CustomDraw>  { using type = ::NMCUSTOMDRAW;     };
-  template <Encoding ENC> struct notify_data<ENC,ListViewEvent,ListViewEvent::CustomDraw>  { using type = ::NMLVCUSTOMDRAW;   };
+  template <Encoding ENC> struct notify_data<ENC,ListViewEvent,ListViewEvent::CustomDraw>  { using type = ::NMLVCUSTOMDRAW;   };*/
 
 
 }

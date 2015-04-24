@@ -166,9 +166,6 @@ namespace wtl
       //! \var translateAccelerator - Functor for 'TranslateAccelerator'
       static const auto translateAccelerator = getFunc<ENC>(::TranslateAcceleratorA,::TranslateAcceleratorW);
 
-      //! \var translateMessage - Functor for 'TranslateMessage'
-      //static const auto translateMessage = getFunc<ENC>(::TranslateMessageA,::TranslateMessageW);
-    
       MSG msg;
 
       // Show window

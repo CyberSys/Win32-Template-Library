@@ -283,7 +283,7 @@ namespace wtl
     
     // ------------------------- MUTATORS -------------------------
 
-    // ---------------------- REPRESENTATION ----------------------
+    // -------------------- REPRESENTATION ---------------------
   protected:
     pugi::xml_document Document;      //!< PugiXml DOM Document
     stream_t           Stream;        //!< Output stream

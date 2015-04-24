@@ -17,12 +17,6 @@
 //! \def DEVELOPMENT_MODE - Activate boundary, domain/logic invariant, iterator, and function argument verification
 #define DEVELOPMENT_MODE
 
-//! \def DISPLAY_FASTTEST_SHELL - Displays a shell when executing fast-test
-#define DISPLAY_FASTTEST_SHELL
-
-//! \def DISPLAY_PACKET_XML - Displays the request/response xml when executing fast-test
-//#define DISPLAY_PACKET_XML
-
 // --------------------------------------------------
 // -------------------- COMPILER --------------------
 // --------------------------------------------------

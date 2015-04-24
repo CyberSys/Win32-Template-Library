@@ -196,7 +196,6 @@ namespace wtl
   //! Define names and values
   //template <> struct enum_names<HatchStyle>  { static const char* names[];   };
   template <> struct enum_values<HatchStyle> { static const HatchStyle values[6]; };
-
   
   // ----------------------------------- PEN STYLES ----------------------------------
   
