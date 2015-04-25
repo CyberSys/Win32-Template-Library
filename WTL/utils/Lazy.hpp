@@ -23,12 +23,12 @@ namespace wtl
   struct Lazy : protected Array<DATA,1,true>
   {
     // ---------------------- TYPES & CONSTANTS -------------------
-  
-    //! \typedef object_t - Object type
-    typedef DATA object_t;
-
-    //! \typedef base - Base class alias
-    typedef Array<DATA,1,true> base;
+    
+    //! \alias base - Base class alias
+    using base = Array<DATA,1,true>;
+    
+    //! \alias object_t - Object type
+    using object_t = DATA;
 
     // ----------------------- CONSTRUCTION -----------------------
     
