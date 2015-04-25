@@ -93,7 +93,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CommandEventArgs = typename CommandEvent<ENC>::arguments_t;
+  using CommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias CommandEventHandler - Handler for 'Command' event (ie. WM_COMMAND)
@@ -102,14 +102,6 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using CommandEventHandler = typename CommandEvent<ENC>::delegate_t;
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::COMMAND> - Defines function signature of 'Command' handlers
-  //! 
-  //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::COMMAND>  { using type = LResult (CommandEventArgs<ENC>&); };*/
 
 
 }

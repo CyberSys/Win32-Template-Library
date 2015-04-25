@@ -14,117 +14,95 @@
 namespace wtl
 {
   
-
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature - Defines the signature of window message event delegate
+  //! \struct EventArgs - Encapsulates decoding win32 message arguments
   //! 
   //! \tparam ENC - Message character encoding 
   //! \tparam WM - Window message
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM>
-  struct delegate_signature { using type = LResult (EventArgs<ENC,WM>&); };
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias delegate_signature_t - Type accessor window message event delegates
-  //! 
-  //! \tparam ENC - Message character encoding 
-  //! \tparam WM - Window message
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM>
-  using delegate_signature_t = typename delegate_signature<ENC,WM>::type; 
-
-  
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct ctrl_delegate_signature - Defines the signature of window message event delegate
-  //! 
-  //! \tparam ENC - Message character encoding 
-  //! \tparam WM - Window message
-  //! \tparam EVENT - Notification message type
-  //! \tparam CODE - Notification message 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT, EVENT CODE>
-  struct ctrl_delegate_signature { using type = LResult (CtrlEventArgs<ENC,WM,EVENT,CODE>&); };
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias ctrl_delegate_signature_t - Type accessor window message event delegates
-  //! 
-  //! \tparam ENC - Message character encoding 
-  //! \tparam WM - Window message
-  //! \tparam EVENT - Notification message type
-  //! \tparam CODE - [optional] Notification message 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT, EVENT CODE = zero<EVENT>::value>
-  using ctrl_delegate_signature_t = typename ctrl_delegate_signature<ENC,WM,EVENT,CODE>::type; 
-
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct MessageEvent - Encapsulates raising an event to handle a window message
-  //! 
-  //! \tparam ENC - Character encoding 
-  //! \tparam WM - Window message
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM>
-  struct MessageEvent : Event<ENC,delegate_signature_t<ENC,WM>>
-  {
+  template <Encoding ENC, WindowMessage WM> 
+  struct EventArgs
+  {    
     // ------------------- TYPES & CONSTANTS -------------------
-  
-    //! \alias arguments_t - Define message argument decoder type
-    using arguments_t = EventArgs<ENC,WM>;
+
+    //! \alias char_t - Define character type
+    using char_t = encoding_char_t<ENC>;
     
-    //! \alias base - Define base type
-    using base = Event<ENC,delegate_signature_t<ENC,WM>>;
+    //! \alias resource_t - Define resource id type
+    using resource_t = ResourceId<ENC>;
+    
+    //! \var encoding - Define message character encoding 
+    static constexpr Encoding  encoding = ENC;
+    
+    //! \var message - Define message identifier
+    static constexpr WindowMessage  message = WM;
+    
+    //! \var unhandled - Define unhandled result
+    static constexpr ::LRESULT  unhandled = unhandled_result<WM>::value;
     
     // -------------------- REPRESENTATION ---------------------
-  
-    // --------------------- CONSTRUCTION ----------------------
 
+    // --------------------- CONSTRUCTION ----------------------
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // EventArgs::EventArgs
+    //! Create argument decoder for messages with zero arguments
+    ///////////////////////////////////////////////////////////////////////////////
+    EventArgs()
+    {}
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // EventArgs::EventArgs
+    //! Create from parameters
+    //! 
+    //! \param[in] w - First message parameter
+    //! \param[in] l - Second message parameter
+    ///////////////////////////////////////////////////////////////////////////////
+    EventArgs(::WPARAM w, ::LPARAM l)
+    {}
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // EventArgs::~EventArgs
+    //! Virtual d-tor
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual ~EventArgs()
+    {}
+    
     // ------------------------ STATIC -------------------------
 
     // ---------------------- ACCESSORS ------------------------			
-
-    // ----------------------- MUTATORS ------------------------
-
-  };
-
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct ChildControlEvent - Encapsulates raising an event to handle a child control notification 
-  //! 
-  //! \tparam ENC - Character encoding 
-  //! \tparam WM - Window message
-  //! \tparam EVENT - Notification message type
-  //! \tparam CODE - [optional] Notification message 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT, EVENT CODE = zero<EVENT>::value>
-  struct ChildControlEvent : Event<ENC,ctrl_delegate_signature_t<ENC,WM,EVENT,CODE>>
-  {
-    // ------------------- TYPES & CONSTANTS -------------------
-  
-    //! \alias base - Define base type
-    using base = Event<ENC,ctrl_delegate_signature_t<ENC,WM,EVENT,CODE>>;
     
-    //! \alias arguments_t - Define message argument decoder type
-    using arguments_t = CtrlEventArgs<ENC,WM,EVENT,CODE>;
-
-    //! \alias event_t - Define notification message type
-    using event_t = EVENT;
-    
-    // -------------------- REPRESENTATION ---------------------
-  
-    // --------------------- CONSTRUCTION ----------------------
-
-    // ------------------------ STATIC -------------------------
-
-    // ---------------------- ACCESSORS ------------------------			
-
     // ----------------------- MUTATORS ------------------------
 
   };
   
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias MessageEvent - Defines an event encapsulating a window message 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam WM - Window message
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM>
+  using MessageEvent = Event<ENC, LResult, EventArgs<ENC,WM>&>;
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias MessageEventArgs - Defines arguments for any 'Message' Event 
+  //! 
+  //! \tparam ENC - Message character encoding 
+  //! \tparam WM - Window message
+  ///////////////////////////////////////////////////////////////////////////////
+  //template <Encoding ENC, WindowMessage WM, template <unsigned> class ARGS = MessageEvent<ENC,WM>::argument_t>
+  //using MessageEventArgs = ARGS<0>; // typename MessageEvent<ENC,WM>::argument_t<0>;
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias MessageEventHandler - Defines handler for any 'Message' event 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam WM - Window message
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM>
+  using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
+
   
 }
 

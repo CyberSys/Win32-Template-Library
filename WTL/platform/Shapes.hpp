@@ -663,7 +663,7 @@ namespace wtl
   using TriangleF = Triangle<float>;
 
 
-} // GDK namespace
+} // WTL namespace
 
 
 

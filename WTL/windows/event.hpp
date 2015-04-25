@@ -9,7 +9,7 @@
 #define WTL_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-//#include "wtl/windows/Delegate.hpp"
+#include "wtl/windows/Delegate.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -18,27 +18,36 @@ namespace wtl
   //! \struct Event - Provides an observeable event pattern with multiple subscribers
   //! 
   //! \tparam ENC - Character encoding 
-  //! \tparam SIG - Call signature of handler function
+  //! \tparam RET - [optional] Handler function return type (If unspecified, no return)
+  //! \tparam SIG - [optional] Handler function signature (If unspecified, no arguments)
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename SIG>
+  template <Encoding ENC, typename RET = void, typename... ARGS>
   struct Event 
   {
     // ------------------- TYPES & CONSTANTS -------------------
   
+    //! \alias argument_t - Delegate argument type accessor
+    //! \tparam IDX - Zero-based argument index
+    template <unsigned IDX>
+    using argument_t = typename std::tuple_element<IDX, std::tuple<ARGS...>>::type;
+  
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias signature_t - Define event handler signature
-    using signature_t = SIG;
-    
     //! \alias delegate_t - Define delegate type
-    using delegate_t = std::function<signature_t>;
+    using delegate_t = Delegate<sizeof...(ARGS),RET,ARGS...>;
+    
+    //! \alias result_t - Define delegate return type
+    using result_t = RET;
 
-    //! \alias result_t - Define event handler return type
-    using result_t = typename delegate_t::result_type;
+    //! \alias signature_t - Define delegate signature
+    using signature_t = RET (ARGS...);
+  
+    //! \var arguments - Number of arguments
+    static constexpr uint32  arguments = sizeof...(ARGS);
 
     //! \var encoding - Define character encoding
-    static constexpr Encoding encoding = ENC;
+    static constexpr Encoding  encoding = ENC;
     
   protected:
     //! \alias storage_t - Define delegate storage type

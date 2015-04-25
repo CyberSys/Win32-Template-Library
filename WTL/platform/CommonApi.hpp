@@ -38,7 +38,26 @@ namespace wtl
     // Return result & routing
     return { route , result };
   }
-
+  
+  /////////////////////////////////////////////////////////////
+  // wtl::post_message
+  //! Post a message to a window
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam WM - Window message
+  //! \tparam FIRST - First parameter type
+  //! \tparam SECOND - Second parameter type
+  //!
+  //! \param[in] const& wnd - Destination window
+  //! \param[in] w - First parameter
+  //! \param[in] l - Second parameter
+  /////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
+  void post_message(const HWnd& wnd, FIRST w, SECOND l)
+  {
+    // Post to target window 
+    getFunc<ENC>(::PostMessageA,::PostMessageW)(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
+  }
 
   /////////////////////////////////////////////////////////////
   // wtl::load_function
@@ -50,8 +69,8 @@ namespace wtl
   //! \param[in] name - Function name
   //! \return bool - True iff unloaded successfully 
   //! 
-  //! \throw gdk::invalid_argument - [Debug only] Module handle is nullptr -or- name is empty
-  //! \throw gdk::domain_error - [Debug only] Function does not exist
+  //! \throw wtl::invalid_argument - [Debug only] Module handle is nullptr -or- name is empty
+  //! \throw wtl::domain_error - [Debug only] Function does not exist
   /////////////////////////////////////////////////////////////
   //template <typename SIG>
   //std::function<SIG> load_function(Module h, std::string name)

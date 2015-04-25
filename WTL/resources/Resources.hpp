@@ -49,6 +49,17 @@ namespace wtl
   public:
     ///////////////////////////////////////////////////////////////////////////////
     // Resource::Resource
+    //! Copy create
+    ///////////////////////////////////////////////////////////////////////////////
+    Resource(const Resource& r) : Module(r.Module),
+                                  Handle(r.Handle),
+                                  Block(r.Block),
+                                  Data(r.Data)
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Resource::Resource
     //! Create from resource handle
     //!
     //! \param[in] const& module - Module containing resource
@@ -72,7 +83,7 @@ namespace wtl
     virtual ~Resource()
     {}
 
-    DEFAULT_COPY(Resource);
+    //DEFAULT_COPY(Resource);
     //DEFAULT_COPY_ASSIGN(Resource);
     
     // ------------------------ STATIC -------------------------
@@ -114,7 +125,9 @@ namespace wtl
     bool operator == (const Resource& r) const
     {
       return this->Handle == r.Handle
-          && this->Module == r.Module;
+          && this->Module == r.Module
+          && this->Block == r.Block
+          && this->Data == r.Data;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

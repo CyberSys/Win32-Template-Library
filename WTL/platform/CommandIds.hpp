@@ -17,8 +17,9 @@ namespace wtl
   //! \enum CommandId - Defines GUI Command Ids
   enum class CommandId : uint16
   {
-    FILE_EXIT,            //!< Exit program
-    // TODO: Import ID_FILE_OPEN, ... etc. from Win32 definitions if possible, otherwise MFC or WTL
+    APP_EXIT = ID_APP_EXIT,            //!< Exit program
+    
+    // TODO: Add remaining FILE,EDIT,VIEW,WINDOW commands
   };
   
   

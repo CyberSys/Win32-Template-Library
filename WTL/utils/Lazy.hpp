@@ -180,7 +180,7 @@ namespace wtl
 
   
 
-} // GDK namespace
+} // WTL namespace
 
 
 

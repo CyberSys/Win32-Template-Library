@@ -772,7 +772,7 @@ namespace wtl
   
   ////////////////////////////////////////////////////////////////////////////////
   // Console::Log
-  //! Print an STL or GDK exception to console (without custom message)
+  //! Print an STL or WTL exception to console (without custom message)
   //! 
   //! \param[in] const* location - Handler location
   //! \param[in] const& e - Exception
@@ -781,7 +781,7 @@ namespace wtl
   {
     lock_t lock(*this);   //!< Take ownership of the console
 
-    // Always check whether input is a GDK exception -- simplifies exception guard logic if we only catch one exception type
+    // Always check whether input is a WTL exception -- simplifies exception guard logic if we only catch one exception type
     if (dynamic_cast<const std::exception*>(&e))
       log(location, reinterpret_cast<const wtl::exception&>(e));
     else
@@ -792,7 +792,7 @@ namespace wtl
   
   ////////////////////////////////////////////////////////////////////////////////
   // Console::Log
-  //! Print GDK exception to console (without custom message)
+  //! Print WTL exception to console (without custom message)
   //!
   //! \param[in] const *location - Handler location
   //! \param[in] const &e - Exception
@@ -809,17 +809,17 @@ namespace wtl
   
   ////////////////////////////////////////////////////////////////////////////////
   // Console::Log
-  //! Print an STL or GDK exception to console (with a custom message)
+  //! Print an STL or WTL exception to console (with a custom message)
   //! 
   //! \param[in] const *location - Handler location
-  //! \param[in] const &e - STL or GDK exception
+  //! \param[in] const &e - STL or WTL exception
   //! \param[in] const *message - Custom message
   ////////////////////////////////////////////////////////////////////////////////
   inline void Console::log(const char* location, const std::exception& e, const char* message)
   {
     lock_t lock(*this);   //!< Take ownership of the console
 
-    // Always check whether input is a GDK exception -- simplifies exception guard logic if we only catch one exception type
+    // Always check whether input is a WTL exception -- simplifies exception guard logic if we only catch one exception type
     if (dynamic_cast<const std::exception*>(&e))
       log(location, reinterpret_cast<const wtl::exception&>(e));
     else
@@ -830,7 +830,7 @@ namespace wtl
   
   ////////////////////////////////////////////////////////////////////////////////
   // Console::Log
-  //! Print GDK exception to console (with a custom message)
+  //! Print WTL exception to console (with a custom message)
   //!
   //! \param[in] const *location - Handler location
   //! \param[in] const &e - Exception

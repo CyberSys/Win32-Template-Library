@@ -80,7 +80,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ShowWindowEventArgs = typename ShowWindowEvent<ENC>::arguments_t;
+  using ShowWindowEventArgs = EventArgs<ENC,WindowMessage::SHOWWINDOW>;
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias ShowWindowEventHandler - Handler for 'ShowWindow' event (ie. WM_SHOWWINDOW)
@@ -89,14 +89,6 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using ShowWindowEventHandler = typename ShowWindowEvent<ENC>::delegate_t;
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::SHOWWINDOW> - Defines function signature of 'ShowWindow' handlers
-  //! 
-  //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::SHOWWINDOW>  { using type = LResult (ShowWindowEventArgs<ENC>&); };*/
 
 
 }

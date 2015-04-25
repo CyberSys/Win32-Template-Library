@@ -15,20 +15,12 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::CLOSE> - Defines function signature of 'CloseWindow' handlers
-  //! 
-  //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::CLOSE>  { using type = LResult (); };
-  
-  ///////////////////////////////////////////////////////////////////////////////
   //! \alias CloseWindowEvent - Defines 'CloseWindow' event (ie. WM_CLOSE)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CloseWindowEvent = MessageEvent<ENC,WindowMessage::CLOSE>;
+  using CloseWindowEvent = Event<ENC,LResult>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias CloseWindowEventHandler - Handler for 'CloseWindow' event (ie. WM_CLOSE)

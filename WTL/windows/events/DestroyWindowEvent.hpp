@@ -13,22 +13,13 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::DESTROY> - Defines function signature of 'DestroyWindow' handlers
-  //! 
-  //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::DESTROY>  { using type = LResult (); };
-  
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias DestroyWindowEvent - Defines 'DestroyWindow' event (ie. WM_DESTROY)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using DestroyWindowEvent = MessageEvent<ENC,WindowMessage::DESTROY>;
+  using DestroyWindowEvent = Event<ENC,LResult>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias DestroyWindowEventHandler - Handler for 'DestroyWindow' event (ie. WM_DESTROY)

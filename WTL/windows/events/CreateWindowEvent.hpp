@@ -101,14 +101,7 @@ namespace wtl
     const char_t*   Name;        //!< Window name
   };
 
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::CREATE> - Defines function signature of 'CreateWindow' handlers
-  //! 
-  //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::CREATE>  { using type = LResult (CreateWindowEventArgs<ENC>&); };*/
+
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias CreateWindowEvent - Defines 'CreateWindow' event (ie. WM_CREATE)
@@ -116,7 +109,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CreateWindowEvent = MessageEvent<ENC,WindowMessage::CREATE>;
+  using CreateWindowEvent = MessageEvent<ENC, WindowMessage::CREATE>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias CreateWindowEventArgs - Arguments for 'CreateWindow' Event (ie. WM_CREATE)
@@ -124,7 +117,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CreateWindowEventArgs = typename CreateWindowEvent<ENC>::arguments_t;
+  using CreateWindowEventArgs = EventArgs<ENC,WindowMessage::CREATE>;
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias CreateWindowEventHandler - Handler for 'CreateWindow' event (ie. WM_CREATE)

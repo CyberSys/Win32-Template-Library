@@ -190,8 +190,8 @@ namespace wtl
 
 
   
-  //! \enum ButtonEvent - Defines standard Button notifications
-  enum class ButtonEvent : ulong32
+  //! \enum ButtonNotification - Defines standard Button notifications
+  enum class ButtonNotification : ulong32
   {
     Click       = 0x00000000L,			        //!< [Windows 3.11] 
     Paint       = 0x00000001L,			        //!< [Windows 3.11] 
@@ -208,12 +208,12 @@ namespace wtl
 
   
   //! Define traits: Contiguous enumeration
-  template <> struct is_attribute<ButtonEvent>  : std::false_type  {};
-  template <> struct is_contiguous<ButtonEvent> : std::true_type   {};
+  template <> struct is_attribute<ButtonNotification>  : std::false_type  {};
+  template <> struct is_contiguous<ButtonNotification> : std::true_type   {};
 
   //! Define limits traits
-  template <> struct max_value<ButtonEvent>     : std::integral_constant<ButtonEvent,ButtonEvent::KillFocus>  {};
-  template <> struct min_value<ButtonEvent>     : std::integral_constant<ButtonEvent,ButtonEvent::Click>      {};
+  template <> struct max_value<ButtonNotification>     : std::integral_constant<ButtonNotification,ButtonNotification::KillFocus>  {};
+  template <> struct min_value<ButtonNotification>     : std::integral_constant<ButtonNotification,ButtonNotification::Click>      {};
 
   
   // ----------------------------------- EDIT CONTROLS ----------------------------------
@@ -247,8 +247,8 @@ namespace wtl
   template <> struct min_value<EditStyle>     : std::integral_constant<EditStyle,EditStyle::Left>     {};
 
   
-  //! \enum EditEvent - Defines standard Edit notifications
-  enum class EditEvent : uint16
+  //! \enum EditNotification - Defines standard Edit notifications
+  enum class EditNotification : uint16
   {
     SetFocus = 0x0100,			        //!< [Explorer 3.00]
     KillFocus = 0x0200,			        //!< [Explorer 3.00]
@@ -263,19 +263,19 @@ namespace wtl
   };
 
   //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<EditEvent>  : std::false_type  {};
-  template <> struct is_contiguous<EditEvent> : std::false_type  {};
+  template <> struct is_attribute<EditNotification>  : std::false_type  {};
+  template <> struct is_contiguous<EditNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<EditEvent>     : std::integral_constant<EditEvent,EditEvent::AlignRightToLeft> {};
-  template <> struct min_value<EditEvent>     : std::integral_constant<EditEvent,EditEvent::SetFocus>         {};
+  template <> struct max_value<EditNotification>     : std::integral_constant<EditNotification,EditNotification::AlignRightToLeft> {};
+  template <> struct min_value<EditNotification>     : std::integral_constant<EditNotification,EditNotification::SetFocus>         {};
 
   
   // ----------------------------------- COMBO-BOX CONTROLS ----------------------------------
 
 
-  //! \enum ComboBoxEvent - Defines standard ComboBox notification
-  enum class ComboBoxEvent : int16
+  //! \enum ComboBoxNotification - Defines standard ComboBox notification
+  enum class ComboBoxNotification : int16
   {
     ErrSpace = -0x0001,			  //!< [Explorer 3.00]
     SelChange = 0x0001,			  //!< [Explorer 3.00]
@@ -291,12 +291,12 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<ComboBoxEvent>  : std::false_type  {};
-  template <> struct is_contiguous<ComboBoxEvent> : std::false_type  {};
+  template <> struct is_attribute<ComboBoxNotification>  : std::false_type  {};
+  template <> struct is_contiguous<ComboBoxNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<ComboBoxEvent>     : std::integral_constant<ComboBoxEvent,ComboBoxEvent::SelAndCancel> {};
-  template <> struct min_value<ComboBoxEvent>     : std::integral_constant<ComboBoxEvent,ComboBoxEvent::ErrSpace>     {}; 
+  template <> struct max_value<ComboBoxNotification>     : std::integral_constant<ComboBoxNotification,ComboBoxNotification::SelAndCancel> {};
+  template <> struct min_value<ComboBoxNotification>     : std::integral_constant<ComboBoxNotification,ComboBoxNotification::ErrSpace>     {}; 
   
 
   //! \enum ComboBoxStyle - Defines standard ComboBox window styles
@@ -329,8 +329,8 @@ namespace wtl
   // ----------------------------------- LIST-BOX CONTROLS ----------------------------------
 
 
-  //! \enum ListBoxEvent - Defines standard ListBox notifications
-  enum class ListBoxEvent : int16
+  //! \enum ListBoxNotification - Defines standard ListBox notifications
+  enum class ListBoxNotification : int16
   {
     ErrSpace = -0x0002,			//!< [Windows 3.11]
     SelChange = 0x0001,			//!< [Windows 3.11]
@@ -341,12 +341,12 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<ListBoxEvent>  : std::false_type  {};
-  template <> struct is_contiguous<ListBoxEvent> : std::false_type  {};
+  template <> struct is_attribute<ListBoxNotification>  : std::false_type  {};
+  template <> struct is_contiguous<ListBoxNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<ListBoxEvent>     : std::integral_constant<ListBoxEvent,ListBoxEvent::KillFocus>  {};
-  template <> struct min_value<ListBoxEvent>     : std::integral_constant<ListBoxEvent,ListBoxEvent::ErrSpace>   {}; 
+  template <> struct max_value<ListBoxNotification>     : std::integral_constant<ListBoxNotification,ListBoxNotification::KillFocus>  {};
+  template <> struct min_value<ListBoxNotification>     : std::integral_constant<ListBoxNotification,ListBoxNotification::ErrSpace>   {}; 
   
 
   //! \enum ListBoxStyle - Defines standard ListBox window styles
@@ -384,8 +384,8 @@ namespace wtl
   // ----------------------------------- LIST-VIEW CONTROLS ----------------------------------
 
 
-  //! \enum ListViewEvent - Defines standard ListView notifications
-  enum class ListViewEvent : int16
+  //! \enum ListViewNotification - Defines standard ListView notifications
+  enum class ListViewNotification : int16
   {
     First               = int16(LVN_FIRST),           //!< First notification
     ItemChanging 				= First - 0,			            //!< [Windows 4.00] 
@@ -437,12 +437,12 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<ListViewEvent>  : std::false_type  {};
-  template <> struct is_contiguous<ListViewEvent> : std::false_type  {};
+  template <> struct is_attribute<ListViewNotification>  : std::false_type  {};
+  template <> struct is_contiguous<ListViewNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<ListViewEvent>     : std::integral_constant<ListViewEvent,ListViewEvent::CustomDraw>   {};
-  template <> struct min_value<ListViewEvent>     : std::integral_constant<ListViewEvent,ListViewEvent::ItemChanging> {}; 
+  template <> struct max_value<ListViewNotification>     : std::integral_constant<ListViewNotification,ListViewNotification::CustomDraw>   {};
+  template <> struct min_value<ListViewNotification>     : std::integral_constant<ListViewNotification,ListViewNotification::ItemChanging> {}; 
   
 
 
@@ -538,8 +538,8 @@ namespace wtl
   // ----------------------------------- STATIC CONTROLS ----------------------------------
   
 
-  //! \enum StaticEvent - Defines standard Static notification
-  enum class StaticEvent : int16
+  //! \enum StaticNotification - Defines standard Static notification
+  enum class StaticNotification : int16
   {
     Clicked  = 0x00000000L,			//!< [Windows 3.11] (MuEx)
     DblClick = 0x00000001L,			//!< [Windows 3.11] (MuEx)
@@ -548,12 +548,12 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous attribute
-  template <> struct is_attribute<StaticEvent>  : std::true_type   {};
-  template <> struct is_contiguous<StaticEvent> : std::false_type  {};
+  template <> struct is_attribute<StaticNotification>  : std::true_type   {};
+  template <> struct is_contiguous<StaticNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<StaticEvent>     : std::integral_constant<StaticEvent,StaticEvent::Disable> {};
-  template <> struct min_value<StaticEvent>     : std::integral_constant<StaticEvent,StaticEvent::Clicked> {}; 
+  template <> struct max_value<StaticNotification>     : std::integral_constant<StaticNotification,StaticNotification::Disable> {};
+  template <> struct min_value<StaticNotification>     : std::integral_constant<StaticNotification,StaticNotification::Clicked> {}; 
   
 
   //! \enum StaticStyle - Defines standard Static window styles
@@ -606,8 +606,8 @@ namespace wtl
   // ----------------------------------- TOOLTIPS CONTROLS ----------------------------------
 
 
-  //! \enum ToolTipEvent - Defines standard ToolTip notifications
-  enum class ToolTipEvent : int16
+  //! \enum ToolTipNotification - Defines standard ToolTip notifications
+  enum class ToolTipNotification : int16
   {
     First         = int16(TTN_FIRST), //!< First notification
 
@@ -621,12 +621,12 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<ToolTipEvent>  : std::false_type  {};
-  template <> struct is_contiguous<ToolTipEvent> : std::false_type  {};
+  template <> struct is_attribute<ToolTipNotification>  : std::false_type  {};
+  template <> struct is_contiguous<ToolTipNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<ToolTipEvent>     : std::integral_constant<ToolTipEvent,ToolTipEvent::LinkClick>     {};
-  template <> struct min_value<ToolTipEvent>     : std::integral_constant<ToolTipEvent,ToolTipEvent::GetDispInfoA>  {}; 
+  template <> struct max_value<ToolTipNotification>     : std::integral_constant<ToolTipNotification,ToolTipNotification::LinkClick>     {};
+  template <> struct min_value<ToolTipNotification>     : std::integral_constant<ToolTipNotification,ToolTipNotification::GetDispInfoA>  {}; 
   
 
   //! \enum ToolTipStyle - Defines standard ToolTip window styles
@@ -653,8 +653,8 @@ namespace wtl
   // ----------------------------------- TREE-VIEW CONTROLS ----------------------------------
 
 
-  //! \enum TreeViewEvent - Defines standard TreeView notifications
-  enum class TreeViewEvent : int16
+  //! \enum TreeViewNotification - Defines standard TreeView notifications
+  enum class TreeViewNotification : int16
   {
     First           = int16(TVN_FIRST), //!< First notification
     
@@ -698,12 +698,12 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<TreeViewEvent>  : std::false_type  {};
-  template <> struct is_contiguous<TreeViewEvent> : std::false_type  {};
+  template <> struct is_attribute<TreeViewNotification>  : std::false_type  {};
+  template <> struct is_contiguous<TreeViewNotification> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<TreeViewEvent>     : std::integral_constant<TreeViewEvent,TreeViewEvent::CustomDraw>     {};
-  template <> struct min_value<TreeViewEvent>     : std::integral_constant<TreeViewEvent,TreeViewEvent::SelChangingA>   {}; 
+  template <> struct max_value<TreeViewNotification>     : std::integral_constant<TreeViewNotification,TreeViewNotification::CustomDraw>     {};
+  template <> struct min_value<TreeViewNotification>     : std::integral_constant<TreeViewNotification,TreeViewNotification::SelChangingA>   {}; 
   
 
 

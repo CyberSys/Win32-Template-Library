@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\controls\Button.hpp
+//! \file wtl\windows\controls\Button.hpp
 //! \brief Encapsulates button controls
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -26,6 +26,15 @@ namespace wtl
   
     //! \alias base - Define base type
     using base = WindowBase<ENC>;
+    
+    //! \var encoding - Inherit character encoding
+    static constexpr Encoding  encoding = base::encoding;
+    
+    // -------------------- REPRESENTATION ---------------------
+    
+    ButtonClickEvent<encoding>        Click;         //!< Button click
+    ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
+    ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
 
     // --------------------- CONSTRUCTION ----------------------
     
@@ -39,6 +48,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Button(HINSTANCE instance) : base(getClass(instance))
     {
+      // Remove paint handlers
+      this->Paint.clear();
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -51,8 +62,14 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Button(wndclass_t& custom) : base(custom)
     {
+      // Remove paint handlers
+      this->Paint.clear();
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    // Button::~Button
+    //! Virtual d-tor
+    ///////////////////////////////////////////////////////////////////////////////
     virtual ~Button()
     {}
 
@@ -93,43 +110,37 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to create window
     ///////////////////////////////////////////////////////////////////////////////
-    //template <Encoding ENC, unsigned LEN, typename IDENT> 
-    //void create2(window_t& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, ButtonStyle style = wtl::ButtonStyle::Centre|wtl::ButtonStyle::Notify, WindowStyleEx exStyle = WindowStyleEx::None)
-    //{
-    //  // Create window
-    //  base::create<ENC,LEN>(parent,text,rc,static_cast<WindowId>(id),WindowStyle::Child|style,exStyle);
-
-    //  // Set initial font
-    //  base::setFont(wtl::StockFont::Window, false);
-    //}
-
-    void setImage(HBITMAP bmp)
+    template <Encoding ENC, unsigned LEN, typename IDENT = WindowId, typename STYLE = WindowStyle>
+    void create(WindowBase<ENC>& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
     {
-      int32 dummy;
-      Button_SetImageList(this->Handle, &dummy);
+      // Create window
+      base::create<ENC,LEN>(parent,text,rc,static_cast<WindowId>(id),WindowStyle::Child|style,exStyle);
+      
+      // Set initial font
+      base::setFont(wtl::StockFont::Window, false);
     }
+
     
     ///////////////////////////////////////////////////////////////////////////////
     // Button::onControlEvent
-    //! Called in response to events from child controls (ie. WM_COMMAND)
+    //! Called in response to a reflected message to raise the associated event
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onControlEvent(ControlEventArgs<encoding>& args) 
+    LResult  onControlEvent(CtrlCommandEventArgs<encoding>& args) override
     { 
-      switch (static_cast<ButtonEvent>(args.Message))
+      // Raise associated event
+      switch (static_cast<ButtonNotification>(args.Message))
       {
-      case ButtonEvent::Click:      return Click.raise();
-      case ButtonEvent::Disabled:
-      case ButtonEvent::Pushed:
+      case ButtonNotification::Click:      return Click.raise(ButtonClickEventArgs<encoding>(args));
+      case ButtonNotification::SetFocus:   return GainFocus.raise(ButtonGainFocusEventArgs<encoding>(args));
+      case ButtonNotification::KillFocus:  return LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(args));
       }
 
-      return args.unhandled();
+      return args.unhandled;
     }
 
-    // -------------------- REPRESENTATION ---------------------
-    
   };
 
 }

@@ -15,7 +15,7 @@ namespace wtl
 {
 
   ////////////////////////////////////////////////////////////////////////////////
-  //! gdk::opaque_cast
+  //! wtl::opaque_cast
   //! Encode the address of a value of type too large to fit within an LPARAM
   //! 
   //! \param[in] const& value - Reference to value too large to fit within an LPARAM
@@ -29,7 +29,7 @@ namespace wtl
   }
   
   ////////////////////////////////////////////////////////////////////////////////
-  //! gdk::opaque_cast
+  //! wtl::opaque_cast
   //! Encodes any value of type small enough to fit within an LPARAM
   //! 
   //! \param[in] value - Value of type small enough to fit within an LPARAM
@@ -44,7 +44,7 @@ namespace wtl
   }
   
   ////////////////////////////////////////////////////////////////////////////////
-  //! gdk::opaque_cast
+  //! wtl::opaque_cast
   //! Encodes two WORDs into an LPARAM
   //! 
   //! \param[in] low - Low word
@@ -59,7 +59,7 @@ namespace wtl
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  //! gdk::opaque_cast
+  //! wtl::opaque_cast
   //! Decode any object's value or address from an LPARAM, expecting an address for types too large to fit
   //! 
   //! \tparam T - Any type
@@ -74,7 +74,7 @@ namespace wtl
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  //! gdk::opaque_cast
+  //! wtl::opaque_cast
   //! Decode any object's value or address from an LPARAM, expecting an address for types too large to fit
   //! 
   //! \tparam T - Any type
@@ -91,7 +91,7 @@ namespace wtl
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  //! gdk::opaque_cast
+  //! wtl::opaque_cast
   //! Decode any object's value or address from an LPARAM, expecting an address for types too large to fit
   //! 
   //! \tparam T - Any type
@@ -106,7 +106,7 @@ namespace wtl
   }
   
 
-} // GDK namespace
+} // WTL namespace
 
 
 

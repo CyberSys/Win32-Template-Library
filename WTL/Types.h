@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Types.h
-//! \brief Defines gdk types
+//! \brief Defines wtl types
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! Copyright © Nick Crowley. All rights reserved.

@@ -111,6 +111,7 @@
 #include "utils/toString.hpp"
 
 // Platform Constants:
+#include "LibRes.h"
 #include "platform/Colours.hpp"
 #include "platform/CommandIds.hpp"
 #include "platform/DrawingFlags.hpp"
@@ -173,9 +174,8 @@
 
 // Events
 #include "windows/Event.hpp"
-#include "windows/EventArgs.hpp"
 #include "windows/MessageEvent.hpp"
-//#include "windows/ChildControlEvent.hpp"
+#include "windows/ControlEvent.hpp"
 #include "windows/events/CreateWindowEvent.hpp"
 #include "windows/events/DestroyWindowEvent.hpp"
 #include "windows/events/CloseWindowEvent.hpp"
@@ -183,8 +183,7 @@
 #include "windows/events/ShowWindowEvent.hpp"
 //#include "windows/events/OwnerDrawEvent.hpp"
 #include "windows/events/CommandEvent.hpp"
-#include "windows/events/ControlEvent.hpp"
-#include "windows/events/ControlNotification.hpp"
+#include "windows/events/StandardControls.hpp"
 
 // Commands
 #include "windows/GuiCommand.hpp"
@@ -211,7 +210,7 @@
 
 // Controls
 #include "windows/Window.hpp"
-#include "controls/Button.hpp"
+#include "windows/controls/Button.hpp"
 
 // Windows & Dialogs
 

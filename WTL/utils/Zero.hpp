@@ -34,6 +34,7 @@ namespace wtl
   template <>           struct zero<uint8>   { static constexpr uint8 value = 0x00U;    };
   template <>           struct zero<int8>    { static constexpr int8 value = 0x00;      };
   template <>           struct zero<char>    { static constexpr char value = 0x00;      };
+  template <>           struct zero<bool>    { static constexpr bool value = false;     };
 
 //! \if CONSTEXPR_CAP - Define here if compiler supports static storage
 #ifdef CONSTEXPR_CAP

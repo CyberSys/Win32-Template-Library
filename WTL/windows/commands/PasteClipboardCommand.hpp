@@ -36,7 +36,7 @@ namespace wtl
     // PasteClipboardCommand::PasteClipboardCommand
     //! Derived c-tor
     ///////////////////////////////////////////////////////////////////////////////
-    PasteClipboardCommand() : base(ID_FILE_EXIT)
+    PasteClipboardCommand() : base(ID_APP_EXIT)
     {}
     
   public:

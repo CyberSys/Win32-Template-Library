@@ -41,6 +41,7 @@
     <ClInclude Include="platform\Shapes.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
+    <ClInclude Include="LibRes.h" />
     <ClInclude Include="resources\DialogResource.hpp" />
     <ClInclude Include="resources\Resources.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
@@ -87,14 +88,12 @@
     <ClInclude Include="utils\Zero.hpp" />
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp" />
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp" />
+    <ClInclude Include="windows\ControlEvent.hpp" />
     <ClInclude Include="windows\controls\Button.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\event.hpp" />
-    <ClInclude Include="windows\EventArgs.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
     <ClInclude Include="windows\events\CommandEvent.hpp" />
-    <ClInclude Include="windows\events\ControlEvent.hpp" />
-    <ClInclude Include="windows\events\ControlNotification.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />

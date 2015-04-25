@@ -299,9 +299,6 @@
     <ClInclude Include="threads\MessagePump.hpp">
       <Filter>Threads</Filter>
     </ClInclude>
-    <ClInclude Include="windows\events\ControlEvent.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
     <ClInclude Include="windows\events\StandardControls.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
@@ -315,9 +312,6 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\events\CommandEvent.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\events\ControlNotification.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp">
@@ -335,9 +329,6 @@
     <ClInclude Include="windows\event.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="windows\EventArgs.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="windows\GuiCommand.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -352,6 +343,12 @@
     </ClInclude>
     <ClInclude Include="windows\Delegate.hpp">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\ControlEvent.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="LibRes.h">
+      <Filter>Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  
   ////////////////////////////////////////////////////////////////////////////////
   // Console::flush 
   //! Flushes the log-file output to disc

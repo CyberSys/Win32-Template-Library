@@ -26,7 +26,7 @@ namespace wtl
     HModule   Handle;       //!< Module handle
 
     // --------------------- CONSTRUCTION ----------------------
-
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // Module::Module
     //! Create from native module handle. Adds module to 'Loaded Modules' collection.
@@ -48,7 +48,29 @@ namespace wtl
 
     // ---------------------- ACCESSORS ------------------------			
     
-    // TODO: Execute functor
+    // TODO: Execute exported function 
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Module::contains const
+    //! Query whether a resource is present
+    //! 
+    //! \tparam ENC - Resource name character encoding 
+    //!
+    //! \param[in] type - Resource type
+    //! \param[in] name - Resource identifier
+    //! \param[in] lang - Resource language
+    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    ///////////////////////////////////////////////////////////////////////////////
+    //template <Encoding ENC>
+    //Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
+    //{ 
+    //  // Load resource handle
+    //  if (::HRSRC res = getFunc<ENC>(::FindResourceExA,::FindResourceExW)(Handle, ResourceId<ENC>(type), name, language))
+    //    return Resource(Handle, HResource(res, AllocType::Accquire));
+
+    //  // [NOT FOUND] Return sentinel
+    //  return Resource::npos;
+    //}
     
     ///////////////////////////////////////////////////////////////////////////////
     // Module::findResource
@@ -160,9 +182,11 @@ namespace wtl
 
       // Search all modules for resource
       for (const element_t& m : *this)
+      {
+        // [FOUND] Find & return resource
         if ((res = m.get().findResource(type, name, language)) != Resource::npos)
-          // [FOUND] Return resource
           return res;
+      }
       
       // [NOT FOUND] Return 'npos'
       return Resource::npos;

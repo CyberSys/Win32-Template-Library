@@ -320,7 +320,7 @@ namespace wtl
   template <typename T>
   const Handle<T>   Handle<T>::npos = Handle<T>(handle_alloc<T>::npos, AllocType::WeakRef);
 
-} // GDK namespace
+} // WTL namespace
 
 
 

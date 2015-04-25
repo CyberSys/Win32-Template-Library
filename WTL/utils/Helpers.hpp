@@ -362,6 +362,25 @@ namespace wtl
     typedef integral_sequence<int, VALUES...>  type;
   };
 
+  
+  /////////////////////////////////////////////////////////////
+  //! \struct sequence - Simple type-list 
+  //! 
+  //! \tparam ...ELEM - Element types
+  /////////////////////////////////////////////////////////////
+  template <typename... ELEM>
+  struct sequence
+  {
+    //! \var count - Define number of elements
+    static constexpr int32 count = sizeof...(ELEM);
+
+    //! \var type - Define types
+    using type = sequence<ELEM...>;
+  };
+
+  template <typename... ELEM>
+  using sequence_t = typename sequence<ELEM...>::type;
+
   // ------------------ TUPLE ITERATION -----------------
   
   ////////////////////////////////////////////////////////////////////////////////

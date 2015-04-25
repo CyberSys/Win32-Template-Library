@@ -40,9 +40,6 @@ namespace wtl
     //! \alias CommandQueue - Define gui command queue type
     using CommandQueue = GuiCommandQueue<ENC>;
     
-    //! \alias CommandCollection - Provides an association between command id and gui commands
-    //using CommandCollection = std::map<CommandId,std::shared_ptr<command_t>>;
-
     //! \struct CommandCollection - Provides a collection of Gui Commands, indexed by Command Id
     struct CommandCollection : std::map<CommandId,std::shared_ptr<command_t>>
     {
@@ -146,8 +143,8 @@ namespace wtl
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
     CommandEvent<encoding>           Command;       //!< Raised in response to WM_COMMAND from menu/accelerators
-    ControlEvent<encoding>           CtrlEvent;     //!< Raised in response to WM_COMMAND from child controls
-    ControlNotification<encoding>    CtrlNotify;    //!< Raised in response to WM_NOTIFY from child controls
+    CtrlCommandEvent<encoding>       CtrlCommand;   //!< Raised in response to WM_COMMAND from child controls
+    CtrlNotifyEvent<encoding>        CtrlNotify;    //!< Raised in response to WM_NOTIFY from child controls
 
   protected:
     wndclass_t&            Class;         //!< Window class 
@@ -167,18 +164,17 @@ namespace wtl
     WindowBase(wndclass_t& cls) : Class(cls)
     {
       // Accept window creation by default
-      Create += new CreateWindowEventHandler<encoding>(std::bind(&WindowBase::onCreate, this, std::placeholders::_1));
+      Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
       
-
       // Paint window background by default
-      //Paint += new PaintWindowEventHandler<encoding>(std::bind(&WindowBase::onPaint, this, std::placeholders::_1));
+      Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
       
       // Reflect control events/notifications by default
-      //CtrlEvent += new ControlEventHandler<encoding>(std::bind(&WindowBase::onControlEvent, this, std::placeholders::_1));
-      //CtrlNotify += new ControlNotificationHandler<encoding>(std::bind(&WindowBase::onControlNotify, this, std::placeholders::_1));
+      CtrlCommand += new CtrlCommandEventHandler<encoding>(this, &WindowBase::onControlEvent);
+      CtrlNotify += new CtrlNotifyEventHandler<encoding>(this, &WindowBase::onControlNotify);
 
       // Execute gui commands by default
-      Command += new CommandEventHandler<encoding>(std::bind(&WindowBase::onCommand, this, std::placeholders::_1));
+      Command += new CommandEventHandler<encoding>(this, &WindowBase::onCommand);
     }
     
   public:
@@ -237,16 +233,21 @@ namespace wtl
         case WindowMessage::CLOSE:          ret = Close.raise();                                                  break;
         case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
         case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
-        case WindowMessage::PAINT:          ret = Paint.raise(PaintWindowEventArgs<encoding>(*Handle,w,l));       break;
-        case WindowMessage::NOTIFY:         ret = CtrlNotify.raise(ControlNotificationArgs<encoding>(w,l));       break;
+        case WindowMessage::NOTIFY:         ret = CtrlNotify.raise(CtrlNotifyEventArgs<encoding>(w,l));           break;
+
         case WindowMessage::COMMAND:  
           // [CTRL-EVENT] Default implementation reflects message to child window
           if (l != 0)
-            ret = CtrlEvent.raise(ControlEventArgs<encoding>(w,l));  
+            ret = CtrlCommand.raise(CtrlCommandEventArgs<encoding>(w,l));  
 
           // [MENU/ACCELERATOR] Default implemenation executes the appropriate command object
           else
             ret = Command.raise(CommandEventArgs<encoding>(w,l));
+          break;
+
+        case WindowMessage::PAINT:          
+          if (!Paint.empty())
+            ret = Paint.raise(PaintWindowEventArgs<encoding>(*Handle,w,l));       
           break;
         }
 
@@ -582,6 +583,18 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::execute
+    //! Executes a gui command
+    //! 
+    //! \throw wtl::logic_error - Gui command not recognised
+    ///////////////////////////////////////////////////////////////////////////////
+    void  execute(CommandId id) 
+    { 
+      // Lookup & Execute associated command
+      Actions.execute( ActiveCommands[id]->clone() );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::find
     //! Find a child window
     //! 
@@ -615,7 +628,7 @@ namespace wtl
     
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::onCreate
-    //! Called during window creation or accept, decline, or modify window parameters
+    //! Called during window creation to modify window parameters and create child windows
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
@@ -633,7 +646,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onControlEvent(ControlEventArgs<encoding>& args) 
+    virtual LResult  onControlEvent(CtrlCommandEventArgs<encoding>& args) 
     { 
       // [Reflected] Reflect message to sender
       return args.reflect(); 
@@ -646,12 +659,12 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onControlNotify(ControlNotificationArgs<encoding>& args) 
+    virtual LResult  onControlNotify(CtrlNotifyEventArgs<encoding>& args) 
     { 
       // [Reflected] Reflect message to sender
       return args.reflect(); 
     }
-
+    
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::onCommand
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
@@ -663,8 +676,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual LResult  onCommand(CommandEventArgs<encoding>& args) 
     { 
-      // Lookup & Execute associated command
-      Actions.execute( ActiveCommands[args.Ident]->clone() );
+      // Execute associated command
+      execute(args.Ident);
 
       // Handled
       return 0;
@@ -687,27 +700,45 @@ namespace wtl
     // WindowBase::post
     //! Posts a message to the window
     //! 
-    //! \param[in] msg - Message identifier
-    //! \param[in] wParam - First parameter
-    //! \param[in] lParam - Second parameter
+    //! \tparam WM - Window Message 
+    //!
+    //! \param[in] w- First parameter
+    //! \param[in] l - Second parameter
     ///////////////////////////////////////////////////////////////////////////////
-    void post(WindowMessage msg, WPARAM wParam = 0, LPARAM lParam = 0)
+    template <WindowMessage WM> 
+    void post(WPARAM w = 0, LPARAM l = 0)
     {
-      getFunc<char_t>(::PostMessageA,::PostMessageW)(*Handle, enum_cast(msg), wParam, lParam);
+      post_message<encoding,WM>(*Handle, w, l);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::send
     //! Sends a message to the window
     //! 
-    //! \param[in] msg - Message identifier
-    //! \param[in] wParam - First parameter
-    //! \param[in] lParam - Second parameter
-    //! \return LRESULT - Message return value
+    //! \tparam WM - Window Message 
+    //!
+    //! \param[in] w- First parameter
+    //! \param[in] l - Second parameter
+    //! \return LResult - Message result & routing
     ///////////////////////////////////////////////////////////////////////////////
-    LRESULT send(WindowMessage msg, WPARAM wParam = 0, LPARAM lParam = 0)
+    template <WindowMessage WM> 
+    LResult send(WPARAM w = 0, LPARAM l = 0)
     {
-      return getFunc<char_t>(::SendMessageA,::SendMessageW)(*Handle, enum_cast(msg), wParam, lParam);
+      return send_message<encoding,WM>(*Handle, w, l);
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::setFont
+    //! Set the window font
+    //! 
+    //! \param[in] const& f - New window font
+    //! \param[in] l - Second parameter
+    //! \return HFont - Weak reference to previous window font
+    ///////////////////////////////////////////////////////////////////////////////
+    HFont setFont(const HFont& f, bool redraw)
+    {
+      ::HFONT prev = (::HFONT)send<WindowMessage::SETFONT>((::WPARAM)f.get(), boolean_cast(redraw)).Result;
+      return { prev, AllocType::WeakRef };
     }
     
     ///////////////////////////////////////////////////////////////////////////////

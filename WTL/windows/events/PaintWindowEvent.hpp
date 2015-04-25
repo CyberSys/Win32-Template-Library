@@ -125,7 +125,15 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using PaintWindowEvent = MessageEvent<ENC,WindowMessage::PAINT>;
-  
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias PaintWindowEventArgs - Arguments for 'PaintWindow' Event (ie. WM_PAINT)
+  //! 
+  //! \tparam ENC - Message character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using PaintWindowEventArgs = EventArgs<ENC,WindowMessage::PAINT>;
+
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias PaintWindowEventHandler - Handler for 'PaintWindow' event (ie. WM_PAINT)
   //! 
@@ -134,22 +142,7 @@ namespace wtl
   template <Encoding ENC>
   using PaintWindowEventHandler = typename PaintWindowEvent<ENC>::delegate_t;
 
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias PaintWindowEventArgs - Arguments for 'PaintWindow' Event (ie. WM_PAINT)
-  //! 
-  //! \tparam ENC - Message character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using PaintWindowEventArgs = typename PaintWindowEvent<ENC>::arguments_t;
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct delegate_signature<WindowMessage::PAINT> - Defines function signature of 'PaintWindow' handlers
-  //! 
-  //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC> 
-  struct delegate_signature<ENC,WindowMessage::PAINT>  { using type = LResult (PaintWindowEventArgs<ENC>&); };*/
-
+  
 }
 
 #endif // WTL_PAINT_WINDOW_EVENT_HPP

@@ -43,7 +43,9 @@ namespace wtl
       // ------------------- TYPES & CONSTANTS -------------------
 
       // --------------------- CONSTRUCTION ----------------------
-      
+    
+      StringTableEntry() = delete;
+
       // ---------------------- ACCESSORS ------------------------			
 
       ///////////////////////////////////////////////////////////////////////////////
@@ -61,8 +63,9 @@ namespace wtl
 
       // -------------------- REPRESENTATION ---------------------
 
-      uint16         Length;      //!< Length of current entry, in characters
-      const wchar_t* Text;        //!< String Text in UTF16
+      uint16         Dummy;        //!< Length of current entry, in characters
+      uint16         Length;        //!< Length of current entry, in characters
+      const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
     };
 
     // -------------------- REPRESENTATION ---------------------
@@ -85,11 +88,14 @@ namespace wtl
     {
       const int32  index = id.Value.Numeral % 16;                   //!< Index of desired string within table
       
+      if (!this->Handle)
+        throw platform_error(HERE, "String resource %d does not exist", id.Value.Numeral);
+
       // Load string table
       const StringTableEntry* item = get<StringTableEntry>();
 
       // Find desired string
-      for (int32 idx = 0; item && idx < index; idx++)
+      for (int32 idx = 1; item && idx < index; idx++)
         item = item->next();
 
       // [NOT-FOUND] Return false & empty string 
