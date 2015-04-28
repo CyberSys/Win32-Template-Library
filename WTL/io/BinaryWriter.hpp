@@ -214,8 +214,7 @@ namespace wtl
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   ////////////////////////////////////////////////////////////////////////////////
   template <typename STREAM, typename U>
-  std::enable_if_t<std::is_enum<U>::value, BinaryWriter<STREAM>&>
-  /*BinaryWriter<STREAM>&*/ operator << (BinaryWriter<STREAM>& w, U val)
+  enable_if_enum_t<U,BinaryWriter<STREAM>&> operator << (BinaryWriter<STREAM>& w, U val)
   {
     // Write as underlying type
     w.write(static_cast<std::underlying_type_t<U>>(val));

@@ -739,8 +739,7 @@ namespace wtl
   //! \return Console& - Reference to 'c'
   ////////////////////////////////////////////////////////////////////////////////
   template <typename E>
-  std::enable_if_t<std::is_enum<E>::value, Console&>
-  /*Console&*/ operator << (Console& c, E e)
+  enable_if_enum_t<E,Console&> operator << (Console& c, E e)
   { 
     return c << toString(e);
   }

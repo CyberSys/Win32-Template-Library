@@ -23,7 +23,7 @@ namespace wtl
   //! \param[in] value - Enumeration value
   //! \return std::underlying_type<T> - Value as underlying type
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
+  template <typename T, typename = enable_if_enum_t<T>>
   std::underlying_type_t<T> enum_cast(T value)
   {
     return static_cast<std::underlying_type_t<T>>(value);
@@ -38,7 +38,7 @@ namespace wtl
   //! \param[in] value - Underlying value
   //! \return T - Enumeration value
   ////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
+  template <typename T, typename = enable_if_enum_t<T>>
   T enum_cast(std::underlying_type_t<T> value)
   {
     return static_cast<T>(value);

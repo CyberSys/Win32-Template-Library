@@ -371,8 +371,7 @@ namespace wtl
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   ////////////////////////////////////////////////////////////////////////////////
   template <typename STREAM, typename U>
-  std::enable_if_t<std::is_enum<U>::value, XmlWriter<STREAM>&>
-  /*XmlWriter<STREAM>&*/ operator << (XmlWriter<STREAM>& w, U val)
+  enable_if_enum_t<U,XmlWriter<STREAM>&> operator << (XmlWriter<STREAM>& w, U val)
   {
     // Write as a numeral accoring to underlying type
     return w << static_cast<std::underlying_type_t<U>>(val);

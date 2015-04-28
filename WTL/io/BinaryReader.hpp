@@ -201,8 +201,7 @@ namespace wtl
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   ////////////////////////////////////////////////////////////////////////////////
   template <typename STREAM, typename U>
-  std::enable_if_t<std::is_enum<U>::value, BinaryReader<STREAM>&>
-  /*BinaryReader<STREAM>&*/ operator >> (BinaryReader<STREAM>& r, U& val)
+  enable_if_enum_t<U,BinaryReader<STREAM>&> operator >> (BinaryReader<STREAM>& r, U& val)
   {
     r.read( reinterpret_cast<std::underlying_type_t<U>&>(val) );  // sizeof(underlying(U)) <= sizeof(U) 
     return r;
