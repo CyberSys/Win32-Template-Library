@@ -287,10 +287,11 @@ namespace wtl
     void release() 
     {
       bool success(true);
+      auto unsafeDelete = [this,&success] (pointer_t  ptr) { success = safeDelete(ptr); };
 
       // Use custom deleter to access result
       if (exists())
-        Storage.reset(nullptr, [this,&success](pointer_t  ptr) { success = safeDelete(ptr); });
+        Storage.reset<native_t,decltype(unsafeDelete)>(nullptr, unsafeDelete);
 
       // [FAILED] Throw platform_error
       if (!success)

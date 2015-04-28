@@ -84,7 +84,6 @@
     <ClInclude Include="utils\Range.hpp" />
     <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\toString.hpp" />
-    <ClInclude Include="utils\widget.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp" />
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp" />

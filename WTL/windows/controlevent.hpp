@@ -111,7 +111,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,message/*+WindowMessage::REFLECT*/>(Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
+      return send_message<encoding,message+WindowMessage::REFLECT>(Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
     }
     
     // ----------------------- MUTATORS ------------------------
@@ -211,7 +211,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,message/*+WindowMessage::REFLECT*/>(Sender, Ident, opaque_cast(Header));
+      return send_message<encoding,message+WindowMessage::REFLECT>(Sender, Ident, opaque_cast(Header));
     }
     
     // ----------------------- MUTATORS ------------------------
@@ -308,6 +308,40 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename EVENT = uint16, EVENT CODE = zero<EVENT>::value>
   using CtrlNotifyEventHandler = typename CtrlNotifyEvent<ENC,EVENT,CODE>::delegate_t;
+
+
+
+  
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias CtrlCommandEvent - Defines an event type for a child control event raised by WM_COMMAND
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16)
+  //! \tparam CODE - [optional] Notification message (Default is zero)
+  ///////////////////////////////////////////////////////////////////////////////
+  /*template <Encoding ENC, typename EVENT = uint16, EVENT CODE = zero<EVENT>::value>
+  using ReflectCtrlCommand = Event<ENC, LResult, CtrlEventArgs<ENC,WindowMessage::REFLECT_COMMAND,EVENT,CODE>&>;*/
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias CtrlCommandEventArgs - Defines arguments for event from controls raised via WM_COMMAND 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16)
+  //! \tparam CODE - [optional] Notification message (Default is zero)
+  ///////////////////////////////////////////////////////////////////////////////
+  /*template <Encoding ENC, typename EVENT = uint16, EVENT CODE = zero<EVENT>::value>
+  using ReflectCtrlCommandEventArgs = CtrlEventArgs<ENC,WindowMessage::REFLECT_COMMAND,EVENT,CODE>;*/
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias CtrlCommandEventHandler - Defines handler for event from controls raised via WM_COMMAND 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16)
+  //! \tparam CODE - [optional] Notification message (Default is zero)
+  ///////////////////////////////////////////////////////////////////////////////
+  /*template <Encoding ENC, typename EVENT = uint16, EVENT CODE = zero<EVENT>::value>
+  using CtrlCommandEventHandler = typename CtrlCommandEvent<ENC,EVENT,CODE>::delegate_t;*/
 
 }
 

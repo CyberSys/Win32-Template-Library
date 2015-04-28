@@ -36,6 +36,7 @@ namespace wtl
     // -------------------- REPRESENTATION ---------------------
     
     HINSTANCE   Instance;          //!< Registered module
+    WNDPROC     WndProc;           //!< Window procedure
     ClassStyle  Style;             //!< Class styles
     HAtom       Atom;              //!< Registered class atom
     HBrush      Background;        //!< Background brush
@@ -49,17 +50,6 @@ namespace wtl
 
     // --------------------- CONSTRUCTION ----------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowClass::WindowClass
-    //! Create a weak reference to a system window class 
-    //! 
-    //! \param[in] id - System window class
-    //! 
-    //! \throw wtl::platform_error - Unrecognised system window class
-    ///////////////////////////////////////////////////////////////////////////////
-    /*WindowClass(SystemClass cls) : WindowClass()
-    {}*/
-
     ///////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
     //! Create a weak reference to an existing window class 
@@ -76,6 +66,7 @@ namespace wtl
                                  WindowStorage(0),
                                  Style(zero<ClassStyle>::value),
                                  Instance(nullptr),
+                                 WndProc(nullptr),
                                  Name(id),
                                  Menu(resource_t::npos),
                                  Atom(HAtom::npos)
@@ -95,6 +86,7 @@ namespace wtl
       SmallIcon     = HIcon(wndClass.hIconSm, AllocType::WeakRef);          //!< WeakRef
       LargeIcon     = HIcon(wndClass.hIcon, AllocType::WeakRef);            //!< WeakRef
       Instance      = wndClass.hInstance;
+      WndProc       = wndClass.lpfnWndProc; 
       Style         = enum_cast<ClassStyle>(wndClass.style);
       ClassStorage  = wndClass.cbClsExtra;
       WindowStorage = wndClass.cbWndExtra;
@@ -143,6 +135,7 @@ namespace wtl
         WindowStorage(wndBytes),
         Style(style),
         Instance(instance),
+        WndProc(proc),
         Name(name),
         Menu(menu),
         Atom(instance, name, style, proc, menu, (HCURSOR)cursor, (HBRUSH)background, (HICON)smIcon, (HICON)bgIcon, clsBytes, wndBytes)
@@ -231,14 +224,17 @@ namespace wtl
   //! \tparam CHAR - Character type
   //! \tparam CLS - System class
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, SystemClass CLS> 
+  template <Encoding ENC> 
   struct SystemWindowClass : WindowClass<ENC>
   { 
     // ------------------- TYPES & CONSTANTS -------------------
   
     //! \alias base - Define base type
     using base = WindowClass<ENC>;
-
+    
+    //! \alias char_t - Inherit window character type
+    using char_t = typename base::char_t;
+    
     // -------------------- REPRESENTATION ---------------------
   
     // --------------------- CONSTRUCTION ----------------------
@@ -251,12 +247,37 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     ///////////////////////////////////////////////////////////////////////////////
-    SystemWindowClass() : base(system_class<encoding_char_t<ENC>,CLS>::name)
+    SystemWindowClass(SystemClass cls) : base(ResourceId<ENC>(getClassName(cls)))
     {}
 
     // ------------------------ STATIC -------------------------
   protected:
+    ///////////////////////////////////////////////////////////////////////////////
+    // SystemWindowClass::getClassName
+    //! Get the system class name
+    //! 
+    //! \param[in] cls - Class enumeration
+    //! \return const char_t* - Window class name
+    //! 
+    //! \throw wtl::invalid_argument - Unrecognised system window class
+    ///////////////////////////////////////////////////////////////////////////////
+    const char_t*  getClassName(SystemClass cls)
+    {
+      // Query class
+      switch (cls)
+      {
+      case SystemClass::Button:       return system_class<char_t,SystemClass::Button>::name;
+      case SystemClass::ComboBox:     return system_class<char_t,SystemClass::ComboBox>::name;
+      case SystemClass::ComboBoxEx:   return system_class<char_t,SystemClass::ComboBoxEx>::name;
+      case SystemClass::Edit:         return system_class<char_t,SystemClass::Edit>::name;
+      case SystemClass::ListBox:      return system_class<char_t,SystemClass::ListBox>::name;
+      case SystemClass::ListView:     return system_class<char_t,SystemClass::ListView>::name;
+      case SystemClass::Static:       return system_class<char_t,SystemClass::Static>::name;
+      }
 
+      // [ERROR] Unrecognised
+      throw invalid_argument(HERE, "Unrecognised system class");
+    }
 
     // ---------------------- ACCESSORS ------------------------			
 

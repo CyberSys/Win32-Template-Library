@@ -150,7 +150,7 @@ namespace wtl
     wndclass_t&            Class;         //!< Window class 
     ChildWindowCollection  Children;      //!< Child window collection
     CommandQueue           Actions;       //!< Command queue
-    Lazy<HWnd>             Handle;        //!< Window handle
+    HWnd                   Handle;        //!< Window handle
     SubClassCollection     SubClasses;    //!< Sub-classed windows collection
 
     // --------------------- CONSTRUCTION ----------------------
@@ -161,7 +161,8 @@ namespace wtl
     //! 
     //! \param[in] &cls - Registered window class 
     ///////////////////////////////////////////////////////////////////////////////
-    WindowBase(wndclass_t& cls) : Class(cls)
+    WindowBase(wndclass_t& cls) : Class(cls), 
+                                  Handle(HWnd::npos)
     {
       // Accept window creation by default
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
@@ -233,21 +234,26 @@ namespace wtl
         case WindowMessage::CLOSE:          ret = Close.raise();                                                  break;
         case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
         case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
-        case WindowMessage::NOTIFY:         ret = CtrlNotify.raise(CtrlNotifyEventArgs<encoding>(w,l));           break;
+
+        case WindowMessage::NOTIFY:         
+        case WindowMessage::REFLECT_NOTIFY: 
+          ret = CtrlNotify.raise(CtrlNotifyEventArgs<encoding>(w,l)); 
+          break;
 
         case WindowMessage::COMMAND:  
+        case WindowMessage::REFLECT_COMMAND:  
           // [CTRL-EVENT] Default implementation reflects message to child window
           if (l != 0)
             ret = CtrlCommand.raise(CtrlCommandEventArgs<encoding>(w,l));  
 
-          // [MENU/ACCELERATOR] Default implemenation executes the appropriate command object
+          // [MENU/ACCELERATOR] Default implementation executes the appropriate command object
           else
             ret = Command.raise(CommandEventArgs<encoding>(w,l));
           break;
 
         case WindowMessage::PAINT:          
           if (!Paint.empty())
-            ret = Paint.raise(PaintWindowEventArgs<encoding>(*Handle,w,l));       
+            ret = Paint.raise(PaintWindowEventArgs<encoding>(Handle,w,l));       
           break;
         }
 
@@ -268,7 +274,7 @@ namespace wtl
           // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
           case WindowType::Native:
             // Delegate to native class window procedure and infer routing
-            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, *Handle, enum_cast(message), w, l);
+            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
             ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
           
             // [HANDLED] Return result & routing
@@ -314,7 +320,7 @@ namespace wtl
           wnd = reinterpret_cast<WindowBase*>( opaque_cast<CreateStruct>(lParam)->lpCreateParams );
 
           // Temporarily assign a weak handle reference for the duration of creation process
-          *wnd->Handle = HWnd(hWnd, AllocType::WeakRef);    // Overwritten by strong reference returned from ::CreateWindow over message is processed
+          wnd->Handle = HWnd(hWnd, AllocType::WeakRef);    // Overwritten by strong reference returned from ::CreateWindow over message is processed
 
           // Add to 'Active Windows' collection
           ActiveWindows[hWnd] = wnd;
@@ -421,11 +427,11 @@ namespace wtl
     // WindowBase::handle const
     //! Get the native window handle 
     //! 
-    //! \return HWND - Native handle
+    //! \return ::HWND - Native handle
     ///////////////////////////////////////////////////////////////////////////////
-    HWND handle() const
+    ::HWND handle() const
     {
-      return this && Handle.exists() ? Handle->get() : nullptr;
+      return this ? Handle.get() : nullptr;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -439,7 +445,7 @@ namespace wtl
     window_t* parent() const
     {
       // Query parent
-      if (HWND wnd = ::GetParent(*Handle))
+      if (::HWND wnd = ::GetParent(Handle))
       {
         // Lookup window in 'Active Windows' collection
         auto pos = ActiveWindows.find(wnd);
@@ -504,13 +510,10 @@ namespace wtl
       if (Handle.exists())
         throw logic_error(HERE, "Window already exists");
 
-      // Create handle object, insert dummy
-      Handle.create(HWnd::npos);
-
       try
       {
         // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-        *Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), menu->handle());
+        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), menu->handle());
       }
       catch (platform_error& e)
       {
@@ -547,13 +550,10 @@ namespace wtl
       if (Handle.exists())
         throw logic_error(HERE, "Window already exists");
 
-      // Create handle object, insert dummy
-      Handle.create(HWnd::npos);
-
       try
       {
         // Create handle, assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow
-        *Handle = HWnd(Class.Instance, Class.Name, this, static_cast<WindowId>(id), static_cast<WindowStyle>(style), exStyle, CharArray<encoding,LEN>(text), rc, parent.handle());
+        Handle = HWnd(Class.Instance, Class.Name, this, static_cast<WindowId>(id), static_cast<WindowStyle>(style), exStyle, CharArray<encoding,LEN>(text), rc, parent.handle());
 
         // Add to parent's child windows collection
         parent.Children[static_cast<WindowId>(id)] = this;
@@ -577,9 +577,9 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     void destroy()
     {
-      // Ensure doesn't already exist
+      // Ensure already exists
       if (Handle.exists())
-        Handle.destroy();
+        Handle.release();
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -708,7 +708,7 @@ namespace wtl
     template <WindowMessage WM> 
     void post(WPARAM w = 0, LPARAM l = 0)
     {
-      post_message<encoding,WM>(*Handle, w, l);
+      post_message<encoding,WM>(Handle, w, l);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -724,7 +724,7 @@ namespace wtl
     template <WindowMessage WM> 
     LResult send(WPARAM w = 0, LPARAM l = 0)
     {
-      return send_message<encoding,WM>(*Handle, w, l);
+      return send_message<encoding,WM>(Handle, w, l);
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -749,7 +749,7 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     void show(ShowWindowFlags mode)
     {
-      ::ShowWindow(*Handle, enum_cast(mode));
+      ::ShowWindow(Handle, enum_cast(mode));
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -767,7 +767,7 @@ namespace wtl
     int32 getText(const CharArray<encoding,LEN>& txt)
     {
       // Lookup window text
-      int32 n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(*Handle, txt, LEN);
+      int32 n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(Handle, txt, LEN);
       if (n || !::GetLastError())
         return n;
 
@@ -789,7 +789,7 @@ namespace wtl
     void setText(const CharArray<encoding,LEN>& txt)
     {
       // Set window text
-      if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(*Handle, txt, LEN) == FALSE)
+      if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt, LEN) == FALSE)
         throw platform_error(HERE, "Unable to set window text");
     }
     
@@ -799,7 +799,7 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     void update()
     {
-      ::UpdateWindow(*Handle);
+      ::UpdateWindow(Handle);
     }
   };
 

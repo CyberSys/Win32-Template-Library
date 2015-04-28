@@ -48,8 +48,11 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Button(HINSTANCE instance) : base(getClass(instance))
     {
-      // Remove paint handlers
+      // Painting handled by system window class
       this->Paint.clear();
+
+      // Subclass prior to creation
+      SubClasses.push_back(SubClass(WindowType::Native, getSystemWndProc()));
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -74,7 +77,7 @@ namespace wtl
     {}
 
     // ------------------------ STATIC -------------------------
-    
+  
     ///////////////////////////////////////////////////////////////////////////////
     // Button::getClass 
     //! Get the window class
@@ -84,16 +87,43 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     static wndclass_t& getClass(HINSTANCE instance) 
     {
-      static SystemWindowClass<encoding,SystemClass::Button>  wc;  //!< Standard button system window class
+      static SystemWindowClass<encoding>  std(SystemClass::Button);  //!< Standard system button class
       
-      // Return singleton
-      return wc;
+      static WindowClass<encoding>  btn(instance,
+                                        std.Name,
+                                        std.Style,
+                                        base::WndProc,   
+                                        std.Menu,
+                                        std.Cursor,
+                                        std.Background,
+                                        std.SmallIcon,
+                                        std.LargeIcon,
+                                        std.ClassStorage,
+                                        std.WindowStorage);    //!< Compile-time button subclass
+
+      // Return custom button class
+      return btn;
+    }
+    
+  protected:
+    ///////////////////////////////////////////////////////////////////////////////
+    // Button::getSystemWndProc 
+    //! Get the standard button window procedure
+    //! 
+    //! \return ::WNDPROC - System window procedure
+    ///////////////////////////////////////////////////////////////////////////////
+    static ::WNDPROC getSystemWndProc() 
+    {
+      static SystemWindowClass<encoding>  std(SystemClass::Button);  //!< Standard button system window class
+      
+      // Return window proc
+      return std.WndProc;
     }
 
     // ---------------------- ACCESSORS ------------------------			
     
     // ----------------------- MUTATORS ------------------------
-    
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // Button::create
     //! Create as child window

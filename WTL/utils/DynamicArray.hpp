@@ -62,10 +62,6 @@ namespace wtl
     
     // ------------------- TYPES & CONSTANTS -------------------
   
-    //! \enum - Define properties
-    enum { length = LENGTH, };    //!< Capacity of the array
-    
-
     //! \alias cast - Defines dynamic array of equal length & dissimilar type
     template <typename D>
 		using cast = Array<D,LENGTH,true>;
@@ -86,7 +82,6 @@ namespace wtl
     //! \alias value_type - Element data type
     using value_type = DATA;
     
-
     //! \alias reference/pointer - Mutable element reference/pointer
     using reference = value_type&;
     using pointer   = value_type*;
@@ -106,11 +101,13 @@ namespace wtl
     using const_array_ptr = const value_type (*)[LENGTH];
 
     //! \var dynamic - Whether array can be resized
-    static const bool dynamic = true;
+    static constexpr bool dynamic = true;
+
+    //! \var length - Capacity of the array
+    static constexpr uint32 length = LENGTH;
 
     //! \var npos - Sentinel value for 'item not found'
-    static const uint32 npos = static_cast<uint32>(-1L);
-
+    static constexpr uint32 npos = static_cast<uint32>(-1L);
 
 //!\ if DEVELOPMENT_MODE - Use iterators instead of pointers to aide development
 #ifdef DEVELOPMENT_MODE
@@ -136,14 +133,14 @@ namespace wtl
       //! \param[in] n - Zero-based Initial index
       ///////////////////////////////////////////////////////////////////////////////
       iterator_t(CONTAINER& a, uint32 n) : Container(&a), 
-                                        Index(n)
+                                           Index(n)
       {}
 
       ///////////////////////////////////////////////////////////////////////////////
       //! iterator_t::iterator_t
       //! Copy-create from another iterator for array of equal type
       //!
-      //! \param[in] &it - Another iterator for array of equal type
+      //! \param[in] const& it - Another iterator for array of equal type
       ///////////////////////////////////////////////////////////////////////////////
       iterator_t(const iterator_t& it)
       {
@@ -155,7 +152,7 @@ namespace wtl
       // ---------------------- ACCESSORS ------------------------			
     
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::getIndex
+      //! iterator_t::getIndex const
       //! Get the index of the current element
       //!
       //! \return uint32 - Zero based index of the current element
@@ -166,101 +163,85 @@ namespace wtl
       }
 
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator==
+      //! iterator_t::operator == const
       //! Logical equality operator
       //!
       //! \param[in] &r - Another iterator for array of equal type
       //! \return bool - True if equal, otherwise false
       ///////////////////////////////////////////////////////////////////////////////
-      bool operator==(const iterator_t& r) const
+      bool operator == (const iterator_t& r) const
       {
         return Index == r.Index && Container == r.Container;    // Match index first
       }
 
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator!=
+      //! iterator_t::operator != const
       //! Logical inequality operator
       //!
       //! \param[in] &r - Another iterator from array of equal type
       //! \return bool - True if not equal, otherwise false
       ///////////////////////////////////////////////////////////////////////////////
-      bool operator!=(const iterator_t& r) const
+      bool operator != (const iterator_t& r) const
       {
         return Index != r.Index || Container != r.Container;    // Check index first
       }
       
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator<=
-      //! Arithmetic lesser-or-equal operator
+      //! iterator_t::operator < const
+      //! Lesser comparison operator
       //!
       //! \param[in] &r - Another iterator for array of equal type
       //! \return bool - True if equal, otherwise false
       ///////////////////////////////////////////////////////////////////////////////
-      bool operator<=(const iterator_t& r) const
-      {
-        return Index <= r.Index && Container == r.Container;    // Match index first
-      }
-
-      ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator>=
-      //! Arithmetic greater-or-equal operator
-      //!
-      //! \param[in] &r - Another iterator for array of equal type
-      //! \return bool - True if equal, otherwise false
-      ///////////////////////////////////////////////////////////////////////////////
-      bool operator>=(const iterator_t& r) const
-      {
-        return Index >= r.Index && Container == r.Container;    // Match index first
-      }
-      
-      ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator<
-      //! Arithmetic lesser operator
-      //!
-      //! \param[in] &r - Another iterator for array of equal type
-      //! \return bool - True if equal, otherwise false
-      ///////////////////////////////////////////////////////////////////////////////
-      bool operator<(const iterator_t& r) const
+      bool operator < (const iterator_t& r) const
       {
         return Index < r.Index && Container == r.Container;    // Match index first
       }
 
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator>
-      //! Arithmetic greater operator
+      //! iterator_t::operator <= const
+      //! Lesser-or-equal comparison operator
       //!
       //! \param[in] &r - Another iterator for array of equal type
       //! \return bool - True if equal, otherwise false
       ///////////////////////////////////////////////////////////////////////////////
-      bool operator>(const iterator_t& r) const
+      bool operator <= (const iterator_t& r) const
+      {
+        return Index <= r.Index && Container == r.Container;    // Match index first
+      }
+
+      ///////////////////////////////////////////////////////////////////////////////
+      //! iterator_t::operator > const
+      //! Greater comparison operator
+      //!
+      //! \param[in] &r - Another iterator for array of equal type
+      //! \return bool - True if equal, otherwise false
+      ///////////////////////////////////////////////////////////////////////////////
+      bool operator > (const iterator_t& r) const
       {
         return Index > r.Index && Container == r.Container;    // Match index first
       }
-
-      // ----------------------- MUTATORS ------------------------
-    
+      
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator=
-      //! Assignment operator
+      //! iterator_t::operator >= const
+      //! Greater-or-equal comparison operator
       //!
-      //! \param[in] &r - Another iterator from array of equal type
-      //! \return iterator_t& - Reference to self
+      //! \param[in] &r - Another iterator for array of equal type
+      //! \return bool - True if equal, otherwise false
       ///////////////////////////////////////////////////////////////////////////////
-      iterator_t& operator=(const iterator_t& r)
+      bool operator >= (const iterator_t& r) const
       {
-        Container = r.Container;
-        Index = r.Index;
-        return *this;
+        return Index >= r.Index && Container == r.Container;    // Match index first
       }
-
+      
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator*
+      //! iterator_t::operator* const
       //! Dereferencing operator
       //!
       //! \throw wtl::out_of_range - [Debug only] Position is invalid
       //! \return reference - Reference to the current element
       ///////////////////////////////////////////////////////////////////////////////
-      reference operator*() const
+      reference operator* () const
       {
         CHECKED_INDEX(Index, 0, Container->size());
 
@@ -269,13 +250,13 @@ namespace wtl
       }
 
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator->
+      //! iterator_t::operator-> const
       //! Dereferencing operator
       //!
       //! \throw wtl::out_of_range - [Debug only] Position is invalid
       //! \return pointer - Pointer to the current element
       ///////////////////////////////////////////////////////////////////////////////
-      pointer operator->() const
+      pointer operator-> () const
       {
         CHECKED_INDEX(Index, 0, Container->size());
 
@@ -290,7 +271,7 @@ namespace wtl
       //! \param[in] const &r - Another position
       //! \return ptr_diff - Sum of indicies
       ///////////////////////////////////////////////////////////////////////////////
-      ptr_diff operator+(const iterator_t& r) const
+      ptr_diff operator + (const iterator_t& r) const
       {
         return Index + r.Index;
       }
@@ -302,20 +283,20 @@ namespace wtl
       //! \param[in] const &r - Another position
       //! \return ptr_diff - Difference between indicies
       ///////////////////////////////////////////////////////////////////////////////
-      ptr_diff operator-(const iterator_t& r) const
+      ptr_diff operator - (const iterator_t& r) const
       {
         return Index - r.Index;
       }
 
       ///////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator[] const
-      //! Advance the iterator by +/- N elements
+      //! Access the element at position +/- N elements
       //!
       //! \param[in] i - Zero-based offset from current position of element to retrieve
       //! \throw wtl::out_of_range - [Debug only] Position is invalid
       //! \return const_reference - Immutable reference to element 
       ///////////////////////////////////////////////////////////////////////////////
-      const_reference operator[](int32 i) const
+      const_reference operator[] (int32 i) const
       {
         CHECKED_INDEX(Index, 0, Container->size());
 
@@ -324,25 +305,53 @@ namespace wtl
       }
       
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator+ const
+      //! iterator_t::operator + const
       //! Calculate a position N elements ahead
       //!
       //! \param[in] i - Number of elements to advance
       //! \return iterator_t - New position
       ///////////////////////////////////////////////////////////////////////////////
-      iterator_t operator+(uint32 i) const
+      iterator_t operator + (uint32 i) const
       {
         return iterator_t(*Container, Index+i);
       }
       
       ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator+= const
+      //! iterator_t::operator- const
+      //! Calculate a position N elements behind
+      //!
+      //! \param[in] i - Number of elements to retreat
+      //! \return iterator_t - New position
+      ///////////////////////////////////////////////////////////////////////////////
+      iterator_t operator- (uint32 i) const
+      {
+        return iterator_t(*Container, Index-i);
+      }
+      
+      // ----------------------- MUTATORS ------------------------
+    
+      ///////////////////////////////////////////////////////////////////////////////
+      //! iterator_t::operator=
+      //! Assignment operator
+      //!
+      //! \param[in] &r - Another iterator from array of equal type
+      //! \return iterator_t& - Reference to self
+      ///////////////////////////////////////////////////////////////////////////////
+      iterator_t& operator= (const iterator_t& r)
+      {
+        Container = r.Container;
+        Index = r.Index;
+        return *this;
+      }
+
+      ///////////////////////////////////////////////////////////////////////////////
+      //! iterator_t::operator += 
       //! Advance the iterator by N elements
       //!
       //! \param[in] i - Number of elements to advance
       //! \return iterator_t - Reference to self at new position
       ///////////////////////////////////////////////////////////////////////////////
-      iterator_t& operator+=(uint32 n) const
+      iterator_t& operator += (uint32 n) 
       {
         Index += n;
         return *this;
@@ -371,18 +380,6 @@ namespace wtl
         iterator_t tmp(*this);
         operator++();
         return tmp;
-      }
-      
-      ///////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator- const
-      //! Calculate a position N elements behind
-      //!
-      //! \param[in] i - Number of elements to retreat
-      //! \return iterator_t - New position
-      ///////////////////////////////////////////////////////////////////////////////
-      iterator_t operator-(uint32 i) 
-      {
-        return iterator_t(*Container, Index-i);
       }
       
       ///////////////////////////////////////////////////////////////////////////////
@@ -444,6 +441,14 @@ namespace wtl
   private:
     //! \enum Unique - Distinct dummy type
     enum class Unique { Signature };
+    
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    array_ref  Data;    //!< Provides strongly typed access to element storage
+    uint32     Count;   //!< Number of valid elements
+
+  private:
+    byte       Storage[sizeof(DATA)*LENGTH];   //!< Actual element storage
 
     // --------------------- CONSTRUCTION ----------------------   
   private:
@@ -1818,14 +1823,6 @@ namespace wtl
 
       return Data[static_cast<uint32>(index)]; 
     }   
-    
-    // -------------------- REPRESENTATION ---------------------
-  protected:
-    array_ref  Data;    //!< Provides strongly typed access to element storage
-    uint32     Count;   //!< Number of valid elements
-
-  private:
-    byte       Storage[sizeof(DATA)*LENGTH];   //!< Actual element storage
   };
 
 
