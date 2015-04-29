@@ -13,20 +13,6 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \enum WindowVersion - Defines operating system (Kernel32) versions
-  enum class WindowVersion : ulong32
-  { 
-    WinNT    = 0x0400,      //!< Windows 9x / NT4
-    Win2000  = 0x0500,      //!< Windows 2000
-    WinXp    = 0x0501,      //!< Windows XP 
-    Win2003  = 0x0502,      //!< Windows Server 2003
-    WinVista = 0x0600,      //!< Windows Vista
-    Win7     = 0x0601,      //!< Windows 7
-    Win8     = 0x0602,      //!< Windows 8
-    Win81    = 0x0603,      //!< Windows 8.1
-    Future,                 //!< Future
-  };
-  
   
   //! \enum ControlVersion - Defines common control library (ComCtl32) versions
   enum class ControlVersion : ulong32
@@ -45,7 +31,16 @@ namespace wtl
     WinXp      = 0x0600,        //!< <Not packaged with OS> (Windows XP)
     WinVista   = 0x0610,        //!< <Not packaged with OS> (Windows Vista)
   };
-  
+
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<ControlVersion>  : std::false_type  {};
+  template <> struct is_contiguous<ControlVersion> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::WinVista>    {};
+  template <> struct min_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Explorer30>  {};
+
+
 
   //! \enum ShellVersion - Defines shell library (Shell32) versions
   enum class ShellVersion : ulong32
@@ -58,22 +53,30 @@ namespace wtl
     Win7       = 0x0610,        //!< Windows 7
     Future,                     //!< Future
   };
-
-
-
-  //! Define traits: Contiguous enumeration
-  template <> struct is_attribute<WindowVersion>  : std::false_type  {};
-  template <> struct is_contiguous<WindowVersion> : std::true_type   {};
+  
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<ShellVersion>  : std::false_type  {};
+  template <> struct is_contiguous<ShellVersion> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<WindowVersion>     : std::integral_constant<WindowVersion,WindowVersion::Future>  {};
-  template <> struct min_value<WindowVersion>     : std::integral_constant<WindowVersion,WindowVersion::Win95>   {};
+  template <> struct max_value<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win7>  {};
+  template <> struct min_value<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win95> {};
+
+
 
 
   //! \struct OperatingSystem - Encapsulates operating system info
   template <Encoding ENC>
   struct OperatingSystem : getType<encoding_char_t<ENC>,OSVERSIONINFOA,OSVERSIONINFOW>
   {
+    // ------------------- TYPES & CONSTANTS -------------------
+  
+    // -------------------- REPRESENTATION ---------------------
+  
+    WindowVersion  Version;         //!< Windows version identifier
+
+    // --------------------- CONSTRUCTION ----------------------
+
     ///////////////////////////////////////////////////////////////////////////////
     // OperatingSystem::OperatingSystem
     //! Create operating system data
@@ -89,7 +92,9 @@ namespace wtl
       if (getVersion(this))
         Version = identify(dwMajorVersion, dwMinorVersion);
     }
-
+    
+    // ------------------------ STATIC -------------------------
+  protected:
     ///////////////////////////////////////////////////////////////////////////////
     // OperatingSystem::identify
     //! Identifies the operating system 
@@ -104,7 +109,8 @@ namespace wtl
       {
       // [Win9x/NT3/NT4] Window 3, Win95, Win98, WinNT 3.5
       case 3:
-      case 4: return WindowVersion::WinNT;   
+      case 4: 
+        return WindowVersion::WinNT;   
 
       // [WINDOWS 5] Windows 2000 or Windows XP
       case 5:
@@ -129,11 +135,15 @@ namespace wtl
         break;
 
       // [FUTURE] Newer
-      default: return WindowVersion::Future;
+      default: 
+        return WindowVersion::Future;
       }
     }
+    
+    // ---------------------- ACCESSORS ------------------------
 
-    WindowVersion  Version;     //!< Windows version identifier
+    // ----------------------- MUTATORS ------------------------
+    
   };
 
 }
