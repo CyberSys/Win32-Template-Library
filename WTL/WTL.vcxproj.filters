@@ -308,9 +308,6 @@
     <ClInclude Include="platform\CommonApi.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="windows\events\CommandEvent.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp">
       <Filter>Windows\Commands</Filter>
     </ClInclude>
@@ -346,6 +343,18 @@
     </ClInclude>
     <ClInclude Include="LibRes.h">
       <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\IconResource.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\List.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\BuildTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\GuiCommandEvent.hpp">
+      <Filter>Windows\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

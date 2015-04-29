@@ -35,6 +35,8 @@ namespace wtl
     ButtonClickEvent<encoding>        Click;         //!< Button click
     ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
     ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
+    OwnerDrawEvent<encoding>          OwnerDraw;     //!< Owner draw
+    //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
     // --------------------- CONSTRUCTION ----------------------
     
@@ -48,8 +50,11 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Button(HINSTANCE instance) : base(getClass(instance))
     {
-      // Painting handled by system window class
+      // Clear paint handlers (Painting handled by system window class)
       this->Paint.clear();
+
+      // Owner draw handler
+      OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &Button::onOwnerDraw);
 
       // Subclass prior to creation
       SubClasses.push_back(SubClass(WindowType::Native, getSystemWndProc()));
@@ -119,7 +124,52 @@ namespace wtl
       // Return window proc
       return std.WndProc;
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Button::routeMessage
+    //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
+    //!
+    //! \param[in] message - Window message identifier
+    //! \param[in] w - [optional] First message parameter
+    //! \param[in] l - [optional] Second message parameter
+    //! \return LResult - Message routing and result 
+    ///////////////////////////////////////////////////////////////////////////////
+    LResult routeMessage(WindowMessage message, WPARAM w, LPARAM l) override
+    {
+      try
+      {
+        LResult ret;       //!< Message result, defaults to unhandled
 
+        // 
+        switch (message)
+        {
+        // [COMMAND (REFLECTED)] Raise associated event
+        case WindowMessage::REFLECT_COMMAND:  
+          // Extract notification
+          switch (static_cast<ButtonNotification>(CtrlCommandEventArgs<encoding>(w,l).Message))
+          {
+          case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
+          case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;
+          case ButtonNotification::KillFocus:  ret = LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(w,l));    break;
+          }
+          break;
+
+        // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw'
+        case WindowMessage::REFLECT_DRAWITEM:  ret = OwnerDraw.raise(OwnerDrawEventArgs<encoding>(w,l));          break;
+        }
+
+        // [UNHANDLED] Return result & routing
+        return base::routeMessage(message, w, l);
+      }
+      catch (wtl::exception& e)
+      {
+        cdebug.log(HERE, e);
+        
+        // [ERROR] Unhandled
+        return MsgRoute::Unhandled;
+      }
+    }
+    
     // ---------------------- ACCESSORS ------------------------			
     
     // ----------------------- MUTATORS ------------------------
@@ -152,25 +202,20 @@ namespace wtl
 
     
     ///////////////////////////////////////////////////////////////////////////////
-    // Button::onControlEvent
-    //! Called in response to a reflected message to raise the associated event
+    // Button::onOwnerDraw
+    //! Called in response to a reflected 'owner draw' message 
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    LResult  onControlEvent(CtrlCommandEventArgs<encoding>& args) override
+    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
     { 
-      // Raise associated event
-      switch (static_cast<ButtonNotification>(args.Message))
-      {
-      case ButtonNotification::Click:      return Click.raise(ButtonClickEventArgs<encoding>(args));
-      case ButtonNotification::SetFocus:   return GainFocus.raise(ButtonGainFocusEventArgs<encoding>(args));
-      case ButtonNotification::KillFocus:  return LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(args));
-      }
+      // Draw background
+      args.Graphics.fill(args.Rect, wtl::StockBrush::Green);
 
-      return args.unhandled;
+      // Handled
+      return 0;
     }
-
   };
 
 }

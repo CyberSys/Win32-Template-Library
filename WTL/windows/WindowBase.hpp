@@ -142,9 +142,9 @@ namespace wtl
     DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-    CommandEvent<encoding>           Command;       //!< Raised in response to WM_COMMAND from menu/accelerators
-    CtrlCommandEvent<encoding>       CtrlCommand;   //!< Raised in response to WM_COMMAND from child controls
-    CtrlNotifyEvent<encoding>        CtrlNotify;    //!< Raised in response to WM_NOTIFY from child controls
+    GuiCommandEvent<encoding>        GuiCommand;    //!< Raised in response to WM_COMMAND from menu/accelerators
+    //CtrlCommandEvent<encoding>       CtrlCommand;   //!< Raised in response to WM_COMMAND from child controls
+    //CtrlNotifyEvent<encoding>        CtrlNotify;    //!< Raised in response to WM_NOTIFY from child controls
 
   protected:
     wndclass_t&            Class;         //!< Window class 
@@ -171,11 +171,11 @@ namespace wtl
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
       
       // Reflect control events/notifications by default
-      CtrlCommand += new CtrlCommandEventHandler<encoding>(this, &WindowBase::onControlEvent);
-      CtrlNotify += new CtrlNotifyEventHandler<encoding>(this, &WindowBase::onControlNotify);
-
+      /*CtrlCommand += new CtrlCommandEventHandler<encoding>(this, &WindowBase::onControlEvent);
+      CtrlNotify += new CtrlNotifyEventHandler<encoding>(this, &WindowBase::onControlNotify);*/
+      
       // Execute gui commands by default
-      Command += new CommandEventHandler<encoding>(this, &WindowBase::onCommand);
+      GuiCommand += new GuiCommandEventHandler<encoding>(this, &WindowBase::onGuiCommand);
     }
     
   public:
@@ -208,92 +208,11 @@ namespace wtl
       case WindowMessage::SETFOCUS:       return res == unhandled_result<WindowMessage::SETFOCUS>::value;
       case WindowMessage::KILLFOCUS:      return res == unhandled_result<WindowMessage::KILLFOCUS>::value;
       case WindowMessage::GETMINMAXINFO:  return res == unhandled_result<WindowMessage::GETMINMAXINFO>::value;
+      case WindowMessage::DRAWITEM:       return res == unhandled_result<WindowMessage::DRAWITEM>::value;
       default:                            return res != 0;
       }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::routeMessage
-    //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
-    //!
-    //! \param[in] message - Window message identifier
-    //! \param[in] w - [optional] First message parameter
-    //! \param[in] l - [optional] Second message parameter
-    //! \return LResult - Message routing and result 
-    ///////////////////////////////////////////////////////////////////////////////
-    LResult routeMessage(WindowMessage message, WPARAM w, LPARAM l)
-    {
-      try
-      {
-        LResult ret;       //!< Message result, defaults to unhandled
-
-        // [EVENT] Raise event associated with message
-        switch (message)
-        {
-        case WindowMessage::CREATE:         ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
-        case WindowMessage::CLOSE:          ret = Close.raise();                                                  break;
-        case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
-        case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
-
-        case WindowMessage::NOTIFY:         
-        case WindowMessage::REFLECT_NOTIFY: 
-          ret = CtrlNotify.raise(CtrlNotifyEventArgs<encoding>(w,l)); 
-          break;
-
-        case WindowMessage::COMMAND:  
-        case WindowMessage::REFLECT_COMMAND:  
-          // [CTRL-EVENT] Default implementation reflects message to child window
-          if (l != 0)
-            ret = CtrlCommand.raise(CtrlCommandEventArgs<encoding>(w,l));  
-
-          // [MENU/ACCELERATOR] Default implementation executes the appropriate command object
-          else
-            ret = Command.raise(CommandEventArgs<encoding>(w,l));
-          break;
-
-        case WindowMessage::PAINT:          
-          if (!Paint.empty())
-            ret = Paint.raise(PaintWindowEventArgs<encoding>(Handle,w,l));       
-          break;
-        }
-
-        // [SUB-CLASS] Offer message to each subclass in turn (if any)
-        for (auto& wnd : SubClasses)
-          switch (wnd.Type)
-          {
-          // [WTL WINDOW] Delegate to window object 
-          case WindowType::Library:
-            // Delegate to instance window procedure
-            ret = wnd.WndProc.Library(message, w, l);
-
-            // [HANDLED/REFLECTED] Return result & routing
-            if (ret.Route == MsgRoute::Handled || ret.Route == MsgRoute::Reflected)
-              return ret;
-            break;
-
-          // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
-          case WindowType::Native:
-            // Delegate to native class window procedure and infer routing
-            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
-            ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
-          
-            // [HANDLED] Return result & routing
-            if (ret.Route == MsgRoute::Handled)
-              return ret;
-          }
-
-        // [UNHANDLED] Return result & routing
-        return ret;
-      }
-      catch (wtl::exception& e)
-      {
-        cdebug.log(HERE, e);
-        
-        // [ERROR] Unhandled
-        return MsgRoute::Unhandled;
-      }
-    }
-    
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::WndProc
     //! Class window procedure 
@@ -640,33 +559,7 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onControlEvent
-    //! Called in response to events from child controls (ie. WM_COMMAND)
-    //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onControlEvent(CtrlCommandEventArgs<encoding>& args) 
-    { 
-      // [Reflected] Reflect message to sender
-      return args.reflect(); 
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onControlNotify
-    //! Called in response to notifications from child controls (ie. WM_NOTIFY)
-    //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onControlNotify(CtrlNotifyEventArgs<encoding>& args) 
-    { 
-      // [Reflected] Reflect message to sender
-      return args.reflect(); 
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onCommand
+    // WindowBase::onGuiCommand
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -674,7 +567,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCommand(CommandEventArgs<encoding>& args) 
+    virtual LResult  onGuiCommand(GuiCommandEventArgs<encoding>& args) 
     { 
       // Execute associated command
       execute(args.Ident);
@@ -710,7 +603,87 @@ namespace wtl
     {
       post_message<encoding,WM>(Handle, w, l);
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::routeMessage
+    //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
+    //!
+    //! \param[in] message - Window message identifier
+    //! \param[in] w - [optional] First message parameter
+    //! \param[in] l - [optional] Second message parameter
+    //! \return LResult - Message routing and result 
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult routeMessage(WindowMessage message, WPARAM w, LPARAM l)
+    {
+      try
+      {
+        LResult ret;       //!< Message result, defaults to unhandled
 
+        // [EVENT] Raise event associated with message
+        switch (message)
+        {
+        case WindowMessage::CREATE:         ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
+        case WindowMessage::CLOSE:          ret = Close.raise();                                                  break;
+        case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
+        case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+
+        // [NOTIFY + OWNER-DRAW] Reflect to sender
+        case WindowMessage::NOTIFY:         ret = CtrlNotifyEventArgs<encoding>(w,l).reflect();                   break;
+        case WindowMessage::DRAWITEM:       ret = OwnerDrawEventArgs<encoding>(w,l).reflect();                    break;
+
+        case WindowMessage::COMMAND:  
+          if (l != 0)
+            // [CONTROL] Reflect to sender
+            ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
+          else
+            // [COMMAND] Raise event (Default executes the appropriate command object)
+            ret = GuiCommand.raise(GuiCommandEventArgs<encoding>(w,l));
+          break;
+
+        // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
+        case WindowMessage::PAINT:          
+          if (!Paint.empty())
+            ret = Paint.raise(PaintWindowEventArgs<encoding>(Handle,w,l));       
+          break;
+        }
+
+        // [SUB-CLASS] Offer message to each subclass in turn (if any)
+        for (auto& wnd : SubClasses)
+          switch (wnd.Type)
+          {
+          // [WTL WINDOW] Delegate to window object 
+          case WindowType::Library:
+            // Delegate to instance window procedure
+            ret = wnd.WndProc.Library(message, w, l);
+
+            // [HANDLED/REFLECTED] Return result & routing
+            if (ret.Route == MsgRoute::Handled || ret.Route == MsgRoute::Reflected)
+              return ret;
+            break;
+
+          // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
+          case WindowType::Native:
+            // Delegate to native class window procedure and infer routing
+            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
+            ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
+          
+            // [HANDLED] Return result & routing
+            if (ret.Route == MsgRoute::Handled)
+              return ret;
+          }
+
+        // [UNHANDLED] Return result & routing
+        return ret;
+      }
+      catch (wtl::exception& e)
+      {
+        cdebug.log(HERE, e);
+        
+        // [ERROR] Unhandled
+        return MsgRoute::Unhandled;
+      }
+    }
+    
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::send
     //! Sends a message to the window

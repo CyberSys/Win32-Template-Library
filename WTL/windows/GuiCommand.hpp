@@ -153,7 +153,7 @@ namespace wtl
     using description_t = StringResource<ENC,1024>;
 
     //! \alias icon_t - Define icon resource type
-    //using icon_t = IconResource<ENC>;
+    using icon_t = IconResource;
 
     //! \var encoding - Define encoding type
     static constexpr Encoding  encoding = base::encoding;
@@ -170,7 +170,7 @@ namespace wtl
     CommandId      Ident;           //!< Command Id
     name_t         Name;            //!< Command Name
     description_t  Description;     //!< Command Description
-    //icon_t         Icon;            //!< Command Icon
+    icon_t         Icon;            //!< Command Icon
     bool           Permanent;       //!< Whether command is permanent
     execute_t      Execute;         //!< Command execution functor
     revert_t       Revert;          //!< Command reversion functor
@@ -188,7 +188,7 @@ namespace wtl
     GuiCommand(CommandId id, T exec) : Ident(id),
                                        Name(resource_id(id)),
                                        Description(resource_id(id)),
-                                       //Icon(resource_id(id)),
+                                       Icon(resource_id(id)),
                                        Permanent(true),
                                        Execute(exec)
     {}
@@ -205,7 +205,7 @@ namespace wtl
     GuiCommand(CommandId id, T1 exec, T2 undo) : Ident(id),
                                                  Name(resource_id(id)),
                                                  Description(resource_id(id)),
-                                                 //Icon(resource_id(id)),
+                                                 Icon(resource_id(id)),
                                                  Permanent(false),
                                                  Execute(exec),
                                                  Revert(undo)
@@ -239,8 +239,7 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     HIcon  icon() const override
     {
-      // TODO: Return icon
-      return SystemIcon::Application;   
+      return Icon.Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -303,8 +302,6 @@ namespace wtl
       // Revert
       Revert();
     }
-
-    
   };
   
 

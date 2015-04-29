@@ -43,6 +43,7 @@
     <ClInclude Include="platform\WindowFlags.hpp" />
     <ClInclude Include="LibRes.h" />
     <ClInclude Include="resources\DialogResource.hpp" />
+    <ClInclude Include="resources\IconResource.hpp" />
     <ClInclude Include="resources\Resources.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessagePump.hpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="threads\WorkerThread.hpp" />
     <ClInclude Include="traits\AcceleratorTraits.hpp" />
     <ClInclude Include="traits\BrushTraits.hpp" />
+    <ClInclude Include="traits\BuildTraits.hpp" />
     <ClInclude Include="traits\CursorTraits.hpp" />
     <ClInclude Include="traits\DeviceContextTraits.hpp" />
     <ClInclude Include="traits\EncodingTraits.hpp" />
@@ -68,6 +70,7 @@
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="utils\Handle.hpp" />
+    <ClInclude Include="utils\List.hpp" />
     <ClInclude Include="utils\Queue.hpp" />
     <ClInclude Include="utils\Random.hpp" />
     <ClInclude Include="utils\Adapters.hpp" />
@@ -92,7 +95,7 @@
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
-    <ClInclude Include="windows\events\CommandEvent.hpp" />
+    <ClInclude Include="windows\events\GuiCommandEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />

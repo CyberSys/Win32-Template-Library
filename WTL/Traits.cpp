@@ -84,7 +84,7 @@ namespace wtl
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \var enum_values<...>::values - Defines HatchStyle values
+  //! \var enum_values<...>::values - Defines character encodings
   const char* enum_names<Encoding>::values[] = { "ANSI", "ASCII", "OEM", "MAC", "THREAD_ANSI", "SYMBOL", "UTF7", "UTF8", "UTF16" };
 
   //! \var enum_values<...>::values - Defines HatchStyle values

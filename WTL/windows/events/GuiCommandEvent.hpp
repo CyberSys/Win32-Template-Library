@@ -80,28 +80,28 @@ namespace wtl
   };
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias CommandEvent - Defines 'Command' event (ie. WM_COMMAND)
+  //! \alias GuiCommandEvent - Defines 'Command' event (ie. WM_COMMAND)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CommandEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
+  using GuiCommandEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias CommandEventArgs - Arguments for 'Command' Event (ie. WM_COMMAND)
+  //! \alias GuiCommandEventArgs - Arguments for 'Command' Event (ie. WM_COMMAND)
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
+  using GuiCommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias CommandEventHandler - Handler for 'Command' event (ie. WM_COMMAND)
+  //! \alias GuiCommandEventHandler - Handler for 'Command' event (ie. WM_COMMAND)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CommandEventHandler = typename CommandEvent<ENC>::delegate_t;
+  using GuiCommandEventHandler = typename GuiCommandEvent<ENC>::delegate_t;
 
 
 }

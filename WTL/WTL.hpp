@@ -87,6 +87,7 @@
 // Enumerations + Encoding
 #include "traits/EnumTraits.hpp"
 #include "traits/EncodingTraits.hpp"
+#include "traits/BuildTraits.hpp"
 
 // Casts: 
 #include "casts/StaticPtrCast.hpp"
@@ -121,6 +122,7 @@
 // Platform Utilities:
 #include "platform/Path.hpp"
 #include "platform/FileSearch.hpp"
+#include "platform/SystemVersion.hpp"
 #include "platform/Shapes.hpp"
 
 // Platform Traits:
@@ -167,6 +169,7 @@
 // Resources
 #include "resources/Resources.hpp"
 #include "resources/StringResource.hpp"
+#include "resources/IconResource.hpp"
 
 // GDI
 #include "gdi/StockObjects.hpp"
@@ -181,8 +184,8 @@
 #include "windows/events/CloseWindowEvent.hpp"
 #include "windows/events/PaintWindowEvent.hpp"
 #include "windows/events/ShowWindowEvent.hpp"
-//#include "windows/events/OwnerDrawEvent.hpp"
-#include "windows/events/CommandEvent.hpp"
+#include "windows/events/OwnerDrawEvent.hpp"
+#include "windows/events/GuiCommandEvent.hpp"
 #include "windows/events/StandardControls.hpp"
 
 // Commands

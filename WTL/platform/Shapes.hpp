@@ -28,9 +28,9 @@ namespace wtl
 
     //! \alias value_t - Defines co-ordinates type
     using value_t = T;
-
+    
     //! \var EMPTY - Empty sentinel value 
-    //static constexpr point_t EMPTY  {0,0}; //point_t();
+    static const point_t EMPTY;
 
     // ----------------------- CONSTRUCTION -----------------------
 
@@ -153,6 +153,10 @@ namespace wtl
              y;       //!< Y co-ordinate
   };
 
+  //! \var Point<T>::EMPTY - 'Empty' sentinel value 
+  template <typename T>
+  const Point<T>  Point<T>::EMPTY;
+
   
   //! \alias PointL - Point using long32 fields
   using PointL = Point<long32>;
@@ -182,7 +186,7 @@ namespace wtl
     using value_t = T;
 
     //! \var EMPTY - Empty sentinel value 
-    //static constexpr size_t EMPTY = size_t();
+    static const size_t EMPTY;
 
     // ----------------------- CONSTRUCTION -----------------------
 
@@ -262,6 +266,11 @@ namespace wtl
              height;       //!< Height extent
   };
   
+  
+  //! \var Size<T>::EMPTY - 'Empty' sentinel value 
+  template <typename T>
+  const Size<T>  Size<T>::EMPTY;
+
   
   //! \alias SizeL - Size using long32 fields
   using SizeL = Size<long32>;
@@ -532,6 +541,10 @@ namespace wtl
              right,       //!< Right extent
              bottom;      //!< Bottom extent
   };
+  
+  //! \var Rect<T>::EMPTY - 'Empty' sentinel value 
+  template <typename T>
+  const Rect<T>  Rect<T>::EMPTY;
 
 
   //! \alias RectL - Rectangle using long32 fields
