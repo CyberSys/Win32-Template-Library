@@ -419,6 +419,14 @@ namespace wtl
   private:
     //! \enum Unique - Distinct dummy type
     enum class Unique { Signature };
+    
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    array_ref  Data;    //!< Provides strongly typed access to element storage
+    uint32     Count;   //!< Number of valid elements
+
+  private:
+    byte       Storage[sizeof(DATA)*LENGTH];   //!< Actual element storage
 
     // --------------------- CONSTRUCTION ----------------------   
   private:
@@ -1794,14 +1802,6 @@ namespace wtl
     {
       return reinterpret_cast<value_type (&)[length]>(*Data);
     }
-
-    // -------------------- REPRESENTATION ---------------------
-  protected:
-    array_ref  Data;    //!< Provides strongly typed access to element storage
-    uint32     Count;   //!< Number of valid elements
-
-  private:
-    byte       Storage[sizeof(DATA)*LENGTH];   //!< Actual element storage
   };
 
   
