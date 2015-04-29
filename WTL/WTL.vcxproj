@@ -109,6 +109,7 @@
     <ClInclude Include="windows\GuiCommandQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageEvent.hpp" />
+    <ClInclude Include="windows\skins\SkinFactory.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />

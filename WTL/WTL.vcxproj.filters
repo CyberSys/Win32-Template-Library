@@ -45,6 +45,9 @@
     <Filter Include="Modules">
       <UniqueIdentifier>{822d32d8-6b48-4e4e-b249-2cf7dba0b501}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\Skins">
+      <UniqueIdentifier>{057bd3f3-5e0d-4c11-b455-019d0b3622d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="io\BinaryReader.hpp">
@@ -355,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="windows\events\GuiCommandEvent.hpp">
       <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\skins\SkinFactory.hpp">
+      <Filter>Windows\Skins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
