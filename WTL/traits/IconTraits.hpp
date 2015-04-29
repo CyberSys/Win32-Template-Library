@@ -42,9 +42,14 @@ namespace wtl
   template <>
   struct handle_alloc<HICON>
   {
+  protected:
+    //! \enum IconFormat - Define data format
+    enum class IconFormat : long32 { v2 = 0x00020000, v3 = 0x00030000 };
+    
+  public:
     //! \var npos - Invalid handle sentinel value
     static const HICON npos; 
-    
+
     ///////////////////////////////////////////////////////////////////////////////
     // handle_alloc<HICON>::create
     //! Load icon from resource
@@ -88,6 +93,50 @@ namespace wtl
 
       // Error: Failed  
       throw platform_error(HERE, "Unable to load system icon");
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // handle_alloc<HICON>::create
+    //! Create icon from image bits
+    //! 
+    //! \param[in] buffer - Buffer containing image
+    //! \param[in] len - Length of buffer
+    //! \param[in] size - Desired icon size
+    //! \return HAlloc<HICON> - Created handle
+    //! 
+    //! \throw wtl::platform_error - Failed to allocate handle
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC = Encoding::UTF16, typename = enable_if_build_t<WindowVersion::Win2000>>
+    static HAlloc<HICON> create(byte* buffer, int32 len, SizeL size) 
+    { 
+      // Create icon handle from bits
+      if (HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
+        return { icon, AllocType::Create };
+
+      // Error: Failed  
+      throw platform_error(HERE, "Unable to create icon from bits");
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // handle_alloc<HICON>::create
+    //! Create icon from image bits
+    //! 
+    //! \param[in] buffer - Buffer containing image
+    //! \param[in] len - Length of buffer
+    //! \param[in] defaultSize - True to pick size based on system metrics. False to use actual size.
+    //! \return HAlloc<HICON> - Created handle
+    //! 
+    //! \throw wtl::platform_error - Failed to allocate handle
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC = Encoding::UTF16, typename = enable_if_build_t<WindowVersion::Win2000>>
+    static HAlloc<HICON> create(byte* buffer, int32 len, bool defaultSize) 
+    { 
+      // Create icon handle from bits
+      if (HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), 0, 0, defaultSize ? LR_DEFAULTCOLOR|LR_DEFAULTSIZE : LR_DEFAULTCOLOR))
+        return { icon, AllocType::Create };
+
+      // Error: Failed  
+      throw platform_error(HERE, "Unable to create icon from bits");
     }
     
     ///////////////////////////////////////////////////////////////////////////////
