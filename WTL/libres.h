@@ -122,6 +122,13 @@
   #define ID_OLE_VERB_LAST              0xE21F
 #endif // !RC_INVOKED
 
+// Command groups
+#define ID_FILE_GROUP                   0xE230
+#define ID_EDIT_GROUP                   0xE231
+#define ID_VIEW_GROUP                   0xE232
+#define ID_WINDOW_GROUP                 0xE233
+#define ID_HELP_GROUP                   0xE234
+
 // View commands (same number used as IDW used for toolbar and status bar)
 #define ID_VIEW_TOOLBAR                 0xE800
 #define ID_VIEW_STATUS_BAR              0xE801
