@@ -63,7 +63,7 @@ namespace wtl
 
       // -------------------- REPRESENTATION ---------------------
 
-      uint16         Dummy;        //!< Length of current entry, in characters
+      //uint16         Dummy;        //!< Length of current entry, in characters
       uint16         Length;        //!< Length of current entry, in characters
       const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
     };
@@ -107,7 +107,7 @@ namespace wtl
         throw logic_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)LEN);
 
       // Convert from UTF16 if necessary
-      Text.assign<Encoding::UTF16>(item->Text);
+      Text.assign<Encoding::UTF16>(item->Text, item->Text+item->Length);
     }
 
     // ------------------------ STATIC -------------------------
