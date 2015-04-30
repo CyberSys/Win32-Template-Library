@@ -16,7 +16,7 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   //! \interface IGuiCommand - Interface for all gui commands
   //! 
-  //! \tparam ENC - Window character encoding 
+  //! \tparam ENC - Command character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct IGuiCommand
@@ -123,11 +123,21 @@ namespace wtl
     virtual void revert() = 0;
   };
   
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias shared_command_t - Shared Gui Command pointer
+  //! 
+  //! \tparam ENC - Command character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using shared_command_t = std::shared_ptr<IGuiCommand<ENC>>;
+
+
+
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct GuiCommand - Encapsulates a single gui command
   //! 
-  //! \tparam ENC - Message character encoding 
+  //! \tparam ENC - Command character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct GuiCommand : IGuiCommand<ENC>
@@ -172,8 +182,8 @@ namespace wtl
     description_t  Description;     //!< Command Description
     icon_t         Icon;            //!< Command Icon
     bool           Permanent;       //!< Whether command is permanent
-    execute_t      Execute;         //!< Command execution functor
-    revert_t       Revert;          //!< Command reversion functor
+    execute_t      ExecuteFn;       //!< Command execution functor
+    revert_t       RevertFn;        //!< Command reversion functor
 
     // --------------------- CONSTRUCTION ----------------------
   
@@ -181,7 +191,7 @@ namespace wtl
     // GuiCommand::GuiCommand
     //! Create a permenant command
     //! 
-    //! \param[in] id - Command identifier
+    //! \param[in] id - Command identifier (Defining name, description, and icon resource)
     //! \param[in] exec - Callable target which implements executing command
     ///////////////////////////////////////////////////////////////////////////////
     template <typename T>
@@ -190,7 +200,7 @@ namespace wtl
                                        Description(resource_id(id)),
                                        Icon(resource_id(id)),
                                        Permanent(true),
-                                       Execute(exec)
+                                       ExecuteFn(exec)
     {}
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -207,8 +217,8 @@ namespace wtl
                                                  Description(resource_id(id)),
                                                  Icon(resource_id(id)),
                                                  Permanent(false),
-                                                 Execute(exec),
-                                                 Revert(undo)
+                                                 ExecuteFn(exec),
+                                                 RevertFn(undo)
     {}
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -284,7 +294,7 @@ namespace wtl
     void execute() override
     {
       // Execute
-      Execute();
+      ExecuteFn();
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -300,7 +310,7 @@ namespace wtl
         throw logic_error(HERE, "Command cannot be reverted");
 
       // Revert
-      Revert();
+      RevertFn();
     }
   };
   

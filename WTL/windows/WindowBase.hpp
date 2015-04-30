@@ -28,8 +28,11 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias command_t - Define gui command base type
+    //! \alias command_t - Define GuiCommand type
     using command_t = IGuiCommand<ENC>;
+    
+    //! \alias cmdgroup_t - Define GuiCommand group type
+    using cmdgroup_t = IGuiCommandGroup<ENC>;
 
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<ENC>;
@@ -40,32 +43,36 @@ namespace wtl
     //! \alias CommandQueue - Define gui command queue type
     using CommandQueue = GuiCommandQueue<ENC>;
     
-    //! \struct CommandCollection - Provides a collection of Gui Commands, indexed by Command Id
-    struct CommandCollection : std::map<CommandId,std::shared_ptr<command_t>>
+    //! \struct CommandGroupCollection - Collection of GuiCommand groups, indexed by Id
+    struct CommandGroupCollection : std::map<CommandGroupId,shared_cmdgroup_t<ENC>>
     {
+      // ------------------- TYPES & CONSTANTS -------------------
+
       //! \alias base - Define base type
-      using base = std::map<CommandId,std::shared_ptr<command_t>>;
+      using base = std::map<CommandGroupId,shared_cmdgroup_t<ENC>>;
+
+      // ----------------------- MUTATORS ------------------------
 
       ///////////////////////////////////////////////////////////////////////////////
-      // CommandCollection::operator +=
-      //! Add a command to the collection
+      // CommandGroupCollection::operator +=
+      //! Add a group to the collection
       //!
-      //! \param[in] *ptr - Gui command
-      //! \return CommandCollection& - Reference to self
+      //! \param[in] *group - Command group
+      //! \return CommandGroupCollection& - Reference to self
       ///////////////////////////////////////////////////////////////////////////////
-      CommandCollection& operator += (command_t* ptr)
+      CommandGroupCollection& operator += (cmdgroup_t* group)
       {
         // Insert/overwrite
-        emplace(ptr->ident(), std::shared_ptr<command_t>(ptr));
+        emplace(group->ident(), shared_cmdgroup_t<ENC>(group));
         return *this;
       }
     };
-    
+
     //! \alias WindowCollection - Window collection type
     using WindowCollection = std::list<WindowBase*>;
     
     //! \alias WindowHandleCollection - Provides an association between native window handles and WindowBase objects
-    using WindowHandleCollection = std::map<HWND,WindowBase*>;
+    using WindowHandleCollection = std::map<::HWND,WindowBase*>;
 
     //! \alias WindowIdCollection - Provides an association between window Ids and WindowBase objects
     using WindowIdCollection = std::map<WindowId,WindowBase*>;
@@ -78,18 +85,21 @@ namespace wtl
     
     //! \alias SubClassCollection - Define subclassed windows collection
     using SubClassCollection = std::list<SubClass>;
-
+    
     //! \alias wndclass_t - Window class type
     using wndclass_t = WindowClass<ENC>;
+    
+    //! \alias wndmenu_t - Window menu type
+    using wndmenu_t = WindowMenu<ENC>;
 
     //! \alias wndproc_t - Win32 Window procedure type
-    using wndproc_t = LRESULT (__stdcall*)(HWND, uint32, WPARAM, LPARAM);
+    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32, WPARAM, LPARAM);
 
     //! \alias wtlproc_t - WTL Window procedure type
     using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  // = decltype(onMessage);
 
     //! \alias window_t - Define own type
-    using window_t = WindowBase;
+    using window_t = WindowBase<ENC>;
     
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
@@ -130,11 +140,11 @@ namespace wtl
 
     // -------------------- REPRESENTATION ---------------------
   public:
-    //! \var ActiveWindows - Static collection of all existing WTL windows for the current process
+    //! \var ActiveWindows - Static collection of all existing WTL windows 
     static WindowHandleCollection  ActiveWindows;
 
-    //! \var ActiveCommands - Static collection of all existing gui commands for the current process
-    static CommandCollection  ActiveCommands;
+    //! \var CommandGroups - Static collection of all GuiCommands groups
+    static CommandGroupCollection  CommandGroups;
     
   public:
     CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
@@ -142,15 +152,15 @@ namespace wtl
     DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-    GuiCommandEvent<encoding>        GuiCommand;    //!< Raised in response to WM_COMMAND from menu/accelerators
-    //CtrlCommandEvent<encoding>       CtrlCommand;   //!< Raised in response to WM_COMMAND from child controls
-    //CtrlNotifyEvent<encoding>        CtrlNotify;    //!< Raised in response to WM_NOTIFY from child controls
-
+    GuiCommandEvent<encoding>        Command;       //!< Raised in response to WM_COMMAND from menu/accelerators
+    
   protected:
     wndclass_t&            Class;         //!< Window class 
     ChildWindowCollection  Children;      //!< Child window collection
     CommandQueue           Actions;       //!< Command queue
     HWnd                   Handle;        //!< Window handle
+    HFont                  Font;          //!< Window font
+    Lazy<wndmenu_t>        Menu;          //!< Window menu, if any
     SubClassCollection     SubClasses;    //!< Sub-classed windows collection
 
     // --------------------- CONSTRUCTION ----------------------
@@ -162,20 +172,17 @@ namespace wtl
     //! \param[in] &cls - Registered window class 
     ///////////////////////////////////////////////////////////////////////////////
     WindowBase(wndclass_t& cls) : Class(cls), 
-                                  Handle(HWnd::npos)
+                                  Handle(HWnd::npos),
+                                  Font(StockObject::SystemFont)
     {
       // Accept window creation by default
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
       
+      // Execute gui commands by default
+      Command += new GuiCommandEventHandler<encoding>(this, &WindowBase::onGuiCommand);
+        
       // Paint window background by default
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
-      
-      // Reflect control events/notifications by default
-      /*CtrlCommand += new CtrlCommandEventHandler<encoding>(this, &WindowBase::onControlEvent);
-      CtrlNotify += new CtrlNotifyEventHandler<encoding>(this, &WindowBase::onControlNotify);*/
-      
-      // Execute gui commands by default
-      GuiCommand += new GuiCommandEventHandler<encoding>(this, &WindowBase::onGuiCommand);
     }
     
   public:
@@ -188,6 +195,32 @@ namespace wtl
     }
 
     // ------------------------ STATIC -------------------------
+  public:
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::getFocus
+    //! Get the window with input focus
+    //!
+    //! \return window_t* - Window with input focus, or nullptr if focus belongs to another thread
+    //!
+    //! \throw wtl::domain_error - Input focus belongs to native window on current thread
+    ///////////////////////////////////////////////////////////////////////////////
+    static window_t*  getFocus()
+    {
+      if (::HWND focus = ::GetFocus())
+      {
+        // Lookup & return window
+        auto wnd = ActiveWindows.find(focus);
+        if (wnd != ActiveWindows.end())
+          return *wnd;
+        
+        // [FAILED] Native window
+        throw domain_error(HERE, "Input focus belongs to native window");
+      }
+
+      // [N/A] Input focus belongs to another thread
+      return nullptr;
+    }
+
   protected:
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::isUnhandled
@@ -203,12 +236,12 @@ namespace wtl
       {
       case WindowMessage::CREATE:         return res == unhandled_result<WindowMessage::CREATE>::value;
       case WindowMessage::DESTROY:        return res == unhandled_result<WindowMessage::DESTROY>::value;
+      case WindowMessage::DRAWITEM:       return res == unhandled_result<WindowMessage::DRAWITEM>::value;
+      case WindowMessage::GETMINMAXINFO:  return res == unhandled_result<WindowMessage::GETMINMAXINFO>::value;
+      case WindowMessage::KILLFOCUS:      return res == unhandled_result<WindowMessage::KILLFOCUS>::value;
       case WindowMessage::SHOWWINDOW:     return res == unhandled_result<WindowMessage::SHOWWINDOW>::value;
       case WindowMessage::SIZE:           return res == unhandled_result<WindowMessage::SIZE>::value;
       case WindowMessage::SETFOCUS:       return res == unhandled_result<WindowMessage::SETFOCUS>::value;
-      case WindowMessage::KILLFOCUS:      return res == unhandled_result<WindowMessage::KILLFOCUS>::value;
-      case WindowMessage::GETMINMAXINFO:  return res == unhandled_result<WindowMessage::GETMINMAXINFO>::value;
-      case WindowMessage::DRAWITEM:       return res == unhandled_result<WindowMessage::DRAWITEM>::value;
       default:                            return res != 0;
       }
     }
@@ -223,7 +256,7 @@ namespace wtl
     //! \param[in] lParam - [optional] Parameter2
     //! \return LRESULT - Typically zero if handled, non-zero if not    (but not always)
     ///////////////////////////////////////////////////////////////////////////////
-    static LRESULT WINAPI  WndProc(HWND hWnd, uint32 message, WPARAM wParam, LPARAM lParam)
+    static LRESULT WINAPI  WndProc(::HWND hWnd, uint32 message, WPARAM wParam, LPARAM lParam)
     {
       WindowBase* wnd(nullptr);   //!< Window object associated with message, if any
        
@@ -393,55 +426,18 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::operator HWND const
+    // WindowBase::operator ::HWND const
     //! Implicit user conversion to native window handle 
     //! 
-    //! \return HWND - Native handle
+    //! \return ::HWND - Native handle
     ///////////////////////////////////////////////////////////////////////////////
-    operator HWND() const
+    operator ::HWND() const
     {
       return handle();
     }
     
     // ----------------------- MUTATORS ------------------------
   public:
-    ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::create
-    //! Creates a parent window
-    //! 
-    //! \tparam ENC - Title string encoding
-    //! \tparam LEN - Title buffer capacity
-    //!
-    //! \param[in] const* parent - Parent window
-    //! \param[in] const& title - Window title
-    //! \param[in] const& rc - Initial position
-    //! \param[in] style - Window styles
-    //! \param[in] exStyle - [optional] Extended styles (default is no extended styles)
-    //! \param[in] const* menu - [optional] Window Menu (default is no window menu)
-    //! 
-    //! \throw wtl::logic_error - Window already exists
-    //! \throw wtl::platform_error - Unable to create window
-    ///////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    void createEx(const WindowBase* parent, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, WindowStyle style, WindowStyleEx exStyle = WindowStyleEx::None, const WindowMenu* menu = nullptr)
-    {
-      // Ensure doesn't already exist
-      if (Handle.exists())
-        throw logic_error(HERE, "Window already exists");
-
-      try
-      {
-        // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), menu->handle());
-      }
-      catch (platform_error& e)
-      {
-        // Log & rethrow
-        cdebug.log(HERE, e);
-        throw;
-      }
-    }
-    
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::create
     //! Create as a child window
@@ -489,28 +485,83 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
+    // WindowBase::createEx
+    //! Creates as an overlapped or popup window 
+    //! 
+    //! \tparam ENC - Title string encoding
+    //! \tparam LEN - Title buffer capacity
+    //!
+    //! \param[in] const* parent - [optional] Parent window
+    //! \param[in] const& title - Window title
+    //! \param[in] const& rc - Initial position
+    //! \param[in] style - Window styles
+    //! \param[in] exStyle - [optional] Extended styles (default is no extended styles)
+    //! 
+    //! \throw wtl::logic_error - Window already exists
+    //! \throw wtl::platform_error - Unable to create window
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC, unsigned LEN>
+    void createEx(const WindowBase* parent, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, WindowStyle style, WindowStyleEx exStyle = WindowStyleEx::None)
+    {
+      // Ensure doesn't already exist
+      if (Handle.exists())
+        throw logic_error(HERE, "Window already exists");
+
+      try
+      {
+        // Create menu
+        Menu.create();
+
+        // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
+        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), nullptr);
+      }
+      catch (platform_error& e)
+      {
+        // Log & rethrow
+        cdebug.log(HERE, e);
+        throw;
+      }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::destroy
-    //! Destroys the window
+    //! Destroys the window and menu 
     //!
     //! \throw wtl::platform_error - Unable to destroy window
     ///////////////////////////////////////////////////////////////////////////////
     void destroy()
     {
-      // Ensure already exists
+      // Ensure exists
       if (Handle.exists())
+      {
+        // Destroy window 
         Handle.release();
+
+        // Destroy menu, if any
+        if (Menu.exists())
+          Menu.destroy();
+
+        // NB: Does not destroy font
+      }
     }
     
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::execute
     //! Executes a gui command
     //! 
+    //! \param[in] id - Command id
     //! \throw wtl::logic_error - Gui command not recognised
     ///////////////////////////////////////////////////////////////////////////////
     void  execute(CommandId id) 
     { 
-      // Lookup & Execute associated command
-      Actions.execute( ActiveCommands[id]->clone() );
+      // Lookup command
+      for (auto& group : CommandGroups)
+        if (command_t* cmd = group->find(id))
+        {
+          // [FOUND] Execute associated command
+          Actions.execute( cmd->clone() );
+          break;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -627,18 +678,35 @@ namespace wtl
         case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
         case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
 
-        // [NOTIFY + OWNER-DRAW] Reflect to sender
-        case WindowMessage::NOTIFY:         ret = CtrlNotifyEventArgs<encoding>(w,l).reflect();                   break;
-        case WindowMessage::DRAWITEM:       ret = OwnerDrawEventArgs<encoding>(w,l).reflect();                    break;
-
+        // [COMMAND] Reflect control events. Raise Gui events.
         case WindowMessage::COMMAND:  
           if (l != 0)
             // [CONTROL] Reflect to sender
             ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
           else
             // [COMMAND] Raise event (Default executes the appropriate command object)
-            ret = GuiCommand.raise(GuiCommandEventArgs<encoding>(w,l));
+            ret = Command.raise(GuiCommandEventArgs<encoding>(w,l));
           break;
+
+        // [NOTIFY] Reflect to sender
+        case WindowMessage::NOTIFY:  
+          ret = CtrlNotifyEventArgs<encoding>(w,l).reflect();   
+          break;
+
+        // [OWNER-DRAW] Reflect to sender
+        case WindowMessage::DRAWITEM:       
+        {
+          OwnerDrawEventArgs<encoding> args(w,l);
+          
+          // [CONTROL] Reflect to originator
+          if (args.CtrlType != OwnerDrawControl::Menu)
+            ret = args.reflect();
+
+          // [MENU] Raise associated menu event
+          else if (Menu.exists())
+            ret = Menu->OwnerDraw.raise(args);
+          break;
+        }
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
         case WindowMessage::PAINT:          
@@ -706,12 +774,11 @@ namespace wtl
     //! 
     //! \param[in] const& f - New window font
     //! \param[in] l - Second parameter
-    //! \return HFont - Weak reference to previous window font
     ///////////////////////////////////////////////////////////////////////////////
-    HFont setFont(const HFont& f, bool redraw)
+    void setFont(const HFont& f, bool redraw)
     {
-      ::HFONT prev = (::HFONT)send<WindowMessage::SETFONT>((::WPARAM)f.get(), boolean_cast(redraw)).Result;
-      return { prev, AllocType::WeakRef };
+      // Update shared window font
+      send<WindowMessage::SETFONT>((uintptr_t)(Font=f).get(), boolean_cast(redraw));
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -777,11 +844,11 @@ namespace wtl
   };
 
   
-  //! \var ActiveCommands - Collection of all existing gui commands for the current process
+  //! \var CommandGroups - Collection of all GuiCommand groups 
   template <Encoding ENC>
-  typename WindowBase<ENC>::CommandCollection   WindowBase<ENC>::ActiveCommands;
+  typename WindowBase<ENC>::CommandGroupCollection   WindowBase<ENC>::CommandGroups;
   
-  //! \var ActiveWindows - Collection of all existing WTL windows for the current process
+  //! \var ActiveWindows - Collection of all WTL windows 
   template <Encoding ENC>
   typename WindowBase<ENC>::WindowHandleCollection   WindowBase<ENC>::ActiveWindows;
 
