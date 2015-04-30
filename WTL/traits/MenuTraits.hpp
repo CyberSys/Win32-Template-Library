@@ -27,15 +27,27 @@ namespace wtl
     // handle_alloc<::HMENU>::create
     //! Create empty menu
     //! 
+    //! \param[in] type - Menu type
     //! \return HAlloc<::HMENU> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to create handle
     ///////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HMENU> create() 
+    static HAlloc<::HMENU> create(MenuType type) 
     { 
-      // Load menu 
-      if (::HMENU menu = ::CreateMenu())
-        return { menu, AllocType::Create };
+      switch (type)
+      {
+      // [WINDOW] Create menu
+      case MenuType::Window:
+        if (::HMENU menu = ::CreateMenu())
+          return { menu, AllocType::Create };
+        break;
+
+      // [POPUP] Create menu
+      case MenuType::Popup:
+        if (::HMENU menu = ::CreatePopupMenu())
+          return { menu, AllocType::Create };
+        break;
+      }
 
       // Error: Failed  
       throw platform_error(HERE, "Unable to create menu");
