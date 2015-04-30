@@ -37,6 +37,7 @@
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
     <ClInclude Include="platform\FileSearch.hpp" />
+    <ClInclude Include="platform\MenuFlags.hpp" />
     <ClInclude Include="platform\Path.hpp" />
     <ClInclude Include="platform\Shapes.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
@@ -88,8 +89,14 @@
     <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\toString.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
+    <ClInclude Include="windows\commands\AboutProgramCommand.hpp" />
+    <ClInclude Include="windows\commands\CopyClipboardCommand.hpp" />
+    <ClInclude Include="windows\commands\CutClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp" />
+    <ClInclude Include="windows\commands\NewDocumentCommand.hpp" />
+    <ClInclude Include="windows\commands\OpenDocumentCommand.hpp" />
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp" />
+    <ClInclude Include="windows\commands\SaveDocumentCommand.hpp" />
     <ClInclude Include="windows\ControlEvent.hpp" />
     <ClInclude Include="windows\controls\Button.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />

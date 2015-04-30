@@ -109,6 +109,7 @@
 #include "utils/Random.hpp"
 #include "utils/Stack.hpp"
 #include "utils/Queue.hpp"
+#include "utils/List.hpp"
 #include "utils/toString.hpp"
 
 // Platform Constants:
@@ -116,6 +117,7 @@
 #include "platform/Colours.hpp"
 #include "platform/CommandIds.hpp"
 #include "platform/DrawingFlags.hpp"
+#include "platform/MenuFlags.hpp"
 #include "platform/WindowFlags.hpp"
 #include "platform/ControlStyles.hpp"
 
@@ -190,18 +192,13 @@
 
 // Commands
 #include "windows/GuiCommand.hpp"
+#include "windows/GuiCommandGroup.hpp"
 #include "windows/GuiCommandQueue.hpp"
 
 // Windows
 #include "windows/WindowMenu.hpp"
 #include "windows/WindowClass.hpp"
 #include "windows/WindowBase.hpp"
-
-// Events
-
-//#include "windows/events/NotifyEventData.hpp"
-//#include "windows/events/NotifyEvent.hpp"
-//#include "windows/events/StandardControls.hpp"
 
 // Threads
 #include "threads/WorkerThread.hpp"
@@ -215,12 +212,22 @@
 #include "windows/Window.hpp"
 #include "windows/controls/Button.hpp"
 
-// Windows & Dialogs
+// TODO: Dialogs
+// ....
 
-// Commands
+// Commands: File
+#include "windows/commands/NewDocumentCommand.hpp"
+#include "windows/commands/OpenDocumentCommand.hpp"
+#include "windows/commands/SaveDocumentCommand.hpp"
 #include "windows/commands/ExitProgramCommand.hpp"
-//#include "windows/commands/PasteClipboardCommand.hpp"
 
+// Commands: Edit
+#include "windows/commands/CutClipboardCommand.hpp"
+#include "windows/commands/CopyClipboardCommand.hpp"
+#include "windows/commands/PasteClipboardCommand.hpp"
+
+// Commands: Help
+#include "windows/commands/AboutProgramCommand.hpp"
 
 #endif // WTL_HEADER_HPP
 

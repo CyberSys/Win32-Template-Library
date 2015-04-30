@@ -362,6 +362,27 @@
     <ClInclude Include="windows\skins\SkinFactory.hpp">
       <Filter>Windows\Skins</Filter>
     </ClInclude>
+    <ClInclude Include="platform\MenuFlags.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\CopyClipboardCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\CutClipboardCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\AboutProgramCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\NewDocumentCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\OpenDocumentCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\commands\SaveDocumentCommand.hpp">
+      <Filter>Windows\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Traits.cpp">
