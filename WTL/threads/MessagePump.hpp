@@ -51,6 +51,13 @@ namespace wtl
     
     //! \var encoding - Define character encoding
     static constexpr Encoding encoding = ENC;
+    
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    HINSTANCE         Instance;   //!< Module instance
+    DialogCollection  Dialogs;    //!< Currently active modeless dialogs
+    window_t          Window;     //!< Main thread window
+    PumpState         State;      //!< Current state
 
     // --------------------- CONSTRUCTION ----------------------
   public:
@@ -61,6 +68,7 @@ namespace wtl
     //! \param[in] instance - Instance handle
     ///////////////////////////////////////////////////////////////////////////////
     MessagePump(::HMODULE instance) : Instance(instance),
+                                      State(PumpState::Idle),
                                       Window(instance)
     {}
     
@@ -126,9 +134,19 @@ namespace wtl
         if (!Window.exists())
           throw platform_error(HERE, "Failed to initialise window");
 
+        // Update state
+        State = PumpState::Running;
+
         // Retrieve next message for any window
         while (getMessage(&msg, nullptr, 0ul, 0ul))
         {
+          // [MODAL] Update state when entering/exiting modal loop
+          switch (static_cast<WindowMessage>(msg.message))
+          {
+          case WindowMessage::ENTERMENULOOP: State = PumpState::ModalLoop;    break;
+          case WindowMessage::EXITMENULOOP:  State = PumpState::Running;      break;
+          }
+
           // [EXISTS] 
           //if (Window && Window->exists())
           //{
@@ -187,11 +205,6 @@ namespace wtl
     virtual void onExit()
     {}
         
-    // -------------------- REPRESENTATION ---------------------
-  protected:
-    HINSTANCE         Instance;   //!< Module instance
-    DialogCollection  Dialogs;    //!< Currently active modeless dialogs
-    window_t          Window;     //!< Main thread window
   };
 
 }
