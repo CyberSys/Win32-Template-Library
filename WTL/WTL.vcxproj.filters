@@ -383,6 +383,30 @@
     <ClInclude Include="windows\commands\SaveDocumentCommand.hpp">
       <Filter>Windows\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="utils\SFINAE.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Clear.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\ForEach.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\SizeOf.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Sequence.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\NameValuePair.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\PowerOf.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\OwnerMeasureEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Traits.cpp">

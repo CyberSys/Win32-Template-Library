@@ -70,8 +70,12 @@
     <ClInclude Include="traits\WindowMessageTraits.hpp" />
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="utils\Clear.hpp" />
+    <ClInclude Include="utils\ForEach.hpp" />
     <ClInclude Include="utils\Handle.hpp" />
     <ClInclude Include="utils\List.hpp" />
+    <ClInclude Include="utils\NameValuePair.hpp" />
+    <ClInclude Include="utils\PowerOf.hpp" />
     <ClInclude Include="utils\Queue.hpp" />
     <ClInclude Include="utils\Random.hpp" />
     <ClInclude Include="utils\Adapters.hpp" />
@@ -86,6 +90,9 @@
     <ClInclude Include="utils\Lazy.hpp" />
     <ClInclude Include="utils\Policies.hpp" />
     <ClInclude Include="utils\Range.hpp" />
+    <ClInclude Include="utils\Sequence.hpp" />
+    <ClInclude Include="utils\SFINAE.hpp" />
+    <ClInclude Include="utils\SizeOf.hpp" />
     <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\toString.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
@@ -104,6 +111,7 @@
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
     <ClInclude Include="windows\events\GuiCommandEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
+    <ClInclude Include="windows\events\OwnerMeasureEvent.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />
     <ClInclude Include="windows\events\CustomDrawEvent.hpp" />

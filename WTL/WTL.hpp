@@ -82,6 +82,7 @@
 // Function object adapters + static allocator + utilities
 #include "utils/Adapters.hpp" 
 #include "utils/Policies.hpp"
+#include "utils/SFINAE.hpp"
 #include "utils/Helpers.hpp"
 
 // Enumerations + Encoding
@@ -111,6 +112,12 @@
 #include "utils/Queue.hpp"
 #include "utils/List.hpp"
 #include "utils/toString.hpp"
+#include "utils/PowerOf.hpp"
+#include "utils/NameValuePair.hpp"
+#include "utils/ForEach.hpp"
+#include "utils/Sequence.hpp"
+#include "utils/SizeOf.hpp"
+#include "utils/Clear.hpp"
 
 // Platform Constants:
 #include "LibRes.h"
@@ -187,10 +194,15 @@
 #include "windows/events/PaintWindowEvent.hpp"
 #include "windows/events/ShowWindowEvent.hpp"
 #include "windows/events/OwnerDrawEvent.hpp"
+#include "windows/events/OwnerMeasureEvent.hpp"
+//#include "windows/events/ActionEvent.hpp"
 #include "windows/events/GuiCommandEvent.hpp"
 #include "windows/events/StandardControls.hpp"
 
 // Commands
+//#include "windows/Action.hpp"
+//#include "windows/ActionGroup.hpp"
+//#include "windows/ActionQueue.hpp"
 #include "windows/GuiCommand.hpp"
 #include "windows/GuiCommandGroup.hpp"
 #include "windows/GuiCommandQueue.hpp"
