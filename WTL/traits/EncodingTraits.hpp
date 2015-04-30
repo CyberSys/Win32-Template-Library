@@ -69,41 +69,65 @@ namespace wtl
   template <>           struct default_encoding<wchar_t> : std::integral_constant<Encoding,Encoding::UTF16>  {};
 
   
+  // --------------------- SFINAE ----------------------
+
   /////////////////////////////////////////////////////////////
   //! \struct enable_if_encoding_t - Defines an SFINAE expression requiring an equal character encoding
   //! 
   //! \tparam VAR - Encoding to test
   //! \tparam ENC - Required encoding
-  //! \tparam RET - Return type
+  //! \tparam RET - [optional] Return type (Default is void)
   /////////////////////////////////////////////////////////////
   template <Encoding VAR, Encoding ENC, typename RET = void>
   using enable_if_encoding_t = std::enable_if_t<VAR == ENC, RET>;
 
-  
   /////////////////////////////////////////////////////////////
   //! \struct enable_if_not_encoding_t - Defines an SFINAE expression requiring a different character encoding
   //! 
   //! \tparam VAR - Encoding to test
   //! \tparam ENC - Required encoding
-  //! \tparam RET - Return type
+  //! \tparam RET - [optional] Return type (Default is void)
   /////////////////////////////////////////////////////////////
   template <Encoding VAR, Encoding ENC, typename RET = void>
   using enable_if_not_encoding_t = std::enable_if_t<VAR != ENC, RET>;
+
   
   /////////////////////////////////////////////////////////////
-  //! \alias enable_if_attribute_t - Defines an SFINAE expression requiring an attribute enumeration
+  //! \struct enable_if_narrow_t - Defines an SFINAE expression requiring a narrow character type
   //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
+  //! \tparam CHR - Character type
+  //! \tparam RET - [optional] Return type (Default is void)
   /////////////////////////////////////////////////////////////
-  /*template <typename E, typename RET = void>
-  using enable_if_encoding_t = typename enable_if_encoding<E,RET>::type;*/
+  template <typename CHR, typename RET = void>
+  using enable_if_narrow_t = std::enable_if_t<sizeof(CHR) == sizeof(char), RET>;
+
+  /////////////////////////////////////////////////////////////
+  //! \struct enable_if_wide_t - Defines an SFINAE expression requiring a wide character type
+  //! 
+  //! \tparam CHR - Character type
+  //! \tparam RET - [optional] Return type (Default is void)
+  /////////////////////////////////////////////////////////////
+  template <typename CHR, typename RET = void>
+  using enable_if_wide_t = std::enable_if_t<sizeof(CHR) == sizeof(wchar_t), RET>;
+
   
+  // --------------------- FUNCTION/TYPE/VALUE SELECTORS ----------------------
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias getType - Defines a narrow/wide type based on a character type
+  //!
+  //! \tparam[in] CHAR - Character type
+  //! \tparam[in] NARROW - Narrow type
+  //! \tparam[in] WIDE - Wide type
+  //! \return auto - 'NARROW' if sizeof(CHAR) == 1, otherwise of type 'WIDE'
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename NARROW, typename WIDE>
+  using getType = std::conditional_t<sizeof(CHAR)==sizeof(char),NARROW,WIDE>;
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias getType_t - Defines the narrow/wide character declaration of a type from an encoding
+  //! \alias getType_t - Defines a narrow/wide type based on a character encoding
   //!
-  //! \tparam[in] ENC - Encoding type
+  //! \tparam[in] ENC - Character encoding 
   //! \tparam[in] NARROW - Narrow type
   //! \tparam[in] WIDE - Wide type
   //! \return - 'NARROW' if sizeof(CHAR) == 1, otherwise of type 'WIDE'
@@ -114,9 +138,45 @@ namespace wtl
 
   ///////////////////////////////////////////////////////////////////////////////
   //! wtl::getFunc
-  //! Get the narrow/wide character implementation of a function 
+  //! Get the narrow character implementation of a function by character type
   //!
-  //! \tparam ENC - Character encoding type
+  //! \tparam CHAR - Narrow character type
+  //! \tparam NARROW - Narrow char callable target type
+  //! \tparam WIDE - Wide char callable target type
+  //! 
+  //! \param[in] narrow - Narrow char function pointer / callable target
+  //! \param[in] wide - Wide char function pointer / callable target
+  //! \return NARROW - Returns 'narrow'
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename NARROW, typename WIDE>
+  enable_if_narrow_t<CHAR,NARROW>  getFunc(NARROW narrow, WIDE wide) 
+  {
+    return narrow;
+  };
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! wtl::getFunc
+  //! Get the wide character implementation of a function by character type
+  //!
+  //! \tparam CHAR - Wide character type
+  //! \tparam NARROW - Narrow char callable target type
+  //! \tparam WIDE - Wide char callable target type
+  //! 
+  //! \param[in] narrow - Narrow char function pointer / callable target
+  //! \param[in] wide - Wide char function pointer / callable target
+  //! \return WIDE - Returns 'wide'
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename NARROW, typename WIDE>
+  enable_if_wide_t<CHAR,WIDE>  getFunc(NARROW narrow, WIDE wide) 
+  {
+    return wide;
+  };
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! wtl::getFunc
+  //! Get the narrow/wide character implementation of a function by character encoding
+  //!
+  //! \tparam ENC - Character encoding 
   //! \tparam NARROW - Narrow char callable target type
   //! \tparam WIDE - Wide char callable target type
   //! 
@@ -137,13 +197,13 @@ namespace wtl
   //!
   //! \tparam ENC - Character encoding type
   //! \tparam VALUE - Value type
+  //! \tparam NARROW - Narrow value
+  //! \tparam WIDE - Wide value
   //! 
-  //! \param[in] narrow - Narrow value
-  //! \param[in] wide - Wide value
   //! \return auto - 'narrow' if sizeof(CHAR) == 1, otherwise 'wide'
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename VAL, VAL NARROW, VAL WIDE>
-  VAL getValue(/*VAL narrow, VAL wide*/) 
+  VAL getValue() 
   {
     return sizeof(encoding_char_t<ENC>) == sizeof(char) ? NARROW : WIDE;
   };
