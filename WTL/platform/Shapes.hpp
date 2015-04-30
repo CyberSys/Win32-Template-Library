@@ -78,22 +78,21 @@ namespace wtl
                                   y(static_cast<T>(Y))
     {}
     
-
     DEFAULT_COPY(Point);   //!< Performs a deep copy
     DEFAULT_COPY_ASSIGN(Point);   //!< Performs a deep copy
     DEFAULT_MOVE(Point);   //!< Performs a deep copy
 
     ///////////////////////////////////////////////////////////////////////////////
     // Point::~Point 
-    //! Virtual d-tor
+    //! Non-virtual d-tor
     ///////////////////////////////////////////////////////////////////////////////
-    /*virtual ~Point()
-    {};*/
+    ~Point()
+    {}
 
     // ------------------------- STATIC ---------------------------
   
     // ------------------------ ACCESSORS -------------------------
-    
+  public:  
     ///////////////////////////////////////////////////////////////////////////////
     // Point::empty const
     //! Query whether point is empty
@@ -226,15 +225,15 @@ namespace wtl
 
     ///////////////////////////////////////////////////////////////////////////////
     // Size::~Size 
-    //! Virtual d-tor
+    //! Non-virtual d-tor
     ///////////////////////////////////////////////////////////////////////////////
-    /*virtual ~Size()
-    {};*/
+    ~Size()
+    {}
 
     // ------------------------- STATIC ---------------------------
   
     // ------------------------ ACCESSORS -------------------------
-    
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // Size::empty const
     //! Query whether size is empty
@@ -244,7 +243,7 @@ namespace wtl
     bool empty() const
     {
       return width == zero<value_t>::value && height == zero<value_t>::value;
-    };
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // Size::operator ::SIZE& 
@@ -387,21 +386,21 @@ namespace wtl
     {}
 
     
-    DEFAULT_COPY(Rect);   //!< Performs a deep copy
-    DEFAULT_MOVE(Rect);   //!< Performs a deep copy
+    DEFAULT_COPY(Rect);          //!< Performs a deep copy
+    DEFAULT_COPY_ASSIGN(Rect);   //!< Performs a deep copy
+    DEFAULT_MOVE(Rect);          //!< Performs a deep copy
 
-    
     ///////////////////////////////////////////////////////////////////////////////
     // Rect::~Rect 
-    //! Virtual d-tor
+    //! Non-Virtual d-tor
     ///////////////////////////////////////////////////////////////////////////////
-    /*virtual ~Rect()
-    {};*/
+    ~Rect()
+    {}
 
     // ------------------------- STATIC ---------------------------
   
     // ------------------------ ACCESSORS -------------------------
-    
+  public:
     ///////////////////////////////////////////////////////////////////////////////
     // Rect::centre const
     //! Query rectangle mid point
@@ -480,14 +479,28 @@ namespace wtl
 
     ///////////////////////////////////////////////////////////////////////////////
     // Rect::operator+ const
-    //! Create new rectangle offset by horizontal and vertical units
+    //! Create new rectangle from adding a horizontal and vertical offset 
     //! 
-    //! \return rect_t - New instance shifted by 'x' horizontal units, and 'y' vertical units
+    //! \param[in] const& pt - Offset
+    //! \return rect_t - New instance added by 'x' horizontal units, and 'y' vertical units
     ///////////////////////////////////////////////////////////////////////////////
     rect_t  operator+ (const point_t&  pt) const
     {
       return rect_t(left + static_cast<value_t>(pt.x),  top + static_cast<value_t>(pt.y),
                     right + static_cast<value_t>(pt.x), bottom + static_cast<value_t>(pt.y));
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Rect::operator- const
+    //! Create new rectangle from subtracting a horizontal and vertical offset 
+    //! 
+    //! \param[in] const& pt - Offset
+    //! \return rect_t - New instance subtracted by 'x' horizontal units, and 'y' vertical units
+    ///////////////////////////////////////////////////////////////////////////////
+    rect_t  operator- (const point_t&  pt) const
+    {
+      return rect_t(left - static_cast<value_t>(pt.x),  top - static_cast<value_t>(pt.y),
+                    right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
     }
     
     // ------------------------- MUTATORS -------------------------
@@ -506,6 +519,30 @@ namespace wtl
       right  = topLeft.x + size.width;
       top    = topLeft.y;
       bottom = topLeft.y + size.height;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Rect::operator +=
+    //! Add a horizontal and vertical offset 
+    //! 
+    //! \param[in] const& pt - Offset
+    //! \return rect_t& - Reference to self at updated position
+    ///////////////////////////////////////////////////////////////////////////////
+    rect_t&  operator += (const point_t&  pt) 
+    {
+      return *this = *this + pt;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Rect::operator -=
+    //! Subtract a horizontal and vertical offset 
+    //! 
+    //! \param[in] const& pt - Offset
+    //! \return rect_t& - Reference to self at updated position
+    ///////////////////////////////////////////////////////////////////////////////
+    rect_t&  operator -= (const point_t&  pt) 
+    {
+      return *this = *this - pt;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
