@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\commands\PasteClipboardCommand.hpp
-//! \brief Encapsulates the 'paste text' Gui Command
+//! \file wtl\windows\commands\CutClipboardCommand.hpp
+//! \brief Encapsulates the 'cut text' command
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_PASTE_CLIPBOARD_HPP
-#define WTL_PASTE_CLIPBOARD_HPP
+#ifndef WTL_CUT_CLIPBOARD_HPP
+#define WTL_CUT_CLIPBOARD_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -15,12 +15,12 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct PasteClipboardCommand - Encapsulates pasting text to the control with input focus
+  //! \struct CutClipboardCommand - Encapsulates 'Cutting' text from the control with input focus
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct PasteClipboardCommand : GuiCommand<ENC>
+  struct CutClipboardCommand : GuiCommand<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
@@ -43,14 +43,14 @@ namespace wtl
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::PasteClipboardCommand
+    // CutClipboardCommand::CutClipboardCommand
     //! Create command
     ///////////////////////////////////////////////////////////////////////////////
-    PasteClipboardCommand()  
-      : base(CommandId::Edit_Paste, [this] () { if (TargetWnd = window_t::getFocus())
-                                                  TargetWnd->setText(c_arr("TODO: Paste text from clipboard")); },
-                                    [this] () { if (TargetWnd)
-                                                  TargetWnd->setText(c_arr("TODO: Restore previous text")); })
+    CutClipboardCommand()  
+      : base(CommandId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
+                                                TargetWnd->setText(c_arr("TODO: Cut text to clipboard")); },
+                                  [this] () { if (TargetWnd)
+                                                TargetWnd->setText(c_arr("TODO: Restore previous text")); })
     {}
     
     // ---------------------- ACCESSORS ------------------------			
@@ -58,25 +58,25 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
     
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::clone const
+    // CutClipboardCommand::clone const
     //! Create a new instance of the command
     //! 
     //! \return interface_t* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
     typename base::interface_t*  clone() const 
     {
-      return new PasteClipboardCommand(*this);
+      return new CutClipboardCommand(*this);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::state const
+    // CutClipboardCommand::state const
     //! Query the current state of the command 
     //! 
     //! \return CommandState - Current state of command
     ///////////////////////////////////////////////////////////////////////////////
     CommandState state() const override
     {
-      // Always enabled
+      // TODO: Query window text selection
       return CommandState::Enabled;
     }
     
@@ -87,4 +87,4 @@ namespace wtl
 
 }
 
-#endif // WTL_PASTE_CLIPBOARD_HPP
+#endif // WTL_CUT_CLIPBOARD_HPP

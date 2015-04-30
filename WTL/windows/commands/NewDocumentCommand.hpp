@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\commands\PasteClipboardCommand.hpp
-//! \brief Encapsulates the 'paste text' Gui Command
+//! \file wtl\windows\commands\NewDocumentCommand.hpp
+//! \brief Encapsulates the 'New Document' Gui Command
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_PASTE_CLIPBOARD_HPP
-#define WTL_PASTE_CLIPBOARD_HPP
+#ifndef WTL_NEW_DOCUMENT_HPP
+#define WTL_NEW_DOCUMENT_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -15,12 +15,12 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct PasteClipboardCommand - Encapsulates pasting text to the control with input focus
+  //! \struct NewDocumentCommand - Encapsulates displaying the 'New Document' dialog
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct PasteClipboardCommand : GuiCommand<ENC>
+  struct NewDocumentCommand : GuiCommand<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
@@ -37,20 +37,17 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
     // -------------------- REPRESENTATION ---------------------
-  protected:
-    window_t*  TargetWnd;       //!< Destination window
-
+  
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::PasteClipboardCommand
+    // NewDocumentCommand::NewDocumentCommand
     //! Create command
+    //! 
+    //! \param[in] appWnd - Main application window
     ///////////////////////////////////////////////////////////////////////////////
-    PasteClipboardCommand()  
-      : base(CommandId::Edit_Paste, [this] () { if (TargetWnd = window_t::getFocus())
-                                                  TargetWnd->setText(c_arr("TODO: Paste text from clipboard")); },
-                                    [this] () { if (TargetWnd)
-                                                  TargetWnd->setText(c_arr("TODO: Restore previous text")); })
+    NewDocumentCommand(window_t& appWnd)  
+      : base(CommandId::File_New, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
     {}
     
     // ---------------------- ACCESSORS ------------------------			
@@ -58,18 +55,18 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
     
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::clone const
+    // NewDocumentCommand::clone const
     //! Create a new instance of the command
     //! 
     //! \return interface_t* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
     typename base::interface_t*  clone() const 
     {
-      return new PasteClipboardCommand(*this);
+      return new NewDocumentCommand(*this);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::state const
+    // NewDocumentCommand::state const
     //! Query the current state of the command 
     //! 
     //! \return CommandState - Current state of command
@@ -87,4 +84,4 @@ namespace wtl
 
 }
 
-#endif // WTL_PASTE_CLIPBOARD_HPP
+#endif // WTL_NEW_DOCUMENT_HPP

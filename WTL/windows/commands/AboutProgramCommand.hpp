@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\commands\PasteClipboardCommand.hpp
-//! \brief Encapsulates the 'paste text' Gui Command
+//! \file wtl\windows\commands\AboutProgramCommand.hpp
+//! \brief Encapsulates the 'About dialog' Gui Command
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -15,12 +15,12 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct PasteClipboardCommand - Encapsulates pasting text to the control with input focus
+  //! \struct AboutProgramCommand - Encapsulates displaying the 'About' dialog
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct PasteClipboardCommand : GuiCommand<ENC>
+  struct AboutProgramCommand : GuiCommand<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
@@ -37,20 +37,17 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
     // -------------------- REPRESENTATION ---------------------
-  protected:
-    window_t*  TargetWnd;       //!< Destination window
-
+  
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::PasteClipboardCommand
+    // AboutProgramCommand::AboutProgramCommand
     //! Create command
+    //! 
+    //! \param[in] appWnd - Main application window
     ///////////////////////////////////////////////////////////////////////////////
-    PasteClipboardCommand()  
-      : base(CommandId::Edit_Paste, [this] () { if (TargetWnd = window_t::getFocus())
-                                                  TargetWnd->setText(c_arr("TODO: Paste text from clipboard")); },
-                                    [this] () { if (TargetWnd)
-                                                  TargetWnd->setText(c_arr("TODO: Restore previous text")); })
+    AboutProgramCommand(window_t& appWnd)  
+      : base(CommandId::App_About, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
     {}
     
     // ---------------------- ACCESSORS ------------------------			
@@ -58,18 +55,18 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
     
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::clone const
+    // AboutProgramCommand::clone const
     //! Create a new instance of the command
     //! 
     //! \return interface_t* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
     typename base::interface_t*  clone() const 
     {
-      return new PasteClipboardCommand(*this);
+      return new AboutProgramCommand(*this);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // PasteClipboardCommand::state const
+    // AboutProgramCommand::state const
     //! Query the current state of the command 
     //! 
     //! \return CommandState - Current state of command

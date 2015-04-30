@@ -24,12 +24,15 @@ namespace wtl
   {
     // ------------------- TYPES & CONSTANTS -------------------
 
-    //! \typedef base - Define base type
+    //! \alias base - Define base type
     using base = GuiCommand<ENC>;
+
+    //! \alias window_t - Define window base type
+    using window_t = WindowBase<ENC>;
 
     // -------------------- REPRESENTATION ---------------------
   protected:
-    WindowBase<ENC>&  AppWnd;
+    window_t&  AppWnd;        //!< Application window
 
     // --------------------- CONSTRUCTION ----------------------
   public:
@@ -39,8 +42,8 @@ namespace wtl
     //! 
     //! \param[in] appWnd - Main application window
     ///////////////////////////////////////////////////////////////////////////////
-    ExitProgramCommand(WindowBase<ENC>& appWnd) 
-      : base(CommandId::APP_EXIT, [&appWnd] () { appWnd.post<WindowMessage::CLOSE>(); } ),
+    ExitProgramCommand(window_t& appWnd) 
+      : base(CommandId::App_Exit, [&appWnd] () { appWnd.post<WindowMessage::CLOSE>(); } ),
         AppWnd(appWnd)
     {}
     
