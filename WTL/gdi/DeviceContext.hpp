@@ -433,10 +433,29 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to draw text
     ///////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
-    int32 write(const CharArray<ENC,LEN>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::SingleLine|DrawTextFlags::VCentre)
+    int32 write(const CharArray<ENC,LEN>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, LEN, rc, enum_cast(flags)))
+      return write<ENC>(txt, txt.size(), rc, flags);
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::write
+    //! Writes text into a rectangle
+    //! 
+    //! \param[in] txt - Text
+    //! \param[in] rc - Drawing rectangle
+    //! \param[in] flags - Drawing flags
+    //! \return int32 - Height of the text in logical units iff successful. (If DT_VCENTER or DT_BOTTOM is specified then the offset from lpRect->top to the bottom of the drawn text)
+    //!                 Zero upon failure.
+    //!
+    //! \throw wtl::platform_error - Unable to draw text
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    int32 write(const encoding_char_t<ENC>* txt, int32 len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
+    {
+      // Draw text
+      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, rc, enum_cast(flags)))
         return height;
 
       // Failure
