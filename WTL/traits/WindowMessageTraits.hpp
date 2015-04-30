@@ -13,8 +13,6 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  
   //! \enum WindowMessage - Windows message identifiers
   enum class WindowMessage : uint16
   {
@@ -339,24 +337,28 @@ namespace wtl
     MsgResult(MsgRoute route, RESULT res = -1) noexcept : Route(route), Result(res)
     {}
     
-    MsgRoute  Route;        //!< 
-    RESULT    Result;       //!< 
+    MsgRoute  Route;        //!< Message routing
+    RESULT    Result;       //!< Message result
   };
 
   //! \alias LResult - Default window message return type
   using LResult = MsgResult<LRESULT>;
   
 
-  
+  ///////////////////////////////////////////////////////////////////////////////
   //! \struct unhandled - Encapsulates unhandled message results
+  //! 
+  //! \tparam WM - Window message
+  ///////////////////////////////////////////////////////////////////////////////
   template <WindowMessage WM> 
   struct unhandled
   {
-    static const LResult value;   //(MsgRoute::Unhandled, unhandled_result<M>::value);
+    //! \var value - 'Unhandled' window message sentinel result 
+    static const LResult value;  
   };
 
   
-  //! \struct unhandled - Encapsulates unhandled message results
+  //! \var unhandled<WM>::value - 'Unhandled' window message sentinel result 
   template <WindowMessage WM> 
   const LResult  unhandled<WM>::value = LResult(MsgRoute::Unhandled, unhandled_result<WM>::value);
   

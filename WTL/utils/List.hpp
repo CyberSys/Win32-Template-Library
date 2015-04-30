@@ -13,7 +13,7 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \enum LinkedListType - Define linked list types
+  //! \enum ListType - Define linked list types
   enum class ListType { Single, Double };
 
   ///////////////////////////////////////////////////////////////////////////////
