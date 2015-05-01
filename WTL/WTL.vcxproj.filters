@@ -407,6 +407,15 @@
     <ClInclude Include="windows\events\ActionEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
+    <ClInclude Include="windows\events\CtrlCommandEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\CtrlNotifyEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\Property.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Traits.cpp">

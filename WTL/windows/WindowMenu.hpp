@@ -64,8 +64,8 @@ namespace wtl
       // Populate
       this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::FType);
       this->fType      = enum_cast(MenuItemType::String|MenuItemType::OwnerDraw);
-      this->dwTypeData = (char_t*)cmd.name();
-      this->cch        = strlen_t(cmd.name());
+      this->dwTypeData = const_cast<char_t*>( cmd.name().c_str() );
+      this->cch        = cmd.name().size();
       this->wID        = enum_cast(cmd.ident());
       this->fState     = enum_cast(toState(cmd.state()));
       this->dwItemData = opaque_cast(cmd);
@@ -85,14 +85,19 @@ namespace wtl
       // Populate
       this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::FType|MenuItemFlag::SubMenu);
       this->fType      = enum_cast(MenuItemType::String|MenuItemType::OwnerDraw);
-      this->dwTypeData = (char_t*)group.name();
-      this->cch        = strlen_t(group.name());
+      this->dwTypeData = const_cast<char_t*>( group.name().c_str() );
+      this->cch        = group.name().size();
       this->wID        = enum_cast(group.ident());
       this->fState     = enum_cast(MenuItemState::Enabled);
       this->dwItemData = opaque_cast(group);
       this->hSubMenu   = popup;
     }
 
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // MenuItemInfo::~MenuItemInfo
+    //! Virtual d-tor
+    ///////////////////////////////////////////////////////////////////////////////
     virtual ~MenuItemInfo()
     {}
     
@@ -157,7 +162,9 @@ namespace wtl
     
     // -------------------- REPRESENTATION ---------------------
   public:
-    OwnerDrawEvent<encoding>   OwnerDraw;     //!< 'Owner draw' event 
+    OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< 'Owner draw' event 
+    OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< 'Owner Measure' event 
+    ActionGroupPtr<encoding>          Group;            //!< Shared Action group
 
   protected:
     HMenu         Handle;     //!< Menu handle
@@ -171,13 +178,15 @@ namespace wtl
     //!
     //! \param[in] const& group - Action group
     ///////////////////////////////////////////////////////////////////////////////
-    PopupMenu(const ActionGroup<ENC>& group) : Handle(MenuType::Popup) 
+    PopupMenu(const ActionGroupPtr<encoding>& group) : Handle(MenuType::Popup), 
+                                                       Group(group)
     {
       // Owner draw handler
-      OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &PopupMenu::onOwnerDraw);
+      /*OwnerDraw += new OwnerDrawMenuEventHandler<encoding>(this, &PopupMenu::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureMenuEventHandler<encoding>(this, &PopupMenu::onOwnerMeasure);*/
 
       // Insert items from group
-      for (auto& cmd : group)
+      for (auto& cmd : *Group)
         *this += cmd.second;
     }
 
@@ -242,31 +251,17 @@ namespace wtl
     //! Searches for an Action 
     //! 
     //! \param[in] id - Action Id
-    //! \return const_iterator - Position of action, if found, otherwise 'end'
+    //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
     ///////////////////////////////////////////////////////////////////////////////
-    const_iterator find(CommandId id) const
+    ActionPtr<encoding> find(CommandId id) const
     {
       // Lookup item
-      return Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // PopupMenu::operator[] const
-    //! Get an Action 
-    //! 
-    //! \param[in] id - Action Id
-    //!
-    //! \throw wtl::out_of_range - Action not found
-    ///////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding> operator[] (CommandId id) const
-    {
-      // Lookup item
-      auto pos = find(id);
-      if (pos != Items.cend())
+      auto pos = Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
+      if (pos != end())
         return *pos;
 
-      // [ERROR] Not found
-      throw out_of_range(HERE, "Action %d not found", enum_cast(id));
+      // [NOT FOUND] Return empty pointer
+      return ActionPtr<encoding>(nullptr);
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -325,33 +320,7 @@ namespace wtl
     }
 
   protected:
-    ///////////////////////////////////////////////////////////////////////////////
-    // PopupMenu::onOwnerDraw
-    //! Called in response to a reflected 'owner draw' message 
-    //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
-    { 
-      //CharArray<encoding,128> text;
-
-      // Draw background
-      args.Graphics.fill(args.Rect, wtl::StockBrush::Gold);
-
-      // Draw items
-      //for (auto& cmd : *this)
-      //{
-      //  // Draw text
-      //  args.Graphics.write<encoding>(cmd->name(), strlen_t(cmd->name()), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
-
-      //  // Advance rectangle
-      //  args.Rect += PointL(0, 18);
-      //}
-
-      // Handled
-      return 0;
-    }
+    
   };
 
 
@@ -381,11 +350,14 @@ namespace wtl
   protected:
     //! \alias collection_t - Define popup menu collection type
     using collection_t = List<popup_t>;
+
+    //! \alias const_iterator - Immutable popup iterator
+    using const_iterator = typename collection_t::const_iterator;
     
     // -------------------- REPRESENTATION ---------------------
   public:
-    OwnerDrawEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
-    OwnerMeasureEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
+    OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
+    OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
 
   protected:
     HMenu         Handle;     //!< Menu handle
@@ -400,8 +372,8 @@ namespace wtl
     WindowMenu() : Handle(MenuType::Window) 
     {
       // Owner draw handler
-      OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
-      OwnerMeasure += new OwnerMeasureEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
+      OwnerDraw += new OwnerDrawMenuEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureMenuEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
     }
 
     // ------------------------ STATIC -------------------------
@@ -409,25 +381,26 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowMenu::getGroup const
-    //! Get a command group 
+    // WindowMenu::begin const
+    //! Get read-only position of first popup menu
     //! 
-    //! \param[in] id - Command group Id
-    //! \return ActionGroup<encoding>* - Command group
-    //! 
-    //! \throw wtl::platform_error - Unable to find command group
+    //! \return const_iterator - Position of first popup menu
     ///////////////////////////////////////////////////////////////////////////////
-    //ActionGroup<encoding>* getGroup(CommandGroupId id) const
-    //{
-    //  MenuItemInfo<encoding> info;
-    //  
-    //  // Query item data
-    //  if (!getFunc<encoding>(::GetMenuItemInfoA,GetMenuItemInfoW)(Handle, enum_cast(id), FALSE, &info))
-    //    throw platform_error(HERE, "Unable to query menu item");
+    const_iterator  begin() const
+    {
+      return Popups.cbegin();
+    }
 
-    //  // Extract command
-    //  return opaque_cast<ActionGroup<encoding>>(info.dwItemData);
-    //}
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowMenu::end const
+    //! Get read-only position of last popup menu
+    //! 
+    //! \return const_iterator - Position of last popup menu
+    ///////////////////////////////////////////////////////////////////////////////
+    const_iterator  end() const
+    {
+      return Popups.cend();
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // WindowMenu::handle const
@@ -474,35 +447,36 @@ namespace wtl
     // WindowMenu::find const
     //! Searches for an Action 
     //! 
-    //! \param[in] id - Action Id
-    //! \return const_iterator - Position of action, if found, otherwise 'end'
+    //! \param[in] id - Action id
+    //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
     ///////////////////////////////////////////////////////////////////////////////
-    //typename popup_t::const_iterator find(CommandId id) const
-    //{
-    //  // Lookup item
-    //  return Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
-    //}
+    ActionPtr<encoding> find(CommandId id) const
+    {
+      // Search popups for a matching action
+      for (auto& popup : Popups)
+        if (auto cmd = popup.find(id))
+          return cmd;
+      
+      // [NOT FOUND] Return empty pointer
+      return ActionPtr<encoding>(nullptr);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowMenu::operator[] const
-    //! Search all popup menus for an action
+    // WindowMenu::find const
+    //! Searches for an Action group
     //! 
-    //! \param[in] id - Action Id
-    //! \return ActionPtr<encoding> - Shared action pointer
+    //! \param[in] id - Group id
+    //! \return ActionGroupPtr<encoding> - Shared group pointer, possibly empty
     ///////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding> operator[] (CommandId id) const
+    ActionGroupPtr<encoding> find(CommandGroupId id) const
     {
-      // Search all popups
-      for (auto& popup : Popups)
-      {
-        // Find & return action
-        auto cmd = popup.find(id);
-        if (cmd != popup.end())
-          return *cmd;
-      }
-      
-      // [ERROR] Not found
-      throw out_of_range(HERE, "Action %d not found", enum_cast(id));
+      // Search for matching popup
+      auto pos = Popups.find_if([id] (const popup_t& popup) { return popup.Group->ident() == id; });
+      if (pos != end())
+        return pos->Group;
+
+      // [NOT FOUND] Return empty pointer
+      return ActionGroupPtr<encoding>(nullptr);
     }
 
     // ----------------------- MUTATORS ------------------------
@@ -522,7 +496,7 @@ namespace wtl
       REQUIRED_PARAM(group);
 
       // Insert new Popup menu into collection and extract its handle
-      auto popup = Popups.emplace(Popups.at(idx), *group);
+      auto popup = Popups.emplace(Popups.at(idx), group);
 
       MenuItemInfo<encoding> item(*group, popup->handle());     //!< Generate pop-up menu item 
 
@@ -555,16 +529,18 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawMenuEventArgs<encoding>& args) 
     { 
-      // Lookup action 
-      auto action = operator[](args.Ident);
-
       // Draw background
-      args.Graphics.fill(args.Rect, wtl::StockBrush::Gold);
+      args.Graphics.fill(args.Rect, wtl::StockBrush::Blue);
 
-      // Draw text
-      //args.Graphics.write(text, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      // [GROUP] Draw name
+      if (auto group = find(command_group_id(args.Ident)))
+        args.Graphics.write(group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+
+      // [ACTION] Draw name
+      else if (auto action = find(command_id(args.Ident)))
+        args.Graphics.write(action->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
       return 0;
@@ -577,14 +553,16 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
-      // Lookup action 
-      auto action = operator[](args.Ident.Action);
+      // [GROUP] Measure group name
+      if (auto group = find(command_group_id(args.Ident)))
+        args.Size = args.Graphics.measure(group->name());
 
-      // Measure text
-      args.Size = args.Graphics.measure(action->name());
-
+      // [ACTION] Measure action name
+      else if (auto action = find(command_id(args.Ident)))
+        args.Size = args.Graphics.measure(action->name());
+        
       // Handled
       return 0;
     }

@@ -196,6 +196,8 @@
 #include "windows/events/OwnerDrawEvent.hpp"
 #include "windows/events/OwnerMeasureEvent.hpp"
 #include "windows/events/ActionEvent.hpp"
+#include "windows/events/CtrlCommandEvent.hpp"
+#include "windows/events/CtrlNotifyEvent.hpp"
 #include "windows/events/StandardControls.hpp"
 
 // Commands

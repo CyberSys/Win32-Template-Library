@@ -14,7 +14,123 @@
 namespace wtl
 {
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM'
+  //! \struct ControlEventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised from controls
+  //! 
+  //! \tparam ENC - Message character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  struct ControlEventArgs<ENC,WindowMessage::DRAWITEM,uint16,zero<uint16>::value>
+  {  
+    // ------------------- TYPES & CONSTANTS -------------------
+  
+    //! \alias char_t - Define character type
+    using char_t = encoding_char_t<ENC>;
+
+    //! \alias resource_t - Define resource id type
+    using resource_t = ResourceId<ENC>;
+
+    //! \alias PaintData - Define paint data type
+    using PaintData = ::DRAWITEMSTRUCT;
+    
+    //! \var encoding - Define character encoding
+    static constexpr Encoding encoding = ENC;
+    
+    //! \var message - Define message identifier
+    static constexpr WindowMessage message = WindowMessage::DRAWITEM;
+    
+    // -------------------- REPRESENTATION ---------------------
+  protected:
+    PaintData&        Data;             //!< Encapsulates the input paint data (NB: Must be initialized before following fields)
+
+  public:
+    OwnerDrawAction   Action;           //!< Type of drawing requested
+    OwnerDrawControl  CtrlType;         //!< Control type
+    DeviceContext     Graphics;         //!< Device context clipped to non-client area 
+    WindowId          Ident;            //!< Control id
+    int32             Item;             //!< Zero-based item index
+    RectL             Rect;             //!< Drawing/update rectangle
+    HWnd              Sender;           //!< Control handle
+
+    // --------------------- CONSTRUCTION ----------------------
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // ControlEventArgs<DRAWITEM>::ControlEventArgs
+    //! Creates arguments for 'OwnerDraw' event from controls (ie. WM_DRAWITEM)
+    //! 
+    //! \param[in] w - Originator window id
+    //! \param[in] l - Paint data
+    //! 
+    //! \throw wtl::invalid_argument - [Debug only] Event is not for a control
+    ///////////////////////////////////////////////////////////////////////////////
+    ControlEventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
+                                               Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
+                                               CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType)), 
+                                               Graphics(Data.hDC),
+                                               Rect(Data.rcItem),
+                                               Item(Data.itemID), 
+                                               Ident(static_cast<WindowId>(Data.CtlID)), 
+                                               Sender(Data.hwndItem, AllocType::WeakRef)
+    {
+      PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // ControlEventArgs::~ControlEventArgs
+    //! Virtual d-tor
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual ~ControlEventArgs()
+    {}
+    
+    // ------------------------ STATIC -------------------------
+
+    // ---------------------- ACCESSORS ------------------------			
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // ControlEventArgs<DRAWITEM>::reflect const
+    //! Reflects the event back to the originator control
+    //! 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    LResult reflect() const
+    {
+      // Reflect message
+      return send_message<encoding,message+WindowMessage::REFLECT>(Sender, opaque_cast(Ident), opaque_cast(Data));
+    }
+    
+    // ----------------------- MUTATORS ------------------------
+  };
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerDrawCtrlEvent - Defines 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
+  //! 
+  //! \tparam ENC - Window character encoding
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerDrawCtrlEvent = ControlEvent<ENC, WindowMessage::DRAWITEM>;
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerDrawCtrlEventArgs - Arguments for 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
+  //! 
+  //! \tparam ENC - Message character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerDrawCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::DRAWITEM>;
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerDrawCtrlEventHandler - Handler for 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
+  //! 
+  //! \tparam ENC - Window character encoding
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerDrawCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::DRAWITEM>;
+
+
+
+
+
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \struct EventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised for menus
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
@@ -43,34 +159,32 @@ namespace wtl
     PaintData&        Data;             //!< Encapsulates the input paint data (NB: Must be initialized before following fields)
 
   public:
-    DeviceContext     Graphics;         //!< Device context clipped to non-client area 
-    RectL             Rect;             //!< Drawing/update rectangle
-    int32             Item;             //!< Zero-based item index
-    WindowId          Ident;            //!< Control id
     OwnerDrawAction   Action;           //!< Type of drawing requested
-    OwnerDrawControl  CtrlType;         //!< Control type
-    HWnd              Ctrl;             //!< [CONTROL] Control handle
-    HMenu             Menu;             //!< [MENU]    Menu handle
+    DeviceContext     Graphics;         //!< Device context clipped to menu area 
+    CommandId         Ident;            //!< Action id
+    RectL             Rect;             //!< Drawing/update rectangle
+    HMenu             Menu;             //!< Control handle
 
     // --------------------- CONSTRUCTION ----------------------
 
     ///////////////////////////////////////////////////////////////////////////////
     // EventArgs<DRAWITEM>::EventArgs
-    //! Creates arguments for 'OwnerDraw' Event (ie. WM_DRAWITEM)
+    //! Creates arguments for 'OwnerDraw' event from controls (ie. WM_DRAWITEM)
     //! 
-    //! \param[in] w - Not used
-    //! \param[in] l - Not used
+    //! \param[in] w - Originator window id
+    //! \param[in] l - Paint data
+    //! 
+    //! \throw wtl::invalid_argument - [Debug only] Event is not for a menu
     ///////////////////////////////////////////////////////////////////////////////
     EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
-                                        Graphics(Data.hDC),
-                                        Rect(Data.rcItem),
-                                        Item(Data.itemID), 
-                                        Ident(static_cast<WindowId>(Data.CtlID)), 
                                         Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
-                                        CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType)), 
-                                        Ctrl(CtrlType != OwnerDrawControl::Menu ? Data.hwndItem : handle_alloc<::HWND>::npos, AllocType::WeakRef), 
-                                        Menu(CtrlType == OwnerDrawControl::Menu ? (HMENU)Data.hwndItem : handle_alloc<::HMENU>::npos, AllocType::WeakRef)
-    {}
+                                        Graphics(Data.hDC),
+                                        Ident(static_cast<CommandId>(Data.itemID)), 
+                                        Menu((::HMENU)Data.hwndItem, AllocType::WeakRef),
+                                        Rect(Data.rcItem)
+    {
+      PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) == OwnerDrawControl::Menu);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // EventArgs::~EventArgs
@@ -83,45 +197,32 @@ namespace wtl
 
     // ---------------------- ACCESSORS ------------------------			
     
-    ///////////////////////////////////////////////////////////////////////////////
-    // EventArgs<DRAWITEM>::reflect const
-    //! Reflects the event back to the originator control
-    //! 
-    //! \return LResult - Message result and routing
-    ///////////////////////////////////////////////////////////////////////////////
-    LResult reflect() const
-    {
-      // Reflect message
-      return send_message<encoding,message+WindowMessage::REFLECT>(Ctrl, opaque_cast(Ident), opaque_cast(Data));
-    }
-    
     // ----------------------- MUTATORS ------------------------
   };
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawEvent - Defines 'OwnerDraw' event (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawMenuEvent - Defines 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawEvent = MessageEvent<ENC, WindowMessage::DRAWITEM>;
+  using OwnerDrawMenuEvent = MessageEvent<ENC, WindowMessage::DRAWITEM>;
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawEventArgs - Arguments for 'OwnerDraw' Event (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawMenuEventArgs - Arguments for 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawEventArgs = EventArgs<ENC,WindowMessage::DRAWITEM>;
+  using OwnerDrawMenuEventArgs = EventArgs<ENC,WindowMessage::DRAWITEM>;
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawEventHandler - Handler for 'OwnerDraw' event (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawMenuEventHandler - Handler for 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawEventHandler = typename OwnerDrawEvent<ENC>::delegate_t;
-
+  using OwnerDrawMenuEventHandler = EventHandler<ENC,WindowMessage::DRAWITEM>;
 }
 
 #endif // WTL_OWNER_DRAW_EVENT_HPP

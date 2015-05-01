@@ -110,6 +110,8 @@
     <ClInclude Include="windows\event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
     <ClInclude Include="windows\events\ActionEvent.hpp" />
+    <ClInclude Include="windows\events\CtrlCommandEvent.hpp" />
+    <ClInclude Include="windows\events\CtrlNotifyEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\OwnerMeasureEvent.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
@@ -124,6 +126,7 @@
     <ClInclude Include="windows\ActionQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageEvent.hpp" />
+    <ClInclude Include="windows\Property.hpp" />
     <ClInclude Include="windows\skins\SkinFactory.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />

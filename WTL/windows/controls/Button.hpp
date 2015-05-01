@@ -35,8 +35,8 @@ namespace wtl
     ButtonClickEvent<encoding>        Click;         //!< Button click
     ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
     ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
-    OwnerDrawEvent<encoding>          OwnerDraw;     //!< Owner draw button
-    OwnerMeasureEvent<encoding>       OwnerMeasure;  //!< Measure button for owner draw
+    OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
+    OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
     // --------------------- CONSTRUCTION ----------------------
@@ -55,8 +55,8 @@ namespace wtl
       this->Paint.clear();
 
       // Owner draw handler
-      OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &Button::onOwnerDraw);
-      OwnerMeasure += new OwnerMeasureEventHandler<encoding>(this, &Button::onOwnerMeasure);
+      OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
       // Subclass prior to creation
       SubClasses.push_back(SubClass(WindowType::Native, getSystemWndProc()));
@@ -156,8 +156,9 @@ namespace wtl
           }
           break;
 
-        // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw'
-        case WindowMessage::REFLECT_DRAWITEM:  ret = OwnerDraw.raise(OwnerDrawEventArgs<encoding>(w,l));          break;
+        // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' or 'Owner Measure'
+        case WindowMessage::REFLECT_DRAWITEM:     ret = OwnerDraw.raise(OwnerDrawCtrlEventArgs<encoding>(w,l));                      break;
+        case WindowMessage::REFLECT_MEASUREITEM:  ret = OwnerMeasure.raise(OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l));   break;
         }
 
         // [UNHANDLED] Return result & routing
@@ -210,7 +211,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       // Draw background
       args.Graphics.fill(args.Rect, wtl::StockBrush::Green);
@@ -226,7 +227,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
       //CharArray<encoding,128> text;
 

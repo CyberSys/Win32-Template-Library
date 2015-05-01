@@ -370,18 +370,19 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::getData
+    // WindowBase::data const
     //! Get window data
     //! 
     //! \param[in] atom - Registered class atom
     //! \param[in] instance - Associated instance handle
+    //! \return DATA* - Mutable window data pointer
     //! 
     //! \throw wtl::platform_error - Unrecognised window class name
     ///////////////////////////////////////////////////////////////////////////////
     template <typename DATA>
-    DATA* getData() const
+    DATA* data() const
     {
-      return getFunc<char_t>(::GetWindowLongPtrA,::GetWindowLongPtrW)(Handle.get(), GWLP_USERDATA);
+      return reinterpret_cast<DATA*>( getFunc<char_t>(::GetWindowLongPtrA,::GetWindowLongPtrW)(Handle.get(), GWLP_USERDATA) );
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -392,18 +393,18 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     bool exists() const
     {
-      return handle() != nullptr;
+      return Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::handle const
-    //! Get the native window handle 
+    //! Get the shared window handle 
     //! 
-    //! \return ::HWND - Native handle
+    //! \return const HWnd& - Shared window handle
     ///////////////////////////////////////////////////////////////////////////////
-    ::HWND handle() const
+    const HWnd& handle() const
     {
-      return this ? Handle.get() : nullptr;
+      return Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -529,13 +530,15 @@ namespace wtl
 
       try
       {
+        HWnd hParent(parent ? parent->handle() : HWnd::npos);     //!< Parent window
+
         // Create menu
         Menu.create();
-
+        
         // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), nullptr); // Menu->handle());
+        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, hParent, nullptr); // Menu->handle());
 
-        // Display menu
+        // Attach/Display menu
         ::SetMenu(Handle, Menu->handle());
       }
       catch (platform_error& e)
@@ -714,33 +717,25 @@ namespace wtl
 
         // [OWNER-DRAW] Reflect to sender
         case WindowMessage::DRAWITEM:       
-        {
-          OwnerDrawEventArgs<encoding> args(w,l);
-          
-          // [CONTROL] Reflect to originator
-          if (args.CtrlType != OwnerDrawControl::Menu)
-            ret = args.reflect();
+          // [CONTROL] Reflect to originator control
+          if (w != 0)
+            ret = OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
 
-          // [MENU] Raise associated menu event
+          // [MENU] Raise menu's OwnerDraw event
           else if (Menu.exists())
-            ret = Menu->OwnerDraw.raise(args);
+            ret = Menu->OwnerDraw.raise(OwnerDrawMenuEventArgs<encoding>(w,l));
           break;
-        }
         
         // [OWNER-MEASURE] Reflect to sender
         case WindowMessage::MEASUREITEM: 
-        {
-          OwnerMeasureEventArgs<encoding> args(Handle,w,l);
-          
           // [CONTROL] Reflect to originator
-          if (args.CtrlType != OwnerDrawControl::Menu)
-            ret = args.reflect(find(args.Ident).Handle);
+          if (w != 0)
+            ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(),w,l).reflect();
 
           // [MENU] Raise associated menu event
           else if (Menu.exists())
-            ret = Menu->OwnerMeasure.raise(args);
+            ret = Menu->OwnerMeasure.raise(OwnerMeasureMenuEventArgs<encoding>(Handle,w,l));
           break;
-        }
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
         case WindowMessage::PAINT:          

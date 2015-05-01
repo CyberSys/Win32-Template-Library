@@ -275,10 +275,11 @@ namespace wtl
     PENWINFIRST = 0x0380,					              //!< 
     PENWINLAST = 0x038F,					              //!< 
 
-    REFLECT = 0x2000,					            		  //!< 
-    REFLECT_COMMAND = REFLECT + COMMAND,				//!< 
-    REFLECT_NOTIFY = REFLECT + NOTIFY,					//!< 
-    REFLECT_DRAWITEM = REFLECT + DRAWITEM,			//!< 
+    REFLECT = 0x2000,					            		  //!< [Custom] Reflection sentinel
+    REFLECT_COMMAND = REFLECT + COMMAND,				//!< [Custom] Reflected COMMAND
+    REFLECT_NOTIFY = REFLECT + NOTIFY,					//!< [Custom] Reflected NOTIFY
+    REFLECT_DRAWITEM = REFLECT + DRAWITEM,			//!< [Custom] Reflected DRAWITEM
+    REFLECT_MEASUREITEM = REFLECT + MEASUREITEM,//!< [Custom] Reflected MEASUREITEM
 
     APP = 0x8000,					            		      //!< 
   };
