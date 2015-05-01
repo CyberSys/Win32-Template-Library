@@ -20,12 +20,12 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct SaveDocumentCommand : GuiCommand<ENC>
+  struct SaveDocumentCommand : Action<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
     //! \alias base - Define base type
-    using base = GuiCommand<ENC>;
+    using base = Action<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -58,9 +58,9 @@ namespace wtl
     // SaveDocumentCommand::clone const
     //! Create a new instance of the command
     //! 
-    //! \return interface_t* - New instance of command
+    //! \return type* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
-    typename base::interface_t*  clone() const 
+    typename base::type*  clone() const 
     {
       return new SaveDocumentCommand(*this);
     }
@@ -69,12 +69,12 @@ namespace wtl
     // SaveDocumentCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return CommandState - Current state of command
+    //! \return ActionState - Current state of command
     ///////////////////////////////////////////////////////////////////////////////
-    CommandState state() const override
+    ActionState state() const override
     {
       // Always enabled
-      return CommandState::Enabled;
+      return ActionState::Enabled;
     }
     
     // ----------------------- MUTATORS ------------------------

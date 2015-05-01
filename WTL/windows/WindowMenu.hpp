@@ -28,6 +28,9 @@ namespace wtl
     //! \alias base - Define base type
     using base = getType_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>;
 
+    //! \alias type - Define own type
+    using type = MenuItemInfo<ENC>;
+
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
@@ -44,67 +47,71 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     MenuItemInfo()
     {
+      wtl::clear(static_cast<base&>(*this));
       this->cbSize = sizeof(base);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // MenuItemInfo::MenuItemInfo
-    //! Create menu item from Gui Command
+    //! Create menu item for an action
     //! 
-    //! \param[in] const* cmd - Gui command
+    //! \param[in] const& cmd - Action
     //! 
-    //! \throw wtl::invalid_argument - [Debug only] Missing command -or- [Always] Unsupported command state
+    //! \throw wtl::invalid_argument - Unsupported action state
     ///////////////////////////////////////////////////////////////////////////////
-    MenuItemInfo(const IGuiCommand<encoding>* cmd) : MenuItemInfo()
+    MenuItemInfo(const Action<encoding>& cmd) : MenuItemInfo()
     {
-      REQUIRED_PARAM(cmd);
-
       // Populate
-      this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::Type);
+      this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::FType);
       this->fType      = enum_cast(MenuItemType::String|MenuItemType::OwnerDraw);
-      this->dwTypeData = (char_t*)cmd->name();
-      this->wID        = enum_cast(cmd->ident());
-      this->fState     = enum_cast(toState(cmd->state()));
-      this->dwItemData = opaque_cast(*cmd);
+      this->dwTypeData = (char_t*)cmd.name();
+      this->cch        = strlen_t(cmd.name());
+      this->wID        = enum_cast(cmd.ident());
+      this->fState     = enum_cast(toState(cmd.state()));
+      this->dwItemData = opaque_cast(cmd);
     }
     
     ///////////////////////////////////////////////////////////////////////////////
     // MenuItemInfo::MenuItemInfo
-    //! Create pop-up menu item for Gui Command Group
+    //! Create pop-up menu item for an action group
     //! 
-    //! \param[in] const& group - Gui Command Group
+    //! \param[in] const& group - Action Group
     //! \param[in] const& popup - Popup menu handle
     //! 
-    //! \throw wtl::invalid_argument - [Debug only] Missing group -or- [Always] Unsupported state of command within group
+    //! \throw wtl::invalid_argument - Unsupported state of action within group
     ///////////////////////////////////////////////////////////////////////////////
-    MenuItemInfo(const GuiCommandGroup<encoding>& group, const HMenu& popup) : MenuItemInfo()
+    MenuItemInfo(const ActionGroup<encoding>& group, const HMenu& popup) : MenuItemInfo()
     {
-      REQUIRED_PARAM(group);
-
       // Populate
-      this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::Type|MenuItemFlag::SubMenu);
+      this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::FType|MenuItemFlag::SubMenu);
       this->fType      = enum_cast(MenuItemType::String|MenuItemType::OwnerDraw);
       this->dwTypeData = (char_t*)group.name();
+      this->cch        = strlen_t(group.name());
       this->wID        = enum_cast(group.ident());
       this->fState     = enum_cast(MenuItemState::Enabled);
       this->dwItemData = opaque_cast(group);
       this->hSubMenu   = popup;
     }
+
+    virtual ~MenuItemInfo()
+    {}
     
     // ------------------------ STATIC -------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
     // MenuItemInfo::toState
-    //! Get menu item state from Gui Command state
+    //! Get menu item state from an action state
     //! 
-    //! \param[in] s - Gui command state
+    //! \param[in] s - Action state
+    //! 
+    //! \throw wtl::invalid_argument - Unsupported state 
     ///////////////////////////////////////////////////////////////////////////////
-    static MenuItemState toState(CommandState s)
+    static MenuItemState toState(ActionState s)
     {
       switch (s)
       {
-      case CommandState::Enabled:   return MenuItemState::Enabled;
-      case CommandState::Disabled:  return MenuItemState::Disabled;
+      case ActionState::Enabled:   return MenuItemState::Enabled;
+      case ActionState::Disabled:  return MenuItemState::Disabled;
       }
 
       // Error: Unsupported
@@ -117,69 +124,58 @@ namespace wtl
 
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct PopupMenu - Encapsulates a window menu
+  //! \struct PopupMenu - Encapsulates a popup menu
   //! 
   //! \tparam ENC - Menu text character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct PopupMenu : List<shared_command_t<ENC>,ListType::Double>
+  struct PopupMenu 
   {
     // ------------------- TYPES & CONSTANTS -------------------
 
-    //! \alias base - Define base type
-    using base = List<shared_command_t<ENC>,ListType::Double>;
+    //! \alias type - Define own type
+    using type = PopupMenu<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias command_t - Define command type
-    //using command_t = IGuiCommand<ENC>;
-    
-    //! \alias cmdgroup_t - Define command group type
-    //using cmdgroup_t = IGuiCommandGroup<ENC>;
-
-    //! \alias item_t - Define item type
-    using item_t = MenuItemInfo<ENC>;
+    //! \alias iteminfo_t - Define item info type
+    using iteminfo_t = MenuItemInfo<ENC>;
     
     //! \alias type - Define own type
     using type = PopupMenu<ENC>;
 
     //! \var encoding - Define item text character encoding
     static constexpr Encoding  encoding = ENC;
+
+  protected:
+    //! \alias collection_t - Define collection type
+    using collection_t = std::list<ActionPtr<ENC>>;
     
     // -------------------- REPRESENTATION ---------------------
   public:
     OwnerDrawEvent<encoding>   OwnerDraw;     //!< 'Owner draw' event 
 
   protected:
-    HMenu      Handle;     //!< Menu handle
+    HMenu         Handle;     //!< Menu handle
+    collection_t  Items;      //!< Menu command items
     
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
     // PopupMenu::PopupMenu
-    //! Create menu with zero items
-    ///////////////////////////////////////////////////////////////////////////////
-    //PopupMenu() : Handle(MenuType::Popup) 
-    //{
-    //  // Owner draw handler
-    //  OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &PopupMenu::onOwnerDraw);
-    //}
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // PopupMenu::PopupMenu
-    //! Populate from group of Gui Commands
+    //! Populate from an Action Group
     //!
-    //! \param[in] const& group - Group of Gui Commands
+    //! \param[in] const& group - Action group
     ///////////////////////////////////////////////////////////////////////////////
-    PopupMenu(const GuiCommandGroup<ENC>& group) : Handle(MenuType::Popup) 
+    PopupMenu(const ActionGroup<ENC>& group) : Handle(MenuType::Popup) 
     {
       // Owner draw handler
       OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &PopupMenu::onOwnerDraw);
 
-      // Populate from group
+      // Insert items from group
       for (auto& cmd : group)
-        *this += *cmd;
+        *this += cmd.second;
     }
 
     // ------------------------ STATIC -------------------------
@@ -191,33 +187,31 @@ namespace wtl
     //! Get the gui command for an item
     //! 
     //! \param[in] id - Command Id
-    //! \return IGuiCommand<encoding>* - Gui Command
+    //! \return IAction<encoding>* - Gui Command
     //! 
     //! \throw wtl::platform_error - Unable to find command
     ///////////////////////////////////////////////////////////////////////////////
-    IGuiCommand<encoding>* getCommand(CommandId id) const
-    {
-      MenuItemInfo<encoding> info;
-      
-      // Query item data
-      if (!getFunc<ENC>(::GetMenuItemInfoA,GetMenuItemInfoW)(Handle, enum_cast(id), FALSE, &info))
-        throw platform_error(HERE, "Unable to query menu item");
+    //Action<encoding>* getCommand(CommandId id) const
+    //{
+    //  MenuItemInfo<encoding> info;
+    //  
+    //  // Query item data
+    //  if (!getFunc<encoding>(::GetMenuItemInfoA,GetMenuItemInfoW)(Handle, enum_cast(id), FALSE, &info))
+    //    throw platform_error(HERE, "Unable to query menu item");
 
-      // Extract command
-      return opaque_cast<IGuiCommand<encoding>>(info.dwItemData);
-    }
-
+    //  // Extract command
+    //  return opaque_cast<Action<encoding>>(info.dwItemData);
+    //}
+    
     ///////////////////////////////////////////////////////////////////////////////
     // PopupMenu::handle const
-    //! Get the native menu handle 
+    //! Get the shared menu handle 
     //! 
-    //! \return ::HMENU - Native handle
-    //! 
-    //! \remarks This method can be executed upon a nullptr
+    //! \return const HMenu& - Shared menu handle
     ///////////////////////////////////////////////////////////////////////////////
-    ::HMENU  handle() const
+    const HMenu& handle() const
     {
-      return this ? Handle.get() : nullptr;
+      return Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -225,6 +219,8 @@ namespace wtl
     //! Get the number of items
     //! 
     //! \return int32 - Number of items
+    //! 
+    //! \throw wtl::platform_error - Unable to query item count
     ///////////////////////////////////////////////////////////////////////////////
     int32  size() const
     {
@@ -245,46 +241,51 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     operator ::HMENU() const
     {
-      return handle();
+      return Handle;
     }
 
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
     // PopupMenu::insert
-    //! Inserts a Gui Command at a position
+    //! Inserts a Gui Action menu item at a position
     //! 
     //! \param[in] idx - Zero-based position 
-    //! \param[in] const* cmd - Gui command
+    //! \param[in] const& cmd - Gui Action
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing command
     //! \throw wtl::platform_error - Unable to insert menu item
     ///////////////////////////////////////////////////////////////////////////////
-    void insert(int32 idx, const IGuiCommand<encoding>* cmd)
+    void  insert(int32 idx, const ActionPtr<encoding>& cmd)
     {
       REQUIRED_PARAM(cmd);
 
-      MenuItemInfo<encoding> item(cmd);     //!< Generate Gui Command menu item
+      MenuItemInfo<encoding> item(*cmd);     //!< Generate Gui Command menu item
 
-      // Insert item at position
-      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, FALSE, &item))
+      // Insert item into menu
+      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, TRUE, &item))
         throw platform_error(HERE, "Unable to insert menu item");
 
-      // Insert into collection at position
-      base::emplace_back(cmd);
+      // Insert Action into collection 
+      auto pos = Items.begin();
+      std::advance(pos, idx);
+      Items.insert(pos, cmd);
     }
     
     ///////////////////////////////////////////////////////////////////////////////
     // PopupMenu::operator += 
-    //! Appends a Gui Command item 
+    //! Appends a Gui Action menu item 
     //! 
-    //! \param[in] const* cmd - Gui command
+    //! \param[in] const& cmd - Gui action
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing command
     //! \throw wtl::platform_error - Unable to insert menu item
     ///////////////////////////////////////////////////////////////////////////////
-    PopupMenu&  operator += (const IGuiCommand<encoding>* cmd)
+    PopupMenu&  operator += (const ActionPtr<encoding>& cmd)
     {
+      REQUIRED_PARAM(cmd);
+
+      // Append action to menu
       insert(size(), cmd);
       return *this;
     }
@@ -299,25 +300,24 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
     { 
-      CharArray<encoding,128> text;
+      //CharArray<encoding,128> text;
 
       // Draw background
       args.Graphics.fill(args.Rect, wtl::StockBrush::Gold);
 
       // Draw items
-      for (auto& cmd : *this)
-      {
-        // Draw text
-        args.Graphics.write<encoding>(cmd->name(), strlen_t(cmd->name()), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      //for (auto& cmd : *this)
+      //{
+      //  // Draw text
+      //  args.Graphics.write<encoding>(cmd->name(), strlen_t(cmd->name()), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
-        // Advance rectangle
-        args.Rect += PointL(0, 18);
-      }
+      //  // Advance rectangle
+      //  args.Rect += PointL(0, 18);
+      //}
 
       // Handled
       return 0;
     }
-
   };
 
 
@@ -328,39 +328,43 @@ namespace wtl
   //! \tparam ENC - Menu text character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowMenu : List<PopupMenu<ENC>,ListType::Double>
+  struct WindowMenu 
   {
     // ------------------- TYPES & CONSTANTS -------------------
-
-    //! \alias base - Define base type
-    using base = List<PopupMenu<ENC>,ListType::Double>;
+    
+    //! \alias type - Define own type
+    using type = WindowMenu<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
 
-    //! \alias type - Define own type
-    using type = WindowMenu<ENC>;
-
     //! \var encoding - Define item text character encoding
     static constexpr Encoding  encoding = ENC;
+
+  protected:
+    //! \alias collection_t - Define popup menu collection type
+    using collection_t = std::list<PopupMenu<ENC>>;
     
     // -------------------- REPRESENTATION ---------------------
   public:
-    OwnerDrawEvent<encoding>   OwnerDraw;     //!< 'Owner draw' event 
+    OwnerDrawEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
+    OwnerMeasureEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
 
   protected:
-    HMenu      Handle;     //!< Menu handle
+    HMenu         Handle;     //!< Menu handle
+    collection_t  Popups;     //!< Popup menu collection
     
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
     // WindowMenu::WindowMenu
-    //! Create menu with zero items
+    //! Create empty window menu 
     ///////////////////////////////////////////////////////////////////////////////
     WindowMenu() : Handle(MenuType::Window) 
     {
       // Owner draw handler
       OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
     }
 
     // ------------------------ STATIC -------------------------
@@ -372,33 +376,31 @@ namespace wtl
     //! Get a command group 
     //! 
     //! \param[in] id - Command group Id
-    //! \return IGuiCommandGroup<encoding>* - Command group
+    //! \return ActionGroup<encoding>* - Command group
     //! 
     //! \throw wtl::platform_error - Unable to find command group
     ///////////////////////////////////////////////////////////////////////////////
-    IGuiCommandGroup<encoding>* getGroup(CommandGroupId id) const
-    {
-      MenuItemInfo<encoding> info;
-      
-      // Query item data
-      if (!getFunc<ENC>(::GetMenuItemInfoA,GetMenuItemInfoW)(Handle, enum_cast(id), FALSE, &info))
-        throw platform_error(HERE, "Unable to query menu item");
+    //ActionGroup<encoding>* getGroup(CommandGroupId id) const
+    //{
+    //  MenuItemInfo<encoding> info;
+    //  
+    //  // Query item data
+    //  if (!getFunc<encoding>(::GetMenuItemInfoA,GetMenuItemInfoW)(Handle, enum_cast(id), FALSE, &info))
+    //    throw platform_error(HERE, "Unable to query menu item");
 
-      // Extract command
-      return opaque_cast<cmdgroup_t>(info.dwItemData);
-    }
+    //  // Extract command
+    //  return opaque_cast<ActionGroup<encoding>>(info.dwItemData);
+    //}
 
     ///////////////////////////////////////////////////////////////////////////////
     // WindowMenu::handle const
-    //! Get the native menu handle 
+    //! Get the shared menu handle 
     //! 
-    //! \return ::HMENU - Native handle
-    //! 
-    //! \remarks This method can be executed upon a nullptr
+    //! \return const HMenu& - Shared menu handle
     ///////////////////////////////////////////////////////////////////////////////
-    ::HMENU  handle() const
+    const HMenu& handle() const
     {
-      return this ? Handle.get() : nullptr;
+      return Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -406,6 +408,8 @@ namespace wtl
     //! Get the number of pop-up menus
     //! 
     //! \return int32 - Number of pop-up menus
+    //!
+    //! \throw wtl::platform_error - Unable to query menu item count
     ///////////////////////////////////////////////////////////////////////////////
     int32  size() const
     {
@@ -426,50 +430,50 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     operator ::HMENU() const
     {
-      return handle();
+      return Handle;
     }
 
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
     // WindowMenu::insert
-    //! Inserts a command group at a position (as a pop-up menu item)
+    //! Inserts a new popup menu item containing the Actions of an ActionGroup 
     //! 
     //! \param[in] idx - Zero-based position 
-    //! \param[in] const& group - Shared command group
+    //! \param[in] const& group - Shared action group
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing command group
     //! \throw wtl::platform_error - Unable to insert menu item
     ///////////////////////////////////////////////////////////////////////////////
-    void insert(int32 idx, const GuiCommandGroup<encoding>& group)
+    void insert(int32 idx, const ActionGroupPtr<encoding>& group)
     {
       REQUIRED_PARAM(group);
 
       // Find position
-      typename base::iterator pos = base::begin();
+      auto pos = Popups.begin();
       std::advance(pos, idx);
 
-      // Insert into collection (creates handle)
-      base::emplace_back(group);
-      auto popup = base::back().handle(); 
+      // Insert new Popup menu into collection and extract its handle
+      auto& popup = *Popups.emplace(pos, *group);
 
-      MenuItemInfo<encoding> item(group.get(), popup);     //!< Generate pop-up menu item
+      MenuItemInfo<encoding> item(*group, popup.handle());     //!< Generate pop-up menu item 
 
       // Insert menu item 
-      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, FALSE, &item))
+      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, TRUE, &item))
         throw platform_error(HERE, "Unable to insert menu item");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // WindowMenu::operator += 
-    //! Appends a command group at a position (as a pop-up menu item)
+    //! Appends a new popup menu item containing the Actions of an ActionGroup 
     //! 
     //! \param[in] const& group - Shared command group
+    //! \return type& - Reference to self
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing command group
     //! \throw wtl::platform_error - Unable to insert menu item
     ///////////////////////////////////////////////////////////////////////////////
-    WindowMenu&  operator += (const shared_cmdgroup_t<encoding>& group)
+    type&  operator += (const ActionGroupPtr<encoding>& group)
     {
       insert(size(), group);
       return *this;
@@ -485,13 +489,34 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
     { 
-      CharArray<encoding,128> text;
+      //CharArray<encoding,128> text;
 
       // Draw background
       args.Graphics.fill(args.Rect, wtl::StockBrush::Gold);
 
       // Draw text
-      args.Graphics.write(text, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      //args.Graphics.write(text, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+
+      // Handled
+      return 0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowMenu::onOwnerMeasure
+    //! Called in response to a reflected 'owner measure' message 
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureEventArgs<encoding>& args) 
+    { 
+      //CharArray<encoding,128> text;
+
+      // Measure text
+      //args.Graphics.write(text, args.Rect, MeasureTextFlags::Centre|MeasureTextFlags::VCentre);
+
+      // Set size
+      args.Size = SizeL(150,18);
 
       // Handled
       return 0;

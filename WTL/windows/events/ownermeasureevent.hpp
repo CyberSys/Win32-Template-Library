@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\event\OwnerDrawEvent.hpp
-//! \brief Encapsulates the WM_DRAWITEM message in the 'OwnerDraw' event
+//! \file wtl\windows\event\OwnerMeasureEvent.hpp
+//! \brief Encapsulates the WM_MEASUREITEM message in the 'OwnerMeasure' event
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_OWNER_DRAW_EVENT_HPP
-#define WTL_OWNER_DRAW_EVENT_HPP
+#ifndef WTL_OWNER_MEASURE_EVENT_HPP
+#define WTL_OWNER_MEASURE_EVENT_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -14,12 +14,12 @@
 namespace wtl
 {
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM'
+  //! \struct EventArgs<WindowMessage::MEASUREITEM> - Event arguments for Win32 message 'WM_MEASUREITEM'
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::DRAWITEM>
+  struct EventArgs<ENC,WindowMessage::MEASUREITEM>
   {  
     // ------------------- TYPES & CONSTANTS -------------------
   
@@ -29,99 +29,97 @@ namespace wtl
     //! \alias resource_t - Define resource id type
     using resource_t = ResourceId<ENC>;
 
-    //! \alias PaintData - Define paint data type
-    using PaintData = ::DRAWITEMSTRUCT;
+    //! \alias MeasureData - Define measure data type
+    using MeasureData = ::MEASUREITEMSTRUCT;
     
     //! \var encoding - Define character encoding
     static constexpr Encoding encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage message = WindowMessage::DRAWITEM;
+    static constexpr WindowMessage message = WindowMessage::MEASUREITEM;
     
     // -------------------- REPRESENTATION ---------------------
   protected:
-    PaintData&        Data;             //!< Encapsulates the input paint data (NB: Must be initialized before following fields)
+    MeasureData&      Data;             //!< Encapsulates the input measure data (NB: Must be initialized before following fields)
 
   public:
-    DeviceContext     Graphics;         //!< Device context clipped to non-client area 
-    RectL             Rect;             //!< Drawing/update rectangle
+    SizeL             Size;             //!< Item size
     int32             Item;             //!< Zero-based item index
-    WindowId          Ident;            //!< Control id
-    OwnerDrawAction   Action;           //!< Type of drawing requested
+    WindowId          Ident;            //!< [CONTROL] Control id
+    CommandId         Action;           //!< [MENU] Command Id
     OwnerDrawControl  CtrlType;         //!< Control type
-    HWnd              Ctrl;             //!< [CONTROL] Control handle
-    HMenu             Menu;             //!< [MENU]    Menu handle
 
     // --------------------- CONSTRUCTION ----------------------
 
     ///////////////////////////////////////////////////////////////////////////////
-    // EventArgs<DRAWITEM>::EventArgs
-    //! Creates arguments for 'OwnerDraw' Event (ie. WM_DRAWITEM)
+    // EventArgs<MEASUREITEM>::EventArgs
+    //! Creates arguments for 'OwnerMeasure' Event (ie. WM_MEASUREITEM)
     //! 
     //! \param[in] w - Not used
     //! \param[in] l - Not used
     ///////////////////////////////////////////////////////////////////////////////
-    EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
-                                        Graphics(Data.hDC),
-                                        Rect(Data.rcItem),
+    EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<MeasureData>(l)), 
+                                        Size(Data.itemWidth, Data.itemHeight),
                                         Item(Data.itemID), 
+                                        Action(static_cast<CommandId>(Data.itemID)), 
                                         Ident(static_cast<WindowId>(Data.CtlID)), 
-                                        Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
-                                        CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType)), 
-                                        Ctrl(CtrlType != OwnerDrawControl::Menu ? Data.hwndItem : handle_alloc<::HWND>::npos, AllocType::WeakRef), 
-                                        Menu(CtrlType == OwnerDrawControl::Menu ? (HMENU)Data.hwndItem : handle_alloc<::HMENU>::npos, AllocType::WeakRef)
+                                        CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType))
     {}
 
     ///////////////////////////////////////////////////////////////////////////////
     // EventArgs::~EventArgs
-    //! Virtual d-tor
+    //! Save values
     ///////////////////////////////////////////////////////////////////////////////
     virtual ~EventArgs()
-    {}
+    {
+      Data.itemWidth = Size.width;
+      Data.itemHeight = Size.height;
+    }
     
     // ------------------------ STATIC -------------------------
 
     // ---------------------- ACCESSORS ------------------------			
     
     ///////////////////////////////////////////////////////////////////////////////
-    // EventArgs<DRAWITEM>::reflect const
+    // EventArgs<MEASUREITEM>::reflect const
     //! Reflects the event back to the originator control
     //! 
+    //! \param[in] const& ctrl - Originator control
     //! \return LResult - Message result and routing
     ///////////////////////////////////////////////////////////////////////////////
-    LResult reflect() const
+    LResult reflect(const HWnd& ctrl) const
     {
       // Reflect message
-      return send_message<encoding,message+WindowMessage::REFLECT>(Ctrl, opaque_cast(Ident), opaque_cast(Data));
+      return send_message<encoding,message+WindowMessage::REFLECT>(ctrl, opaque_cast(Ident), opaque_cast(Data));
     }
     
     // ----------------------- MUTATORS ------------------------
   };
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawEvent - Defines 'OwnerDraw' event (ie. WM_DRAWITEM)
+  //! \alias OwnerMeasureEvent - Defines 'OwnerMeasure' event (ie. WM_MEASUREITEM)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawEvent = MessageEvent<ENC, WindowMessage::DRAWITEM>;
+  using OwnerMeasureEvent = MessageEvent<ENC, WindowMessage::MEASUREITEM>;
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawEventArgs - Arguments for 'OwnerDraw' Event (ie. WM_DRAWITEM)
+  //! \alias OwnerMeasureEventArgs - Arguments for 'OwnerMeasure' Event (ie. WM_MEASUREITEM)
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawEventArgs = EventArgs<ENC,WindowMessage::DRAWITEM>;
+  using OwnerMeasureEventArgs = EventArgs<ENC,WindowMessage::MEASUREITEM>;
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawEventHandler - Handler for 'OwnerDraw' event (ie. WM_DRAWITEM)
+  //! \alias OwnerMeasureEventHandler - Handler for 'OwnerMeasure' event (ie. WM_MEASUREITEM)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawEventHandler = typename OwnerDrawEvent<ENC>::delegate_t;
+  using OwnerMeasureEventHandler = typename OwnerMeasureEvent<ENC>::delegate_t;
 
 }
 
-#endif // WTL_OWNER_DRAW_EVENT_HPP
+#endif // WTL_OWNER_MEASURE_EVENT_HPP

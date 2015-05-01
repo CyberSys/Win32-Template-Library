@@ -1,251 +1,158 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\GuiCommandGroup.hpp
-//! \brief Groups gui commands for use in menus and toolbars 
+//! \file wtl\windows\ActionGroup.hpp
+//! \brief Provides a collection of gui actions (for usage with menus/toolbars)
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_GUI_COMMAND_GROUP_HPP
-#define WTL_GUI_COMMAND_GROUP_HPP
+#ifndef WTL_ACTION_GROUP_HPP
+#define WTL_ACTION_GROUP_HPP
 
 #include "wtl/WTL.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \interface IGuiCommandGroup - Interface for all gui commands
-  //! 
-  //! \tparam ENC - Command character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  struct IGuiCommandGroup
-  {
-    // ------------------- TYPES & CONSTANTS -------------------
-
-    //! \alias char_t - Define character type
-    using char_t = encoding_char_t<ENC>;
-    
-    //! \alias command_t - Define command interface type
-    using command_t = IGuiCommand<ENC>;
-
-    //! \alias interface_t - Define own type
-    using interface_t = IGuiCommandGroup<ENC>;
-
-    //! \alias resource_t - Define resource ident type
-    using resource_t = ResourceId<ENC>;
-
-    //! \var encoding - Define encoding type
-    static constexpr Encoding  encoding = ENC;
-    
-    // -------------------- REPRESENTATION ---------------------
-
-    // --------------------- CONSTRUCTION ----------------------
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::~IGuiCommandGroup
-    //! Virtual d-tor
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual ~IGuiCommandGroup() 
-    {}
-    
-    // ---------------------- ACCESSORS ------------------------			
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::collection const
-    //! Get all commands in the group
-    //! 
-    //! \return std::list<shared_command_t> - Collection of shared gui commands
-    ///////////////////////////////////////////////////////////////////////////////
-    std::list<shared_command_t<encoding>>  collection() const = 0;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::description const
-    //! Get the command group description
-    //! 
-    //! \return char_t* - Command group description
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  description() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::find const
-    //! Find a command within the group
-    //! 
-    //! \return command_t* - Command if found, otherwise nullptr
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual command_t*  find(CommandId id) const = 0;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::icon const
-    //! Get the command group icon
-    //! 
-    //! \return HIcon - Shared icon handle
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual HIcon  icon() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::ident const
-    //! Get the command group identifier
-    //! 
-    //! \return CommandGroupId  - Command group identifier
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual CommandGroupId  ident() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommandGroup::name const
-    //! Get the command group name
-    //! 
-    //! \return char_t* - Command group name
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  name() const = 0;
-    
-    // ----------------------- MUTATORS ------------------------
-  };
-
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias shared_cmdgroup_t - Shared GuiCommand group pointer
-  //! 
-  //! \tparam ENC - Command character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using shared_cmdgroup_t = std::shared_ptr<IGuiCommandGroup<ENC>>;
-
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct GuiCommandGroup - Provides a collection of Gui Commands, indexed by Command Id
+  //! \struct ActionGroup - Provides a collection of Gui Commands, indexed by Command Id
   //! 
   //! \tparam ENC - Command character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct GuiCommandGroup : std::map<CommandId,shared_command_t<ENC>>, 
-                           IGuiCommandGroup<ENC>
+  struct ActionGroup : std::map<CommandId,ActionPtr<ENC>>
   {
     //! \alias base - Define base type
-    using base = std::map<CommandId,shared_command_t<ENC>>;
+    using base = std::map<CommandId,ActionPtr<ENC>>;
 
-    //! \alias command_t - Inherit command type
-    using command_t = typename IGuiCommandGroup<ENC>::command_t;
+    //! \alias type - Define own type
+    using type = ActionGroup<ENC>;
     
-    //! \alias name_t - Define name string resource type
-    using name_t = StringResource<ENC,128>;
-
+    //! \alias action_t - Define action pointer type
+    using action_t = Action<ENC>;
+    
+    //! \alias char_t - Define character type
+    using char_t = encoding_char_t<ENC>;
+    
     //! \alias description_t - Define description string resource type
     using description_t = StringResource<ENC,1024>;
     
     //! \alias icon_t - Define icon resource type
     using icon_t = IconResource;
 
+    //! \alias name_t - Define name string resource type
+    using name_t = StringResource<ENC,128>;
+
+    //! \alias resource_t - Define resource ident type
+    using resource_t = ResourceId<ENC>;
+    
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
 
     // -------------------- REPRESENTATION ---------------------
   protected:
-    CommandGroupId Ident;           //!< Command Id
-    name_t         Name;            //!< Command Name
-    description_t  Description;     //!< Command Description
-    icon_t         Icon;            //!< Command Icon
+    CommandGroupId  Ident;           //!< Command Id
+    name_t          Name;            //!< Command Name
+    description_t   Description;     //!< Command Description
+    icon_t          Icon;            //!< Command Icon
     
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::GuiCommandGroup
+    // ActionGroup::ActionGroup
     //! Create empty collection
     //! 
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     ///////////////////////////////////////////////////////////////////////////////
-    GuiCommandGroup(CommandGroupId id) : Ident(id),
-                                         Name(resource_id(id)),
-                                         Description(resource_id(id)),
-                                         Icon(resource_id(id)),
+    ActionGroup(CommandGroupId id) : Ident(id),
+                                     Name(resource_id(id)),
+                                     Description(resource_id(id)),
+                                     Icon(resource_id(id))
     {}
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::GuiCommandGroup
+    // ActionGroup::ActionGroup
     //! Create populated collection
     //! 
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
-    //! \param[in] cmds - Commands
+    //! \param[in] cmds - List of actions
     ///////////////////////////////////////////////////////////////////////////////
-    GuiCommandGroup(CommandGroupId id, std::initializer_list<command_t*>&& cmds) : GuiCommandGroup(id)
+    ActionGroup(CommandGroupId id, std::initializer_list<action_t*>&& cmds) : ActionGroup(id)
     {
       // Populate
-      for (command_t* c : cmds)
+      for (action_t* c : cmds)
         *this += c;
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // ActionGroup::~ActionGroup
+    //! Virtual d-tor
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual ~ActionGroup() 
+    {}
+    
     
     // ------------------------ STATIC -------------------------
 
     // ---------------------- ACCESSORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::collection const
-    //! Get all commands in the group
-    //! 
-    //! \return std::list<shared_command_t> - Collection of shared gui commands
-    ///////////////////////////////////////////////////////////////////////////////
-    std::list<shared_command_t<encoding>>  collection() const override
-    {
-      std::list<shared_command_t<encoding>> out;
-      std::transform(begin(), end(), out.begin(), [](typename base::value_type& p) { return p.second; } );
-      return out;
-      /*for (auto& cmd : *this)
-        out.push_back(cmd->second);*/
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::description const
+    // ActionGroup::description const
     //! Get the command description
     //! 
     //! \return char_t* - Command description
     ///////////////////////////////////////////////////////////////////////////////
-    const char_t*  description() const override
+    virtual const char_t*  description() const 
     {
       return Description.Text;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::find const
-    //! Find a command within the group
+    // ActionGroup::find const
+    //! Find an action within the group
     //! 
-    //! \return command_t* - Command if found, otherwise nullptr
+    //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
     ///////////////////////////////////////////////////////////////////////////////
-    command_t*  find(CommandId id) const 
+    ActionPtr<encoding>  find(CommandId id) const 
     {
-      auto cmd = base::find(id);
-      return cmd != base::end() ? cmd->second.get() : nullptr;
+      // Lookup action & return if found
+      auto pos = base::find(id);
+      if (pos != base::end())
+        return pos->second; 
+      
+      // [NOT FOUND] Return nullptr sentinel
+      return ActionPtr<encoding>(nullptr);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::icon const
-    //! Get the command icon
+    // ActionGroup::icon const
+    //! Get the group icon
     //! 
     //! \return HIcon - Shared icon handle
     ///////////////////////////////////////////////////////////////////////////////
-    HIcon  icon() const override
+    virtual HIcon  icon() const 
     {
       return Icon.Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::ident const
-    //! Get the command identifier
+    // ActionGroup::ident const
+    //! Get the group identifier
     //! 
-    //! \return CommandId - Command identifier
+    //! \return CommandGroupId - Action group identifier
     ///////////////////////////////////////////////////////////////////////////////
-    CommandId  ident() const override
+    virtual CommandGroupId  ident() const 
     {
       return Ident;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::name const
-    //! Get the command name
+    // ActionGroup::name const
+    //! Get the group name
     //! 
-    //! \return char_t* - Command name
+    //! \return char_t* - Group name
     ///////////////////////////////////////////////////////////////////////////////
-    const char_t*  name() const override
+    virtual const char_t*  name() const 
     {
       return Name.Text;
     }
@@ -253,21 +160,29 @@ namespace wtl
     // ----------------------- MUTATORS ------------------------
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandGroup::operator +=
-    //! Add a command to the collection
+    // ActionGroup::operator +=
+    //! Add an action to the group
     //!
-    //! \param[in] *ptr - Gui command
-    //! \return GuiCommandGroup& - Reference to self
+    //! \param[in] *cmd - Action
+    //! \return ActionGroup& - Reference to self
     ///////////////////////////////////////////////////////////////////////////////
-    GuiCommandGroup& operator += (command_t* ptr)
+    ActionGroup& operator += (action_t* cmd)
     {
       // Insert/overwrite
-      this->emplace(ptr->ident(), std::shared_ptr<command_t>(ptr));
+      this->emplace(cmd->ident(), ActionPtr<encoding>(cmd));
       return *this;
     }
   };
-    
+  
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias ActionGroupPtr - Shared Action group pointer
+  //! 
+  //! \tparam ENC - Command character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using ActionGroupPtr = std::shared_ptr<ActionGroup<ENC>>;
+
 
 }
 
-#endif // WTL_GUI_COMMAND_GROUP_HPP
+#endif // WTL_ACTION_GROUP_HPP

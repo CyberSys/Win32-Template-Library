@@ -28,42 +28,62 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias command_t - Define GuiCommand type
-    using command_t = IGuiCommand<ENC>;
+    //! \alias action_t - Define Action type
+    using action_t = Action<ENC>;
     
-    //! \alias cmdgroup_t - Define GuiCommand group type
-    using cmdgroup_t = IGuiCommandGroup<ENC>;
-
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<ENC>;
     
     //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
     using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
 
-    //! \alias CommandQueue - Define gui command queue type
-    using CommandQueue = GuiCommandQueue<ENC>;
+    //! \alias ActionQueue - Define gui command queue type
+    using ActionQueue = ActionQueue<ENC>;
     
-    //! \struct CommandGroupCollection - Collection of GuiCommand groups, indexed by Id
-    struct CommandGroupCollection : std::map<CommandGroupId,shared_cmdgroup_t<ENC>>
+    //! \struct ActionGroupCollection - Collection of Action groups, indexed by Id
+    struct ActionGroupCollection : std::map<CommandGroupId,ActionGroupPtr<ENC>>
     {
       // ------------------- TYPES & CONSTANTS -------------------
 
       //! \alias base - Define base type
-      using base = std::map<CommandGroupId,shared_cmdgroup_t<ENC>>;
-
-      // ----------------------- MUTATORS ------------------------
+      using base = std::map<CommandGroupId,ActionGroupPtr<ENC>>;
+      
+      // ----------------------- ACCESSORS -----------------------
 
       ///////////////////////////////////////////////////////////////////////////////
-      // CommandGroupCollection::operator +=
+      // ActionGroupCollection::find const
+      //! Find an action within the collection
+      //! 
+      //! \return ActionPtr<ENC> - Shared Action pointer, possibly empty
+      ///////////////////////////////////////////////////////////////////////////////
+      ActionPtr<ENC>  find(CommandId id) const 
+      {
+        // Lookup action
+        for (const auto& group : *this)
+          if (auto cmd = group.second->find(id))
+            return cmd;
+
+        // [NOT FOUND] Return empty pointer
+        return ActionPtr<ENC>(nullptr);
+      }
+
+      // ----------------------- MUTATORS ------------------------
+      
+      ///////////////////////////////////////////////////////////////////////////////
+      // ActionGroupCollection::operator +=
       //! Add a group to the collection
       //!
       //! \param[in] *group - Command group
-      //! \return CommandGroupCollection& - Reference to self
+      //! \return ActionGroupCollection& - Reference to self
+      //! 
+      //! \throw wtl::invalid_argument - [Debug only] Missing group
       ///////////////////////////////////////////////////////////////////////////////
-      CommandGroupCollection& operator += (cmdgroup_t* group)
+      ActionGroupCollection& operator += (ActionGroup<ENC>* group)
       {
+        REQUIRED_PARAM(group);
+
         // Insert/overwrite
-        emplace(group->ident(), shared_cmdgroup_t<ENC>(group));
+        emplace(group->ident(), ActionGroupPtr<ENC>(group));
         return *this;
       }
     };
@@ -143,8 +163,8 @@ namespace wtl
     //! \var ActiveWindows - Static collection of all existing WTL windows 
     static WindowHandleCollection  ActiveWindows;
 
-    //! \var CommandGroups - Static collection of all GuiCommands groups
-    static CommandGroupCollection  CommandGroups;
+    //! \var ActionGroups - Static collection of all Actions groups
+    static ActionGroupCollection  ActionGroups;
     
   public:
     CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
@@ -152,12 +172,12 @@ namespace wtl
     DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-    GuiCommandEvent<encoding>        Command;       //!< Raised in response to WM_COMMAND from menu/accelerators
+    ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
     
   protected:
     wndclass_t&            Class;         //!< Window class 
     ChildWindowCollection  Children;      //!< Child window collection
-    CommandQueue           Actions;       //!< Command queue
+    ActionQueue            Actions;       //!< Actions queue
     HWnd                   Handle;        //!< Window handle
     HFont                  Font;          //!< Window font
     Lazy<wndmenu_t>        Menu;          //!< Window menu, if any
@@ -179,7 +199,7 @@ namespace wtl
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
       
       // Execute gui commands by default
-      Command += new GuiCommandEventHandler<encoding>(this, &WindowBase::onGuiCommand);
+      Action += new ActionEventHandler<encoding>(this, &WindowBase::onAction);
         
       // Paint window background by default
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
@@ -211,7 +231,7 @@ namespace wtl
         // Lookup & return window
         auto wnd = ActiveWindows.find(focus);
         if (wnd != ActiveWindows.end())
-          return *wnd;
+          return wnd->second;
         
         // [FAILED] Native window
         throw domain_error(HERE, "Input focus belongs to native window");
@@ -513,7 +533,10 @@ namespace wtl
         Menu.create();
 
         // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), nullptr);
+        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, parent->handle(), nullptr); // Menu->handle());
+
+        // Display menu
+        ::SetMenu(Handle, Menu->handle());
       }
       catch (platform_error& e)
       {
@@ -547,21 +570,17 @@ namespace wtl
     
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::execute
-    //! Executes a gui command
+    //! Executes an Action, adding it to the actions queue
     //! 
-    //! \param[in] id - Command id
-    //! \throw wtl::logic_error - Gui command not recognised
+    //! \param[in] id - Action id
+    //!
+    //! \throw wtl::logic_error - Action not found
     ///////////////////////////////////////////////////////////////////////////////
     void  execute(CommandId id) 
     { 
-      // Lookup command
-      for (auto& group : CommandGroups)
-        if (command_t* cmd = group->find(id))
-        {
-          // [FOUND] Execute associated command
-          Actions.execute( cmd->clone() );
-          break;
-        }
+      // Lookup action and execute 
+      if (auto cmd = ActionGroups.find(id))
+        Actions.execute(cmd->clone());
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -610,7 +629,7 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onGuiCommand
+    // WindowBase::onAction
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -618,7 +637,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onGuiCommand(GuiCommandEventArgs<encoding>& args) 
+    virtual LResult  onAction(ActionEventArgs<encoding>& args) 
     { 
       // Execute associated command
       execute(args.Ident);
@@ -684,8 +703,8 @@ namespace wtl
             // [CONTROL] Reflect to sender
             ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
           else
-            // [COMMAND] Raise event (Default executes the appropriate command object)
-            ret = Command.raise(GuiCommandEventArgs<encoding>(w,l));
+            // [ACTION] Raise event (Default executes the appropriate command object)
+            ret = Action.raise(ActionEventArgs<encoding>(w,l));
           break;
 
         // [NOTIFY] Reflect to sender
@@ -705,6 +724,21 @@ namespace wtl
           // [MENU] Raise associated menu event
           else if (Menu.exists())
             ret = Menu->OwnerDraw.raise(args);
+          break;
+        }
+        
+        // [OWNER-MEASURE] Reflect to sender
+        case WindowMessage::MEASUREITEM: 
+        {
+          OwnerMeasureEventArgs<encoding> args(w,l);
+          
+          // [CONTROL] Reflect to originator
+          if (args.CtrlType != OwnerDrawControl::Menu)
+            ret = args.reflect(find(args.Ident).Handle);
+
+          // [MENU] Raise associated menu event
+          else if (Menu.exists())
+            ret = Menu->OwnerMeasure.raise(args);
           break;
         }
 
@@ -829,7 +863,7 @@ namespace wtl
     void setText(const CharArray<encoding,LEN>& txt)
     {
       // Set window text
-      if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt, LEN) == FALSE)
+      if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt) == FALSE)
         throw platform_error(HERE, "Unable to set window text");
     }
     
@@ -844,9 +878,9 @@ namespace wtl
   };
 
   
-  //! \var CommandGroups - Collection of all GuiCommand groups 
+  //! \var ActionGroups - Collection of all Action groups 
   template <Encoding ENC>
-  typename WindowBase<ENC>::CommandGroupCollection   WindowBase<ENC>::CommandGroups;
+  typename WindowBase<ENC>::ActionGroupCollection   WindowBase<ENC>::ActionGroups;
   
   //! \var ActiveWindows - Collection of all WTL windows 
   template <Encoding ENC>

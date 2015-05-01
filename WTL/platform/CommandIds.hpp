@@ -134,11 +134,11 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   enum class CommandGroupId : uint16
   {
-    File,           //!< File commands group
-    Edit,           //!< Edit commands group
-    View,           //!< View commands group
-    Window,         //!< Window commands group
-    Help,           //!< Help commands group
+    File = ID_FILE_GROUP,           //!< File commands group
+    Edit = ID_EDIT_GROUP,           //!< Edit commands group
+    View = ID_VIEW_GROUP,           //!< View commands group
+    Window = ID_WINDOW_GROUP,       //!< Window commands group
+    Help = ID_HELP_GROUP,           //!< Help commands group
   };
   
   

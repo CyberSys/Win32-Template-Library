@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\GuiCommand.hpp
-//! \brief Encapsulates commands in the Gui using the 'Command' pattern
+//! \file wtl\windows\Action.hpp
+//! \brief Encapsulates commands in the Gui using the 'Action'/'Command' pattern
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_GUI_COMMAND_HPP
-#define WTL_GUI_COMMAND_HPP
+#ifndef WTL_ACTION_HPP
+#define WTL_ACTION_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -14,159 +14,35 @@
 namespace wtl
 {
   ///////////////////////////////////////////////////////////////////////////////
-  //! \interface IGuiCommand - Interface for all gui commands
+  //! \struct Action - Encapsulates a single gui command
   //! 
   //! \tparam ENC - Command character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct IGuiCommand
+  struct Action 
   {
     // ------------------- TYPES & CONSTANTS -------------------
-
+    
+    //! \alias type - Define own type
+    using type = Action<ENC>;
+    
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias interface_t - Define own type
-    using interface_t = IGuiCommand<ENC>;
-
-    //! \alias resource_t - Define resource ident type
-    using resource_t = ResourceId<ENC>;
-
-    //! \var encoding - Define encoding type
-    static constexpr Encoding  encoding = ENC;
-    
-    // -------------------- REPRESENTATION ---------------------
-
-    // --------------------- CONSTRUCTION ----------------------
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::~IGuiCommand
-    //! Virtual d-tor
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual ~IGuiCommand() 
-    {}
-    
-    // ---------------------- ACCESSORS ------------------------			
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::clone const
-    //! Create a new instance of the command
-    //! 
-    //! \return interface_t* - New instance of command
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual interface_t*  clone() const = 0;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::description const
-    //! Get the command description
-    //! 
-    //! \return char_t* - Command description
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  description() const = 0;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::icon const
-    //! Get the command icon
-    //! 
-    //! \return HIcon - Shared icon handle
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual HIcon  icon() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::ident const
-    //! Get the command identifier
-    //! 
-    //! \return CommandId - Command identifier
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual CommandId  ident() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::name const
-    //! Get the command name
-    //! 
-    //! \return char_t* - Command name
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  name() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::permanent const
-    //! Query the whether the command can be reverted
-    //! 
-    //! \return bool - True iff command is permanent (cannot be undone)
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual bool  permanent() const = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::state const
-    //! Query the current state of the command 
-    //! 
-    //! \return CommandState - Current state of command
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual CommandState  state() const = 0;
-    
-    // ----------------------- MUTATORS ------------------------
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::execute 
-    //! Executes the command
-    //! 
-    //! \throw logic_error - Command has not been implemented
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual void execute() = 0;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // IGuiCommand::revert
-    //! Reverts the command
-    //! 
-    //! \throw logic_error - Command has not been implemented
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual void revert() = 0;
-  };
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias shared_command_t - Shared Gui Command pointer
-  //! 
-  //! \tparam ENC - Command character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using shared_command_t = std::shared_ptr<IGuiCommand<ENC>>;
-
-
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct GuiCommand - Encapsulates a single gui command
-  //! 
-  //! \tparam ENC - Command character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  struct GuiCommand : IGuiCommand<ENC>
-  {
-    // ------------------- TYPES & CONSTANTS -------------------
-    
-    //! \alias base - Define base type
-    using base = IGuiCommand<ENC>;
-    
-    //! \alias char_t - Inherit character type
-    using char_t = typename base::char_t;
-    
-    //! \alias interface_t - Inherit interface type
-    using interface_t = typename base::interface_t;
-    
-    //! \alias resource_t - Inherit resource ident type
-    using resource_t = typename base::resource_t;
-
-    //! \alias name_t - Define name string resource type
-    using name_t = StringResource<ENC,128>;
-
     //! \alias description_t - Define description string resource type
     using description_t = StringResource<ENC,1024>;
 
     //! \alias icon_t - Define icon resource type
     using icon_t = IconResource;
+    
+    //! \alias name_t - Define name string resource type
+    using name_t = StringResource<ENC,128>;
+    
+    //! \alias resource_t - Define resource ident type
+    using resource_t = ResourceId<ENC>;
 
     //! \var encoding - Define encoding type
-    static constexpr Encoding  encoding = base::encoding;
+    static constexpr Encoding  encoding = ENC;
     
   protected:
     //! \alias execute_t - Define execute functor type
@@ -186,124 +62,142 @@ namespace wtl
     revert_t       RevertFn;        //!< Command reversion functor
 
     // --------------------- CONSTRUCTION ----------------------
-  
+  public:
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::GuiCommand
+    // Action::Action
     //! Create a permenant command
     //! 
     //! \param[in] id - Command identifier (Defining name, description, and icon resource)
     //! \param[in] exec - Callable target which implements executing command
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    GuiCommand(CommandId id, T exec) : Ident(id),
-                                       Name(resource_id(id)),
-                                       Description(resource_id(id)),
-                                       Icon(resource_id(id)),
-                                       Permanent(true),
-                                       ExecuteFn(exec)
+    Action(CommandId id, execute_t exec) : Ident(id),
+                                           Name(resource_id(id)),
+                                           Description(resource_id(id)),
+                                           Icon(resource_id(id)),
+                                           Permanent(true),
+                                           ExecuteFn(exec)
     {}
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::GuiCommand
+    // Action::Action
     //! Create a revertible command
     //! 
     //! \param[in] id - Command identifier
     //! \param[in] exec - Callable target which implements executing command
     //! \param[in] undo - Callable target which implements reverting command
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename T1, typename T2>
-    GuiCommand(CommandId id, T1 exec, T2 undo) : Ident(id),
-                                                 Name(resource_id(id)),
-                                                 Description(resource_id(id)),
-                                                 Icon(resource_id(id)),
-                                                 Permanent(false),
-                                                 ExecuteFn(exec),
-                                                 RevertFn(undo)
+    Action(CommandId id, execute_t exec, revert_t undo) : Ident(id),
+                                                          Name(resource_id(id)),
+                                                          Description(resource_id(id)),
+                                                          Icon(resource_id(id)),
+                                                          Permanent(false),
+                                                          ExecuteFn(exec),
+                                                          RevertFn(undo)
     {}
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::~GuiCommand
+    // Action::~Action
     //! Virtual d-tor
     ///////////////////////////////////////////////////////////////////////////////
-    virtual ~GuiCommand() 
+    virtual ~Action() 
     {}
     
     // ---------------------- ACCESSORS ------------------------			
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::description const
+    // Action::clone const
+    //! Create a new instance of the command
+    //! 
+    //! \return type* - New instance of command
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual type*  clone() const = 0;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Action::description const
     //! Get the command description
     //! 
     //! \return char_t* - Command description
     ///////////////////////////////////////////////////////////////////////////////
-    const char_t*  description() const override
+    virtual const char_t*  description() const 
     {
       return Description.Text;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::icon const
+    // Action::icon const
     //! Get the command icon
     //! 
     //! \return HIcon - Shared icon handle
     ///////////////////////////////////////////////////////////////////////////////
-    HIcon  icon() const override
+    virtual HIcon  icon() const 
     {
       return Icon.Handle;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::ident const
+    // Action::ident const
     //! Get the command identifier
     //! 
     //! \return CommandId - Command identifier
     ///////////////////////////////////////////////////////////////////////////////
-    CommandId  ident() const override
+    virtual CommandId  ident() const 
     {
       return Ident;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::name const
+    // Action::name const
     //! Get the command name
     //! 
     //! \return char_t* - Command name
     ///////////////////////////////////////////////////////////////////////////////
-    const char_t*  name() const override
+    virtual const char_t*  name() const 
     {
       return Name.Text;
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::permanent const
+    // Action::permanent const
     //! Query the whether the command can be reverted
     //! 
     //! \return bool - True iff command is permanent (cannot be undone)
     ///////////////////////////////////////////////////////////////////////////////
-    bool  permanent() const override
+    virtual bool  permanent() const 
     {
       return Permanent;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Action::state const
+    //! Query the current state of the command 
+    //! 
+    //! \return ActionState - Current state of command
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual ActionState state() const 
+    {
+      // Always enabled by default
+      return ActionState::Enabled;
     }
     
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::execute 
+    // Action::execute 
     //! Executes the command
     ///////////////////////////////////////////////////////////////////////////////
-    void execute() override
+    virtual void execute() 
     {
       // Execute
       ExecuteFn();
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommand::revert
+    // Action::revert
     //! Reverts the command
     //! 
     //! \throw logic_error - Command cannot be reverted
     ///////////////////////////////////////////////////////////////////////////////
-    void revert() override
+    virtual void revert() 
     {
       // Verify
       if (permanent())
@@ -314,9 +208,15 @@ namespace wtl
     }
   };
   
-
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias ActionPtr - Shared Action/Command pointer
+  //! 
+  //! \tparam ENC - Command character encoding 
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using ActionPtr = std::shared_ptr<Action<ENC>>;
   
 
 }
 
-#endif // WTL_GUI_COMMAND_HPP
+#endif // WTL_ACTION_HPP

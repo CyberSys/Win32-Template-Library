@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\GuiCommandQueue.hpp
+//! \file wtl\windows\ActionQueue.hpp
 //! \brief Provides an undo/redo queue of all gui commands
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -15,12 +15,12 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct GuiCommandQueue - Enqueues executed Gui commands, providing an 'Undo' and 'Redo' functionality if supported by the command
+  //! \struct ActionQueue - Enqueues executed Gui commands, providing an 'Undo' and 'Redo' functionality if supported by the command
   //! 
   //! \tparam ENC - Command character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct GuiCommandQueue
+  struct ActionQueue
   {
     // ------------------- TYPES & CONSTANTS -------------------
 
@@ -30,12 +30,12 @@ namespace wtl
     //! \var encoding - Define command character encoding 
     static constexpr Encoding encoding = ENC;
 
-    //! \alias command_t - Define command base type
-    using command_t = IGuiCommand<ENC>;
+    //! \alias action_t - Define command base type
+    using action_t = Action<ENC>;
 
   protected:
     //! \alias storage_t - Define storage type
-    using storage_t = std::shared_ptr<command_t>;
+    using storage_t = ActionPtr<ENC>;
 
     //! \alias collection_t - Define collection type
     using collection_t = Stack<storage_t>;
@@ -43,10 +43,10 @@ namespace wtl
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::GuiCommandQueue
+    // ActionQueue::ActionQueue
     //! Create empty Gui command queue
     ///////////////////////////////////////////////////////////////////////////////
-    GuiCommandQueue()
+    ActionQueue()
     {}
 
     // ------------------------ STATIC -------------------------
@@ -54,7 +54,7 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------		
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::canRepeat const
+    // ActionQueue::canRepeat const
     //! Query whether the last reverted command can be repeated
     //! 
     //! \return bool - True if 'Redo' is available
@@ -65,7 +65,7 @@ namespace wtl
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::canRevert const
+    // ActionQueue::canRevert const
     //! Query whether the last executed command can be reverted
     //! 
     //! \return bool - True if 'Undo' is available
@@ -76,14 +76,14 @@ namespace wtl
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::peekRepeat const
+    // ActionQueue::peekRepeat const
     //! Peek the last reverted command (next repeatable command)
     //! 
-    //! \return const command_t& - Immutable reference to next repeatable command 
+    //! \return const action_t& - Immutable reference to next repeatable command 
     //! 
     //! \throw logic_error - No repeatable commands exist
     ///////////////////////////////////////////////////////////////////////////////
-    const command_t&  peekRepeat() const
+    const action_t&  peekRepeat() const
     {
       // Ensure non-empty
       if (RepeatableCommands.empty())
@@ -94,14 +94,14 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::peekRevert const
+    // ActionQueue::peekRevert const
     //! Peek the last executed command (next revertible command)
     //! 
-    //! \return const command_t& - Immutable reference to next revertible command 
+    //! \return const action_t& - Immutable reference to next revertible command 
     //! 
     //! \throw logic_error - No revertible commands exist
     ///////////////////////////////////////////////////////////////////////////////
-    const command_t&  peekRevert() const
+    const action_t&  peekRevert() const
     {
       // Ensure non-empty
       if (ExecutedCommands.empty())
@@ -114,7 +114,7 @@ namespace wtl
     // ----------------------- MUTATORS ------------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::clear
+    // ActionQueue::clear
     //! Clears all commands from the queue
     ///////////////////////////////////////////////////////////////////////////////
     void clear()
@@ -124,7 +124,7 @@ namespace wtl
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::execute
+    // ActionQueue::execute
     //! Executes a command and saves it. Clears all repeatable commands.
     //! 
     //! \param[in] *cmd - Gui command
@@ -133,7 +133,7 @@ namespace wtl
     //! 
     //! \remarks If the command logic throws, the queue is unaffected
     ///////////////////////////////////////////////////////////////////////////////
-    void execute(command_t* cmd)
+    void execute(action_t* cmd)
     {
       REQUIRED_PARAM(cmd);
 
@@ -149,7 +149,7 @@ namespace wtl
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::repeat
+    // ActionQueue::repeat
     //! Repeats the last command to be reverted
     //! 
     //! \throw wtl::logic_error - No commands have been reverted
@@ -170,7 +170,7 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // GuiCommandQueue::revert
+    // ActionQueue::revert
     //! Reverts the previously executed command 
     //! 
     //! \throw wtl::logic_error - No reverted commands

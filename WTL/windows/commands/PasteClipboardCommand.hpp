@@ -20,12 +20,12 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct PasteClipboardCommand : GuiCommand<ENC>
+  struct PasteClipboardCommand : Action<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
     //! \alias base - Define base type
-    using base = GuiCommand<ENC>;
+    using base = Action<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -48,9 +48,9 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     PasteClipboardCommand()  
       : base(CommandId::Edit_Paste, [this] () { if (TargetWnd = window_t::getFocus())
-                                                  TargetWnd->setText(c_arr("TODO: Paste text from clipboard")); },
+                                                  TargetWnd->setText(c_arr(L"TODO: Paste text from clipboard")); },
                                     [this] () { if (TargetWnd)
-                                                  TargetWnd->setText(c_arr("TODO: Restore previous text")); })
+                                                  TargetWnd->setText(c_arr(L"TODO: Restore previous text")); })
     {}
     
     // ---------------------- ACCESSORS ------------------------			
@@ -61,9 +61,9 @@ namespace wtl
     // PasteClipboardCommand::clone const
     //! Create a new instance of the command
     //! 
-    //! \return interface_t* - New instance of command
+    //! \return type* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
-    typename base::interface_t*  clone() const 
+    typename base::type*  clone() const 
     {
       return new PasteClipboardCommand(*this);
     }
@@ -72,12 +72,12 @@ namespace wtl
     // PasteClipboardCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return CommandState - Current state of command
+    //! \return ActionState - Current state of command
     ///////////////////////////////////////////////////////////////////////////////
-    CommandState state() const override
+    ActionState state() const override
     {
       // Always enabled
-      return CommandState::Enabled;
+      return ActionState::Enabled;
     }
     
     // ----------------------- MUTATORS ------------------------

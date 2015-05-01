@@ -5,8 +5,8 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_PASTE_CLIPBOARD_HPP
-#define WTL_PASTE_CLIPBOARD_HPP
+#ifndef WTL_ABOUT_PROGRAM_HPP
+#define WTL_ABOUT_PROGRAM_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -20,12 +20,12 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct AboutProgramCommand : GuiCommand<ENC>
+  struct AboutProgramCommand : Action<ENC>
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
     //! \alias base - Define base type
-    using base = GuiCommand<ENC>;
+    using base = Action<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -58,9 +58,9 @@ namespace wtl
     // AboutProgramCommand::clone const
     //! Create a new instance of the command
     //! 
-    //! \return interface_t* - New instance of command
+    //! \return type* - New instance of command
     ///////////////////////////////////////////////////////////////////////////////
-    typename base::interface_t*  clone() const 
+    typename base::type*  clone() const 
     {
       return new AboutProgramCommand(*this);
     }
@@ -69,12 +69,12 @@ namespace wtl
     // AboutProgramCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return CommandState - Current state of command
+    //! \return ActionState - Current state of command
     ///////////////////////////////////////////////////////////////////////////////
-    CommandState state() const override
+    ActionState state() const override
     {
       // Always enabled
-      return CommandState::Enabled;
+      return ActionState::Enabled;
     }
     
     // ----------------------- MUTATORS ------------------------
@@ -84,4 +84,4 @@ namespace wtl
 
 }
 
-#endif // WTL_PASTE_CLIPBOARD_HPP
+#endif // WTL_ABOUT_PROGRAM_HPP

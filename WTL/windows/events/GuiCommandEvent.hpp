@@ -13,15 +13,15 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \enum CommandSource - Defines how a Gui command was raised
-  enum class CommandSource
+  //! \enum ActionSource - Defines how a Gui command was raised
+  enum class ActionSource
   {
     MenuItem = 0,     //!< Command raised via menu item
     Accelerator = 1,  //!< Command raised via accelerator
   };
 
-  //! \enum CommandState - Define states of GUI Commands
-  enum class CommandState
+  //! \enum ActionState - Define states of GUI Commands
+  enum class ActionState
   {
     Disabled = 0,     //!< Command should be disabled
     Enabled = 1,      //!< Command should be enabled
@@ -64,7 +64,7 @@ namespace wtl
     //! \param[in] l - Originator window handle
     ///////////////////////////////////////////////////////////////////////////////
     EventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<CommandId>(LOWORD(w))), 
-                                        Source(enum_cast<CommandSource>(HIWORD(w)))
+                                        Source(enum_cast<ActionSource>(HIWORD(w)))
     {}
     
     // ------------------------ STATIC -------------------------
@@ -75,33 +75,33 @@ namespace wtl
 
     // -------------------- REPRESENTATION ---------------------
 
-    CommandId      Ident;     //!< Command id 
-    CommandSource  Source;    //!< How command was raised
+    CommandId      Ident;     //!< Action id 
+    ActionSource  Source;    //!< How command was raised
   };
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias GuiCommandEvent - Defines 'Command' event (ie. WM_COMMAND)
+  //! \alias ActionEvent - Defines 'Action' event (ie. WM_COMMAND from menus/accelerators/toolbars)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using GuiCommandEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
+  using ActionEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias GuiCommandEventArgs - Arguments for 'Command' Event (ie. WM_COMMAND)
+  //! \alias ActionEventArgs - Arguments for 'Action' Event (ie. WM_COMMAND from menus/accelerators/toolbars)
   //! 
   //! \tparam ENC - Message character encoding 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using GuiCommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
+  using ActionEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias GuiCommandEventHandler - Handler for 'Command' event (ie. WM_COMMAND)
+  //! \alias ActionEventHandler - Handler for 'Action' event (ie. WM_COMMAND from menus/accelerators/toolbars)
   //! 
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using GuiCommandEventHandler = typename GuiCommandEvent<ENC>::delegate_t;
+  using ActionEventHandler = typename ActionEvent<ENC>::delegate_t;
 
 
 }
