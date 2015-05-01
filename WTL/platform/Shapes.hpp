@@ -79,7 +79,6 @@ namespace wtl
     {}
     
     DEFAULT_COPY(Point);   //!< Performs a deep copy
-    DEFAULT_COPY_ASSIGN(Point);   //!< Performs a deep copy
     DEFAULT_MOVE(Point);   //!< Performs a deep copy
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -387,7 +386,6 @@ namespace wtl
 
     
     DEFAULT_COPY(Rect);          //!< Performs a deep copy
-    DEFAULT_COPY_ASSIGN(Rect);   //!< Performs a deep copy
     DEFAULT_MOVE(Rect);          //!< Performs a deep copy
 
     ///////////////////////////////////////////////////////////////////////////////

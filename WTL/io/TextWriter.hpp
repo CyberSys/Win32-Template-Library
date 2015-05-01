@@ -67,7 +67,6 @@ namespace wtl
     // Copy semantics determined by stream type
     DEFAULT_COPY(TextWriter);
     DEFAULT_MOVE(TextWriter);
-    DEFAULT_COPY_ASSIGN(TextWriter);
 	
 	  // ------------------------- STATIC ---------------------------
 

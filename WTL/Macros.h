@@ -66,28 +66,47 @@
 // -------------------- COPY SEMANTICS  --------------------
 // ---------------------------------------------------------
 
-//! \def NO_COPY - Prevents a type from being copy-constructed
-#define NO_COPY(type)               type(const type& r) = delete
+//! \def NO_COPY_CTOR - Prevents a type from being copy-constructed
+#define NO_COPY_CTOR(type)          type(const type& r) = delete
 
 //! \def NO_COPY_ASSIGN - Prevents copy-assignment upon a type
 #define NO_COPY_ASSIGN(type)        type& operator=(const type& r) = delete
 
-//! \def NO_MOVE - Prevents a type from being copy-move-constructed
-#define NO_MOVE(type)               type(type&& r) = delete
+//! \def NO_COPY - Prevents a type from being copy-constructed or copy-assigned
+#define NO_COPY(type)               NO_COPY_CTOR(type);  NO_COPY_ASSIGN(type)
+
+
+//! \def DEFAULT_COPY_CTOR - Enables compiler generated copy constructor
+#define DEFAULT_COPY_CTOR(type)     type(const type& r) = default
+
+//! \def DEFAULT_COPY_ASSIGN - Enables compiler generated copy-assign operator
+#define DEFAULT_COPY_ASSIGN(type)   type& operator=(const type& r) = default
+
+//! \def DEFAULT_COPY - Enables compiler generated copy constructor
+#define DEFAULT_COPY(type)          DEFAULT_COPY_CTOR(type);  DEFAULT_COPY_ASSIGN(type)
+
+// ---------------------------------------------------------
+// -------------------- MOVE SEMANTICS  --------------------
+// ---------------------------------------------------------
+
+//! \def NO_MOVE_CTOR - Prevents a type from being move-constructed
+#define NO_MOVE_CTOR(type)          type(type&& r) = delete
 
 //! \def NO_MOVE_ASSIGN - Prevents move-assignment upon a type
 #define NO_MOVE_ASSIGN(type)        type& operator=(type&& r) = delete
 
-//! \def DEFAULT_COPY - Enables compiler generated copy c-tor
-#define DEFAULT_COPY(type)          type(const type& r) = default
-
-//! \def DEFAULT_COPY_ASSIGN - Enables compiler generated assignment operator
-#define DEFAULT_COPY_ASSIGN(type)   type& operator=(const type& r) = default
-
-//! \def DEFAULT_MOVE - Enables compiler generated copy-move c-tor
-#define DEFAULT_MOVE(type)          type(type&& r) = default
+//! \def NO_MOVE - Prevents a type from being move-constructed or move-assigned
+#define NO_MOVE(type)               NO_MOVE_CTOR(type);  NO_MOVE_ASSIGN(type)
 
 
+//! \def DEFAULT_MOVE_CTOR - Enables compiler generated move constructor
+#define DEFAULT_MOVE_CTOR(type)     type(type&& r) = default
+
+//! \def DEFAULT_MOVE_ASSIGN - Enables compiler generated move-assignment operator
+#define DEFAULT_MOVE_ASSIGN(type)   type& operator=(type&& r) = default
+
+//! \def DEFAULT_MOVE - Enables compiler generated move constructor
+#define DEFAULT_MOVE(type)          DEFAULT_MOVE_CTOR(type);  DEFAULT_MOVE_ASSIGN(type)
 
 // --------------------------------------------------
 // ------------------ DEVELOPMENT -------------------

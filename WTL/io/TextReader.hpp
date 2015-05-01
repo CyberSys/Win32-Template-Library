@@ -62,7 +62,6 @@ namespace wtl
 
     // Copy semantics determined by stream type
     DEFAULT_COPY(TextReader);
-    DEFAULT_COPY_ASSIGN(TextReader);
 	
 	  // ------------------------- STATIC ---------------------------
 

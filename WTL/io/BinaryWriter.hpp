@@ -60,9 +60,8 @@ namespace wtl
     virtual ~BinaryWriter()
     {}
 
-    // Copy semantics determined by stream type
-    DEFAULT_COPY(BinaryWriter);
-    DEFAULT_COPY_ASSIGN(BinaryWriter);
+    
+    DEFAULT_COPY(BinaryWriter);   //!< Copy semantics determined by stream type
 	
 	  // ------------------------- STATIC ---------------------------
 

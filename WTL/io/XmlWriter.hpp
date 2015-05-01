@@ -164,9 +164,8 @@ namespace wtl
     virtual ~XmlWriter()
     {}
 
-    // Copy semantics determined by stream type
-    DEFAULT_COPY(XmlWriter);
-    DEFAULT_COPY_ASSIGN(XmlWriter);
+    
+    DEFAULT_COPY(XmlWriter);    //!< Copy semantics determined by stream type
 	
 	  // ------------------------- STATIC ---------------------------
 
