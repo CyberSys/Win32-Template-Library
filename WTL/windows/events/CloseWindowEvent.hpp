@@ -20,7 +20,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CloseWindowEvent = Event<ENC,LResult>;
+  using CloseWindowEvent = Event<LResult>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias CloseWindowEventHandler - Handler for 'CloseWindow' event (ie. WM_CLOSE)

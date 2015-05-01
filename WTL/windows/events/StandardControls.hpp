@@ -20,7 +20,7 @@ namespace wtl
   //! \tparam CODE - Notification message 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEvent = Event<ENC, LResult, CtrlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>&>;
+  using ButtonEvent = Event<LResult, ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>&>;
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias ButtonEventArgs - Defines arguments for button control events raised via WM_COMMAND 
@@ -29,7 +29,7 @@ namespace wtl
   //! \tparam CODE - Notification message 
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEventArgs = CtrlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>;
+  using ButtonEventArgs = ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias ButtonEventHandler - Defines handlers for button control events raised via WM_COMMAND 

@@ -17,23 +17,22 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct Event - Provides an observeable event pattern with multiple subscribers
   //! 
-  //! \tparam ENC - Character encoding 
   //! \tparam RET - [optional] Handler function return type (If unspecified, no return)
   //! \tparam SIG - [optional] Handler function signature (If unspecified, no arguments)
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename RET = void, typename... ARGS>
+  template <typename RET = void, typename... ARGS>
   struct Event 
   {
     // ------------------- TYPES & CONSTANTS -------------------
   
+    ///////////////////////////////////////////////////////////////////////////////
     //! \alias argument_t - Delegate argument type accessor
+    //!
     //! \tparam IDX - Zero-based argument index
+    ///////////////////////////////////////////////////////////////////////////////
     template <unsigned IDX>
     using argument_t = typename std::tuple_element<IDX, std::tuple<ARGS...>>::type;
   
-    //! \alias char_t - Define character type
-    using char_t = encoding_char_t<ENC>;
-    
     //! \alias delegate_t - Define delegate type
     using delegate_t = Delegate<sizeof...(ARGS),RET,ARGS...>;
     
@@ -46,9 +45,6 @@ namespace wtl
     //! \var arguments - Number of arguments
     static constexpr uint32  arguments = sizeof...(ARGS);
 
-    //! \var encoding - Define character encoding
-    static constexpr Encoding  encoding = ENC;
-    
   protected:
     //! \alias storage_t - Define delegate storage type
     using storage_t = std::shared_ptr<delegate_t>;

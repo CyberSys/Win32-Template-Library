@@ -83,25 +83,17 @@ namespace wtl
   //! \tparam WM - Window message
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
-  using MessageEvent = Event<ENC, LResult, EventArgs<ENC,WM>&>;
+  using MessageEvent = Event<LResult, EventArgs<ENC,WM>&>;
+
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias MessageEventArgs - Defines arguments for any 'Message' Event 
-  //! 
-  //! \tparam ENC - Message character encoding 
-  //! \tparam WM - Window message
-  ///////////////////////////////////////////////////////////////////////////////
-  //template <Encoding ENC, WindowMessage WM, template <unsigned> class ARGS = MessageEvent<ENC,WM>::argument_t>
-  //using MessageEventArgs = ARGS<0>; // typename MessageEvent<ENC,WM>::argument_t<0>;
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \alias MessageEventHandler - Defines handler for any 'Message' event 
+  //! \alias EventHandler - Defines handler for any 'Message' event 
   //! 
   //! \tparam ENC - Window character encoding
   //! \tparam WM - Window message
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
-  using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
+  using EventHandler = typename MessageEvent<ENC,WM>::delegate_t;
 
   
 }

@@ -19,7 +19,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using DestroyWindowEvent = Event<ENC,LResult>;
+  using DestroyWindowEvent = Event<LResult>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias DestroyWindowEventHandler - Handler for 'DestroyWindow' event (ie. WM_DESTROY)

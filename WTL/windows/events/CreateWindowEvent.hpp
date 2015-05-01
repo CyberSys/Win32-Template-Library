@@ -125,7 +125,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CreateWindowEventHandler = typename CreateWindowEvent<ENC>::delegate_t;
+  using CreateWindowEventHandler = EventHandler<ENC,WindowMessage::CREATE>;
 
 }
 

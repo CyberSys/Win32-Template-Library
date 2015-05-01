@@ -101,7 +101,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ActionEventHandler = typename ActionEvent<ENC>::delegate_t;
+  using ActionEventHandler = EventHandler<ENC,WindowMessage::COMMAND>;
 
 
 }

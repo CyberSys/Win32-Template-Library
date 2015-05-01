@@ -88,7 +88,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ShowWindowEventHandler = typename ShowWindowEvent<ENC>::delegate_t;
+  using ShowWindowEventHandler = EventHandler<ENC,WindowMessage::SHOWWINDOW>;
 
 
 }
