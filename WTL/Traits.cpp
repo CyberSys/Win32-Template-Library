@@ -42,19 +42,19 @@ namespace wtl
 namespace wtl
 {
   //! \var npos - Define 'Invalid handle' sentinel values
-  //const ::HFILESEARCH handle_alloc<::HFILESEARCH>::npos = (const ::HFILESEARCH)INVALID_HANDLE_VALUE;
   const ::ATOM        handle_alloc<::ATOM>::npos = INVALID_ATOM;
-  const ::HACCEL      handle_alloc<::HACCEL>::npos = (const ::HACCEL)INVALID_HANDLE_VALUE;
-  const ::HBRUSH      handle_alloc<::HBRUSH>::npos = (const ::HBRUSH)INVALID_HANDLE_VALUE;
-  const ::HDC         handle_alloc<::HDC>::npos = (const ::HDC)INVALID_HANDLE_VALUE;
-  const ::HFONT       handle_alloc<::HFONT>::npos = (const ::HFONT)INVALID_HANDLE_VALUE;
-  const ::HGLOBAL     handle_alloc<::HGLOBAL>::npos = (const ::HGLOBAL)INVALID_HANDLE_VALUE;
-  const ::HICON       handle_alloc<::HICON>::npos = (const ::HICON)INVALID_HANDLE_VALUE;
-  const ::HMENU       handle_alloc<::HMENU>::npos = (const ::HMENU)INVALID_HANDLE_VALUE;
-  const ::HMODULE     handle_alloc<::HMODULE>::npos = (const ::HMODULE)INVALID_HANDLE_VALUE;
-  const ::HPEN        handle_alloc<::HPEN>::npos = (const ::HPEN)INVALID_HANDLE_VALUE;
-  const ::HRSRC       handle_alloc<::HRSRC>::npos = (const ::HRSRC)INVALID_HANDLE_VALUE;
-  const ::HWND        handle_alloc<::HWND>::npos = (const ::HWND)INVALID_HANDLE_VALUE;
+  const ::HACCEL      handle_alloc<::HACCEL>::npos = nullptr;
+  const ::HBRUSH      handle_alloc<::HBRUSH>::npos = nullptr;
+  const ::HDC         handle_alloc<::HDC>::npos = nullptr;
+  const ::HFILESEARCH handle_alloc<::HFILESEARCH>::npos = (const ::HFILESEARCH)INVALID_HANDLE_VALUE;
+  const ::HFONT       handle_alloc<::HFONT>::npos = nullptr;
+  const ::HGLOBAL     handle_alloc<::HGLOBAL>::npos = nullptr;
+  const ::HICON       handle_alloc<::HICON>::npos = nullptr;
+  const ::HMENU       handle_alloc<::HMENU>::npos = nullptr;
+  const ::HMODULE     handle_alloc<::HMODULE>::npos = nullptr;
+  const ::HPEN        handle_alloc<::HPEN>::npos = nullptr;
+  const ::HRSRC       handle_alloc<::HRSRC>::npos = nullptr;
+  const ::HWND        handle_alloc<::HWND>::npos = nullptr;
   
   //! \var handle_alloc<T>::npos - 'Invalid handle' sentinel value 
   /*template <typename T>
