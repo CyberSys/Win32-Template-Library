@@ -35,7 +35,8 @@ namespace wtl
     ButtonClickEvent<encoding>        Click;         //!< Button click
     ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
     ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
-    OwnerDrawEvent<encoding>          OwnerDraw;     //!< Owner draw
+    OwnerDrawEvent<encoding>          OwnerDraw;     //!< Owner draw button
+    OwnerMeasureEvent<encoding>       OwnerMeasure;  //!< Measure button for owner draw
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
     // --------------------- CONSTRUCTION ----------------------
@@ -55,6 +56,7 @@ namespace wtl
 
       // Owner draw handler
       OwnerDraw += new OwnerDrawEventHandler<encoding>(this, &Button::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
       // Subclass prior to creation
       SubClasses.push_back(SubClass(WindowType::Native, getSystemWndProc()));
@@ -212,6 +214,27 @@ namespace wtl
     { 
       // Draw background
       args.Graphics.fill(args.Rect, wtl::StockBrush::Green);
+
+      // Handled
+      return 0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Button::onOwnerMeasure
+    //! Called in response to a reflected 'owner measure' message 
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureEventArgs<encoding>& args) 
+    { 
+      //CharArray<encoding,128> text;
+
+      // Measure text
+      //args.Graphics.write(text, args.Rect, MeasureTextFlags::Centre|MeasureTextFlags::VCentre);
+
+      // Set size
+      args.Size = SizeL(150,18);
 
       // Handled
       return 0;

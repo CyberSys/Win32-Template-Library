@@ -150,7 +150,10 @@ namespace wtl
 
   protected:
     //! \alias collection_t - Define collection type
-    using collection_t = std::list<ActionPtr<ENC>>;
+    using collection_t = List<ActionPtr<ENC>>;
+
+    //! \alias const_iterator - Define collection iterator type
+    using const_iterator = typename collection_t::const_iterator;
     
     // -------------------- REPRESENTATION ---------------------
   public:
@@ -183,26 +186,27 @@ namespace wtl
     // ---------------------- ACCESSORS ------------------------			
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // PopupMenu::getCommand const
-    //! Get the gui command for an item
+    // PopupMenu::begin const
+    //! Get read-only position of first action
     //! 
-    //! \param[in] id - Command Id
-    //! \return IAction<encoding>* - Gui Command
-    //! 
-    //! \throw wtl::platform_error - Unable to find command
+    //! \return const_iterator - Position of first action
     ///////////////////////////////////////////////////////////////////////////////
-    //Action<encoding>* getCommand(CommandId id) const
-    //{
-    //  MenuItemInfo<encoding> info;
-    //  
-    //  // Query item data
-    //  if (!getFunc<encoding>(::GetMenuItemInfoA,GetMenuItemInfoW)(Handle, enum_cast(id), FALSE, &info))
-    //    throw platform_error(HERE, "Unable to query menu item");
+    const_iterator  begin() const
+    {
+      return Items.cbegin();
+    }
 
-    //  // Extract command
-    //  return opaque_cast<Action<encoding>>(info.dwItemData);
-    //}
-    
+    ///////////////////////////////////////////////////////////////////////////////
+    // PopupMenu::end const
+    //! Get read-only position of last action
+    //! 
+    //! \return const_iterator - Position of last action
+    ///////////////////////////////////////////////////////////////////////////////
+    const_iterator  end() const
+    {
+      return Items.cend();
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     // PopupMenu::handle const
     //! Get the shared menu handle 
@@ -232,7 +236,39 @@ namespace wtl
       // Error: failed
       throw platform_error(HERE, "Unable to query menu item count");
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // PopupMenu::find const
+    //! Searches for an Action 
+    //! 
+    //! \param[in] id - Action Id
+    //! \return const_iterator - Position of action, if found, otherwise 'end'
+    ///////////////////////////////////////////////////////////////////////////////
+    const_iterator find(CommandId id) const
+    {
+      // Lookup item
+      return Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // PopupMenu::operator[] const
+    //! Get an Action 
+    //! 
+    //! \param[in] id - Action Id
+    //!
+    //! \throw wtl::out_of_range - Action not found
+    ///////////////////////////////////////////////////////////////////////////////
+    ActionPtr<encoding> operator[] (CommandId id) const
+    {
+      // Lookup item
+      auto pos = find(id);
+      if (pos != Items.cend())
+        return *pos;
 
+      // [ERROR] Not found
+      throw out_of_range(HERE, "Action %d not found", enum_cast(id));
+    }
+    
     ///////////////////////////////////////////////////////////////////////////////
     // PopupMenu::operator ::HMENU const
     //! Implicit user conversion to native menu handle
@@ -243,7 +279,7 @@ namespace wtl
     {
       return Handle;
     }
-
+    
     // ----------------------- MUTATORS ------------------------
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -267,9 +303,7 @@ namespace wtl
         throw platform_error(HERE, "Unable to insert menu item");
 
       // Insert Action into collection 
-      auto pos = Items.begin();
-      std::advance(pos, idx);
-      Items.insert(pos, cmd);
+      Items.insert(Items.at(idx), cmd);
     }
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -338,12 +372,15 @@ namespace wtl
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
 
+    //! \alias popup_t - Define popup menu type
+    using popup_t = PopupMenu<ENC>;
+
     //! \var encoding - Define item text character encoding
     static constexpr Encoding  encoding = ENC;
 
   protected:
     //! \alias collection_t - Define popup menu collection type
-    using collection_t = std::list<PopupMenu<ENC>>;
+    using collection_t = List<popup_t>;
     
     // -------------------- REPRESENTATION ---------------------
   public:
@@ -432,6 +469,41 @@ namespace wtl
     {
       return Handle;
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowMenu::find const
+    //! Searches for an Action 
+    //! 
+    //! \param[in] id - Action Id
+    //! \return const_iterator - Position of action, if found, otherwise 'end'
+    ///////////////////////////////////////////////////////////////////////////////
+    //typename popup_t::const_iterator find(CommandId id) const
+    //{
+    //  // Lookup item
+    //  return Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
+    //}
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // WindowMenu::operator[] const
+    //! Search all popup menus for an action
+    //! 
+    //! \param[in] id - Action Id
+    //! \return ActionPtr<encoding> - Shared action pointer
+    ///////////////////////////////////////////////////////////////////////////////
+    ActionPtr<encoding> operator[] (CommandId id) const
+    {
+      // Search all popups
+      for (auto& popup : Popups)
+      {
+        // Find & return action
+        auto cmd = popup.find(id);
+        if (cmd != popup.end())
+          return *cmd;
+      }
+      
+      // [ERROR] Not found
+      throw out_of_range(HERE, "Action %d not found", enum_cast(id));
+    }
 
     // ----------------------- MUTATORS ------------------------
     
@@ -449,14 +521,10 @@ namespace wtl
     {
       REQUIRED_PARAM(group);
 
-      // Find position
-      auto pos = Popups.begin();
-      std::advance(pos, idx);
-
       // Insert new Popup menu into collection and extract its handle
-      auto& popup = *Popups.emplace(pos, *group);
+      auto popup = Popups.emplace(Popups.at(idx), *group);
 
-      MenuItemInfo<encoding> item(*group, popup.handle());     //!< Generate pop-up menu item 
+      MenuItemInfo<encoding> item(*group, popup->handle());     //!< Generate pop-up menu item 
 
       // Insert menu item 
       if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, TRUE, &item))
@@ -489,7 +557,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawEventArgs<encoding>& args) 
     { 
-      //CharArray<encoding,128> text;
+      // Lookup action 
+      auto action = operator[](args.Ident);
 
       // Draw background
       args.Graphics.fill(args.Rect, wtl::StockBrush::Gold);
@@ -510,13 +579,11 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureEventArgs<encoding>& args) 
     { 
-      //CharArray<encoding,128> text;
+      // Lookup action 
+      auto action = operator[](args.Ident.Action);
 
       // Measure text
-      //args.Graphics.write(text, args.Rect, MeasureTextFlags::Centre|MeasureTextFlags::VCentre);
-
-      // Set size
-      args.Size = SizeL(150,18);
+      args.Size = args.Graphics.measure(action->name());
 
       // Handled
       return 0;

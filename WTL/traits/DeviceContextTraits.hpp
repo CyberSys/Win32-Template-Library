@@ -15,45 +15,60 @@ namespace wtl
 {
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct HAlloc<HDC> - Associates window handle, DC handle, and allocation method
+  //! \struct HAlloc<::HDC> - Associates window handle, DC handle, and allocation method
   ///////////////////////////////////////////////////////////////////////////////
   template <>
-  struct HAlloc<HDC>
+  struct HAlloc<::HDC>
   {
-    HAlloc(HDC dc, AllocType at) : Handle(dc), Method(at), Window(0)
+    ///////////////////////////////////////////////////////////////////////////////
+    // HAlloc<::HDC>::HAlloc
+    //! Create without owner window
+    //! 
+    //! \param[in] dc - Device context
+    //! \param[in] at - Allocation type
+    ///////////////////////////////////////////////////////////////////////////////
+    HAlloc(::HDC dc, AllocType at) : Handle(dc), Method(at), Window(0)
     {}
 
-    HAlloc(HDC dc, HWND wnd, AllocType at) : Handle(dc), Method(at), Window(wnd)
+    ///////////////////////////////////////////////////////////////////////////////
+    // HAlloc<::HDC>::HAlloc
+    //! Store owner window
+    //! 
+    //! \param[in] dc - Device context
+    //! \param[in] wnd - Owner window
+    //! \param[in] at - Allocation type
+    ///////////////////////////////////////////////////////////////////////////////
+    HAlloc(::HDC dc, ::HWND wnd, AllocType at) : Handle(dc), Method(at), Window(wnd)
     {}
 
-    HDC        Handle;      //!< Handle
+    ::HDC      Handle;      //!< Handle
     AllocType  Method;      //!< Allocation method
-    HWND       Window;      //!< Owner window
+    ::HWND     Window;      //!< Owner window
   };
 
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HDC> - Encapsulates device context handle allocation
+  //! \struct handle_alloc<::HDC> - Encapsulates device context handle allocation
   ///////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<HDC>
+  struct handle_alloc<::HDC>
   {
     //! \var npos - Invalid handle sentinel value
-    static const HDC npos; 
+    static const ::HDC npos; 
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HDC>::create
+    // handle_alloc<::HDC>::create
     //! Accquire client area device context 
     //! 
     //! \param[in] wnd - Window handle
-    //! \return HAlloc<HDC> - Accquired handle
+    //! \return HAlloc<::HDC> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     ///////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HDC> create(HWND wnd) 
+    static HAlloc<::HDC> create(::HWND wnd) 
     { 
       // Load menu 
-      if (HDC dc = GetDC(wnd))
+      if (::HDC dc = GetDC(wnd))
         return { dc, wnd, AllocType::Accquire };
 
       // Error: Failed  
@@ -61,24 +76,24 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HDC>::clone
+    // handle_alloc<::HDC>::clone
     //! Clone handle
     //! 
     //! \param[in] dc - Device context handle
-    //! \return HAlloc<HDC> - Duplicate of handle
+    //! \return HAlloc<::HDC> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     ///////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HDC> clone(HAlloc<HDC> dc);
+    static HAlloc<::HDC> clone(HAlloc<::HDC> dc);
 
     ///////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HDC>::destroy noexcept
+    // handle_alloc<::HDC>::destroy noexcept
     //! Release Menu handle
     //! 
     //! \param[in] dc - Device context handle
     //! \return bool - True iff closed successfully
     ///////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HDC> dc) noexcept
+    static bool destroy(HAlloc<::HDC> dc) noexcept
     {
       // Delete without checking if handle is valid
       switch (dc.Method)
@@ -93,7 +108,7 @@ namespace wtl
 
 
   //! \alias HDeviceContext - Shared device context handle
-  using HDeviceContext = Handle<HDC>;
+  using HDeviceContext = Handle<::HDC>;
 
   
 } //namespace wtl

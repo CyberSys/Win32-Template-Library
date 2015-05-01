@@ -76,7 +76,7 @@ namespace wtl
     // -------------------- REPRESENTATION ---------------------
 
     CommandId      Ident;     //!< Action id 
-    ActionSource  Source;    //!< How command was raised
+    ActionSource  Source;     //!< How command was raised
   };
   
   ///////////////////////////////////////////////////////////////////////////////

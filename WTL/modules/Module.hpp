@@ -146,12 +146,12 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct ModuleCollection - Hosts all loaded modules
   ///////////////////////////////////////////////////////////////////////////////
-  struct ModuleCollection : protected std::list<std::reference_wrapper<const Module>>
+  struct ModuleCollection : protected List<std::reference_wrapper<const Module>>
   {
     // ------------------- TYPES & CONSTANTS -------------------
   
     //! \alias base - Define base type
-    using base = std::list<std::reference_wrapper<const Module>>;
+    using base = List<std::reference_wrapper<const Module>>;
 
     //! \alias element_t - Define collection element type
     using element_t = std::reference_wrapper<const Module>;

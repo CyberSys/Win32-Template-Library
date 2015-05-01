@@ -37,18 +37,25 @@ namespace wtl
     
     //! \var message - Define message identifier
     static constexpr WindowMessage message = WindowMessage::MEASUREITEM;
+
+    //! \union Identifier - Measure item identifier
+    union Identifier
+    {
+      WindowId    Control;      //!< Control id
+      CommandId   Action;       //!< Action Id
+    };
     
     // -------------------- REPRESENTATION ---------------------
   protected:
     MeasureData&      Data;             //!< Encapsulates the input measure data (NB: Must be initialized before following fields)
 
   public:
-    SizeL             Size;             //!< Item size
-    int32             Item;             //!< Zero-based item index
-    WindowId          Ident;            //!< [CONTROL] Control id
-    CommandId         Action;           //!< [MENU] Command Id
     OwnerDrawControl  CtrlType;         //!< Control type
-
+    DeviceContext     Graphics;         //!< Device context
+    Identifier        Ident;            //!< Control/Menu identifier
+    int32             Item;             //!< [CONTROL] Zero-based item index
+    SizeL             Size;             //!< Item size
+    
     // --------------------- CONSTRUCTION ----------------------
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -58,13 +65,18 @@ namespace wtl
     //! \param[in] w - Not used
     //! \param[in] l - Not used
     ///////////////////////////////////////////////////////////////////////////////
-    EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<MeasureData>(l)), 
-                                        Size(Data.itemWidth, Data.itemHeight),
-                                        Item(Data.itemID), 
-                                        Action(static_cast<CommandId>(Data.itemID)), 
-                                        Ident(static_cast<WindowId>(Data.CtlID)), 
-                                        CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType))
-    {}
+    EventArgs(const HWnd& wnd, ::WPARAM w, ::LPARAM l) : Data(*opaque_cast<MeasureData>(l)), 
+                                                         Graphics(HDeviceContext(wnd)),
+                                                         Size(Data.itemWidth, Data.itemHeight),
+                                                         Item(Data.itemID), 
+                                                         CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType))
+    {
+      // Extract identifier
+      if (CtrlType == OwnerDrawControl::Menu)
+        Ident.Action = static_cast<CommandId>(Data.itemID);
+      else
+        Ident.Control = static_cast<WindowId>(Data.CtlID);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // EventArgs::~EventArgs
@@ -90,7 +102,7 @@ namespace wtl
     LResult reflect(const HWnd& ctrl) const
     {
       // Reflect message
-      return send_message<encoding,message+WindowMessage::REFLECT>(ctrl, opaque_cast(Ident), opaque_cast(Data));
+      return send_message<encoding,message+WindowMessage::REFLECT>(ctrl, opaque_cast(Data.CtlID), opaque_cast(Data));
     }
     
     // ----------------------- MUTATORS ------------------------

@@ -89,7 +89,7 @@ namespace wtl
     };
 
     //! \alias WindowCollection - Window collection type
-    using WindowCollection = std::list<WindowBase*>;
+    using WindowCollection = List<WindowBase*>;
     
     //! \alias WindowHandleCollection - Provides an association between native window handles and WindowBase objects
     using WindowHandleCollection = std::map<::HWND,WindowBase*>;
@@ -104,7 +104,7 @@ namespace wtl
     using ChildWindowCollection = WindowIdCollection;
     
     //! \alias SubClassCollection - Define subclassed windows collection
-    using SubClassCollection = std::list<SubClass>;
+    using SubClassCollection = List<SubClass>;
     
     //! \alias wndclass_t - Window class type
     using wndclass_t = WindowClass<ENC>;
@@ -730,7 +730,7 @@ namespace wtl
         // [OWNER-MEASURE] Reflect to sender
         case WindowMessage::MEASUREITEM: 
         {
-          OwnerMeasureEventArgs<encoding> args(w,l);
+          OwnerMeasureEventArgs<encoding> args(Handle,w,l);
           
           // [CONTROL] Reflect to originator
           if (args.CtrlType != OwnerDrawControl::Menu)

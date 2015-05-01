@@ -287,7 +287,31 @@ namespace wtl
       if (::FillRect(Handle, rc, brush) == FALSE)
         throw platform_error(HERE, "Unable to fill custom rect");
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::measure
+    //! Measure text using the current font
+    //! 
+    //! \tparam ENC - Character encoding
+    //! \tparam LEN - Buffer capacity
+    //!
+    //! \param[in] const &txt - Text
+    //! \return SizeL - Size in pixels
+    //!
+    //! \throw wtl::platform_error - Unable to measure text
+    ///////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC, unsigned LEN>
+    SizeL measure(const CharArray<ENC,LEN>& txt)
+    {
+      SizeL sz;   //!< Text size
 
+      // Measure text
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), sz) == FALSE)
+        throw platform_error(HERE, "Unable to measure text");
+
+      return sz;
+    }
+    
     ///////////////////////////////////////////////////////////////////////////////
     // DeviceContext::pop
     //! Discards the current object and replaces it with the previous one
