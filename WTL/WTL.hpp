@@ -195,17 +195,13 @@
 #include "windows/events/ShowWindowEvent.hpp"
 #include "windows/events/OwnerDrawEvent.hpp"
 #include "windows/events/OwnerMeasureEvent.hpp"
-//#include "windows/events/ActionEvent.hpp"
-#include "windows/events/GuiCommandEvent.hpp"
+#include "windows/events/ActionEvent.hpp"
 #include "windows/events/StandardControls.hpp"
 
 // Commands
-//#include "windows/Action.hpp"
-//#include "windows/ActionGroup.hpp"
-//#include "windows/ActionQueue.hpp"
-#include "windows/GuiCommand.hpp"
-#include "windows/GuiCommandGroup.hpp"
-#include "windows/GuiCommandQueue.hpp"
+#include "windows/Action.hpp"
+#include "windows/ActionGroup.hpp"
+#include "windows/ActionQueue.hpp"
 
 // Windows
 #include "windows/WindowMenu.hpp"

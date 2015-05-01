@@ -109,7 +109,7 @@
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
-    <ClInclude Include="windows\events\GuiCommandEvent.hpp" />
+    <ClInclude Include="windows\events\ActionEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\OwnerMeasureEvent.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
@@ -119,9 +119,9 @@
     <ClInclude Include="windows\events\OwnerDrawEvent.hpp" />
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
-    <ClInclude Include="windows\GuiCommand.hpp" />
-    <ClInclude Include="windows\GuiCommandGroup.hpp" />
-    <ClInclude Include="windows\GuiCommandQueue.hpp" />
+    <ClInclude Include="windows\Action.hpp" />
+    <ClInclude Include="windows\ActionGroup.hpp" />
+    <ClInclude Include="windows\ActionQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageEvent.hpp" />
     <ClInclude Include="windows\skins\SkinFactory.hpp" />

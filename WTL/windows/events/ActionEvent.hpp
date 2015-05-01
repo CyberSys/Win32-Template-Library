@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\CommandEvent.hpp
-//! \brief Provides argument/delegate/handler types for events from controls via WM_COMMAND
+//! \file wtl\windows\events\ActionEvent.hpp
+//! \brief Provides argument/delegate/handler types for action events
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
