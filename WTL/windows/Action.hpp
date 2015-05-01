@@ -116,9 +116,9 @@ namespace wtl
     // Action::description const
     //! Get the command description
     //! 
-    //! \return char_t* - Command description
+    //! \return const description_t::string_t& - Command description
     ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  description() const 
+    virtual const typename description_t::string_t&  description() const 
     {
       return Description.Text;
     }
@@ -149,9 +149,9 @@ namespace wtl
     // Action::name const
     //! Get the command name
     //! 
-    //! \return char_t* - Command name
+    //! \return const name_t::string_t& - Command name
     ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  name() const 
+    virtual const typename name_t::string_t&  name() const 
     {
       return Name.Text;
     }

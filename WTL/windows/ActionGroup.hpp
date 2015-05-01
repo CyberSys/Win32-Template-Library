@@ -98,11 +98,11 @@ namespace wtl
     
     ///////////////////////////////////////////////////////////////////////////////
     // ActionGroup::description const
-    //! Get the command description
+    //! Get the group description
     //! 
-    //! \return char_t* - Command description
+    //! \return const description_t::string_t& - Group description
     ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  description() const 
+    virtual const typename description_t::string_t&  description() const 
     {
       return Description.Text;
     }
@@ -139,7 +139,7 @@ namespace wtl
     // ActionGroup::ident const
     //! Get the group identifier
     //! 
-    //! \return CommandGroupId - Action group identifier
+    //! \return CommandGroupId - Group identifier
     ///////////////////////////////////////////////////////////////////////////////
     virtual CommandGroupId  ident() const 
     {
@@ -150,9 +150,9 @@ namespace wtl
     // ActionGroup::name const
     //! Get the group name
     //! 
-    //! \return char_t* - Group name
+    //! \return const name_t::string_t& - Group name
     ///////////////////////////////////////////////////////////////////////////////
-    virtual const char_t*  name() const 
+    virtual const typename name_t::string_t&  name() const 
     {
       return Name.Text;
     }
