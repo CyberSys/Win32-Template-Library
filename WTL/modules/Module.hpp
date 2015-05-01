@@ -41,8 +41,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual ~Module();
 
-    NO_COPY(Module);
-    NO_MOVE(Module);
+    DISABLE_COPY(Module);           //!< Modules are unique
+    DEFAULT_MOVE(Module);      //!< Modules can be moved
     
     // ------------------------ STATIC -------------------------
 

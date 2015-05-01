@@ -253,7 +253,7 @@ namespace wtl
         Owner.setAttributes(Attributes);
       }
 
-      NO_COPY_ASSIGN(CursorState);
+      DISABLE_COPY_ASSIGN(CursorState);
 
     protected:
       Console& Owner;       //!< Console
@@ -326,7 +326,7 @@ namespace wtl
       ::FreeConsole();
     }
     
-    //NO_COPY(Console);     //!< Mutex can't be copied
+    //DISABLE_COPY(Console);     //!< Mutex can't be copied
 
     // -------------------------- STATIC --------------------------
   

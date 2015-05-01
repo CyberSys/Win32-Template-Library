@@ -10,16 +10,16 @@
 
 #include "WTL.hpp"
 
-// --------------------------------------------------
-// -------------- CONDITIONAL BUILDS ----------------
-// --------------------------------------------------
+// --------------------------------------------------------------
+// -------------------- CONDITIONAL BUILDS ----------------------
+// --------------------------------------------------------------
 
 //! \def DEVELOPMENT_MODE - Activate boundary, domain/logic invariant, iterator, and function argument verification
 #define DEVELOPMENT_MODE
 
-// --------------------------------------------------
-// -------------------- COMPILER --------------------
-// --------------------------------------------------
+// --------------------------------------------------------------
+// -------------------------- COMPILER --------------------------
+// --------------------------------------------------------------
 
 //! \if __clang__ - Clang
 #ifdef __clang__
@@ -38,9 +38,9 @@
   #endif
 #endif
 
-// --------------------------------------------------
-// ----------------- GLOBAL MACROS ------------------
-// --------------------------------------------------
+// --------------------------------------------------------------
+// ----------------------- GLOBAL MACROS ------------------------
+// --------------------------------------------------------------
 
 //! \def STR - Stringifies a symbol
 #define STR2(s)  #s
@@ -62,55 +62,55 @@
 //! \def _CRT_SECURE_NO_WARNINGS - Disable C runtime library warnings
 #define _CRT_SECURE_NO_WARNINGS
 
-// ---------------------------------------------------------
-// -------------------- COPY SEMANTICS  --------------------
-// ---------------------------------------------------------
+// ---------------------------------------------------------------------
+// -------------------------- COPY SEMANTICS  --------------------------
+// ---------------------------------------------------------------------
 
-//! \def NO_COPY_CTOR - Prevents a type from being copy-constructed
-#define NO_COPY_CTOR(type)          type(const type& r) = delete
+//! \def DISABLE_COPY_CTOR - Prevents copy-construction
+#define DISABLE_COPY_CTOR(type)     type(const type& r) = delete
 
-//! \def NO_COPY_ASSIGN - Prevents copy-assignment upon a type
-#define NO_COPY_ASSIGN(type)        type& operator=(const type& r) = delete
+//! \def DISABLE_COPY_ASSIGN - Prevents copy-assignment 
+#define DISABLE_COPY_ASSIGN(type)   type& operator=(const type& r) = delete
 
-//! \def NO_COPY - Prevents a type from being copy-constructed or copy-assigned
-#define NO_COPY(type)               NO_COPY_CTOR(type);  NO_COPY_ASSIGN(type)
+//! \def DISABLE_COPY - Prevents copy-construction and copy-assignment
+#define DISABLE_COPY(type)          DISABLE_COPY_CTOR(type);  DISABLE_COPY_ASSIGN(type)
 
 
-//! \def DEFAULT_COPY_CTOR - Enables compiler generated copy constructor
+//! \def DEFAULT_COPY_CTOR - Enables copy-construction
 #define DEFAULT_COPY_CTOR(type)     type(const type& r) = default
 
-//! \def DEFAULT_COPY_ASSIGN - Enables compiler generated copy-assign operator
+//! \def DEFAULT_COPY_ASSIGN - Enables copy-assignment
 #define DEFAULT_COPY_ASSIGN(type)   type& operator=(const type& r) = default
 
-//! \def DEFAULT_COPY - Enables compiler generated copy constructor
+//! \def DEFAULT_COPY - Enables copy-construction and copy-assignment
 #define DEFAULT_COPY(type)          DEFAULT_COPY_CTOR(type);  DEFAULT_COPY_ASSIGN(type)
 
-// ---------------------------------------------------------
-// -------------------- MOVE SEMANTICS  --------------------
-// ---------------------------------------------------------
+// ---------------------------------------------------------------------
+// -------------------------- MOVE SEMANTICS  --------------------------
+// ---------------------------------------------------------------------
 
-//! \def NO_MOVE_CTOR - Prevents a type from being move-constructed
-#define NO_MOVE_CTOR(type)          type(type&& r) = delete
+//! \def DISABLE_MOVE_CTOR - Prevents move-construction
+#define DISABLE_MOVE_CTOR(type)     type(type&& r) = delete
 
-//! \def NO_MOVE_ASSIGN - Prevents move-assignment upon a type
-#define NO_MOVE_ASSIGN(type)        type& operator=(type&& r) = delete
+//! \def DISABLE_MOVE_ASSIGN - Prevents move-assignment 
+#define DISABLE_MOVE_ASSIGN(type)   type& operator=(type&& r) = delete
 
-//! \def NO_MOVE - Prevents a type from being move-constructed or move-assigned
-#define NO_MOVE(type)               NO_MOVE_CTOR(type);  NO_MOVE_ASSIGN(type)
+//! \def DISABLE_MOVE - Prevents move-construction and move-assignment
+#define DISABLE_MOVE(type)          DISABLE_MOVE_CTOR(type);  DISABLE_MOVE_ASSIGN(type)
 
 
-//! \def DEFAULT_MOVE_CTOR - Enables compiler generated move constructor
+//! \def DEFAULT_MOVE_CTOR - Enables move-construction
 #define DEFAULT_MOVE_CTOR(type)     type(type&& r) = default
 
-//! \def DEFAULT_MOVE_ASSIGN - Enables compiler generated move-assignment operator
+//! \def DEFAULT_MOVE_ASSIGN - Enables move-assignment 
 #define DEFAULT_MOVE_ASSIGN(type)   type& operator=(type&& r) = default
 
-//! \def DEFAULT_MOVE - Enables compiler generated move constructor
+//! \def DEFAULT_MOVE - Enables move-construction and move-assignment
 #define DEFAULT_MOVE(type)          DEFAULT_MOVE_CTOR(type);  DEFAULT_MOVE_ASSIGN(type)
 
-// --------------------------------------------------
-// ------------------ DEVELOPMENT -------------------
-// --------------------------------------------------
+// --------------------------------------------------------------
+// ------------------------ DEVELOPMENT -------------------------
+// --------------------------------------------------------------
 
 //! if DEVELOPMENT_MODE - Activate  Query whether in release mode  (Can be manually set)
 #ifdef DEVELOPMENT_MODE
