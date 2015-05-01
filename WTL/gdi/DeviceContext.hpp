@@ -295,7 +295,7 @@ namespace wtl
     //! \tparam ENC - Character encoding
     //! \tparam LEN - Buffer capacity
     //!
-    //! \param[in] const &txt - Text
+    //! \param[in] const &txt - Character array 
     //! \return SizeL - Size in pixels
     //!
     //! \throw wtl::platform_error - Unable to measure text
@@ -307,6 +307,30 @@ namespace wtl
 
       // Measure text
       if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), sz) == FALSE)
+        throw platform_error(HERE, "Unable to measure text");
+
+      return sz;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::measure
+    //! Measure text using the current font
+    //! 
+    //! \tparam CHR - Character type
+    //! \tparam ENC - [optional] Character encoding
+    //!
+    //! \param[in] const* txt - Null terminated string
+    //! \return SizeL - Size in pixels
+    //!
+    //! \throw wtl::platform_error - Unable to measure text
+    ///////////////////////////////////////////////////////////////////////////////
+    template <typename CHR, Encoding ENC = default_encoding<CHR>::value>
+    SizeL measure(const CHR* txt)
+    {
+      SizeL sz;   //!< Text size
+
+      // Measure text
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), sz) == FALSE)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
