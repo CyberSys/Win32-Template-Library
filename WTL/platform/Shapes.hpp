@@ -31,6 +31,9 @@ namespace wtl
     
     //! \var EMPTY - Empty sentinel value 
     static const point_t EMPTY;
+    
+    //! \var native - Whether binary compatible with ::POINT
+    static constexpr bool native = sizeof(value_t) == sizeof(long32);
 
     // ----------------------- CONSTRUCTION -----------------------
 
@@ -100,8 +103,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return x == zero<value_t>::value && y == zero<value_t>::value;
-    };
+      return *this == EMPTY;
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // Point::operator+ const
@@ -115,7 +118,7 @@ namespace wtl
     { 
       return point_t(x + static_cast<T>(pt.x), 
                      y + static_cast<T>(pt.y)); 
-    };
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // Point::operator- const
@@ -129,20 +132,39 @@ namespace wtl
     { 
       return point_t(x - static_cast<T>(pt.x), 
                      y - static_cast<T>(pt.y)); 
-    };
+    }
 
     // ------------------------- MUTATORS -------------------------
 
+    ///////////////////////////////////////////////////////////////////////////////
+    // Point::clear
+    //! Reset all fields to zero
+    ///////////////////////////////////////////////////////////////////////////////
+    void  clear() 
+    {
+      *this = EMPTY;
+    }
+    
     ///////////////////////////////////////////////////////////////////////////////
     // Point::operator ::POINT& 
     //! Implicit user conversion to win32 point 
     //! 
     //! \return ::POINT& - Mutable reference to win32 point
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32)>>
-    operator ::POINT& ()
+    operator std::enable_if_t<native,::POINT&> ()
     {
       return *reinterpret_cast<::POINT*>(this);
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Point::operator ::POINT& 
+    //! Implicit user conversion to win32 point 
+    //! 
+    //! \return ::POINT* - Mutable pointer to win32 point
+    ///////////////////////////////////////////////////////////////////////////////
+    operator std::enable_if_t<native,::POINT*> ()
+    {
+      return reinterpret_cast<::POINT*>(this);
     }
 
     // -------------------- REPRESENTATION ---------------------
@@ -185,6 +207,9 @@ namespace wtl
 
     //! \var EMPTY - Empty sentinel value 
     static const size_t EMPTY;
+
+    //! \var native - Whether binary compatible with ::SIZE
+    static constexpr bool native = sizeof(value_t) == sizeof(long32);
 
     // ----------------------- CONSTRUCTION -----------------------
 
@@ -241,23 +266,42 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return width == zero<value_t>::value && height == zero<value_t>::value;
+      return *this == EMPTY;
     }
 
+    // ------------------------- MUTATORS -------------------------
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Size::clear
+    //! Reset all fields to zero
+    ///////////////////////////////////////////////////////////////////////////////
+    void  clear() 
+    {
+      *this = EMPTY;
+    };
+    
     ///////////////////////////////////////////////////////////////////////////////
     // Size::operator ::SIZE& 
     //! Implicit user conversion to win32 size 
     //! 
     //! \return ::SIZE& - Mutable reference to win32 size
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32)>>
-    operator ::SIZE& ()
+    operator std::enable_if_t<native,::SIZE&> ()
     {
       return *reinterpret_cast<::SIZE*>(this);
     }
-
-    // ------------------------- MUTATORS -------------------------
     
+    ///////////////////////////////////////////////////////////////////////////////
+    // Size::operator ::SIZE& 
+    //! Implicit user conversion to win32 size 
+    //! 
+    //! \return ::SIZE* - Mutable pointer to win32 size
+    ///////////////////////////////////////////////////////////////////////////////
+    operator std::enable_if_t<native,::SIZE*> ()
+    {
+      return reinterpret_cast<::SIZE*>(this);
+    }
+
     // -------------------- REPRESENTATION ---------------------
 
     value_t  width,        //!< Width extent
@@ -299,6 +343,9 @@ namespace wtl
 
     //! \var EMPTY - Sentinel empty rectangle
     static const rect_t EMPTY;
+
+    //! \var native - Whether binary compatible with ::RECT
+    static constexpr bool native = sizeof(value_t) == sizeof(long32);
 
     // ----------------------- CONSTRUCTION -----------------------
 
@@ -435,8 +482,7 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return left == zero<value_t>::value && right  == zero<value_t>::value
-          && top  == zero<value_t>::value && bottom == zero<value_t>::value;
+      return *this == EMPTY;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -463,17 +509,28 @@ namespace wtl
 
     
     ///////////////////////////////////////////////////////////////////////////////
+    // Rect::operator ::RECT&  const
+    //! Implicit user conversion to win32 rectangle 
+    //! 
+    //! \return const ::RECT& - Immutable reference to win32 rectangle
+    ///////////////////////////////////////////////////////////////////////////////
+    operator std::enable_if_t<native,const ::RECT&> () const
+    {
+      return *reinterpret_cast<const ::RECT*>(this);
+    }
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////
     // Rect::operator ::RECT* const
     //! Implicit user conversion to win32 rectangle 
     //! 
     //! \return const ::RECT* - Immutable pointer to win32 rectangle
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32)>>
-    operator const ::RECT* () const
+    operator std::enable_if_t<native,const ::RECT*> () const
     {
       return reinterpret_cast<const ::RECT*>(this);
     }
-
+    
 
     ///////////////////////////////////////////////////////////////////////////////
     // Rect::operator+ const
@@ -502,6 +559,15 @@ namespace wtl
     }
     
     // ------------------------- MUTATORS -------------------------
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Rect::clear
+    //! Reset all fields to zero
+    ///////////////////////////////////////////////////////////////////////////////
+    void  clear() 
+    {
+      *this = EMPTY;
+    }
     
     ///////////////////////////////////////////////////////////////////////////////
     // Rect::set
@@ -549,8 +615,7 @@ namespace wtl
     //! 
     //! \return ::RECT& - Mutable reference to win32 rectangle
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32)>>
-    operator ::RECT& ()
+    operator std::enable_if_t<native,::RECT&> ()
     {
       return *reinterpret_cast<::RECT*>(this);
     }
@@ -562,12 +627,10 @@ namespace wtl
     //! 
     //! \return ::RECT* - Mutable pointer to win32 rectangle
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32)>>
-    operator ::RECT* ()
+    operator std::enable_if_t<native,::RECT*> ()
     {
       return reinterpret_cast<::RECT*>(this);
     }
-    
     
     // -------------------- REPRESENTATION ---------------------
 
