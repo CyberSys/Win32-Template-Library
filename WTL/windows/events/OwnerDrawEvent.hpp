@@ -222,7 +222,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawMenuEventHandler = EventHandler<ENC,WindowMessage::DRAWITEM>;
+  using OwnerDrawMenuEventHandler = MessageEventHandler<ENC,WindowMessage::DRAWITEM>;
 }
 
 #endif // WTL_OWNER_DRAW_EVENT_HPP

@@ -221,7 +221,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerMeasureMenuEventHandler = EventHandler<ENC,WindowMessage::MEASUREITEM>;
+  using OwnerMeasureMenuEventHandler = MessageEventHandler<ENC,WindowMessage::MEASUREITEM>;
 
 }
 

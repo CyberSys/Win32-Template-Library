@@ -87,13 +87,13 @@ namespace wtl
 
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! \alias EventHandler - Defines handler for any 'Message' event 
+  //! \alias MessageEventHandler - Defines handler for any 'Message' event 
   //! 
   //! \tparam ENC - Window character encoding
   //! \tparam WM - Window message
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
-  using EventHandler = typename MessageEvent<ENC,WM>::delegate_t;
+  using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
 
   
 }

@@ -205,6 +205,9 @@
 #include "windows/ActionGroup.hpp"
 #include "windows/ActionQueue.hpp"
 
+// Properties
+#include "windows/Property.hpp"
+
 // Windows
 #include "windows/WindowMenu.hpp"
 #include "windows/WindowClass.hpp"

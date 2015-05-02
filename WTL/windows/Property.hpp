@@ -23,43 +23,39 @@ namespace wtl
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
-    //! \alias value_type - Define value type
-    using value_type = VALUE;
-
     //! \alias type - Define our type
     using type = PropertyData<VALUE>;
+    
+    //! \alias reference_t - Define immutable reference type
+    using reference_t = const VALUE&;
+
+    //! \alias value_t - Define value type
+    using value_t = VALUE;
 
     // ----------------------- REPRESENTATION ------------------------
   protected:
-    value_type   Value;      //!< Value
+    value_t   Value;      //!< Property value
 
     // --------------------- CONSTRUCTION ----------------------
   public:
     ///////////////////////////////////////////////////////////////////////////////
     // PropertyData::PropertyData
-    //! Create a property with a default value
-    ///////////////////////////////////////////////////////////////////////////////
-    PropertyData() : Value(zero<value_type>::value)
-    {}
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // PropertyData::PropertyData
     //! Create a property with an initial value
     //! 
-    //! \param[in] value - Initial value
+    //! \param[in] const& value - Initial value
     ///////////////////////////////////////////////////////////////////////////////
-    explicit PropertyData(value_type value) : Value(value)
+    explicit PropertyData(reference_t value) : Value(value)
     {}
 
     // ---------------------- ACCESSORS ------------------------			
     
     ///////////////////////////////////////////////////////////////////////////////
     // PropertyData::get const
-    //! PropertyData accessor
+    //! Value accessor
     //! 
-    //! \return value_type - Value
+    //! \return reference_t - Immutable reference to value
     ///////////////////////////////////////////////////////////////////////////////
-    value_type  get() const
+    virtual reference_t  get() const
     {
       return Value;
     }
@@ -68,38 +64,46 @@ namespace wtl
     
     ///////////////////////////////////////////////////////////////////////////////
     // PropertyData::set 
-    //! PropertyData mutator
+    //! Value mutator
     //! 
     //! \param[in] const& value - New value
     ///////////////////////////////////////////////////////////////////////////////
-    void set(value_type value) 
+    virtual void set(reference_t value) 
     {
       Value = value;
     }
   };
 
+  
   ///////////////////////////////////////////////////////////////////////////////
-  //! \struct Property - Encapsulates a value and provides change notification
+  //! \struct Property - Encapsulates any value with getter/setters and provides change notification
   //! 
   //! \tparam VALUE - Value type
-  //! \tparam PROVIDER - [optional] Data provider type
+  //! \tparam MUTABLE - [optional] Whether property can be changed (Default is true)
+  //! \tparam PROVIDER - [optional] Property data provider type
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, typename PROVIDER = PropertyData<VALUE>>
+  template <typename VALUE, bool MUTABLE = true, typename PROVIDER = PropertyData<VALUE>>
   struct Property 
   {
     // ------------------- TYPES & CONSTANTS -------------------
     
-    //! \alias ChangeEvent - Define 'ValueChanged' event
-    using ChangeEvent = Event<void>;
-
-    //! \alias delegate_t - Define delegate type
-    using delegate_t = typename ChangeEvent::delegate_t;
-
-    //! \alias value_type - Define value type
-    using value_type = VALUE;
-    
     //! \alias type - Define our type
-    using type = Property<VALUE>;
+    using type = Property<VALUE,MUTABLE,PROVIDER>;
+
+    //! \alias ChangedEvent - Defines post-update event
+    using ChangedEvent = Event<void>;
+
+    //! \alias ChangingEvent - Defines pre-update event
+    using ChangingEvent = Event<bool,const VALUE&,const VALUE&>;
+    
+    //! \alias reference_t - Define immutable reference type
+    using reference_t = const VALUE&;
+
+    //! \alias value_t - Define value type
+    using value_t = VALUE;
+
+    //! \var readonly - Define whether property is read-only
+    static constexpr bool readonly = !MUTABLE;
 
   protected:
     //! \alias provider_t - Define data provider type
@@ -107,31 +111,26 @@ namespace wtl
 
     // ----------------------- REPRESENTATION ------------------------
   public:
-    ChangeEvent  Changed;     //!< Raised after value changes
+    ChangedEvent   Changed;     //!< Raised after value changes
+    ChangingEvent  Changing;    //!< Raised before value changes
 
   protected:
-    provider_t   Data;        //!< Value
+    provider_t     Data;        //!< Value provider
 
     // --------------------- CONSTRUCTION ----------------------
   public:
-    ///////////////////////////////////////////////////////////////////////////////
-    // Property::Property
-    //! Create a property with a default value
-    ///////////////////////////////////////////////////////////////////////////////
-    Property() 
-    {}
-
     ///////////////////////////////////////////////////////////////////////////////
     // Property::Property
     //! Create a property with an initial value
     //! 
     //! \param[in] value - Initial value
     ///////////////////////////////////////////////////////////////////////////////
-    explicit Property(value_type value) : Data(value)
+    template <typename... ARGS>
+    explicit Property(ARGS&&... args) : Data(std::forward<ARGS>(args)...)
     {}
 
-    DEFAULT_COPY_CTOR(Property);    //!< Shallow reference copy
-    DEFAULT_MOVE_CTOR(Property);    //!< Shallow reference copy
+    DISABLE_COPY(Property);       //!< Cannot be copied
+    DISABLE_MOVE(Property);       //!< Cannot be moved
 
     ///////////////////////////////////////////////////////////////////////////////
     // Property::~Property
@@ -146,20 +145,20 @@ namespace wtl
     // Property::get const
     //! Property accessor
     //! 
-    //! \return value_type - Value
+    //! \return reference_t - Immutable reference to value
     ///////////////////////////////////////////////////////////////////////////////
-    value_type  get() const
+    reference_t  get() const
     {
       return Data.get();
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // Property::operator value_type const
-    //! Implicit user conversion to value_type
+    // Property::operator reference_t const
+    //! Implicit user conversion to reference_t
     //! 
-    //! \return value_type - Value
+    //! \return reference_t - Immutable reference to value
     ///////////////////////////////////////////////////////////////////////////////
-    operator value_type() const
+    operator reference_t() const
     {
       return get();
     }
@@ -170,22 +169,27 @@ namespace wtl
     // Property::set 
     //! Property mutator
     //! 
-    //! \param[in] value - New value
+    //! \param[in] const& value - New value
     ///////////////////////////////////////////////////////////////////////////////
-    void set(value_type value) 
+    std::enable_if_t<!readonly>  set(reference_t value) 
     {
-      Data.set(value);
-      Changed();
+      // Raise 'Changing'
+      if (Changing(Data.get(), value))
+      {
+        // Set and raise 'Changed'
+        Data.set(value);
+        Changed();
+      }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // Property::operator =
     //! Assign from value
     //! 
-    //! \param[in] value - New value
+    //! \param[in] const& value - New value
     //! \return type& - Reference to self
     ///////////////////////////////////////////////////////////////////////////////
-    type& operator = (value_type value) 
+    type& operator = (reference_t value) 
     {
       set(value);
       return *this;
@@ -211,13 +215,36 @@ namespace wtl
     //! \param[in] && r - Another property
     //! \return type& - Reference to self
     ///////////////////////////////////////////////////////////////////////////////
-    type& operator = (type&& r) 
+    /*type& operator = (type&& r) 
     {
       set(r.Value);
       return *this;
-    }
+    }*/
   };
   
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias PropertyChangedEventHandler - Define 'Property Value Changed' event delegate type
+  //! 
+  //! \tparam VALUE - Value type
+  //! \tparam MUTABLE - [optional] Whether property can be changed (Default is true)
+  //! \tparam PROVIDER - [optional] Property data provider type
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, bool MUTABLE = true, typename PROVIDER = PropertyData<VALUE>>
+  using PropertyChangedEventHandler = EventHandler< typename Property<VALUE,MUTABLE,PROVIDER>::ChangedEvent >;
+    
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias PropertyChangingEventHandler - Define 'Property Value Changing' event delegate type
+  //! 
+  //! \tparam VALUE - Value type
+  //! \tparam MUTABLE - [optional] Whether property can be changed (Default is true)
+  //! \tparam PROVIDER - [optional] Property data provider type
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, bool MUTABLE = true, typename PROVIDER = PropertyData<VALUE>>
+  using PropertyChangingEventHandler = EventHandler< typename Property<VALUE,MUTABLE,PROVIDER>::ChangingEvent >;
+  
+    
 }
 
 #endif // WTL_PROPERTY_HPP

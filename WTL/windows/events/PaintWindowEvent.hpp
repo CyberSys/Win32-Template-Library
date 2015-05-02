@@ -140,7 +140,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using PaintWindowEventHandler = EventHandler<ENC,WindowMessage::PAINT>;
+  using PaintWindowEventHandler = MessageEventHandler<ENC,WindowMessage::PAINT>;
 
   
 }

@@ -158,28 +158,70 @@ namespace wtl
       WindowType  Type;       //!< Window type
     };
 
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct FontPropertyData - Encapsulates setting the window font
+    ///////////////////////////////////////////////////////////////////////////////
+    struct FontPropertyData : PropertyData<HFont>
+    {
+      // -------------------- REPRESENTATION ---------------------
+    protected:
+      window_t&  Window;
+
+      // --------------------- CONSTRUCTION ----------------------
+    public:
+      ///////////////////////////////////////////////////////////////////////////////
+      // FontPropertyData::FontPropertyData
+      //! Create from owner window
+      //! 
+      //! \param[in] const& wnd - Owner window
+      ///////////////////////////////////////////////////////////////////////////////
+      FontPropertyData(const window_t& wnd) : Window(wnd)
+      {}
+
+      // ----------------------- ACCESSORS -----------------------
+
+      // ------------------------ MUTATORS -----------------------
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // FontPropertyData::set 
+      //! Set the window font
+      //! 
+      //! \param[in] const& font - New font
+      ///////////////////////////////////////////////////////////////////////////////
+      void set(const HFont& font) override
+      {
+        // Set window font, redraw, update value
+        Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
+        base::set(font);
+      }
+    };
+
+    //! \alias FontProperty - Define window font property
+    using FontProperty = Property<HFont,true,FontPropertyData>;
+
     // -------------------- REPRESENTATION ---------------------
   public:
     //! \var ActiveWindows - Static collection of all existing WTL windows 
     static WindowHandleCollection  ActiveWindows;
 
     //! \var ActionGroups - Static collection of all Actions groups
-    static ActionGroupCollection  ActionGroups;
+    static ActionGroupCollection   ActionGroups;
     
+    // -------------------- REPRESENTATION ---------------------
   public:
+    ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
     CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>       Close;         //!< Raised in response to WM_CLOSE
     DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-    ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
     
   protected:
+    ActionQueue            Actions;       //!< Actions queue
     wndclass_t&            Class;         //!< Window class 
     ChildWindowCollection  Children;      //!< Child window collection
-    ActionQueue            Actions;       //!< Actions queue
-    HWnd                   Handle;        //!< Window handle
     HFont                  Font;          //!< Window font
+    HWnd                   Handle;        //!< Window handle
     Lazy<wndmenu_t>        Menu;          //!< Window menu, if any
     SubClassCollection     SubClasses;    //!< Sub-classed windows collection
 

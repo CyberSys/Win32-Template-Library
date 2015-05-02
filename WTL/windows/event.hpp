@@ -195,7 +195,16 @@ namespace wtl
       Subscribers.remove_if( findByAddress );
     }
   };
+  
 
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \alias EventHandler - Defines the handler type for any event
+  //! 
+  //! \tparam EVENT - Any event type
+  ///////////////////////////////////////////////////////////////////////////////
+  template <typename EVENT>
+  using EventHandler = typename EVENT::delegate_t;
+  
 
 }
 
