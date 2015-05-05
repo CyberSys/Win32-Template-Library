@@ -125,9 +125,6 @@
     <ClInclude Include="utils\Range.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Zero.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Handle.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -417,6 +414,9 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="utils\Constant.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Default.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

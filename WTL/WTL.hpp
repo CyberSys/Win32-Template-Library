@@ -98,7 +98,7 @@
 
 // Utilities: 
 #include "utils/FormatSpec.hpp"
-#include "utils/Zero.hpp"
+#include "utils/Default.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Range.hpp"
 #include "utils/DynamicArray.hpp"
