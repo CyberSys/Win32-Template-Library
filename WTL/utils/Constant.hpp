@@ -22,32 +22,58 @@ namespace wtl
   template <typename T, T VALUE> 
   struct complex_constant 
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \alias type - Define own type
     using type = complex_constant<T,VALUE>;
 
     //! \alias value_type - Define value type
     using value_type = T;
 
-    //! \var value - Define default value
+    //! \var value - Define value
     static constexpr value_type value = VALUE;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // complex_constant::complex_constant constexpr
+    //! Default construct
+    /////////////////////////////////////////////////////////////////////////////////////////
     constexpr 
     complex_constant()
     {}
+    
+    // --------------------------------------- STATIC ---------------------------------------
 
-    // return stored value
+    // -------------------------------------- ACCESSORS -------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // complex_constant::operator() constexpr
+    //! Query value
+    //! 
+    //! \return value_type - Value
+    /////////////////////////////////////////////////////////////////////////////////////////
   	constexpr 
     value_type operator ()() const noexcept 
     { 
       return value; 
     }
 
-    // return stored value
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // complex_constant::operator value_type constexpr
+    //! Implicit user conversion to value type
+    //! 
+    //! \return value_type - Value
+    /////////////////////////////////////////////////////////////////////////////////////////
   	constexpr
     operator value_type() const noexcept 
     { 
       return value; 
     }
+    
+    // --------------------------------------- MUTATORS -------------------------------------
   };
 
 }

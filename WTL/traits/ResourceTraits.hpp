@@ -17,29 +17,27 @@ namespace wtl
   //! \enum ResourceType - Defines resource types
   enum class ResourceType : uint32
   {
-    Cursor = 1,
-    Bitmap = 2,
-    Icon = 3,
-    Menu = 4,
-    Dialog = 5,
-    String = 6,
-    FontDir = 7,
-    Font = 8,
-    Accelerator = 9,
-    RcData = 10,
-    MessageTable = 11,
-    GroupCursor  = 12,
-    GroupIcon    = 14,
-    Version = 16,
-    DlgInclude = 17,
-#if(winver >= 0x0400)
-    PlugPlay = 19,
-    Vxd = 20,
-    AniCursor = 21,
-    AniIcon = 22,
-#endif 
-    Html = 23,
-    Manifest = 24,
+    Cursor = 1,           //!< 
+    Bitmap = 2,           //!< 
+    Icon = 3,             //!< 
+    Menu = 4,             //!< 
+    Dialog = 5,           //!< 
+    String = 6,           //!< 
+    FontDir = 7,          //!< 
+    Font = 8,             //!< 
+    Accelerator = 9,      //!< 
+    RcData = 10,          //!< 
+    MessageTable = 11,    //!< 
+    GroupCursor = 12,     //!< 
+    GroupIcon = 14,       //!< 
+    Version = 16,         //!< 
+    DlgInclude = 17,      //!< 
+    PlugPlay = 19,        //!< [Windows 4.00] 
+    Vxd = 20,             //!< [Windows 4.00] 
+    AniCursor = 21,       //!< [Windows 4.00] 
+    AniIcon = 22,         //!< [Windows 4.00] 
+    Html = 23,            //!< 
+    Manifest = 24,        //!< 
   };
 
   //! Define traits: Non-contiguous enumeration
@@ -54,6 +52,7 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ResourceId - Resource identifier
+  //! 
   //! \tparam ENC - String encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
@@ -67,8 +66,8 @@ namespace wtl
     //! \union Ident - Identifier
     union Ident
     {
-      const char_t* Name;       //!< Resource name
-      uint32        Numeral;    //!< Resource ID
+      const char_t*  Name;       //!< Resource name
+      uint32         Numeral;    //!< Resource ID
     };
     
     // ----------------------------------- REPRESENTATION -----------------------------------
