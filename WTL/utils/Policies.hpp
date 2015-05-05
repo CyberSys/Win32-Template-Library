@@ -41,7 +41,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static void construct(T *addr)
 		{	
-		  *addr = zero<T>::value;
+		  *addr = default_t<T>::value;
 		}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ namespace wtl
 		{	
 //! \if DEVELOPMENT_MODE - Reset value to zero
 #ifdef DEVELOPMENT_MODE
-      *addr = zero<U>::value;
+      *addr = default_t<U>::value;
 #endif
 		}
     

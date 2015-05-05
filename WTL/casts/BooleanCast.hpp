@@ -26,7 +26,7 @@ namespace wtl
   template <typename T>
   BOOL boolean_cast(T value)
   {
-    return value != zero<T>::value ? TRUE : FALSE;
+    return value != default_t<T>::value ? TRUE : FALSE;
   };
   
   //////////////////////////////////////////////////////////////////////////////////////////

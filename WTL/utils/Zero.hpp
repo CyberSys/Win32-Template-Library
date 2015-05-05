@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\utils\Zero.hpp
-//! \brief Defines zero for any type
+//! \file wtl\utils\Default.hpp
+//! \brief Defines the default value for any type
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -15,28 +15,19 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct zero - Defines zero for any type
+  //! \struct default_t - Defines the default value for any type
   //! 
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> struct zero : std::integral_constant<T, static_cast<T>(0)>
+  template <typename T> struct default_t : std::integral_constant<T, static_cast<T>(0)>
   {};
 
   // Define for bool
-  template <> struct zero<bool>   : std::integral_constant<bool, false> {};
+  template <> struct default_t<bool>   : std::integral_constant<bool, false> {};
 
   // Define for floating points 
-  template <> struct zero<double> { static constexpr double value = 0.0; };
-  template <> struct zero<float>  { static constexpr float value = 0.0f; };
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \typedef zero_t - Zero type accessor 
-  //! 
-  //! \tparam T - Any type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  using zero_t = typename zero<std::remove_const<T>>;
+  template <> struct default_t<double> { static constexpr double value = 0.0; };
+  template <> struct default_t<float>  { static constexpr float value = 0.0f; };
 
 }
 

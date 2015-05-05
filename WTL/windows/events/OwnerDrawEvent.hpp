@@ -19,7 +19,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ControlEventArgs<ENC,WindowMessage::DRAWITEM,uint16,zero<uint16>::value>
+  struct ControlEventArgs<ENC,WindowMessage::DRAWITEM,uint16,default_t<uint16>::value>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   

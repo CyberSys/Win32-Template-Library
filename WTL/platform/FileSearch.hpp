@@ -99,7 +99,7 @@ namespace wtl
     {
       LOGIC_INVARIANT(exists());
 
-      return (FileAttribute::Directory & Result.dwFileAttributes) != zero<FileAttribute>::value;
+      return (FileAttribute::Directory & Result.dwFileAttributes) != default_t<FileAttribute>::value;
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////

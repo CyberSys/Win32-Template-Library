@@ -44,7 +44,7 @@ namespace wtl
     typedef Array<uint32,BITS,true> BitArray;
 
     //! \var ZERO - Define how we represent zero
-    static const mask_t ZERO = zero<mask_t>::value;
+    static const mask_t ZERO = default_t<mask_t>::value;
       
     //////////////////////////////////////////////////////////////////////////////////////////
     //! \struct loop - Unfurls the high bits of the mask into a variable length array
