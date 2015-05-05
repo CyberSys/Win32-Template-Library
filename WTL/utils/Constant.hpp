@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Constant.hpp
-//! \brief Encapsulates a compile-time constant
+//! \brief Encapsulates compile-time constants
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -14,18 +14,18 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct complex_constant - Provides a compile-time constant of non-aggregate type
+  //! \struct integral_constant - Encapsulates an integral/enumeration compile-time constant
   //! 
-  //! \tparam T - Any type  (Aggregates not supported)
-  //! \tparam VALUE - Compile-time value
+  //! \tparam T - Integral or enumeration type  
+  //! \tparam VALUE - (Compile-time) Value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, T VALUE> 
-  struct complex_constant 
+  struct integral_constant 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = complex_constant<T,VALUE>;
+    using type = integral_constant<T,VALUE>;
 
     //! \alias value_type - Define value type
     using value_type = T;
@@ -38,11 +38,11 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // complex_constant::complex_constant constexpr
+    // integral_constant::integral_constant constexpr
     //! Default construct
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr 
-    complex_constant()
+    integral_constant()
     {}
     
     // --------------------------------------- STATIC ---------------------------------------
@@ -50,7 +50,7 @@ namespace wtl
     // -------------------------------------- ACCESSORS -------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // complex_constant::operator() constexpr
+    // integral_constant::operator() constexpr
     //! Query value
     //! 
     //! \return value_type - Value
@@ -62,7 +62,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // complex_constant::operator value_type constexpr
+    // integral_constant::operator value_type constexpr
     //! Implicit user conversion to value type
     //! 
     //! \return value_type - Value
@@ -76,6 +76,70 @@ namespace wtl
     // --------------------------------------- MUTATORS -------------------------------------
   };
 
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct literal_constant - Encapsulates a literal/reference compile-time constant 
+  //! 
+  //! \tparam T - Literal or reference type (NB: Must be default constructible)
+  //!
+  //! \remarks This is a temporary workaround until we get extended constexpr
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct literal_constant 
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = literal_constant<T>;
+
+    //! \alias value_type - Define value type
+    using value_type = T;
+
+    //! \var value - Define value
+    static constexpr value_type value();
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // literal_constant::literal_constant constexpr
+    //! Default construct
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr 
+    literal_constant()
+    {}
+    
+    // --------------------------------------- STATIC ---------------------------------------
+
+    // -------------------------------------- ACCESSORS -------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // literal_constant::operator() constexpr
+    //! Query value
+    //! 
+    //! \return value_type - Value
+    /////////////////////////////////////////////////////////////////////////////////////////
+  	constexpr 
+    value_type operator ()() const noexcept 
+    { 
+      return value; 
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // literal_constant::operator value_type constexpr
+    //! Implicit user conversion to value type
+    //! 
+    //! \return value_type - Value
+    /////////////////////////////////////////////////////////////////////////////////////////
+  	constexpr
+    operator value_type() const noexcept 
+    { 
+      return value; 
+    }
+    
+    // --------------------------------------- MUTATORS -------------------------------------
+  };
 }
 
 

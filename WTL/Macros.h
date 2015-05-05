@@ -63,7 +63,20 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 // ---------------------------------------------------------------------
-// -------------------------- COPY SEMANTICS  --------------------------
+// ------------------------ CONSTEXPR SEMANTICS ------------------------
+// ---------------------------------------------------------------------
+
+//! \def CONSTEXPR_CTOR - Enables constexpr default-construction
+#define CONSTEXPR_CTOR(type)        constexpr type() noexcept = default
+
+//! \def CONSTEXPR_COPY_CTOR - Enables constexpr copy-construction
+#define CONSTEXPR_COPY_CTOR(type)   constexpr type(const type& r) noexcept = default
+
+//! \def CONSTEXPR_MOVE_CTOR - Enables constexpr move-construction
+#define CONSTEXPR_MOVE_CTOR(type)   constexpr type(type&& r) noexcept = default
+
+// ---------------------------------------------------------------------
+// -------------------------- COPY SEMANTICS ---------------------------
 // ---------------------------------------------------------------------
 
 //! \def DISABLE_COPY_CTOR - Prevents copy-construction
@@ -86,7 +99,7 @@
 #define DEFAULT_COPY(type)          DEFAULT_COPY_CTOR(type);  DEFAULT_COPY_ASSIGN(type)
 
 // ---------------------------------------------------------------------
-// -------------------------- MOVE SEMANTICS  --------------------------
+// -------------------------- MOVE SEMANTICS ---------------------------
 // ---------------------------------------------------------------------
 
 //! \def DISABLE_MOVE_CTOR - Prevents move-construction

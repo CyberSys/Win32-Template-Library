@@ -284,7 +284,7 @@ namespace wtl
     void  fill(const Rect<T>& rc, const HBrush& brush)
     {
       // Fill target rectangle with custom brush
-      if (::FillRect(Handle, rc, brush) == FALSE)
+      if (::FillRect(Handle, (const ::RECT*)rc, brush) == FALSE)
         throw platform_error(HERE, "Unable to fill custom rect");
     }
     
@@ -306,7 +306,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), sz) == FALSE)
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), (::SIZE*)sz) == FALSE)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -503,7 +503,7 @@ namespace wtl
     int32 write(const encoding_char_t<ENC>* txt, int32 len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, rc, enum_cast(flags)))
+      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, (::RECT*)rc, enum_cast(flags)))
         return height;
 
       // Failure

@@ -52,6 +52,7 @@ namespace wtl
     //! 
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     Point(const ::POINT&  pt) : x(static_cast<T>(pt.x)), 
                                 y(static_cast<T>(pt.y))
     {}
@@ -81,8 +82,12 @@ namespace wtl
                                   y(static_cast<T>(Y))
     {}
     
-    DEFAULT_COPY(Point);   //!< Performs a deep copy
-    DEFAULT_MOVE(Point);   //!< Performs a deep copy
+    CONSTEXPR_COPY_CTOR(Point);   //!< Performs a deep copy
+    CONSTEXPR_MOVE_CTOR(Point);   //!< Performs a deep copy
+
+    DEFAULT_COPY_ASSIGN(Point);   //!< Performs a deep copy
+    DEFAULT_MOVE_ASSIGN(Point);   //!< Performs a deep copy
+    
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::~Point 
@@ -147,22 +152,24 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::operator ::POINT& 
-    //! Implicit user conversion to win32 point 
+    //! Implicit user conversion to win32 ::POINT reference
     //! 
-    //! \return ::POINT& - Mutable reference to win32 point
+    //! \return ::POINT& - Mutable reference to win32 ::POINT
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,::POINT&> ()
+    template <typename = std::enable_if_t<native>>
+    operator ::POINT& ()
     {
       return *reinterpret_cast<::POINT*>(this);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::POINT& 
-    //! Implicit user conversion to win32 point 
+    // Point::operator ::POINT*
+    //! Explicit user conversion to win32 ::POINT pointer
     //! 
-    //! \return ::POINT* - Mutable pointer to win32 point
+    //! \return ::POINT* - Mutable pointer to win32 ::POINT
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,::POINT*> ()
+    template <typename = std::enable_if_t<native>>
+    explicit operator ::POINT* ()
     {
       return reinterpret_cast<::POINT*>(this);
     }
@@ -172,17 +179,23 @@ namespace wtl
     value_t  x,       //!< X co-ordinate
              y;       //!< Y co-ordinate
   };
-
+  
   //! \var Point<T>::EMPTY - 'Empty' sentinel value 
   template <typename T>
   const Point<T>  Point<T>::EMPTY;
 
-  
   //! \alias PointL - Point using long32 fields
   using PointL = Point<long32>;
-
+  
   //! \alias PointF - Point using floating point fields
   using PointF = Point<float>;
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<Point> - Define default values for 'Points' types
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<PointL> : literal_constant<PointL> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<PointF> : literal_constant<PointF> { CONSTEXPR_CTOR(default_t); };
 
 
   
@@ -278,26 +291,28 @@ namespace wtl
     void  clear() 
     {
       *this = EMPTY;
-    };
+    }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::operator ::SIZE& 
-    //! Implicit user conversion to win32 size 
+    //! Implicit user conversion to win32 ::SIZE reference
     //! 
-    //! \return ::SIZE& - Mutable reference to win32 size
+    //! \return ::SIZE& - Mutable reference to win32 ::SIZE
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,::SIZE&> ()
+    template <typename = std::enable_if_t<native>>
+    operator ::SIZE& ()
     {
       return *reinterpret_cast<::SIZE*>(this);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::SIZE& 
-    //! Implicit user conversion to win32 size 
+    // Size::operator ::SIZE*
+    //! Explicit user conversion to win32 ::SIZE pointer
     //! 
-    //! \return ::SIZE* - Mutable pointer to win32 size
+    //! \return ::SIZE* - Mutable pointer to win32 ::SIZE
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,::SIZE*> ()
+    template <typename = std::enable_if_t<native>>
+    explicit operator ::SIZE* ()
     {
       return reinterpret_cast<::SIZE*>(this);
     }
@@ -320,7 +335,12 @@ namespace wtl
   //! \alias SizeF - Size using floating point fields
   using SizeF = Size<float>;
 
-
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<Size> - Define default values for 'Sizes' types
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<SizeL> : literal_constant<SizeL> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<SizeF> : literal_constant<SizeF> { CONSTEXPR_CTOR(default_t); };
+  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Rect - Encapsulates a rectangle of any type
@@ -509,28 +529,29 @@ namespace wtl
 
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT&  const
-    //! Implicit user conversion to win32 rectangle 
+    // Rect::operator ::RECT& const 
+    //! Implicit user conversion to win32 ::RECT reference
     //! 
-    //! \return const ::RECT& - Immutable reference to win32 rectangle
+    //! \return const ::RECT& - Immutable reference to win32 ::RECT
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,const ::RECT&> () const
+    template <typename = std::enable_if_t<native>>
+    operator const ::RECT& () const
     {
       return *reinterpret_cast<const ::RECT*>(this);
     }
     
-    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT* const
-    //! Implicit user conversion to win32 rectangle 
+    // Rect::operator ::RECT* const 
+    //! Explicit user conversion to win32 ::RECT pointer
     //! 
-    //! \return const ::RECT* - Immutable pointer to win32 rectangle
+    //! \return const ::RECT* - Immutable pointer to win32 ::RECT
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,const ::RECT*> () const
+    template <typename = std::enable_if_t<native>>
+    explicit operator const ::RECT* () const
     {
       return reinterpret_cast<const ::RECT*>(this);
     }
-    
+
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::operator+ const
@@ -611,27 +632,28 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::operator ::RECT& 
-    //! Implicit user conversion to win32 rectangle 
+    //! Implicit user conversion to win32 ::RECT reference
     //! 
-    //! \return ::RECT& - Mutable reference to win32 rectangle
+    //! \return ::RECT& - Mutable reference to win32 ::RECT
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,::RECT&> ()
+    template <typename = std::enable_if_t<native>>
+    operator ::RECT& ()
     {
       return *reinterpret_cast<::RECT*>(this);
     }
     
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::operator ::RECT*
-    //! Implicit user conversion to win32 rectangle 
+    //! Explicit user conversion to win32 ::RECT pointer
     //! 
-    //! \return ::RECT* - Mutable pointer to win32 rectangle
+    //! \return ::RECT* - Mutable pointer to win32 ::RECT
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator std::enable_if_t<native,::RECT*> ()
+    template <typename = std::enable_if_t<native>>
+    explicit operator ::RECT* ()
     {
       return reinterpret_cast<::RECT*>(this);
     }
-    
+
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     value_t  left,        //!< Left extent
@@ -650,8 +672,12 @@ namespace wtl
 
   //! \alias RectF - Rectangle using floating point fields
   using RectF = Rect<float>;
-
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<Rect> - Define default values for 'Rect' types
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<RectL> : literal_constant<RectL> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<RectF> : literal_constant<RectF> { CONSTEXPR_CTOR(default_t); };
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
