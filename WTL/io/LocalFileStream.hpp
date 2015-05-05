@@ -153,7 +153,7 @@ namespace wtl
       }
       
       // Error
-      return default_t<distance_t>::value;
+      return default_t<distance_t>();
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ namespace wtl
       LOGIC_INVARIANT(Handle != nullptr);
       
       // Query position, convert into elements
-      return Handle ? static_cast<position_t>(ftell(Handle)) / sizeof(element_t) : default_t<position_t>::value;
+      return Handle ? static_cast<position_t>(ftell(Handle)) / sizeof(element_t) : default_t<position_t>();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -296,7 +296,7 @@ namespace wtl
       LOGIC_INVARIANT(Handle != nullptr);
 
       // Read data in elements
-      return Handle ? fread(buffer, sizeof(element_t), length, Handle) : default_t<distance_t>::value;
+      return Handle ? fread(buffer, sizeof(element_t), length, Handle) : default_t<distance_t>();
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -375,7 +375,7 @@ namespace wtl
       LOGIC_INVARIANT(Handle != nullptr);
 
       // Write data in elements
-      return Handle ? fwrite(buffer, sizeof(element_t), length, Handle) : default_t<distance_t>::value;
+      return Handle ? fwrite(buffer, sizeof(element_t), length, Handle) : default_t<distance_t>();
     }
     
     // ----------------------------------- REPRESENTATION -----------------------------------

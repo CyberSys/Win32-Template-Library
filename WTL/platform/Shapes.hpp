@@ -42,8 +42,8 @@ namespace wtl
     //! Create empty point centred at origin
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Point() : x(default_t<T>::value), 
-              y(default_t<T>::value)
+    Point() : x(default_t<T>()), 
+              y(default_t<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -218,8 +218,8 @@ namespace wtl
     //! Create empty size of zero width and height
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Size() : width(default_t<T>::value), 
-             height(default_t<T>::value)
+    Size() : width(default_t<T>()), 
+             height(default_t<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -354,10 +354,10 @@ namespace wtl
     //! Create empty rectangle with all fields initialized to zero
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Rect() : left(default_t<T>::value), 
-             top(default_t<T>::value), 
-             right(default_t<T>::value), 
-             bottom(default_t<T>::value)
+    Rect() : left(default_t<T>()), 
+             top(default_t<T>()), 
+             right(default_t<T>()), 
+             bottom(default_t<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////

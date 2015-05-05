@@ -337,7 +337,7 @@ namespace wtl
       //! 
       //! \param[in] const& wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      StyleExPropertyImpl(window_t& wnd) : base(wnd, default_t<WindowStyleEx>::value)
+      StyleExPropertyImpl(window_t& wnd) : base(wnd, default_t<WindowStyleEx>())
       {}
 
       // ----------------------- ACCESSORS -----------------------

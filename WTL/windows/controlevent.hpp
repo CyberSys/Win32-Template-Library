@@ -21,7 +21,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification type (Default is uint16)
   //! \tparam CODE - [optional] Notification code (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default_t<EVENT>::value>
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default_t<EVENT>()>
   struct ControlEventArgs;
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification message type (Default is uint16)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default_t<EVENT>::value>
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default_t<EVENT>()>
   using ControlEvent = Event<LResult, ControlEventArgs<ENC,WM,EVENT,CODE>&>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification message type (Default is uint16)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default_t<EVENT>::value> 
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default_t<EVENT>()> 
   using ControlEventHandler = typename ControlEvent<ENC,WM,EVENT,CODE>::delegate_t;
 
 

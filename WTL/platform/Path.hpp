@@ -305,7 +305,7 @@ namespace wtl
     bool  isFolder() const
     {
       // Query folder flag
-      return (attributes & FileAttribute::Directory) != default_t<FileAttribute>::value;
+      return (attributes & FileAttribute::Directory) != default_t<FileAttribute>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

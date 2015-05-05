@@ -117,7 +117,7 @@ namespace wtl
     static constexpr Encoding encoding = ENCODING;
 
     //! \var null_t - Null terminator
-    static const char_t null_t = default_t<char_t>::value;
+    static const char_t null_t = default_t<char_t>();
 
     //! \var EMPTY - Empty character array sentinel value
     static const CharArray<ENCODING,LENGTH> EMPTY;
@@ -238,7 +238,7 @@ namespace wtl
         const int32 CAPACITY = lastOut-output-1;   //!< Output buffer character capacity 
 
         // Clear output
-        output[0] = default_t<output_t>::value;
+        output[0] = default_t<output_t>();
 
         // Prevent output buffer overrun
         if (last - first > CAPACITY)
@@ -249,7 +249,7 @@ namespace wtl
           *output = *pos;
 
         // null terminate
-        *output = default_t<output_t>::value;
+        *output = default_t<output_t>();
         
         // Return number of characters copied
         return last-first;

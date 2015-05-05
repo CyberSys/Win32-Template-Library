@@ -82,7 +82,7 @@ namespace wtl
         return (value = it, true);
 
     // Return false and set value to default
-    return (value = default_t<ENUM>::value, false);
+    return (value = default_t<ENUM>(), false);
   }
 
 }

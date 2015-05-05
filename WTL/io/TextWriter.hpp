@@ -113,7 +113,7 @@ namespace wtl
       CHECKED_LENGTH(1, remaining());
 
       // Ensure null terminated
-      /*Stream.put(default_t<element_t>::value);
+      /*Stream.put(default_t<element_t>());
       Stream.seek(-1, FileSeek::Current);*/
 
       // Return string
@@ -150,7 +150,7 @@ namespace wtl
       Stream.put(c);
 
       // Null terminate
-      Stream.put(default_t<element_t>::value);
+      Stream.put(default_t<element_t>());
       Stream.seek(-1, FileSeek::Current);
     }
 
@@ -190,7 +190,7 @@ namespace wtl
       Stream.write(str, length);
       
       // Null terminate then reverse over the null terminator
-      Stream.put(default_t<element_t>::value);
+      Stream.put(default_t<element_t>());
       Stream.seek(-1, FileSeek::Current);
     }
     
