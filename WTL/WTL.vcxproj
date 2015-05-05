@@ -71,6 +71,7 @@
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="utils\Clear.hpp" />
+    <ClInclude Include="utils\Constant.hpp" />
     <ClInclude Include="utils\ForEach.hpp" />
     <ClInclude Include="utils\Handle.hpp" />
     <ClInclude Include="utils\List.hpp" />

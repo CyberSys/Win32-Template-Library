@@ -184,7 +184,7 @@ namespace wtl
   
   //! \var npos - Define 'No resource' sentinel value
   template <Encoding ENC>
-  const ResourceId<ENC>  ResourceId<ENC>::npos = ResourceId<ENC>(default_t<uint16>());
+  const ResourceId<ENC>  ResourceId<ENC>::npos = ResourceId<ENC>(default<uint16>());
   
   
   /////////////////////////////////////////////////////////////////////////////////////////

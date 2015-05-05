@@ -416,6 +416,9 @@
     <ClInclude Include="windows\Property.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="utils\Constant.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Traits.cpp">

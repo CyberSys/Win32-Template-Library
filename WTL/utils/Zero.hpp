@@ -5,10 +5,11 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_ZERO_HPP
-#define WTL_ZERO_HPP
+#ifndef WTL_DEFAULT_HPP
+#define WTL_DEFAULT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Constant.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -19,46 +20,61 @@ namespace wtl
   //! 
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> struct default_t : integral_constant<T, static_cast<T>(0)>
+  template <typename T> struct default_t : complex_constant<T, static_cast<T>(0)>
   {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // default_t::default_t constexpr 
+    //! Default construct
+    /////////////////////////////////////////////////////////////////////////////////////////
     constexpr 
-    default_t()
+    default_t() noexcept
     {}
   };
-  //{
-  //  //! \var value - Define default value
-  //  static constexpr T value = static_cast<T>(0);
 
-  //  // return stored value
-  //	constexpr operator T() const noexcept { return value; }
-  //};
 
-  // Define for bool
-  template <> struct default_t<bool> : integral_constant<bool, false> 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<bool> - Defines default bool as 'false'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<bool> : complex_constant<bool, false> 
   {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // default_t::default_t constexpr
+    //! Default construct
+    /////////////////////////////////////////////////////////////////////////////////////////
     constexpr 
-    default_t()
+    default_t() noexcept
     {}
   };
-  //{
-  //  // return stored value
-  //	constexpr operator bool() const noexcept { return this->value; }
-  //};
 
-  // Define for floating points 
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<double> - Defines for double
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <> struct default_t<double> { static constexpr double value = 0.0; };
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<float> - Defines for float
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <> struct default_t<float>  { static constexpr float value = 0.0f; };
 
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::default constexpr
+  //! Get the default-value for any type
+  //! 
+  //! \tparam T - Any type
+  //!
+  //! \return default_t<T> - Default value
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> constexpr
   default_t<T> default() noexcept
   {
     return default_t<T>();
   }
-
 }
 
 
 
-#endif // WTL_ZERO_HPP
+#endif // WTL_DEFAULT_HPP
 
 

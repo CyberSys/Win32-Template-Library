@@ -1240,7 +1240,7 @@ namespace wtl
     //! \param[in] seed - Initial seed value
     //! \return value_type - Sum of all elements
     /////////////////////////////////////////////////////////////////////////////////////////
-    value_type accumulate(value_type seed /*= default_t<value_type>()*/)
+    value_type accumulate(value_type seed /*= default<value_type>()*/)
     {
       for_each([&seed](const value_type& v) { seed += v; });
       return seed;

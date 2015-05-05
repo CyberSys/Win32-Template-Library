@@ -64,7 +64,7 @@ namespace wtl
                                  LargeIcon(HIcon::npos),
                                  ClassStorage(0),
                                  WindowStorage(0),
-                                 Style(default_t<ClassStyle>()),
+                                 Style(default<ClassStyle>()),
                                  Instance(nullptr),
                                  WndProc(nullptr),
                                  Name(id),

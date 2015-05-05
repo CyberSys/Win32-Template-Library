@@ -54,39 +54,6 @@ namespace wtl
   struct is_covariant : std::is_base_of<BASE<T>, DERIVED<T>>
   {};
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t - Defines the default value for any type
-  //! 
-  //! \tparam T - Any type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, T VALUE> 
-  struct integral_constant 
-  {
-    using type = integral_constant<T,VALUE>;
-
-    using value_type = T;
-
-    //! \var value - Define default value
-    static constexpr value_type value = VALUE;
-
-    constexpr 
-    integral_constant()
-    {}
-
-    // return stored value
-  	constexpr 
-    value_type operator ()() const noexcept 
-    { 
-      return value; 
-    }
-
-    // return stored value
-  	constexpr
-    operator value_type() const noexcept 
-    { 
-      return value; 
-    }
-  };
 
 }
 
