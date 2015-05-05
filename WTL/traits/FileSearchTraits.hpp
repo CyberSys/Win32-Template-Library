@@ -29,16 +29,16 @@ namespace wtl
     // handle_alloc<HFILESEARCH>::create
     //! Create file search handle
     //! 
-    //! \tparam CHAR - Character type
+    //! \tparam CHR - Character type
     //! 
     //! \param[in] const& query - Search query. Wildcards are permitted.
     //! \param[in,out] &results - Results storage, populated with first result if successful
     //! \return HFILESEARCH - File search handle
     ///////////////////////////////////////////////////////////////////////////////
-    template <typename CHAR>
-    static HFILESEARCH create(const CHAR* folder, getType<CHAR,WIN32_FIND_DATAA,WIN32_FIND_DATAW>& results) 
+    template <typename CHR>
+    static HFILESEARCH create(const CHR* folder, getType<CHR,WIN32_FIND_DATAA,WIN32_FIND_DATAW>& results) 
     { 
-      return reinterpret_cast<HFILESEARCH>( getFunc<CHAR>(::FindFirstFileA,::FindFirstFileW)(folder.c_str(), &results) ); 
+      return reinterpret_cast<HFILESEARCH>( getFunc<CHR>(::FindFirstFileA,::FindFirstFileW)(folder.c_str(), &results) ); 
     }
     
     ///////////////////////////////////////////////////////////////////////////////

@@ -220,7 +220,7 @@ namespace wtl
     ////////////////////////////////////////////////////////////////////////////////
     void   setBackColour(COLORREF c)
     {
-      CHAR buf[10];
+      CHR buf[10];
 
       // Check stream is open
       if (Closed)
@@ -280,7 +280,7 @@ namespace wtl
     ////////////////////////////////////////////////////////////////////////////////
     void   setForeColour(COLORREF c)
     {
-      CHAR buf[10];
+      CHR buf[10];
 
       // Check stream is open
       if (Closed)
@@ -314,7 +314,7 @@ namespace wtl
     ////////////////////////////////////////////////////////////////////////////////
     void   setFontSize(UINT size)
     {
-      CHAR buf[10];
+      CHR buf[10];
 
       // Check stream is open
       if (Closed)
@@ -360,7 +360,7 @@ namespace wtl
     ////////////////////////////////////////////////////////////////////////////////
     void   setLeftMargin(UINT twips)
     {
-      CHAR buf[10];
+      CHR buf[10];
 
       // Check stream is open
       if (Closed)

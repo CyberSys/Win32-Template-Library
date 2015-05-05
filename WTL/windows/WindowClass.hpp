@@ -171,57 +171,54 @@ namespace wtl
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct system_class - Defines the names of system window classes
   //! 
-  //! \tparam CHAR - Character type
+  //! \tparam CHR - Character type
   //! \tparam CLS - System class
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, SystemClass CLS> 
+  template <typename CHR, SystemClass CLS> 
   struct system_class 
   { 
     //! \alias char_t - Define character type
-    using char_t = CHAR;
+    using char_t = CHR;
 
     //! \var name - System window class name
-    static const char_t name[];    
+    static constexpr const char_t* name = getValue<char_t>("",L"");
   };
 
-  /*template <SystemClass CLS> const char    system_class<char,CLS>::name[] = "";
-  template <SystemClass CLS> const wchar_t system_class<wchar_t,CLS>::name[] = L"";*/
+  //! \var system_class<CHR>::value - Define standard control class names
+  template <typename CHR> struct system_class<CHR,SystemClass::Animate>       { static constexpr const CHR* name = getValue<CHR>(ANIMATE_CLASSA,ANIMATE_CLASSW);            };
+  template <typename CHR> struct system_class<CHR,SystemClass::DateTime>      { static constexpr const CHR* name = getValue<CHR>(DATETIMEPICK_CLASSA,DATETIMEPICK_CLASSW);  };
+  template <typename CHR> struct system_class<CHR,SystemClass::HotKey>        { static constexpr const CHR* name = getValue<CHR>(HOTKEY_CLASSA,HOTKEY_CLASSW);              };
+  template <typename CHR> struct system_class<CHR,SystemClass::Calendar>      { static constexpr const CHR* name = getValue<CHR>(MONTHCAL_CLASSA,MONTHCAL_CLASSW);          };
+  template <typename CHR> struct system_class<CHR,SystemClass::ProgressBar>   { static constexpr const CHR* name = getValue<CHR>(PROGRESS_CLASSA,PROGRESS_CLASSW);          };
+  template <typename CHR> struct system_class<CHR,SystemClass::CoolBar>       { static constexpr const CHR* name = getValue<CHR>(REBARCLASSNAMEA,REBARCLASSNAMEW);          };
+  template <typename CHR> struct system_class<CHR,SystemClass::StatusBar>     { static constexpr const CHR* name = getValue<CHR>(STATUSCLASSNAMEA,STATUSCLASSNAMEW);        };
+  template <typename CHR> struct system_class<CHR,SystemClass::ToolBar>       { static constexpr const CHR* name = getValue<CHR>(TOOLBARCLASSNAMEA,TOOLBARCLASSNAMEW);      };
+  template <typename CHR> struct system_class<CHR,SystemClass::ToolTip>       { static constexpr const CHR* name = getValue<CHR>(TOOLTIPS_CLASSA,TOOLTIPS_CLASSW);          };
+  template <typename CHR> struct system_class<CHR,SystemClass::TrackBar>      { static constexpr const CHR* name = getValue<CHR>(TRACKBAR_CLASSA,TRACKBAR_CLASSW);          };
+  template <typename CHR> struct system_class<CHR,SystemClass::Spin>          { static constexpr const CHR* name = getValue<CHR>(UPDOWN_CLASSA,UPDOWN_CLASSW);              };
 
-  //! \var system_class<wchar_t>::value - Defines standard controls window class names
-  template <> struct system_class<wchar_t,SystemClass::Animate>       { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::DateTime>      { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::HotKey>        { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Calendar>      { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ProgressBar>   { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::CoolBar>       { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::StatusBar>     { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ToolBar>       { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ToolTip>       { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::TrackBar>      { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Spin>          { static const wchar_t name[];     };
-
-  //! \var system_class<wchar_t>::value - Defines common control window class names
-  template <> struct system_class<wchar_t,SystemClass::Button>        { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ComboBox>      { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ComboBoxEx>    { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Edit>          { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Header>        { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ListBox>       { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::IpAddress>     { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Link>          { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ListView>      { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::NativeFont>    { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::PageScroller>  { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::ScrollBar>     { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Static>        { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::Tab>           { static const wchar_t name[];     };
-  template <> struct system_class<wchar_t,SystemClass::TreeView>      { static const wchar_t name[];     };
+  //! \var system_class<CHR>::value - Define common control class names
+  template <typename CHR> struct system_class<CHR,SystemClass::Button>        { static constexpr const CHR* name = getValue<CHR>(WC_BUTTONA,WC_BUTTONW);                    };
+  template <typename CHR> struct system_class<CHR,SystemClass::ComboBox>      { static constexpr const CHR* name = getValue<CHR>(WC_COMBOBOXA,WC_COMBOBOXW);                };
+  template <typename CHR> struct system_class<CHR,SystemClass::ComboBoxEx>    { static constexpr const CHR* name = getValue<CHR>(WC_COMBOBOXEXA,WC_COMBOBOXEXW);            };
+  template <typename CHR> struct system_class<CHR,SystemClass::Edit>          { static constexpr const CHR* name = getValue<CHR>(WC_EDITA,WC_EDITW);                        };
+  template <typename CHR> struct system_class<CHR,SystemClass::Header>        { static constexpr const CHR* name = getValue<CHR>(WC_HEADERA,WC_HEADERW);                    };
+  template <typename CHR> struct system_class<CHR,SystemClass::ListBox>       { static constexpr const CHR* name = getValue<CHR>(WC_LISTBOXA,WC_LISTBOXW);                  };
+  template <typename CHR> struct system_class<CHR,SystemClass::IpAddress>     { static constexpr const CHR* name = getValue<CHR>(WC_IPADDRESSA,WC_IPADDRESSW);              };
+  template <typename CHR> struct system_class<CHR,SystemClass::Link>          { static constexpr const CHR* name = getValue<CHR>("SysLink",L"SysLink");                     };
+  template <typename CHR> struct system_class<CHR,SystemClass::ListView>      { static constexpr const CHR* name = getValue<CHR>(WC_LISTVIEWA,WC_LISTVIEWW);                };
+  template <typename CHR> struct system_class<CHR,SystemClass::NativeFont>    { static constexpr const CHR* name = getValue<CHR>(WC_NATIVEFONTCTLA,WC_NATIVEFONTCTLW);      };
+  template <typename CHR> struct system_class<CHR,SystemClass::PageScroller>  { static constexpr const CHR* name = getValue<CHR>(WC_PAGESCROLLERA,WC_PAGESCROLLERW);        };
+  template <typename CHR> struct system_class<CHR,SystemClass::ScrollBar>     { static constexpr const CHR* name = getValue<CHR>(WC_SCROLLBARA,WC_SCROLLBARW);              };
+  template <typename CHR> struct system_class<CHR,SystemClass::Static>        { static constexpr const CHR* name = getValue<CHR>(WC_STATICA,WC_STATICW);                    };
+  template <typename CHR> struct system_class<CHR,SystemClass::Tab>           { static constexpr const CHR* name = getValue<CHR>(WC_TABCONTROLA,WC_TABCONTROLW);            };
+  template <typename CHR> struct system_class<CHR,SystemClass::TreeView>      { static constexpr const CHR* name = getValue<CHR>(WC_TREEVIEWA,WC_TREEVIEWW);                };
 
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \struct system_class - Defines the names of system window classes
   //! 
-  //! \tparam CHAR - Character type
+  //! \tparam CHR - Character type
   //! \tparam CLS - System class
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC> 

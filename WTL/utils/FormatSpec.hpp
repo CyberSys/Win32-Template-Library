@@ -14,78 +14,39 @@
 namespace wtl
 {
   
-  // ------------------ FORMAT SPEC -----------------
-
-//! \if CONSTEXPR_CAP - Define here if compiler supports static storage
-#ifdef CONSTEXPR_CAP
   /////////////////////////////////////////////////////////////
-  //! \struct format_spec - Defines printf type specification for fundemental types
+  //! \struct format_spec - Defines printf type specification for any type
   /////////////////////////////////////////////////////////////
-  template <typename char_t, typename T> struct format_spec     { static const char value[]; /* Undefined */ };
+  template <typename char_t, typename T> struct  format_spec           { static const char_t value[]; /* Undefined */  };
 
-  template <> struct format_spec<char,double>      { static constexpr const char value[] = "%llf"; };
-  template <> struct format_spec<char,uint64>      { static constexpr const char value[] = "%llu"; };
-  template <> struct format_spec<char,int64>       { static constexpr const char value[] = "%lld"; };
-  template <> struct format_spec<char,float>       { static constexpr const char value[] = "%lf";  };
-  template <> struct format_spec<char,ulong32>     { static constexpr const char value[] = "%lu";  };
-  template <> struct format_spec<char,long32>      { static constexpr const char value[] = "%ld";  };
-  template <> struct format_spec<char,uint32>      { static constexpr const char value[] = "%lu";  };
-  template <> struct format_spec<char,int32>       { static constexpr const char value[] = "%ld";  };
-  template <> struct format_spec<char,uint16>      { static constexpr const char value[] = "%hu";  };
-  template <> struct format_spec<char,int16>       { static constexpr const char value[] = "%hd";  };
-  template <> struct format_spec<char,uint8>       { static constexpr const char value[] = "%c";  };
-  template <> struct format_spec<char,int8>        { static constexpr const char value[] = "%c";  };
-  template <> struct format_spec<char,char>        { static constexpr const char value[] = "%c";  };
-  template <> struct format_spec<char,char*>       { static constexpr const char value[] = "%s";  };
-  template <> struct format_spec<char,const char*> { static constexpr const char value[] = "%s";  };
-#else
-  /////////////////////////////////////////////////////////////
-  //! \struct format_spec - Defines printf type specification for fundemental types
-  /////////////////////////////////////////////////////////////
-  template <typename char_t, typename T> struct format_spec     { static const char value[]; /* Undefined */ };
+  //! \var format_spec<char_t>::value - Define type specs for fundemental types
+  template <typename char_t> struct format_spec<char_t,double>         { static constexpr const char_t* value = getValue<char_t>("%llf", L"%llf");  };
+  template <typename char_t> struct format_spec<char_t,uint64>         { static constexpr const char_t* value = getValue<char_t>("%llu", L"%llu");  };
+  template <typename char_t> struct format_spec<char_t,int64>          { static constexpr const char_t* value = getValue<char_t>("%lld", L"%lld");  };
+  template <typename char_t> struct format_spec<char_t,float>          { static constexpr const char_t* value = getValue<char_t>("%lf", L"%lf");    };
+  template <typename char_t> struct format_spec<char_t,ulong32>        { static constexpr const char_t* value = getValue<char_t>("%lu", L"%lu");    };
+  template <typename char_t> struct format_spec<char_t,long32>         { static constexpr const char_t* value = getValue<char_t>("%ld", L"%ld");    };
+  template <typename char_t> struct format_spec<char_t,uint32>         { static constexpr const char_t* value = getValue<char_t>("%lu", L"%lu");    };
+  template <typename char_t> struct format_spec<char_t,int32>          { static constexpr const char_t* value = getValue<char_t>("%ld", L"%ld");    };
+  template <typename char_t> struct format_spec<char_t,uint16>         { static constexpr const char_t* value = getValue<char_t>("%hu", L"%hu");    };
+  template <typename char_t> struct format_spec<char_t,int16>          { static constexpr const char_t* value = getValue<char_t>("%hd", L"%hd");    };
+  template <typename char_t> struct format_spec<char_t,char_t>         { static constexpr const char_t* value = getValue<char_t>("%c", L"%c");      };
+  template <typename char_t> struct format_spec<char_t,uint8>          { static constexpr const char_t* value = getValue<char_t>("%cu", L"%cu");    };
+  template <typename char_t> struct format_spec<char_t,int8>           { static constexpr const char_t* value = getValue<char_t>("%c", L"%c");      };
+  template <typename char_t> struct format_spec<char_t,char_t*>        { static constexpr const char_t* value = getValue<char_t>("%s", L"%s");      };
+  template <typename char_t> struct format_spec<char_t,uint8*>         { static constexpr const char_t* value = getValue<char_t>("%s", L"%s");      };
+  template <typename char_t> struct format_spec<char_t,const char_t*>  { static constexpr const char_t* value = getValue<char_t>("%s", L"%s");      };
+  template <typename char_t> struct format_spec<char_t,const uint8*>   { static constexpr const char_t* value = getValue<char_t>("%s", L"%s");      };
 
-  template <> struct format_spec<char,double>             { static const char value[]; };
-  template <> struct format_spec<char,uint64>             { static const char value[]; };
-  template <> struct format_spec<char,int64>              { static const char value[]; };
-  template <> struct format_spec<char,float>              { static const char value[]; };
-  template <> struct format_spec<char,ulong32>            { static const char value[]; };
-  template <> struct format_spec<char,long32>             { static const char value[]; };
-  template <> struct format_spec<char,uint32>             { static const char value[]; };
-  template <> struct format_spec<char,int32>              { static const char value[]; };
-  template <> struct format_spec<char,uint16>             { static const char value[]; };
-  template <> struct format_spec<char,int16>              { static const char value[]; };
-  template <> struct format_spec<char,uint8>              { static const char value[]; };
-  template <> struct format_spec<char,int8>               { static const char value[]; };
-  template <> struct format_spec<char,char>               { static const char value[]; };
-  template <> struct format_spec<char,char*>              { static const char value[]; };
-  template <> struct format_spec<char,uint8*>             { static const char value[]; };
-  template <> struct format_spec<char,const char*>        { static const char value[]; };
-  template <> struct format_spec<char,const uint8*>       { static const char value[]; };
 
-  template <> struct format_spec<wchar_t,double>          { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,uint64>          { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,int64>           { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,float>           { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,ulong32>         { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,long32>          { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,uint32>          { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,int32>           { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,uint16>          { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,int16>           { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,uint8>           { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,int8>            { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,wchar_t>         { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,wchar_t*>        { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,uint16*>         { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,const wchar_t*>  { static const wchar_t value[]; };
-  template <> struct format_spec<wchar_t,const uint16*>   { static const wchar_t value[]; };
-#endif
-  
   ///////////////////////////////////////////////////////////////////////////////
   //! \typedef format_spec_t - Query printf type specification for any type
   ///////////////////////////////////////////////////////////////////////////////
   template <typename char_t, typename T> 
   using format_spec_t = format_spec<char_t, std::conditional_t<std::is_enum<T>::value, int, std::remove_const_t<T>> >;
+
+
+
 
   ///////////////////////////////////////////////////////////////////////////////
   // wtl::snprintf_t

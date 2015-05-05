@@ -10,6 +10,11 @@
 
 #include "WTL.hpp"
 
+// Remove 'CHAR' typedef
+#ifdef CHAR
+  #undef CHAR
+#endif
+
 // Fundamental types
 using int8    = int8_t;
 using uint8   = uint8_t;

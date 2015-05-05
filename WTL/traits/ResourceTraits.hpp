@@ -208,15 +208,15 @@ namespace wtl
   //! wtl::resource_name
   //! Creates a resource string identifier
   //!
-  //! \tparam CHAR - Character type
+  //! \tparam CHR - Character type
   //! 
   //! \param[in] const* name - Resource name
   //! \return ResourceId - Resource Id of appropriate type
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR>
-  ResourceId<default_encoding<CHAR>::value> resource_name(const CHAR* name)
+  template <typename CHR>
+  ResourceId<default_encoding<CHR>::value> resource_name(const CHR* name)
   {
-    return ResourceId<default_encoding<CHAR>::value>(name);
+    return ResourceId<default_encoding<CHR>::value>(name);
   }
 
 

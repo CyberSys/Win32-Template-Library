@@ -20,9 +20,6 @@ namespace wtl
   template <typename ELEMENT, uint32 LENGTH>
   using array_ref_t = ELEMENT (&)[LENGTH];
   
-  //! \alias array_ptr_t - Defines array pointer types
-  template <typename ELEMENT, uint32 LENGTH>
-  using array_ptr_t = ELEMENT (*)[LENGTH];
 
   // ------------------ COPY N -----------------
 

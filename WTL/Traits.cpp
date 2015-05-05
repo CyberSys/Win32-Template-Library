@@ -55,32 +55,8 @@ namespace wtl
   const ::HPEN        handle_alloc<::HPEN>::npos = nullptr;
   const ::HRSRC       handle_alloc<::HRSRC>::npos = nullptr;
   const ::HWND        handle_alloc<::HWND>::npos = nullptr;
-  
-  //! \var handle_alloc<T>::npos - 'Invalid handle' sentinel value 
-  /*template <typename T>
-  const T handle_alloc<T>::npos = (const T)INVALID_HANDLE_VALUE;*/
-
-  
-  //! \var npos - Define 'No handle' sentinel values
-  /*template <typename T>
-  const Handle<T>   Handle<T>::npos = Handle<T>(handle_alloc<T>::npos, AllocType::WeakRef);*/
-
-  /*const HAccelerator   HAccelerator::npos = HAccelerator(handle_alloc<::HACCEL>::npos, AllocType::WeakRef);
-  const HAtom          HAtom::npos = HAtom(handle_alloc<::ATOM>::npos, AllocType::WeakRef);
-  const HBrush         HBrush::npos = HBrush(handle_alloc<::HBRUSH>::npos, AllocType::WeakRef);
-  const HDeviceContext HDeviceContext::npos = HDeviceContext(handle_alloc<::HDC>::npos, AllocType::WeakRef);
-  const HFont          HFont::npos = HFont(handle_alloc<::HFONT>::npos, AllocType::WeakRef);
-  const HGlobal        HGlobal::npos = HGlobal(handle_alloc<::HGLOBAL>::npos, AllocType::WeakRef);
-  const HIcon          HIcon::npos = HIcon(handle_alloc<::HICON>::npos, AllocType::WeakRef);
-  const HMenu          HMenu::npos = HMenu(handle_alloc<::HMENU>::npos, AllocType::WeakRef);
-  const HModule        HModule::npos = HModule(handle_alloc<::HMODULE>::npos, AllocType::WeakRef);
-  const HPen           HPen::npos = HPen(handle_alloc<::HPEN>::npos, AllocType::WeakRef);
-  const HResource      HResource::npos = HResource(handle_alloc<::HRSRC>::npos, AllocType::WeakRef);
-  const HWnd           HWnd::npos = HWnd(handle_alloc<::HWND>::npos, AllocType::WeakRef);*/
 }
 
-//! \if CONSTEXPR_CAP - Define here if compiler does not support static storage
-#ifndef CONSTEXPR_CAP
 //! \namespace wtl - Windows template library
 namespace wtl
 {
@@ -90,51 +66,7 @@ namespace wtl
   //! \var enum_values<...>::values - Defines HatchStyle values
   const Encoding enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
                                                      Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
-
-  //! \var format_spec<...>::value - Defines narrow string formatting type specifications
-  const char format_spec<char,double>::value[] = "%llf";
-  const char format_spec<char,uint64>::value[] = "%llu";
-  const char format_spec<char,int64>::value[] = "%lld";
-  const char format_spec<char,float>::value[] = "%lf";
-  const char format_spec<char,uint32>::value[] = "%lu";
-  const char format_spec<char,int32>::value[] = "%ld";
-  const char format_spec<char,ulong32>::value[] = "%lu";
-  const char format_spec<char,long32>::value[] = "%ld";
-  const char format_spec<char,uint16>::value[] = "%hu";
-  const char format_spec<char,int16>::value[] = "%hd";
-  const char format_spec<char,uint8>::value[] = "%cu";
-  const char format_spec<char,int8>::value[] = "%c";
-  const char format_spec<char,char>::value[] = "%c";
-  const char format_spec<char,char*>::value[] = "%s";
-  const char format_spec<char,uint8*>::value[] = "%s";
-  const char format_spec<char,const char*>::value[] = "%s";
-  const char format_spec<char,const uint8*>::value[] = "%s";
-
-  //! \var format_spec<...>::value - Defines wide string formatting type specifications
-  const wchar_t format_spec<wchar_t,double>::value[] = L"%llf";
-  const wchar_t format_spec<wchar_t,uint64>::value[] = L"%llu";
-  const wchar_t format_spec<wchar_t,int64>::value[] = L"%lld";
-  const wchar_t format_spec<wchar_t,float>::value[] = L"%lf";
-  const wchar_t format_spec<wchar_t,uint32>::value[] = L"%lu";
-  const wchar_t format_spec<wchar_t,int32>::value[] = L"%ld";
-  const wchar_t format_spec<wchar_t,ulong32>::value[] = L"%lu";
-  const wchar_t format_spec<wchar_t,long32>::value[] = L"%ld";
-  const wchar_t format_spec<wchar_t,uint16>::value[] = L"%hu";
-  const wchar_t format_spec<wchar_t,int16>::value[] = L"%hd";
-  const wchar_t format_spec<wchar_t,uint8>::value[] = L"%cu";
-  const wchar_t format_spec<wchar_t,int8>::value[] = L"%c";
-  const wchar_t format_spec<wchar_t,wchar_t>::value[] = L"%c";
-  const wchar_t format_spec<wchar_t,wchar_t*>::value[] = L"%s";
-  const wchar_t format_spec<wchar_t,uint16*>::value[] = L"%s";
-  const wchar_t format_spec<wchar_t,const wchar_t*>::value[] = L"%s";
-  const wchar_t format_spec<wchar_t,const uint16*>::value[] = L"%s";
-}
-#endif
-
-
-//! \namespace wtl - Windows template library
-namespace wtl
-{
+  
   //! \var enum_values<...>::value - Defines Colour values
   const Colour  enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
                                                    Colour::Leaves, Colour::Forest, Colour::Yellow, Colour::Gold, Colour::Orange, Colour::Honey, Colour::Brown, Colour::Red, Colour::Rose,
@@ -144,6 +76,12 @@ namespace wtl
   const HatchStyle  enum_values<HatchStyle>::values[6] = { HatchStyle::Horizontal, HatchStyle::Vertical, HatchStyle::ForwardDiagonal, 
                                                            HatchStyle::BackwardDiagonal, HatchStyle::Cross, HatchStyle::CrossDiagonal };
 
+}
+
+
+//! \namespace wtl - Windows template library
+namespace wtl
+{
   //! \var DeviceContext::ScreenDC - Screen device context
   DeviceContext  ScreenDC = HDeviceContext::npos;
 
@@ -213,40 +151,4 @@ namespace wtl
   const Resource  Resource::npos;
 }
 
-
-//! \namespace wtl - Windows template library
-namespace wtl
-{
-  //! \var system_class<...>::value - Defines standard controls window class names
-  const wchar_t system_class<wchar_t,SystemClass::Animate>::name[] = ANIMATE_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::DateTime>::name[] = DATETIMEPICK_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::HotKey>::name[] = HOTKEY_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::Calendar>::name[] = MONTHCAL_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::ProgressBar>::name[] = PROGRESS_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::CoolBar>::name[] = REBARCLASSNAMEW;
-  const wchar_t system_class<wchar_t,SystemClass::StatusBar>::name[] = STATUSCLASSNAMEW;
-  const wchar_t system_class<wchar_t,SystemClass::ToolBar>::name[] = TOOLBARCLASSNAMEW;
-  const wchar_t system_class<wchar_t,SystemClass::ToolTip>::name[] = TOOLTIPS_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::TrackBar>::name[] = TRACKBAR_CLASSW;
-  const wchar_t system_class<wchar_t,SystemClass::Spin>::name[] = UPDOWN_CLASSW;
-  
-  //! \var system_class<...>::value - Defines common control window class names
-  const wchar_t system_class<wchar_t,SystemClass::Button>::name[] = WC_BUTTONW;
-  const wchar_t system_class<wchar_t,SystemClass::ComboBox>::name[] = WC_COMBOBOXW;
-  const wchar_t system_class<wchar_t,SystemClass::ComboBoxEx>::name[] = WC_COMBOBOXEXW;
-  const wchar_t system_class<wchar_t,SystemClass::Edit>::name[] = WC_EDITW;
-  const wchar_t system_class<wchar_t,SystemClass::Header>::name[] = WC_HEADERW;
-  const wchar_t system_class<wchar_t,SystemClass::ListBox>::name[] = WC_LISTBOXW;
-  const wchar_t system_class<wchar_t,SystemClass::IpAddress>::name[] = WC_IPADDRESSW;
-  const wchar_t system_class<wchar_t,SystemClass::Link>::name[] = L"SysLink";
-  const wchar_t system_class<wchar_t,SystemClass::ListView>::name[] = WC_LISTVIEWW;
-  const wchar_t system_class<wchar_t,SystemClass::NativeFont>::name[] = WC_NATIVEFONTCTLW;
-  const wchar_t system_class<wchar_t,SystemClass::PageScroller>::name[] = WC_PAGESCROLLERW;
-  const wchar_t system_class<wchar_t,SystemClass::ScrollBar>::name[] = WC_SCROLLBARW;
-  const wchar_t system_class<wchar_t,SystemClass::Static>::name[] = WC_STATICW;
-  const wchar_t system_class<wchar_t,SystemClass::Tab>::name[] = WC_TABCONTROLW;
-  const wchar_t system_class<wchar_t,SystemClass::TreeView>::name[] = WC_TREEVIEWW;
-
-
-}
 

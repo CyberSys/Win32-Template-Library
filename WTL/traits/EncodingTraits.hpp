@@ -26,7 +26,10 @@ namespace wtl
     UTF8 = CP_UTF8,               //!< UTF-8
     UTF16 = 1200,                 //!< UTF-16
   };
-  
+
+  //! \alias array_ptr_t - Defines array pointer types
+  template <typename ELEMENT, uint32 LENGTH>
+  using array_ptr_t = ELEMENT (*)[LENGTH];
   //! Define traits: Non-Contiguous Enumeration
   template <> struct is_attribute<Encoding>  : std::false_type  {};
   template <> struct is_contiguous<Encoding> : std::false_type  {};
@@ -111,18 +114,18 @@ namespace wtl
   using enable_if_wide_t = std::enable_if_t<sizeof(CHR) == sizeof(wchar_t), RET>;
 
   
-  // --------------------- FUNCTION/TYPE/VALUE SELECTORS ----------------------
+  // --------------------- TYPE SELECTORS ----------------------
 
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias getType - Defines a narrow/wide type based on a character type
   //!
-  //! \tparam[in] CHAR - Character type
+  //! \tparam[in] CHR - Character type
   //! \tparam[in] NARROW - Narrow type
   //! \tparam[in] WIDE - Wide type
-  //! \return auto - 'NARROW' if sizeof(CHAR) == 1, otherwise of type 'WIDE'
+  //! \return auto - 'NARROW' if sizeof(CHR) == 1, otherwise of type 'WIDE'
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, typename NARROW, typename WIDE>
-  using getType = std::conditional_t<sizeof(CHAR)==sizeof(char),NARROW,WIDE>;
+  template <typename CHR, typename NARROW, typename WIDE>
+  using getType = std::conditional_t<sizeof(CHR)==sizeof(char),NARROW,WIDE>;
   
   ///////////////////////////////////////////////////////////////////////////////
   //! \alias getType_t - Defines a narrow/wide type based on a character encoding
@@ -130,100 +133,105 @@ namespace wtl
   //! \tparam[in] ENC - Character encoding 
   //! \tparam[in] NARROW - Narrow type
   //! \tparam[in] WIDE - Wide type
-  //! \return - 'NARROW' if sizeof(CHAR) == 1, otherwise of type 'WIDE'
+  //! \return - 'NARROW' if sizeof(CHR) == 1, otherwise of type 'WIDE'
   ///////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename NARROW, typename WIDE>
   using getType_t = getType<encoding_char_t<ENC>,NARROW,WIDE>;
 
+  // --------------------- VALUE SELECTORS ----------------------
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! wtl::getFunc
-  //! Get the narrow character implementation of a function by character type
+  //! wtl::getValue constexpr
+  //! Get the narrow-character implementation of any value
   //!
-  //! \tparam CHAR - Narrow character type
-  //! \tparam NARROW - Narrow char callable target type
-  //! \tparam WIDE - Wide char callable target type
+  //! \tparam CHR - Narrow character type
+  //! \tparam NARROW - Narrow-char value type
+  //! \tparam WIDE - Wide-char value type
   //! 
-  //! \param[in] narrow - Narrow char function pointer / callable target
-  //! \param[in] wide - Wide char function pointer / callable target
+  //! \param[in] narrow - Narrow-char value
+  //! \param[in] wide - Wide-char value
   //! \return NARROW - Returns 'narrow'
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, typename NARROW, typename WIDE>
-  enable_if_narrow_t<CHAR,NARROW>  getFunc(NARROW narrow, WIDE wide) 
+  template <typename CHR, typename NARROW, typename WIDE> constexpr
+  auto  getValue(NARROW narrow, WIDE wide) noexcept -> enable_if_narrow_t<CHR,NARROW>
   {
     return narrow;
   };
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! wtl::getFunc
-  //! Get the wide character implementation of a function by character type
+  //! wtl::getValue constexpr
+  //! Get the wide-character implementation of any value by character type
   //!
-  //! \tparam CHAR - Wide character type
-  //! \tparam NARROW - Narrow char callable target type
-  //! \tparam WIDE - Wide char callable target type
+  //! \tparam CHR - Wide character type
+  //! \tparam NARROW - Narrow-char value type
+  //! \tparam WIDE - Wide-char value type
   //! 
-  //! \param[in] narrow - Narrow char function pointer / callable target
-  //! \param[in] wide - Wide char function pointer / callable target
+  //! \param[in] narrow - Narrow-char value
+  //! \param[in] wide - Wide-char value
   //! \return WIDE - Returns 'wide'
   ///////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, typename NARROW, typename WIDE>
-  enable_if_wide_t<CHAR,WIDE>  getFunc(NARROW narrow, WIDE wide) 
+  template <typename CHR, typename NARROW, typename WIDE> constexpr
+  auto  getValue(NARROW narrow, WIDE wide) noexcept -> enable_if_wide_t<CHR,WIDE>
   {
     return wide;
   };
   
   ///////////////////////////////////////////////////////////////////////////////
-  //! wtl::getFunc
-  //! Get the narrow/wide character implementation of a function by character encoding
+  //! wtl::getValue constexpr
+  //! Get the narrow/wide character implementation of any value by character encoding
   //!
   //! \tparam ENC - Character encoding 
-  //! \tparam NARROW - Narrow char callable target type
-  //! \tparam WIDE - Wide char callable target type
+  //! \tparam NARROW - Narrow-char value type
+  //! \tparam WIDE - Wide-char value type
+  //! 
+  //! \param[in] narrow - Narrow-char value
+  //! \param[in] wide - Wide-char value
+  //! \return auto - 'narrow' if sizeof(CHR) == 1, otherwise 'wide'
+  ///////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, typename NARROW, typename WIDE> constexpr
+  getType_t<ENC,NARROW,WIDE>  getValue(NARROW narrow, WIDE wide) noexcept
+  {
+    return getValue<encoding_char_t<ENC>>(narrow, wide);
+  };
+  
+  // --------------------- FUNCTION SELECTORS ----------------------
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //! wtl::getFunc constexpr
+  //! Get the narrow/wide function pointer by character type
+  //!
+  //! \tparam CHR - Character type
+  //! \tparam NARROW - Narrow char function pointer
+  //! \tparam WIDE - Wide char function pointer
   //! 
   //! \param[in] narrow - Narrow char function pointer / callable target
   //! \param[in] wide - Wide char function pointer / callable target
-  //! \return auto - 'narrow' if sizeof(CHAR) == 1, otherwise 'wide'
+  //! \return auto - 'narrow' if sizeof(CHR) == 1, otherwise 'wide'
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename NARROW, typename WIDE>
-  getType_t<ENC,NARROW,WIDE>  getFunc(NARROW narrow, WIDE wide) 
+  template <typename CHR, typename NARROW, typename WIDE> constexpr
+  auto  getFunc(NARROW narrow, WIDE wide) noexcept
   {
-    return getFunc<encoding_char_t<ENC>>(narrow, wide);
+    return getValue<CHR>(narrow,wide);
   };
-  
 
   ///////////////////////////////////////////////////////////////////////////////
-  //! wtl::getValue
-  //! Get the narrow/wide implementation of a value
+  //! wtl::getFunc constexpr
+  //! Get the narrow/wide function by character encoding
   //!
-  //! \tparam ENC - Character encoding type
-  //! \tparam VALUE - Value type
-  //! \tparam NARROW - Narrow value
-  //! \tparam WIDE - Wide value
+  //! \tparam ENC - Character encoding 
+  //! \tparam NARROW - Narrow char function pointer
+  //! \tparam WIDE - Wide char function pointer
   //! 
-  //! \return auto - 'narrow' if sizeof(CHAR) == 1, otherwise 'wide'
+  //! \param[in] narrow - Narrow char function pointer / callable target
+  //! \param[in] wide - Wide char function pointer / callable target
+  //! \return auto - 'narrow' if narrow character encoding, otherwise 'wide'
   ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename VAL, VAL NARROW, VAL WIDE>
-  VAL getValue() 
+  template <Encoding ENC, typename NARROW, typename WIDE> constexpr
+  auto  getFunc(NARROW narrow, WIDE wide) noexcept
   {
-    return sizeof(encoding_char_t<ENC>) == sizeof(char) ? NARROW : WIDE;
+    return getValue<ENC>(narrow, wide);
   };
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! wtl::getValue
-  //! Get the narrow/wide implementation of a value
-  //!
-  //! \tparam ENC - Character encoding type
-  //! \tparam VALUE - Value type
-  //! 
-  //! \param[in] narrow - Narrow value
-  //! \param[in] wide - Wide value
-  //! \return auto - 'narrow' if sizeof(CHAR) == 1, otherwise 'wide'
-  ///////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename VAL>
-  constexpr VAL getValue_t(VAL narrow, VAL wide) 
-  {
-    return getValue<ENC,VAL,narrow,wide>();
-  };
+
   
 } //namespace wtl
 #endif // WTL_ENCODING_HPP
