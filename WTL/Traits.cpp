@@ -89,7 +89,7 @@ namespace wtl
 
   //! \var enum_values<...>::values - Defines HatchStyle values
   const Encoding enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
-                                                      Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
+                                                     Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
 
   //! \var format_spec<...>::value - Defines narrow string formatting type specifications
   const char format_spec<char,double>::value[] = "%llf";
@@ -246,5 +246,7 @@ namespace wtl
   const wchar_t system_class<wchar_t,SystemClass::Static>::name[] = WC_STATICW;
   const wchar_t system_class<wchar_t,SystemClass::Tab>::name[] = WC_TABCONTROLW;
   const wchar_t system_class<wchar_t,SystemClass::TreeView>::name[] = WC_TREEVIEWW;
+
+
 }
 

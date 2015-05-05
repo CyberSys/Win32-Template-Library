@@ -155,7 +155,7 @@ namespace wtl
   //! \return ENUM - Bitwise-or combination of both values
   ////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_attribute_t<ENUM,ENUM>  operator| (ENUM a, VALUE b)
+  auto operator | (ENUM a, VALUE b) noexcept -> enable_if_attribute_t<ENUM,ENUM> 
   {
     static_assert(is_attribute<ENUM>::value, "Enumeration does not support bitwise OR");
 
@@ -178,7 +178,7 @@ namespace wtl
   //! \return ENUM& - Reference to 'a' (now combined with 'b')
   ////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_attribute_t<ENUM, ENUM&>  operator|= (ENUM& a, VALUE b)
+  enable_if_attribute_t<ENUM, ENUM&>  operator|= (ENUM& a, VALUE b) noexcept
   {
     return a = a | b;
   }
@@ -205,6 +205,26 @@ namespace wtl
                            & static_cast<std::underlying_type_t<ENUM>>(b));
   }
 
+  ////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator & constexpr
+  //! Compile-time logical-AND operator for querying attributes without casting iff their type
+  //! traits specify they support the operation
+  //!
+  //! \tparam ENUM - Enumeration type
+  //! \tparam VALUE - Value type
+  //!
+  //! \param[in] const &a - Enumeration value
+  //! \param[in] const &b - Another value
+  //! \return bool - True iff one or more bits in common
+  ////////////////////////////////////////////////////////////////////////////////
+  template <typename ENUM, typename VALUE> constexpr
+  enable_if_attribute_t<ENUM,bool>  operator && (ENUM a, VALUE b)
+  {
+    static_assert(is_attribute<ENUM>::value, "Enumeration does not support logical AND");
+
+    // Query whether all bits are present
+    return (a & b) == static_cast<ENUM>(b);
+  }
 
   ////////////////////////////////////////////////////////////////////////////////
   // wtl::operator&= constexpr

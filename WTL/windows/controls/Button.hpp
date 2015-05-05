@@ -200,7 +200,7 @@ namespace wtl
       base::create<ENC,LEN>(parent,text,rc,static_cast<WindowId>(id),WindowStyle::Child|style,exStyle);
       
       // Set initial font
-      base::setFont(wtl::StockFont::Window, false);
+      //base::setFont(wtl::StockFont::Window, false);
     }
 
     

@@ -144,6 +144,7 @@
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>WTL</RootNamespace>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

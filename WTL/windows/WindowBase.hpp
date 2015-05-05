@@ -131,7 +131,9 @@ namespace wtl
       Native,    //!< Native window
     };
 
+    ///////////////////////////////////////////////////////////////////////////////
     //! \struct SubClass - Represents a subclassed window
+    ///////////////////////////////////////////////////////////////////////////////
     struct SubClass
     {
       //! \union WindowProc - Window procedure
@@ -158,24 +160,73 @@ namespace wtl
       WindowType  Type;       //!< Window type
     };
 
+  protected:
     ///////////////////////////////////////////////////////////////////////////////
-    //! \struct FontPropertyData - Encapsulates setting the window font
+    //! \struct WindowPropertyImpl - Base class for window properties
+    //!
+    //! \tparam VALUE - Value type
+    //! \tparam TYPE - [optional] Accessibility and representation (Default is mutable reference type)
     ///////////////////////////////////////////////////////////////////////////////
-    struct FontPropertyData : PropertyData<HFont>
+    template <typename VALUE, PropertyType TYPE>
+    struct WindowPropertyImpl : PropertyImpl<VALUE,TYPE>
     {
+      friend window_t;    //!< Allow WindowBase to internally set value
+
+      // ------------------- TYPES & CONSTANTS -------------------
+
+      //! \alias type - Define own type
+      using type = WindowPropertyImpl<VALUE,TYPE>;
+
+      //! \alias base - Define base type
+      using base = PropertyImpl<VALUE,TYPE>;
+
       // -------------------- REPRESENTATION ---------------------
     protected:
-      window_t&  Window;
+      window_t&  Window;      //!< Owner window
 
       // --------------------- CONSTRUCTION ----------------------
     public:
       ///////////////////////////////////////////////////////////////////////////////
-      // FontPropertyData::FontPropertyData
-      //! Create from owner window
+      // WindowPropertyImpl::WindowPropertyImpl
+      //! Stores the owner window
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
       ///////////////////////////////////////////////////////////////////////////////
-      FontPropertyData(const window_t& wnd) : Window(wnd)
+      template <typename... ARGS>
+      WindowPropertyImpl(window_t& wnd, ARGS&&... args) : base(std::forward<ARGS>(args)...),
+                                                          Window(wnd)
+      {}
+
+      // ----------------------- ACCESSORS -----------------------
+
+      // ------------------------ MUTATORS -----------------------
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct FontPropertyImpl - Implements the window font property [Mutable,Reference]
+    ///////////////////////////////////////////////////////////////////////////////
+    struct FontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableRef>
+    {
+      // ------------------- TYPES & CONSTANTS -------------------
+      
+      //! \alias type - Define own type
+      using type = FontPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<HFont,PropertyType::MutableRef>;
+
+      // -------------------- REPRESENTATION ---------------------
+
+      // --------------------- CONSTRUCTION ----------------------
+    
+      ///////////////////////////////////////////////////////////////////////////////
+      // FontPropertyImpl::FontPropertyImpl
+      //! Create with initial value of 'npos'
+      //! 
+      //! \param[in,out] &wnd - Owner window
+      ///////////////////////////////////////////////////////////////////////////////
+      FontPropertyImpl(window_t& wnd) : base(wnd, HFont::npos)
       {}
 
       // ----------------------- ACCESSORS -----------------------
@@ -183,21 +234,154 @@ namespace wtl
       // ------------------------ MUTATORS -----------------------
 
       ///////////////////////////////////////////////////////////////////////////////
-      // FontPropertyData::set 
+      // FontPropertyImpl::set 
       //! Set the window font
       //! 
-      //! \param[in] const& font - New font
+      //! \param[in] auto font - New font
       ///////////////////////////////////////////////////////////////////////////////
-      void set(const HFont& font) override
+      void set(typename base::argument_t font) override
       {
-        // Set window font, redraw, update value
-        Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
+        // Set window font & redraw
+        this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
+
+        // Update value
         base::set(font);
       }
     };
 
-    //! \alias FontProperty - Define window font property
-    using FontProperty = Property<HFont,true,FontPropertyData>;
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct StylePropertyImpl - Implements the window style property [Mutable,Value]
+    ///////////////////////////////////////////////////////////////////////////////
+    struct StylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>
+    {
+      // ------------------- TYPES & CONSTANTS -------------------
+
+      //! \alias type - Define own type
+      using type = StylePropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // -------------------- REPRESENTATION ---------------------
+
+      // --------------------- CONSTRUCTION ----------------------
+    public:
+      ///////////////////////////////////////////////////////////////////////////////
+      // StylePropertyImpl::StylePropertyImpl
+      //! Create with default value 
+      //! 
+      //! \param[in] const& wnd - Owner window
+      ///////////////////////////////////////////////////////////////////////////////
+      StylePropertyImpl(window_t& wnd) : base(wnd, zero<WindowStyle>::value)
+      {}
+
+      // ----------------------- ACCESSORS -----------------------
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // StylePropertyImpl::get const
+      //! Get the window style
+      //! 
+      //! \return argument_t - Current window style
+      ///////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // Get window style
+        return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+      }
+
+      // ------------------------ MUTATORS -----------------------
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // StylePropertyImpl::set 
+      //! Set the window style
+      //! 
+      //! \param[in] style - New window style
+      ///////////////////////////////////////////////////////////////////////////////
+      void set(argument_t style) override
+      {
+        // Set window style
+        if (!getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
+          throw platform_error(HERE, "Unable to set window style");
+
+        // Update value
+        base::set(style);
+      }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //! \struct StyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
+    ///////////////////////////////////////////////////////////////////////////////
+    struct StyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>
+    {
+      // ------------------- TYPES & CONSTANTS -------------------
+
+      //! \alias type - Define own type
+      using type = StyleExPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // -------------------- REPRESENTATION ---------------------
+
+      // --------------------- CONSTRUCTION ----------------------
+    public:
+      ///////////////////////////////////////////////////////////////////////////////
+      // StyleExPropertyImpl::StyleExPropertyImpl
+      //! Create with default value
+      //! 
+      //! \param[in] const& wnd - Owner window
+      ///////////////////////////////////////////////////////////////////////////////
+      StyleExPropertyImpl(window_t& wnd) : base(wnd, zero<WindowStyleEx>::value)
+      {}
+
+      // ----------------------- ACCESSORS -----------------------
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // StyleExPropertyImpl::get const
+      //! Get the extended window style
+      //! 
+      //! \return argument_t - Current extended window style
+      ///////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // Get extended window style
+        return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
+      }
+
+      // ------------------------ MUTATORS -----------------------
+
+      ///////////////////////////////////////////////////////////////////////////////
+      // StyleExPropertyImpl::set 
+      //! Set the extended window style
+      //! 
+      //! \param[in] style - New extended window style
+      ///////////////////////////////////////////////////////////////////////////////
+      void set(argument_t style) override
+      {
+        // Set extended window style
+        if (!getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
+          throw platform_error(HERE, "Unable to set extended window style");
+
+        // Update value
+        base::set(style);
+      }
+    };
+
+  public:
+    //! \alias WindowFontProperty - Define window font property type  
+    using WindowFontProperty = Property<FontPropertyImpl,window_t>;
+
+    //! \alias WindowStyleProperty - Define window style property type 
+    using WindowStyleProperty = Property<StylePropertyImpl,window_t>;
+
+    //! \alias WindowStyleExProperty - Define extended window style property type 
+    using WindowStyleExProperty = Property<StyleExPropertyImpl,window_t>;
 
     // -------------------- REPRESENTATION ---------------------
   public:
@@ -215,12 +399,15 @@ namespace wtl
     DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
+
+    WindowFontProperty               Font;          //!< Window font property
+    WindowStyleProperty              Style;         //!< Window style property
+    WindowStyleExProperty            StyleEx;       //!< Extended window style property
     
   protected:
     ActionQueue            Actions;       //!< Actions queue
     wndclass_t&            Class;         //!< Window class 
     ChildWindowCollection  Children;      //!< Child window collection
-    HFont                  Font;          //!< Window font
     HWnd                   Handle;        //!< Window handle
     Lazy<wndmenu_t>        Menu;          //!< Window menu, if any
     SubClassCollection     SubClasses;    //!< Sub-classed windows collection
@@ -234,8 +421,10 @@ namespace wtl
     //! \param[in] &cls - Registered window class 
     ///////////////////////////////////////////////////////////////////////////////
     WindowBase(wndclass_t& cls) : Class(cls), 
+                                  Font(*this),
                                   Handle(HWnd::npos),
-                                  Font(StockObject::SystemFont)
+                                  Style(*this),
+                                  StyleEx(*this)
     {
       // Accept window creation by default
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
@@ -247,7 +436,6 @@ namespace wtl
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
     
-  public:
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::~WindowBase
     //! Virtual d-tor
@@ -669,6 +857,11 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
+      // Initialise properties
+      Font.init(StockObject::SystemFont);   
+      Style.init(args.Style);
+      StyleEx.init(args.StyleEx);
+
       // [Handled] Accept parameters
       return 0; 
     }
@@ -846,11 +1039,11 @@ namespace wtl
     //! \param[in] const& f - New window font
     //! \param[in] l - Second parameter
     ///////////////////////////////////////////////////////////////////////////////
-    void setFont(const HFont& f, bool redraw)
-    {
-      // Update shared window font
-      send<WindowMessage::SETFONT>((uintptr_t)(Font=f).get(), boolean_cast(redraw));
-    }
+    //void setFont(const HFont& f, bool redraw)
+    //{
+    //  // Update shared window font
+    //  send<WindowMessage::SETFONT>((uintptr_t)(Font=f).get(), boolean_cast(redraw));
+    //}
     
     ///////////////////////////////////////////////////////////////////////////////
     // WindowBase::show

@@ -180,6 +180,23 @@ namespace wtl
 		}
   };
 
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // wtl::reconstruct
+  //! Reconstructs an object in place
+  //! 
+  //! \tparam T - Object type
+  //! \tparam ARGS - Constructor argument types
+  //!
+  //! \param[in,out] &obj - Object 
+  //! \param[in] &&... args - [optional] Object constructor arguments
+  ////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename... ARGS>
+  void reconstruct(T& obj, ARGS&&... args)
+  {
+    // Reconstruct object
+    static_alloc<T>::reconstruct(&obj, std::forward<ARGS>(args)...);
+  }
   
 
 } //namespace wtl
