@@ -98,4 +98,4 @@ namespace wtl
 
 #endif // WTL_MENU_FLAGS_HPP
 
-#pragma once
+

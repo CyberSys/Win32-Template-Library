@@ -112,4 +112,4 @@ namespace wtl
 
 #endif // WTL_OPAQUE_CAST_HPP
 
-#pragma once
+

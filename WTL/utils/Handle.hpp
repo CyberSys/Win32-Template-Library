@@ -327,4 +327,4 @@ namespace wtl
 
 #endif // WTL_HANDLE_HPP
 
-#pragma once
+

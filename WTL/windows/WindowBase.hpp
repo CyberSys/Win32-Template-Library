@@ -204,14 +204,14 @@ namespace wtl
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct FontPropertyImpl - Implements the window font property [Mutable,Reference]
+    //! \struct WindowFontPropertyImpl - Implements the window font property [Mutable,Reference]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct FontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableRef>
+    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableRef>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
       
       //! \alias type - Define own type
-      using type = FontPropertyImpl;
+      using type = WindowFontPropertyImpl;
 
       //! \alias base - Define base type
       using base = WindowPropertyImpl<HFont,PropertyType::MutableRef>;
@@ -221,12 +221,12 @@ namespace wtl
       // ------------------------------------ CONSTRUCTION ------------------------------------
     
       /////////////////////////////////////////////////////////////////////////////////////////
-      // FontPropertyImpl::FontPropertyImpl
+      // WindowFontPropertyImpl::WindowFontPropertyImpl
       //! Create with initial value of 'npos'
       //! 
       //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      FontPropertyImpl(window_t& wnd) : base(wnd, HFont::npos)
+      WindowFontPropertyImpl(window_t& wnd) : base(wnd, HFont::npos)
       {}
 
       // ----------------------- ACCESSORS -----------------------
@@ -234,7 +234,7 @@ namespace wtl
       // ------------------------ MUTATORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // FontPropertyImpl::set 
+      // WindowFontPropertyImpl::set 
       //! Set the window font
       //! 
       //! \param[in] auto font - New font
@@ -250,14 +250,14 @@ namespace wtl
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct StylePropertyImpl - Implements the window style property [Mutable,Value]
+    //! \struct WindowStylePropertyImpl - Implements the window style property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct StylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>
+    struct WindowStylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias type - Define own type
-      using type = StylePropertyImpl;
+      using type = WindowStylePropertyImpl;
 
       //! \alias base - Define base type
       using base = WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>;
@@ -270,18 +270,18 @@ namespace wtl
       // ------------------------------------ CONSTRUCTION ------------------------------------
     public:
       /////////////////////////////////////////////////////////////////////////////////////////
-      // StylePropertyImpl::StylePropertyImpl
+      // WindowStylePropertyImpl::WindowStylePropertyImpl
       //! Create with default value 
       //! 
       //! \param[in] const& wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      StylePropertyImpl(window_t& wnd) : base(wnd, default<WindowStyle>())
+      WindowStylePropertyImpl(window_t& wnd) : base(wnd, default<WindowStyle>())
       {}
 
       // ----------------------- ACCESSORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // StylePropertyImpl::get const
+      // WindowStylePropertyImpl::get const
       //! Get the window style
       //! 
       //! \return argument_t - Current window style
@@ -295,7 +295,7 @@ namespace wtl
       // ------------------------ MUTATORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // StylePropertyImpl::set 
+      // WindowStylePropertyImpl::set 
       //! Set the window style
       //! 
       //! \param[in] style - New window style
@@ -312,14 +312,14 @@ namespace wtl
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct StyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
+    //! \struct WindowStyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct StyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>
+    struct WindowStyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias type - Define own type
-      using type = StyleExPropertyImpl;
+      using type = WindowStyleExPropertyImpl;
 
       //! \alias base - Define base type
       using base = WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>;
@@ -332,18 +332,18 @@ namespace wtl
       // ------------------------------------ CONSTRUCTION ------------------------------------
     public:
       /////////////////////////////////////////////////////////////////////////////////////////
-      // StyleExPropertyImpl::StyleExPropertyImpl
+      // WindowStyleExPropertyImpl::WindowStyleExPropertyImpl
       //! Create with default value
       //! 
       //! \param[in] const& wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      StyleExPropertyImpl(window_t& wnd) : base(wnd, default<WindowStyleEx>())
+      WindowStyleExPropertyImpl(window_t& wnd) : base(wnd, default<WindowStyleEx>())
       {}
 
       // ----------------------- ACCESSORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // StyleExPropertyImpl::get const
+      // WindowStyleExPropertyImpl::get const
       //! Get the extended window style
       //! 
       //! \return argument_t - Current extended window style
@@ -357,7 +357,7 @@ namespace wtl
       // ------------------------ MUTATORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // StyleExPropertyImpl::set 
+      // WindowStyleExPropertyImpl::set 
       //! Set the extended window style
       //! 
       //! \param[in] style - New extended window style
@@ -373,15 +373,78 @@ namespace wtl
       }
     };
 
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowRectPropertyImpl - Implements the window rectangle property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowRectPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<RectL,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------------ CONSTRUCTION ------------------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowRectPropertyImpl::WindowRectPropertyImpl
+      //! Create with default value 
+      //! 
+      //! \param[in] const& wnd - Owner window
+      /////////////////////////////////////////////////////////////////////////////////////////
+      WindowRectPropertyImpl(window_t& wnd) : base(wnd, default<WindowStyle>())
+      {}
+
+      // ----------------------- ACCESSORS -----------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowRectPropertyImpl::get const
+      //! Get the window style
+      //! 
+      //! \return argument_t - Current window style
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // Get window style
+        return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+      }
+
+      // ------------------------ MUTATORS -----------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowRectPropertyImpl::set 
+      //! Set the window style
+      //! 
+      //! \param[in] style - New window style
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t style) override
+      {
+        // Set window style
+        if (!getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
+          throw platform_error(HERE, "Unable to set window style");
+
+        // Update value
+        base::set(style);
+      }
+    };
+
   public:
     //! \alias WindowFontProperty - Define window font property type  
-    using WindowFontProperty = Property<FontPropertyImpl,window_t>;
+    using WindowFontProperty = Property<WindowFontPropertyImpl,window_t>;
 
     //! \alias WindowStyleProperty - Define window style property type 
-    using WindowStyleProperty = Property<StylePropertyImpl,window_t>;
+    using WindowStyleProperty = Property<WindowStylePropertyImpl,window_t>;
 
     //! \alias WindowStyleExProperty - Define extended window style property type 
-    using WindowStyleExProperty = Property<StyleExPropertyImpl,window_t>;
+    using WindowStyleExProperty = Property<WindowStyleExPropertyImpl,window_t>;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:

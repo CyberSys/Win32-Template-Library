@@ -186,4 +186,4 @@ namespace wtl
 
 #endif // WTL_LAZY_HPP
 
-#pragma once
+

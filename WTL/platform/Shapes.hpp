@@ -780,4 +780,4 @@ namespace wtl
 
 #endif // WTL_RECT_HPP
 
-#pragma once
+

@@ -376,4 +376,4 @@ namespace wtl
 
 #endif // WTL_EXCEPTION_HPP
 
-#pragma once
+
