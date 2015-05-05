@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Types.h
 //! \brief Defines wtl types
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! Copyright © Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_TYPES_HPP
 #define WTL_TYPES_HPP
 
@@ -15,7 +15,7 @@
   #undef CHAR
 #endif
 
-// Fundamental types
+// Fundemental types
 using int8    = int8_t;
 using uint8   = uint8_t;
 using int16   = int16_t;
@@ -42,5 +42,16 @@ using dword = ulong32;
 //using Socket = intptr_t;
 //typedef HMODULE           Module;
 
+//! \namespace wtl - Windows template library
+namespace wtl
+{
+  //! \alias array_ref_t - Defines array reference types
+  template <typename ELEMENT, uint32 LENGTH>
+  using array_ref_t = ELEMENT (&)[LENGTH];
+  
+  //! \alias array_ptr_t - Defines array pointer types
+  template <typename ELEMENT, uint32 LENGTH>
+  using array_ptr_t = ELEMENT (*)[LENGTH];
+}
 
 #endif // WTL_TYPES_HPP

@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\OwnerDrawEvent.hpp
 //! \brief Encapsulates the WM_DRAWITEM message in the 'OwnerDraw' event
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_OWNER_DRAW_EVENT_HPP
 #define WTL_OWNER_DRAW_EVENT_HPP
 
@@ -13,15 +13,15 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ControlEventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised from controls
   //! 
   //! \tparam ENC - Message character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct ControlEventArgs<ENC,WindowMessage::DRAWITEM,uint16,zero<uint16>::value>
   {  
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -38,7 +38,7 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage message = WindowMessage::DRAWITEM;
     
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     PaintData&        Data;             //!< Encapsulates the input paint data (NB: Must be initialized before following fields)
 
@@ -51,9 +51,9 @@ namespace wtl
     RectL             Rect;             //!< Drawing/update rectangle
     HWnd              Sender;           //!< Control handle
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<DRAWITEM>::ControlEventArgs
     //! Creates arguments for 'OwnerDraw' event from controls (ie. WM_DRAWITEM)
     //! 
@@ -61,7 +61,7 @@ namespace wtl
     //! \param[in] l - Paint data
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Event is not for a control
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     ControlEventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
                                                Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
                                                CtrlType(enum_cast<OwnerDrawControl>(Data.CtlType)), 
@@ -74,53 +74,53 @@ namespace wtl
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs::~ControlEventArgs
     //! Virtual d-tor
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~ControlEventArgs()
     {}
     
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
 
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<DRAWITEM>::reflect const
     //! Reflects the event back to the originator control
     //! 
     //! \return LResult - Message result and routing
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     LResult reflect() const
     {
       // Reflect message
       return send_message<encoding,message+WindowMessage::REFLECT>(Sender, opaque_cast(Ident), opaque_cast(Data));
     }
     
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
   };
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawCtrlEvent - Defines 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawCtrlEvent = ControlEvent<ENC, WindowMessage::DRAWITEM>;
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawCtrlEventArgs - Arguments for 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Message character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::DRAWITEM>;
 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawCtrlEventHandler - Handler for 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::DRAWITEM>;
 
@@ -129,15 +129,15 @@ namespace wtl
 
 
 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised for menus
   //! 
   //! \tparam ENC - Message character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct EventArgs<ENC,WindowMessage::DRAWITEM>
   {  
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -154,7 +154,7 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage message = WindowMessage::DRAWITEM;
     
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     PaintData&        Data;             //!< Encapsulates the input paint data (NB: Must be initialized before following fields)
 
@@ -165,9 +165,9 @@ namespace wtl
     RectL             Rect;             //!< Drawing/update rectangle
     HMenu             Menu;             //!< Control handle
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<DRAWITEM>::EventArgs
     //! Creates arguments for 'OwnerDraw' event from controls (ie. WM_DRAWITEM)
     //! 
@@ -175,7 +175,7 @@ namespace wtl
     //! \param[in] l - Paint data
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Event is not for a menu
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
                                         Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
                                         Graphics(Data.hDC),
@@ -186,41 +186,41 @@ namespace wtl
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) == OwnerDrawControl::Menu);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::~EventArgs
     //! Virtual d-tor
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~EventArgs()
     {}
     
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
 
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
     
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
   };
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawMenuEvent - Defines 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawMenuEvent = MessageEvent<ENC, WindowMessage::DRAWITEM>;
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawMenuEventArgs - Arguments for 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Message character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawMenuEventArgs = EventArgs<ENC,WindowMessage::DRAWITEM>;
 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawMenuEventHandler - Handler for 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
   //! 
   //! \tparam ENC - Window character encoding
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawMenuEventHandler = MessageEventHandler<ENC,WindowMessage::DRAWITEM>;
 }

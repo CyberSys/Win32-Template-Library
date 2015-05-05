@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\resources\DialogResource.hpp
 //! \brief Encapsulates reading dialog resources
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_DIALOG_RESOURCES_HPP
 #define WTL_DIALOG_RESOURCES_HPP
 
@@ -51,15 +51,15 @@ namespace wtl
     ulong32       ctrlId;     //!< Control Id
   };
 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Resources - Provides access to application resources
   //! 
   //! \tparam ENC - Character encoding type
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC = Encoding::UTF16>
   struct DialogResource : Resources<ENC>
   {      
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias char_t - Defines character type
     using char_t = encoding_char_t<ENC>;
@@ -67,26 +67,26 @@ namespace wtl
     //! \alias stream_t - Defines memory stream type
     using stream_t = MemoryStream<uint8>;
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct DialogItemTemplate - Variable length dialog item template
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     struct DialogItemTemplate 
     {
-      // ------------------- TYPES & CONSTANTS -------------------
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias ByteVector - User data storage type
       using ByteVector = std::vector<uint8>;
 
-      // --------------------- CONSTRUCTION ----------------------
+      // ------------------------------------ CONSTRUCTION ------------------------------------
 
-      ///////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////
       // DialogItemTemplate::DialogItemTemplate 
       //! Create from extended item template (DLGITEMTEMPLATEEX)
       //! 
       //! \param[in] &stream - Binary reader containing extended item template
-      ///////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////
       DialogItemTemplate(BinaryReader<stream_t>& stream) 
       {
         // Read item data
@@ -125,13 +125,13 @@ namespace wtl
           UserData.assign(in.position(), in.position()+numBytes);
       }
 
-      // ------------------------ STATIC -------------------------
+      // --------------------------------------- STATIC ---------------------------------------
 
-      // ---------------------- ACCESSORS ------------------------			
+      // -------------------------------------- ACCESSORS --------------------------------------			
 
-      // ----------------------- MUTATORS ------------------------
+      // --------------------------------------- MUTATORS --------------------------------------
 
-      // -------------------- REPRESENTATION ---------------------
+      // ----------------------------------- REPRESENTATION -----------------------------------
 
       WindowStyle    Style;          //!< Window style
       WindowStyleEx  StyleEx;        //!< Extended window style
@@ -143,28 +143,28 @@ namespace wtl
       ByteVector     UserData;       //!< Creation data
     };
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct DialogTemplate - Variable length dialog item template
     //! 
     //! \tparam ENC - Character encoding
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     struct DialogTemplate 
     {
-      // ------------------- TYPES & CONSTANTS -------------------
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias stream_t - Defines input stream type
       using stream_t = MemoryStream<encoding_char_t<ENC>>;
 
       using ItemCollection = std::vector<DialogItemTemplate>;
 
-      // --------------------- CONSTRUCTION ----------------------
+      // ------------------------------------ CONSTRUCTION ------------------------------------
 
-      ///////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////
       // DialogTemplate::DialogTemplate 
       //! Create from an extended dialog template
       //! 
       //! \param[in] &stream - Binary reader containing extended dialog item template
-      ///////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////
       DialogTemplate(BinaryReader<stream_t>& stream) 
       {
         int16  version,       //!< Version
@@ -200,13 +200,13 @@ namespace wtl
           Items.emplace_back(stream);
       }
       
-      // ------------------------ STATIC -------------------------
+      // --------------------------------------- STATIC ---------------------------------------
 
-      // ---------------------- ACCESSORS ------------------------			
+      // -------------------------------------- ACCESSORS --------------------------------------			
 
-      // ----------------------- MUTATORS ------------------------
+      // --------------------------------------- MUTATORS --------------------------------------
 
-      // -------------------- REPRESENTATION ---------------------
+      // ----------------------------------- REPRESENTATION -----------------------------------
     public:
       WindowStyle    Style;          //!< Window style
       WindowStyleEx  StyleEx;        //!< Extended window style
@@ -219,14 +219,14 @@ namespace wtl
     };
 
   protected:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // DialogItemTemplate::getWindowClass
     //! Get a system window class name from its ordinal
     //! 
     //! \param[in] id - System window class identifier
     //! 
     //! \throw wtl::domain_error - Unrecognised window class
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     static std::wstring getWindowClass(SystemClass id)
     {
       switch (id)
@@ -243,7 +243,7 @@ namespace wtl
       throw domain_error(HERE, "Unrecognised window class ordinal '%d'", enum_cast(id));
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Resources::load
     //! Find the resource data block associated with a resource handle
     //! 
@@ -252,7 +252,7 @@ namespace wtl
     //! \param[in] module - Module containing resource
     //! \param[in] res - Resource handle
     //! \return DATA* - Resource data block
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <typename DATA = uint8>
     static DATA* load(HMODULE module, const HResource& res)
     {
@@ -272,7 +272,7 @@ namespace wtl
     }
 
   public:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Resources::loadDialog
     //! Loads a string resource
     //! 
@@ -285,7 +285,7 @@ namespace wtl
     //! \return bool - True iff was found 
     //! 
     //! \throw wtl::domain_error - Insufficient buffer capacity
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LENGTH>
     bool loadDialog(HMODULE module, ResourceId<ENC> id, DLGTEMPLATE) 
     {

@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\WindowClass.hpp
 //! \brief Encapsulates Window classes
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_WINDOW_CLASS_HPP
 #define WTL_WINDOW_CLASS_HPP
 
@@ -14,15 +14,15 @@
 namespace wtl
 {
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct WindowClass - Encapsulates window class properties
   //! 
   //! \tparam ENC - Character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct WindowClass 
   {
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias char_t - Character type
     using char_t = encoding_char_t<ENC>;
@@ -33,7 +33,7 @@ namespace wtl
     //! \alias native_t - Type accessor for native ::WNDCLASSEX type
     using native_t = getType<char_t,::WNDCLASSEXA,::WNDCLASSEXW>;
     
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
     
     HINSTANCE   Instance;          //!< Registered module
     WNDPROC     WndProc;           //!< Window procedure
@@ -48,16 +48,16 @@ namespace wtl
     int32       ClassStorage,      //!< Size of class storage, in bytes
                 WindowStorage;     //!< Size of window storage, in bytes
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
     //! Create a weak reference to an existing window class 
     //! 
     //! \param[in] id - Registered window class
     //! 
     //! \throw wtl::platform_error - Unrecognised window class
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(resource_t id) : Background(HBrush::npos),
                                  Cursor(HCursor::npos),
                                  SmallIcon(HIcon::npos),
@@ -98,7 +98,7 @@ namespace wtl
         Atom = HAtom(Name.toOrdinal(), AllocType::WeakRef);   //!< WeakRef
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
     //! Registers a new window class
     //! 
@@ -115,7 +115,7 @@ namespace wtl
     //! \param[in] wndBytes - Size of handle storage, if any
     //! 
     //! \throw wtl::platform_error - Unable to register window class
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(HINSTANCE instance, 
                 resource_t name,
                 ClassStyle style, 
@@ -141,10 +141,10 @@ namespace wtl
         Atom(instance, name, style, proc, menu, (HCURSOR)cursor, (HBRUSH)background, (HICON)smIcon, (HICON)bgIcon, clsBytes, wndBytes)
     {}
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::~WindowClass
     //! Unregisters the window class
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~WindowClass() 
     {
       //! \var unregisterClass - Functor for 'UnregisterClass' 
@@ -159,21 +159,21 @@ namespace wtl
     WindowClass(const WindowClass&) = default;
     WindowClass(WindowClass&&) = default;
 
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
     
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
     
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
     
   };
 
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct system_class - Defines the names of system window classes
   //! 
   //! \tparam CHR - Character type
   //! \tparam CLS - System class
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename CHR, SystemClass CLS> 
   struct system_class 
   { 
@@ -215,16 +215,16 @@ namespace wtl
   template <typename CHR> struct system_class<CHR,SystemClass::TreeView>      { static constexpr const CHR* name = getValue<CHR>(WC_TREEVIEWA,WC_TREEVIEWW);                };
 
 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct system_class - Defines the names of system window classes
   //! 
   //! \tparam CHR - Character type
   //! \tparam CLS - System class
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC> 
   struct SystemWindowClass : WindowClass<ENC>
   { 
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias base - Define base type
     using base = WindowClass<ENC>;
@@ -232,24 +232,24 @@ namespace wtl
     //! \alias char_t - Inherit window character type
     using char_t = typename base::char_t;
     
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // SystemWindowClass::SystemWindowClass
     //! Create a weak reference to a system window class 
     //! 
     //! \param[in] id - System window class
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     SystemWindowClass(SystemClass cls) : base(ResourceId<ENC>(getClassName(cls)))
     {}
 
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
   protected:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // SystemWindowClass::getClassName
     //! Get the system class name
     //! 
@@ -257,7 +257,7 @@ namespace wtl
     //! \return const char_t* - Window class name
     //! 
     //! \throw wtl::invalid_argument - Unrecognised system window class
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     const char_t*  getClassName(SystemClass cls)
     {
       // Query class
@@ -276,9 +276,9 @@ namespace wtl
       throw invalid_argument(HERE, "Unrecognised system class");
     }
 
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------
 
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
     
   };
 

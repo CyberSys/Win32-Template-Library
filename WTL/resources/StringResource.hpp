@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\resources\StringResource.hpp
 //! \brief Encapsulates reading string resources
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_STRING_RESOURCES_HPP
 #define WTL_STRING_RESOURCES_HPP
 
@@ -14,16 +14,16 @@
 namespace wtl
 {
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct StringResource - Encapsulates loading a string from the resource table
   //! 
   //! \tparam ENC - Character encoding type
   //! \tparam LEN - Buffer capacity
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, unsigned LEN>
   struct StringResource : Resource
   {      
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias base - Define base type
     using base = Resource;
@@ -35,46 +35,46 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
   protected:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     struct StringTableEntry
     {
-      // ------------------- TYPES & CONSTANTS -------------------
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-      // --------------------- CONSTRUCTION ----------------------
+      // ------------------------------------ CONSTRUCTION ------------------------------------
     
       StringTableEntry() = delete;
 
-      // ---------------------- ACCESSORS ------------------------			
+      // -------------------------------------- ACCESSORS --------------------------------------			
 
-      ///////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////
       // StringTableEntry::next
       //! Advance beyond this variable length entry to the next
       //! 
       //! \return const StringTableEntry* - Immutable pointer to next string in table
-      ///////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////
       const StringTableEntry* next() const
       {
         return reinterpret_cast<const StringTableEntry*>(Text + Length);
       }
       
-      // ----------------------- MUTATORS ------------------------
+      // --------------------------------------- MUTATORS --------------------------------------
 
-      // -------------------- REPRESENTATION ---------------------
+      // ----------------------------------- REPRESENTATION -----------------------------------
 
       //uint16         Dummy;        //!< Length of current entry, in characters
       uint16         Length;        //!< Length of current entry, in characters
       const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
     };
 
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     string_t   Text;     //!< String resource text
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // StringResource::StringResource
     //! Loads a string resource
     //! 
@@ -83,7 +83,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Missing string -or- Insufficient buffer capacity to store string
     //! \throw wtl::platform_error - Unable to load resource
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     explicit StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) : base(LoadedModules.findString(id,lang))
     {
       const int32  index = id.Value.Numeral % 16;                   //!< Index of desired string within table
@@ -110,11 +110,11 @@ namespace wtl
       Text.assign<Encoding::UTF16>(item->Text, item->Text+item->Length);
     }
 
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
 
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
 
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
 
   };
 

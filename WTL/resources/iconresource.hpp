@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\resources\IconResource.hpp
 //! \brief Encapsulates reading icon resources
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_ICON_RESOURCES_HPP
 #define WTL_ICON_RESOURCES_HPP
 
@@ -14,23 +14,23 @@
 namespace wtl
 {
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct IconResource - Encapsulates loading an icon from the resource table
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   struct IconResource : Resource
   {      
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias base - Define base type
     using base = Resource;
 
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     HIcon   Handle;     //!< Shared icon handle
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // IconResource::IconResource
     //! Loads an icon resource
     //! 
@@ -41,7 +41,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Missing icon
     //! \throw wtl::platform_error - Unable to load resource
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC> explicit 
     IconResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) 
         // Load appropriate icon from resources, then create handle
@@ -49,7 +49,7 @@ namespace wtl
         Handle(const_cast<byte*>(get<byte>()), base::size(), true)
     {}
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // IconResource::IconResource
     //! Loads an icon resource with a custom size
     //! 
@@ -61,7 +61,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Missing icon
     //! \throw wtl::platform_error - Unable to load resource
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC> explicit 
     IconResource(ResourceId<ENC> id, SizeL size, LanguageId lang = LanguageId::Neutral) 
         // Load appropriate icon from resources, then create handle
@@ -69,9 +69,9 @@ namespace wtl
         Handle(const_cast<byte*>(get<byte>()), base::size(), size)
     {}
     
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
   protected:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // IconResource::IconResource
     //! Loads an icon resource
     //! 
@@ -81,7 +81,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Missing icon
     //! \throw wtl::platform_error - Unable to load resource
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
     static ResourceId<ENC> findIconId(ResourceId<ENC> id, SizeL size, LanguageId lang)
     {
@@ -91,9 +91,9 @@ namespace wtl
       return ::LookupIconIdFromDirectoryEx(const_cast<byte*>(group.get<byte>()), TRUE, size.width, size.height, LR_DEFAULTCOLOR);
     }
 
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
 
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
 
   };
 

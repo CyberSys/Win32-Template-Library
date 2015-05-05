@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\platform\SystemVersion.hpp
 //! \brief Provides Windows OS version info
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_SYSTEM_VERSION_HPP
 #define WTL_SYSTEM_VERSION_HPP
 
@@ -69,18 +69,18 @@ namespace wtl
   template <Encoding ENC>
   struct OperatingSystem : getType<encoding_char_t<ENC>,OSVERSIONINFOA,OSVERSIONINFOW>
   {
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   
     WindowVersion  Version;         //!< Windows version identifier
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // OperatingSystem::OperatingSystem
     //! Create operating system data
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     OperatingSystem() : Version(WindowVersion::Future)
     {
       static const auto getVersion = getFunc<encoding_char_t<ENC>>(::GetVersionExA,::GetVersionExW);
@@ -93,16 +93,16 @@ namespace wtl
         Version = identify(dwMajorVersion, dwMinorVersion);
     }
     
-    // ------------------------ STATIC -------------------------
+    // --------------------------------------- STATIC ---------------------------------------
   protected:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // OperatingSystem::identify
     //! Identifies the operating system 
     //! 
     //! \param[in] major - Major version number
     //! \param[in] minor - Minor version number
     //! \return WindowVersion - Windows version identifier
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     static WindowVersion identify(long32 major, long32 minor)
     {
       switch (major)
@@ -140,9 +140,9 @@ namespace wtl
       }
     }
     
-    // ---------------------- ACCESSORS ------------------------
+    // -------------------------------------- ACCESSORS --------------------------------------
 
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
     
   };
 

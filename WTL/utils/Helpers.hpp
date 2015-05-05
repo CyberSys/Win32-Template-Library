@@ -1,57 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Helpers.hpp
 //! \brief Collection of helper templates 
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_HELPERS_HPP
 #define WTL_HELPERS_HPP
 
 #include "wtl/WTL.hpp"
 
-
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  // -------------- ARRAY REFERENCE --------------
+  // --------------------------------- AUTO-CAST ---------------------------------
 
-  //! \alias array_ref_t - Defines array reference types
-  template <typename ELEMENT, uint32 LENGTH>
-  using array_ref_t = ELEMENT (&)[LENGTH];
-  
-
-  // ------------------ COPY N -----------------
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // wtl::copy_n
-  //! Copies up to N values from one range to another
-  //! 
-  //! \tparam INPUT - Input iterator type
-  //! \tparam OUTPUT - Output iterator type
-  //! \param[in] input - First element in input range
-  //! \param[in] n - Maximum number of elements to copy
-  //! \param[in] output - First element in output range
-  //! \return OUTPUT - Position in output range immediately following the last element copied
-  ////////////////////////////////////////////////////////////////////////////////
-  //template<typename INPUT, typename OUTPUT>
-  //OUTPUT copy_n(INPUT input, int32 n, OUTPUT output)
-  //{
-  //  // Stop when zero
-  //  if (n <= 0)
-  //    return output;
-
-  //  // Copy/decrement step
-  //  *output = static_cast<OUTPUT::value_type>(*input);
-  //  return copy_n(++input, n-1, ++output);
-  //}
-  
-  // ------------------ LEAST EXPENSIVE CAST -----------------
-
-  /////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct auto_cast - Cast from any type A to any type B  (work in progress)
-  /////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename BASE, typename DERIVED>
   DERIVED auto_cast(BASE b);
 
@@ -80,7 +46,7 @@ namespace wtl
   }
 
 
-  // ------------------ RELATIONAL -----------------
+  // --------------------------------- CO-VARIANCE ---------------------------------
 
   template <template <typename> class BASE, 
             template <typename> class DERIVED, 

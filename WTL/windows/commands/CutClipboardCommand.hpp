@@ -1,10 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\commands\CutClipboardCommand.hpp
 //! \brief Encapsulates the 'cut text' command
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 #ifndef WTL_CUT_CLIPBOARD_HPP
 #define WTL_CUT_CLIPBOARD_HPP
 
@@ -14,15 +14,15 @@
 namespace wtl
 {
   
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct CutClipboardCommand - Encapsulates 'Cutting' text from the control with input focus
   //! 
   //! \tparam ENC - Message character encoding 
-  ///////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   struct CutClipboardCommand : Action<ENC>
   {
-    // ------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias base - Define base type
     using base = Action<ENC>;
@@ -36,16 +36,16 @@ namespace wtl
     //! \var encoding - Define encoding type
     static constexpr Encoding encoding = ENC;
     
-    // -------------------- REPRESENTATION ---------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     window_t*  TargetWnd;       //!< Destination window
 
-    // --------------------- CONSTRUCTION ----------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // CutClipboardCommand::CutClipboardCommand
     //! Create command
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     CutClipboardCommand()  
       : base(CommandId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
                                                 TargetWnd->setText(c_arr(L"TODO: Cut text to clipboard")); },
@@ -53,34 +53,34 @@ namespace wtl
                                                 TargetWnd->setText(c_arr(L"TODO: Restore previous text")); })
     {}
     
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
 
-    // ---------------------- ACCESSORS ------------------------			
+    // -------------------------------------- ACCESSORS --------------------------------------			
     
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // CutClipboardCommand::clone const
     //! Create a new instance of the command
     //! 
     //! \return type* - New instance of command
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     typename base::type*  clone() const 
     {
       return new CutClipboardCommand(*this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     // CutClipboardCommand::state const
     //! Query the current state of the command 
     //! 
     //! \return ActionState - Current state of command
-    ///////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     ActionState state() const override
     {
       // TODO: Query window text selection
       return ActionState::Enabled;
     }
     
-    // ----------------------- MUTATORS ------------------------
+    // --------------------------------------- MUTATORS --------------------------------------
     
   };
   
