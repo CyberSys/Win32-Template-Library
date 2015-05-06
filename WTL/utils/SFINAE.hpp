@@ -71,6 +71,24 @@ namespace wtl
 
   
   //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_array_t - Defines an SFINAE expression requiring an object of array type 
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_array_t = std::enable_if_t<std::is_array<T>::value, RET>;
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_class_t - Defines an SFINAE expression requiring an object of class/struct type 
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_class_t = std::enable_if_t<std::is_class<T>::value, RET>;
+
+  //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_class_constructible_t - Defines an SFINAE expression requiring an object of class type and a c-tor of specific signature
   //! 
   //! \tparam T - Input type
