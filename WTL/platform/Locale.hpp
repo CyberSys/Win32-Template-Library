@@ -20,8 +20,15 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \var Neutral - Define neutral language id
-    static const LanguageId   Neutral;
+    //! \var <various> - Define various language ids
+    static const LanguageId   Neutral,
+                              Invariant,
+                              English,
+                              Chinese,
+                              French,
+                              Spanish,
+                              Welsh,
+                              Zulu;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -100,15 +107,21 @@ namespace wtl
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct LocaleId - Encapsulates a Win32 locale identifier (LCID)
+  //! \struct LocaleId - Encapsulates a Win32 locale identifier (::LCID)
   /////////////////////////////////////////////////////////////////////////////////////////
   struct LocaleId
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \var <various> - Define various locale ids
+    static const LocaleId   Neutral,      //!< Neutral
+                            Invariant,    //!< Invariant
+                            User,         //!< User locale
+                            System;       //!< System locale
+
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    LCID Value;       //!< Win32 locale identifier
+    ::LCID Value;       //!< Win32 locale identifier
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
@@ -120,6 +133,15 @@ namespace wtl
     //! \param[in] sort - Sort order
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr LocaleId(LanguageId lang, SortOrderId sort) : Value(MAKELCID(lang,sort)) 
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // LocaleId::LocaleId constexpr
+    //! Create from Win32 locale identifier
+    //! 
+    //! \param[in] locale - Win32 locale identifier
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr LocaleId(::LCID locale) : Value(locale) 
     {}
 
     // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
@@ -152,12 +174,12 @@ namespace wtl
 
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // LocaleId::operator ::LCID constexpr
+    // LocaleId::operator ::::LCID constexpr
     //! Implicit user conversion to Win32 locale identifier
     //! 
-    //! \return LCID - Win32 locale identifier
+    //! \return ::LCID - Win32 locale identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator LCID() const
+    operator ::LCID() const
     {
       return Value;
     }
