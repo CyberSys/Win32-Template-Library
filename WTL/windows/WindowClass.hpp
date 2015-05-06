@@ -33,6 +33,9 @@ namespace wtl
     //! \alias native_t - Type accessor for native ::WNDCLASSEX type
     using native_t = getType<char_t,::WNDCLASSEXA,::WNDCLASSEXW>;
     
+    //! \var encoding - Define window character encoding
+    static constexpr Encoding encoding = ENC;
+
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     HINSTANCE   Instance;          //!< Registered module
@@ -52,11 +55,23 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
+    //! Create a weak reference to a system window class 
+    //! 
+    //! \param[in] id - System window class
+    //! 
+    //! \throw wtl::invalid_argument - Unrecognised system window class
+    //! \throw wtl::platform_error - Unable to register class
+    /////////////////////////////////////////////////////////////////////////////////////////
+    WindowClass(SystemClass cls) : WindowClass(getSystemClassName(cls))
+    {}
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowClass::WindowClass
     //! Create a weak reference to an existing window class 
     //! 
     //! \param[in] id - Registered window class
     //! 
-    //! \throw wtl::platform_error - Unrecognised window class
+    //! \throw wtl::platform_error - Unable to register class
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(resource_t id) : Background(HBrush::npos),
                                  Cursor(HCursor::npos),
@@ -68,7 +83,7 @@ namespace wtl
                                  Instance(nullptr),
                                  WndProc(nullptr),
                                  Name(id),
-                                 Menu(resource_t::npos),
+                                 Menu(default<resource_t>()),
                                  Atom(HAtom::npos)
     {
       //! \var getClassInfoEx - Functor for 'GetClassInfoEx' 
@@ -161,6 +176,59 @@ namespace wtl
 
     // --------------------------------------- STATIC ---------------------------------------
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowClass::getSystemClassName
+    //! Query name of a system window class
+    //! 
+    //! \param[in] cls - System class
+    //! \return resource_t - Resource id
+    //! 
+    //! \throw wtl::invalid_argument - Unrecognised system window class
+    /////////////////////////////////////////////////////////////////////////////////////////
+    static resource_t  getSystemClassName(SystemClass cls)
+    {
+      // Query class
+      switch (cls)
+      {
+      //! Standard controls
+      case SystemClass::Animate:			return getValue<encoding>(ANIMATE_CLASSA,ANIMATE_CLASSW);
+      case SystemClass::DateTime:			return getValue<encoding>(DATETIMEPICK_CLASSA,DATETIMEPICK_CLASSW);
+      case SystemClass::HotKey:			  return getValue<encoding>(HOTKEY_CLASSA,HOTKEY_CLASSW);
+      case SystemClass::Calendar:			return getValue<encoding>(MONTHCAL_CLASSA,MONTHCAL_CLASSW);
+      case SystemClass::ProgressBar:	return getValue<encoding>(PROGRESS_CLASSA,PROGRESS_CLASSW);
+      case SystemClass::CoolBar:			return getValue<encoding>(REBARCLASSNAMEA,REBARCLASSNAMEW);
+      case SystemClass::StatusBar:		return getValue<encoding>(STATUSCLASSNAMEA,STATUSCLASSNAMEW);
+      case SystemClass::ToolBar:			return getValue<encoding>(TOOLBARCLASSNAMEA,TOOLBARCLASSNAMEW);
+      case SystemClass::ToolTip:			return getValue<encoding>(TOOLTIPS_CLASSA,TOOLTIPS_CLASSW);
+      case SystemClass::TrackBar:			return getValue<encoding>(TRACKBAR_CLASSA,TRACKBAR_CLASSW);
+      case SystemClass::Spin:			    return getValue<encoding>(UPDOWN_CLASSA,UPDOWN_CLASSW);
+
+      //! Common controls
+      case SystemClass::Button:			  return getValue<encoding>(WC_BUTTONA,WC_BUTTONW);
+      case SystemClass::ComboBox:			return getValue<encoding>(WC_COMBOBOXA,WC_COMBOBOXW);
+      case SystemClass::ComboBoxEx:		return getValue<encoding>(WC_COMBOBOXEXA,WC_COMBOBOXEXW);
+      case SystemClass::Edit:			    return getValue<encoding>(WC_EDITA,WC_EDITW);
+      case SystemClass::Header:			  return getValue<encoding>(WC_HEADERA,WC_HEADERW);
+      case SystemClass::ListBox:			return getValue<encoding>(WC_LISTBOXA,WC_LISTBOXW);
+      case SystemClass::IpAddress:		return getValue<encoding>(WC_IPADDRESSA,WC_IPADDRESSW);
+      case SystemClass::Link:			    return getValue<encoding>("SysLink",L"SysLink");
+
+      case SystemClass::ListView:			return getValue<encoding>(WC_LISTVIEWA,WC_LISTVIEWW);
+      case SystemClass::NativeFont:		return getValue<encoding>(WC_NATIVEFONTCTLA,WC_NATIVEFONTCTLW);
+      case SystemClass::PageScroller:	return getValue<encoding>(WC_PAGESCROLLERA,WC_PAGESCROLLERW);
+      case SystemClass::ScrollBar:	  return getValue<encoding>(WC_SCROLLBARA,WC_SCROLLBARW);
+      case SystemClass::Static:			  return getValue<encoding>(WC_STATICA,WC_STATICW);
+      case SystemClass::Tab:			    return getValue<encoding>(WC_TABCONTROLA,WC_TABCONTROLW);
+      case SystemClass::TreeView:			return getValue<encoding>(WC_TREEVIEWA,WC_TREEVIEWW);
+  
+      //! Special classes
+      case SystemClass::MessageOnly:  return getValue<encoding>("Message",L"Message");
+      }
+
+      // [ERROR] Unrecognised
+      throw invalid_argument(HERE, "Unrecognised system class");
+    }
+
     // -------------------------------------- ACCESSORS --------------------------------------			
     
     // --------------------------------------- MUTATORS --------------------------------------
@@ -168,120 +236,6 @@ namespace wtl
   };
 
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct system_class - Defines the names of system window classes
-  //! 
-  //! \tparam CHR - Character type
-  //! \tparam CLS - System class
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename CHR, SystemClass CLS> 
-  struct system_class 
-  { 
-    //! \alias char_t - Define character type
-    using char_t = CHR;
-
-    //! \var name - System window class name
-    static constexpr const char_t* name = getValue<char_t>("",L"");
-  };
-
-  //! \var system_class<CHR>::value - Define standard control class names
-  template <typename CHR> struct system_class<CHR,SystemClass::Animate>       { static constexpr const CHR* name = getValue<CHR>(ANIMATE_CLASSA,ANIMATE_CLASSW);            };
-  template <typename CHR> struct system_class<CHR,SystemClass::DateTime>      { static constexpr const CHR* name = getValue<CHR>(DATETIMEPICK_CLASSA,DATETIMEPICK_CLASSW);  };
-  template <typename CHR> struct system_class<CHR,SystemClass::HotKey>        { static constexpr const CHR* name = getValue<CHR>(HOTKEY_CLASSA,HOTKEY_CLASSW);              };
-  template <typename CHR> struct system_class<CHR,SystemClass::Calendar>      { static constexpr const CHR* name = getValue<CHR>(MONTHCAL_CLASSA,MONTHCAL_CLASSW);          };
-  template <typename CHR> struct system_class<CHR,SystemClass::ProgressBar>   { static constexpr const CHR* name = getValue<CHR>(PROGRESS_CLASSA,PROGRESS_CLASSW);          };
-  template <typename CHR> struct system_class<CHR,SystemClass::CoolBar>       { static constexpr const CHR* name = getValue<CHR>(REBARCLASSNAMEA,REBARCLASSNAMEW);          };
-  template <typename CHR> struct system_class<CHR,SystemClass::StatusBar>     { static constexpr const CHR* name = getValue<CHR>(STATUSCLASSNAMEA,STATUSCLASSNAMEW);        };
-  template <typename CHR> struct system_class<CHR,SystemClass::ToolBar>       { static constexpr const CHR* name = getValue<CHR>(TOOLBARCLASSNAMEA,TOOLBARCLASSNAMEW);      };
-  template <typename CHR> struct system_class<CHR,SystemClass::ToolTip>       { static constexpr const CHR* name = getValue<CHR>(TOOLTIPS_CLASSA,TOOLTIPS_CLASSW);          };
-  template <typename CHR> struct system_class<CHR,SystemClass::TrackBar>      { static constexpr const CHR* name = getValue<CHR>(TRACKBAR_CLASSA,TRACKBAR_CLASSW);          };
-  template <typename CHR> struct system_class<CHR,SystemClass::Spin>          { static constexpr const CHR* name = getValue<CHR>(UPDOWN_CLASSA,UPDOWN_CLASSW);              };
-
-  //! \var system_class<CHR>::value - Define common control class names
-  template <typename CHR> struct system_class<CHR,SystemClass::Button>        { static constexpr const CHR* name = getValue<CHR>(WC_BUTTONA,WC_BUTTONW);                    };
-  template <typename CHR> struct system_class<CHR,SystemClass::ComboBox>      { static constexpr const CHR* name = getValue<CHR>(WC_COMBOBOXA,WC_COMBOBOXW);                };
-  template <typename CHR> struct system_class<CHR,SystemClass::ComboBoxEx>    { static constexpr const CHR* name = getValue<CHR>(WC_COMBOBOXEXA,WC_COMBOBOXEXW);            };
-  template <typename CHR> struct system_class<CHR,SystemClass::Edit>          { static constexpr const CHR* name = getValue<CHR>(WC_EDITA,WC_EDITW);                        };
-  template <typename CHR> struct system_class<CHR,SystemClass::Header>        { static constexpr const CHR* name = getValue<CHR>(WC_HEADERA,WC_HEADERW);                    };
-  template <typename CHR> struct system_class<CHR,SystemClass::ListBox>       { static constexpr const CHR* name = getValue<CHR>(WC_LISTBOXA,WC_LISTBOXW);                  };
-  template <typename CHR> struct system_class<CHR,SystemClass::IpAddress>     { static constexpr const CHR* name = getValue<CHR>(WC_IPADDRESSA,WC_IPADDRESSW);              };
-  template <typename CHR> struct system_class<CHR,SystemClass::Link>          { static constexpr const CHR* name = getValue<CHR>("SysLink",L"SysLink");                     };
-  template <typename CHR> struct system_class<CHR,SystemClass::ListView>      { static constexpr const CHR* name = getValue<CHR>(WC_LISTVIEWA,WC_LISTVIEWW);                };
-  template <typename CHR> struct system_class<CHR,SystemClass::NativeFont>    { static constexpr const CHR* name = getValue<CHR>(WC_NATIVEFONTCTLA,WC_NATIVEFONTCTLW);      };
-  template <typename CHR> struct system_class<CHR,SystemClass::PageScroller>  { static constexpr const CHR* name = getValue<CHR>(WC_PAGESCROLLERA,WC_PAGESCROLLERW);        };
-  template <typename CHR> struct system_class<CHR,SystemClass::ScrollBar>     { static constexpr const CHR* name = getValue<CHR>(WC_SCROLLBARA,WC_SCROLLBARW);              };
-  template <typename CHR> struct system_class<CHR,SystemClass::Static>        { static constexpr const CHR* name = getValue<CHR>(WC_STATICA,WC_STATICW);                    };
-  template <typename CHR> struct system_class<CHR,SystemClass::Tab>           { static constexpr const CHR* name = getValue<CHR>(WC_TABCONTROLA,WC_TABCONTROLW);            };
-  template <typename CHR> struct system_class<CHR,SystemClass::TreeView>      { static constexpr const CHR* name = getValue<CHR>(WC_TREEVIEWA,WC_TREEVIEWW);                };
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct system_class - Defines the names of system window classes
-  //! 
-  //! \tparam CHR - Character type
-  //! \tparam CLS - System class
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> 
-  struct SystemWindowClass : WindowClass<ENC>
-  { 
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
-    //! \alias base - Define base type
-    using base = WindowClass<ENC>;
-    
-    //! \alias char_t - Inherit window character type
-    using char_t = typename base::char_t;
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // SystemWindowClass::SystemWindowClass
-    //! Create a weak reference to a system window class 
-    //! 
-    //! \param[in] id - System window class
-    //! 
-    //! \throw wtl::platform_error - Unrecognised system window class
-    /////////////////////////////////////////////////////////////////////////////////////////
-    SystemWindowClass(SystemClass cls) : base(ResourceId<ENC>(getClassName(cls)))
-    {}
-
-    // --------------------------------------- STATIC ---------------------------------------
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // SystemWindowClass::getClassName
-    //! Get the system class name
-    //! 
-    //! \param[in] cls - Class enumeration
-    //! \return const char_t* - Window class name
-    //! 
-    //! \throw wtl::invalid_argument - Unrecognised system window class
-    /////////////////////////////////////////////////////////////////////////////////////////
-    const char_t*  getClassName(SystemClass cls)
-    {
-      // Query class
-      switch (cls)
-      {
-      case SystemClass::Button:       return system_class<char_t,SystemClass::Button>::name;
-      case SystemClass::ComboBox:     return system_class<char_t,SystemClass::ComboBox>::name;
-      case SystemClass::ComboBoxEx:   return system_class<char_t,SystemClass::ComboBoxEx>::name;
-      case SystemClass::Edit:         return system_class<char_t,SystemClass::Edit>::name;
-      case SystemClass::ListBox:      return system_class<char_t,SystemClass::ListBox>::name;
-      case SystemClass::ListView:     return system_class<char_t,SystemClass::ListView>::name;
-      case SystemClass::Static:       return system_class<char_t,SystemClass::Static>::name;
-      }
-
-      // [ERROR] Unrecognised
-      throw invalid_argument(HERE, "Unrecognised system class");
-    }
-
-    // -------------------------------------- ACCESSORS --------------------------------------
-
-    // --------------------------------------- MUTATORS --------------------------------------
-    
-  };
-
 
 }
 
