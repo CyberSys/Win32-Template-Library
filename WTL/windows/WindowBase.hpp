@@ -226,7 +226,7 @@ namespace wtl
       //! 
       //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowFontPropertyImpl(window_t& wnd) : base(wnd, HFont::npos)
+      WindowFontPropertyImpl(window_t& wnd) : base(wnd, default<HFont>())
       {}
 
       // ----------------------- ACCESSORS -----------------------
@@ -485,7 +485,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowBase(wndclass_t& cls) : Class(cls), 
                                   Font(*this),
-                                  Handle(HWnd::npos),
+                                  Handle(default<HWnd>()),
                                   Style(*this),
                                   StyleEx(*this)
     {
@@ -823,7 +823,7 @@ namespace wtl
 
       try
       {
-        HWnd hParent(parent ? parent->handle() : HWnd::npos);     //!< Parent window
+        HWnd hParent(parent ? parent->handle() : default<HWnd>());     //!< Parent window
 
         // Create menu
         Menu.create();

@@ -35,12 +35,18 @@ namespace wtl
   //! Define limits traits
   template <> struct max_value<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Shield>      {};
   template <> struct min_value<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Application> {};
+  
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias HIcon - Shared icon handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HIcon = Handle<::HICON>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HICON> - Encapsulates icon handle allocation
+  //! \struct handle_alloc<::HICON> - Encapsulates icon handle allocation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<HICON>
+  struct handle_alloc<::HICON>
   {
   protected:
     //! \enum IconFormat - Define data format
@@ -48,25 +54,25 @@ namespace wtl
     
   public:
     //! \var npos - Invalid handle sentinel value
-    static const HICON npos; 
+    static constexpr ::HICON npos = default<::HICON>(); 
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HICON>::create
+    // handle_alloc<::HICON>::create
     //! Load icon from resource
     //! 
     //! \tparam ENC - Character encoding 
     //! 
     //! \param[in] instance - Instance containing icon
     //! \param[in] ident - Icon identifier
-    //! \return HAlloc<HICON> - Accquired handle
+    //! \return HAlloc<::HICON> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<HICON> create(HINSTANCE instance, ResourceId<ENC> ident) 
+    static HAlloc<::HICON> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       // Load icon handle
-      if (HICON icon = getFunc<ENC>(::LoadIconA,::LoadIconW)(instance, ident))
+      if (::HICON icon = getFunc<ENC>(::LoadIconA,::LoadIconW)(instance, ident))
         return { icon, AllocType::Accquire };
 
       // Error: Failed  
@@ -74,21 +80,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HICON>::create
+    // handle_alloc<::HICON>::create
     //! Load icon from system resource
     //! 
     //! \tparam ENC - Character encoding 
     //! 
     //! \param[in] ident - System icon identifier
-    //! \return HAlloc<HICON> - Accquired handle
+    //! \return HAlloc<::HICON> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC = Encoding::UTF16>
-    static HAlloc<HICON> create(SystemIcon ident) 
+    static HAlloc<::HICON> create(SystemIcon ident) 
     { 
       // Load icon handle
-      if (HICON icon = getFunc<ENC>(::LoadIconA,::LoadIconW)(nullptr, resource_id<ENC>(ident)))
+      if (::HICON icon = getFunc<ENC>(::LoadIconA,::LoadIconW)(nullptr, resource_id<ENC>(ident)))
         return { icon, AllocType::Accquire };
 
       // Error: Failed  
@@ -96,21 +102,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HICON>::create
+    // handle_alloc<::HICON>::create
     //! Create icon from image bits
     //! 
     //! \param[in] buffer - Buffer containing image
     //! \param[in] len - Length of buffer
     //! \param[in] size - Desired icon size
-    //! \return HAlloc<HICON> - Created handle
+    //! \return HAlloc<::HICON> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC = Encoding::UTF16, typename = enable_if_build_t<WindowVersion::Win2000>>
-    static HAlloc<HICON> create(byte* buffer, int32 len, SizeL size) 
+    static HAlloc<::HICON> create(byte* buffer, int32 len, SizeL size) 
     { 
       // Create icon handle from bits
-      if (HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
+      if (::HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
         return { icon, AllocType::Create };
 
       // Error: Failed  
@@ -118,21 +124,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HICON>::create
+    // handle_alloc<::HICON>::create
     //! Create icon from image bits
     //! 
     //! \param[in] buffer - Buffer containing image
     //! \param[in] len - Length of buffer
     //! \param[in] defaultSize - True to pick size based on system metrics. False to use actual size.
-    //! \return HAlloc<HICON> - Created handle
+    //! \return HAlloc<::HICON> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC = Encoding::UTF16, typename = enable_if_build_t<WindowVersion::Win2000>>
-    static HAlloc<HICON> create(byte* buffer, int32 len, bool defaultSize) 
+    static HAlloc<::HICON> create(byte* buffer, int32 len, bool defaultSize) 
     { 
       // Create icon handle from bits
-      if (HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), 0, 0, defaultSize ? LR_DEFAULTCOLOR|LR_DEFAULTSIZE : LR_DEFAULTCOLOR))
+      if (::HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), 0, 0, defaultSize ? LR_DEFAULTCOLOR|LR_DEFAULTSIZE : LR_DEFAULTCOLOR))
         return { icon, AllocType::Create };
 
       // Error: Failed  
@@ -146,13 +152,13 @@ namespace wtl
     //! \tparam ENC - Character encoding 
     //! 
     //! \param[in] ident - System cursor identifier
-    //! \return HAlloc<HCURSOR> - Accquired handle
+    //! \return HAlloc<::HCURSOR> - Accquired handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC = Encoding::UTF16>
-    static HAlloc<HCURSOR> create(SystemCursor ident) 
+    static HAlloc<::HCURSOR> create(SystemCursor ident) 
     { 
       // Load cursor handle
-      if (HICON cursor = getFunc<ENC>(::LoadCursorA,::LoadCursorW)(nullptr, resource_id<ENC>(ident)))
+      if (::HCURSOR cursor = getFunc<ENC>(::LoadCursorA,::LoadCursorW)(nullptr, resource_id<ENC>(ident)))
         return { cursor, AllocType::Accquire };
 
       // Error: Failed  
@@ -160,37 +166,30 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HICON>::clone
+    // handle_alloc<::HICON>::clone
     //! Clone handle
     //! 
     //! \param[in] icon - Icon handle
-    //! \return HICON - Duplicate of handle
+    //! \return ::HICON - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HICON> clone(HAlloc<HICON> icon);
+    static HAlloc<::HICON> clone(HAlloc<::HICON> icon);
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HICON>::destroy noexcept
+    // handle_alloc<::HICON>::destroy noexcept
     //! Release brush handle
     //! 
     //! \param[in] icon - Icon handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HICON> icon) noexcept
+    static bool destroy(HAlloc<::HICON> icon) noexcept
     {
       // no-op
       return true;
     }
   };
   
-  //! \alias HIcon - Shared icon handle
-  using HIcon = Handle<HICON>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<HIcon> - Define default icon handle
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<HIcon> : reference_constant<HIcon,HIcon::npos> {}; 
   
 } //namespace wtl
 #endif // WTL_ICON_TRAITS_HPP

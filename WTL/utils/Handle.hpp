@@ -53,18 +53,17 @@ namespace wtl
   //! \tparam T - Any handle type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct handle_alloc
-  {
-    static const T npos;
-
-    static HAlloc<T> create();
-    static HAlloc<T> clone(HAlloc<T>);
-    static void      destroy(HAlloc<T>);
-  };
+  struct handle_alloc;  /* Undefined */
+  //{
+  //  static constexpr T  npos = ¬T;
+  //
+  //  handle_alloc() = delete;
+  //
+  //  static HAlloc<T>  create();
+  //  static HAlloc<T>  clone(HAlloc<T>);
+  //  static void       destroy(HAlloc<T>);
+  //};
   
-  //! \var handle_alloc<T>::npos - 'Invalid handle' sentinel value 
-  template <typename T>
-  const T handle_alloc<T>::npos = (const T)INVALID_HANDLE_VALUE;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Handle - Encapsulates any handle
@@ -100,9 +99,6 @@ namespace wtl
     //! \typedef traits_t - Define handle traits type
     using traits_t = native_traits<native_t>; 
 
-    //! \var npos - 'No handle' sentinel value
-    static const Handle<T> npos; 
-    
     // ----------------------------------- REPRESENTATION ------------------------------------
   protected:
     halloc_t      Allocation;  //!< Allocated handle & method storage
@@ -112,22 +108,25 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::Handle
-    //! Create empty handle
+    //! Create weak reference to appropriate 'Invalid Handle' sentinel value
     /////////////////////////////////////////////////////////////////////////////////////////
-    /*constexpr Handle() : Handle(npos)
-    {}*/
+    Handle() : Handle(alloc_t::npos, AllocType::WeakRef)
+    {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::Handle
     //! Create shared handle using appropriate allocator
     //! 
-    //! \param[in] &&... args - [optional] Strongly typed variadic arguments
+    //! \param[in] && arg - First strongly typed variadic argument
+    //! \param[in] &&... args - [optional] Remaining strongly typed variadic arguments
     //! 
     //! \throw wtl::platform_error - Unable to create handle
+    //! 
+    //! \remarks This constructor syntax enforces an invariant upon allocators; they cannot provide a parameterless factory method
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    Handle(ARGS&&... args) : Allocation(alloc_t::create(std::forward<ARGS>(args)...)), 
-                             Storage(toPointer(Allocation.Handle), [this](pointer_t ptr) { safeDelete(ptr); })
+    template <typename ARG, typename... ARGS>
+    Handle(ARG&& arg, ARGS&&... args) : Allocation( alloc_t::create(std::forward<ARG>(arg), std::forward<ARGS>(args)...) ), 
+                                        Storage( toPointer(Allocation.Handle), [this](pointer_t ptr) { safeDelete(ptr); } )
     {
       // Ensure created successfully
       if (!exists())
@@ -149,18 +148,6 @@ namespace wtl
     DEFAULT_MOVE(type);
 
     // ------------------------- STATIC ---------------------------
-  public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::npos
-    //! Get the 'Invalid handle' sentinel value
-    //! 
-    //! \return native_t - 'Invalid handle' sentinel value
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*static native_t npos()
-    {
-      return alloc_t::npos;
-    }*/
-
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::toHandle
@@ -298,11 +285,7 @@ namespace wtl
     }
   };
 
-  //! \var Handle<T>::npos - 'No handle' sentinel value
-  template <typename T>
-  const Handle<T>   Handle<T>::npos = Handle<T>(handle_alloc<T>::npos, AllocType::WeakRef);
 
-  
 
 } // WTL namespace
 

@@ -39,6 +39,7 @@
     <ClInclude Include="platform\FileSearch.hpp" />
     <ClInclude Include="platform\MenuFlags.hpp" />
     <ClInclude Include="platform\Path.hpp" />
+    <ClInclude Include="platform\ResourceId.hpp" />
     <ClInclude Include="platform\Shapes.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />

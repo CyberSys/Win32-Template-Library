@@ -39,9 +39,9 @@ namespace wtl
     // Resource::Resource
     //! Create empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    Resource() : Module(HModule::npos),
-                 Handle(HResource::npos),
-                 Block(HGlobal::npos),
+    Resource() : Module(default<HModule>()),
+                 Handle(default<HResource>()),
+                 Block(default<HGlobal>()),
                  Data(nullptr)
     {
     }

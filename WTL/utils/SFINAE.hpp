@@ -13,36 +13,73 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_boolean_t - Defines an SFINAE expression requiring an boolean type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_boolean_t = std::enable_if_t<std::is_same<T,bool>::value, RET>;
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_integral_t - Defines an SFINAE expression requiring an integral type
+  //! \alias enable_if_floating_t - Defines an SFINAE expression requiring a floating point type
   //! 
-  //! \tparam OBJ - Object type
-  //! \tparam RET - [optional] Return type  (Default is void)
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename OBJ, typename RET = void>
-  using enable_if_integral_t = std::enable_if_t<std::is_integral<OBJ>::value, RET>;
+  template <typename T, typename RET = void>
+  using enable_if_floating_t = std::enable_if_t<std::is_floating_point<T>::value, RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_integer_t - Defines an SFINAE expression requiring an integer type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_integer_t = std::enable_if_t<std::is_integral<T>::value 
+                                            && !std::is_same<T,bool>::value, RET>;
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_integral_t - Defines an SFINAE expression requiring an integral type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_integral_t = std::enable_if_t<std::is_integral<T>::value, RET>;
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_not_pod_t - Defines an SFINAE expression requiring an object of class type
+  //! \alias enable_if_not_pod_t - Defines an SFINAE expression requiring an object of class type
   //! 
-  //! \tparam OBJ - Object type
-  //! \tparam RET - [optional] Return type  (Default is void)
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename OBJ, typename RET = void>
-  using enable_if_not_pod_t = std::enable_if_t<!std::is_pod<OBJ>::value, RET>;
+  template <typename T, typename RET = void>
+  using enable_if_not_pod_t = std::enable_if_t<!std::is_pod<T>::value, RET>;
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_pod_t - Defines an SFINAE expression requiring an object of POD type
+  //! \alias enable_if_pod_t - Defines an SFINAE expression requiring an object of POD type
   //! 
-  //! \tparam OBJ - Object type
-  //! \tparam RET - [optional] Return type  (Default is void)
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename OBJ, typename RET = void>
-  using enable_if_pod_t = std::enable_if_t<std::is_pod<OBJ>::value, RET>;
+  template <typename T, typename RET = void>
+  using enable_if_pod_t = std::enable_if_t<std::is_pod<T>::value, RET>;
 
   
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_class_constructible_t - Defines an SFINAE expression requiring an object of class type and a c-tor of specific signature
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //! \tparam ARGS - [optional] Constructor argument types  (Default is none)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void, typename... ARGS>
+  using enable_if_class_constructible_t = std::enable_if_t<std::is_class<T>::value && std::is_constructible<T,ARGS...>, RET>;
+
 }
 
 

@@ -13,7 +13,12 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias HAccelerator - Shared accelerator table handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HAccelerator = Handle<::HACCEL>;
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct handle_alloc<::HACCEL> - Encapsulates accelerator handle allocation
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +26,7 @@ namespace wtl
   struct handle_alloc<::HACCEL>
   {
     //! \var npos - Invalid handle sentinel value
-    static const ::HACCEL npos; 
+    static constexpr ::HACCEL npos = default<::HACCEL>(); 
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<HACCEL>::create
@@ -74,13 +79,6 @@ namespace wtl
     }
   };
   
-  //! \alias HAccelerator - Shared accelerator table handle
-  using HAccelerator = Handle<::HACCEL>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<HAccelerator> - Define default accelerator table handle
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<HAccelerator> : reference_constant<HAccelerator,HAccelerator::npos> {}; 
 } //namespace wtl
 #endif // WTL_ACCELERATOR_TRAITS_HPP
 

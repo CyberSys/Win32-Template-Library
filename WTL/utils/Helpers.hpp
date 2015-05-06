@@ -54,12 +54,7 @@ namespace wtl
   struct is_covariant : std::is_base_of<BASE<T>, DERIVED<T>>
   {};
   
-  
-  // --------------------------------- CO-VARIANCE ---------------------------------
-
-
 }
-
 
 
 #endif // WTL_HELPERS_HPP

@@ -117,7 +117,7 @@ namespace wtl
     static constexpr Encoding encoding = ENCODING;
 
     //! \var null_t - Null terminator
-    static const char_t null_t = default<char_t>();
+    static constexpr char_t null_t = default<char_t>();
 
     //! \var EMPTY - Empty character array sentinel value
     static const CharArray<ENCODING,LENGTH> EMPTY;

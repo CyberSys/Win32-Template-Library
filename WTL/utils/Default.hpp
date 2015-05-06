@@ -20,34 +20,102 @@ namespace wtl
   //! 
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> 
-  struct default_t : integral_constant<T, static_cast<T>(0)>  { CONSTEXPR_CTOR(default_t); };
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<bool> - Defines default bool as false
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> 
-  struct default_t<bool> : integral_constant<bool, false>     { CONSTEXPR_CTOR(default_t); };
+  template <typename T, typename = void> 
+  struct default_t; 
+  /* Undefined */
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<T*> - Defines default pointer as nullptr
+  //! \struct default_t<integer> - Integer types default to zero
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct default_t<T*> : integral_constant<T*, nullptr>       { CONSTEXPR_CTOR(default_t); };
+  struct default_t<T,enable_if_integer_t<T>> : integral_constant<T, static_cast<T>(0)>
+  {};
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<T&> - Disallows references 
+  //! \struct default_t<boolean> - Boolean types default to false
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct default_t<T&>;
+  struct default_t<T,enable_if_boolean_t<T>> : integral_constant<bool, false>
+  {};
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<double> - Defines default floating points as zero
+  //! \struct default_t<enumeration> - Enumeration types default to zero for now
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<double> { static constexpr double value = 0.0; CONSTEXPR_CTOR(default_t); };
-  template <> struct default_t<float>  { static constexpr float value = 0.0f; CONSTEXPR_CTOR(default_t); };
+  template <typename T> 
+  struct default_t<T,enable_if_enum_t<T>> : integral_constant<T, static_cast<T>(0)>
+  {};
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<float> - Floating-point types default to zero
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct default_t<T,enable_if_floating_t<T>> 
+  {
+    static constexpr T  value = static_cast<T>(0.0);
+  };
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<pointer> - Pointer types default to nullptr
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U>
+  struct default_t<T*,U> 
+  {
+    static constexpr T*  value = nullptr;
+  };
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<reference> - Reference types are not allowed
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U>
+  struct default_t<T&,U>;
+  /*Undefined*/
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<T,POD> - Plain-old-data types default to an uninitialized structure
+  /////////////////////////////////////////////////////////////////////////////////////////
+  /*template <typename T> 
+  struct default_t<T,enable_if_pod_t<T>> 
+  {
+    static const T  value;
+  };
+
+  template <typename T> 
+  const T default_t<T,enable_if_pod_t<T>>::value;*/
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<class> - Class types default to a default-constructed instance
+  //! 
+  //! \remarks Non-default constructible class types require individual specializations
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct default_t<T,std::enable_if_t<std::is_class<T>::value
+                                   && std::is_constructible<T>::value>> 
+  {
+    static const T  value;
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var default_t<class>::value - Default class-type storage
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  const T default_t<T,std::enable_if_t<std::is_class<T>::value
+                                    && std::is_constructible<T>::value>>::value;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<class> - Class types default to a default-constructed instance
+  //! 
+  //! \remarks This implementation crashes MSVC 2015 RC
+  /////////////////////////////////////////////////////////////////////////////////////////
+  /*template <typename T> 
+  struct default_t<T,enable_if_class_constructible_t<T>> 
+  {
+    static const T  value;
+  };*/
+
+  /*template <typename T> 
+  const T default_t<T,enable_if_class_constructible_t<T>>::value;*/
+
+  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::default constexpr
@@ -60,24 +128,25 @@ namespace wtl
   template <typename T> constexpr
   T  default() noexcept
   {
-    return default_t<T>()();
+    // Return default value
+    return default_t<T>::value;   
   }
 
   
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::default constexpr
-  //! Get the default-value for any type
+  //! Get the default-value for any type via ATD
   //! 
   //! \tparam T - Any type
   //!
-  //! \param[in] const& - Ignored
+  //! \param[in] const& - Value used to deduce T
   //! \return default_t<T> - Default value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> constexpr
   T  default(const T&) noexcept
   {
-    return default_t<T>()();
+    // Return default value
+    return default_t<T>::value;   
   }
 }
 

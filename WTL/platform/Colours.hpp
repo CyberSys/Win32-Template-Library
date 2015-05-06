@@ -64,8 +64,6 @@ namespace wtl
   //template <> struct enum_names<Colour>  { static const char* names[];   };
   template <> struct enum_values<Colour> { static const Colour values[26]; };
 
-  
-
   // ----------------------------------- SYSTEM COLOURS ----------------------------------
   
 

@@ -40,6 +40,11 @@ namespace wtl
   template <> struct max_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::VRedraw>     {};
   template <> struct min_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::DropShadow>  {};
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias Atom - Shared class atom handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HAtom = Handle<::ATOM>;
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +54,7 @@ namespace wtl
   struct handle_alloc<::ATOM>
   {
     //! \var npos - Invalid handle sentinel value
-    static const ::ATOM npos; 
+    static constexpr ::ATOM npos = default<::ATOM>(); 
 
     //! \alias WndClassEx - Window class data type
     template <Encoding ENC>
@@ -135,14 +140,6 @@ namespace wtl
     }
   };
 
-
-  //! \alias Atom - Window class atom
-  using HAtom = Handle<::ATOM>;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<HAtom> - Define default atom handle
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<HAtom> : reference_constant<HAtom,HAtom::npos> {}; 
 
 } //namespace wtl
 #endif // WTL_WINDOW_CLASS_TRAITS_HPP

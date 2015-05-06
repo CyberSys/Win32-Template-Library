@@ -13,29 +13,34 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HBRUSH> - Encapsulates brush handle allocation
+  //! \alias HBrush - Shared brush handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HBrush = Handle<::HBRUSH>;
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct handle_alloc<::HBRUSH> - Encapsulates brush handle allocation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<HBRUSH>
+  struct handle_alloc<::HBRUSH>
   {
     //! \var npos - Invalid handle sentinel value
-    static const HBRUSH npos; 
+    static constexpr ::HBRUSH npos = default<::HBRUSH>(); 
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HBRUSH>::create
+    // handle_alloc<::HBRUSH>::create
     //! Create solid brush
     //! 
     //! \param[in] colour - Brush colour
-    //! \return HAlloc<HBRUSH> - Created handle
+    //! \return HAlloc<::HBRUSH> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HBRUSH> create(Colour colour) 
+    static HAlloc<::HBRUSH> create(Colour colour) 
     { 
       // Create solid colour brush handle
-      if (HBRUSH brush = ::CreateSolidBrush(enum_cast(colour)))
+      if (::HBRUSH brush = ::CreateSolidBrush(enum_cast(colour)))
         return { brush, AllocType::Create };
 
       // Error: Failed  
@@ -43,19 +48,19 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HBRUSH>::create
+    // handle_alloc<::HBRUSH>::create
     //! Create hatch brush
     //! 
     //! \param[in] style - Hatch style
     //! \param[in] colour - Brush colour
-    //! \return HAlloc<HBRUSH> - Created handle
+    //! \return HAlloc<::HBRUSH> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HBRUSH> create(HatchStyle style, Colour colour) 
+    static HAlloc<::HBRUSH> create(HatchStyle style, Colour colour) 
     { 
       // Create hatch brush handle
-      if (HBRUSH brush = ::CreateHatchBrush(enum_cast(style), enum_cast(colour)))
+      if (::HBRUSH brush = ::CreateHatchBrush(enum_cast(style), enum_cast(colour)))
         return { brush, AllocType::Create };
 
       // Error: Failed  
@@ -63,18 +68,18 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HBRUSH>::create
+    // handle_alloc<::HBRUSH>::create
     //! Create system colour brush
     //! 
     //! \param[in] col - System colour
-    //! \return HAlloc<HBRUSH> - Accquired handle
+    //! \return HAlloc<::HBRUSH> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HBRUSH> create(SystemColour col) 
+    static HAlloc<::HBRUSH> create(SystemColour col) 
     { 
       // Accquire system colour brush handle
-      if (HBRUSH brush = ::GetSysColorBrush(enum_cast(col)))
+      if (::HBRUSH brush = ::GetSysColorBrush(enum_cast(col)))
         return { brush, AllocType::Accquire };
 
       // Error: Failed  
@@ -83,15 +88,15 @@ namespace wtl
     
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HBRUSH>::create
+    // handle_alloc<::HBRUSH>::create
     //! Accquire stock brush handle
     //! 
     //! \param[in] obj - Stock object
-    //! \return HAlloc<HBRUSH> - Accquired handle
+    //! \return HAlloc<::HBRUSH> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HBRUSH> create(StockObject obj) 
+    static HAlloc<::HBRUSH> create(StockObject obj) 
     { 
       switch (obj)
       {
@@ -103,7 +108,7 @@ namespace wtl
       case StockObject::NullBrush:
       case StockObject::DcBrush:
         // Accquire stock brush
-        if (HBRUSH brush = (HBRUSH)::GetStockObject(enum_cast(obj)))
+        if (::HBRUSH brush = (::HBRUSH)::GetStockObject(enum_cast(obj)))
           return { brush, AllocType::WeakRef };
       }
       
@@ -112,24 +117,24 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HBRUSH>::clone
+    // handle_alloc<::HBRUSH>::clone
     //! Clone handle
     //! 
     //! \param[in] brush - Brush handle
-    //! \return HAlloc<HBRUSH> - Duplicate of handle
+    //! \return HAlloc<::HBRUSH> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HBRUSH>  clone(HAlloc<HBRUSH> brush);
+    static HAlloc<::HBRUSH>  clone(HAlloc<::HBRUSH> brush);
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HBRUSH>::destroy noexcept
+    // handle_alloc<::HBRUSH>::destroy noexcept
     //! Release brush handle
     //! 
     //! \param[in] brush - Brush handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HBRUSH> brush) noexcept
+    static bool destroy(HAlloc<::HBRUSH> brush) noexcept
     {
       // Delete without checking if handle is valid
       switch (brush.Method)
@@ -142,14 +147,6 @@ namespace wtl
     }
   };
 
-
-  //! \alias HBrush - Shared brush handle
-  using HBrush = Handle<HBRUSH>;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<HBrush> - Define default brush handle
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<HBrush> : reference_constant<HBrush,HBrush::npos> {};
   
 } //namespace wtl
 #endif // WTL_BRUSH_TRAITS_HPP

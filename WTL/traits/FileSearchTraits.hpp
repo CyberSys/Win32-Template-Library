@@ -17,41 +17,47 @@ DECLARE_HANDLE(HFILESEARCH);
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HFILESEARCH> - Encapsulates creating file system search handles
+  //! \alias HFileSearch - Shared file-system search handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HFileSearch = Handle<::HFILESEARCH>;
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct handle_alloc<::HFILESEARCH> - Encapsulates creating file-system search handles
   /////////////////////////////////////////////////////////////////////////////////////////
   template <>
   struct handle_alloc<::HFILESEARCH>
   {
     //! \var npos - Invalid handle sentinel value
-    static const HFILESEARCH npos; 
+    static constexpr ::HFILESEARCH npos = (::HFILESEARCH)INVALID_HANDLE_VALUE;    //default<::HFILESEARCH>(); 
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HFILESEARCH>::create
+    // handle_alloc<::HFILESEARCH>::create
     //! Create file search handle
     //! 
-    //! \tparam CHR - Character type
+    //! \tparam ENC - Character encoding
     //! 
     //! \param[in] const& query - Search query. Wildcards are permitted.
     //! \param[in,out] &results - Results storage, populated with first result if successful
-    //! \return HFILESEARCH - File search handle
+    //! \return ::HFILESEARCH - File search handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename CHR>
-    static HFILESEARCH create(const CHR* folder, getType<CHR,WIN32_FIND_DATAA,WIN32_FIND_DATAW>& results) 
+    template <Encoding ENC>
+    static ::HFILESEARCH create(const encoding_char_t<ENC>* folder, getType_t<ENC,::WIN32_FIND_DATAA,::WIN32_FIND_DATAW>& results) 
     { 
-      return reinterpret_cast<HFILESEARCH>( getFunc<CHR>(::FindFirstFileA,::FindFirstFileW)(folder.c_str(), &results) ); 
+      return reinterpret_cast<::HFILESEARCH>( getFunc<ENC>(::FindFirstFileA,::FindFirstFileW)(folder.c_str(), &results) ); 
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HFILESEARCH>::clone
+    // handle_alloc<::HFILESEARCH>::clone
     //! Clone handle
     //! 
     //! \param[in] search - Handle
-    //! \return HFILESEARCH - Duplicate of handle
+    //! \return ::HFILESEARCH - Duplicate of handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HFILESEARCH  clone(HFILESEARCH search);
+    static ::HFILESEARCH  clone(::HFILESEARCH search);
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HFILESEARCH>::destroy noexcept
+    // handle_alloc<::HFILESEARCH>::destroy noexcept
     //! Release handle 
     //! 
     //! \param[in] search - Handle
@@ -59,7 +65,7 @@ namespace wtl
     //!
     //! \throw wtl::invalid_argument - [Debug only] Handle is invalid
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HFILESEARCH search) noexcept
+    static bool destroy(::HFILESEARCH search) noexcept
     {
       //PARAM_INVARIANT(search, search != npos);
 

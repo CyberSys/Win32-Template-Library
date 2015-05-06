@@ -73,20 +73,47 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct sequence - Simple type-list 
   //! 
-  //! \tparam ...ELEM - Element types
+  //! \tparam ...TYPES - Elements
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename... ELEM>
+  template <typename... TYPES>
   struct sequence
   {
-    //! \var count - Define number of elements
-    static constexpr int32 count = sizeof...(ELEM);
+    //! \alias type - Define own type
+    using type = sequence<TYPES...>;
 
-    //! \var type - Define types
-    using type = sequence<ELEM...>;
+    //! \var length - Define number of elements
+    static constexpr int32 length = sizeof...(TYPES);
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \alias index - Element accessor
+    //!
+    //! \tparam IDX - Zero-based element index
+    //! \return auto - Element
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <unsigned IDX>
+    using index = typename std::tuple_element<IDX, std::tuple<TYPES...>>::type;
   };
 
-  template <typename... ELEM>
-  using sequence_t = typename sequence<ELEM...>::type;
+  /*template <typename... TYPES>
+  using sequence_t = typename sequence<TYPES...>::type;*/
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias push_base_t - Append a type to the back of the type list
+  //! 
+  //! \tparam T - Type to insert
+  //! \tparam ... TYPES - [optional] Existing sequence
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename... TYPES>
+  using push_back_t = sequence<TYPES..., T>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias push_front - Insert a type to the front of the list
+  //! 
+  //! \tparam T - Type to insert
+  //! \tparam ... TYPES - [optional] Existing sequence
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename... TYPES>
+  using push_front_t = sequence<T, TYPES...>;
 
 }
 

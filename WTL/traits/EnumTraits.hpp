@@ -32,6 +32,33 @@ namespace wtl
   struct is_contiguous : std::integral_constant<bool, std::is_enum<E>::value || std::is_arithmetic<E>::value>
   {};
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_enum_t - Defines an SFINAE expression requiring an enumeration
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_enum_t = std::enable_if_t<std::is_enum<E>::value, RET>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_attribute_t - Defines an SFINAE expression requiring an attribute enumeration
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_attribute_t = std::enable_if_t<std::is_enum<E>::value && is_attribute<E>::value, RET>;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_contiguous_t - Defines an SFINAE expression requiring a contiguous enumeration
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_contiguous_t = std::enable_if_t<std::is_enum<E>::value && is_contiguous<E>::value, RET>;
+  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct enum_names - Defines names for enumeration literals
@@ -56,6 +83,45 @@ namespace wtl
     //! \var values - Values array
     static const E values[];
   };
+  
+}
+
+//! \namespace std - Namespace injection
+namespace std
+{
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // std::begin
+  //! Get the start iterator of an enumeration values collection
+  //! 
+  //! \tparam T - Enumeration type
+  //! 
+  //! \return T* - Position of first value in collection
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  ::wtl::enable_if_enum_t<T,T*>  begin()
+  {
+    return begin(::wtl::enum_values<T>::values);
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // std::end
+  //! Get the end iterator of an enumeration values collection
+  //! 
+  //! \tparam T - Enumeration type
+  //! 
+  //! \return T* - Position immediately beyond last value in collection
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  ::wtl::enable_if_enum_t<T,T*>  end()
+  {
+    return end(::wtl::enum_values<T>::values);
+  };
+}
+
+
+//! \namespace wtl - Windows template library
+namespace wtl
+{
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct min_value - Defines minimum value for a type
@@ -78,69 +144,6 @@ namespace wtl
     //static constexpr E  value = (E)0;
   };
 
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_enum - Defines an SFINAE expression requiring an enumeration
-  //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename RET = void>
-  struct enable_if_enum : std::enable_if<std::is_enum<E>::value, RET> 
-  {};
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias enable_if_enum_t - Defines an SFINAE expression requiring an enumeration
-  //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename RET = void>
-  using enable_if_enum_t = typename enable_if_enum<E,RET>::type;
-
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_attribute - Defines an SFINAE expression requiring an attribute enumeration
-  //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename RET = void>
-  struct enable_if_attribute : std::enable_if<std::is_enum<E>::value && is_attribute<E>::value, RET>
-  {};
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias enable_if_attribute_t - Defines an SFINAE expression requiring an attribute enumeration
-  //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename RET = void>
-  using enable_if_attribute_t = typename enable_if_attribute<E,RET>::type;
-  
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_contiguous - Defines an SFINAE expression requiring a contiguous enumeration
-  //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename RET = void>
-  struct enable_if_contiguous : std::enable_if<std::is_enum<E>::value && is_contiguous<E>::value, RET>
-  {};
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct enable_if_contiguous_t - Defines an SFINAE expression requiring a contiguous enumeration
-  //! 
-  //! \tparam E - Input type
-  //! \tparam RET - Return type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename RET = void>
-  using enable_if_contiguous_t = typename enable_if_contiguous<E,RET>::type;
-  
-  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | constexpr

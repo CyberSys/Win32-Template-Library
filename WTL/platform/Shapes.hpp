@@ -188,15 +188,6 @@ namespace wtl
   //! \alias PointF - Point using floating point fields
   using PointF = Point<float>;
 
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<Point> - Define default values for 'Points' types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<PointL> : reference_constant<PointL,PointL::EMPTY> {};
-  template <> struct default_t<PointF> : reference_constant<PointF,PointF::EMPTY> {};
-
-
-
 
 
 
@@ -336,15 +327,6 @@ namespace wtl
 
   //! \alias SizeF - Size using floating point fields
   using SizeF = Size<float>;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<Size> - Define default values for 'Sizes' types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<SizeL> : reference_constant<SizeL,SizeL::EMPTY> { CONSTEXPR_CTOR(default_t); };
-  template <> struct default_t<SizeF> : reference_constant<SizeF,SizeF::EMPTY> { CONSTEXPR_CTOR(default_t); };
-  
-
-
 
 
 
@@ -680,14 +662,6 @@ namespace wtl
   //! \alias RectF - Rectangle using floating point fields
   using RectF = Rect<float>;
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<Rect> - Define default values for 'Rect' types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<RectL> : reference_constant<RectL,RectL::EMPTY> { CONSTEXPR_CTOR(default_t); };
-  template <> struct default_t<RectF> : reference_constant<RectF,RectF::EMPTY> { CONSTEXPR_CTOR(default_t); };
-
-  
-
 
 
 

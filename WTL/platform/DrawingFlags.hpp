@@ -103,7 +103,166 @@ namespace wtl
   template <> struct max_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Opaque>       {};
   template <> struct min_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Transparent>  {};
   
+  //! \enum FontWeight - Defines font weights
+  enum class FontWeight : ulong32
+  { 
+    DontCare = 0, 			        //!< 
+    Thin = 100, 			          //!< 
+    ExtraLight = 200, 			    //!< 
+    Light = 300, 			          //!< 
+    Normal = 400, 			        //!< 
+    Medium = 500, 			        //!< 
+    SemiBold = 600, 			      //!< 
+    Bold = 700, 			          //!< 
+    ExtraBold = 800, 			      //!< 
+    Heavy = 900, 			          //!< 
+
+    UltraKight = ExtraLight, 		//!< 
+    Regular = Normal, 			    //!< 
+    Demibold = SemiBold, 			  //!< 
+    Ultrabold = ExtraBold, 			//!< 
+    Black = Heavy, 			        //!< 
+  };
   
+  // ----------------------------------- FONT PROPERTIES ----------------------------------
+
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<FontWeight>  : std::false_type  {};
+  template <> struct is_contiguous<FontWeight> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<FontWeight>     : std::integral_constant<FontWeight,FontWeight::Heavy>      {};
+  template <> struct min_value<FontWeight>     : std::integral_constant<FontWeight,FontWeight::DontCare>   {};
+ 
+
+  //! \enum FontCharSet - Defines font character sets
+  enum class FontCharSet : ulong32
+  { 
+    Ansi = 0,			      //!<
+    Default = 1,			  //!<
+    Symbol = 2,			    //!<
+    Shiftjis = 128,		  //!<
+    Hangeul = 129,			//!<
+    Hangul = 129,			  //!<
+    Gb2312 = 134,			  //!<
+    Chinesebig5 = 136,	//!<
+    Oem = 255,			    //!<
+    Johab = 130,			  //!<
+    Hebrew = 177,			  //!<
+    Arabic = 178,			  //!<
+    Greek = 161,			  //!<
+    Turkish = 162,			//!<
+    Vietnamese = 163,	  //!<
+    Thai = 222,			    //!<
+    Easteurope = 238,	  //!<
+    Russian = 204,			//!<
+    Mac = 77,			      //!<
+    Baltic = 186,			  //!<
+  };
+  
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<FontCharSet>  : std::false_type  {};
+  template <> struct is_contiguous<FontCharSet> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<FontCharSet>     : std::integral_constant<FontCharSet,FontCharSet::Oem>    {};
+  template <> struct min_value<FontCharSet>     : std::integral_constant<FontCharSet,FontCharSet::Ansi>   {};
+  
+
+
+  //! \enum FontQuality - Defines font quality
+  enum class FontQuality : ulong32
+  {
+    Default = 0,			      //!<
+    Draft = 1,			        //!<
+    Proof = 2,			        //!<
+    NonAntiAliased = 3,			//!<
+    AntiAliased = 4,			  //!<
+    ClearType = 5,			    //!< [Windows 5.01]
+    ClearTypeNatural = 6,	  //!< [Windows 5.01]
+  };
+  
+  //! Define traits: Contiguous enumeration
+  template <> struct is_attribute<FontQuality>  : std::false_type  {};
+  template <> struct is_contiguous<FontQuality> : std::true_type   {};
+
+  //! Define limits traits
+  template <> struct max_value<FontQuality>     : std::integral_constant<FontQuality,FontQuality::ClearTypeNatural>    {};
+  template <> struct min_value<FontQuality>     : std::integral_constant<FontQuality,FontQuality::Default>             {};
+
+
+
+  //! \enum FontPrecision - Defines font output precision
+  enum class FontPrecision : ulong32
+  {
+    Default = 0, 			  //!< 
+    String = 1, 			  //!< 
+    Character = 2, 			//!< 
+    Stroke = 3, 			  //!< 
+    TT = 4, 			      //!< 
+    Device = 5, 			  //!< 
+    Raster = 6, 			  //!< 
+    TT_Only = 7, 			  //!< 
+    Outline = 8, 			  //!< 
+    ScreenOutline = 9,  //!< 
+    PS_Only = 10, 			//!< 
+  };
+    
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<FontPrecision>  : std::false_type  {};
+  template <> struct is_contiguous<FontPrecision> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<FontPrecision>     : std::integral_constant<FontPrecision,FontPrecision::PS_Only>   {};
+  template <> struct min_value<FontPrecision>     : std::integral_constant<FontPrecision,FontPrecision::Default>   {};
+
+
+
+  //! \enum FontClipping - Defines font output precision
+  enum class FontClipping : ulong32
+  {
+    Default = 0, 			        //!< 
+    Character = 1, 			      //!< 
+    Stroke = 2, 			        //!< 
+    Mask = 0xf, 			        //!< 
+    LH_Angles = (1 << 4), 		//!< 
+    TT_Always = (2 << 4), 		//!< 
+    DFA_Disable = (4 << 4), 	//!< [Windows 6.00]
+    Embedded = (8 << 4), 			//!< 
+  };
+  
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<FontClipping>  : std::false_type  {};
+  template <> struct is_contiguous<FontClipping> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<FontClipping>     : std::integral_constant<FontClipping,FontClipping::Embedded>    {};
+  template <> struct min_value<FontClipping>     : std::integral_constant<FontClipping,FontClipping::Default>     {};
+
+  
+  //! \enum FontFamily - Defines font families
+  enum class FontFamily : ulong32
+  { 
+    Default = 0,          //!< Default pitch
+    Fixed = 1,            //!< Fixed pitch
+    Variable = 2,         //!< Variable pitch
+    MonoFont = 8,         //!< Default pitch
+    DontCare = (0<<4),    //!< Don't care or don't know
+    Roman = (1<<4),       //!< Variable stroke width, serifed. Times Roman, Century Schoolbook, etc.
+    Swiss = (2<<4),       //!< Variable stroke width, sans-serifed. Helvetica, Swiss, etc. 
+    Modern = (3<<4),      //!< Constant stroke width, serifed or sans-serifed. Pica, Elite, Courier, etc. 
+    Script = (4<<4),      //!< Cursive, etc. 
+    Decorative = (5<<4),  //!< Old English, etc. 
+  };
+  
+  //! Define traits: Non-contiguous attribute
+  template <> struct is_attribute<FontFamily>  : std::false_type  {};
+  template <> struct is_contiguous<FontFamily> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<FontFamily>     : std::integral_constant<FontFamily,FontFamily::Decorative>  {};
+  template <> struct min_value<FontFamily>     : std::integral_constant<FontFamily,FontFamily::Default>     {};
+
   // ----------------------------------- OWNER DRAW ----------------------------------
 
   
@@ -276,6 +435,42 @@ namespace wtl
   template <> struct min_value<StockObject>     : std::integral_constant<StockObject,StockObject::WhiteBrush>  {};
 
   
+  // ----------------------------------- RESOURCE TYPES ----------------------------------
+  
+  
+  //! \enum ResourceType - Defines resource types
+  enum class ResourceType : uint32
+  {
+    Cursor = 1,           //!< 
+    Bitmap = 2,           //!< 
+    Icon = 3,             //!< 
+    Menu = 4,             //!< 
+    Dialog = 5,           //!< 
+    String = 6,           //!< 
+    FontDir = 7,          //!< 
+    Font = 8,             //!< 
+    Accelerator = 9,      //!< 
+    RcData = 10,          //!< 
+    MessageTable = 11,    //!< 
+    GroupCursor = 12,     //!< 
+    GroupIcon = 14,       //!< 
+    Version = 16,         //!< 
+    DlgInclude = 17,      //!< 
+    PlugPlay = 19,        //!< [Windows 4.00] 
+    Vxd = 20,             //!< [Windows 4.00] 
+    AniCursor = 21,       //!< [Windows 4.00] 
+    AniIcon = 22,         //!< [Windows 4.00] 
+    Html = 23,            //!< 
+    Manifest = 24,        //!< 
+  };
+
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<ResourceType>  : std::false_type {};
+  template <> struct is_contiguous<ResourceType> : std::false_type {};
+
+  //! Define limits traits
+  template <> struct max_value<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Cursor>     {};
+  template <> struct min_value<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Manifest>   {};
   
 
 

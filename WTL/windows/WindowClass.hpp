@@ -64,8 +64,6 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(SystemClass cls) : WindowClass(getSystemClassName(cls))
     {
-      PointL pt = default<PointL>();
-      Background = default<HBrush>();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -77,14 +75,14 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to register class
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(resource_t id) : Name(id),
-                                 Atom(HAtom::npos),
-                                 Background(HBrush::npos),
+                                 Atom(default<HAtom>()),
+                                 Background(default<HBrush>()),
                                  ClassStorage(default(ClassStorage)),
-                                 Cursor(HCursor::npos),
+                                 Cursor(default<HCursor>()),
                                  Instance(default<::HINSTANCE>()),
-                                 LargeIcon(HIcon::npos),
+                                 LargeIcon(default<HIcon>()),
                                  Menu(default<resource_t>()),
-                                 SmallIcon(HIcon::npos),
+                                 SmallIcon(default<HIcon>()),
                                  Style(default<ClassStyle>()),
                                  WindowStorage(default(WindowStorage)),
                                  WndProc(default<::WNDPROC>())

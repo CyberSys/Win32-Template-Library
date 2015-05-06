@@ -41,34 +41,16 @@ namespace wtl
   Console cdebug;
 }
 
-//! \namespace wtl - Windows template library
-namespace wtl
-{
-  //! \var npos - Define 'Invalid handle' sentinel values
-  const ::ATOM        handle_alloc<::ATOM>::npos = INVALID_ATOM;
-  const ::HACCEL      handle_alloc<::HACCEL>::npos = nullptr;
-  const ::HBRUSH      handle_alloc<::HBRUSH>::npos = nullptr;
-  const ::HDC         handle_alloc<::HDC>::npos = nullptr;
-  const ::HFILESEARCH handle_alloc<::HFILESEARCH>::npos = (const ::HFILESEARCH)INVALID_HANDLE_VALUE;
-  const ::HFONT       handle_alloc<::HFONT>::npos = nullptr;
-  const ::HGLOBAL     handle_alloc<::HGLOBAL>::npos = nullptr;
-  const ::HICON       handle_alloc<::HICON>::npos = nullptr;
-  const ::HMENU       handle_alloc<::HMENU>::npos = nullptr;
-  const ::HMODULE     handle_alloc<::HMODULE>::npos = nullptr;
-  const ::HPEN        handle_alloc<::HPEN>::npos = nullptr;
-  const ::HRSRC       handle_alloc<::HRSRC>::npos = nullptr;
-  const ::HWND        handle_alloc<::HWND>::npos = nullptr;
-}
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   //! \var enum_values<...>::values - Defines character encodings
-  const char* enum_names<Encoding>::values[] = { "ANSI", "ASCII", "OEM", "MAC", "THREAD_ANSI", "SYMBOL", "UTF7", "UTF8", "UTF16" };
+  const char*  enum_names<Encoding>::values[] = { "ANSI", "ASCII", "OEM", "MAC", "THREAD_ANSI", "SYMBOL", "UTF7", "UTF8", "UTF16" };
 
   //! \var enum_values<...>::values - Defines HatchStyle values
-  const Encoding enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
-                                                     Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
+  const Encoding  enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
+                                                      Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
   
   //! \var enum_values<...>::value - Defines Colour values
   const Colour  enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
@@ -86,7 +68,7 @@ namespace wtl
 namespace wtl
 {
   //! \var DeviceContext::ScreenDC - Screen device context
-  DeviceContext  ScreenDC = HDeviceContext::npos;
+  DeviceContext  ScreenDC = default<HDeviceContext>();
 
   //! Stock brushes
   const HBrush  StockBrush::Black(Colour::Black);       //!< Black brush
