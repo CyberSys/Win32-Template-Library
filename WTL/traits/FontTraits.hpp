@@ -298,6 +298,11 @@ namespace wtl
   //! \alias HFont - Shared font handle
   using HFont = Handle<HFONT>;
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HFont> - Define default font handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HFont> : reference_constant<HFont,HFont::npos> {}; 
+
 } //namespace wtl
 #endif // WTL_FONT_TRAITS_HPP
 

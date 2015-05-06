@@ -77,6 +77,11 @@ namespace wtl
   
   //! \alias HGlobal - Shared global memory handle
   using HGlobal = Handle<::HGLOBAL>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HGlobal> - Define default global memory handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HGlobal> : reference_constant<HGlobal,HGlobal::npos> {}; 
 
 } //namespace wtl
 #endif // WTL_GLOBAL_MEM_TRAITS_HPP

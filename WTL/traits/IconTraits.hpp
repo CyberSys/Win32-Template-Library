@@ -186,7 +186,11 @@ namespace wtl
   
   //! \alias HIcon - Shared icon handle
   using HIcon = Handle<HICON>;
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HIcon> - Define default icon handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HIcon> : reference_constant<HIcon,HIcon::npos> {}; 
   
 } //namespace wtl
 #endif // WTL_ICON_TRAITS_HPP

@@ -76,7 +76,11 @@ namespace wtl
   
   //! \alias HAccelerator - Shared accelerator table handle
   using HAccelerator = Handle<::HACCEL>;
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HAccelerator> - Define default accelerator table handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HAccelerator> : reference_constant<HAccelerator,HAccelerator::npos> {}; 
 } //namespace wtl
 #endif // WTL_ACCELERATOR_TRAITS_HPP
 

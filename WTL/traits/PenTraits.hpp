@@ -15,16 +15,16 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<HPEN> - Encapsulates creating device context pens
+  //! \struct handle_alloc<::HPEN> - Encapsulates creating device context pens
   /////////////////////////////////////////////////////////////////////////////////////////
   template <>
-  struct handle_alloc<HPEN>
+  struct handle_alloc<::HPEN>
   {
     //! \var npos - Invalid handle sentinel value
-    static const HPEN npos; 
+    static const ::HPEN npos; 
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HPEN>::create
+    // handle_alloc<::HPEN>::create
     //! Create pen handle
     //! 
     //! \param[in] style - Style
@@ -34,10 +34,10 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HPEN> create(PenStyle style, int32 width, Colour colour) 
+    static HAlloc<::HPEN> create(PenStyle style, int32 width, Colour colour) 
     { 
       // Create solid colour brush handle
-      if (HPEN pen = ::CreatePen(enum_cast(style), width, enum_cast(colour)))
+      if (::HPEN pen = ::CreatePen(enum_cast(style), width, enum_cast(colour)))
         return { pen, AllocType::Create };
 
       // Error: Failed  
@@ -45,15 +45,15 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HPEN>::create
+    // handle_alloc<::HPEN>::create
     //! Accquire stock pen handle
     //! 
     //! \param[in] obj - Stock object
-    //! \return HAlloc<HPEN> - Accquired handle
+    //! \return HAlloc<::HPEN> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HPEN> create(StockObject obj) 
+    static HAlloc<::HPEN> create(StockObject obj) 
     { 
       switch (obj)
       {
@@ -62,7 +62,7 @@ namespace wtl
       case StockObject::NullPen:
       case StockObject::DcPen:
         // Accquire stock pen
-        if (HPEN pen = (HPEN)::GetStockObject(enum_cast(obj)))
+        if (::HPEN pen = (::HPEN)::GetStockObject(enum_cast(obj)))
           return { pen, AllocType::WeakRef };
       }
       
@@ -72,24 +72,24 @@ namespace wtl
     
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HPEN>::clone
+    // handle_alloc<::HPEN>::clone
     //! Clone handle
     //! 
     //! \param[in] pen - Handle
-    //! \return HAlloc<HPEN> - Duplicate of handle
+    //! \return HAlloc<::HPEN> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HPEN> clone(HAlloc<HPEN> pen);
+    static HAlloc<::HPEN> clone(HAlloc<::HPEN> pen);
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<HPEN>::destroy noexcept
+    // handle_alloc<::HPEN>::destroy noexcept
     //! Release handle 
     //! 
     //! \param[in] pen - Handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HPEN> pen) noexcept
+    static bool destroy(HAlloc<::HPEN> pen) noexcept
     {
       // Delete without checking if handle is valid
       switch (pen.Method)
@@ -102,10 +102,16 @@ namespace wtl
     }
   };
 
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias HPen - Shared pen handle
-  using HPen = Handle<HPEN>;
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HPen = Handle<::HPEN>;
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HPen> - Define default pen handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HPen> : reference_constant<HPen,HPen::npos> {};
+
 } //namespace wtl
 #endif // WTL_PEN_TRAITS_HPP
 

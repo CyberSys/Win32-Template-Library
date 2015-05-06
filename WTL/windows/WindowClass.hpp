@@ -38,8 +38,8 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    HINSTANCE   Instance;          //!< Registered module
-    WNDPROC     WndProc;           //!< Window procedure
+    ::HINSTANCE Instance;          //!< Registered module
+    ::WNDPROC   WndProc;           //!< Window procedure
     ClassStyle  Style;             //!< Class styles
     HAtom       Atom;              //!< Registered class atom
     HBrush      Background;        //!< Background brush
@@ -63,7 +63,10 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to register class
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(SystemClass cls) : WindowClass(getSystemClassName(cls))
-    {}
+    {
+      PointL pt = default<PointL>();
+      Background = default<HBrush>();
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
@@ -73,18 +76,18 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to register class
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowClass(resource_t id) : Background(HBrush::npos),
+    WindowClass(resource_t id) : Name(id),
+                                 Atom(HAtom::npos),
+                                 Background(HBrush::npos),
+                                 ClassStorage(default(ClassStorage)),
                                  Cursor(HCursor::npos),
-                                 SmallIcon(HIcon::npos),
+                                 Instance(default<::HINSTANCE>()),
                                  LargeIcon(HIcon::npos),
-                                 ClassStorage(0),
-                                 WindowStorage(0),
-                                 Style(default<ClassStyle>()),
-                                 Instance(nullptr),
-                                 WndProc(nullptr),
-                                 Name(id),
                                  Menu(default<resource_t>()),
-                                 Atom(HAtom::npos)
+                                 SmallIcon(HIcon::npos),
+                                 Style(default<ClassStyle>()),
+                                 WindowStorage(default(WindowStorage)),
+                                 WndProc(default<::WNDPROC>())
     {
       //! \var getClassInfoEx - Functor for 'GetClassInfoEx' 
       static const auto getClassInfoEx = getFunc<ENC>(::GetClassInfoExA,::GetClassInfoExW);
@@ -131,29 +134,28 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to register window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowClass(HINSTANCE instance, 
+    WindowClass(::HINSTANCE instance, 
                 resource_t name,
                 ClassStyle style, 
-                WNDPROC proc, 
+                ::WNDPROC proc, 
                 resource_t menu, 
                 const HCursor& cursor, 
                 const HBrush& background, 
                 const HIcon& smIcon, 
                 const HIcon& bgIcon, 
                 int32 clsBytes = 0, 
-                int32 wndBytes = 0)
-      : Background(background),
-        Cursor(cursor),
-        SmallIcon(smIcon),
-        LargeIcon(bgIcon),
-        ClassStorage(clsBytes),
-        WindowStorage(wndBytes),
-        Style(style),
-        Instance(instance),
-        WndProc(proc),
-        Name(name),
-        Menu(menu),
-        Atom(instance, name, style, proc, menu, (HCURSOR)cursor, (HBRUSH)background, (HICON)smIcon, (HICON)bgIcon, clsBytes, wndBytes)
+                int32 wndBytes = 0) : Atom(instance, name, style, proc, menu, (::HCURSOR)cursor, (::HBRUSH)background, (::HICON)smIcon, (::HICON)bgIcon, clsBytes, wndBytes),
+                                      Background(background),
+                                      ClassStorage(clsBytes),
+                                      Cursor(cursor),
+                                      Instance(instance),
+                                      LargeIcon(bgIcon),              
+                                      Menu(menu),
+                                      Name(name),
+                                      SmallIcon(smIcon),
+                                      Style(style),
+                                      WindowStorage(wndBytes),
+                                      WndProc(proc)
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////

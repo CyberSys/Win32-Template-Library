@@ -108,8 +108,12 @@ namespace wtl
 
 
   //! \alias HCursor - Shared cursor handle
-  using HCursor = Handle<HCURSOR>;
-
+  using HCursor = Handle<::HCURSOR>;
+ 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HCursor> - Define default cursor handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //template <> struct default_t<HCursor> : reference_constant<HCursor,HCursor::npos> {}; 
   
 } //namespace wtl
 #endif // WTL_CURSOR_TRAITS_HPP

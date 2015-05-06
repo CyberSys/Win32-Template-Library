@@ -74,6 +74,9 @@
 //! \def CONSTEXPR_MOVE_CTOR - Enables constexpr move-construction
 #define CONSTEXPR_MOVE_CTOR(type)   constexpr type(type&& r) noexcept = default
 
+//! \def DEFAULT_CONSTEXPR - Enables constexpr default-construction
+#define DEFAULT_CONSTEXPR(type)     CONSTEXPR_CTOR(type);  CONSTEXPR_COPY_CTOR(type);  CONSTEXPR_MOVE_CTOR(type)
+
 // ---------------------------------------------------------------------
 // -------------------------- COPY SEMANTICS ---------------------------
 // ---------------------------------------------------------------------

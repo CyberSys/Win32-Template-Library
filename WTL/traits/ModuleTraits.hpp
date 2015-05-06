@@ -79,6 +79,11 @@ namespace wtl
   
   //! \alias HModule - Shared module handle
   using HModule = Handle<::HMODULE>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HModule> - Define default module handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HModule> : reference_constant<HModule,HModule::npos> {}; 
 
 } //namespace wtl
 #endif // WTL_MODULE_TRAITS_HPP

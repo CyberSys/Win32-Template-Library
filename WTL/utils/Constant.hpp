@@ -76,6 +76,84 @@ namespace wtl
     // --------------------------------------- MUTATORS -------------------------------------
   };
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct reference_constant - Encapsulates a reference type compile-time constant
+  //! 
+  //! \tparam T - Integral or enumeration type  
+  //! \tparam VALUE - (Compile-time) Value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, const T& VALUE> 
+  struct reference_constant 
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = reference_constant<T,VALUE>;
+
+    //! \alias value_type - Define value type
+    using value_type = T;
+
+    //! \alias reference_type - Define reference type
+    using reference_type = const T&;
+
+//! \if CONSTEXPR_SDMI_CAP - Use static scope if SDMI supported
+#ifdef CONSTEXPR_SDMI_CAP
+    //! \var value - Define value
+    static constexpr value_type value = VALUE;
+#endif
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // reference_constant::reference_constant constexpr
+    //! Default construct
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr 
+    reference_constant()
+    {}
+    
+    // --------------------------------------- STATIC ---------------------------------------
+
+    // -------------------------------------- ACCESSORS -------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // reference_constant::operator() constexpr
+    //! Query value
+    //! 
+    //! \return reference_type - Reference to value
+    /////////////////////////////////////////////////////////////////////////////////////////
+  	constexpr 
+    reference_type operator ()() const noexcept 
+    { 
+//! \ifnot CONSTEXPR_SDMI_CAP - Copy-create 
+#ifndef CONSTEXPR_SDMI_CAP
+      return VALUE;
+#else
+      return value;
+#endif
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // reference_constant::operator reference_type constexpr
+    //! Implicit user conversion to reference type
+    //! 
+    //! \return reference_type - Reference to value
+    /////////////////////////////////////////////////////////////////////////////////////////
+  	constexpr
+    operator reference_type() const noexcept 
+    { 
+//! \ifnot CONSTEXPR_SDMI_CAP - Copy-create 
+#ifndef CONSTEXPR_SDMI_CAP
+      return VALUE;
+#else
+      return value;
+#endif
+    }
+    
+    // --------------------------------------- MUTATORS -------------------------------------
+  };
 
 
   /////////////////////////////////////////////////////////////////////////////////////////

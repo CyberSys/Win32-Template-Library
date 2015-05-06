@@ -146,6 +146,10 @@ namespace wtl
   //! \alias HBrush - Shared brush handle
   using HBrush = Handle<HBRUSH>;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HBrush> - Define default brush handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HBrush> : reference_constant<HBrush,HBrush::npos> {};
   
 } //namespace wtl
 #endif // WTL_BRUSH_TRAITS_HPP

@@ -298,7 +298,12 @@ namespace wtl
   
   //! \alias HResource - Resource handle
   using HResource = Handle<::HRSRC>;
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HResource> - Define default resource handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HResource> : reference_constant<HResource,HResource::npos> {}; 
+  
 } //namespace wtl
 #endif // WTL_RESOURCE_TRAITS_HPP
 

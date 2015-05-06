@@ -111,6 +111,11 @@ namespace wtl
   using HDeviceContext = Handle<::HDC>;
 
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HDeviceContext> - Define default DC handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HDeviceContext> : reference_constant<HDeviceContext,HDeviceContext::npos> {}; 
+
 } //namespace wtl
 #endif // WTL_DEVICE_CONTEXT_TRAITS_HPP
 

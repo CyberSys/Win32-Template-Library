@@ -139,6 +139,10 @@ namespace wtl
   //! \alias Atom - Window class atom
   using HAtom = Handle<::ATOM>;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HAtom> - Define default atom handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HAtom> : reference_constant<HAtom,HAtom::npos> {}; 
 
 } //namespace wtl
 #endif // WTL_WINDOW_CLASS_TRAITS_HPP

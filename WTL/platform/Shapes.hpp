@@ -41,9 +41,8 @@ namespace wtl
     // Point::Point constexpr
     //! Create empty point centred at origin
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr
-    Point() : x(default<T>()), 
-              y(default<T>())
+    constexpr Point() : x(default<T>()), 
+                        y(default<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -52,9 +51,8 @@ namespace wtl
     //! 
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr
-    Point(const ::POINT&  pt) : x(static_cast<T>(pt.x)), 
-                                y(static_cast<T>(pt.y))
+    constexpr Point(const ::POINT&  pt) : x(static_cast<T>(pt.x)), 
+                                          y(static_cast<T>(pt.y))
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +61,8 @@ namespace wtl
     //! 
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    Point(const ::POINTS&  pt) : x(static_cast<T>(pt.x)), 
-                                 y(static_cast<T>(pt.y))
+    constexpr Point(const ::POINTS&  pt) : x(static_cast<T>(pt.x)), 
+                                           y(static_cast<T>(pt.y))
     {}
 
 
@@ -77,7 +75,7 @@ namespace wtl
     //! \param[in] const x - X co-ordinate
     //! \param[in] const y - Y co-ordinate
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename A, typename B>
+    template <typename A, typename B> constexpr
     Point(const A X, const B Y) : x(static_cast<T>(X)), 
                                   y(static_cast<T>(Y))
     {}
@@ -108,7 +106,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return *this == EMPTY;
+      return *this == default<point_t>();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +145,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void  clear() 
     {
-      *this = EMPTY;
+      *this = default<point_t>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -194,8 +192,12 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<Point> - Define default values for 'Points' types
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<PointL> : literal_constant<PointL> { CONSTEXPR_CTOR(default_t); };
-  template <> struct default_t<PointF> : literal_constant<PointF> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<PointL> : reference_constant<PointL,PointL::EMPTY> {};
+  template <> struct default_t<PointF> : reference_constant<PointF,PointF::EMPTY> {};
+
+
+
+
 
 
   
@@ -338,9 +340,14 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<Size> - Define default values for 'Sizes' types
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<SizeL> : literal_constant<SizeL> { CONSTEXPR_CTOR(default_t); };
-  template <> struct default_t<SizeF> : literal_constant<SizeF> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<SizeL> : reference_constant<SizeL,SizeL::EMPTY> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<SizeF> : reference_constant<SizeF,SizeF::EMPTY> { CONSTEXPR_CTOR(default_t); };
   
+
+
+
+
+
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Rect - Encapsulates a rectangle of any type
@@ -676,10 +683,15 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<Rect> - Define default values for 'Rect' types
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <> struct default_t<RectL> : literal_constant<RectL> { CONSTEXPR_CTOR(default_t); };
-  template <> struct default_t<RectF> : literal_constant<RectF> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<RectL> : reference_constant<RectL,RectL::EMPTY> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<RectF> : reference_constant<RectF,RectF::EMPTY> { CONSTEXPR_CTOR(default_t); };
 
   
+
+
+
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Triangle - Encapsulates a triangle of any type
   //! 

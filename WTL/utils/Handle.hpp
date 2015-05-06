@@ -79,6 +79,9 @@ namespace wtl
 
     // ---------------------- TYPES & CONSTANTS -------------------
     
+    //! \typedef type - Define own type
+    using type = Handle<T>;
+
     //! \typedef alloc_t - Define handle allocator type
     using alloc_t = handle_alloc<T>;
 
@@ -109,6 +112,13 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::Handle
+    //! Create empty handle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    /*constexpr Handle() : Handle(npos)
+    {}*/
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Handle::Handle
     //! Create shared handle using appropriate allocator
     //! 
     //! \param[in] &&... args - [optional] Strongly typed variadic arguments
@@ -135,37 +145,8 @@ namespace wtl
                                       Storage(toPointer(h), [this](pointer_t ptr) { safeDelete(ptr); } )
     {}
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::Handle
-    //! Copy-create from another shared handle
-    //! 
-    //! \param[in] const& r - Another shared handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Handle(const Handle&) = default;
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::Handle
-    //! Move-create from another shared handle
-    //! 
-    //! \param[in] && r - Another shared handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Handle(Handle&&) = default;
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::operator=
-    //! Copy-assign from another shared handle
-    //! 
-    //! \param[in] const& r - Another shared handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Handle& operator=(const Handle&) = default;
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::operator=
-    //! Move-assign from another shared handle
-    //! 
-    //! \param[in] && r - Another shared handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Handle& operator=(Handle&&) = default;
+    DEFAULT_COPY(type);
+    DEFAULT_MOVE(type);
 
     // ------------------------- STATIC ---------------------------
   public:
@@ -320,6 +301,8 @@ namespace wtl
   //! \var Handle<T>::npos - 'No handle' sentinel value
   template <typename T>
   const Handle<T>   Handle<T>::npos = Handle<T>(handle_alloc<T>::npos, AllocType::WeakRef);
+
+  
 
 } // WTL namespace
 

@@ -111,7 +111,11 @@ namespace wtl
   //! \alias HMenu - Shared menu handle
   using HMenu = Handle<::HMENU>;
 
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<HMenu> - Define default menu handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<HMenu> : reference_constant<HMenu,HMenu::npos> {}; 
+
 } //namespace wtl
 #endif // WTL_MENU_TRAITS_HPP
 
