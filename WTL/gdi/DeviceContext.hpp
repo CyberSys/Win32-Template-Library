@@ -137,6 +137,9 @@ namespace wtl
                          ObjectStack<HFont>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \var ScreenDC - Screen device context
+    static DeviceContext  ScreenDC;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -515,7 +518,6 @@ namespace wtl
     HDeviceContext   Handle;    //!< DC Handle
   };
 
-
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator +=
   //! Select a drawing object into a device context
@@ -549,8 +551,6 @@ namespace wtl
     return dc;
   }
 
-  //! \var ScreenDC - Screen device context
-  extern DeviceContext  ScreenDC;
 
 }
 

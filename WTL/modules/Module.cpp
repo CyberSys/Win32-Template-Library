@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\library\Module.cpp
+//! \file wtl\modules\Module.cpp
 //! \brief Provides module implementation
 //! \date 7 March 2015
 //! \author Nick Crowley
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "WTL.hpp"
+#include "wtl/WTL.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

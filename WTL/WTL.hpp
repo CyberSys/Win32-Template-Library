@@ -128,6 +128,7 @@
 #include "platform/MenuFlags.hpp"
 #include "platform/WindowFlags.hpp"
 #include "platform/ControlStyles.hpp"
+#include "platform/Locale.hpp"
 
 // Platform Utilities:
 #include "platform/Path.hpp"
@@ -136,7 +137,6 @@
 #include "platform/Shapes.hpp"
 
 // Platform Traits:
-#include "traits/LocaleTraits.hpp"
 #include "traits/ResourceTraits.hpp"
 #include "traits/GlobalTraits.hpp"
 #include "traits/WindowClassTraits.hpp"

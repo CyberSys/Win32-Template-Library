@@ -1,75 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\library\Traits.cpp
-//! \brief Provides static storage for traits for compilers that dont fully support constexpr
-//! \date 7 March 2015
+//! \file wtl\gdi\StockObjects.cpp
+//! \brief Provides extended stock drawing objects
+//! \date 6 March 2015
 //! \author Nick Crowley
-//! \copyright © Nick Crowley. All rights reserved.
+//! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "WTL.hpp"
-
-// Debug
-wtl::MessageWindow<> wnd;
+#include "wtl/WTL.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // Console::flush 
-  //! Flushes the log-file output to disc
-  //////////////////////////////////////////////////////////////////////////////////////////
-  void Console::flush()
-  {
-    // Flush log-file
-    //logFile.flush();
-  }
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // Console::log
-  //! Write string to log with current attributes
-  //! 
-  //! \param[in] *str - String
-  //////////////////////////////////////////////////////////////////////////////////////////
-  void Console::log(const char* str)
-  {
-    // Write to log-file
-    //logFile.write(str, getAttributes());
-  }
-  
-  //! \var cdebug - Debug output
-  Console cdebug;
-}
-
-
-//! \namespace wtl - Windows template library
-namespace wtl
-{
-  //! \var enum_values<...>::values - Defines character encodings
-  const char*  enum_names<Encoding>::values[] = { "ANSI", "ASCII", "OEM", "MAC", "THREAD_ANSI", "SYMBOL", "UTF7", "UTF8", "UTF16" };
-
-  //! \var enum_values<...>::values - Defines HatchStyle values
-  const Encoding  enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
-                                                      Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
-  
-  //! \var enum_values<...>::value - Defines Colour values
-  const Colour  enum_values<Colour>::values[26] = {Colour::Black, Colour::Blue, Colour::DarkBlue, Colour::SkyBlue, Colour::Cyan, Colour::Teal, Colour::Lime, Colour::Teal, Colour::Green,
-                                                   Colour::Leaves, Colour::Forest, Colour::Yellow, Colour::Gold, Colour::Orange, Colour::Honey, Colour::Brown, Colour::Red, Colour::Rose,
-                                                   Colour::Pink, Colour::Purple, Colour::Magenta, Colour::Beige, Colour::Wheat, Colour::Snow, Colour::White, Colour::Invalid };
-  
-  //! \var enum_values<...>::value - Defines HatchStyle values
-  const HatchStyle  enum_values<HatchStyle>::values[6] = { HatchStyle::Horizontal, HatchStyle::Vertical, HatchStyle::ForwardDiagonal, 
-                                                           HatchStyle::BackwardDiagonal, HatchStyle::Cross, HatchStyle::CrossDiagonal };
-
-}
-
-
-//! \namespace wtl - Windows template library
-namespace wtl
-{
-  //! \var DeviceContext::ScreenDC - Screen device context
-  DeviceContext  ScreenDC = default<HDeviceContext>();
-
   //! Stock brushes
   const HBrush  StockBrush::Black(Colour::Black);       //!< Black brush
   const HBrush  StockBrush::Blue(Colour::Blue);        //!< Blue brush
@@ -99,7 +40,7 @@ namespace wtl
 
   //! Stock fonts
   const HFont  StockFont::System(StockObject::SystemFixedFont);
-  const HFont  StockFont::Tooltip(c_arr("MS Shell Dlg 2"), ScreenDC.getFontHeight(8));
+  const HFont  StockFont::Tooltip(c_arr("MS Shell Dlg 2"), DeviceContext::ScreenDC.getFontHeight(8));
   const HFont  StockFont::Window(StockObject::DefaultGuiFont);
   
   //! Stock pens
@@ -129,11 +70,5 @@ namespace wtl
   const HPen  StockPen::White(PenStyle::Solid, 1, Colour::White);       //!< White pen
   const HPen  StockPen::Null(StockObject::NullPen);                                     //!< Special: Null pen
   
-  //! \var LanguageId::Neutral - Define neutral language id
-  const LanguageId  LanguageId::Neutral(LANG_NEUTRAL,SUBLANG_NEUTRAL);
-
-  //! \var Resource::npos - Define 'Resource not found' sentinel value
-  const Resource  Resource::npos;
 }
-
 

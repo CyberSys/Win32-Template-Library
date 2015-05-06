@@ -37,6 +37,7 @@
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
     <ClInclude Include="platform\FileSearch.hpp" />
+    <ClInclude Include="platform\Locale.hpp" />
     <ClInclude Include="platform\MenuFlags.hpp" />
     <ClInclude Include="platform\Path.hpp" />
     <ClInclude Include="platform\ResourceId.hpp" />
@@ -62,7 +63,6 @@
     <ClInclude Include="traits\FontTraits.hpp" />
     <ClInclude Include="traits\GlobalTraits.hpp" />
     <ClInclude Include="traits\IconTraits.hpp" />
-    <ClInclude Include="traits\LocaleTraits.hpp" />
     <ClInclude Include="traits\MenuTraits.hpp" />
     <ClInclude Include="traits\ModuleTraits.hpp" />
     <ClInclude Include="traits\PenTraits.hpp" />
@@ -137,10 +137,12 @@
     <ClInclude Include="WTL.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Module.cpp" />
-    <ClCompile Include="Traits.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="gdi\DeviceContext.cpp" />
+    <ClCompile Include="gdi\StockObjects.cpp" />
+    <ClCompile Include="modules\Module.cpp" />
+    <ClCompile Include="platform\Locale.cpp" />
+    <ClCompile Include="traits\Traits.cpp" />
+    <ClCompile Include="utils\Console.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>

@@ -81,7 +81,7 @@ namespace wtl
     //! \param[in] type - Resource type
     //! \param[in] name - Resource identifier
     //! \param[in] lang - Resource language
-    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    //! \return Resource - Resource, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
     Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
@@ -91,7 +91,7 @@ namespace wtl
         return Resource(Handle, HResource(res, AllocType::Accquire));
 
       // [NOT FOUND] Return sentinel
-      return Resource::npos;
+      return default<Resource>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ namespace wtl
     //!
     //! \param[in] id - String identifier
     //! \param[in] lang - Resource language
-    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    //! \return Resource - Resource, possibly empty
     //!
     //! \throw wtl::invalid_argument - String ids must be numeric constants
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -173,23 +173,23 @@ namespace wtl
     //! \param[in] type - Resource type
     //! \param[in] name - Resource identifier
     //! \param[in] lang - Resource language
-    //! \return Resource - Resource if found, otherwise 'npos'
+    //! \return Resource - Resource, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
     Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
     {
-      Resource res = Resource::npos;
+      Resource res;
 
       // Search all modules for resource
       for (const element_t& m : *this)
       {
         // [FOUND] Find & return resource
-        if ((res = m.get().findResource(type, name, language)) != Resource::npos)
+        if ((res = m.get().findResource(type, name, language)) != default<Resource>())
           return res;
       }
       
-      // [NOT FOUND] Return 'npos'
-      return Resource::npos;
+      // [NOT FOUND] Return default
+      return default<Resource>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ namespace wtl
     //!
     //! \param[in] id - String identifier
     //! \param[in] lang - Resource language
-    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    //! \return Resource - Resource, possibly empty
     //!
     //! \throw wtl::invalid_argument - String ids must be numeric constants
     /////////////////////////////////////////////////////////////////////////////////////////

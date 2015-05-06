@@ -13,8 +13,6 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
- 
-
   //! \struct StockBrush - Provides stock brushes
   struct StockBrush
   {
@@ -47,7 +45,6 @@ namespace wtl
   };
 
 
-
   //! \struct StockFont - Provides stock fonts
   struct StockFont
   {
@@ -55,6 +52,7 @@ namespace wtl
                         Tooltip,       //!< Tooltip font
                         Window;        //!< Window font
   };
+
   
   //! \struct StockPen - Provides stock pens
   struct StockPen

@@ -176,9 +176,6 @@
     <ClInclude Include="resources\Resources.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="traits\LocaleTraits.hpp">
-      <Filter>Traits</Filter>
-    </ClInclude>
     <ClInclude Include="resources\DialogResource.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
@@ -422,13 +419,28 @@
     <ClInclude Include="platform\ResourceId.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="platform\Locale.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Traits.cpp">
-      <Filter>Library</Filter>
+    <ClCompile Include="utils\Console.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Module.cpp">
-      <Filter>Library</Filter>
+    <ClCompile Include="gdi\StockObjects.cpp">
+      <Filter>GDI</Filter>
+    </ClCompile>
+    <ClCompile Include="gdi\DeviceContext.cpp">
+      <Filter>GDI</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\Locale.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\Module.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="traits\Traits.cpp">
+      <Filter>Traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -21,9 +21,6 @@ namespace wtl
   {      
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \var npos - Sentinel value for 'Resource not found'
-    static const Resource npos;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     HModule     Module;     //!< Module containing resource
@@ -34,7 +31,7 @@ namespace wtl
     const void* Data;       //!< Resource data
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
-  protected:
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Resource::Resource
     //! Create empty
@@ -46,7 +43,6 @@ namespace wtl
     {
     }
 
-  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Resource::Resource
     //! Copy create
