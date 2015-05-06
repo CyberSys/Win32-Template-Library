@@ -396,49 +396,115 @@ namespace wtl
     public:
       /////////////////////////////////////////////////////////////////////////////////////////
       // WindowRectPropertyImpl::WindowRectPropertyImpl
-      //! Create with default value 
+      //! Create with empty rectangle
       //! 
       //! \param[in] const& wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowRectPropertyImpl(window_t& wnd) : base(wnd, default<WindowStyle>())
+      WindowRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
       {}
 
       // ----------------------- ACCESSORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
       // WindowRectPropertyImpl::get const
-      //! Get the window style
+      //! Get the window rectangle
       //! 
-      //! \return argument_t - Current window style
+      //! \return argument_t - Current window rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
       argument_t  get() const override
       {
-        // Get window style
-        return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+        // Query and return window rect 
+        ::GetWindowRect(this->Window, (::RECT*)const_cast<type*>(this)->Value);
+        return this->Value;
       }
 
       // ------------------------ MUTATORS -----------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
       // WindowRectPropertyImpl::set 
-      //! Set the window style
+      //! Set the window rectangle
       //! 
-      //! \param[in] style - New window style
+      //! \param[in] style - New window rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t style) override
+      void set(argument_t rc) override
       {
-        // Set window style
-        if (!getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
-          throw platform_error(HERE, "Unable to set window style");
+        MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
+
+        // [¬RESIZED] Add appropriate flag
+        if (this->Value.width() == rc.width() && this->Value.height() == rc.height())
+          flags |= MoveWindowFlags::NoSize;
+
+        // [¬MOVED] Add appropriate flag
+        if (this->Value.left == rc.left && this->Value.top == rc.top)
+          flags |= MoveWindowFlags::NoMove;
+
+        // Set window rect
+        if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+          throw platform_error(HERE, "Unable to set window position");
 
         // Update value
-        base::set(style);
+        base::set(rc);
       }
     };
 
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct ClientRectPropertyImpl - Implements the client rectangle property [Immutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct ClientRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::ImmutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = ClientRectPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<RectL,PropertyType::ImmutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------------ CONSTRUCTION ------------------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // ClientRectPropertyImpl::ClientRectPropertyImpl
+      //! Create with empty rectangle
+      //! 
+      //! \param[in] const& wnd - Owner client
+      /////////////////////////////////////////////////////////////////////////////////////////
+      ClientRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
+      {}
+
+      // ----------------------- ACCESSORS -----------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // ClientRectPropertyImpl::get const
+      //! Get the client rectangle
+      //! 
+      //! \return argument_t - Current client rectangle
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // Query and return client rect 
+        ::GetClientRect(this->Window, (::RECT*)const_cast<type*>(this)->Value);
+        return this->Value;
+      }
+
+      // ------------------------ MUTATORS -----------------------
+    };
+
+
   public:
+    //! \alias ClientRectProperty - Define client rectangle property type  
+    using ClientRectProperty = Property<ClientRectPropertyImpl,window_t>;
+
     //! \alias WindowFontProperty - Define window font property type  
     using WindowFontProperty = Property<WindowFontPropertyImpl,window_t>;
+    
+    //! \alias WindowRectProperty - Define window rectangle property type  
+    using WindowRectProperty = Property<WindowRectPropertyImpl,window_t>;
 
     //! \alias WindowStyleProperty - Define window style property type 
     using WindowStyleProperty = Property<WindowStylePropertyImpl,window_t>;
@@ -463,7 +529,9 @@ namespace wtl
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
 
+    ClientRectProperty               ClientRect;    //!< Client rectangle property
     WindowFontProperty               Font;          //!< Window font property
+    WindowRectProperty               WindowRect;    //!< Window rectangle property
     WindowStyleProperty              Style;         //!< Window style property
     WindowStyleExProperty            StyleEx;       //!< Extended window style property
     
@@ -484,10 +552,12 @@ namespace wtl
     //! \param[in] &cls - Registered window class 
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowBase(wndclass_t& cls) : Class(cls), 
+                                  ClientRect(*this),
                                   Font(*this),
                                   Handle(default<HWnd>()),
                                   Style(*this),
-                                  StyleEx(*this)
+                                  StyleEx(*this),
+                                  WindowRect(*this)
     {
       // Accept window creation by default
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
@@ -924,7 +994,8 @@ namespace wtl
       Font.init(StockObject::SystemFont);   
       Style.init(args.Style);
       StyleEx.init(args.StyleEx);
-
+      WindowRect.init(args.Rect);
+      
       // [Handled] Accept parameters
       return 0; 
     }

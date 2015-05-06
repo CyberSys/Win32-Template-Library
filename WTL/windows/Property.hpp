@@ -14,7 +14,18 @@
 namespace wtl
 {
   //! \enum PropertyType - Defines property types
-  enum class PropertyType : int32 { Mutable = 0, Immutable = 1, Reference = 2, Value = 4, MutableRef = Mutable|Reference, MutableValue = Mutable|Value };
+  enum class PropertyType : int32 
+  { 
+    Mutable = 0,        //!< Read/Write
+    Immutable = 1,      //!< Read only
+    Reference = 2,      //!< Reference type
+    Value = 4,          //!< Value type
+    
+    MutableRef = Mutable|Reference, 
+    MutableValue = Mutable|Value,
+    ImmutableValue = Immutable|Value,
+    ImmutableReference = Immutable|Reference,
+  };
 
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<PropertyType>  : std::true_type  {};
@@ -56,7 +67,7 @@ namespace wtl
 
     // ----------------------- REPRESENTATION ------------------------
   protected:
-    value_t   Value;      //!< Property value
+    value_t   Value;      //!< Property value  
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -321,7 +332,8 @@ namespace wtl
     //! 
     //! \param[in] auto value - New value  or  immutable reference to new value
     /////////////////////////////////////////////////////////////////////////////////////////
-    std::enable_if_t<!readonly>  set(argument_t value) 
+    template <typename = std::enable_if_t<!readonly>>
+    void  set(argument_t value) 
     {
       // Raise 'Changing'
       if (Changing.raise(Impl.get(), value))
