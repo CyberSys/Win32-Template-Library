@@ -47,7 +47,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     MenuItemInfo()
     {
-      wtl::clear(static_cast<base&>(*this));
+      wtl::clear(base_cast(*this));
       this->cbSize = sizeof(base);
     }
 

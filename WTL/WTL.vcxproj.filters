@@ -422,6 +422,9 @@
     <ClInclude Include="platform\Locale.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="casts\BaseCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\Console.cpp">
