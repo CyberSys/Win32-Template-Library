@@ -15,6 +15,16 @@ namespace wtl
 {
   
   //////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_integral_t - Defines an SFINAE expression requiring an integral type
+  //! 
+  //! \tparam OBJ - Object type
+  //! \tparam RET - [optional] Return type  (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename OBJ, typename RET = void>
+  using enable_if_integral_t = std::enable_if_t<std::is_integral<OBJ>::value, RET>;
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct enable_if_not_pod_t - Defines an SFINAE expression requiring an object of class type
   //! 
   //! \tparam OBJ - Object type
