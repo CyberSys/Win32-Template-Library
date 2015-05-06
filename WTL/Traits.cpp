@@ -8,6 +8,9 @@
 
 #include "WTL.hpp"
 
+// Debug
+wtl::MessageWindow<> wnd;
+
 //! \namespace wtl - Windows template library
 namespace wtl
 {

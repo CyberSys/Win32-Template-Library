@@ -62,7 +62,7 @@ namespace wtl
   template <typename T> constexpr
   T  default() noexcept
   {
-    return default_t<T>::value;
+    return default_t<T>();
   }
 }
 

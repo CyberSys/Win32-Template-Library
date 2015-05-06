@@ -94,7 +94,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static wndclass_t& getClass(HINSTANCE instance) 
     {
-      static SystemWindowClass<encoding>  std(SystemClass::Button);  //!< Standard system button class
+      static WindowClass<encoding>  std(SystemClass::Button);  //!< Standard system button class
       
       static WindowClass<encoding>  btn(instance,
                                         std.Name,
@@ -121,7 +121,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static ::WNDPROC getSystemWndProc() 
     {
-      static SystemWindowClass<encoding>  std(SystemClass::Button);  //!< Standard button system window class
+      static WindowClass<encoding>  std(SystemClass::Button);  //!< Standard button system window class
       
       // Return window proc
       return std.WndProc;

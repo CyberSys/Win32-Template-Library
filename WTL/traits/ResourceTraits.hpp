@@ -75,6 +75,16 @@ namespace wtl
     Ident  Value;     //!< Resource identifier value
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ResourceId::ResourceId
+    //! Create empty
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
+    ResourceId() 
+    {
+      Value.Numeral = 0;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ResourceId::ResourceId
@@ -82,6 +92,7 @@ namespace wtl
     //! 
     //! \param[in] const* name - Resource name
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     ResourceId(const char_t* name) 
     {
       Value.Name = name;
@@ -93,6 +104,7 @@ namespace wtl
     //! 
     //! \param[in] id - 16-bit ordinal representation
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     ResourceId(uint16 id) 
     {
       Value.Numeral = id;
@@ -104,69 +116,72 @@ namespace wtl
     //! 
     //! \param[in] type - Resource type
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     ResourceId(ResourceType type) 
     {
       Value.Numeral = enum_cast(type);
     }
 
-    // --------------------------------------- STATIC ---------------------------------------
+    CONSTEXPR_COPY_CTOR(ResourceId);
+    CONSTEXPR_MOVE_CTOR(ResourceId);
+    DEFAULT_COPY_ASSIGN(ResourceId);
+    DEFAULT_MOVE_ASSIGN(ResourceId);
 
-    //! \var npos - 'No resource' sentinel value
-    static const ResourceId npos;
+    // --------------------------------------- STATIC ---------------------------------------
 
     // -------------------------------------- ACCESSORS --------------------------------------			
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceId::isOrdinal const
+    // ResourceId::isOrdinal constexpr 
     //! Queries whether the Id is numeric 
     //! 
     //! \return bool - True iff ordinal representation
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool isOrdinal() const
+    constexpr bool isOrdinal() const noexcept 
     {
       return IS_INTRESOURCE(Value.Numeral);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceId::isString const
+    // ResourceId::isString constexpr 
     //! Queries whether the Id is a string 
     //! 
     //! \return bool - True iff string representation
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool isString() const
+    constexpr bool isString() const noexcept 
     {
       return !IS_INTRESOURCE(Value.Numeral);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceId::toOrdinal const
+    // ResourceId::toOrdinal constexpr 
     //! Get the Ordinal representation
     //! 
     //! \return uint16 - Ordinal representation
     /////////////////////////////////////////////////////////////////////////////////////////
-    uint16 toOrdinal() const
+    constexpr uint16 toOrdinal() const noexcept 
     {
       return static_cast<uint16>(Value.Numeral);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceId::toString const
+    // ResourceId::toString constexpr 
     //! Get the string representation
     //! 
     //! \return const char_t* - String representation
     /////////////////////////////////////////////////////////////////////////////////////////
-    const char_t* toString() const
+    constexpr const char_t* toString() const noexcept 
     {
       return Value.Name;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceId::operator char_t* const
+    // ResourceId::operator const char_t* constexpr 
     //! Get string representation of resource identifier 
     //! 
     //! \return char_t* - String representation 
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator const char_t*() const
+    constexpr operator const char_t*() const noexcept
     {
       return Value.Name;
     }
@@ -181,10 +196,12 @@ namespace wtl
   //! \alias ResourceIdW - UTF16 Resource identifier
   using ResourceIdW = ResourceId<Encoding::UTF16>;
   
-  //! \var npos - Define 'No resource' sentinel value
-  template <Encoding ENC>
-  const ResourceId<ENC>  ResourceId<ENC>::npos = ResourceId<ENC>(default<uint16>());
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_t<ResourceId> - Define default values for 'ResourceId' types
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <> struct default_t<ResourceIdA> : literal_constant<ResourceIdA> { CONSTEXPR_CTOR(default_t); };
+  template <> struct default_t<ResourceIdW> : literal_constant<ResourceIdW> { CONSTEXPR_CTOR(default_t); };
+
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::resource_id

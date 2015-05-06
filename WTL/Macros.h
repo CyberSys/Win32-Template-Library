@@ -23,8 +23,8 @@
 
 //! \if __clang__ - Clang
 #ifdef __clang__
-  //! \def CONSTEXPR_CAP - Enabled iff compiler provides full constexpr support
-  #define CONSTEXPR_CAP
+  //! \def CONSTEXPR_SDMI_CAP - Enabled iff compiler supports constexpr static data member initialization 
+  #define CONSTEXPR_SDMI_CAP
 
 //! \if _MSC_VER - Visual Studio 
 #elif _MSC_VER 
@@ -33,8 +33,7 @@
 
   //! \if _MSC_VER >= 1900 - Visual Studio 2015
   #if _MSC_VER >= 1900
-    //! \def CONSTEXPR_CAP - Enabled iff compiler provides full constexpr support
-    //#define CONSTEXPR_CAP
+    
   #endif
 #endif
 
@@ -67,7 +66,7 @@
 // ---------------------------------------------------------------------
 
 //! \def CONSTEXPR_CTOR - Enables constexpr default-construction
-#define CONSTEXPR_CTOR(type)        constexpr type() noexcept = default
+#define CONSTEXPR_CTOR(type)        constexpr type() noexcept {}
 
 //! \def CONSTEXPR_COPY_CTOR - Enables constexpr copy-construction
 #define CONSTEXPR_COPY_CTOR(type)   constexpr type(const type& r) noexcept = default

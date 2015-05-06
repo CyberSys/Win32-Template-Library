@@ -52,6 +52,52 @@ namespace wtl
   };
 
   
+  ///////////////////////////////////////////////////////////////////////////////
+  //! \struct MessageWindow - Provides a message-only window
+  //! 
+  //! \tparam ENC - Window charactrer encoding (UTF16 if unspecified)
+  ///////////////////////////////////////////////////////////////////////////////
+  template <wtl::Encoding ENC = wtl::Encoding::UTF16>
+  struct MessageWindow : wtl::WindowBase<ENC>
+  {
+    // ------------------------ TYPES --------------------------
+  
+    //! \alias base - Define base type
+    using base = wtl::WindowBase<ENC>;
+
+    //! \alias wndclass_t - Inherit window class type
+    using wndclass_t = typename base::wndclass_t;
+
+    //! \var encoding - Inherit window character encoding
+    static constexpr wtl::Encoding  encoding = base::encoding;
+
+    // -------------------- REPRESENTATION ---------------------
+  
+    // --------------------- CONSTRUCTION ----------------------
+  
+    ///////////////////////////////////////////////////////////////////////////////
+    // MessageWindow::MessageWindow
+    //! Create a message-only window
+    ///////////////////////////////////////////////////////////////////////////////
+    MessageWindow() : base(getClass())
+    {}
+  
+    // ------------------------ STATIC -------------------------
+  
+    ///////////////////////////////////////////////////////////////////////////////
+    // MessageWindow::getClass 
+    //! Get the window class
+    //! 
+    //! \return wndclass_t& - Window class 
+    ///////////////////////////////////////////////////////////////////////////////
+    static wndclass_t& getClass() 
+    {
+      static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
+
+      // Return singleton
+      return std;
+    }
+  };
 
 }
 

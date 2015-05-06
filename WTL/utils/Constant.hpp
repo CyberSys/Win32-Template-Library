@@ -77,6 +77,7 @@ namespace wtl
   };
 
 
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct literal_constant - Encapsulates a literal/reference compile-time constant 
   //! 
@@ -94,9 +95,12 @@ namespace wtl
 
     //! \alias value_type - Define value type
     using value_type = T;
-
+  
+//! \if CONSTEXPR_SDMI_CAP - Use static scope if SDMI supported
+#ifdef CONSTEXPR_SDMI_CAP
     //! \var value - Define value
-    static constexpr value_type value();
+    static constexpr value_type value = value_type();
+#endif
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
@@ -123,7 +127,12 @@ namespace wtl
   	constexpr 
     value_type operator ()() const noexcept 
     { 
-      return value; 
+//! \ifnot CONSTEXPR_SDMI_CAP - Default construct
+#ifndef CONSTEXPR_SDMI_CAP
+      return value_type();
+#else
+      return value;
+#endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -135,11 +144,17 @@ namespace wtl
   	constexpr
     operator value_type() const noexcept 
     { 
-      return value; 
+//! \ifnot CONSTEXPR_SDMI_CAP - Default construct
+#ifndef CONSTEXPR_SDMI_CAP
+      return value_type();
+#else
+      return value;
+#endif
     }
     
     // --------------------------------------- MUTATORS -------------------------------------
   };
+
 }
 
 
