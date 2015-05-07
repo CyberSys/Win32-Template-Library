@@ -25,6 +25,9 @@ namespace wtl
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias type - Define own type
+    using type = WindowBase<ENC>;
+    
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<ENC>;
     
@@ -34,8 +37,23 @@ namespace wtl
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<ENC>;
     
-    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
-    using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
+    //! \alias wndclass_t - Window class type
+    using wndclass_t = WindowClass<ENC>;
+    
+    //! \alias wndmenu_t - Window menu type
+    using wndmenu_t = WindowMenu<ENC>;
+
+    //! \alias wndproc_t - Win32 Window procedure type
+    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32, WPARAM, LPARAM);
+
+    //! \alias wtlproc_t - WTL Window procedure type
+    using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  // = decltype(onMessage);
+
+    //! \alias window_t - Define own type
+    using window_t = type;
+    
+    //! \var encoding - Define window character encoding
+    static constexpr Encoding encoding = ENC;
 
     //! \alias ActionQueue - Define gui command queue type
     using ActionQueue = ActionQueue<ENC>;
@@ -87,6 +105,9 @@ namespace wtl
         return *this;
       }
     };
+    
+    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
+    using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
 
     //! \alias WindowCollection - Window collection type
     using WindowCollection = List<WindowBase*>;
@@ -101,29 +122,81 @@ namespace wtl
     using ActiveWindowCollection = WindowHandleCollection;
 
     //! \alias ChildWindowCollection - Define child window collection type
-    using ChildWindowCollection = WindowIdCollection;
-    
-    //! \alias SubClassCollection - Define subclassed windows collection
-    using SubClassCollection = List<SubClass>;
-    
-    //! \alias wndclass_t - Window class type
-    using wndclass_t = WindowClass<ENC>;
-    
-    //! \alias wndmenu_t - Window menu type
-    using wndmenu_t = WindowMenu<ENC>;
+    struct ChildWindowCollection : WindowIdCollection
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+      // ----------------------------------- REPRESENTATION -----------------------------------
+    protected:
+      window_t&  Parent;        //!< Parent/owner of collection
+      
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // ChildWindowCollection::ChildWindowCollection
+      //! Create empty collection
+      //! 
+      //! \param[in] &parent - Parent/owner of collection
+      /////////////////////////////////////////////////////////////////////////////////////////
+      ChildWindowCollection(window_t& parent) : Parent(parent)
+      {}
+      
+      // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
 
-    //! \alias wndproc_t - Win32 Window procedure type
-    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32, WPARAM, LPARAM);
+      // ----------------------------------- STATIC METHODS -----------------------------------
 
-    //! \alias wtlproc_t - WTL Window procedure type
-    using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  // = decltype(onMessage);
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
-    //! \alias window_t - Define own type
-    using window_t = WindowBase<ENC>;
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // ChildWindowCollection::insert
+      //! Insert child window into collection
+      //! 
+      //! \tparam ENC - Window text string encoding
+      //! \tparam LEN - Window text buffer capacity
+      //! \tparam IDENT - Window identifier type
+      //! \tparam STYLE - Window style type
+      //!
+      //! \param[in,out] &child - Child window object  (Handle must not exist)
+      //! \param[in] const& text - Window text
+      //! \param[in] const& rc - Initial position
+      //! \param[in] id - Window id
+      //! \param[in] style - Window styles
+      //! \param[in] exStyle - [optional] Extended styles (default is no extended styles)
+      //! \param[in] const* menu - [optional] Window Menu (default is no window menu)
+      //! 
+      //! \throw wtl::logic_error - Window already exists
+      //! \throw wtl::platform_error - Unable to create window
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <Encoding ENC, unsigned LEN, typename IDENT = WindowId, typename STYLE = WindowStyle>
+      void insert(window_t& child, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
+      {
+        // Ensure child doesn't already exist
+        if (child.Handle.exists())
+          throw logic_error(HERE, "Window already exists");
+
+        try
+        {
+          // Create child window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
+          child.Handle = HWnd(child.Class.Instance, child.Class.Name, &child, static_cast<WindowId>(id), static_cast<WindowStyle>(style), exStyle, CharArray<encoding,LEN>(text), rc, parent.handle());
+
+          // Add to collection
+          this->emplace(static_cast<WindowId>(id), &child);
+        }
+        // [ERROR] Failed to create
+        catch (platform_error& e)
+        {
+          // Remove from collection
+          this->erase(static_cast<WindowId>(id));
+
+          // Log & rethrow
+          cdebug.log(HERE, e);
+          throw;
+        }
+      }
+    };
     
-    //! \var encoding - Define window character encoding
-    static constexpr Encoding encoding = ENC;
-
     //! \enum WindowType - Define window types
     enum class WindowType
     {
@@ -159,7 +232,10 @@ namespace wtl
       WindowProc  WndProc;    //!< Window procedure
       WindowType  Type;       //!< Window type
     };
-
+    
+    //! \alias SubClassCollection - Define subclassed windows collection
+    using SubClassCollection = List<SubClass>;
+    
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowPropertyImpl - Base class for window properties
@@ -373,7 +449,6 @@ namespace wtl
       }
     };
 
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowRectPropertyImpl - Implements the window rectangle property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -447,7 +522,6 @@ namespace wtl
       }
     };
 
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ClientRectPropertyImpl - Implements the client rectangle property [Immutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -553,6 +627,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowBase(wndclass_t& cls) : Class(cls), 
                                   ClientRect(*this),
+                                  Children(*this),
                                   Font(*this),
                                   Handle(default<HWnd>()),
                                   Style(*this),
