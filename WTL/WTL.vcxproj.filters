@@ -428,6 +428,9 @@
     <ClInclude Include="utils\Zero.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="casts\ConstExprCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\Console.cpp">

@@ -97,6 +97,7 @@
 #include "casts/EnumCast.hpp"
 #include "casts/BooleanCast.hpp"
 #include "casts/BaseCast.hpp"
+#include "casts/ConstExprCast.hpp"
 
 // Utilities: 
 #include "utils/FormatSpec.hpp"

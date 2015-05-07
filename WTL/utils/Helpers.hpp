@@ -54,23 +54,6 @@ namespace wtl
   struct is_covariant : std::is_base_of<BASE<T>, DERIVED<T>>
   {};
   
-
-  // --------------------------------- CONSTEXPR ---------------------------------
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::meta constexpr
-  //! Forces compile-time evaluation of an expression
-  //! 
-  //! \param[in] result - Input
-  //! \return T - Returns copy of input
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> constexpr 
-  T  meta(T result)
-  {
-    static constexpr T var = result;
-
-    return var;
-  };
 }
 
 

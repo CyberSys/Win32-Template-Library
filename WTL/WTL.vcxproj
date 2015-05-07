@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="casts\BaseCast.hpp" />
     <ClInclude Include="casts\BooleanCast.hpp" />
+    <ClInclude Include="casts\ConstExprCast.hpp" />
     <ClInclude Include="casts\EnumCast.hpp" />
     <ClInclude Include="casts\OpaqueCast.hpp" />
     <ClInclude Include="casts\StaticPtrCast.hpp" />
