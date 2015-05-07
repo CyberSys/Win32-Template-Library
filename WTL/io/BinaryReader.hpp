@@ -22,7 +22,7 @@ namespace wtl
   template <typename STREAM>
   struct BinaryReader 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \typedef delegate_t - Defines signature of output overload
     typedef BinaryReader<STREAM>& (*delegate_t)(BinaryReader<STREAM>&);
@@ -39,7 +39,7 @@ namespace wtl
     //! \typedef stream_t - Stream type
     typedef STREAM stream_t;
     
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // BinaryReader::BinaryReader 
@@ -63,11 +63,11 @@ namespace wtl
     // Copy semantics determined by stream type
     DEFAULT_COPY(BinaryReader);
 	
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // BinaryReader::read

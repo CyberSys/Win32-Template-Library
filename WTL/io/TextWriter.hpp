@@ -22,7 +22,7 @@ namespace wtl
   template <typename STREAM>
   struct TextWriter 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \typedef delegate_t - Defines signature of output overload
     typedef TextWriter& (*delegate_t)(TextWriter&);
@@ -43,7 +43,7 @@ namespace wtl
     /*template <unsigned LENGTH>
     using literal_t = const element_t (&)[LENGTH];*/
 
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextWriter::TextWriter 
@@ -68,9 +68,9 @@ namespace wtl
     DEFAULT_COPY(TextWriter);
     DEFAULT_MOVE(TextWriter);
 	
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // TextWriter::used() const
@@ -120,7 +120,7 @@ namespace wtl
       return Stream.begin();
     }
     
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextWriter::flush

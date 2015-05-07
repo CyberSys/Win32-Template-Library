@@ -22,7 +22,7 @@ namespace wtl
   template <typename STREAM>
   struct TextReader 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \typedef delegate_t - Defines signature of input overload
     typedef TextReader& (*delegate_t)(TextReader&);
@@ -39,7 +39,7 @@ namespace wtl
     //! \typedef stream_t - Stream type
     typedef STREAM stream_t;
     
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextReader::TextReader 
@@ -63,11 +63,11 @@ namespace wtl
     // Copy semantics determined by stream type
     DEFAULT_COPY(TextReader);
 	
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextReader::match

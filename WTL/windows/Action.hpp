@@ -51,7 +51,7 @@ namespace wtl
     //! \alias revert_t - Define undo functor type
     using revert_t = std::function<void ()>;
 
-    // ----------------------- REPRESENTATION ------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     CommandId      Ident;           //!< Command Id
     name_t         Name;            //!< Command Name
@@ -61,7 +61,7 @@ namespace wtl
     execute_t      ExecuteFn;       //!< Command execution functor
     revert_t       RevertFn;        //!< Command reversion functor
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Action::Action
@@ -102,7 +102,7 @@ namespace wtl
     virtual ~Action() 
     {}
     
-    // -------------------------------------- ACCESSORS --------------------------------------			
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Action::clone const
@@ -179,7 +179,7 @@ namespace wtl
       return ActionState::Enabled;
     }
     
-    // --------------------------------------- MUTATORS --------------------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Action::execute 

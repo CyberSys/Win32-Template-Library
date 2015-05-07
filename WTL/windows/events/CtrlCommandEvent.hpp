@@ -50,7 +50,7 @@ namespace wtl
     HWnd      Sender;    //!< Originator window handle
     event_t   Message;   //!< Notification code
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<COMMAND>::ControlEventArgs
@@ -86,9 +86,9 @@ namespace wtl
 
     DEFAULT_COPY(ControlEventArgs);
     
-    // --------------------------------------- STATIC ---------------------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // -------------------------------------- ACCESSORS --------------------------------------			
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<COMMAND>::reflect const
@@ -102,7 +102,7 @@ namespace wtl
       return send_message<encoding,message+WindowMessage::REFLECT>(Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
     }
     
-    // --------------------------------------- MUTATORS --------------------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   };
 

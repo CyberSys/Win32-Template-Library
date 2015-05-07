@@ -24,7 +24,7 @@ namespace wtl
   template <typename STREAM>
   struct XmlReader 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \typedef XPathNode - Single node returned by an x-path query
     typedef pugi::xpath_node  XPathNode;
@@ -41,7 +41,7 @@ namespace wtl
     //! \typedef stream_t - Stream type
     typedef STREAM  stream_t;
 
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // XmlReader::XmlReader 
@@ -72,7 +72,7 @@ namespace wtl
     {
     }
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlReader::evaluate
@@ -281,7 +281,7 @@ namespace wtl
       return Document.root();
     }
     
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:

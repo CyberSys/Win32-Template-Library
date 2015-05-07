@@ -76,7 +76,7 @@ namespace wtl
     //static_assert(std::is_convertible<T,HANDLE>::value, "Only Win32 handles are supported");
     static_assert(sizeof(T) <= sizeof(HANDLE), "Unsupported handle size");
 
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \typedef type - Define own type
     using type = Handle<T>;
@@ -147,7 +147,7 @@ namespace wtl
     DEFAULT_COPY(type);
     DEFAULT_MOVE(type);
 
-    // ------------------------- STATIC ---------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::toHandle
@@ -173,7 +173,7 @@ namespace wtl
       return (pointer_t)(long32)h;
     }
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::exists const
@@ -244,7 +244,7 @@ namespace wtl
       return !operator==(r);
     }
 
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::release

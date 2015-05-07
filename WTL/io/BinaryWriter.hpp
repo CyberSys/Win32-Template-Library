@@ -22,7 +22,7 @@ namespace wtl
   template <typename STREAM>
   struct BinaryWriter 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \typedef delegate_t - Defines signature of output overload
     typedef BinaryWriter<STREAM>& (*delegate_t)(BinaryWriter<STREAM>&);
@@ -39,7 +39,7 @@ namespace wtl
     //! \typedef stream_t - Stream type
     typedef STREAM stream_t;
     
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // BinaryWriter::BinaryWriter 
@@ -63,9 +63,9 @@ namespace wtl
     
     DEFAULT_COPY(BinaryWriter);   //!< Copy semantics determined by stream type
 	
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     //////////////////////////////////////////////////////////////////////////////////////////
     // TextWriter::remaining() const
@@ -81,7 +81,7 @@ namespace wtl
       return Stream.remaining();
     }
     
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // BinaryWriter::write

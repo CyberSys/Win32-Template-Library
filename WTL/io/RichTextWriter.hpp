@@ -23,7 +23,7 @@ namespace wtl
   template <typename STREAM>
   struct RichTextWriter : TextWriter<STREAM>
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \typedef base - Base class alias
     typedef TextWriter<STREAM> base;
@@ -61,7 +61,7 @@ namespace wtl
     const static COLORREF Yellow  = RGB(249,192,0);
     const static COLORREF White   = RGB(255,255,255);
 
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // RichTextWriter::RichTextWriter 
@@ -92,11 +92,11 @@ namespace wtl
     DEFAULT_COPY(RichTextWriter);     //!< Copy semantics determined by stream type
     DEFAULT_MOVE(RichTextWriter);     //!< Move semantics determined by stream type
 	
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // RtfWriter::close()

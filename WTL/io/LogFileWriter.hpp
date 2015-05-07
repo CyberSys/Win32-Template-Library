@@ -22,7 +22,7 @@ namespace wtl
   template <typename STREAM>
   struct LogFileWriter : RichTextWriter<STREAM>
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \typedef base - Defines base type
     typedef RichTextWriter<STREAM> base;
@@ -51,7 +51,7 @@ namespace wtl
       FOREGROUND_GREY = FOREGROUND_INTENSITY|FOREGROUND_BLACK,
     };
 
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // LogFileWriter::LogFileWriter 
@@ -100,9 +100,9 @@ namespace wtl
     DEFAULT_MOVE(LogFileWriter);
     DEFAULT_COPY_ASSIGN(LogFileWriter);
 	
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // LogFileWriter::close

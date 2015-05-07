@@ -65,11 +65,11 @@ namespace wtl
     //! \alias argument_t - Define accessor/mutator argument type (Value vs Reference)
     using argument_t = std::conditional_t<reference, reference_t, value_t>;
 
-    // ----------------------- REPRESENTATION ------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     value_t   Value;      //!< Property value  
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::PropertyImpl
@@ -91,7 +91,7 @@ namespace wtl
     DISABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
     DISABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
 
-    // -------------------------------------- ACCESSORS --------------------------------------			
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::get const
@@ -104,7 +104,7 @@ namespace wtl
       return Value;
     }
 
-    // --------------------------------------- MUTATORS --------------------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::set 
@@ -153,12 +153,12 @@ namespace wtl
     //! \alias mutator_t - Define mutator delegate type
     using mutator_t = std::function<void (argument_t)>;
 
-    // ----------------------- REPRESENTATION ------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     accessor_t  Accessor;      //!< Accessor delegate
     mutator_t   Mutator;       //!< Mutator delegate
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyFunctor::PropertyFunctor
@@ -190,7 +190,7 @@ namespace wtl
     DISABLE_COPY(PropertyFunctor);       //!< Copy semantics determined by value type
     DISABLE_MOVE(PropertyFunctor);       //!< Move semantics determined by value type
     
-    // -------------------------------------- ACCESSORS --------------------------------------			
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyFunctor::get const
@@ -203,7 +203,7 @@ namespace wtl
       return Accessor();
     }
 
-    // --------------------------------------- MUTATORS --------------------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyFunctor::set 
@@ -267,7 +267,7 @@ namespace wtl
     //! \var reference - Define whether property is a reference or value type
     static constexpr bool reference = IMPL::reference;
 
-    // ----------------------- REPRESENTATION ------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     ChangedEvent   Changed;     //!< Raised after value changes
     ChangingEvent  Changing;    //!< Raised before value changes
@@ -275,7 +275,7 @@ namespace wtl
   protected:
     provider_t     Impl;        //!< Implementation provider
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::Property
@@ -300,7 +300,7 @@ namespace wtl
     virtual ~Property() 
     {}
     
-    // -------------------------------------- ACCESSORS --------------------------------------			
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::get const
@@ -324,7 +324,7 @@ namespace wtl
       return get();
     }*/
 
-    // --------------------------------------- MUTATORS --------------------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::set 

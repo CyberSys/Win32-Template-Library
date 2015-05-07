@@ -51,7 +51,7 @@ namespace wtl
     int32       ClassStorage,      //!< Size of class storage, in bytes
                 WindowStorage;     //!< Size of window storage, in bytes
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
@@ -174,7 +174,7 @@ namespace wtl
     WindowClass(const WindowClass&) = default;
     WindowClass(WindowClass&&) = default;
 
-    // --------------------------------------- STATIC ---------------------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::getSystemClassName
@@ -229,9 +229,9 @@ namespace wtl
       throw invalid_argument(HERE, "Unrecognised system class");
     }
 
-    // -------------------------------------- ACCESSORS --------------------------------------			
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
-    // --------------------------------------- MUTATORS --------------------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
   };
 

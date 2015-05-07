@@ -25,7 +25,7 @@ namespace wtl
   template <typename ELEMENT>
   struct LocalFileStream 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \typedef distance_t - Stream distance type
     typedef ulong32  distance_t;
@@ -36,7 +36,7 @@ namespace wtl
     //! \typedef position_t - Stream position type
     typedef ulong32  position_t;
 
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // LocalFileStream::LocalFileStream
@@ -100,7 +100,7 @@ namespace wtl
     //DEFAULT_COPY(LocalFileStream);
     //DEFAULT_COPY_ASSIGN(LocalFileStream);
 
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
   protected:
     //////////////////////////////////////////////////////////////////////////////////////////
     // LocalFileStream::LocalFileStream
@@ -125,7 +125,7 @@ namespace wtl
 
       throw wtl::invalid_argument(HERE, "Unrecognised file access type");
     }
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // LocalFileStream::length const
@@ -219,7 +219,7 @@ namespace wtl
       return Handle;
     }
     
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     //////////////////////////////////////////////////////////////////////////////////////////
     // LocalFileStream::operator=

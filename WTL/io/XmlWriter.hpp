@@ -40,7 +40,7 @@ namespace wtl
     //! \var Type - Element type
     static constexpr ElementType  Type = TYPE;
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlElement::XmlElement
@@ -123,7 +123,7 @@ namespace wtl
   template <typename STREAM>
   struct XmlWriter : TextWriter<STREAM>
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \typedef stream_t - Stream type
     typedef STREAM stream_t;
@@ -143,7 +143,7 @@ namespace wtl
     //! \typedef position_t - Stream position type
     typedef typename stream_t::position_t position_t;
     
-    // ----------------------- CONSTRUCTION -----------------------
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlWriter::XmlWriter 
@@ -167,11 +167,11 @@ namespace wtl
     
     DEFAULT_COPY(XmlWriter);    //!< Copy semantics determined by stream type
 	
-	  // ------------------------- STATIC ---------------------------
+	  // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
