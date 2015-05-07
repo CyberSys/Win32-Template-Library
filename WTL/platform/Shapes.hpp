@@ -21,7 +21,7 @@ namespace wtl
   template <typename T>
   struct Point 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias point_t - Defines point type
     using point_t = Point<T>;
@@ -34,8 +34,13 @@ namespace wtl
     
     //! \var native - Whether binary compatible with ::POINT
     static constexpr bool native = sizeof(value_t) == sizeof(long32);
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ----------------------- CONSTRUCTION -----------------------
+    value_t  x,       //!< X co-ordinate
+             y;       //!< Y co-ordinate
+
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::Point constexpr
@@ -94,9 +99,9 @@ namespace wtl
     ~Point()
     {}
 
-    // ------------------------- STATIC ---------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
   
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:  
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::empty const
@@ -137,7 +142,7 @@ namespace wtl
                      y - static_cast<T>(pt.y)); 
     }
 
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::clear
@@ -171,11 +176,6 @@ namespace wtl
     {
       return reinterpret_cast<::POINT*>(this);
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    value_t  x,       //!< X co-ordinate
-             y;       //!< Y co-ordinate
   };
   
   //! \var Point<T>::EMPTY - 'Empty' sentinel value 
@@ -200,7 +200,7 @@ namespace wtl
   template <typename T>
   struct Size 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias point_t - Defines point of matching type
     using point_t = Point<T>;
@@ -216,8 +216,13 @@ namespace wtl
 
     //! \var native - Whether binary compatible with ::SIZE
     static constexpr bool native = sizeof(value_t) == sizeof(long32);
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ----------------------- CONSTRUCTION -----------------------
+    value_t  width,        //!< Width extent
+             height;       //!< Height extent
+
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::Size constexpr
@@ -260,9 +265,9 @@ namespace wtl
     ~Size()
     {}
 
-    // ------------------------- STATIC ---------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
   
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::empty const
@@ -275,7 +280,7 @@ namespace wtl
       return *this == EMPTY;
     }
 
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::clear
@@ -309,11 +314,6 @@ namespace wtl
     {
       return reinterpret_cast<::SIZE*>(this);
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    value_t  width,        //!< Width extent
-             height;       //!< Height extent
   };
   
   
@@ -339,7 +339,7 @@ namespace wtl
   template <typename T>
   struct Rect
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias point_t - Defines point of matching type
     using point_t = Point<T>;
@@ -355,8 +355,15 @@ namespace wtl
 
     //! \var native - Whether binary compatible with ::RECT
     static constexpr bool native = sizeof(value_t) == sizeof(long32);
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ----------------------- CONSTRUCTION -----------------------
+    value_t  left,        //!< Left extent
+             top,         //!< Top extent
+             right,       //!< Right extent
+             bottom;      //!< Bottom extent
+
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::Rect constexpr
@@ -451,9 +458,9 @@ namespace wtl
     ~Rect()
     {}
 
-    // ------------------------- STATIC ---------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
   
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::centre const
@@ -568,7 +575,7 @@ namespace wtl
                     right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
     }
     
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::clear
@@ -642,13 +649,6 @@ namespace wtl
     {
       return reinterpret_cast<::RECT*>(this);
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    value_t  left,        //!< Left extent
-             top,         //!< Top extent
-             right,       //!< Right extent
-             bottom;      //!< Bottom extent
   };
   
   //! \var Rect<T>::EMPTY - 'Empty' sentinel value 
@@ -674,7 +674,7 @@ namespace wtl
   template <typename T>
   struct Triangle 
   {
-    // ---------------------- TYPES & CONSTANTS -------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias point_t - Defines point type
     using point_t = Point<T>;
@@ -690,8 +690,12 @@ namespace wtl
 
     //! \var EMPTY - Empty sentinel value 
     //static constexpr size_t EMPTY = size_t();
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ----------------------- CONSTRUCTION -----------------------
+    point_t  Points[3];     //!< Points
+
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Triangle::Triangle constexpr
@@ -745,9 +749,9 @@ namespace wtl
     /*virtual ~Triangle()
     {};*/
 
-    // ------------------------- STATIC ---------------------------
+    // ----------------------------------- STATIC METHODS -----------------------------------
   
-    // ------------------------ ACCESSORS -------------------------
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Triangle::empty const
@@ -760,7 +764,7 @@ namespace wtl
       return Points[0].empty() && Points[1].empty() && Points[2].empty();
     };
 
-    // ------------------------- MUTATORS -------------------------
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Triangle::operator const ::POINT*
@@ -773,10 +777,6 @@ namespace wtl
     {
       return reinterpret_cast<const ::POINT*>(Points);
     }
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    point_t  Points[3];     //!< Points
   };
   
   //! \alias TriangleL - Triangle using long32 fields
