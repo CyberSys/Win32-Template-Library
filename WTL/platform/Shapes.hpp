@@ -182,7 +182,7 @@ namespace wtl
   template <typename T>
   const Point<T>  Point<T>::EMPTY;
 
-  //! \alias PointL - Point using long32 fields
+  //! \alias PointL - Point using long32 fields (binary compatible with Win32 ::RECT)
   using PointL = Point<long32>;
   
   //! \alias PointF - Point using floating point fields
@@ -322,7 +322,7 @@ namespace wtl
   const Size<T>  Size<T>::EMPTY;
 
   
-  //! \alias SizeL - Size using long32 fields
+  //! \alias SizeL - Size using long32 fields (binary compatible with Win32 ::RECT)
   using SizeL = Size<long32>;
 
   //! \alias SizeF - Size using floating point fields
@@ -656,7 +656,7 @@ namespace wtl
   const Rect<T>  Rect<T>::EMPTY;
 
 
-  //! \alias RectL - Rectangle using long32 fields
+  //! \alias RectL - Rectangle using long32 fields (binary compatible with Win32 ::RECT)
   using RectL = Rect<long32>;
 
   //! \alias RectF - Rectangle using floating point fields
