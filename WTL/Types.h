@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\utils\Types.h
-//! \brief Defines wtl types
+//! \file wtl\Types.h
+//! \brief Defines fundemental wtl types
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! Copyright © Nick Crowley. All rights reserved.
