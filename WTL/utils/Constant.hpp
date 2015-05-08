@@ -5,8 +5,8 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_CONSTANT_HPP
-#define WTL_CONSTANT_HPP
+#ifndef WTL_CONSTANT_DATA_HPP
+#define WTL_CONSTANT_DATA_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -237,6 +237,6 @@ namespace wtl
 
 
 
-#endif // WTL_CONSTANT_HPP
+#endif // WTL_CONSTANT_DATA_HPP
 
 
