@@ -17,6 +17,7 @@
     <ClInclude Include="casts\EnumCast.hpp" />
     <ClInclude Include="casts\OpaqueCast.hpp" />
     <ClInclude Include="casts\StaticPtrCast.hpp" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="gdi\StockObjects.hpp" />
     <ClInclude Include="gdi\DeviceContext.hpp" />
     <ClInclude Include="io\BinaryReader.hpp" />

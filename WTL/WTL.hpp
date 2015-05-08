@@ -79,6 +79,7 @@
 
 // Types
 #include "Types.h"
+#include "Constants.h"
 
 // Function object adapters + static allocator + utilities
 #include "utils/Adapters.hpp" 
@@ -121,6 +122,7 @@
 #include "utils/Sequence.hpp"
 #include "utils/SizeOf.hpp"
 #include "utils/Clear.hpp"
+#include "utils/Zero.hpp"
 
 // Platform Constants:
 #include "LibRes.h"
