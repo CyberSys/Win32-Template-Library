@@ -174,10 +174,14 @@ namespace wtl
     //! \alias value_type - Define value type
     using value_type = T;
   
-//! \if CONSTEXPR_SDMI_CAP - Use static scope if SDMI supported
+//! \if CONSTEXPR_SDMI_CAP - Use compile-initialization if SDMI supported
 #ifdef CONSTEXPR_SDMI_CAP
     //! \var value - Define value
     static constexpr value_type value = value_type();
+
+#else
+    //! \var value - Declare value at compile-time
+    static const value_type value;
 #endif
     
     // ----------------------------------- REPRESENTATION -----------------------------------
@@ -205,12 +209,7 @@ namespace wtl
   	constexpr 
     value_type operator ()() const noexcept 
     { 
-//! \ifnot CONSTEXPR_SDMI_CAP - Default construct
-#ifndef CONSTEXPR_SDMI_CAP
-      return value_type();
-#else
       return value;
-#endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -222,17 +221,20 @@ namespace wtl
   	constexpr
     operator value_type() const noexcept 
     { 
-//! \ifnot CONSTEXPR_SDMI_CAP - Default construct
-#ifndef CONSTEXPR_SDMI_CAP
-      return value_type();
-#else
       return value;
-#endif
     }
     
     // --------------------------------------- MUTATORS -------------------------------------
   };
 
+//! \ifnot CONSTEXPR_SDMI_CAP - Rely upon runtime initialization 
+#ifndef CONSTEXPR_SDMI_CAP
+
+  //! \var literal_constant<T>::value - Default construct
+  template <typename T> 
+  const T  literal_constant<T>::value;
+
+#endif
 }
 
 

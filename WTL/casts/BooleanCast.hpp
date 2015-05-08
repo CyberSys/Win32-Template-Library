@@ -9,24 +9,40 @@
 #define WTL_BOOLEAN_CAST_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Default.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  //! \alias enable_if_not_BOOL_t - SFINAE expression requiring other than Win32 Boolean
+  template <typename T, typename RET = void>
+  using enable_if_not_BOOL_t = std::enable_if_t<!std::is_same<T,BOOL>::value,RET>;
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::boolean_cast
+  //! Converts any non-pointer type (except Win32 BOOL) to Win32 BOOL  (As TRUE (1) or FALSE (0))
+  //! 
+  //! \tparam T - Value type (exception Win32 BOOL)
+  //!
+  //! \param[in] value - Value
+  //! \return BOOL - TRUE (1) if non-zero, otherwise FALSE (0)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  enable_if_not_BOOL_t<T,BOOL>  boolean_cast(T value)
+  {
+    return value != default<T>() ? True : False;
+  };
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::boolean_cast
-  //! Converts a value to BOOL as TRUE or FALSE
+  //! Converts a Win32 BOOL to boolean
   //! 
-  //! \tparam T - Value type
-  //!
-  //! \param[in] value - Value
-  //! \return BOOL - TRUE if non-zero, otherwise FALSE
+  //! \param[in] value - Win32 BOOL
+  //! \return bool - True iff non-zero
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  BOOL boolean_cast(T value)
+  inline bool boolean_cast(BOOL value)
   {
-    return value != default<T>() ? TRUE : FALSE;
+    return value != default<BOOL>();
   };
   
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +57,7 @@ namespace wtl
   template <typename T>
   BOOL boolean_cast(T* value)
   {
-    return value != nullptr ? TRUE : FALSE;
+    return value != nullptr ? True : False;
   };
   
 }

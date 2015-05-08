@@ -49,7 +49,7 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    Button(HINSTANCE instance) : base(getClass(instance))
+    Button(::HINSTANCE instance) : base(getClass(instance))
     {
       // Clear paint handlers (Painting handled by system window class)
       this->Paint.clear();
@@ -177,33 +177,6 @@ namespace wtl
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::create
-    //! Create as child window
-    //! 
-    //! \tparam ENC - Text string encoding
-    //! \tparam LEN - Text buffer capacity
-    //!
-    //! \param[in] const& parent - Parent window
-    //! \param[in] const& text - Window text
-    //! \param[in] const& rc - Initial position
-    //! \param[in] id - Window id (Can be specified using any type)
-    //! \param[in] style - Window styles (if unspecified then 'Child' is specified)
-    //! \param[in] exStyle - [optional] Extended window styles (If 'none' then window has no extended window styles)
-    //! 
-    //! \throw wtl::platform_error - Unable to create window
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN, typename IDENT = WindowId, typename STYLE = WindowStyle>
-    void create(WindowBase<ENC>& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
-    {
-      // Create window
-      base::create<ENC,LEN>(parent,text,rc,static_cast<WindowId>(id),WindowStyle::Child|style,exStyle);
-      
-      // Set initial font
-      //base::setFont(wtl::StockFont::Window, false);
-    }
-
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message 

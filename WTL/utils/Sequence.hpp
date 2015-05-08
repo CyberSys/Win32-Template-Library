@@ -27,12 +27,17 @@ namespace wtl
     constexpr integral_sequence() : values{VALUES...}
     {}
 
-    //! \typedef type - Expose type
-    typedef integral_sequence<T,VALUES...> type;
+    //! \alias type - Define own type
+    using type = integral_sequence<T,VALUES...>;
     
     //! \var values - Sequence values
-    const T values[];// { VALUES... };
+    static const T values[]; 
   };
+
+  //! \var integral_sequence<T,VALUES>::values - Sequence values
+  template <typename T, T... VALUES>
+  const T  integral_sequence<T,VALUES...>::values = { VALUES... };
+
 
   // Push a type to the back of the type list
   template <typename T, T VALUE, T... VALUES>

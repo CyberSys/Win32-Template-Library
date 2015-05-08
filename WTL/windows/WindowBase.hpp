@@ -66,7 +66,7 @@ namespace wtl
       //! \alias base - Define base type
       using base = std::map<CommandGroupId,ActionGroupPtr<ENC>>;
       
-      // ----------------------- ACCESSORS -----------------------
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
       // ActionGroupCollection::find const
@@ -150,50 +150,45 @@ namespace wtl
       // ----------------------------------- MUTATOR METHODS ----------------------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // ChildWindowCollection::insert
-      //! Insert child window into collection
+      // ChildWindowCollection::create
+      //! Creates a child window and inserts it into the collection
       //! 
       //! \tparam ENC - Window text string encoding
       //! \tparam LEN - Window text buffer capacity
-      //! \tparam IDENT - Window identifier type
-      //! \tparam STYLE - Window style type
       //!
       //! \param[in,out] &child - Child window object  (Handle must not exist)
       //! \param[in] const& text - Window text
-      //! \param[in] const& rc - Initial position
-      //! \param[in] id - Window id
-      //! \param[in] style - Window styles
-      //! \param[in] exStyle - [optional] Extended styles (default is no extended styles)
-      //! \param[in] const* menu - [optional] Window Menu (default is no window menu)
       //! 
       //! \throw wtl::logic_error - Window already exists
       //! \throw wtl::platform_error - Unable to create window
       /////////////////////////////////////////////////////////////////////////////////////////
-      template <Encoding ENC, unsigned LEN, typename IDENT = WindowId, typename STYLE = WindowStyle>
-      void insert(window_t& child, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
+      template <Encoding ENC, unsigned LEN>
+      void create(window_t& child, const CharArray<ENC,LEN>& text)
       {
         // Ensure child doesn't already exist
         if (child.Handle.exists())
           throw logic_error(HERE, "Window already exists");
 
-        try
-        {
-          // Create child window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-          child.Handle = HWnd(child.Class.Instance, child.Class.Name, &child, static_cast<WindowId>(id), static_cast<WindowStyle>(style), exStyle, CharArray<encoding,LEN>(text), rc, parent.handle());
+        // Create child window  (calls 'insert()' if successful)
+        child.create(&Parent, text);
+      }
+      
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // ChildWindowCollection::insert
+      //! Inserts an existing child window into the collection
+      //!
+      //! \param[in,out] &child - Child window object  (Handle must exist)
+      //! 
+      //! \throw wtl::logic_error - Window does not exist
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void insert(window_t& child)
+      {
+        // Ensure child exists
+        if (!child.Handle.exists())
+          throw logic_error(HERE, "Window does not exist");
 
-          // Add to collection
-          this->emplace(static_cast<WindowId>(id), &child);
-        }
-        // [ERROR] Failed to create
-        catch (platform_error& e)
-        {
-          // Remove from collection
-          this->erase(static_cast<WindowId>(id));
-
-          // Log & rethrow
-          cdebug.log(HERE, e);
-          throw;
-        }
+        // Add to collection
+        this->emplace(child.Ident, &child);
       }
     };
     
@@ -274,254 +269,11 @@ namespace wtl
                                                           Window(wnd)
       {}
 
-      // ----------------------- ACCESSORS -----------------------
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
-      // ------------------------ MUTATORS -----------------------
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
     };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowFontPropertyImpl - Implements the window font property [Mutable,Reference]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableRef>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-      
-      //! \alias type - Define own type
-      using type = WindowFontPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<HFont,PropertyType::MutableRef>;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowFontPropertyImpl::WindowFontPropertyImpl
-      //! Create with initial value of 'npos'
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowFontPropertyImpl(window_t& wnd) : base(wnd, default<HFont>())
-      {}
-
-      // ----------------------- ACCESSORS -----------------------
-
-      // ------------------------ MUTATORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowFontPropertyImpl::set 
-      //! Set the window font
-      //! 
-      //! \param[in] auto font - New font
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(typename base::argument_t font) override
-      {
-        // Set window font & redraw
-        this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
-
-        // Update value
-        base::set(font);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowStylePropertyImpl - Implements the window style property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowStylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowStylePropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>;
-
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStylePropertyImpl::WindowStylePropertyImpl
-      //! Create with default value 
-      //! 
-      //! \param[in] const& wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStylePropertyImpl(window_t& wnd) : base(wnd, default<WindowStyle>())
-      {}
-
-      // ----------------------- ACCESSORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStylePropertyImpl::get const
-      //! Get the window style
-      //! 
-      //! \return argument_t - Current window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
-      {
-        // Get window style
-        return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
-      }
-
-      // ------------------------ MUTATORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStylePropertyImpl::set 
-      //! Set the window style
-      //! 
-      //! \param[in] style - New window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t style) override
-      {
-        // Set window style
-        if (!getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
-          throw platform_error(HERE, "Unable to set window style");
-
-        // Update value
-        base::set(style);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowStyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowStyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowStyleExPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>;
-
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStyleExPropertyImpl::WindowStyleExPropertyImpl
-      //! Create with default value
-      //! 
-      //! \param[in] const& wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStyleExPropertyImpl(window_t& wnd) : base(wnd, default<WindowStyleEx>())
-      {}
-
-      // ----------------------- ACCESSORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStyleExPropertyImpl::get const
-      //! Get the extended window style
-      //! 
-      //! \return argument_t - Current extended window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
-      {
-        // Get extended window style
-        return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
-      }
-
-      // ------------------------ MUTATORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStyleExPropertyImpl::set 
-      //! Set the extended window style
-      //! 
-      //! \param[in] style - New extended window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t style) override
-      {
-        // Set extended window style
-        if (!getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
-          throw platform_error(HERE, "Unable to set extended window style");
-
-        // Update value
-        base::set(style);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowRectPropertyImpl - Implements the window rectangle property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::MutableValue>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowRectPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<RectL,PropertyType::MutableValue>;
-
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowRectPropertyImpl::WindowRectPropertyImpl
-      //! Create with empty rectangle
-      //! 
-      //! \param[in] const& wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
-      {}
-
-      // ----------------------- ACCESSORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowRectPropertyImpl::get const
-      //! Get the window rectangle
-      //! 
-      //! \return argument_t - Current window rectangle
-      /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
-      {
-        // Query and return window rect 
-        ::GetWindowRect(this->Window, (::RECT*)const_cast<type*>(this)->Value);
-        return this->Value;
-      }
-
-      // ------------------------ MUTATORS -----------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowRectPropertyImpl::set 
-      //! Set the window rectangle
-      //! 
-      //! \param[in] style - New window rectangle
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t rc) override
-      {
-        MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
-
-        // [¬RESIZED] Add appropriate flag
-        if (this->Value.width() == rc.width() && this->Value.height() == rc.height())
-          flags |= MoveWindowFlags::NoSize;
-
-        // [¬MOVED] Add appropriate flag
-        if (this->Value.left == rc.left && this->Value.top == rc.top)
-          flags |= MoveWindowFlags::NoMove;
-
-        // Set window rect
-        if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
-          throw platform_error(HERE, "Unable to set window position");
-
-        // Update value
-        base::set(rc);
-      }
-    };
-
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ClientRectPropertyImpl - Implements the client rectangle property [Immutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -551,40 +303,562 @@ namespace wtl
       ClientRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
       {}
 
-      // ----------------------- ACCESSORS -----------------------
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
       // ClientRectPropertyImpl::get const
       //! Get the client rectangle
       //! 
       //! \return argument_t - Current client rectangle
+      //! 
+      //! \throw wtl::logic_error - Window does not exist
       /////////////////////////////////////////////////////////////////////////////////////////
       argument_t  get() const override
       {
-        // Query and return client rect 
-        ::GetClientRect(this->Window, (::RECT*)const_cast<type*>(this)->Value);
+        RectL rc;
+        
+        // Ensure exists
+        if (!Window.exists())
+          throw logic_error(HERE, "Cannot query client rectangle until window exists");
+        
+        // Query & return client rectangle
+        ::GetClientRect(this->Window, (::RECT*)rc);
+        return rc;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+      
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // ClientRectPropertyImpl::set 
+      //! Set the client rectangle
+      //! 
+      //! \param[in] rc - New client rectangle
+      //! 
+      //! \throw wtl::logic_error - Window does not exist
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t rc) override
+      {
+        // Ensure exists
+        if (!Window.exists())
+          throw logic_error(HERE, "Cannot query client rectangle until window exists");
+
+        // Calculate and set window rectangle from client rectangle + window properties
+        if (!::AdjustWindowRectEx((::RECT*)rc, 
+                                  enum_cast(this->Window.Style.get()), 
+                                  boolean_cast(!this->Window.Menu.empty()), 
+                                  enum_cast(this->Window.StyleEx.get())))
+          throw platform_error(HERE, "Unable to set client rectangle");
+        
+        // Ignore base value
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowEnabledPropertyImpl - Implements the window state property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowEnabledPropertyImpl : WindowPropertyImpl<bool,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowEnabledPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<bool,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowEnabledPropertyImpl::WindowEnabledPropertyImpl
+      //! Create with initial value
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename... ARGS>
+      WindowEnabledPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowEnabledPropertyImpl::get const
+      //! Get the window state
+      //! 
+      //! \return argument_t - Window state
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query window state
+        if (Window.exists())
+          return boolean_cast(::IsWindowVisible(this->Window));
+
+        // Return cached
         return this->Value;
       }
 
-      // ------------------------ MUTATORS -----------------------
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowEnabledPropertyImpl::set 
+      //! Set the window state
+      //! 
+      //! \param[in] state - Window state
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t state) override
+      {
+        // Set window state
+        if (Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
+          throw platform_error(HERE, "Unable to set window state");
+
+        // Update value
+        base::set(state);
+      }
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowFontPropertyImpl - Implements the window font property [Mutable,Reference]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableRef>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+      
+      //! \alias type - Define own type
+      using type = WindowFontPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<HFont,PropertyType::MutableRef>;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowFontPropertyImpl::WindowFontPropertyImpl
+      //! Create with initial value of 'npos'
+      //! 
+      //! \param[in,out] &wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename... ARGS>
+      WindowFontPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowFontPropertyImpl::set 
+      //! Set the window font
+      //! 
+      //! \param[in] auto font - New font
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(typename base::argument_t font) override
+      {
+        // Set window font & redraw
+        if (Window.exists())
+          this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
+
+        // Update value
+        base::set(font);
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowIdPropertyImpl - Implements the window Id property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowIdPropertyImpl : WindowPropertyImpl<WindowId,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowIdPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<WindowId,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowIdPropertyImpl::WindowIdPropertyImpl
+      //! Create with initial value 
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] init - Initial value
+      /////////////////////////////////////////////////////////////////////////////////////////
+      WindowIdPropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowIdPropertyImpl::get const
+      //! Get the window Id
+      //! 
+      //! \return argument_t - Current window Id
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query window Id
+        if (Window.exists())
+          return static_cast<WindowId>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_ID) );
+        
+        // Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowIdPropertyImpl::set 
+      //! Set the window Id
+      //! 
+      //! \param[in] id - New window Id
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t id) override
+      {
+        // [EXISTS] Set window Id
+        if (Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
+          throw platform_error(HERE, "Unable to set window Id");
+
+        // Store value
+        base::set(id);
+      }
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowStylePropertyImpl - Implements the window style property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowStylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowStylePropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowStylePropertyImpl::WindowStylePropertyImpl
+      //! Create with initial value 
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] init - Initial value
+      /////////////////////////////////////////////////////////////////////////////////////////
+      WindowStylePropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowStylePropertyImpl::get const
+      //! Get the window style
+      //! 
+      //! \return argument_t - Current window style
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query window style
+        if (Window.exists())
+          return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+        
+        // Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowStylePropertyImpl::set 
+      //! Set the window style
+      //! 
+      //! \param[in] style - New window style
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t style) override
+      {
+        // [EXISTS] Set window style
+        if (Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
+          throw platform_error(HERE, "Unable to set window style");
+
+        // Store value
+        base::set(style);
+      }
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowStyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowStyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowStyleExPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowStyleExPropertyImpl::WindowStyleExPropertyImpl
+      //! Create with default value
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] init - Initial value
+      /////////////////////////////////////////////////////////////////////////////////////////
+      WindowStyleExPropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowStyleExPropertyImpl::get const
+      //! Get the extended window style
+      //! 
+      //! \return argument_t - Current extended window style
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query extended window style
+        if (Window.exists())
+          return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
+
+        // Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowStyleExPropertyImpl::set 
+      //! Set the extended window style
+      //! 
+      //! \param[in] style - New extended window style
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t style) override
+      {
+        // [EXISTS] Set extended window style
+        if (Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
+          throw platform_error(HERE, "Unable to set extended window style");
+
+        // Update value
+        base::set(style);
+      }
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowRectPropertyImpl - Implements the window rectangle property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowRectPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<RectL,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowRectPropertyImpl::WindowRectPropertyImpl
+      //! Create with initial value
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename... ARGS>
+      WindowRectPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowRectPropertyImpl::get const
+      //! Get the window rectangle
+      //! 
+      //! \return argument_t - Current window rectangle
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query window rectangle
+        if (Window.exists())
+        {
+          RectL rc;
+          ::GetWindowRect(this->Window, (::RECT*)rc);
+          return rc;
+        }
+
+        // Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowRectPropertyImpl::set 
+      //! Set the window rectangle
+      //! 
+      //! \param[in] rc - New window rectangle
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t rc) override
+      {
+        // [EXISTS] 
+        if (Window.exists())
+        {
+          MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
+
+          // [¬RESIZED] Add appropriate flag
+          if (this->Value.width() == rc.width() && this->Value.height() == rc.height())
+            flags |= MoveWindowFlags::NoSize;
+
+          // [¬MOVED] Add appropriate flag
+          if (this->Value.left == rc.left && this->Value.top == rc.top)
+            flags |= MoveWindowFlags::NoMove;
+
+          // Set window rect
+          if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+            throw platform_error(HERE, "Unable to set window position");
+        }
+
+        // Update value
+        base::set(rc);
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowVisibilityPropertyImpl - Implements the window visibility property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowVisibilityPropertyImpl : WindowPropertyImpl<Visibility,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowVisibilityPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<Visibility,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowVisibilityPropertyImpl::WindowVisibilityPropertyImpl
+      //! Create with initial value
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename... ARGS>
+      WindowVisibilityPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowVisibilityPropertyImpl::get const
+      //! Get the window visibility
+      //! 
+      //! \return argument_t - Window visibility
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query window visibility
+        if (Window.exists())
+        {
+          WindowPlacement info;
+
+          // Query window placement
+          if (!::GetWindowPlacement(this->Window, &info))
+            throw platform_error(HERE, "Unable to query window placement");
+
+          // Extract visibility
+          return enum_cast<Visibility>(info.flags);
+        }
+
+        // Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowVisibilityPropertyImpl::set 
+      //! Set the window visibility
+      //! 
+      //! \param[in] state - Window visibility
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t state) override
+      {
+        // Set window visibility
+        if (Window.exists() && !::ShowWindow(Window, enum_cast(state)))
+          throw platform_error(HERE, "Unable to set window visibility");
+
+        // Update value
+        base::set(state);
+      }
     };
 
 
   public:
     //! \alias ClientRectProperty - Define client rectangle property type  
-    using ClientRectProperty = Property<ClientRectPropertyImpl,window_t>;
+    using ClientRectProperty = Property<ClientRectPropertyImpl>;
 
     //! \alias WindowFontProperty - Define window font property type  
-    using WindowFontProperty = Property<WindowFontPropertyImpl,window_t>;
+    using WindowFontProperty = Property<WindowFontPropertyImpl>;
+    
+    //! \alias WindowIdProperty - Define window id property type  
+    using WindowIdProperty = Property<WindowIdPropertyImpl>;
     
     //! \alias WindowRectProperty - Define window rectangle property type  
-    using WindowRectProperty = Property<WindowRectPropertyImpl,window_t>;
+    using WindowRectProperty = Property<WindowRectPropertyImpl>;
 
     //! \alias WindowStyleProperty - Define window style property type 
-    using WindowStyleProperty = Property<WindowStylePropertyImpl,window_t>;
+    using WindowStyleProperty = Property<WindowStylePropertyImpl>;
 
     //! \alias WindowStyleExProperty - Define extended window style property type 
-    using WindowStyleExProperty = Property<WindowStyleExPropertyImpl,window_t>;
+    using WindowStyleExProperty = Property<WindowStyleExPropertyImpl>;
+    
+    //! \alias WindowEnabledProperty - Define window visibliity property type 
+    using WindowEnabledProperty = Property<WindowEnabledPropertyImpl>;
+
+    //! \alias WindowVisibilityProperty - Define window visibliity property type 
+    using WindowVisibilityProperty = Property<WindowVisibilityPropertyImpl>;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
@@ -593,6 +867,12 @@ namespace wtl
 
     //! \var ActionGroups - Static collection of all Actions groups
     static ActionGroupCollection   ActionGroups;
+
+    //! \var DefaultPosition - Default window creation position
+    static const PointL  DefaultPosition;
+
+    //! \var DefaultSize - Default window creation size
+    static const SizeL  DefaultSize;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
@@ -603,19 +883,22 @@ namespace wtl
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
 
+    ActionQueue                      Actions;       //!< Actions queue
+    ChildWindowCollection            Children;      //!< Child window collection
     ClientRectProperty               ClientRect;    //!< Client rectangle property
+    WindowEnabledProperty            Enabled;       //!< Window enabled property
     WindowFontProperty               Font;          //!< Window font property
-    WindowRectProperty               WindowRect;    //!< Window rectangle property
+    WindowIdProperty                 Ident;         //!< Child Window Id property
+    WindowMenu<encoding>             Menu;          //!< Window menu, possibly empty
     WindowStyleProperty              Style;         //!< Window style property
     WindowStyleExProperty            StyleEx;       //!< Extended window style property
-    
+    WindowVisibilityProperty         Visible;       //!< Visibility property
+    WindowRectProperty               WindowRect;    //!< Window rectangle property
+
   protected:
-    ActionQueue            Actions;       //!< Actions queue
-    wndclass_t&            Class;         //!< Window class 
-    ChildWindowCollection  Children;      //!< Child window collection
-    HWnd                   Handle;        //!< Window handle
-    Lazy<wndmenu_t>        Menu;          //!< Window menu, if any
-    SubClassCollection     SubClasses;    //!< Sub-classed windows collection
+    WindowClass<encoding>&      Class;         //!< Window class reference
+    HWnd                        Handle;        //!< Window handle
+    SubClassCollection          SubClasses;    //!< Sub-classed windows collection
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public: 
@@ -628,11 +911,14 @@ namespace wtl
     WindowBase(wndclass_t& cls) : Class(cls), 
                                   ClientRect(*this),
                                   Children(*this),
-                                  Font(*this),
+                                  Enabled(*this, true),
+                                  Font(*this, StockObject::SystemFont),
+                                  Ident(*this, zero<WindowId>()),
                                   Handle(default<HWnd>()),
-                                  Style(*this),
-                                  StyleEx(*this),
-                                  WindowRect(*this)
+                                  Style(*this, WindowStyle::OverlappedWindow),
+                                  StyleEx(*this, WindowStyleEx::None),
+                                  Visible(*this, Visibility::ShowNormal),
+                                  WindowRect(*this, DefaultPosition, DefaultSize)
     {
       // Accept window creation by default
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
@@ -800,12 +1086,12 @@ namespace wtl
     //! 
     //! \return RectL - Client rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    RectL clientRect() const
+    /*RectL clientRect() const
     {
       RectL rc;
       ::GetClientRect(Handle, rc);
       return rc;
-    }
+    }*/
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::data const
@@ -877,12 +1163,12 @@ namespace wtl
     //! 
     //! \return RectL - Window rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    RectL windowRect() const
+    /*RectL windowRect() const
     {
       RectL rc;
       ::GetWindowRect(Handle, rc);
       return rc;
-    }
+    }*/
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::operator ::HWND const
@@ -899,94 +1185,62 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::create
-    //! Create as a child window
+    //! Creates the window (as a child, popup, or overlapped window)
     //! 
-    //! \tparam ENC - Text string encoding
-    //! \tparam LEN - Text buffer capacity
-    //! \tparam IDENT - Child window identifier type
-    //! \tparam STYLE - Window style type
+    //! \tparam ENC - Window text string encoding
+    //! \tparam LEN - Window text buffer capacity
     //!
-    //! \param[in,out] &parent - Parent window
+    //! \param[in,out] *owner - [optional] Parent/owner window   (Required for child windows)
     //! \param[in] const& text - Window text
-    //! \param[in] const& rc - Initial position
-    //! \param[in] id - Window id
-    //! \param[in] style - Window styles
-    //! \param[in] exStyle - [optional] Extended styles (default is no extended styles)
-    //! \param[in] const* menu - [optional] Window Menu (default is no window menu)
     //! 
+    //! \throw wtl::invalid_argument - Attempting to create a child window without a parent window
     //! \throw wtl::logic_error - Window already exists
     //! \throw wtl::platform_error - Unable to create window
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN, typename IDENT = WindowId, typename STYLE = WindowStyle>
-    void create(WindowBase& parent, const CharArray<ENC,LEN>& text, const Rect<int32>& rc, IDENT id, STYLE style = (STYLE)WindowStyle::Child, WindowStyleEx exStyle = WindowStyleEx::None)
-    {
-      // Ensure doesn't already exist
-      if (Handle.exists())
-        throw logic_error(HERE, "Window already exists");
-
-      try
-      {
-        // Create handle, assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow
-        Handle = HWnd(Class.Instance, Class.Name, this, static_cast<WindowId>(id), static_cast<WindowStyle>(style), exStyle, CharArray<encoding,LEN>(text), rc, parent.handle());
-
-        // Add to parent's child windows collection
-        parent.Children[static_cast<WindowId>(id)] = this;
-      }
-      catch (platform_error& e)
-      {
-        // Remove parent's child windows collection
-        parent.Children.erase(static_cast<WindowId>(id));
-
-        // Log & rethrow
-        cdebug.log(HERE, e);
-        throw;
-      }
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::createEx
-    //! Creates as an overlapped or popup window 
     //! 
-    //! \tparam ENC - Title string encoding
-    //! \tparam LEN - Title buffer capacity
+    //! \remarks The window handle is first accessible during WM_CREATE (not before during WM_GETMINMAXINFO)
+    //! \remarks This is a weak-ref handle assigned by the class window procedure, a strong-ref is returned 
+    //! \remarks and saved here if the creation is successful.
     //!
-    //! \param[in] const* parent - [optional] Parent window
-    //! \param[in] const& title - Window title
-    //! \param[in] const& rc - Initial position
-    //! \param[in] style - Window styles
-    //! \param[in] exStyle - [optional] Extended styles (default is no extended styles)
-    //! 
-    //! \throw wtl::logic_error - Window already exists
-    //! \throw wtl::platform_error - Unable to create window
+    //! \remarks Child windows are automatically added to the ChildWindowCollection of the parent
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
-    void createEx(const WindowBase* parent, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, WindowStyle style, WindowStyleEx exStyle = WindowStyleEx::None)
+    void create(window_t* owner, const CharArray<ENC,LEN>& text)
     {
-      // Ensure doesn't already exist
+      // Ensure window does not exist
       if (Handle.exists())
         throw logic_error(HERE, "Window already exists");
 
-      try
+      // [CHILD] Create window  
+      if (Ident != zero<WindowId>())
       {
-        HWnd hParent(parent ? parent->handle() : default<HWnd>());     //!< Parent window
+        // Require parent window
+        if (!owner)
+          throw invalid_argument(HERE, "Missing parent window");
 
-        // Create menu
-        Menu.create();
-        
-        // Create window handle (assign weak-ref during onCreate(), overwrite with strong-ref HWnd from ::CreateWindow)
-        Handle = HWnd(Class.Instance, Class.Name, this, style, exStyle, CharArray<encoding,LEN>(title), rc, hParent, nullptr); // Menu->handle());
+        // Require existant parent window
+        if (!owner->exists())
+          throw logic_error(HERE, "Parent window does not exist");
 
-        // Attach/Display menu
-        ::SetMenu(Handle, Menu->handle());
+        // Create as child using window Ident
+        Handle = HWnd(Class.Instance, Class.Name, owner->handle(), this, Ident, Style, StyleEx, CharArray<encoding,LEN>(text), WindowRect);
+
+        // Add to parent's collection of child windows
+        owner->Children.insert(*this);
       }
-      catch (platform_error& e)
+      // [POPUP/OVERLAPPED] Create window (possibly with menu)
+      else
       {
-        // Log & rethrow
-        cdebug.log(HERE, e);
-        throw;
+        ::HWND parent = owner ? (::HWND)owner->handle() : default<::HWND>();          //!< Use parent if any
+
+        // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
+        Handle = HWnd(Class.Instance, Class.Name, parent, this, nullptr, Style, StyleEx, CharArray<encoding,LEN>(text), WindowRect);
+
+        // [MENU] Attach menu if populated during onCreate(..)
+        if (!Menu.empty())
+          ::SetMenu(Handle, Menu.handle());
       }
     }
-
+      
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::destroy
     //! Destroys the window and menu 
@@ -998,14 +1252,13 @@ namespace wtl
       // Ensure exists
       if (Handle.exists())
       {
+        // TODO: Detach menu?
+        ::SetMenu(Handle, nullptr);
+
         // Destroy window 
         Handle.release();
 
-        // Destroy menu, if any
-        if (Menu.exists())
-          Menu.destroy();
-
-        // NB: Does not destroy font
+        // NB: Font & Menu handles are released by members
       }
     }
     
@@ -1066,10 +1319,10 @@ namespace wtl
     virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // Initialise properties
-      Font.init(StockObject::SystemFont);   
+      /*Font.init(StockObject::SystemFont);   
       Style.init(args.Style);
       StyleEx.init(args.StyleEx);
-      WindowRect.init(args.Rect);
+      WindowRect.init(args.Rect);*/
       
       // [Handled] Accept parameters
       return 0; 
@@ -1166,8 +1419,8 @@ namespace wtl
             ret = OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
 
           // [MENU] Raise menu's OwnerDraw event
-          else if (Menu.exists())
-            ret = Menu->OwnerDraw.raise(OwnerDrawMenuEventArgs<encoding>(w,l));
+          else 
+            ret = Menu.OwnerDraw.raise(OwnerDrawMenuEventArgs<encoding>(w,l));
           break;
         
         // [OWNER-MEASURE] Reflect to sender
@@ -1177,8 +1430,8 @@ namespace wtl
             ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(),w,l).reflect();
 
           // [MENU] Raise associated menu event
-          else if (Menu.exists())
-            ret = Menu->OwnerMeasure.raise(OwnerMeasureMenuEventArgs<encoding>(Handle,w,l));
+          else 
+            ret = Menu.OwnerMeasure.raise(OwnerMeasureMenuEventArgs<encoding>(Handle,w,l));
           break;
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
@@ -1317,15 +1570,23 @@ namespace wtl
   };
 
   
-  //! \var ActionGroups - Collection of all Action groups 
+  //! \var WindowBase<ENC>::ActionGroups - Collection of all Action groups 
   template <Encoding ENC>
   typename WindowBase<ENC>::ActionGroupCollection   WindowBase<ENC>::ActionGroups;
   
-  //! \var ActiveWindows - Collection of all WTL windows 
+  //! \var WindowBase<ENC>::ActiveWindows - Collection of all WTL windows 
   template <Encoding ENC>
   typename WindowBase<ENC>::WindowHandleCollection   WindowBase<ENC>::ActiveWindows;
 
+  
+  //! \var WindowBase<ENC>::DefaultPosition - Default window creation position
+  template <Encoding ENC>
+  const PointL  WindowBase<ENC>::DefaultPosition(CW_USEDEFAULT, CW_USEDEFAULT);
 
+  //! \var WindowBase<ENC>::DefaultSize - Default window creation size
+  template <Encoding ENC>
+  const SizeL  WindowBase<ENC>::DefaultSize(CW_USEDEFAULT, CW_USEDEFAULT);
+    
 }
 
 #endif // WTL_WINDOW_BASE_HPP

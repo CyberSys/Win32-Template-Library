@@ -167,7 +167,21 @@ namespace wtl
   template <> struct is_attribute<MoveWindowFlags>  : std::true_type   {};
   template <> struct is_contiguous<MoveWindowFlags> : std::false_type  {};
 
-  
+  template <> struct enum_values<MoveWindowFlags> : integral_sequence<MoveWindowFlags, MoveWindowFlags::NoSize, MoveWindowFlags::NoMove> {};
+
+  //! \struct WindowPlacement - Window placement
+  struct WindowPlacement : ::WINDOWPLACEMENT
+  {
+    using base = ::WINDOWPLACEMENT;
+
+    WindowPlacement() 
+    {
+      clear(*base_cast(this));
+      this->length = sizeof(base);
+    }
+  };
+
+  template <> struct default_t<WindowPlacement> : literal_constant<::WINDOWPLACEMENT> {};
   
   // ----------------------------------- ::ShowWindow(..) Flags ----------------------------------
   
@@ -191,6 +205,9 @@ namespace wtl
     ShowDefault = 10,			  //!< 
     ForceMinimize = 11,			//!< 
   };
+
+  //! \alias Visibility - Alias for ShowWindowFlags
+  using Visibility = ShowWindowFlags;
 
 
   //! Define traits: Contiguous enumeration

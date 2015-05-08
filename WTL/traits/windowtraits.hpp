@@ -82,19 +82,19 @@ namespace wtl
     //!
     //! \param[in] instance - Module instance
     //! \param[in] const& wndClass - Window class atom
+    //! \param[in] owner - [optional] Parent/owner window
     //! \param[in] object - Creation parameter (Typically Window object pointer)
+    //! \param[in] menu - [optional] Window Menu
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
     //! \param[in] const& title - Window title
     //! \param[in] const& rc - Initial position
-    //! \param[in] parent - Parent window
-    //! \param[in] menu - Window Menu
     //! \return HAlloc<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, OBJ* object, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, ::HWND parent, ::HMENU menu)
+    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND owner, OBJ* object, ::HMENU menu, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const RectL& rc)
     { 
       using char_t = encoding_char_t<ENC>;    //!< Character encoding type
 
@@ -107,7 +107,7 @@ namespace wtl
                                  title, 
                                  enum_cast(style), 
                                  rc.left, rc.top, rc.width(), rc.height(), 
-                                 parent, 
+                                 owner, 
                                  menu, 
                                  instance,     //!< Instance handle
                                  object);      //!< Pass object as parameter data
@@ -130,22 +130,22 @@ namespace wtl
     //!
     //! \param[in] instance - Module instance
     //! \param[in] const& wndClass - Window class atom
+    //! \param[in] parent - Parent window
     //! \param[in] object - Creation parameter (Typically Window object pointer)
     //! \param[in] id - Window id
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
     //! \param[in] const& title - Window title
     //! \param[in] const& rc - Initial position
-    //! \param[in] parent - Parent window
     //! \return HAlloc<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const Rect<int32>& rc, ::HWND parent)
+    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND parent, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const RectL& rc)
     { 
       // Create child window
-      return create(instance, wndClass, object, style, ext, title, rc, parent, reinterpret_cast<::HMENU>(enum_cast(id)));
+      return create(instance, wndClass, parent, object, reinterpret_cast<::HMENU>(enum_cast(id)), style, ext, title, rc);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

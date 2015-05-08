@@ -71,7 +71,7 @@ namespace wtl
       template <typename... ARGS>
       static RET invoke(collection_t& subscribers, ARGS&&... args) 
       {
-        RET r;
+        RET r(default<RET>());
 
         // Forward (Copy construct) arguments to each subscriber
         for (auto& fn : subscribers)

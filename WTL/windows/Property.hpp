@@ -85,11 +85,10 @@ namespace wtl
     // PropertyImpl::~PropertyImpl
     //! Virtual d-tor
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~PropertyImpl()
-    {}
+    virtual ~PropertyImpl() = default;
 
-    DISABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
-    DISABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
+    DEFAULT_COPY(PropertyImpl);       //!< Copy semantics determined by value type
+    DEFAULT_MOVE(PropertyImpl);       //!< Move semantics determined by value type
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
@@ -133,91 +132,91 @@ namespace wtl
   //! \tparam VALUE - External value type
   //! \tparam TYPE - Property properties 
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, PropertyType TYPE>
-  struct PropertyFunctor : PropertyImpl<VALUE,TYPE>
-  {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  //template <typename VALUE, PropertyType TYPE>
+  //struct PropertyFunctor : PropertyImpl<VALUE,TYPE>
+  //{
+  //  // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-    //! \alias base - Define base type
-    using base = PropertyImpl<VALUE,TYPE>;
+  //  //! \alias base - Define base type
+  //  using base = PropertyImpl<VALUE,TYPE>;
 
-    //! \alias type - Define own type
-    using type = PropertyFunctor<VALUE,TYPE>;
+  //  //! \alias type - Define own type
+  //  using type = PropertyFunctor<VALUE,TYPE>;
 
-    //! \alias argument_t - Inherit accessor/mutator argument type (Value vs Reference)
-    using argument_t = typename base::argument_t;
+  //  //! \alias argument_t - Inherit accessor/mutator argument type (Value vs Reference)
+  //  using argument_t = typename base::argument_t;
 
-    //! \alias accessor_t - Define accessor delegate type
-    using accessor_t = std::function<argument_t (void)>;
+  //  //! \alias accessor_t - Define accessor delegate type
+  //  using accessor_t = std::function<argument_t (void)>;
 
-    //! \alias mutator_t - Define mutator delegate type
-    using mutator_t = std::function<void (argument_t)>;
+  //  //! \alias mutator_t - Define mutator delegate type
+  //  using mutator_t = std::function<void (argument_t)>;
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    accessor_t  Accessor;      //!< Accessor delegate
-    mutator_t   Mutator;       //!< Mutator delegate
+  //  // ----------------------------------- REPRESENTATION -----------------------------------
+  //protected:
+  //  accessor_t  Accessor;      //!< Accessor delegate
+  //  mutator_t   Mutator;       //!< Mutator delegate
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-  public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyFunctor::PropertyFunctor
-    //! Create from accessor/mutator delegates and initialize value
-    //! 
-    //! \param[in] get - Accessor delegate
-    //! \param[in] set - Mutator delegate
-    //! \param[in] &&... args - [optional] Value constructor arguments
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    PropertyFunctor(accessor_t get, mutator_t set, ARGS&&... args) : base(std::forward<ARGS>(args)...),
-                                                                     Accessor(set), 
-                                                                     Mutator(get)
-    {}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyFunctor::PropertyFunctor
-    //! Create from mutator delegate and initialize value
-    //! 
-    //! \param[in] set - Mutator delegate
-    //! \param[in] &&... args - [optional] Value constructor arguments
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    PropertyFunctor(mutator_t set, ARGS&&... args) : base(std::forward<ARGS>(args)...),
-                                                     Accessor(std::bind(&this::get, this)), 
-                                                     Mutator(set)
-    {}
+  //  // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  //public:
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  // PropertyFunctor::PropertyFunctor
+  //  //! Create from accessor/mutator delegates and initialize value
+  //  //! 
+  //  //! \param[in] get - Accessor delegate
+  //  //! \param[in] set - Mutator delegate
+  //  //! \param[in] &&... args - [optional] Value constructor arguments
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  template <typename... ARGS>
+  //  PropertyFunctor(accessor_t get, mutator_t set, ARGS&&... args) : base(std::forward<ARGS>(args)...),
+  //                                                                   Accessor(set), 
+  //                                                                   Mutator(get)
+  //  {}
+  //  
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  // PropertyFunctor::PropertyFunctor
+  //  //! Create from mutator delegate and initialize value
+  //  //! 
+  //  //! \param[in] set - Mutator delegate
+  //  //! \param[in] &&... args - [optional] Value constructor arguments
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  template <typename... ARGS>
+  //  PropertyFunctor(mutator_t set, ARGS&&... args) : base(std::forward<ARGS>(args)...),
+  //                                                   Accessor(std::bind(&this::get, this)), 
+  //                                                   Mutator(set)
+  //  {}
 
-    DISABLE_COPY(PropertyFunctor);       //!< Copy semantics determined by value type
-    DISABLE_MOVE(PropertyFunctor);       //!< Move semantics determined by value type
-    
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+  //  DISABLE_COPY(PropertyFunctor);       //!< Copy semantics determined by value type
+  //  DISABLE_MOVE(PropertyFunctor);       //!< Move semantics determined by value type
+  //  
+  //  // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyFunctor::get const
-    //! Value accessor
-    //! 
-    //! \return auto - Value  or  immutable reference to value
-    /////////////////////////////////////////////////////////////////////////////////////////
-    argument_t  get() const override
-    {
-      return Accessor();
-    }
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  // PropertyFunctor::get const
+  //  //! Value accessor
+  //  //! 
+  //  //! \return auto - Value  or  immutable reference to value
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  argument_t  get() const override
+  //  {
+  //    return Accessor();
+  //  }
 
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
+  //  // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyFunctor::set 
-    //! Value mutator
-    //! 
-    //! \param[in] auto value - New value  or  immutable reference to new value
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(argument_t value)  override
-    {
-      // Mutator and update value
-      Mutator(value);
-      base::set(value);
-    }
-  };
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  // PropertyFunctor::set 
+  //  //! Value mutator
+  //  //! 
+  //  //! \param[in] auto value - New value  or  immutable reference to new value
+  //  /////////////////////////////////////////////////////////////////////////////////////////
+  //  void  set(argument_t value)  override
+  //  {
+  //    // Mutator and update value
+  //    Mutator(value);
+  //    base::set(value);
+  //  }
+  //};
 
   /*template <typename VALUE, PropertyType TYPE, typename ACCESSOR, typename MUTATOR, typename... ARGS>
   PropertyFunctor<VALUE,TYPE>  make_property(ACCESSOR get, MUTATOR set, ARGS&&... args)
@@ -241,7 +240,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = Property<IMPL>;
+    using type = Property<IMPL,OWNER>;
 
     //! \alias argument_t - Inherit argument type (Value vs Reference)
     using argument_t = typename IMPL::argument_t;
@@ -319,11 +318,59 @@ namespace wtl
     //! 
     //! \return auto - Value  or  immutable reference to value
     /////////////////////////////////////////////////////////////////////////////////////////
-    /*operator argument_t() const
+    operator argument_t() const
     {
       return get();
-    }*/
-
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator == const
+    //! Equality operator for values
+    //! 
+    //! \param[in] auto value - Value  
+    //! \return bool - True iff equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool  operator == (argument_t value) const
+    {
+      return get() == value;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator == const
+    //! Equality operator for properties
+    //! 
+    //! \param[in] auto r - Another property
+    //! \return bool - True iff equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool  operator == (const type& r) const
+    {
+      return get() == r.get();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator != const
+    //! Inequality operator for values
+    //! 
+    //! \param[in] auto value - Value  
+    //! \return bool - True iff unequal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool  operator != (argument_t value) const
+    {
+      return get() != value;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator != const
+    //! Inequality operator for properties
+    //! 
+    //! \param[in] auto r - Another property
+    //! \return bool - True iff unequal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool  operator != (const type& r) const
+    {
+      return get() != r.get();
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
