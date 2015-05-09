@@ -455,13 +455,34 @@ namespace wtl
     // Rect::~Rect 
     //! Non-Virtual d-tor
     /////////////////////////////////////////////////////////////////////////////////////////
-    ~Rect()
-    {}
+    ~Rect() = default;
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::bottomLeft const
+    //! Query bottom-left corner of rectangle 
+    //! 
+    //! \return point_t - Point defining rectangle corner
+    /////////////////////////////////////////////////////////////////////////////////////////
+    point_t  bottomLeft() const
+    {
+      return point_t(left, bottom);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::bottomRight const
+    //! Query bottom-right corner of rectangle 
+    //! 
+    //! \return point_t - Point defining rectangle corner
+    /////////////////////////////////////////////////////////////////////////////////////////
+    point_t  bottomRight() const
+    {
+      return point_t(right, bottom);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::centre const
     //! Query rectangle mid point
@@ -472,7 +493,7 @@ namespace wtl
     {
       return point_t(width() / static_cast<value_t>(2),
                      height() / static_cast<value_t>(2));
-    };
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::contains const
@@ -513,6 +534,28 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::topLeft const
+    //! Query top-left corner of rectangle 
+    //! 
+    //! \return point_t - Point defining rectangle corner
+    /////////////////////////////////////////////////////////////////////////////////////////
+    point_t  topLeft() const
+    {
+      return point_t(left, top);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::topRight const
+    //! Query top-right corner of rectangle 
+    //! 
+    //! \return point_t - Point defining rectangle corner
+    /////////////////////////////////////////////////////////////////////////////////////////
+    point_t  topRight() const
+    {
+      return point_t(right, top);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::width const
     //! Query rectangle width
     //! 
@@ -521,7 +564,7 @@ namespace wtl
     value_t  width() const
     {
       return right - left;
-    };
+    }
 
     
     /////////////////////////////////////////////////////////////////////////////////////////

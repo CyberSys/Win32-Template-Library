@@ -318,7 +318,7 @@ namespace wtl
         RectL rc;
         
         // Ensure exists
-        if (!Window.exists())
+        if (!this->Window.exists())
           throw logic_error(HERE, "Cannot query client rectangle until window exists");
         
         // Query & return client rectangle
@@ -339,7 +339,7 @@ namespace wtl
       void set(argument_t rc) override
       {
         // Ensure exists
-        if (!Window.exists())
+        if (!this->Window.exists())
           throw logic_error(HERE, "Cannot query client rectangle until window exists");
 
         // Calculate and set window rectangle from client rectangle + window properties
@@ -395,7 +395,7 @@ namespace wtl
       argument_t  get() const override
       {
         // [EXISTS] Query window state
-        if (Window.exists())
+        if (this->Window.exists())
           return boolean_cast(::IsWindowVisible(this->Window));
 
         // Return cached
@@ -413,7 +413,7 @@ namespace wtl
       void set(argument_t state) override
       {
         // Set window state
-        if (Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
+        if (this->Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
           throw platform_error(HERE, "Unable to set window state");
 
         // Update value
@@ -462,7 +462,7 @@ namespace wtl
       void set(typename base::argument_t font) override
       {
         // Set window font & redraw
-        if (Window.exists())
+        if (this->Window.exists())
           this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
 
         // Update value
@@ -511,7 +511,7 @@ namespace wtl
       argument_t  get() const override
       {
         // [EXISTS] Query window Id
-        if (Window.exists())
+        if (this->Window.exists())
           return static_cast<WindowId>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_ID) );
         
         // Return cached
@@ -529,7 +529,7 @@ namespace wtl
       void set(argument_t id) override
       {
         // [EXISTS] Set window Id
-        if (Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
+        if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
           throw platform_error(HERE, "Unable to set window Id");
 
         // Store value
@@ -578,7 +578,7 @@ namespace wtl
       argument_t  get() const override
       {
         // [EXISTS] Query window style
-        if (Window.exists())
+        if (this->Window.exists())
           return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
         
         // Return cached
@@ -596,7 +596,7 @@ namespace wtl
       void set(argument_t style) override
       {
         // [EXISTS] Set window style
-        if (Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
+        if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
           throw platform_error(HERE, "Unable to set window style");
 
         // Store value
@@ -645,7 +645,7 @@ namespace wtl
       argument_t  get() const override
       {
         // [EXISTS] Query extended window style
-        if (Window.exists())
+        if (this->Window.exists())
           return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
 
         // Return cached
@@ -663,7 +663,7 @@ namespace wtl
       void set(argument_t style) override
       {
         // [EXISTS] Set extended window style
-        if (Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
+        if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
           throw platform_error(HERE, "Unable to set extended window style");
 
         // Update value
@@ -713,7 +713,7 @@ namespace wtl
       argument_t  get() const override
       {
         // [EXISTS] Query window rectangle
-        if (Window.exists())
+        if (this->Window.exists())
         {
           RectL rc;
           ::GetWindowRect(this->Window, (::RECT*)rc);
@@ -735,7 +735,7 @@ namespace wtl
       void set(argument_t rc) override
       {
         // [EXISTS] 
-        if (Window.exists())
+        if (this->Window.exists())
         {
           MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
 
@@ -750,6 +750,84 @@ namespace wtl
           // Set window rect
           if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
             throw platform_error(HERE, "Unable to set window position");
+        }
+
+        // Update value
+        base::set(rc);
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowSizePropertyImpl - Implements the window size property [Mutable,Value]
+    //! 
+    //! \remarks [WINDOW EXISTS]  Window Size derived from Window Rectangle 
+    //! \remarks [WINDOW ~EXISTS] Window Rectangle derived from cached Window Size & Location
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowSizePropertyImpl : WindowPropertyImpl<SizeL,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowSizePropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<SizeL,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowSizePropertyImpl::WindowSizePropertyImpl
+      //! Create with initial value
+      //! 
+      //! \param[in] const& wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename... ARGS>
+      WindowSizePropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowSizePropertyImpl::get const
+      //! Get the window size
+      //! 
+      //! \return argument_t - Current window size
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Derive window size from window rectangle 
+        if (this->Window.exists())
+          return this->Window.WindowRect->size();
+
+        // Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowSizePropertyImpl::set 
+      //! Set the window size
+      //! 
+      //! \param[in] sz - New window size
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t sz) override
+      {
+        // Set window rectangle according to new size  
+        this->Window.WindowRect = RectL(this->Window.WindowRect->topLeft(), sz);
+
+        {
+          MoveWindowFlags flags = MoveWindowFlags::NoZOrder | MoveWindowFlags::NoMove;
+
+          // Set window rectangle directly?
+          if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+            throw platform_error(HERE, "Unable to resize window");
         }
 
         // Update value
@@ -799,7 +877,7 @@ namespace wtl
       argument_t  get() const override
       {
         // [EXISTS] Query window visibility
-        if (Window.exists())
+        if (this->Window.exists())
         {
           WindowPlacement info;
 
@@ -826,7 +904,7 @@ namespace wtl
       void set(argument_t state) override
       {
         // Set window visibility
-        if (Window.exists() && !::ShowWindow(Window, enum_cast(state)))
+        if (this->Window.exists() && !::ShowWindow(Window, enum_cast(state)))
           throw platform_error(HERE, "Unable to set window visibility");
 
         // Update value
@@ -834,10 +912,12 @@ namespace wtl
       }
     };
 
-
   public:
     //! \alias ClientRectProperty - Define client rectangle property type  
     using ClientRectProperty = Property<ClientRectPropertyImpl>;
+    
+    //! \alias WindowEnabledProperty - Define window visibliity property type 
+    using WindowEnabledProperty = Property<WindowEnabledPropertyImpl>;
 
     //! \alias WindowFontProperty - Define window font property type  
     using WindowFontProperty = Property<WindowFontPropertyImpl>;
@@ -847,6 +927,9 @@ namespace wtl
     
     //! \alias WindowRectProperty - Define window rectangle property type  
     using WindowRectProperty = Property<WindowRectPropertyImpl>;
+    
+    //! \alias WindowSizeProperty - Define window rectangle property type  
+    using WindowSizeProperty = Property<WindowSizePropertyImpl>;
 
     //! \alias WindowStyleProperty - Define window style property type 
     using WindowStyleProperty = Property<WindowStylePropertyImpl>;
@@ -854,9 +937,6 @@ namespace wtl
     //! \alias WindowStyleExProperty - Define extended window style property type 
     using WindowStyleExProperty = Property<WindowStyleExPropertyImpl>;
     
-    //! \alias WindowEnabledProperty - Define window visibliity property type 
-    using WindowEnabledProperty = Property<WindowEnabledPropertyImpl>;
-
     //! \alias WindowVisibilityProperty - Define window visibliity property type 
     using WindowVisibilityProperty = Property<WindowVisibilityPropertyImpl>;
 
