@@ -78,12 +78,19 @@ namespace wtl
   //! \tparam E - Enumeration type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename E>
-  struct enum_values
-  {
-    //! \var values - Values array
-    static const E values[];
-  };
+  struct enum_values;
+  //{
+  //  //! \var values - Values array
+  //  static constexpr E values[1] = { E() };
+  //};
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enum_values_t - Enumeration literal sequence type accessor
+  //! 
+  //! \tparam E - Enumeration type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E>
+  using enum_values_t = typename enum_values<E>::type;
 }
 
 //! \namespace std - Namespace injection

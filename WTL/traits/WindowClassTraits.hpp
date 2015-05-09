@@ -36,6 +36,20 @@ namespace wtl
   template <> struct is_attribute<ClassStyle>  : std::true_type  {};
   template <> struct is_contiguous<ClassStyle> : std::false_type {};
 
+  template <> struct enum_values<ClassStyle> : integral_sequence<ClassStyle, ClassStyle::VRedraw, 
+                                                                             ClassStyle::HRedraw,
+                                                                             ClassStyle::DblClks,
+                                                                             ClassStyle::OwnDC,  
+                                                                             ClassStyle::ClassDC, 
+                                                                             ClassStyle::ParentDC,
+                                                                             ClassStyle::NoClose, 
+                                                                             ClassStyle::SaveBits,
+                                                                             ClassStyle::ByteAlignClient,
+                                                                             ClassStyle::ByteAlignWindow,
+                                                                             ClassStyle::GlobalClass, 
+                                                                             ClassStyle::Ime,  
+                                                                             ClassStyle::DropShadow> {};
+
   //! Define limits traits
   template <> struct max_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::VRedraw>     {};
   template <> struct min_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::DropShadow>  {};

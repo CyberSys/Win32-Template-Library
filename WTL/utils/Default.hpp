@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Constant.hpp"
+#include "wtl/utils/Sequence.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -42,7 +43,7 @@ namespace wtl
   //! \struct default_t<enumeration> - Enumeration types default to zero for now
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct default_t<T,enable_if_enum_t<T>> : integral_constant<T, static_cast<T>(0)>
+  struct default_t<T,enable_if_enum_t<T>> : get<0,enum_values_t<T>> 
   {};
   
   /////////////////////////////////////////////////////////////////////////////////////////

@@ -167,7 +167,19 @@ namespace wtl
   template <> struct is_attribute<MoveWindowFlags>  : std::true_type   {};
   template <> struct is_contiguous<MoveWindowFlags> : std::false_type  {};
 
-  template <> struct enum_values<MoveWindowFlags> : integral_sequence<MoveWindowFlags, MoveWindowFlags::NoSize, MoveWindowFlags::NoMove> {};
+  template <> struct enum_values<MoveWindowFlags> : integral_sequence<MoveWindowFlags, MoveWindowFlags::NoSize,
+                                                                                       MoveWindowFlags::NoMove,
+                                                                                       MoveWindowFlags::NoZOrder,
+                                                                                       MoveWindowFlags::NoRedraw,
+                                                                                       MoveWindowFlags::NoActivate,
+                                                                                       MoveWindowFlags::FrameChanged,
+                                                                                       MoveWindowFlags::ShowWindow,
+                                                                                       MoveWindowFlags::HideWindow,
+                                                                                       MoveWindowFlags::NoCopyBits,
+                                                                                       MoveWindowFlags::NoOwnerZOrder,
+                                                                                       MoveWindowFlags::NoSendChanging,
+                                                                                       MoveWindowFlags::DeferErase,
+                                                                                       MoveWindowFlags::AsyncWindowPos>  {};
 
   //! \struct WindowPlacement - Window placement
   struct WindowPlacement : ::WINDOWPLACEMENT

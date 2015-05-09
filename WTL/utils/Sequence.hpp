@@ -13,76 +13,138 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+  //
+  // ------------------------------------------------------------------- INTEGRAL SEQUENCE ------------------------------------------------------------------
+  //
+
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct integral_sequence 
-  //! Holds an constant expression integral sequence for use in meta-programming
+  //! \struct integral_sequence - Provides a compile-time sequence of integral/enumeration literals
   //! 
   //! \tparam T - Element type
-  //! \tparam VALUES - Type list
+  //! \tparam VALUES - Sequence literals
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, T... VALUES>
   struct integral_sequence 
   {
-    constexpr integral_sequence() : values{VALUES...}
-    {}
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    // Require integral/enumeration type
+    static_assert(std::is_integral<T>::value || std::is_enum<T>::value, "integral_sequence<T,T...> requires T to be an integral or enumeration type.");
 
     //! \alias type - Define own type
     using type = integral_sequence<T,VALUES...>;
-    
-    //! \var values - Sequence values
-    static const T values[]; 
+
+    //! \alias value_type - Define value type
+    using value_type = T;
+
+    //! \var length - Length of sequence
+    static constexpr int32 length = sizeof...(VALUES);
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    constexpr integral_sequence() = default; //: values{VALUES...}  // Not supported in MSVC2015 RC
+    virtual ~integral_sequence() = default;
   };
 
-  //! \var integral_sequence<T,VALUES>::values - Sequence values
-  template <typename T, T... VALUES>
-  const T  integral_sequence<T,VALUES...>::values = { VALUES... };
-
-
-  // Push a type to the back of the type list
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias sequence_push_back_nt - Append a non-type sequence
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, T VALUE, T... VALUES>
-  using push_back = integral_sequence<T,VALUES...,VALUE>;
+  using sequence_push_back_nt = integral_sequence<T,VALUES...,VALUE>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias push_front
-  // Push a type to the front of the list
+  //! \alias sequence_push_front_nt - Prepend a non-type sequence
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, T VALUE, T... VALUES>   // usage: probably push_front<..>::type
-  using push_front = integral_sequence<T,VALUE,VALUES...>;
+  template <typename T, T VALUE, T... VALUES>   
+  using sequence_push_front_nt = integral_sequence<T,VALUE,VALUES...>;
+
+
 
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::generate_sequence
-  //! Sequence generating meta-function
+  //! Generates a compile-time sequence of integral/enumeration literals
   //!
-  //! \tparam[in] T -Element type
-  //! \tparam[in] N - Number of elements to generate
-  //! \tparam[in] VALUES - Type-list, initially empty
-  //! \treturn type - Sequence type
+  //! \tparam[in] T - Element type
+  //! \tparam[in] IDX - Number of elements to generate
+  //! \tparam[in] VALUES - [optional] Value list, empty on first call
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <int IDX, int... VALUES>
-  struct generate_sequence : generate_sequence<IDX-1, IDX-1, VALUES...> 
+  template <typename T, unsigned IDX, T... VALUES>
+  struct generate_sequence : generate_sequence<T, IDX-1, IDX-1, VALUES...> 
   {};
 
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::generate_sequence
   //! Base case
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <int... VALUES>
-  struct generate_sequence<0, VALUES...> 
+  template <typename T, T... VALUES>
+  struct generate_sequence<T, 0, VALUES...> 
   {
     //! \typedef type - Output
-    typedef integral_sequence<int, VALUES...>  type;
+    using type = integral_sequence<T, VALUES...>;
   };
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias generate_sequence_t - Generates a compile-time sequence of integral/enumeration literals
+  //!
+  //! \tparam[in] T - Element type
+  //! \tparam[in] IDX - Number of elements to generate
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, unsigned IDX>
+  using generate_sequence_t = typename generate_sequence<T,IDX>::type;
+  
+
+  
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct sequence - Simple type-list 
+  //! \struct get - Integral/enum sequence element accessor
+  //! 
+  //! \tparam IDX - Zero-based element index
+  //! \tparam T - Element type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <unsigned IDX, typename T>  
+  struct get;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct get - Base-case: Return front() when IDX == 0
+  //! 
+  //! \tparam T - Element type
+  //! \tparam VAL - First value
+  //! \tparam SEQ - Remaining values
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, T VAL, T... SEQ>  
+  struct get<0, integral_sequence<T, VAL, SEQ...>> : integral_constant<T, VAL> 
+  {};
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct get - Recursive step: Pop front() while IDX > 0
+  //! 
+  //! \tparam IDX - Zero-based element index (but not zero)
+  //! \tparam T - Element type
+  //! \tparam VAL - First value
+  //! \tparam SEQ - Remaining values
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <unsigned IDX, typename T, T VAL, T... SEQ>  
+  struct get<IDX, integral_sequence<T, VAL, SEQ...>> : integral_constant<T,get<IDX-1, integral_sequence<T, SEQ...>>::value> 
+  {};
+
+  
+  //
+  // ------------------------------------------------------------------- SEQUENCE ------------------------------------------------------------------
+  //
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct sequence - Provides a compile-time type-list
   //! 
   //! \tparam ...TYPES - Elements
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename... TYPES>
   struct sequence
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \alias type - Define own type
     using type = sequence<TYPES...>;
 
@@ -97,28 +159,33 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     template <unsigned IDX>
     using index = typename std::tuple_element<IDX, std::tuple<TYPES...>>::type;
-  };
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	};
 
   /*template <typename... TYPES>
   using sequence_t = typename sequence<TYPES...>::type;*/
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias push_base_t - Append a type to the back of the type list
+  //! \alias sequence_push_back_t - Append a type-sequence
   //! 
   //! \tparam T - Type to insert
   //! \tparam ... TYPES - [optional] Existing sequence
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename... TYPES>
-  using push_back_t = sequence<TYPES..., T>;
+  using sequence_push_back_t = sequence<TYPES..., T>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias push_front - Insert a type to the front of the list
+  //! \alias sequence_push_front_t - Prepend a type-sequence
   //! 
   //! \tparam T - Type to insert
   //! \tparam ... TYPES - [optional] Existing sequence
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename... TYPES>
-  using push_front_t = sequence<T, TYPES...>;
+  using sequence_push_front_t = sequence<T, TYPES...>;
+
 
 }
 
