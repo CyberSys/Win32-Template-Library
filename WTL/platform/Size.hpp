@@ -24,17 +24,14 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-    //! \alias point_t - Defines point of matching type
-    using point_t = Point<T>;
-
-    //! \alias size_t - Defines size type
-    using size_t = Size<T>;
+    //! \alias type - Defines own type
+    using type = Size<T>;
 
     //! \alias value_t - Defines dimension type
     using value_t = T;
 
     //! \var EMPTY - Empty sentinel value 
-    static const size_t EMPTY;
+    static const type EMPTY;
 
     //! \var native - Whether binary compatible with ::SIZE
     static constexpr bool native = sizeof(value_t) == sizeof(long32);
@@ -56,37 +53,43 @@ namespace wtl
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::Size 
+    // Size::Size constexpr
     //! Create from Win32 size
     //! 
     //! \param[in] const& sz - Input size
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     Size(const ::SIZE&  sz) : width(static_cast<T>(sz.cx)), 
                               height(static_cast<T>(sz.cy))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::Size 
+    // Size::Size constexpr
     //! Create from dimensions of any type
     //! 
     //! \param[in] const w - Width
     //! \param[in] const h - Height
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U>
+    template <typename U> constexpr
     Size(const U w, const U h) : width(static_cast<T>(w)), 
                                  height(static_cast<T>(h))
     {}
     
-    DEFAULT_COPY(Size);   //!< Performs a deep copy
-    DEFAULT_MOVE(Size);   //!< Performs a deep copy
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::~Size 
     //! Non-virtual d-tor
     /////////////////////////////////////////////////////////////////////////////////////////
     ~Size()
     {}
+    
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    
+    CONSTEXPR_COPY_CTOR(Size);   //!< Performs a deep copy
+    CONSTEXPR_MOVE_CTOR(Size);   //!< Performs a deep copy
 
+    DEFAULT_COPY_ASSIGN(Size);   //!< Performs a deep copy
+    DEFAULT_MOVE_ASSIGN(Size);   //!< Performs a deep copy
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -101,7 +104,31 @@ namespace wtl
     {
       return *this == EMPTY;
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator == const
+    //! Equality operator
+    //! 
+    //! \param[in] const& r - Another size
+    //! \return bool - True iff co-ordinates equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator == (const type& r)
+    {
+      return width == r.width && height == r.height;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator != const
+    //! Inequality operator
+    //! 
+    //! \param[in] const& r - Another size
+    //! \return bool - True iff co-ordinates unequal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator != (const type& r)
+    {
+      return width != r.width || height != r.height;
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////

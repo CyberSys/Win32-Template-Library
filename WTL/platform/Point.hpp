@@ -85,19 +85,20 @@ namespace wtl
                                   y(static_cast<T>(Y))
     {}
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::~Point 
+    //! Non-virtual d-tor
+    /////////////////////////////////////////////////////////////////////////////////////////
+    ~Point() = default;
+
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    
     CONSTEXPR_COPY_CTOR(Point);   //!< Performs a deep copy
     CONSTEXPR_MOVE_CTOR(Point);   //!< Performs a deep copy
 
     DEFAULT_COPY_ASSIGN(Point);   //!< Performs a deep copy
     DEFAULT_MOVE_ASSIGN(Point);   //!< Performs a deep copy
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::~Point 
-    //! Non-virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ~Point()
-    {}
-
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -151,6 +152,18 @@ namespace wtl
     bool operator == (const type& r)
     {
       return x == r.x && y == r.y;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator != const
+    //! Inequality operator
+    //! 
+    //! \param[in] const& r - Another point
+    //! \return bool - True iff co-ordinates unequal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator != (const type& r)
+    {
+      return x != r.x || y != r.y;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

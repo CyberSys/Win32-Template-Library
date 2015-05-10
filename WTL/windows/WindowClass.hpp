@@ -169,6 +169,8 @@ namespace wtl
       if (unregisterClass(Name, Instance) == FALSE)
         cdebug << Cons::Error << "Unable to unregister window class" << Cons::Endl;
     }
+    
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
 
     // Deep copy semantics
     WindowClass(const WindowClass&) = default;

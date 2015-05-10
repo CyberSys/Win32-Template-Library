@@ -260,7 +260,7 @@ namespace wtl
     using ChangedEvent = Event<void>;
 
     //! \alias ChangingEvent - Defines pre-update event
-    using ChangingEvent = Event<bool,argument_t,argument_t>;
+    using ChangingEvent = Event<bool,/*argument_t,*/argument_t>;
 
     //! \var readonly - Define whether property is read-only or mutable
     static constexpr bool readonly = IMPL::readonly;
@@ -407,7 +407,7 @@ namespace wtl
     void  set(argument_t value) 
     {
       // Raise 'Changing'
-      if (Changing.raise(Impl.get(), value))
+      //if (Changing.raise(/*Impl.get(),*/ value))
       {
         // Set and raise 'Changed'
         Impl.set(value);

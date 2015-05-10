@@ -88,13 +88,14 @@ namespace wtl
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
     //! \param[in] const& title - Window title
-    //! \param[in] const& rc - Initial position
+    //! \param[in] pos - Initial position
+    //! \param[in] size - Initial size
     //! \return HAlloc<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND owner, OBJ* object, ::HMENU menu, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const RectL& rc)
+    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND owner, OBJ* object, ::HMENU menu, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, PointL pos, SizeL size)
     { 
       using char_t = encoding_char_t<ENC>;    //!< Character encoding type
 
@@ -106,7 +107,7 @@ namespace wtl
                                  wndClass.toString(), 
                                  title, 
                                  enum_cast(style), 
-                                 rc.left, rc.top, rc.width(), rc.height(), 
+                                 pos.x, pos.y, size.width, size.height, 
                                  owner, 
                                  menu, 
                                  instance,     //!< Instance handle
@@ -136,16 +137,17 @@ namespace wtl
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
     //! \param[in] const& title - Window title
-    //! \param[in] const& rc - Initial position
+    //! \param[in] pos - Initial position
+    //! \param[in] size - Initial size
     //! \return HAlloc<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND parent, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, const RectL& rc)
+    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND parent, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, PointL pos, SizeL size)
     { 
       // Create child window
-      return create(instance, wndClass, parent, object, reinterpret_cast<::HMENU>(enum_cast(id)), style, ext, title, rc);
+      return create(instance, wndClass, parent, object, reinterpret_cast<::HMENU>(enum_cast(id)), style, ext, title, pos, size);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

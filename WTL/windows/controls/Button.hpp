@@ -51,6 +51,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Button(::HINSTANCE instance) : base(getClass(instance))
     {
+      // Set properties
+      this->Style = WindowStyle::ChildWindow | ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
+
       // Clear paint handlers (Painting handled by system window class)
       this->Paint.clear();
 
@@ -72,6 +75,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Button(wndclass_t& custom) : base(custom)
     {
+      // Set properties
+      this->Style = WindowStyle::ChildWindow | ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
+
       // Remove paint handlers
       this->Paint.clear();
     }

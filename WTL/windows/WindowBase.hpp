@@ -141,8 +141,6 @@ namespace wtl
       ChildWindowCollection(window_t& parent) : Parent(parent)
       {}
       
-      // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
-
       // ----------------------------------- STATIC METHODS -----------------------------------
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -1035,6 +1033,9 @@ namespace wtl
     };
 
   public:
+    struct WindowPositionPropertyImpl;
+    struct WindowSizePropertyImpl;
+
     //! \alias ClientRectProperty - Define client rectangle property type  
     using ClientRectProperty = Property<ClientRectPropertyImpl>;
     
@@ -1047,9 +1048,6 @@ namespace wtl
     //! \alias WindowIdProperty - Define window id property type  
     using WindowIdProperty = Property<WindowIdPropertyImpl>;
     
-    struct WindowPositionPropertyImpl;
-    struct WindowSizePropertyImpl;
-
     //! \alias WindowRectProperty - Define window rectangle property type  
     using WindowRectProperty = Property<WindowRectPropertyImpl,WindowPositionPropertyImpl,WindowSizePropertyImpl>;
     
@@ -1084,6 +1082,7 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
+    // Events
     ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
     CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>       Close;         //!< Raised in response to WM_CLOSE
@@ -1092,13 +1091,16 @@ namespace wtl
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
     PositionChangedEvent<encoding>   Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
+    // Fields
     ActionQueue                      Actions;       //!< Actions queue
     ChildWindowCollection            Children;      //!< Child window collection
+    WindowMenu<encoding>             Menu;          //!< Window menu, possibly empty
+
+    // Properties
     ClientRectProperty               ClientRect;    //!< Client rectangle property
     WindowEnabledProperty            Enabled;       //!< Window enabled property
     WindowFontProperty               Font;          //!< Window font property
     WindowIdProperty                 Ident;         //!< Child Window Id property
-    WindowMenu<encoding>             Menu;          //!< Window menu, possibly empty
     WindowPositionProperty           Position;      //!< Window position property
     WindowSizeProperty               Size;          //!< Window size property
     WindowStyleProperty              Style;         //!< Window style property
@@ -1141,9 +1143,6 @@ namespace wtl
         
       // Paint window background by default
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
-
-      // Update position properties by default
-      Repositioned += new PositionChangedEventHandler<encoding>(this, &WindowBase::onRepositioned);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -1241,9 +1240,6 @@ namespace wtl
         // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
         case WindowMessage::GETMINMAXINFO:
           return getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
-
-        // [WINDOW MOVED/RESIZED] Update position properties
-        case WindowMessage::WINDOWPOSCHANGED:
 
         // [REMAINDER] Lookup native handle from the 'Active Windows' collection
         default:
@@ -1441,7 +1437,7 @@ namespace wtl
           throw logic_error(HERE, "Parent window does not exist");
 
         // Create as child using window Ident
-        Handle = HWnd(Class.Instance, Class.Name, owner->handle(), this, Ident, Style, StyleEx, CharArray<encoding,LEN>(text), WindowRect);
+        Handle = HWnd(Class.Instance, Class.Name, owner->handle(), this, Ident, Style, StyleEx, CharArray<encoding,LEN>(text), Position, Size);
 
         // Add to parent's collection of child windows
         owner->Children.insert(*this);
@@ -1452,7 +1448,7 @@ namespace wtl
         ::HWND parent = owner ? (::HWND)owner->handle() : default<::HWND>();          //!< Use parent if any
 
         // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
-        Handle = HWnd(Class.Instance, Class.Name, parent, this, nullptr, Style, StyleEx, CharArray<encoding,LEN>(text), WindowRect);
+        Handle = HWnd(Class.Instance, Class.Name, parent, this, nullptr, Style, StyleEx, CharArray<encoding,LEN>(text), Position, Size);
 
         // [MENU] Attach menu if populated during onCreate(..)
         if (!Menu.empty())
@@ -1578,29 +1574,6 @@ namespace wtl
       return 0; 
     }
   
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onRepositioned
-    //! Called to update properties after moving/resizing window
-    //! 
-    //! \param[in,out] args - Message arguments containing drawing data
-    //! \return LResult - Message result and routing
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onRepositioned(PositionChangedEventArgs<encoding>& args) 
-    { 
-      // Update size, position, and window rectangle
-      /*Size.update(args.Rect.size());
-      Position.update(args.Rect.topLeft());
-      WindowRect.update(args.Rect);*/
-
-      // Raise events
-      /*WindowRect.Changed.raise();
-      Position.Changed.raise();
-      Size.Changed.raise();*/
-      
-      // [Handled] 
-      return 0; 
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::post
     //! Posts a message to the window
