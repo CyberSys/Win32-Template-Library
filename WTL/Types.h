@@ -15,36 +15,39 @@
   #undef CHAR
 #endif
 
-// Fundemental types
-using int8    = int8_t;
-using uint8   = uint8_t;
-using int16   = int16_t;
-using uint16  = uint16_t;
-using int32   = int32_t;
-using uint32  = uint32_t;
-using long32  = signed long int;
-using ulong32 = unsigned long int;
-using int64   = int64_t;
-using uint64  = uint64_t;
-using float32 = float_t;
-using float64 = double_t;
-
-// Integers of data-bus width
-//using intptr_t;
-//using uintptr_t;
-
-// Convenience aliases
-using byte  = uint8;
-using word  = uint16;
-using dword = ulong32;
-
-// Handles
-//using Socket = intptr_t;
-//typedef HMODULE           Module;
-
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+
+  // Fundemental types
+  using int8    = int8_t;
+  using uint8   = uint8_t;
+  using int16   = int16_t;
+  using uint16  = uint16_t;
+  using int32   = int32_t;
+  using uint32  = uint32_t;
+  using long32  = signed long int;
+  using ulong32 = unsigned long int;
+  using int64   = int64_t;
+  using uint64  = uint64_t;
+  using float32 = float_t;
+  using float64 = double_t;
+
+  
+  // Standard types
+  using intptr_t = int32;
+  using uintptr_t = uint32;
+  // using size_t = int32;
+  using ptrdiff_t = int32;
+  
+
+  // Common names
+  using byte  = uint8;
+  using word  = uint16;
+  using dword = ulong32;
+
+
+
   //! \alias array_ref_t - Defines array reference types
   template <typename ELEMENT, uint32 LENGTH>
   using array_ref_t = ELEMENT (&)[LENGTH];
