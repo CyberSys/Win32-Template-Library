@@ -43,8 +43,11 @@
     <ClInclude Include="platform\Locale.hpp" />
     <ClInclude Include="platform\MenuFlags.hpp" />
     <ClInclude Include="platform\Path.hpp" />
+    <ClInclude Include="platform\Point.hpp" />
+    <ClInclude Include="platform\Rectangle.hpp" />
     <ClInclude Include="platform\ResourceId.hpp" />
-    <ClInclude Include="platform\Shapes.hpp" />
+    <ClInclude Include="platform\Size.hpp" />
+    <ClInclude Include="platform\Triangle.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
     <ClInclude Include="LibRes.h" />
@@ -120,6 +123,7 @@
     <ClInclude Include="windows\events\CtrlNotifyEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\OwnerMeasureEvent.hpp" />
+    <ClInclude Include="windows\events\PositionChangedEvent.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />
     <ClInclude Include="windows\events\CustomDrawEvent.hpp" />

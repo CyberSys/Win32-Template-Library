@@ -266,9 +266,6 @@
     <ClInclude Include="platform\Path.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="platform\Shapes.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="windows\events\OwnerDrawEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
@@ -433,6 +430,21 @@
     </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\PositionChangedEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Triangle.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Point.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Size.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Rectangle.hpp">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

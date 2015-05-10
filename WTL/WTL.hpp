@@ -138,7 +138,10 @@
 #include "platform/Path.hpp"
 #include "platform/FileSearch.hpp"
 #include "platform/SystemVersion.hpp"
-#include "platform/Shapes.hpp"
+#include "platform/Point.hpp"
+#include "platform/Size.hpp"
+#include "platform/Rectangle.hpp"
+#include "platform/Triangle.hpp"
 
 // Platform Traits:
 #include "traits/ResourceTraits.hpp"
@@ -198,6 +201,7 @@
 #include "windows/events/CloseWindowEvent.hpp"
 #include "windows/events/PaintWindowEvent.hpp"
 #include "windows/events/ShowWindowEvent.hpp"
+#include "windows/events/PositionChangedEvent.hpp"
 #include "windows/events/OwnerDrawEvent.hpp"
 #include "windows/events/OwnerMeasureEvent.hpp"
 #include "windows/events/ActionEvent.hpp"
