@@ -63,7 +63,6 @@ namespace wtl
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
-      //uint16         Dummy;        //!< Length of current entry, in characters
       uint16         Length;        //!< Length of current entry, in characters
       const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
     };

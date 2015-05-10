@@ -37,16 +37,12 @@ namespace wtl
     
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \enum - Define properties
-    enum { length = LENGTH, };    //!< Capacity of the array
-    
-
     //! \alias cast - Defines fixed array of equal length & dissimilar type
     template <typename D>
 		using cast = Array<D,LENGTH,false>;
     
-    //! \alias ptr_diff - Pointer difference type
-    using ptr_diff = size_t;
+    //! \alias ptrdiff_t - Pointer difference type
+    using ptrdiff_t = intptr_t;
     
     //! \alias other - Defines dynamic array of equal type & length 
 		using other = Array<DATA,LENGTH,true>;
@@ -70,22 +66,25 @@ namespace wtl
     using array_t   = value_type [LENGTH];
     using array_ref = value_type (&)[LENGTH];
     using array_ptr = value_type (*)[LENGTH];
-
+    
     //! \alias const_reference/const_pointer - Immutable element reference/pointer
-    using const_reference = const reference;
-    using const_pointer   = const pointer;
+    using const_reference = const value_type&;
+    using const_pointer   = const value_type*;
 
     //! \alias const_array_t/const_array_ref/const_array_ptr - Immutable array value/reference/pointer
-    using const_array_t   = value_type [LENGTH];
+    using const_array_t   = const value_type [LENGTH];
     using const_array_ref = const value_type (&)[LENGTH];
     using const_array_ptr = const value_type (*)[LENGTH];
 
 
     //! \var dynamic - Whether array can be resized
     static const bool dynamic = false;
+    
+    //! \var length - Capacity of the array
+    static constexpr uint32 length = LENGTH;
 
     //! \var npos - Sentinel value for 'item not found'
-    static const uint32 npos = static_cast<uint32>(-1L);
+    static constexpr uint32 npos = static_cast<uint32>(-1L);
 
 //!\ if DEVELOPMENT_MODE - Use iterators instead of pointers to aide development
 #ifdef DEVELOPMENT_MODE
@@ -247,9 +246,9 @@ namespace wtl
       //! Add this position to another
       //!
       //! \param[in] const &r - Another position
-      //! \return ptr_diff - Sum of indicies
+      //! \return ptrdiff_t - Sum of indicies
       /////////////////////////////////////////////////////////////////////////////////////////
-      ptr_diff operator + (const iterator_t& r) const
+      ptrdiff_t operator + (const iterator_t& r) const
       {
         return Index + r.Index;
       }
@@ -259,9 +258,9 @@ namespace wtl
       //! Substract this position from another
       //!
       //! \param[in] const &r - Another position
-      //! \return ptr_diff - Difference between indicies
+      //! \return ptrdiff_t - Difference between indicies
       /////////////////////////////////////////////////////////////////////////////////////////
-      ptr_diff operator - (const iterator_t& r) const
+      ptrdiff_t operator - (const iterator_t& r) const
       {
         return Index - r.Index;
       }

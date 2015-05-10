@@ -29,14 +29,8 @@ namespace wtl
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias description_t - Define description string resource type
-    using description_t = StringResource<ENC,1024>;
-
     //! \alias icon_t - Define icon resource type
     using icon_t = IconResource;
-    
-    //! \alias name_t - Define name string resource type
-    using name_t = StringResource<ENC,128>;
     
     //! \alias resource_t - Define resource ident type
     using resource_t = ResourceId<ENC>;
@@ -50,33 +44,82 @@ namespace wtl
 
     //! \alias revert_t - Define undo functor type
     using revert_t = std::function<void ()>;
+    
+    //! \struct NameStringResource - Encapsulates decoding command name and description
+    struct NameStringResource 
+    { 
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+      
+      //! \alias description_t - Define description string resource type
+      using description_t = CharArray<encoding,1024>;
+
+      //! \alias name_t - Define name string resource type
+      using name_t = CharArray<encoding,128>;
+
+      //! \var LineFeed - 
+      static constexpr char_t  LineFeed = '\n';
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      name_t         Name;            //!< Command Name
+      description_t  Description;     //!< Command Description
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // NameStringResource::NameStringResource
+      //! Create decoded from string id
+      //! 
+      //! \param[in] id - Name/description resource id
+      /////////////////////////////////////////////////////////////////////////////////////////
+      NameStringResource(resource_t id)
+      {
+        StringResource<encoding,1024> res(id);
+      
+        // [NAME/DESCRIPTION] Extract name & description
+        if (res.Text.contains(LineFeed))
+        {
+          int32 sep = res.Text.find(LineFeed);
+
+          // Assign description and truncate name
+          Name.assign<encoding>(res.Text.begin(), res.Text.begin()+(sep+1));
+          Description.assign<encoding>(res.Text.begin()+(sep+1), res.Text.end());
+        }
+        else
+          // [NAME] Leave description blank
+          Name = res.Text;
+      }
+    };
+
+    //! \using decoder_t - Name/description string type
+    using decoder_t = NameStringResource;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    CommandId      Ident;           //!< Command Id
-    name_t         Name;            //!< Command Name
-    description_t  Description;     //!< Command Description
-    icon_t         Icon;            //!< Command Icon
-    bool           Permanent;       //!< Whether command is permanent
-    execute_t      ExecuteFn;       //!< Command execution functor
-    revert_t       RevertFn;        //!< Command reversion functor
+    CommandId   Ident;           //!< Command Id
+    icon_t      Icon;            //!< Command Icon
+    bool        Permanent;       //!< Whether command is permanent
+    decoder_t   NameString;      //!< Name + Description
+    execute_t   ExecuteFn;       //!< Command execution functor
+    revert_t    RevertFn;        //!< Command reversion functor
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Action::Action
-    //! Create a permenant command
+    //! Create a permanent command
     //! 
     //! \param[in] id - Command identifier (Defining name, description, and icon resource)
     //! \param[in] exec - Callable target which implements executing command
     /////////////////////////////////////////////////////////////////////////////////////////
     Action(CommandId id, execute_t exec) : Ident(id),
-                                           Name(resource_id(id)),
-                                           Description(resource_id(id)),
                                            Icon(resource_id(id)),
+                                           NameString(resource_id(id)),
                                            Permanent(true),
                                            ExecuteFn(exec)
     {}
+    
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Action::Action
@@ -87,9 +130,8 @@ namespace wtl
     //! \param[in] undo - Callable target which implements reverting command
     /////////////////////////////////////////////////////////////////////////////////////////
     Action(CommandId id, execute_t exec, revert_t undo) : Ident(id),
-                                                          Name(resource_id(id)),
-                                                          Description(resource_id(id)),
                                                           Icon(resource_id(id)),
+                                                          NameString(resource_id(id)),
                                                           Permanent(false),
                                                           ExecuteFn(exec),
                                                           RevertFn(undo)
@@ -116,11 +158,11 @@ namespace wtl
     // Action::description const
     //! Get the command description
     //! 
-    //! \return const description_t::string_t& - Command description
+    //! \return const description_t& - Command description
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename description_t::string_t&  description() const 
+    virtual const typename decoder_t::description_t&  description() const 
     {
-      return Description.Text;
+      return NameString.Description;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -149,11 +191,11 @@ namespace wtl
     // Action::name const
     //! Get the command name
     //! 
-    //! \return const name_t::string_t& - Command name
+    //! \return const name_t& - Command name
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename name_t::string_t&  name() const 
+    virtual const typename decoder_t::name_t&  name() const 
     {
-      return Name.Text;
+      return NameString.Name;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
