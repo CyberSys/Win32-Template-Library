@@ -117,10 +117,10 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::init
-    //! Initialise value 
+    // Property::update
+    //! Silent value mutator
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual void  init(argument_t value) 
+    virtual void  update(argument_t value) 
     {
       Value = value;
     }
@@ -230,17 +230,19 @@ namespace wtl
   //! \struct Property - Encapsulates any value with getter/setters. Provides update verification and change notification.
   //! 
   //! \tparam IMPL - Implementation type
-  //! \tparam OWNER - [optional] Type permitted to perform internal mutation
+  //! \tparam INTERNAL1 - [optional] Type permitted to perform internal mutation
+  //! \tparam INTERNAL2 - [optional] Type permitted to perform internal mutation
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename OWNER = void>
+  template <typename IMPL, typename INTERNAL1 = void, typename INTERNAL2 = void>
   struct Property 
   {
-    friend OWNER;     //!< Extended friend permits optional internal access
+    friend INTERNAL1;     //!< Extended friend permits optional internal access
+    friend INTERNAL2;     //!< Extended friend permits optional internal access
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = Property<IMPL,OWNER>;
+    using type = Property<IMPL,INTERNAL1,INTERNAL2>;
 
     //! \alias argument_t - Inherit argument type (Value vs Reference)
     using argument_t = typename IMPL::argument_t;
@@ -454,16 +456,16 @@ namespace wtl
 
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::init
-    //! Initialise value without raising events
+    // Property::update
+    //! Set value without raising events
     //! 
     //! \param[in] &&... args - [optional] Value constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    void  init(ARGS&&... args) 
+    void  update(ARGS&&... args) 
     {
-      // Initialise value
-      Impl.init(std::forward<ARGS>(args)...);
+      // Update value
+      Impl.update(std::forward<ARGS>(args)...);
     }
 
   };

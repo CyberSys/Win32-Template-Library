@@ -298,9 +298,9 @@ namespace wtl
       // ClientRectPropertyImpl::ClientRectPropertyImpl
       //! Create with empty rectangle
       //! 
-      //! \param[in] const& wnd - Owner client
+      //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      ClientRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
+      ClientRectPropertyImpl(window_t& wnd) : base(wnd, default<argument_t>())
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -311,19 +311,28 @@ namespace wtl
       //! 
       //! \return argument_t - Current client rectangle
       //! 
-      //! \throw wtl::logic_error - Window does not exist
+      //! \throw wtl::logic_error - Window is using default size or location
+      //! \throw wtl::platform_error - Unable to query client rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
       argument_t  get() const override
       {
-        RectL rc;
+        // [EXISTS] Return current window rectangle
+        if (this->Window.exists())
+        {
+          argument_t rc;    //!< Client rectangle
         
-        // Ensure exists
-        if (!this->Window.exists())
-          throw logic_error(HERE, "Cannot query client rectangle until window exists");
-        
-        // Query & return client rectangle
-        ::GetClientRect(this->Window, (::RECT*)rc);
-        return rc;
+          // Query & return client rectangle
+          if (!::GetClientRect(this->Window, (::RECT*)rc))
+            throw platform_error(HERE, "Unable to query window rectangle");
+          return rc;
+        }
+
+        // [DEFAULT] Cannot generate a window rectangle from default co-ordinates
+        if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
+
+        // [~EXISTS] Return cached, if any
+        return this->Value;
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -332,24 +341,25 @@ namespace wtl
       // ClientRectPropertyImpl::set 
       //! Set the client rectangle
       //! 
-      //! \param[in] rc - New client rectangle
+      //! \param[in] client - New client rectangle
       //! 
-      //! \throw wtl::logic_error - Window does not exist
+      //! \throw wtl::platform_error - Unable to calculate window rectangle from client
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t rc) override
+      void set(argument_t client) override
       {
-        // Ensure exists
-        if (!this->Window.exists())
-          throw logic_error(HERE, "Cannot query client rectangle until window exists");
+        argument_t wnd(client);   //!< New window rectangle
 
-        // Calculate and set window rectangle from client rectangle + window properties
-        if (!::AdjustWindowRectEx((::RECT*)rc, 
+        // Calculate window rectangle 
+        if (!::AdjustWindowRectEx((::RECT*)wnd, 
                                   enum_cast(this->Window.Style.get()), 
                                   boolean_cast(!this->Window.Menu.empty()), 
                                   enum_cast(this->Window.StyleEx.get())))
-          throw platform_error(HERE, "Unable to set client rectangle");
-        
-        // Ignore base value
+          throw platform_error(HERE, "Unable to calculate window rectangle from client");
+
+        // Set value silently 
+        this->Value = client;
+        // Set window rectangle, raising chain of 'Changed' events
+        this->Window.WindowRect = wnd;
       }
     };
     
@@ -377,7 +387,7 @@ namespace wtl
       // WindowEnabledPropertyImpl::WindowEnabledPropertyImpl
       //! Create with initial value
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
@@ -494,7 +504,7 @@ namespace wtl
       // WindowIdPropertyImpl::WindowIdPropertyImpl
       //! Create with initial value 
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
       WindowIdPropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
@@ -561,7 +571,7 @@ namespace wtl
       // WindowStylePropertyImpl::WindowStylePropertyImpl
       //! Create with initial value 
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
       WindowStylePropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
@@ -628,7 +638,7 @@ namespace wtl
       // WindowStyleExPropertyImpl::WindowStyleExPropertyImpl
       //! Create with default value
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
       WindowStyleExPropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
@@ -695,7 +705,7 @@ namespace wtl
       // WindowRectPropertyImpl::WindowRectPropertyImpl
       //! Create with initial value
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
@@ -709,19 +719,29 @@ namespace wtl
       //! Get the window rectangle
       //! 
       //! \return argument_t - Current window rectangle
+      //!
+      //! \throw wtl::logic_error - Window is using default size or location
+      //! \throw wtl::platform_error - Unable to query window rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
       argument_t  get() const override
       {
-        // [EXISTS] Query window rectangle
+        // [EXISTS] Return current window rectangle
         if (this->Window.exists())
         {
-          RectL rc;
-          ::GetWindowRect(this->Window, (::RECT*)rc);
-          return rc;
+          argument_t wnd;    //!< Window rectangle
+        
+          // Query & return window rectangle
+          if (!::GetWindowRect(this->Window, (::RECT*)wnd))
+            throw platform_error(HERE, "Unable to query window rectangle");
+          return wnd;
         }
 
-        // Return cached
-        return this->Value;
+        // [DEFAULT] Error: Cannot generate a window rectangle from default co-ordinates
+        if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
+
+        // [~EXISTS] Generate from cached size & position
+        return { this->Window.Position(), this->Window.Size() };
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -731,37 +751,57 @@ namespace wtl
       //! Set the window rectangle
       //! 
       //! \param[in] rc - New window rectangle
+      //! 
+      //! \throw wtl::platform_error - Unable to set window position
       /////////////////////////////////////////////////////////////////////////////////////////
       void set(argument_t rc) override
       {
-        // [EXISTS] 
+        bool resized = this->Value.width() == rc.width() && this->Value.height() == rc.height(),    //!< Whether resized
+               moved = this->Value.left == rc.left && this->Value.top == rc.top;                    //!< Whethe rmoved
+
+        // [EXISTS] Resize window
         if (this->Window.exists())
         {
           MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
-
+          
           // [¬RESIZED] Add appropriate flag
-          if (this->Value.width() == rc.width() && this->Value.height() == rc.height())
+          if (!resized)
             flags |= MoveWindowFlags::NoSize;
 
           // [¬MOVED] Add appropriate flag
-          if (this->Value.left == rc.left && this->Value.top == rc.top)
+          if (!moved)
             flags |= MoveWindowFlags::NoMove;
 
-          // Set window rect
+          // Resize/reposition window
           if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
             throw platform_error(HERE, "Unable to set window position");
         }
 
-        // Update value
-        base::set(rc);
+        // Update value 
+        this->update(rc);
+        // Internally set sibling properties
+        this->Window.Size.update(rc.size());
+        this->Window.Position.update(rc.topLeft());
+
+        // Raise WindowRect->Changed & ClientRect->Changed
+        this->Window.WindowRect.Changed.raise();
+        this->Window.ClientRect.Changed.raise();
+
+        // [RESIZED] Raise Size->Changed
+        if (resized)
+          this->Window.Size.Changed.raise();
+
+        // [MOVED] Raise Position->Changed
+        if (moved)
+          this->Window.Position.Changed.raise();
       }
     };
     
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowSizePropertyImpl - Implements the window size property [Mutable,Value]
     //! 
-    //! \remarks [WINDOW EXISTS]  Window Size derived from Window Rectangle 
-    //! \remarks [WINDOW ~EXISTS] Window Rectangle derived from cached Window Size & Location
+    //! \remarks [EXISTS]  Derived from Window Rectangle 
+    //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
     /////////////////////////////////////////////////////////////////////////////////////////
     struct WindowSizePropertyImpl : WindowPropertyImpl<SizeL,PropertyType::MutableValue>
     {
@@ -784,7 +824,7 @@ namespace wtl
       // WindowSizePropertyImpl::WindowSizePropertyImpl
       //! Create with initial value
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
@@ -803,9 +843,9 @@ namespace wtl
       {
         // [EXISTS] Derive window size from window rectangle 
         if (this->Window.exists())
-          return this->Window.WindowRect->size();
+          return this->Window.WindowRect().size();
 
-        // Return cached
+        // [~EXISTS] Return cached size  (Offline window rectangle derived from size)
         return this->Value;
       }
 
@@ -819,19 +859,101 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       void set(argument_t sz) override
       {
-        // Set window rectangle according to new size  
-        this->Window.WindowRect = RectL(this->Window.WindowRect->topLeft(), sz);
+        RectL wnd(this->Window.Position(), sz);   //!< New window rectangle
 
+        // [EXISTS] Resize window rectangle    [Raises WindowRect->Changed, ClientRect->Changed, Size->Changed]
+        if (this->Window.exists())
+          this->Window.WindowRect = wnd;
+        else
         {
-          MoveWindowFlags flags = MoveWindowFlags::NoZOrder | MoveWindowFlags::NoMove;
-
-          // Set window rectangle directly?
-          if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
-            throw platform_error(HERE, "Unable to resize window");
+          // Update Size + WindowRect
+          this->update(sz);
+          this->Window.WindowRect.update(wnd);
+          
+          // Raise WindowRect->Changed then Size->Changed  (But not ClientRect->Changed)
+          this->Window.WindowRect.Changed.raise();
+          this->Window.Size.Changed.raise();
         }
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowPositionPropertyImpl - Implements the window position property [Mutable,Value]
+    //! 
+    //! \remarks [EXISTS]  Derived from Window Rectangle 
+    //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowPositionPropertyImpl : WindowPropertyImpl<PointL,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-        // Update value
-        base::set(rc);
+      //! \alias type - Define own type
+      using type = WindowPositionPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<PointL,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowPositionPropertyImpl::WindowPositionPropertyImpl
+      //! Create with initial value
+      //! 
+      //! \param[in,out] &wnd - Owner window
+      //! \param[in] &&... args - [optional] Value constructor arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename... ARGS>
+      WindowPositionPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowPositionPropertyImpl::get const
+      //! Get the window position
+      //! 
+      //! \return argument_t - Current window position
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Derive window position from window rectangle 
+        if (this->Window.exists())
+          return this->Window.WindowRect().topLeft();
+
+        // [~EXISTS] Return cached position  (Offline window rectangle derived from position)
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowPositionPropertyImpl::set 
+      //! Set the window position
+      //! 
+      //! \param[in] pt - New window position
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t pt) override
+      {
+        RectL wnd(pt, this->Window.Size.get());   //!< New window rectangle
+
+        // [EXISTS] Reposition window rectangle   [Raises WindowRect->Changed, ClientRect->Changed, Position->Changed]
+        if (this->Window.exists())
+          this->Window.WindowRect = wnd;
+        else
+        {
+          // Update Position + WindowRect
+          this->update(pt);
+          this->Window.WindowRect.update(wnd);
+          
+          // Raise WindowRect->Changed then Position->Changed   (But not ClientRect->Changed)
+          this->Window.WindowRect.Changed.raise();
+          this->Window.Position.Changed.raise();
+        }
       }
     };
     
@@ -859,7 +981,7 @@ namespace wtl
       // WindowVisibilityPropertyImpl::WindowVisibilityPropertyImpl
       //! Create with initial value
       //! 
-      //! \param[in] const& wnd - Owner window
+      //! \param[in,out] &wnd - Owner window
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
@@ -925,11 +1047,17 @@ namespace wtl
     //! \alias WindowIdProperty - Define window id property type  
     using WindowIdProperty = Property<WindowIdPropertyImpl>;
     
+    struct WindowPositionPropertyImpl;
+    struct WindowSizePropertyImpl;
+
     //! \alias WindowRectProperty - Define window rectangle property type  
-    using WindowRectProperty = Property<WindowRectPropertyImpl>;
+    using WindowRectProperty = Property<WindowRectPropertyImpl,WindowPositionPropertyImpl,WindowSizePropertyImpl>;
     
-    //! \alias WindowSizeProperty - Define window rectangle property type  
-    using WindowSizeProperty = Property<WindowSizePropertyImpl>;
+    //! \alias WindowPositionProperty - Define window position property type  
+    using WindowPositionProperty = Property<WindowPositionPropertyImpl,WindowRectPropertyImpl>;
+
+    //! \alias WindowSizeProperty - Define window size property type  
+    using WindowSizeProperty = Property<WindowSizePropertyImpl,WindowRectPropertyImpl>;
 
     //! \alias WindowStyleProperty - Define window style property type 
     using WindowStyleProperty = Property<WindowStylePropertyImpl>;
@@ -962,7 +1090,8 @@ namespace wtl
     DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
     PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-
+    PositionChangedEvent<encoding>   Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
+    
     ActionQueue                      Actions;       //!< Actions queue
     ChildWindowCollection            Children;      //!< Child window collection
     ClientRectProperty               ClientRect;    //!< Client rectangle property
@@ -970,15 +1099,17 @@ namespace wtl
     WindowFontProperty               Font;          //!< Window font property
     WindowIdProperty                 Ident;         //!< Child Window Id property
     WindowMenu<encoding>             Menu;          //!< Window menu, possibly empty
+    WindowPositionProperty           Position;      //!< Window position property
+    WindowSizeProperty               Size;          //!< Window size property
     WindowStyleProperty              Style;         //!< Window style property
     WindowStyleExProperty            StyleEx;       //!< Extended window style property
     WindowVisibilityProperty         Visible;       //!< Visibility property
     WindowRectProperty               WindowRect;    //!< Window rectangle property
 
   protected:
-    WindowClass<encoding>&      Class;         //!< Window class reference
-    HWnd                        Handle;        //!< Window handle
-    SubClassCollection          SubClasses;    //!< Sub-classed windows collection
+    WindowClass<encoding>&           Class;         //!< Window class reference
+    HWnd                             Handle;        //!< Window handle
+    SubClassCollection               SubClasses;    //!< Sub-classed windows collection
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public: 
@@ -995,10 +1126,12 @@ namespace wtl
                                   Font(*this, StockObject::SystemFont),
                                   Ident(*this, zero<WindowId>()),
                                   Handle(default<HWnd>()),
+                                  Position(*this, DefaultPosition),
+                                  Size(*this, DefaultSize),
                                   Style(*this, WindowStyle::OverlappedWindow),
                                   StyleEx(*this, WindowStyleEx::None),
                                   Visible(*this, Visibility::ShowNormal),
-                                  WindowRect(*this, DefaultPosition, DefaultSize)
+                                  WindowRect(*this)
     {
       // Accept window creation by default
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
@@ -1008,6 +1141,9 @@ namespace wtl
         
       // Paint window background by default
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
+
+      // Update position properties by default
+      Repositioned += new PositionChangedEventHandler<encoding>(this, &WindowBase::onRepositioned);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -1105,6 +1241,9 @@ namespace wtl
         // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
         case WindowMessage::GETMINMAXINFO:
           return getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
+
+        // [WINDOW MOVED/RESIZED] Update position properties
+        case WindowMessage::WINDOWPOSCHANGED:
 
         // [REMAINDER] Lookup native handle from the 'Active Windows' collection
         default:
@@ -1440,6 +1579,29 @@ namespace wtl
     }
   
     /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onRepositioned
+    //! Called to update properties after moving/resizing window
+    //! 
+    //! \param[in,out] args - Message arguments containing drawing data
+    //! \return LResult - Message result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onRepositioned(PositionChangedEventArgs<encoding>& args) 
+    { 
+      // Update size, position, and window rectangle
+      /*Size.update(args.Rect.size());
+      Position.update(args.Rect.topLeft());
+      WindowRect.update(args.Rect);*/
+
+      // Raise events
+      /*WindowRect.Changed.raise();
+      Position.Changed.raise();
+      Size.Changed.raise();*/
+      
+      // [Handled] 
+      return 0; 
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::post
     //! Posts a message to the window
     //! 
@@ -1472,10 +1634,11 @@ namespace wtl
         // [EVENT] Raise event associated with message
         switch (message)
         {
-        case WindowMessage::CREATE:         ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
-        case WindowMessage::CLOSE:          ret = Close.raise();                                                  break;
-        case WindowMessage::DESTROY:        ret = Destroy.raise();                                                break;
-        case WindowMessage::SHOWWINDOW:     ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+        case WindowMessage::CREATE:           ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
+        case WindowMessage::CLOSE:            ret = Close.raise();                                                  break;
+        case WindowMessage::DESTROY:          ret = Destroy.raise();                                                break;
+        case WindowMessage::SHOWWINDOW:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+        case WindowMessage::WINDOWPOSCHANGED: ret = Repositioned.raise(PositionChangedEventArgs<encoding>(w,l));    break;
 
         // [COMMAND] Reflect control events. Raise Gui events.
         case WindowMessage::COMMAND:  
