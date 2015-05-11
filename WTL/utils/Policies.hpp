@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\Utils\Policies.hpp
+//! \file wtl\utils\Policies.hpp
 //! \brief Provides allocation & initialization policies 
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -16,7 +16,7 @@ namespace wtl
  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct static_alloc - Static allocator
-  //! Provides creation, destruction, and reconstruction for any type on the stack
+  //! \remarks Provides creation, destruction, and reconstruction for any type on the stack
   //!
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -29,9 +29,7 @@ namespace wtl
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct static_alloc<T, typename std::enable_if_t<!std::is_class<T>::value>>
-                                                /* std::is_integral<T>::value 
-                                                || std::is_floating_point<T>::value>> */
+  struct static_alloc<T, enable_if_not_class_t<T>>
   {
     /////////////////////////////////////////////////////////////////////////////////////////
     // static_alloc::construct
@@ -108,7 +106,7 @@ namespace wtl
   //! \tparam T - Object type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct static_alloc<T, typename std::enable_if_t<std::is_class<T>::value>> 
+  struct static_alloc<T, enable_if_class_t<T>> 
   {
     /////////////////////////////////////////////////////////////////////////////////////////
     // static_alloc::construct
