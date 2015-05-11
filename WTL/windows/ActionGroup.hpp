@@ -34,26 +34,23 @@ namespace wtl
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias description_t - Define description string resource type
-    using description_t = StringResource<ENC,1024>;
-    
     //! \alias icon_t - Define icon resource type
     using icon_t = IconResource;
-
-    //! \alias name_t - Define name string resource type
-    using name_t = StringResource<ENC,128>;
 
     //! \alias resource_t - Define resource ident type
     using resource_t = ResourceId<ENC>;
     
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
+  
+  protected:
+    //! \using decoder_t - Name/description string type
+    using decoder_t = typename Action<encoding>::NameStringResource;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     CommandGroupId  Ident;           //!< Command Id
-    name_t          Name;            //!< Command Name
-    description_t   Description;     //!< Command Description
+    decoder_t       NameString;      //!< Name + Description
     icon_t          Icon;            //!< Command Icon
     
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
@@ -65,8 +62,7 @@ namespace wtl
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     /////////////////////////////////////////////////////////////////////////////////////////
     ActionGroup(CommandGroupId id) : Ident(id),
-                                     Name(resource_id(id)),
-                                     Description(resource_id(id)),
+                                     NameString(resource_id(id)),
                                      Icon(resource_id(id))
     {}
 
@@ -102,9 +98,9 @@ namespace wtl
     //! 
     //! \return const description_t::string_t& - Group description
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename description_t::string_t&  description() const 
+    virtual const typename decoder_t::description_t&  description() const 
     {
-      return Description.Text;
+      return NameString.Description;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -150,11 +146,11 @@ namespace wtl
     // ActionGroup::name const
     //! Get the group name
     //! 
-    //! \return const name_t::string_t& - Group name
+    //! \return const decoder_t::name_t& - Group name
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename name_t::string_t&  name() const 
+    virtual const typename decoder_t::name_t&  name() const 
     {
-      return Name.Text;
+      return NameString.Name;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

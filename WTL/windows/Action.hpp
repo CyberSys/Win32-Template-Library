@@ -38,13 +38,6 @@ namespace wtl
     //! \var encoding - Define encoding type
     static constexpr Encoding  encoding = ENC;
     
-  protected:
-    //! \alias execute_t - Define execute functor type
-    using execute_t = std::function<void ()>;
-
-    //! \alias revert_t - Define undo functor type
-    using revert_t = std::function<void ()>;
-    
     //! \struct NameStringResource - Encapsulates decoding command name and description
     struct NameStringResource 
     { 
@@ -68,29 +61,36 @@ namespace wtl
     
       /////////////////////////////////////////////////////////////////////////////////////////
       // NameStringResource::NameStringResource
-      //! Create decoded from string id
+      //! Create decoder from string id
       //! 
       //! \param[in] id - Name/description resource id
       /////////////////////////////////////////////////////////////////////////////////////////
       NameStringResource(resource_t id)
       {
-        StringResource<encoding,1024> res(id);
+        auto text = StringResource(id).c_arr<encoding,1024>();
       
         // [NAME/DESCRIPTION] Extract name & description
-        if (res.Text.contains(LineFeed))
+        if (text.contains(LineFeed))
         {
-          int32 sep = res.Text.find(LineFeed);
+          int32 sep = text.find(LineFeed);
 
           // Assign description and truncate name
-          Name.assign<encoding>(res.Text.begin(), res.Text.begin()+(sep+1));
-          Description.assign<encoding>(res.Text.begin()+(sep+1), res.Text.end());
+          Name.assign<encoding>(text.begin(), text.begin()+(sep+1));
+          Description.assign<encoding>(text.begin()+(sep+1), text.end());
         }
+        // [NAME] Leave description blank
         else
-          // [NAME] Leave description blank
-          Name = res.Text;
+          Name = text;
       }
     };
 
+  protected:
+    //! \alias execute_t - Define execute functor type
+    using execute_t = std::function<void ()>;
+
+    //! \alias revert_t - Define undo functor type
+    using revert_t = std::function<void ()>;
+    
     //! \using decoder_t - Name/description string type
     using decoder_t = NameStringResource;
 
@@ -158,7 +158,7 @@ namespace wtl
     // Action::description const
     //! Get the command description
     //! 
-    //! \return const description_t& - Command description
+    //! \return const decoder_t::description_t& - Command description
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual const typename decoder_t::description_t&  description() const 
     {
@@ -191,7 +191,7 @@ namespace wtl
     // Action::name const
     //! Get the command name
     //! 
-    //! \return const name_t& - Command name
+    //! \return const decoder_t::name_t& - Command name
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual const typename decoder_t::name_t&  name() const 
     {

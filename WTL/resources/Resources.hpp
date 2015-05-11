@@ -87,6 +87,17 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Resource::exists const
+    //! Query whether resource is valid
+    //! 
+    //! \return bool - True iff resource is valid
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool exists() const
+    {
+      return Handle.exists();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Resource::get const
     //! Access the resource data 
     //! 
@@ -137,7 +148,18 @@ namespace wtl
     {
       return !operator==(r);
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Resource::operator bool const
+    //! Query whether resource is valid
+    //! 
+    //! \return bool - True iff resource is valid
+    /////////////////////////////////////////////////////////////////////////////////////////
+    operator bool () const
+    {
+      return exists();
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 

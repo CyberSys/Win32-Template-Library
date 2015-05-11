@@ -16,24 +16,10 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct StringResource - Encapsulates loading a string from the resource table
-  //! 
-  //! \tparam ENC - Character encoding type
-  //! \tparam LEN - Buffer capacity
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned LEN>
-  struct StringResource : Resource
+  struct StringResource 
   {      
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
-    //! \alias base - Define base type
-    using base = Resource;
-
-    //! \alias string_t - Define string type
-    using string_t = CharArray<ENC,LEN>;
-    
-    //! \var encoding - Define character encoding
-    static constexpr Encoding encoding = ENC;
-    
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
@@ -68,14 +54,18 @@ namespace wtl
     };
 
     // ----------------------------------- REPRESENTATION -----------------------------------
-  public:
-    string_t   Text;     //!< String resource text
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  protected:
+    Resource                 Table;       //!< Table resource
+    const StringTableEntry*  Entry;       //!< Desired entry
+    uint16                   Ident;       //!< String id
     
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // StringResource::StringResource
     //! Loads a string resource
+    //! 
+    //! \tparam ENC - Character encoding type
     //! 
     //! \param[in] id - String identifier
     //! \param[in] lang - String language
@@ -83,36 +73,63 @@ namespace wtl
     //! \throw wtl::logic_error - Missing string -or- Insufficient buffer capacity to store string
     //! \throw wtl::platform_error - Unable to load resource
     /////////////////////////////////////////////////////////////////////////////////////////
-    explicit StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) : base(LoadedModules.findString(id,lang))
+    template <Encoding ENC>
+    explicit StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) : Table(LoadedModules.findString(id,lang)), 
+                                                                                         Entry(Table.get<StringTableEntry>()),
+                                                                                         Ident(id.toOrdinal())
     {
-      const int32  index = id.Value.Numeral % 16;                   //!< Index of desired string within table
-      
-      if (!this->Handle)
-        throw platform_error(HERE, "String resource %d does not exist", id.Value.Numeral);
-
-      // Load string table
-      const StringTableEntry* item = get<StringTableEntry>();
+      // [CHECK] Ensure table found
+      if (!Table.exists())
+        throw platform_error(HERE, "String resource %d does not exist", Ident);
 
       // Find desired string
-      for (int32 idx = 1; item && idx < index; idx++)
-        item = item->next();
+      for (int32 i = 1, index = Ident % 16; Entry && i < index; i++)
+        Entry = Entry->next();
 
       // [NOT-FOUND] Return false & empty string 
-      if (!item)
-        throw logic_error(HERE, "String resource %d does not exist", id.Value.Numeral);
-
-      // [FOUND] Ensure sufficient space is available
-      if (item->Length > LEN)
-        throw logic_error(HERE, "String resource %d requires %d chars but only %d available", id.Value.Numeral, (int32)item->Length, (int32)LEN);
-
-      // Convert from UTF16 if necessary
-      Text.assign<Encoding::UTF16>(item->Text, item->Text+item->Length);
+      if (!Entry)
+        throw logic_error(HERE, "String resource %d does not exist", Ident);
     }
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // StringResource::c_arr const
+    //! Populate character array from string resource
+    //! 
+    //! \tparam ENC - Character encoding type
+    //! \tparam LEN - Buffer capacity
+    //! 
+    //! \return CharArray<ENC,LENGTH> - Character array containing string resource
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC, unsigned LEN>
+    CharArray<ENC,LEN> c_arr() const
+    {
+      // [FOUND] Ensure sufficient space is available
+      if (Entry->Length > LEN)
+        throw logic_error(HERE, "String resource %d requires %d chars but only %d available", Ident, Entry->Length, LEN);
 
+      // Copy string as UTF16 (Convert on return if necessary)
+      return CharArray<Encoding::UTF16,LEN>(Entry->Text, Entry->Text+Entry->Length);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // StringResource::c_str const
+    //! Populate dynamic string from string resource
+    //! 
+    //! \tparam ENC - Character encoding type
+    //! 
+    //! \return String<ENC> - Dynamic string containing string resource
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    String<ENC> c_str() const
+    {
+      // Copy string as UTF16 (Convert on return if necessary)
+      return String<Encoding::UTF16>(Entry->Text, Entry->Text+Entry->Length);
+    }
+      
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   };
