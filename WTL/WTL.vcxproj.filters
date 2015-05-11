@@ -446,6 +446,9 @@
     <ClInclude Include="platform\Rectangle.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="utils\String.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\Console.cpp">

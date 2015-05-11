@@ -108,6 +108,7 @@
 #include "utils/DynamicArray.hpp"
 #include "utils/FixedArray.hpp"
 #include "utils/CharArray.hpp"
+#include "utils/String.hpp"
 #include "utils/Lazy.hpp"
 #include "utils/Bitset.hpp"
 #include "utils/Handle.hpp"
