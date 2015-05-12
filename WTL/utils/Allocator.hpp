@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\utils\Policies.hpp
+//! \file wtl\utils\Allocator.hpp
 //! \brief Provides allocation & initialization policies 
 //! \date 6 March 2015
 //! \author Nick Crowley

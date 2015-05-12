@@ -119,9 +119,6 @@
     <ClInclude Include="utils\Lazy.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Policies.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Range.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -456,6 +453,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\Triangle.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Allocator.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

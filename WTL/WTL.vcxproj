@@ -97,7 +97,7 @@
     <ClInclude Include="utils\FormatSpec.hpp" />
     <ClInclude Include="utils\Helpers.hpp" />
     <ClInclude Include="utils\Lazy.hpp" />
-    <ClInclude Include="utils\Policies.hpp" />
+    <ClInclude Include="utils\Allocator.hpp" />
     <ClInclude Include="utils\Range.hpp" />
     <ClInclude Include="utils\Sequence.hpp" />
     <ClInclude Include="utils\SFINAE.hpp" />
