@@ -9,7 +9,7 @@
 #define WTL_DYNAMIC_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Policies.hpp"           //!< Static alloc
+#include "wtl/utils/Allocator.hpp"          //!< StaticAlloc
 #include "wtl/utils/Exception.hpp"          //!< Exceptions
 #include <iterator>                         //!< std::iterator
 #include <functional>                       //!< std::
