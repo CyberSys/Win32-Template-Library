@@ -19,10 +19,10 @@
 #include "wtl/traits/PenTraits.hpp"               //!< HPen
 #include "wtl/platform/Colours.hpp"               //!< Colours
 #include "wtl/platform/DrawingFlags.hpp"          //!< DrawTextFlags
-#include "wtl/platform/Rectangle.hpp"             //!< Rectangle
-#include "wtl/platform/Point.hpp"                 //!< Point
-#include "wtl/platform/Size.hpp"                  //!< Size
-#include "wtl/platform/Triangle.hpp"              //!< Triangle
+#include "wtl/utils/Rectangle.hpp"             //!< Rectangle
+#include "wtl/utils/Point.hpp"                 //!< Point
+#include "wtl/utils/Size.hpp"                  //!< Size
+#include "wtl/utils/Triangle.hpp"              //!< Triangle
 #include <deque>                                  //!< std::deque
 
 //! \namespace wtl - Windows template library

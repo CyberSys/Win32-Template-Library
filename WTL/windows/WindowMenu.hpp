@@ -28,8 +28,6 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct MenuItemInfo - Menu item info
   //! 
@@ -177,9 +175,9 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
-    OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< 'Owner draw' event 
-    OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< 'Owner Measure' event 
-    ActionGroupPtr<encoding>          Group;            //!< Shared Action group
+    events::OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< 'Owner draw' event 
+    events::OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< 'Owner Measure' event 
+    ActionGroupPtr<encoding>                  Group;            //!< Shared Action group
 
   protected:
     HMenu         Handle;     //!< Menu handle
@@ -371,8 +369,8 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
-    OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
-    OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
+    events::OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
+    events::OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
 
   protected:
     HMenu         Handle;     //!< Menu handle
@@ -387,8 +385,8 @@ namespace wtl
     WindowMenu() : Handle(MenuType::Window) 
     {
       // Owner draw handler
-      OwnerDraw += new OwnerDrawMenuEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
-      OwnerMeasure += new OwnerMeasureMenuEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
+      OwnerDraw += new events::OwnerDrawMenuEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
+      OwnerMeasure += new events::OwnerMeasureMenuEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
     }
 
     // ----------------------------------- STATIC METHODS -----------------------------------
@@ -555,10 +553,10 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(wtl::OwnerDrawMenuEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerDraw(events::OwnerDrawMenuEventArgs<encoding>& args) 
     { 
       // Draw background
-      args.Graphics.fill(args.Rect, wtl::StockBrush::Blue);
+      args.Graphics.fill(args.Rect, StockBrush::Blue);
 
       // [GROUP] Draw name
       if (auto group = find(command_group_id(args.Ident)))
@@ -579,7 +577,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(wtl::OwnerMeasureMenuEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerMeasure(events::OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
       // [GROUP] Measure group name
       if (auto group = find(command_group_id(args.Ident)))
@@ -594,7 +592,7 @@ namespace wtl
     }
 
   };
-
-}
+      
+} // namespace wtl
 
 #endif  // WTL_WINDOW_MENU_HPP

@@ -9,8 +9,8 @@
 #define WTL_RECT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/platform/Point.hpp"
-#include "wtl/platform/Size.hpp"
+#include "wtl/utils/Point.hpp"
+#include "wtl/utils/Size.hpp"
 #include <type_traits>          //!< std::enable_if
 
 //! \namespace wtl - Windows template library

@@ -16,7 +16,7 @@
 #include <stdexcept>                          //!< std::Exception
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::messageBox
@@ -118,6 +118,7 @@ namespace wtl
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconQuestion);
   }
-}
+        
+} // namespace wtl
 
 #endif // WTL_MESSAGE_BOX_HPP

@@ -11,9 +11,10 @@
 #include "wtl/WTL.hpp"
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias notify_data - Defines the data-structure sent with each Win32 WM_NOTIFY message
   //! 
@@ -51,7 +52,8 @@ namespace wtl
   template <Encoding ENC> struct notify_data<ENC,NotifyMessage,NotifyMessage::CustomDraw>  { using type = ::NMCUSTOMDRAW;     };
   template <Encoding ENC> struct notify_data<ENC,ListViewEvent,ListViewEvent::CustomDraw>  { using type = ::NMLVCUSTOMDRAW;   };*/
 
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_NOTIFY_EVENT_DATA_HPP

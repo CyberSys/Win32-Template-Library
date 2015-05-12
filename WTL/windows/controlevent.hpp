@@ -14,7 +14,7 @@
 #include "wtl/traits/EncodingTraits.hpp"                //!< Encoding
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ControlEventArgs - Event arguments for win32 messages from controls
@@ -49,10 +49,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default<EVENT>()> 
   using ControlEventHandler = typename ControlEvent<ENC,WM,EVENT,CODE>::delegate_t;
-
-
-  
-
-}
+      
+} // namespace wtl
 
 #endif // WTL_CONTROL_EVENT_HPP

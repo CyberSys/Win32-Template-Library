@@ -12,9 +12,8 @@
 #include <functional>             //!< std::function, std::bind, std::placeholders
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias delegate_traits - Defines delegate traits
   //! 
@@ -153,6 +152,7 @@ namespace wtl
   {
     return new Delegate<sizeof...(ARGS),RET,ARGS...>(obj,fn);
   }
-}
+
+} // namespace wtl
 
 #endif // WTL_EVENT_DELEGATE_HPP

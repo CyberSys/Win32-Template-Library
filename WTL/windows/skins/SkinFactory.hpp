@@ -11,9 +11,15 @@
 #include "wtl/WTL.hpp"
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace windows - WTL Windows
+namespace windows 
 {
-  
-}
+
+  // TODO: Factory class producing drawing types encapsulating standard drawing, themed drawing, user defined drawing, etc.
+      
+} // namespace windows
+} // namespace wtl
+
 
 #endif // WTL_SKIN_FACTORY_HPP

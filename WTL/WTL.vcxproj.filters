@@ -416,18 +416,6 @@
     <ClInclude Include="windows\events\PositionChangedEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
-    <ClInclude Include="platform\Triangle.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="platform\Point.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="platform\Size.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="platform\Rectangle.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="utils\String.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -456,6 +444,18 @@
       <Filter>Windows\Events</Filter>
     </ClInclude>
     <ClInclude Include="utils\LengthOf.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Point.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Rectangle.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Size.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Triangle.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,9 +13,8 @@
 #include "wtl/utils/Stack.hpp"             //!< Stack
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ActionQueue - Enqueues executed Gui commands, providing an 'Undo' and 'Redo' functionality if supported by the command
   //! 
@@ -198,8 +197,7 @@ namespace wtl
                   RepeatableCommands;    //!< 'Redo' command queue
                   
   };
-
-  
-}
+        
+} // namespace wtl
 
 #endif // WTL_GUI_COMMAND_QUEUE_HPP

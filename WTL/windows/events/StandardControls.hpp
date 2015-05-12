@@ -13,7 +13,9 @@
 #include "wtl/platform/ControlStyles.hpp"         //!< Styles+Notifications
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ButtonEvent - Defines a button control event raised by WM_COMMAND
@@ -151,7 +153,8 @@ namespace wtl
   /*template <Encoding ENC, typename SENDER> using VirtualListViewCacheHintEventHandler    = ListViewEventHandler<ENC,SENDER,ListViewEvent::OdCacheHint>; 		
   template <Encoding ENC, typename SENDER> using VirtualListViewFindItemEventHandler     = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::OdFindItemA,ListViewEvent::OdFindItemW)>;
   template <Encoding ENC, typename SENDER> using VirtualListViewStateChangedEventHandler = ListViewEventHandler<ENC,SENDER,ListViewEvent::OdStateChanged>; 	*/
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_CONTROL_EVENTS_HPP

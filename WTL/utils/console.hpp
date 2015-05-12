@@ -322,7 +322,7 @@ namespace wtl
         // Feedback
         Write("Console attached to process");
       }
-      catch (wtl::exception& e)
+      catch (exception& e)
       {
         errorBox(::GetDesktopWindow(), c_arr("Debug Console"), e);
       }

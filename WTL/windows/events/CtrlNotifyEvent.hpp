@@ -16,7 +16,9 @@
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +149,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename EVENT = uint16, EVENT CODE = default<EVENT>()>
   using CtrlNotifyEventHandler = ControlEventHandler<ENC,WindowMessage::NOTIFY,EVENT,CODE>;
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_CONTROL_NOTIFY_EVENT_HPP

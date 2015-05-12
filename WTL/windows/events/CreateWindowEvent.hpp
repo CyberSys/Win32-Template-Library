@@ -12,7 +12,9 @@
 #include "wtl/windows/MessageEvent.hpp"            //!< Event
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +129,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using CreateWindowEventHandler = MessageEventHandler<ENC,WindowMessage::CREATE>;
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_CREATE_WINDOW_EVENT_HPP

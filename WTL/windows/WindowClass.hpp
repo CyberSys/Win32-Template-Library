@@ -20,9 +20,8 @@
 #include "wtl/traits/WindowClassTraits.hpp"     //!< HAtom
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct WindowClass - Encapsulates window class properties
   //! 
@@ -246,8 +245,7 @@ namespace wtl
     
   };
 
-  
-
-}
+      
+} // namespace wtl
 
 #endif // WTL_WINDOW_CLASS_HPP

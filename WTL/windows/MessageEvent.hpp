@@ -15,9 +15,8 @@
 #include "wtl/traits/EncodingTraits.hpp"                //!< Encoding
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs - Encapsulates decoding win32 message arguments
   //! 
@@ -98,8 +97,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
   using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
-
-  
-}
+        
+} // namespace wtl
 
 #endif // WTL_EVENT_MESSAGE_HPP

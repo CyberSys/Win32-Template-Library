@@ -16,11 +16,13 @@
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
 #include "wtl/windows/ControlEvent.hpp"         //!< ControlEventArgs
 #include "wtl/windows/MessageEvent.hpp"         //!< MessageEvent
-#include "wtl/platform/Rectangle.hpp"           //!< Rect
+#include "wtl/utils/Rectangle.hpp"           //!< Rect
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +135,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerDrawCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::DRAWITEM>;
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_OWNER_DRAW_CONTROL_EVENT_HPP

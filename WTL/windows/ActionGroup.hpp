@@ -14,9 +14,8 @@
 #include <memory>                          //!< std::shared_ptr
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ActionGroup - Provides a collection of Gui Commands, indexed by Command Id
   //! 
@@ -180,8 +179,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using ActionGroupPtr = std::shared_ptr<ActionGroup<ENC>>;
-
-
-}
+        
+} // namespace wtl
 
 #endif // WTL_ACTION_GROUP_HPP

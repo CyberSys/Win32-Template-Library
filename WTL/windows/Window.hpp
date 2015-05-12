@@ -12,9 +12,8 @@
 #include "wtl/windows/WindowBase.hpp"
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
-  
   //! \struct Window - Window class
   template <Encoding ENC>
   struct Window : WindowBase<ENC>
@@ -100,6 +99,7 @@ namespace wtl
     }
   };
 
-}
+} // namespace wtl
+
 
 #endif // WTL_WINDOW_HPP

@@ -15,8 +15,8 @@
 #include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
 #include "wtl/platform/ResourceId.hpp"    //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"   //!< WindowId, WindowStyle, WindowStyleEx
-#include "wtl/platform/Point.hpp"         //!< Point
-#include "wtl/platform/Size.hpp"          //!< Size
+#include "wtl/utils/Point.hpp"         //!< Point
+#include "wtl/utils/Size.hpp"          //!< Size
 
 //! \namespace wtl - Windows template library
 namespace wtl

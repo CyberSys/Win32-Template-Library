@@ -11,13 +11,14 @@
 #include "wtl/WTL.hpp"
 #include "wtl/casts/OpaqueCast.hpp"                //!< OpaqueCast
 #include "wtl/windows/MessageEvent.hpp"            //!< Event
-#include "wtl/platform/Rectangle.hpp"              //!< Rect
+#include "wtl/utils/Rectangle.hpp"              //!< Rect
 #include "wtl/traits/WindowTraits.hpp"             //!< HWnd
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
-  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::WINDOWPOSCHANGED> - Event arguments for Win32 message 'WM_WINDOWPOSCHANGED'
@@ -107,8 +108,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using PositionChangedEventHandler = MessageEventHandler<ENC,WindowMessage::WINDOWPOSCHANGED>;
-
   
-}
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_POSITION_CHANGED_EVENT

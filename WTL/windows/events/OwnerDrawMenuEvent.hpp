@@ -15,10 +15,12 @@
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
 #include "wtl/windows/MessageEvent.hpp"         //!< EventArgs
-#include "wtl/platform/Rectangle.hpp"           //!< Rect
+#include "wtl/utils/Rectangle.hpp"           //!< Rect
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +118,8 @@ namespace wtl
   template <Encoding ENC>
   using OwnerDrawMenuEventHandler = MessageEventHandler<ENC,WindowMessage::DRAWITEM>;
 
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_OWNER_DRAW_EVENT_HPP

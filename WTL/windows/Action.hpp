@@ -282,7 +282,6 @@ namespace wtl
   template <Encoding ENC>
   using ActionPtr = std::shared_ptr<Action<ENC>>;
   
-
-}
+} // namespace wtl
 
 #endif // WTL_ACTION_HPP

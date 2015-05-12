@@ -15,7 +15,7 @@
 #include <type_traits>                          //!< std::enable_if, std::conditional
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
   //! \enum PropertyType - Defines property types
   enum class PropertyType : int32 
@@ -503,7 +503,7 @@ namespace wtl
   /*template <typename PROPERTY>
   using PropertyChangingEventHandler = EventHandler< typename PROPERTY::ChangingEvent >;*/
   
-    
-}
+      
+} // namespace wtl
 
 #endif // WTL_PROPERTY_HPP

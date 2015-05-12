@@ -17,7 +17,7 @@
 #include <list>                               //!< std::list
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Event - Provides an observeable event pattern with multiple subscribers
@@ -209,8 +209,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename EVENT>
   using EventHandler = typename EVENT::delegate_t;
-  
-
-}
+        
+} // namespace wtl
 
 #endif // WTL_EVENT_HPP

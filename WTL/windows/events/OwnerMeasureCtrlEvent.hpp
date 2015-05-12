@@ -15,11 +15,13 @@
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
 #include "wtl/windows/ControlEvent.hpp"         //!< ControlEventArgs
-#include "wtl/platform/Rectangle.hpp"           //!< Rect
+#include "wtl/utils/Rectangle.hpp"           //!< Rect
 #include "wtl/traits/WindowTraits.hpp"          //!< HWnd
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ControlEventArgs<WindowMessage::MEASUREITEM> - Event arguments for Win32 message 'WM_MEASUREITEM' raised by controls
@@ -133,9 +135,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerMeasureCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::MEASUREITEM>;
-
-
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_OWNER_MEASURE_CTRL_EVENT_HPP

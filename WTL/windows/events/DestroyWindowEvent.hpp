@@ -12,7 +12,9 @@
 #include "wtl/windows/MessageEvent.hpp"            //!< Event
 
 //! \namespace wtl - Windows template library
-namespace wtl
+namespace wtl {
+//! \namespace events - WTL Window events
+namespace events 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias DestroyWindowEvent - Defines 'DestroyWindow' event (ie. WM_DESTROY)
@@ -30,7 +32,8 @@ namespace wtl
   template <Encoding ENC>
   using DestroyWindowEventHandler = typename DestroyWindowEvent<ENC>::delegate_t;
 
-
-}
+  
+} // namespace events
+} // namespace wtl
 
 #endif // WTL_DESTROY_WINDOW_EVENT_HPP
