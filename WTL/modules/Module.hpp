@@ -9,12 +9,15 @@
 #define WTL_MODULE_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"
-#include "wtl/utils/List.hpp"
-#include "wtl/traits/ModuleTraits.hpp"
-#include "wtl/resources/Resource.hpp"
-#include "wtl/platform/ResourceId.hpp"
-#include <functional>
+#include "wtl/utils/Handle.hpp"             //!< Handle
+#include "wtl/utils/List.hpp"               //!< List
+#include "wtl/utils/Default.hpp"            //!< Default
+#include "wtl/traits/EncodingTraits.hpp"    //!< Encoding
+#include "wtl/traits/ModuleTraits.hpp"      //!< HModule
+#include "wtl/traits/ResourceTraits.hpp"    //!< HResource
+#include "wtl/resources/ResourceBlob.hpp"   //!< ResourceBlob
+#include "wtl/platform/ResourceId.hpp"      //!< ResourceId
+#include <functional>                       //!< std::forward
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -86,17 +89,17 @@ namespace wtl
     //! \param[in] type - Resource type
     //! \param[in] name - Resource identifier
     //! \param[in] lang - Resource language
-    //! \return Resource - Resource, possibly empty
+    //! \return ResourceBlob - Resource, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
+    ResourceBlob  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
     { 
       // Load resource handle
       if (::HRSRC res = getFunc<ENC>(::FindResourceExA,::FindResourceExW)(Handle, ResourceId<ENC>(type), name, language))
-        return Resource(Handle, HResource(res, AllocType::Accquire));
+        return ResourceBlob(Handle, HResource(res, AllocType::Accquire));
 
       // [NOT FOUND] Return sentinel
-      return default<Resource>();
+      return default<ResourceBlob>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -107,12 +110,12 @@ namespace wtl
     //!
     //! \param[in] id - String identifier
     //! \param[in] lang - Resource language
-    //! \return Resource - Resource, possibly empty
+    //! \return ResourceBlob - Resource, possibly empty
     //!
     //! \throw wtl::invalid_argument - String ids must be numeric constants
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    Resource  findString(ResourceId<ENC> id, LanguageId language = LanguageId::Neutral) const
+    ResourceBlob  findString(ResourceId<ENC> id, LanguageId language = LanguageId::Neutral) const
     { 
       if (!id.isOrdinal())
         throw invalid_argument(HERE, "String ids must be numeric constants");
@@ -178,23 +181,23 @@ namespace wtl
     //! \param[in] type - Resource type
     //! \param[in] name - Resource identifier
     //! \param[in] lang - Resource language
-    //! \return Resource - Resource, possibly empty
+    //! \return ResourceBlob - Resource, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
+    ResourceBlob  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
     {
-      Resource res;
+      ResourceBlob res;
 
       // Search all modules for resource
       for (const element_t& m : *this)
       {
         // [FOUND] Find & return resource
-        if ((res = m.get().findResource(type, name, language)) != default<Resource>())
+        if ((res = m.get().findResource(type, name, language)) != default<ResourceBlob>())
           return res;
       }
       
       // [NOT FOUND] Return default
-      return default<Resource>();
+      return default<ResourceBlob>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -205,12 +208,12 @@ namespace wtl
     //!
     //! \param[in] id - String identifier
     //! \param[in] lang - Resource language
-    //! \return Resource - Resource, possibly empty
+    //! \return ResourceBlob - Resource, possibly empty
     //!
     //! \throw wtl::invalid_argument - String ids must be numeric constants
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    Resource  findString(ResourceId<ENC> id, LanguageId language = LanguageId::Neutral) const
+    ResourceBlob  findString(ResourceId<ENC> id, LanguageId language = LanguageId::Neutral) const
     { 
       if (!id.isOrdinal())
         throw invalid_argument(HERE, "String ids must be numeric constants");

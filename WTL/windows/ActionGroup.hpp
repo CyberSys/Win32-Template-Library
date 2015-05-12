@@ -9,6 +9,9 @@
 #define WTL_ACTION_GROUP_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/Action.hpp"          //!< Action
+#include <map>                             //!< std::map
+#include <memory>                          //!< std::shared_ptr
 
 //! \namespace wtl - Windows template library
 namespace wtl

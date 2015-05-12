@@ -9,7 +9,12 @@
 #define WTL_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Delegate.hpp"
+#include "wtl/casts/OpaqueCast.hpp"           //!< OpaqueCast
+#include "wtl/windows/Delegate.hpp"           //!< Delegate
+#include <tuple>                              //!< std::tuple
+#include <utility>                            //!< std::tuple_element
+#include <memory>                             //!< std::shared_ptr
+#include <list>                               //!< std::list
 
 //! \namespace wtl - Windows template library
 namespace wtl

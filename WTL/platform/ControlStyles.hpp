@@ -10,102 +10,12 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EnumTraits.hpp"
-#include <utility>"
+#include <utility>
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  // ----------------------------------- COMMON STYLES ----------------------------------
   
-  //! \enum WindowStyle - Defines basic window styles
-  enum class WindowStyle : ulong32
-  {
-    Overlapped = 0x00000000L,
-    Popup = 0x80000000L,
-    Child = 0x40000000L,
-    Minimize = 0x20000000L,
-    Visible = 0x10000000L,
-    Disabled = 0x08000000L,
-    ClipSiblings = 0x04000000L,
-    ClipChildren = 0x02000000L,
-    Maximize = 0x01000000L,
-    Border = 0x00800000L,
-    DlgFrame = 0x00400000L,
-    Caption = Border|DlgFrame,     
-    VScroll = 0x00200000L,
-    HScroll = 0x00100000L,
-    SysMenu = 0x00080000L,
-    ThickFrame = 0x00040000L,
-    Group = 0x00020000L,
-    TabStop = 0x00010000L,
-
-    MinimizeBox = 0x00020000L,
-    MaximizeBox = 0x00010000L,
-
-    Titled = Overlapped,
-    Iconic = Minimize,
-    SizeBox = ThickFrame,
-
-    OverlappedWindow = Overlapped|Caption|SysMenu|ThickFrame|MinimizeBox|MaximizeBox,
-    TitledWindow = OverlappedWindow,
-    ChildWindow = Child|Border,           //!< NB: Added 'Border' style
-    PopupWindow = Popup|Border|SysMenu,
-  };
-  
-  //! Define traits: Non-contiguous Attribute
-  template <> struct is_attribute<WindowStyle>  : std::true_type  {};
-  template <> struct is_contiguous<WindowStyle> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<WindowStyle>     : std::integral_constant<WindowStyle,WindowStyle::PopupWindow>   {};
-  template <> struct min_value<WindowStyle>     : std::integral_constant<WindowStyle,WindowStyle::Overlapped>    {};
-
-  //! \enum WindowStyleEx - Defines extended window styles
-  enum class WindowStyleEx : ulong32
-  {
-    None = 0x00000000L,                 //!< None
-
-    DlgModalFrame = 0x00000001L,        //!< 
-    NoParentNotify = 0x00000004L,       //!< 
-    TopMost = 0x00000008L,              //!< 
-    AcceptFiles = 0x00000010L,          //!< 
-    Transparent = 0x00000020L,          //!< 
-
-    MdiChild = 0x00000040L,             //!< 
-    ToolWindow = 0x00000080L,           //!< 
-    WindowEdge = 0x00000100L,           //!< 
-    ClientEdge = 0x00000200L,           //!< 
-    ContextHelp = 0x00000400L,          //!< 
-    Right = 0x00001000L,                //!< 
-    Left = 0x00000000L,                 //!< 
-    RtlReading = 0x00002000L,           //!< 
-    LtrReading = 0x00000000L,           //!< 
-    LeftScrollBar = 0x00004000L,        //!< 
-    RightScrollBar = 0x00000000L,       //!< 
-
-    ControlParent = 0x00010000L,        //!< 
-    StaticEdge = 0x00020000L,           //!< 
-    AppWindow = 0x00040000L,            //!< 
-
-    OverlappedWindow = WindowEdge|ClientEdge,
-    PaletteWindow = WindowEdge|ToolWindow|TopMost,
-    
-    Layered = 0x00080000,               //!< 
-    NoActivate = 0x08000000L,           //!< 
-    NoInheritLayout = 0x00100000L,      //!< Disable inheritence of mirroring by children
-    LayoutRtl = 0x00400000L,            //!< Right to left mirroring
-  
-    Composited = 0x02000000L,           //!< 
-  };
-
-  //! Define traits: Non-contiguous Attribute
-  template <> struct is_attribute<WindowStyleEx>  : std::true_type  {};
-  template <> struct is_contiguous<WindowStyleEx> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<WindowStyleEx>     : std::integral_constant<WindowStyleEx,WindowStyleEx::Composited> {};
-  template <> struct min_value<WindowStyleEx>     : std::integral_constant<WindowStyleEx,WindowStyleEx::None>       {};
-
   // ----------------------------------- COMMON NOTIFICATIONS ----------------------------------
 
   //! \enum NotifyMessage - Windows standard notifications

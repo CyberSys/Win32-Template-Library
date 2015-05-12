@@ -9,6 +9,8 @@
 #define WTL_BUTTON_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/WindowBase.hpp"                 //!< WindowBase
+#include "wtl/windows/events/StandardControls.hpp"    //!< ButtonClickEvent
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -12,12 +12,13 @@
 #include "wtl/casts/EnumCast.hpp"                 //!< EnumCast
 #include "wtl/utils/Handle.hpp"                   //!< Handle
 #include "wtl/utils/CharArray.hpp"                //!< CharArray
+#include "wtl/utils/LengthOf.hpp"                 //!< LengthOf
 #include "wtl/traits/DeviceContextTraits.hpp"     //!< HDeviceContext
 #include "wtl/traits/BrushTraits.hpp"             //!< HBrush
 #include "wtl/traits/FontTraits.hpp"              //!< HFont
 #include "wtl/traits/PenTraits.hpp"               //!< HPen
 #include "wtl/platform/Colours.hpp"               //!< Colours
-#include "wtl/platform/DrawingFlags.hpp"          //!< 
+#include "wtl/platform/DrawingFlags.hpp"          //!< DrawTextFlags
 #include "wtl/platform/Rectangle.hpp"             //!< Rectangle
 #include "wtl/platform/Point.hpp"                 //!< Point
 #include "wtl/platform/Size.hpp"                  //!< Size
@@ -406,7 +407,7 @@ namespace wtl
     void  polygon(::POINT (&points)[LENGTH])
     {
       // Fill & outline polygon
-      if (::Polygon(Handle, points, size_of(points)) == FALSE)
+      if (::Polygon(Handle, points, lengthof(points)) == FALSE)
         throw platform_error(HERE, "Unable to draw polygon");
     }
     

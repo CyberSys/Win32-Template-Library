@@ -10,10 +10,13 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Handle.hpp"           //!< Handle
+#include "wtl/utils/CharArray.hpp"        //!< CharArray
 #include "wtl/traits/EnumTraits.hpp"      //!< is_attribute
 #include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
 #include "wtl/platform/ResourceId.hpp"    //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"   //!< WindowId, WindowStyle, WindowStyleEx
+#include "wtl/platform/Point.hpp"         //!< Point
+#include "wtl/platform/Size.hpp"          //!< Size
 
 //! \namespace wtl - Windows template library
 namespace wtl

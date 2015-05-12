@@ -9,51 +9,15 @@
 #define WTL_WINDOW_CLASS_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/EnumCast.hpp"         //!< EnumCast
+#include "wtl/utils/Handle.hpp"           //!< Handle
+#include "wtl/utils/Default.hpp"          //!< Default
+#include "wtl/platform/ResourceId.hpp"    //!< ResourceId
+#include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  //! \enum ClassStyle - Defines window class styles
-  enum class ClassStyle : uint32
-  {
-    VRedraw         = 0x0001,          //!< Redraw upon vertical resize
-    HRedraw         = 0x0002,          //!< Redraw upon horiontal resize
-    DblClks         = 0x0008,          //!< Send double-click notifications
-    OwnDC           = 0x0020,          //!< 
-    ClassDC         = 0x0040,          //!< 
-    ParentDC        = 0x0080,          //!< 
-    NoClose         = 0x0200,          //!< 
-    SaveBits        = 0x0800,          //!< 
-    ByteAlignClient = 0x1000,          //!< 
-    ByteAlignWindow = 0x2000,          //!< 
-    GlobalClass     = 0x4000,          //!< Registers class globally for all processes (ignores instance handle) 
-    Ime             = 0x00010000,      //!< 
-    DropShadow      = 0x00020000,      //!< 
-  };
-  
-  //! Define traits: Non-contiguous Attribute
-  template <> struct is_attribute<ClassStyle>  : std::true_type  {};
-  template <> struct is_contiguous<ClassStyle> : std::false_type {};
-
-  template <> struct enum_values<ClassStyle> : integral_sequence<ClassStyle, ClassStyle::VRedraw, 
-                                                                             ClassStyle::HRedraw,
-                                                                             ClassStyle::DblClks,
-                                                                             ClassStyle::OwnDC,  
-                                                                             ClassStyle::ClassDC, 
-                                                                             ClassStyle::ParentDC,
-                                                                             ClassStyle::NoClose, 
-                                                                             ClassStyle::SaveBits,
-                                                                             ClassStyle::ByteAlignClient,
-                                                                             ClassStyle::ByteAlignWindow,
-                                                                             ClassStyle::GlobalClass, 
-                                                                             ClassStyle::Ime,  
-                                                                             ClassStyle::DropShadow> {};
-
-  //! Define limits traits
-  template <> struct max_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::VRedraw>     {};
-  template <> struct min_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::DropShadow>  {};
-
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias Atom - Shared class atom handle
@@ -96,17 +60,17 @@ namespace wtl
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<::ATOM> create(HINSTANCE instance, 
-                               ResourceId<ENC> name,
-                               ClassStyle style, 
-                               WNDPROC proc, 
-                               ResourceId<ENC> menu, 
-                               HCURSOR cursor, 
-                               HBRUSH brush, 
-                               HICON smIcon, 
-                               HICON bgIcon, 
-                               int32 clsBytes = 0, 
-                               int32 wndBytes = 0)
+    static HAlloc<::ATOM> create(::HINSTANCE instance, 
+                                 ResourceId<ENC> name,
+                                 ClassStyle style, 
+                                 ::WNDPROC proc, 
+                                 ResourceId<ENC> menu, 
+                                 ::HCURSOR cursor, 
+                                 ::HBRUSH brush, 
+                                 ::HICON smIcon, 
+                                 ::HICON bgIcon, 
+                                 int32 clsBytes = 0, 
+                                 int32 wndBytes = 0)
     {
       // Init window class
       WndClassEx<ENC> wndCls = {sizeof(wndCls), enum_cast(style), proc, clsBytes, wndBytes, instance, bgIcon, cursor, brush, menu, name, smIcon};

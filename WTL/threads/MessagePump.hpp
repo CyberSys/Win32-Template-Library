@@ -9,6 +9,13 @@
 #define WTL_MESSAGE_PUMP_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"            //!< Encoding
+#include "wtl/traits/WindowMessageTraits.hpp"       //!< WindowMessage
+#include "wtl/platform/ResourceId.hpp"              //!< ResourceId
+#include "wtl/platform/WindowFlags.hpp"             //!< ShowWindowFlags
+#include "wtl/windows/MessageBox.hpp"               //!< MessageBox
+#include "wtl/utils/Console.hpp"                    //!< Console
+#include <stdexcept>                                //!< std::exception
 
 //! \namespace wtl - Windows template library
 namespace wtl

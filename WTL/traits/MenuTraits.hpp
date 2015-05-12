@@ -9,6 +9,9 @@
 #define WTL_MENU_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"               //!< Handle
+#include "wtl/traits/EncodingTraits.hpp"      //!< Encoding
+#include "wtl/platform/MenuFlags.hpp"         //!< MenuType
 
 //! \namespace wtl - Windows template library
 namespace wtl

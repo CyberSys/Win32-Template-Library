@@ -9,6 +9,9 @@
 #define WTL_ABOUT_PROGRAM_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/Action.hpp"             //!< Action
+#include "wtl/windows/WindowBase.hpp"         //!< WindowBase
+#include "wtl/windows/MessageBox.hpp"         //!< errorBox
 
 //! \namespace wtl - Windows template library
 namespace wtl

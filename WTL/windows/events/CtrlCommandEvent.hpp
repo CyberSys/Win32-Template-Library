@@ -9,6 +9,11 @@
 #define WTL_CONTROL_COMMAND_EVENT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"                 //!< Handle
+#include "wtl/traits/WindowTraits.hpp"          //!< HWnd
+#include "wtl/windows/ControlEvent.hpp"         //!< ControlEventArgs
+#include "wtl/platform/WindowFlags.hpp"         //!< WindowId
+#include "wtl/platform/CommonApi.hpp"           //!< send_message
 
 //! \namespace wtl - Windows template library
 namespace wtl

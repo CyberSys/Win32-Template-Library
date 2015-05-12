@@ -263,9 +263,6 @@
     <ClInclude Include="platform\Path.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="windows\events\OwnerDrawEvent.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp">
       <Filter>Windows\Commands</Filter>
     </ClInclude>
@@ -289,9 +286,6 @@
     </ClInclude>
     <ClInclude Include="windows\events\StandardControls.hpp">
       <Filter>Windows\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="platform\CommandIds.hpp">
-      <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\WindowMenu.hpp">
       <Filter>Windows</Filter>
@@ -365,9 +359,6 @@
     <ClInclude Include="utils\ForEach.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\SizeOf.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Sequence.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -376,9 +367,6 @@
     </ClInclude>
     <ClInclude Include="utils\PowerOf.hpp">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\events\OwnerMeasureEvent.hpp">
-      <Filter>Windows\Events</Filter>
     </ClInclude>
     <ClInclude Include="windows\Action.hpp">
       <Filter>Windows</Filter>
@@ -446,11 +434,29 @@
     <ClInclude Include="platform\SystemFlags.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="resources\Resource.hpp">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\ResourceBlob.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\CommandId.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\OwnerDrawMenuEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\OwnerDrawCtrlEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\OwnerMeasureMenuEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\OwnerMeasureCtrlEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\LengthOf.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

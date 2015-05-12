@@ -17,28 +17,28 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Resource - Provides access to resource data
+  //! \struct ResourceBlob - Provides access to resource data
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct Resource
+  struct ResourceBlob
   {      
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     HModule     Module;     //!< Module containing resource
-    HGlobal     Block;      //!< Resource block handle
-    HResource   Handle;     //!< Resource data handle
+    HGlobal     Block;      //!< ResourceBlob block handle
+    HResource   Handle;     //!< ResourceBlob data handle
   
   private:
-    const void* Data;       //!< Resource data
+    const void* Data;       //!< ResourceBlob data
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::Resource
+    // ResourceBlob::ResourceBlob
     //! Create empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    Resource() : Module(default<HModule>()),
+    ResourceBlob() : Module(default<HModule>()),
                  Handle(default<HResource>()),
                  Block(default<HGlobal>()),
                  Data(nullptr)
@@ -46,10 +46,10 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::Resource
+    // ResourceBlob::ResourceBlob
     //! Copy create
     /////////////////////////////////////////////////////////////////////////////////////////
-    Resource(const Resource& r) : Module(r.Module),
+    ResourceBlob(const ResourceBlob& r) : Module(r.Module),
                                   Handle(r.Handle),
                                   Block(r.Block),
                                   Data(r.Data)
@@ -57,15 +57,15 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::Resource
+    // ResourceBlob::ResourceBlob
     //! Create from resource handle
     //!
     //! \param[in] const& module - Module containing resource
-    //! \param[in] const& resource - Resource handle
+    //! \param[in] const& resource - ResourceBlob handle
     //! 
     //! \throw platform_error - Unable to load resource
     /////////////////////////////////////////////////////////////////////////////////////////
-    Resource(const HModule& module, const HResource& resource) : Module(module),
+    ResourceBlob(const HModule& module, const HResource& resource) : Module(module),
                                                                  Handle(resource),
                                                                  Block(module,resource),
                                                                  Data(::LockResource(Block))
@@ -75,21 +75,21 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::~Resource
+    // ResourceBlob::~ResourceBlob
     //! Virtual d-tor
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Resource()
+    virtual ~ResourceBlob()
     {}
 
-    //DEFAULT_COPY(Resource);
-    //DEFAULT_COPY_ASSIGN(Resource);
+    //DEFAULT_COPY(ResourceBlob);
+    //DEFAULT_COPY_ASSIGN(ResourceBlob);
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::exists const
+    // ResourceBlob::exists const
     //! Query whether resource is valid
     //! 
     //! \return bool - True iff resource is valid
@@ -100,10 +100,10 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::get const
+    // ResourceBlob::get const
     //! Access the resource data 
     //! 
-    //! \tparam DATA - Resource storage format
+    //! \tparam DATA - ResourceBlob storage format
     //! 
     //! \return const storage_t* - Immutable pointer to resource data 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -114,10 +114,10 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::size const
+    // ResourceBlob::size const
     //! Query the resource size
     //! 
-    //! \return long32 - Resource size (Not sure of format)
+    //! \return long32 - ResourceBlob size (Not sure of format)
     /////////////////////////////////////////////////////////////////////////////////////////
     long32 size() const
     {
@@ -125,13 +125,13 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::operator == const
+    // ResourceBlob::operator == const
     //! Equality operator 
     //! 
     //! \param[in] const &r - Another handle
     //! \return bool - True iff handles are to the same resource
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator == (const Resource& r) const
+    bool operator == (const ResourceBlob& r) const
     {
       return this->Handle == r.Handle
           && this->Module == r.Module
@@ -140,19 +140,19 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::operator != const
+    // ResourceBlob::operator != const
     //! Inequality operator 
     //! 
     //! \param[in] const &r - Another resource
     //! \return bool - False iff handles are to the same resource
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator != (const Resource& r) const
+    bool operator != (const ResourceBlob& r) const
     {
       return !operator==(r);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Resource::operator bool const
+    // ResourceBlob::operator bool const
     //! Query whether resource is valid
     //! 
     //! \return bool - True iff resource is valid

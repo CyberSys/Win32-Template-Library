@@ -9,6 +9,9 @@
 #define WTL_STRING_RESOURCES_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/Resources/ResourceBlob.hpp"       //!< ResourceBlob
+#include "wtl/utils/CharArray.hpp"              //!< CharArray
+#include "wtl/utils/String.hpp"                 //!< String
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -55,7 +58,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    Resource                 Table;       //!< Table resource
+    ResourceBlob             Table;       //!< Table resource
     const StringTableEntry*  Entry;       //!< Desired entry
     uint16                   Ident;       //!< String id
     

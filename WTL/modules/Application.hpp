@@ -10,8 +10,8 @@
 
 #include "wtl/WTL.hpp"
 //#include "wtl/traits/ApplicationTraits.hpp"
-#include "wtl/modules/Module.hpp"
-#include "wtl/threads/MessagePump.hpp"
+#include "wtl/modules/Module.hpp"                   //!< Module
+#include "wtl/threads/MessagePump.hpp"              //!< MessagePump
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -11,8 +11,10 @@
 #include "wtl/platform/Colours.hpp"
 #include "wtl/platform/DrawingFlags.hpp"
 
+#include "wtl/windows/Window.hpp"
+
 // Debug
-//static wtl::MessageWindow<> wnd;
+static wtl::MessageWindow<> wnd;
 
 //! \namespace wtl - Windows template library
 namespace wtl

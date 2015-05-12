@@ -9,6 +9,42 @@
 #define WTL_WINDOW_BASE_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/BooleanCast.hpp"                        //!< BooleanCast
+#include "wtl/casts/EnumCast.hpp"                           //!< EnumCast
+#include "wtl/casts/OpaqueCast.hpp"                         //!< OpaqueCast
+#include "wtl/traits/EncodingTraits.hpp"                    //!< Encoding
+#include "wtl/traits/WindowMessageTraits.hpp"               //!< WindowMesssage
+#include "wtl/traits/WindowTraits.hpp"                      //!< HWnd
+#include "wtl/utils/Exception.hpp"                          //!< exception
+#include "wtl/utils/List.hpp"                               //!< List
+#include "wtl/utils/Default.hpp"                            //!< Default
+#include "wtl/utils/CharArray.hpp"                          //!< CharArray
+#include "wtl/utils/Console.hpp"                            //!< Console
+#include "wtl/utils/Zero.hpp"                               //!< Zero
+#include "wtl/platform/ResourceId.hpp"                      //!< ResourceId
+#include "wtl/platform/WindowFlags.hpp"                     //!< WindowStyle
+#include "wtl/platform/CommonApi.hpp"                       //!< send_message
+#include "wtl/windows/Action.hpp"                           //!< Action
+#include "wtl/windows/ActionGroup.hpp"                      //!< ActionGroup
+#include "wtl/windows/ActionQueue.hpp"                      //!< ActionQueue
+#include "wtl/windows/Property.hpp"                         //!< Property
+#include "wtl/windows/WindowClass.hpp"                      //!< WindowClass
+#include "wtl/windows/WindowMenu.hpp"                       //!< WindowMenu
+#include "wtl/windows/events/ActionEvent.hpp"               //!< ActionEvent
+#include "wtl/windows/events/CloseWindowEvent.hpp"          //!< CloseWindowEvent
+#include "wtl/windows/events/CreateWindowEvent.hpp"         //!< CreateWindowEven
+#include "wtl/windows/events/CtrlCommandEvent.hpp"          //!< CtrlCommandEvent
+#include "wtl/windows/events/CtrlNotifyEvent.hpp"           //!< CtrlNotifyEvent
+#include "wtl/windows/events/DestroyWindowEvent.hpp"        //!< DestroyWindowEvent
+#include "wtl/windows/events/OwnerDrawCtrlEvent.hpp"        //!< OwnerDrawCtrlEvent
+#include "wtl/windows/events/OwnerDrawMenuEvent.hpp"        //!< OwnerDrawMenuEvent
+#include "wtl/windows/events/OwnerMeasureCtrlEvent.hpp"     //!< OwnerMeasureCtrlEvent
+#include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"     //!< OwnerMeasureMenuEvent
+#include "wtl/windows/events/PaintWindowEvent.hpp"          //!< PaintWindowEvent
+#include "wtl/windows/events/ShowWindowEvent.hpp"           //!< ShowWindowEvent
+#include "wtl/windows/events/PositionChangedEvent.hpp"      //!< PositionChangedEvent
+
+#include <map>                                              //!< std::map
 
 //! \namespace wtl - Windows template library
 namespace wtl

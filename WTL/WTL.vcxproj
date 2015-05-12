@@ -36,7 +36,7 @@
     <ClInclude Include="modules\Application.hpp" />
     <ClInclude Include="modules\Module.hpp" />
     <ClInclude Include="platform\Colours.hpp" />
-    <ClInclude Include="platform\CommandIds.hpp" />
+    <ClInclude Include="platform\CommandId.hpp" />
     <ClInclude Include="platform\CommonApi.hpp" />
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
@@ -54,7 +54,7 @@
     <ClInclude Include="platform\WindowFlags.hpp" />
     <ClInclude Include="resources\DialogResource.hpp" />
     <ClInclude Include="resources\IconResource.hpp" />
-    <ClInclude Include="resources\Resource.hpp" />
+    <ClInclude Include="resources\ResourceBlob.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessagePump.hpp" />
     <ClInclude Include="threads\MessageThread.hpp" />
@@ -102,7 +102,7 @@
     <ClInclude Include="utils\Range.hpp" />
     <ClInclude Include="utils\Sequence.hpp" />
     <ClInclude Include="utils\SFINAE.hpp" />
-    <ClInclude Include="utils\SizeOf.hpp" />
+    <ClInclude Include="utils\LengthOf.hpp" />
     <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\toString.hpp" />
     <ClInclude Include="utils\Default.hpp" />
@@ -124,13 +124,15 @@
     <ClInclude Include="windows\events\CtrlCommandEvent.hpp" />
     <ClInclude Include="windows\events\CtrlNotifyEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
-    <ClInclude Include="windows\events\OwnerMeasureEvent.hpp" />
+    <ClInclude Include="windows\events\OwnerDrawCtrlEvent.hpp" />
+    <ClInclude Include="windows\events\OwnerMeasureCtrlEvent.hpp" />
+    <ClInclude Include="windows\events\OwnerMeasureMenuEvent.hpp" />
     <ClInclude Include="windows\events\PositionChangedEvent.hpp" />
     <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />
     <ClInclude Include="windows\events\CustomDrawEvent.hpp" />
     <ClInclude Include="windows\events\DestroyWindowEvent.hpp" />
-    <ClInclude Include="windows\events\OwnerDrawEvent.hpp" />
+    <ClInclude Include="windows\events\OwnerDrawMenuEvent.hpp" />
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
     <ClInclude Include="windows\Action.hpp" />

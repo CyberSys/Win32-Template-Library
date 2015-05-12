@@ -9,33 +9,15 @@
 #define WTL_ICON_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/BuildTraits.hpp"             //!< enable_if_build_t
+#include "wtl/traits/EncodingTraits.hpp"          //!< EncodingTraits
+#include "wtl/platform/Size.hpp"                  //!< Size
+#include "wtl/platform/SystemFlags.hpp"           //!< SystemIcon
+#include "wtl/platform/ResourceId.hpp"            //!< ResourceId
 
 //! \namespace wtl - Windows template library
 namespace wtl
 { 
-  //! \enum SystemIcon - System icon Ids
-  enum class SystemIcon
-  {
-    Application = 32512,			    //!< 
-    Hand = 32513,			            //!< 
-    Question = 32514,			        //!< 
-    Exclamation = 32515,			    //!< 
-    Asterisk = 32516,			        //!< 
-    WinLogo = 32517,			        //!< 
-    Shield = 32518,               //!< [Windows 6.00]
-    Warning = Exclamation,			  //!< 
-    Error = Hand,			            //!< 
-    Information = Asterisk,			  //!< 
-  };
-  
-  //! Define traits: Non-contiguous enumeration
-  template <> struct is_attribute<SystemIcon>  : std::false_type  {};
-  template <> struct is_contiguous<SystemIcon> : std::false_type  {};
-  
-  //! Define limits traits
-  template <> struct max_value<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Shield>      {};
-  template <> struct min_value<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Application> {};
-  
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias HIcon - Shared icon handle

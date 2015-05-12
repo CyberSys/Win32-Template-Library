@@ -9,12 +9,14 @@
 #define WTL_PAINT_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/MessageEvent.hpp"            //!< Event
+#include "wtl/gdi/DeviceContext.hpp"               //!< DeviceContext
+#include "wtl/platform/Rectangle.hpp"              //!< Rect
+#include "wtl/traits/WindowTraits.hpp"             //!< HWnd
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::PAINT> - Event arguments for Win32 message 'WM_PAINT'
   //! 

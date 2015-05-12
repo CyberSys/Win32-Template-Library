@@ -9,6 +9,8 @@
 #define WTL_CUT_CLIPBOARD_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/Action.hpp"             //!< Action
+#include "wtl/windows/WindowBase.hpp"         //!< WindowBase
 
 //! \namespace wtl - Windows template library
 namespace wtl

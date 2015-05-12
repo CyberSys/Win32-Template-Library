@@ -9,26 +9,14 @@
 #define WTL_COMMAND_EVENT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/EnumCast.hpp"             //!< EnumCast
+#include "wtl/platform/CommandId.hpp"         //!< CommandId
+#include "wtl/windows/Action.hpp"             //!< ActionSource/ActionState
+#include "wtl/windows/MessageEvent.hpp"       //!< MessageEvent
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \enum ActionSource - Defines how a Gui command was raised
-  enum class ActionSource
-  {
-    MenuItem = 0,     //!< Command raised via menu item
-    Accelerator = 1,  //!< Command raised via accelerator
-  };
-
-  //! \enum ActionState - Define states of GUI Commands
-  enum class ActionState
-  {
-    Disabled = 0,     //!< Command should be disabled
-    Enabled = 1,      //!< Command should be enabled
-    Hidden = 2,       //!< Command should be hidden
-  };
-
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::COMMAND> - Arguments decoder for Gui commands raised via menu or accelerator
   //! 

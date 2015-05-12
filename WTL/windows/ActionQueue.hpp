@@ -9,6 +9,8 @@
 #define WTL_GUI_COMMAND_QUEUE_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/Action.hpp"          //!< Action
+#include "wtl/utils/Stack.hpp"             //!< Stack
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -9,6 +9,21 @@
 #define WTL_WINDOW_MENU_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/BaseCast.hpp"         //!< BaseCast
+#include "wtl/casts/EnumCast.hpp"         //!< EnumCast
+#include "wtl/utils/Handle.hpp"           //!< Handle
+#include "wtl/utils/Clear.hpp"            //!< Clear
+#include "wtl/utils/Default.hpp"          //!< Default
+#include "wtl/platform/CommandId.hpp"     //!< CommandId
+#include "wtl/platform/ResourceId.hpp"    //!< ResourceId
+#include "wtl/platform/MenuFlags.hpp"     //!< MenuItemState
+#include "wtl/gdi/StockObjects.hpp"       //!< StockBrush
+#include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
+#include "wtl/traits/MenuTraits.hpp"      //!< HMenu
+#include "wtl/windows/Action.hpp"         //!< Action
+#include "wtl/windows/ActionGroup.hpp"    //!< Action
+#include "wtl/windows/events/OwnerDrawMenuEvent.hpp"        //!< OwnerDrawEvent
+#include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"     //!< OwnerMeasureEvent
 
 //! \namespace wtl - Windows template library
 namespace wtl

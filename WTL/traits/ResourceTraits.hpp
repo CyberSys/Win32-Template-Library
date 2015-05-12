@@ -9,9 +9,9 @@
 #define WTL_RESOURCE_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/ModuleTraits.hpp"
-#include "wtl/platform/ResourceId.hpp"
-#include "wtl/platform/Locale.hpp"
+#include "wtl/traits/ModuleTraits.hpp"      //!< HModule
+#include "wtl/platform/ResourceId.hpp"      //!< ResourceId
+#include "wtl/platform/Locale.hpp"          //!< LanguageId
 
 //! \namespace wtl - Windows template library
 namespace wtl

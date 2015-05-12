@@ -13,7 +13,7 @@
 #include "wtl/utils/FormatSpec.hpp"         //!< printf_t
 #include "wtl/platform/WindowFlags.hpp"     //!< FormatMessageFlags
 #include <exception>                        //!< std::exception
-#include <utility>                          //!< std::exception
+#include <utility>                          //!< std::forward
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -9,6 +9,9 @@
 #define WTL_CONTROL_EVENT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/windows/Event.hpp"                        //!< Event
+#include "wtl/traits/WindowMessageTraits.hpp"           //!< WindowMessage
+#include "wtl/traits/EncodingTraits.hpp"                //!< Encoding
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -23,6 +26,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM, typename EVENT = uint16, EVENT CODE = default<EVENT>()>
   struct ControlEventArgs;
+  /* Undefined */
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ControlEvent - Defines a child control event type 

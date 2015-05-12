@@ -9,10 +9,34 @@
 #define WTL_ACTION_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
+#include "wtl/utils/CharArray.hpp"                //!< CharArray
+#include "wtl/platform/CommandId.hpp"             //!< CommandId
+#include "wtl/platform/ResourceId.hpp"            //!< ResourceId
+#include "wtl/resources/StringResource.hpp"       //!< StringResource
+#include "wtl/resources/IconResource.hpp"         //!< IconResource
+#include <memory>                                 //!< std::shared_ptr
+#include <functional>                             //!< std::function
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  //! \enum ActionSource - Defines how a Gui command was raised
+  enum class ActionSource
+  {
+    MenuItem = 0,     //!< Command raised via menu item
+    Accelerator = 1,  //!< Command raised via accelerator
+  };
+
+  //! \enum ActionState - Define states of GUI Commands
+  enum class ActionState
+  {
+    Disabled = 0,     //!< Command should be disabled
+    Enabled = 1,      //!< Command should be enabled
+    Hidden = 2,       //!< Command should be hidden
+  };
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Action - Encapsulates a single gui command
   //! 
