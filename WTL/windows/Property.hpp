@@ -91,8 +91,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~PropertyImpl() = default;
 
-    DEFAULT_COPY(PropertyImpl);       //!< Copy semantics determined by value type
-    DEFAULT_MOVE(PropertyImpl);       //!< Move semantics determined by value type
+    ENABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
+    ENABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
@@ -295,8 +295,8 @@ namespace wtl
     DISABLE_COPY_CTOR(Property);       //!< Copy semantics determined by implementation
     DISABLE_MOVE_CTOR(Property);       //!< Move semantics determined by implementation
 
-    /*DEFAULT_COPY_ASSIGN(Property);
-    DEFAULT_MOVE_ASSIGN(Property);*/
+    /*ENABLE_COPY_ASSIGN(Property);
+    ENABLE_MOVE_ASSIGN(Property);*/
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::~Property

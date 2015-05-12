@@ -82,14 +82,14 @@
 #define DISABLE_COPY(type)          DISABLE_COPY_CTOR(type);  DISABLE_COPY_ASSIGN(type)
 
 
-//! \def DEFAULT_COPY_CTOR - Enables copy-construction
-#define DEFAULT_COPY_CTOR(type)     type(const type& r) = default
+//! \def ENABLE_COPY_CTOR - Enables copy-construction
+#define ENABLE_COPY_CTOR(type)     type(const type& r) = default
 
-//! \def DEFAULT_COPY_ASSIGN - Enables copy-assignment
-#define DEFAULT_COPY_ASSIGN(type)   type& operator=(const type& r) = default
+//! \def ENABLE_COPY_ASSIGN - Enables copy-assignment
+#define ENABLE_COPY_ASSIGN(type)   type& operator=(const type& r) = default
 
-//! \def DEFAULT_COPY - Enables copy-construction and copy-assignment
-#define DEFAULT_COPY(type)          DEFAULT_COPY_CTOR(type);  DEFAULT_COPY_ASSIGN(type)
+//! \def ENABLE_COPY - Enables copy-construction and copy-assignment
+#define ENABLE_COPY(type)          ENABLE_COPY_CTOR(type);  ENABLE_COPY_ASSIGN(type)
 
 // ---------------------------------------------------------------------
 // -------------------------- MOVE SEMANTICS ---------------------------
@@ -105,14 +105,27 @@
 #define DISABLE_MOVE(type)          DISABLE_MOVE_CTOR(type);  DISABLE_MOVE_ASSIGN(type)
 
 
-//! \def DEFAULT_MOVE_CTOR - Enables move-construction
-#define DEFAULT_MOVE_CTOR(type)     type(type&& r) = default
+//! \def ENABLE_MOVE_CTOR - Enables move-construction
+#define ENABLE_MOVE_CTOR(type)      type(type&& r) = default
 
-//! \def DEFAULT_MOVE_ASSIGN - Enables move-assignment 
-#define DEFAULT_MOVE_ASSIGN(type)   type& operator=(type&& r) = default
+//! \def ENABLE_MOVE_ASSIGN - Enables move-assignment 
+#define ENABLE_MOVE_ASSIGN(type)    type& operator=(type&& r) = default
 
-//! \def DEFAULT_MOVE - Enables move-construction and move-assignment
-#define DEFAULT_MOVE(type)          DEFAULT_MOVE_CTOR(type);  DEFAULT_MOVE_ASSIGN(type)
+//! \def ENABLE_MOVE - Enables move-construction and move-assignment
+#define ENABLE_MOVE(type)           ENABLE_MOVE_CTOR(type);  ENABLE_MOVE_ASSIGN(type)
+
+// ---------------------------------------------------------------------
+// ------------------------ DESTROY SEMANTICS --------------------------
+// ---------------------------------------------------------------------
+
+//! \def DISABLE_DTOR - Removes destructor
+#define DISABLE_DTOR(type)          ~type() = delete
+
+//! \def ENABLE_DTOR - Generates a trivial non-virtual destructor
+#define ENABLE_DTOR(type)           ~type() = default
+
+//! \def VIRTUAL_DTOR - Generates a trivial virtual destructor
+#define VIRTUAL_DTOR(type)          virtual ~type() = default
 
 // --------------------------------------------------------------
 // ------------------------ DEVELOPMENT -------------------------

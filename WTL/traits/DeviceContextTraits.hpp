@@ -22,6 +22,16 @@ namespace wtl
   template <>
   struct HAlloc<::HDC>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    ::HDC      Handle;      //!< Handle
+    AllocType  Method;      //!< Allocation method
+    ::HWND     Window;      //!< Owner window
+
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // HAlloc<::HDC>::HAlloc
     //! Create without owner window
@@ -42,10 +52,15 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     HAlloc(::HDC dc, ::HWND wnd, AllocType at) : Handle(dc), Method(at), Window(wnd)
     {}
+  
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
 
-    ::HDC      Handle;      //!< Handle
-    AllocType  Method;      //!< Allocation method
-    ::HWND     Window;      //!< Owner window
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+    
   };
 
 
@@ -61,8 +76,18 @@ namespace wtl
   template <>
   struct handle_alloc<::HDC>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \var npos - Invalid handle sentinel value
     static constexpr ::HDC npos = default<::HDC>(); 
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HDC>::create
@@ -112,6 +137,10 @@ namespace wtl
       }
       return false;
     }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
 

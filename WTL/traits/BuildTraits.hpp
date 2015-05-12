@@ -29,6 +29,8 @@ namespace wtl
   template <> 
   struct build_traits<void>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \var target - Target operating system
     static constexpr WindowVersion  target = static_cast<WindowVersion>(_WIN32_WINNT);
   };

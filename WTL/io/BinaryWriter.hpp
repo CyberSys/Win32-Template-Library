@@ -61,7 +61,7 @@ namespace wtl
     {}
 
     
-    DEFAULT_COPY(BinaryWriter);   //!< Copy semantics determined by stream type
+    ENABLE_COPY(BinaryWriter);   //!< Copy semantics determined by stream type
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 

@@ -90,8 +90,8 @@ namespace wtl
 
     CONSTEXPR_COPY_CTOR(ResourceId);
     CONSTEXPR_MOVE_CTOR(ResourceId);
-    DEFAULT_COPY_ASSIGN(ResourceId);
-    DEFAULT_MOVE_ASSIGN(ResourceId);
+    ENABLE_COPY_ASSIGN(ResourceId);
+    ENABLE_MOVE_ASSIGN(ResourceId);
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

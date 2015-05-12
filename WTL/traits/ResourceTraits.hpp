@@ -30,8 +30,18 @@ namespace wtl
   template <>
   struct handle_alloc<::HRSRC>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \var npos - Invalid handle sentinel value
     static constexpr ::HRSRC npos = default<::HRSRC>(); 
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HRSRC>::create
@@ -81,6 +91,10 @@ namespace wtl
       // Resource handles are not released by module under Win32
       return true;
     }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
   
 } //namespace wtl

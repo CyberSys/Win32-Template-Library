@@ -87,8 +87,8 @@ namespace wtl
       Points[2] = btmLeft + Point<W>(width,0);
     }
 
-    DEFAULT_COPY(Triangle);   //!< Performs a deep copy
-    DEFAULT_MOVE(Triangle);   //!< Performs a deep copy
+    ENABLE_COPY(Triangle);   //!< Performs a deep copy
+    ENABLE_MOVE(Triangle);   //!< Performs a deep copy
      
     /////////////////////////////////////////////////////////////////////////////////////////
     // Triangle::~Triangle 

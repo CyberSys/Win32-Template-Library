@@ -165,7 +165,7 @@ namespace wtl
     {}
 
     
-    DEFAULT_COPY(XmlWriter);    //!< Copy semantics determined by stream type
+    ENABLE_COPY(XmlWriter);    //!< Copy semantics determined by stream type
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 

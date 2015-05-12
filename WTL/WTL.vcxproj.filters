@@ -194,9 +194,6 @@
     <ClInclude Include="traits\AcceleratorTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
-    <ClInclude Include="traits\WindowMessageTraits.hpp">
-      <Filter>Traits</Filter>
-    </ClInclude>
     <ClInclude Include="windows\MessageBox.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -457,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="utils\Allocator.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\WindowMessage.hpp">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

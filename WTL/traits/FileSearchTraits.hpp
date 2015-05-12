@@ -28,8 +28,18 @@ namespace wtl
   template <>
   struct handle_alloc<::HFILESEARCH>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \var npos - Invalid handle sentinel value
     static constexpr ::HFILESEARCH npos = (::HFILESEARCH)INVALID_HANDLE_VALUE;    //default<::HFILESEARCH>(); 
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HFILESEARCH>::create
@@ -72,6 +82,10 @@ namespace wtl
       // Close search query
       return ::FindClose(search) != FALSE;
     }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
 

@@ -31,6 +31,7 @@
     <ClInclude Include="io\TextWriter.hpp" />
     <ClInclude Include="io\XmlReader.hpp" />
     <ClInclude Include="io\XmlWriter.hpp" />
+    <ClInclude Include="platform\WindowMessage.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="modules\Application.hpp" />
@@ -71,7 +72,6 @@
     <ClInclude Include="traits\PenTraits.hpp" />
     <ClInclude Include="traits\ResourceTraits.hpp" />
     <ClInclude Include="traits\WindowClassTraits.hpp" />
-    <ClInclude Include="traits\WindowMessageTraits.hpp" />
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="utils\Point.hpp" />

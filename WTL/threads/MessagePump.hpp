@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"            //!< Encoding
-#include "wtl/traits/WindowMessageTraits.hpp"       //!< WindowMessage
+#include "wtl/platform/WindowMessage.hpp"       //!< WindowMessage
 #include "wtl/platform/ResourceId.hpp"              //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"             //!< ShowWindowFlags
 #include "wtl/windows/MessageBox.hpp"               //!< MessageBox

@@ -13,7 +13,7 @@
 #include "wtl/casts/EnumCast.hpp"                           //!< EnumCast
 #include "wtl/casts/OpaqueCast.hpp"                         //!< OpaqueCast
 #include "wtl/traits/EncodingTraits.hpp"                    //!< Encoding
-#include "wtl/traits/WindowMessageTraits.hpp"               //!< WindowMesssage
+#include "wtl/platform/WindowMessage.hpp"               //!< WindowMesssage
 #include "wtl/traits/WindowTraits.hpp"                      //!< HWnd
 #include "wtl/utils/Exception.hpp"                          //!< exception
 #include "wtl/utils/List.hpp"                               //!< List
@@ -1182,13 +1182,11 @@ namespace wtl
       Paint += new events::PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::~WindowBase
-    //! Virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~WindowBase()
-    {
-    }
+    // --------------------------- COPY, MOVE & DESTROY SEMANTICS ---------------------------
+  public:
+    DISABLE_COPY(WindowBase);
+    ENABLE_MOVE(WindowBase);
+    VIRTUAL_DTOR(WindowBase);
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:

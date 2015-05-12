@@ -96,9 +96,9 @@ namespace wtl
     {}
 
     // Copy semantics determined by stream type
-    DEFAULT_COPY(LogFileWriter);
-    DEFAULT_MOVE(LogFileWriter);
-    DEFAULT_COPY_ASSIGN(LogFileWriter);
+    ENABLE_COPY(LogFileWriter);
+    ENABLE_MOVE(LogFileWriter);
+    ENABLE_COPY_ASSIGN(LogFileWriter);
 	
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 

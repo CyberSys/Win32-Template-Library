@@ -89,8 +89,8 @@ namespace wtl
     virtual ~RichTextWriter()
     {}
 
-    DEFAULT_COPY(RichTextWriter);     //!< Copy semantics determined by stream type
-    DEFAULT_MOVE(RichTextWriter);     //!< Move semantics determined by stream type
+    ENABLE_COPY(RichTextWriter);     //!< Copy semantics determined by stream type
+    ENABLE_MOVE(RichTextWriter);     //!< Move semantics determined by stream type
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 

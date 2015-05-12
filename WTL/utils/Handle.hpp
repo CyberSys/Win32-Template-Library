@@ -147,8 +147,8 @@ namespace wtl
                                       Storage(toPointer(h), [this](pointer_t ptr) { safeDelete(ptr); } )
     {}
     
-    DEFAULT_COPY(type);
-    DEFAULT_MOVE(type);
+    ENABLE_COPY(type);
+    ENABLE_MOVE(type);
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   protected:

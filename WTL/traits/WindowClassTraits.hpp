@@ -31,12 +31,22 @@ namespace wtl
   template <>
   struct handle_alloc<::ATOM>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \var npos - Invalid handle sentinel value
     static constexpr ::ATOM npos = default<::ATOM>(); 
 
     //! \alias WndClassEx - Window class data type
     template <Encoding ENC>
     using WndClassEx = getType<encoding_char_t<ENC>,::WNDCLASSEXA,::WNDCLASSEXW>;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::ATOM>::create
@@ -116,6 +126,10 @@ namespace wtl
       // Delete without checking if handle is valid
       return ::UnregisterClassW((const wchar_t*)atom.Handle, nullptr) != FALSE;
     }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
 

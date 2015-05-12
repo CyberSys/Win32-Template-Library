@@ -30,6 +30,7 @@ namespace wtl
   template <>
   struct handle_alloc<::HICON>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   protected:
     //! \enum IconFormat - Define data format
     enum class IconFormat : long32 { v2 = 0x00020000, v3 = 0x00030000 };
@@ -37,6 +38,14 @@ namespace wtl
   public:
     //! \var npos - Invalid handle sentinel value
     static constexpr ::HICON npos = default<::HICON>(); 
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HICON>::create
@@ -170,6 +179,10 @@ namespace wtl
       // no-op
       return true;
     }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
   
   

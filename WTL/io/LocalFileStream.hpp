@@ -97,8 +97,8 @@ namespace wtl
     }
 	  
     // Shallow copy semantics
-    //DEFAULT_COPY(LocalFileStream);
-    //DEFAULT_COPY_ASSIGN(LocalFileStream);
+    //ENABLE_COPY(LocalFileStream);
+    //ENABLE_COPY_ASSIGN(LocalFileStream);
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
   protected:

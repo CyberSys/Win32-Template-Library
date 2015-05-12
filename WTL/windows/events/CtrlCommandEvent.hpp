@@ -91,7 +91,7 @@ namespace events
     virtual ~ControlEventArgs()
     {}
 
-    DEFAULT_COPY(ControlEventArgs);
+    ENABLE_COPY(ControlEventArgs);
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 

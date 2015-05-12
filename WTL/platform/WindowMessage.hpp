@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\traits\WindowMessageTraits.hpp
-//! \brief Defines window message traits 
+//! \file wtl\platform\WindowMessage.hpp
+//! \brief Defines window messages
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_MESSAGE_TRAITS_HPP
-#define WTL_WINDOW_MESSAGE_TRAITS_HPP
+#ifndef WTL_WINDOW_MESSAGE_HPP
+#define WTL_WINDOW_MESSAGE_HPP
 
 #include "wtl/WTL.hpp"
 
@@ -364,5 +364,5 @@ namespace wtl
   const LResult  unhandled<WM>::value = LResult(MsgRoute::Unhandled, unhandled_result<WM>::value);
   
 } //namespace wtl
-#endif // WTL_WINDOW_MESSAGE_TRAITS_HPP
+#endif // WTL_WINDOW_MESSAGE_HPP
 

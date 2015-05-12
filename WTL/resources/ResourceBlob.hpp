@@ -81,8 +81,8 @@ namespace wtl
     virtual ~ResourceBlob()
     {}
 
-    //DEFAULT_COPY(ResourceBlob);
-    //DEFAULT_COPY_ASSIGN(ResourceBlob);
+    //ENABLE_COPY(ResourceBlob);
+    //ENABLE_COPY_ASSIGN(ResourceBlob);
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   

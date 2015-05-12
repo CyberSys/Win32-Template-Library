@@ -118,7 +118,7 @@ namespace wtl
     }
 
     // Shallow copy semantics
-    DEFAULT_COPY(MemoryStream);
+    ENABLE_COPY(MemoryStream);
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
@@ -539,7 +539,7 @@ namespace wtl
     }
 
     
-    DEFAULT_COPY(BufferStream);   //!< Deep copy semantics
+    ENABLE_COPY(BufferStream);   //!< Deep copy semantics
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 

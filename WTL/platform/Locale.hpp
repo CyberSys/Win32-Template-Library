@@ -57,8 +57,8 @@ namespace wtl
     
 	  // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
 
-    DEFAULT_COPY(LanguageId);
-    DEFAULT_MOVE(LanguageId);
+    ENABLE_COPY(LanguageId);
+    ENABLE_MOVE(LanguageId);
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

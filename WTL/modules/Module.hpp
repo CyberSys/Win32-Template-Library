@@ -50,7 +50,7 @@ namespace wtl
     virtual ~Module();
 
     DISABLE_COPY(Module);           //!< Modules are unique
-    DEFAULT_MOVE(Module);      //!< Modules can be moved
+    ENABLE_MOVE(Module);      //!< Modules can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 

@@ -11,7 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/windows/Event.hpp"                        //!< Event
 #include "wtl/platform/ResourceId.hpp"                  //!< ResourceId
-#include "wtl/traits/WindowMessageTraits.hpp"           //!< WindowMessage
+#include "wtl/platform/WindowMessage.hpp"           //!< WindowMessage
 #include "wtl/traits/EncodingTraits.hpp"                //!< Encoding
 
 //! \namespace wtl - Windows template library

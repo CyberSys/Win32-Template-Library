@@ -148,8 +148,8 @@ namespace wtl
     CONSTEXPR_COPY_CTOR(Rect);   //!< Performs a deep copy
     CONSTEXPR_MOVE_CTOR(Rect);   //!< Performs a deep copy
 
-    DEFAULT_COPY_ASSIGN(Rect);   //!< Performs a deep copy
-    DEFAULT_MOVE_ASSIGN(Rect);   //!< Performs a deep copy
+    ENABLE_COPY_ASSIGN(Rect);   //!< Performs a deep copy
+    ENABLE_MOVE_ASSIGN(Rect);   //!< Performs a deep copy
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   

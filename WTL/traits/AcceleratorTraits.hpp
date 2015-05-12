@@ -25,8 +25,18 @@ namespace wtl
   template <>
   struct handle_alloc<::HACCEL>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \var npos - Invalid handle sentinel value
     static constexpr ::HACCEL npos = default<::HACCEL>(); 
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<HACCEL>::create
@@ -77,6 +87,10 @@ namespace wtl
       // no-op
       return true;
     }
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
   
 } //namespace wtl
