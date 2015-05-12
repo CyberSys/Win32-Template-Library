@@ -152,8 +152,9 @@
     <ClCompile Include="gdi\DeviceContext.cpp" />
     <ClCompile Include="gdi\StockObjects.cpp" />
     <ClCompile Include="modules\Module.cpp" />
+    <ClCompile Include="platform\DrawingFlags.cpp" />
     <ClCompile Include="platform\Locale.cpp" />
-    <ClCompile Include="traits\Traits.cpp" />
+    <ClCompile Include="traits\EncodingTraits.cpp" />
     <ClCompile Include="utils\Console.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

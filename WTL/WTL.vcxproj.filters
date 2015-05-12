@@ -475,8 +475,11 @@
     <ClCompile Include="modules\Module.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="traits\Traits.cpp">
+    <ClCompile Include="traits\EncodingTraits.cpp">
       <Filter>Traits</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\DrawingFlags.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
