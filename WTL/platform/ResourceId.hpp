@@ -9,6 +9,8 @@
 #define WTL_RESOURCE_ID_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
+#include "wtl/platform/SystemFlags.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -9,6 +9,10 @@
 #define WTL_PATH_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
+#include "wtl/utils/CharArray.hpp"
+#include <string>
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -588,11 +592,11 @@ namespace wtl
       Path<ENCODING>::array_t tmp;     //!< Absolute path of user temp folder
 
       // Get temp folder
-      if (!getFunc<char_t>(GetTempPathA,GetTempPathW)(MAX_PATH, tmp))
+      if (!getFunc<char_t>(::GetTempPathA,::GetTempPathW)(MAX_PATH, tmp))
         throw wtl::platform_error(HERE, "Unable to get temp folder");
 
       // Combine with random filename   (TODO: See L_tmpnam constant and tmpnam() func)
-      if (!getFunc<char_t>(GetTempFileNameA,GetTempFileNameW)(tmp, prefix, NULL, Data))
+      if (!getFunc<char_t>(::GetTempFileNameA,::GetTempFileNameW)(tmp, prefix, NULL, Data))
         throw wtl::platform_error(HERE, "Unable to generate temporary filename");
 
       // Update length

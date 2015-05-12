@@ -9,6 +9,7 @@
 #define WTL_RANGE_HPP
 
 #include "wtl/WTL.hpp"
+#include <iterator>                   //!< std::iterator
 
 //! \namespace wtl - Windows template library
 namespace wtl

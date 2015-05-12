@@ -10,6 +10,7 @@
 #define WTL_STATIC_PTR_CAST_HPP
 
 #include "wtl/WTL.hpp"
+#include <type_traits>                  //!< std::enable_if, std::integral_constant
 
 //! \namespace wtl - Windows template library
 namespace wtl

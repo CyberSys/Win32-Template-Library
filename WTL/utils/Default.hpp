@@ -11,6 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Constant.hpp"
 #include "wtl/utils/Sequence.hpp"
+#include "wtl/utils/SFINAE.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

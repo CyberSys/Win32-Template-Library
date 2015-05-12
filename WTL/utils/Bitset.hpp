@@ -9,6 +9,8 @@
 #define WTL_BITSET_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Default.hpp"
+#include "wtl/utils/DynamicArray.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -31,30 +33,26 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   public:
     //! \typedef mask_t - Mask type
-    typedef MASK mask_t;
+    using mask_t = MASK;
 
-    //! \enum - Defines bitset properties
-    enum 
-    {
-      BYTES = sizeof(mask_t),   //!< Defines the number of bytes in the set
-      BITS  = 8 * BYTES,        //!< Defines the number of bits in the set
-    };
-
-    //! \typedef BitArray - Array large enough to hold all bit indicies
-    typedef Array<uint32,BITS,true> BitArray;
-
-    //! \var ZERO - Define how we represent zero
-    static const mask_t ZERO = default<mask_t>();
+    //! \var bytes - Defines the number of bits in the set
+    static constexpr uint32 bytes = sizeof(mask_t);
       
+    //! \var bits - Defines the number of bytes in the set
+    static constexpr uint32 bits = 8 * bytes;
+    
+    //! \alias BitArray - Array large enough to hold all bit indicies
+    using BitArray = DynamicArray<uint32,bits>;
+  
     //////////////////////////////////////////////////////////////////////////////////////////
     //! \struct loop - Unfurls the high bits of the mask into a variable length array
     //!
     //! \tparam IDX - Zero-based iteration index
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <int32 IDX>
+    template <uint32 IDX>
     struct loop
     {
-      static_assert((IDX >= 0) && (IDX < BITS), "Invalid loop index");
+      static_assert((IDX >= 0) && (IDX < bits), "Invalid loop index");
 
       //////////////////////////////////////////////////////////////////////////////////////////
       // Bitset::flatten
@@ -75,10 +73,10 @@ namespace wtl
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct loop<BITS> - Base case 
+    //! \struct loop<bits> - Base case 
     //////////////////////////////////////////////////////////////////////////////////////////
     template <>
-    struct loop<BITS>
+    struct loop<bits>
     {
       static void flatten(const mask_t& mask, BitArray& out)
       { /*no-op*/ }
@@ -90,7 +88,7 @@ namespace wtl
     // Bitset::Bitset
     //! Initialize an empty/clear bitset 
     //////////////////////////////////////////////////////////////////////////////////////////
-    Bitset() : Mask(ZERO)
+    Bitset() : Mask(default<mask_t>())
     {}
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -125,10 +123,10 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     bool get(uint32 index) const
     {
-      CHECKED_INDEX(index, 0, BITS);
+      CHECKED_INDEX(index, 0, bits);
 
       // Query state of bit
-      return (Mask & static_cast<mask_t>(1 << index)) != ZERO;
+      return (Mask & static_cast<mask_t>(1 << index)) != default<mask_t>();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +137,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return Mask == ZERO;
+      return Mask == default<mask_t>();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -235,7 +233,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void  clear()
     {
-      Mask = ZERO;
+      Mask = default<mask_t>();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +246,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void  clear(uint32 index)
     {
-      CHECKED_INDEX(index, 0, BITS);
+      CHECKED_INDEX(index, 0, bits);
 
       // Clear bit
       Mask &= ~static_cast<mask_t>(1 << index);
@@ -264,7 +262,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void  set(uint32 index)
     {
-      CHECKED_INDEX(index, 0, BITS);
+      CHECKED_INDEX(index, 0, bits);
       
       // Set bit
       Mask |= static_cast<mask_t>(1 << index);

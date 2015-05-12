@@ -9,6 +9,10 @@
 #define WTL_STOCK_OBJECTS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"
+#include "wtl/traits/BrushTraits.hpp"
+#include "wtl/traits/FontTraits.hpp"
+#include "wtl/traits/PenTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

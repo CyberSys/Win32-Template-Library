@@ -9,6 +9,20 @@
 #define WTL_DEVICE_CONTEXT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/EnumCast.hpp"                 //!< EnumCast
+#include "wtl/utils/Handle.hpp"                   //!< Handle
+#include "wtl/utils/CharArray.hpp"                //!< CharArray
+#include "wtl/traits/DeviceContextTraits.hpp"     //!< HDeviceContext
+#include "wtl/traits/BrushTraits.hpp"             //!< HBrush
+#include "wtl/traits/FontTraits.hpp"              //!< HFont
+#include "wtl/traits/PenTraits.hpp"               //!< HPen
+#include "wtl/platform/Colours.hpp"               //!< Colours
+#include "wtl/platform/DrawingFlags.hpp"          //!< 
+#include "wtl/platform/Rectangle.hpp"             //!< Rectangle
+#include "wtl/platform/Point.hpp"                 //!< Point
+#include "wtl/platform/Size.hpp"                  //!< Size
+#include "wtl/platform/Triangle.hpp"              //!< Triangle
+#include <deque>                                  //!< std::deque
 
 //! \namespace wtl - Windows template library
 namespace wtl

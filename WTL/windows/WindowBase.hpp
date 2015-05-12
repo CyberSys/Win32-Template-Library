@@ -279,11 +279,11 @@ namespace wtl
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-      //! \alias type - Define own type
-      using type = ClientRectPropertyImpl;
-
       //! \alias base - Define base type
       using base = WindowPropertyImpl<RectL,PropertyType::ImmutableValue>;
+      
+      //! \alias type - Define own type
+      using type = ClientRectPropertyImpl;
 
       //! \alias argument_t - Inherit argument type
       using argument_t = typename base::argument_t;

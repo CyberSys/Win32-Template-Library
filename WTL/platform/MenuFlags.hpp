@@ -9,6 +9,7 @@
 #define WTL_MENU_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

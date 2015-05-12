@@ -9,6 +9,9 @@
 #define WTL_HANDLE_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Exception.hpp"            //!< Exceptions
+#include <utility>                            //!< std::forward
+#include <memory>                             //!< std::shared_ptr
 
 //! \namespace wtl - Windows template library
 namespace wtl

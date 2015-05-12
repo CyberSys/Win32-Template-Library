@@ -9,6 +9,7 @@
 #define WTL_LAZY_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/DynamicArray.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -20,12 +21,12 @@ namespace wtl
   //! \tparam DATA - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename DATA>
-  struct Lazy : protected Array<DATA,1,true>
+  struct Lazy : protected DynamicArray<DATA,1>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias base - Base class alias
-    using base = Array<DATA,1,true>;
+    using base = DynamicArray<DATA,1>;
     
     //! \alias object_t - Object type
     using object_t = DATA;

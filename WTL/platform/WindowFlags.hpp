@@ -9,10 +9,17 @@
 #define WTL_WINDOW_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/BaseCast.hpp"
+#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/utils/Clear.hpp"
+#include "wtl/utils/Constant.hpp"
+#include "wtl/utils/Default.hpp"
+#include "wtl/utils/Sequence.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  
   // ----------------------------------- ::FormatMessage(..) Flags ----------------------------------
 
   //! \enum FormatMessageFlags - 
@@ -313,6 +320,50 @@ namespace wtl
   template <> struct max_value<SystemClass>     : std::integral_constant<SystemClass,SystemClass::IconTitle>  {};
   template <> struct min_value<SystemClass>     : std::integral_constant<SystemClass,SystemClass::Animate>    {};
 
+  // ----------------------------------- WINDOW ID ----------------------------------
+  
+  //! \enum WindowId - Represents a Window Id
+  enum class WindowId : uint16
+  {
+    Ok = 1,			        //!< 'Ok' button
+    Cancel = 2,			    //!< 'Cancel' button
+    Abort = 3,			    //!< 'Abort' button
+    Retry = 4,			    //!< 'Retry' button
+    Ignore = 5,			    //!< 'Ignore' button
+    Yes = 6,			      //!< 'Yes' button
+    No = 7,			        //!< 'No' button
+    Close = 8,			    //!< 'Close' button
+    Help = 9,			      //!< 'Help' button
+    TryAgain = 10,			//!< [Windows 5.00] 'Try Again' button
+    Continue = 11,			//!< [Windows 5.00] 'Continue' button
+    User = 0x0100,      //!< User defined
+    Timeout = 32000,		//!< [Windows 5.01] Message box timed out
+  };
+  
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<WindowId>  : std::false_type  {};
+  template <> struct is_contiguous<WindowId> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<WindowId>     : std::integral_constant<WindowId,WindowId::Timeout>   {};
+  template <> struct min_value<WindowId>     : std::integral_constant<WindowId,WindowId::Ok>        {};
+  
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::window_id
+  //! Creates a strongly typed window id from any integral or enumeration type
+  //!
+  //! \tparam TYPE - Integral or enumeration type
+  //! 
+  //! \param[in] id - Value representing window id
+  //! \return WindowId - WindowId representation of 'id'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
+  WindowId window_id(VALUE id)
+  {
+    // Convert into underlying type then cast to enumeration
+    return enum_cast<WindowId>( static_cast<std::underlying_type_t<WindowId>>(id) );
+  }
 
 }
 

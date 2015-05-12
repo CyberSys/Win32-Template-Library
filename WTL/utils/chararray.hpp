@@ -9,6 +9,8 @@
 #define WTL_CHAR_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/FixedArray.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

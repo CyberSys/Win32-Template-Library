@@ -9,6 +9,11 @@
 #define WTL_MESSAGE_BOX_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"      //!< getFunc()
+//#include "wtl/traits/WindowTraits.hpp"        //!< WindowId
+#include "wtl/utils/CharArray.hpp"            //!< CharArray
+#include "wtl/platform/WindowFlags.hpp"       //!< MessageBoxFlags
+#include <stdexcept>                          //!< std::Exception
 
 //! \namespace wtl - Windows template library
 namespace wtl

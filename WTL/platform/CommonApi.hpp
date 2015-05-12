@@ -9,6 +9,9 @@
 #define WTL_API_COMMON_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
+#include "wtl/traits/WindowMessageTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

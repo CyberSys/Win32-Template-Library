@@ -9,6 +9,8 @@
 #define WTL_RESOURCES_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/GlobalTraits.hpp"
+#include "wtl/traits/ResourceTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

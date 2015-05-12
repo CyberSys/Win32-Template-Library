@@ -9,6 +9,10 @@
 #define WTL_TO_STRING_HPP
 
 #include "wtl/WTL.hpp"
+//#include "wtl/utils/SFINAE.hpp"             //!< 
+#include "wtl/traits/EnumTraits.hpp"        //!< wtl::enable_if_attribute_t
+#include <algorithm>                        //!< std::find
+#include <iterator>                         //!< std::begin, std::end
 
 //! \namespace wtl - Windows template library
 namespace wtl

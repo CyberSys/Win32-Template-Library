@@ -9,6 +9,7 @@
 #define WTL_SFINAE_HPP
 
 #include "wtl/WTL.hpp"
+#include <type_traits>                //!< std::enable_if, std::integral_constant
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -64,6 +65,16 @@ namespace wtl
   template <typename T, typename RET = void, typename... ARGS>
   using enable_if_class_constructible_t = std::enable_if_t<std::is_class<T>::value && std::is_constructible<T,ARGS...>, RET>;
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_enum_t - Defines an SFINAE expression requiring an enumeration
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_enum_t = std::enable_if_t<std::is_enum<E>::value, RET>;
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_floating_t - Defines an SFINAE expression requiring a floating point type

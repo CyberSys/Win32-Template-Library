@@ -9,6 +9,9 @@
 #define WTL_FORMAT_SPEC_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
+#include <type_traits>
+#include <exception>
 
 //! \namespace wtl - Windows template library
 namespace wtl

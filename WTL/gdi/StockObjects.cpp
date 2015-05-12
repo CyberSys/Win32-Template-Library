@@ -6,7 +6,8 @@
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "wtl/WTL.hpp"
+#include "StockObjects.hpp"
+#include "wtl/gdi/DeviceContext.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -9,6 +9,8 @@
 #define WTL_CONTROL_STYLES_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"
+#include <utility>"
 
 //! \namespace wtl - Windows template library
 namespace wtl

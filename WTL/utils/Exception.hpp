@@ -9,6 +9,11 @@
 #define WTL_EXCEPTION_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/EnumCast.hpp"           //!< EnumCast
+#include "wtl/utils/FormatSpec.hpp"         //!< printf_t
+#include "wtl/platform/WindowFlags.hpp"     //!< FormatMessageFlags
+#include <exception>                        //!< std::exception
+#include <utility>                          //!< std::exception
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -11,6 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/ModuleTraits.hpp"
 #include "wtl/platform/ResourceId.hpp"
+#include "wtl/platform/Locale.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

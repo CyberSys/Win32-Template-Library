@@ -9,6 +9,12 @@
 #define WTL_DYNAMIC_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Policies.hpp"           //!< Static alloc
+#include "wtl/utils/Exception.hpp"          //!< Exceptions
+#include <iterator>                         //!< std::iterator
+#include <functional>                       //!< std::
+#include <algorithm>                        //!< std::equals,std::find_if,etc.
+#include <initializer_list>                 //!< std::initializer_list
 
 //! \namespace wtl - Windows template library
 namespace wtl

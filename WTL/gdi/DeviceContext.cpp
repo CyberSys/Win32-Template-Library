@@ -6,7 +6,8 @@
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "wtl/WTL.hpp"
+#include "DeviceContext.hpp"
+#include "wtl/utils/Default.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

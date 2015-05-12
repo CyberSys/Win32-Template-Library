@@ -5,7 +5,7 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#include "wtl/WTL.hpp"
+#include "Locale.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

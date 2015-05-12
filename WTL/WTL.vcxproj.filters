@@ -173,9 +173,6 @@
     <ClInclude Include="threads\WorkerThread.hpp">
       <Filter>Threads</Filter>
     </ClInclude>
-    <ClInclude Include="resources\Resources.hpp">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="resources\DialogResource.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
@@ -326,9 +323,6 @@
     <ClInclude Include="windows\ControlEvent.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="LibRes.h">
-      <Filter>Library</Filter>
-    </ClInclude>
     <ClInclude Include="resources\IconResource.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
@@ -448,6 +442,15 @@
     </ClInclude>
     <ClInclude Include="utils\String.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\SystemFlags.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\Resource.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

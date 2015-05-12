@@ -9,6 +9,8 @@
 #define WTL_ENUMERATION_CAST_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/SFINAE.hpp"         //!< wtl::enable_if_enum_t
+#include <type_traits>                  //!< std::enable_if, std::integral_constant
 
 //! \namespace wtl - Windows template library
 namespace wtl

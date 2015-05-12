@@ -9,6 +9,10 @@
 #define WTL_FONT_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"               //!< Handle
+#include "wtl/utils/CharArray.hpp"            //!< CharArray
+#include "wtl/platform/DrawingFlags.hpp"      //!< StockObject, FontStyles
+#include "wtl/casts/EnumCast.hpp"             //!< EnumCast
 
 //! \namespace wtl - Windows template library
 namespace wtl

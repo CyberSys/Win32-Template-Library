@@ -9,6 +9,19 @@
 #define WTL_CONSOLE_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/EnumCast.hpp"           //!< EnumCast
+#include "wtl/traits/EnumTraits.hpp"        //!< is_attribute
+#include "wtl/utils/Exception.hpp"          //!< wtl::exception
+#include "wtl/utils/Bitset.hpp"             //!< Bitset
+#include "wtl/utils/CharArray.hpp"          //!< CharArray
+#include "wtl/utils/NameValuePair.hpp"      //!< NameValuePair
+#include "wtl/platform/Path.hpp"            //!< Path
+#include "wtl/windows/MessageBox.hpp"       //!< errorBox()
+#include <stdexcept>                        //!< std::exception
+#include <tuple>                            //!< std::tuple
+#include <string>                           //!< std::string
+#include <mutex>                            //!< std::lock_guard
+#include <type_traits>                      //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl

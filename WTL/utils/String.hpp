@@ -9,6 +9,9 @@
 #define WTL_STRING_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"        //!< Character encoding
+#include "wtl/utils/Exception.hpp"              //!< Exceptions
+#include <string>                               //!< std::basic_string
 
 //! \namespace wtl - Windows template library
 namespace wtl

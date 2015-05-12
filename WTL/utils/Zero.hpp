@@ -9,7 +9,9 @@
 #define WTL_ZERO_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/SFINAE.hpp"
 #include "wtl/utils/Default.hpp"
+#include "wtl/utils/Constant.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

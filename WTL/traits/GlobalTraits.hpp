@@ -9,6 +9,10 @@
 #define WTL_GLOBAL_MEM_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"
+#include "wtl/utils/Default.hpp"
+#include "wtl/traits/ModuleTraits.hpp"
+#include "wtl/traits/ResourceTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

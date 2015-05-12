@@ -9,6 +9,8 @@
 #define WTL_POLICIES_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/SFINAE.hpp"             //!< wtl::enable_if_class_t
+#include <utility>                          //!< std::forward
 
 //! \namespace wtl - Windows template library
 namespace wtl

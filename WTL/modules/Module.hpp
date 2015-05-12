@@ -9,7 +9,12 @@
 #define WTL_MODULE_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"
+#include "wtl/utils/List.hpp"
 #include "wtl/traits/ModuleTraits.hpp"
+#include "wtl/resources/Resource.hpp"
+#include "wtl/platform/ResourceId.hpp"
+#include <functional>
 
 //! \namespace wtl - Windows template library
 namespace wtl

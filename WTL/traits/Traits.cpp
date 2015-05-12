@@ -7,9 +7,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
+#include "wtl/platform/Colours.hpp"
+#include "wtl/platform/DrawingFlags.hpp"
 
 // Debug
-static wtl::MessageWindow<> wnd;
+//static wtl::MessageWindow<> wnd;
 
 //! \namespace wtl - Windows template library
 namespace wtl

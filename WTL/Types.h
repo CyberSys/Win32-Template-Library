@@ -9,6 +9,7 @@
 #define WTL_TYPES_HPP
 
 #include "WTL.hpp"
+#include <stdint.h>
 
 // Remove 'CHAR' typedef
 #ifdef CHAR
@@ -30,8 +31,8 @@ namespace wtl
   using ulong32 = unsigned long int;
   using int64   = int64_t;
   using uint64  = uint64_t;
-  using float32 = float_t;
-  using float64 = double_t;
+  using float32 = float;
+  using float64 = double;
 
   
   // Standard types

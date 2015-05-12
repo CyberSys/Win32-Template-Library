@@ -9,6 +9,7 @@
 #define WTL_BUILD_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
 
 //! \namespace wtl - Windows template library
 namespace wtl

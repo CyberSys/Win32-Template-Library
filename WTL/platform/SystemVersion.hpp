@@ -9,6 +9,9 @@
 #define WTL_SYSTEM_VERSION_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/traits/EncodingTraits.hpp"
+#include <utility>
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -67,7 +70,7 @@ namespace wtl
 
   //! \struct OperatingSystem - Encapsulates operating system info
   template <Encoding ENC>
-  struct OperatingSystem : getType<encoding_char_t<ENC>,OSVERSIONINFOA,OSVERSIONINFOW>
+  struct OperatingSystem : getType<encoding_char_t<ENC>,::OSVERSIONINFOA,::OSVERSIONINFOW>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -86,7 +89,7 @@ namespace wtl
       static const auto getVersion = getFunc<encoding_char_t<ENC>>(::GetVersionExA,::GetVersionExW);
 
       // Prepare
-      dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+      dwOSVersionInfoSize = sizeof(::OSVERSIONINFO);
 
       // Query windows version
       if (getVersion(this))

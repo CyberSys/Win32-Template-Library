@@ -9,6 +9,7 @@
 #define WTL_SIZE_HPP
 
 #include "wtl/WTL.hpp"
+#include <type_traits>          //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl

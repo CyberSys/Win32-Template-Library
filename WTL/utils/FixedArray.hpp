@@ -10,6 +10,8 @@
 #define WTL_FIXED_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/DynamicArray.hpp"
+#include "wtl/utils/Range.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -9,6 +9,8 @@
 #define WTL_ENCODING_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
+#include <type_traits>                    //!< std::enable_if_t, std::integral_constant
 
 //! \namespace wtl - Windows template library
 namespace wtl

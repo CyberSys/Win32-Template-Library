@@ -9,6 +9,8 @@
 #define WTL_SEQUENCE_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Constant.hpp"         //!< 
+#include <type_traits>
 
 //! \namespace wtl - Windows template library
 namespace wtl

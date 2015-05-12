@@ -9,6 +9,7 @@
 #define WTL_POINT_HPP
 
 #include "wtl/WTL.hpp"
+#include <type_traits>          //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -125,7 +126,7 @@ namespace wtl
     type operator+ (const Point<U>&  pt) const 
     { 
       return type(x + static_cast<T>(pt.x), 
-                     y + static_cast<T>(pt.y)); 
+                  y + static_cast<T>(pt.y)); 
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +140,7 @@ namespace wtl
     type operator- (const Point<U>&  pt) const 
     { 
       return type(x - static_cast<T>(pt.x), 
-                     y - static_cast<T>(pt.y)); 
+                  y - static_cast<T>(pt.y)); 
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

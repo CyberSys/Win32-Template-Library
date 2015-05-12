@@ -6,7 +6,7 @@
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "../WTL.hpp"
+#include "Console.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl

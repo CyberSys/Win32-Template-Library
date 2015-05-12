@@ -9,6 +9,8 @@
 #define WTL_DEVICE_CONTEXT_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Handle.hpp"
+#include "wtl/utils/Default.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -74,7 +76,7 @@ namespace wtl
     static HAlloc<::HDC> create(::HWND wnd) 
     { 
       // Load menu 
-      if (::HDC dc = GetDC(wnd))
+      if (::HDC dc = ::GetDC(wnd))
         return { dc, wnd, AllocType::Accquire };
 
       // Error: Failed  

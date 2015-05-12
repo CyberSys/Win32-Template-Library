@@ -31,6 +31,7 @@
     <ClInclude Include="io\TextWriter.hpp" />
     <ClInclude Include="io\XmlReader.hpp" />
     <ClInclude Include="io\XmlWriter.hpp" />
+    <ClInclude Include="Resource.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="modules\Application.hpp" />
     <ClInclude Include="modules\Module.hpp" />
@@ -47,13 +48,13 @@
     <ClInclude Include="platform\Rectangle.hpp" />
     <ClInclude Include="platform\ResourceId.hpp" />
     <ClInclude Include="platform\Size.hpp" />
+    <ClInclude Include="platform\SystemFlags.hpp" />
     <ClInclude Include="platform\Triangle.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
-    <ClInclude Include="LibRes.h" />
     <ClInclude Include="resources\DialogResource.hpp" />
     <ClInclude Include="resources\IconResource.hpp" />
-    <ClInclude Include="resources\Resources.hpp" />
+    <ClInclude Include="resources\Resource.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessagePump.hpp" />
     <ClInclude Include="threads\MessageThread.hpp" />

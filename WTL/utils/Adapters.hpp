@@ -9,6 +9,7 @@
 #define WTL_ADAPTERS_HPP
 
 #include "wtl/WTL.hpp"
+#include <functional>               //!< std::unary_function
 
 //! \namespace wtl - Windows template library
 namespace wtl

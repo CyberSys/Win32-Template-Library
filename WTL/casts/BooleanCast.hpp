@@ -11,6 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Default.hpp"
 
+
 //! \namespace wtl - Windows template library
 namespace wtl
 {

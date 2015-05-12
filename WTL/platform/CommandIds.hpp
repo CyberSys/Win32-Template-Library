@@ -9,6 +9,8 @@
 #define WTL_COMMAND_IDS_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/casts/EnumCast.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
