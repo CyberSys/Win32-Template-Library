@@ -52,15 +52,6 @@
   #define HERE  __FUNCTION__
 #endif
 
-//! \def STRSAFE_NO_DEPRECATE - Disable the StringSafe library depreciation warnings
-#define STRSAFE_NO_DEPRECATE
-
-//! \def _SCL_SECURE_NO_WARNINGS - Disable visual C++ checked iterator warnings, provided by wtl
-#define _SCL_SECURE_NO_WARNINGS
-
-//! \def _CRT_SECURE_NO_WARNINGS - Disable C runtime library warnings
-#define _CRT_SECURE_NO_WARNINGS
-
 // ---------------------------------------------------------------------
 // ------------------------ CONSTEXPR SEMANTICS ------------------------
 // ---------------------------------------------------------------------
