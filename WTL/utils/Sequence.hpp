@@ -44,10 +44,14 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 	
-    constexpr integral_sequence() = default; //: values{VALUES...}  // Not supported in MSVC2015 RC
-    virtual ~integral_sequence() = default;
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    DEFAULT_CONSTEXPR(integral_sequence);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(integral_sequence);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(integral_sequence);       //!< Immutable
+    ENABLE_POLY(integral_sequence);               //!< Can be polymorphic
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +168,14 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    DEFAULT_CONSTEXPR(sequence);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(sequence);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(sequence);       //!< Immutable
+    ENABLE_POLY(sequence);               //!< Can be polymorphic
 	};
 
   /*template <typename... TYPES>

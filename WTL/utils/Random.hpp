@@ -20,7 +20,7 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   protected:
     //////////////////////////////////////////////////////////////////////////////////////////
     // Random::Random
@@ -30,6 +30,12 @@ namespace wtl
     {
       srand((int32)time(0));
     }
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(Random);     //!< Cannot instantiate
+    DISABLE_MOVE(Random);     //!< Cannot instantiate
+    ENABLE_POLY(Random);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:

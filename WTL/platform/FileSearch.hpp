@@ -23,30 +23,39 @@ namespace wtl
   ////////////////////////////////////////////////////////////////////////////////////////// 
   //! \struct FileSearch - Provides a file system search query iterator
   //! 
-  //! \tparam ENCODING - Defines path character encoding 
+  //! \tparam ENC - Defines path character encoding 
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENCODING>
+  template <Encoding ENC>
   struct FileSearch
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-    //! \alias encoding - Encoding type
-    static constexpr Encoding encoding = ENCODING;  
-
+    //! \alias type - Define own type
+    using type = FileSearch<ENC>;
+  
     //! \alias char_t - Encoding character type
-    using char_t = encoding_char_t<encoding>;
+    using char_t = encoding_char_t<ENC>;
 
     //! \alias path_t - Path type
-    using path_t = Path<encoding>;
+    using path_t = Path<ENC>;
 
     //! \alias result_t - Results data type
     using result_t = getType<char_t,::WIN32_FIND_DATAA,::WIN32_FIND_DATAW>;
 
     //! \alias handle_t - Search handle type
     using handle_t = Handle<::HFILESEARCH>;
+    
+    //! \alias encoding - Encoding type
+    static constexpr Encoding encoding = ENC;  
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    result_t   Result;      //!< Storage for current result
+    handle_t   Handle;      //!< Search handle
+    path_t     Folder;      //!< Absolute path of target folder (with trailing backslash)
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
     //////////////////////////////////////////////////////////////////////////////////////////
     // FileSearch::FileSearch
     //! Create and execute a file system query
@@ -61,24 +70,21 @@ namespace wtl
     {
       // Verify folder exists
       if (!folder.exists())
-        throw wtl::logic_error(HERE, "Search folder '%s' does not exist", folder.c_str());
+        throw logic_error(HERE, "Search folder '%s' does not exist", folder.c_str());
 
       // Skip undesireable first result
       if (exists() && !valid())
         next();
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // FileSearch::~FileSearch
-    //! Closes the query handle
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~FileSearch()
-    {
-    }
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(MessagePump);      //!< Cannot be copied
+    ENABLE_MOVE(MessagePump);       //!< Can be moved
+    ENABLE_POLY(MessagePump);       //!< Can be polymorphic  [Closes the query handle]
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   
-
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   public:
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -104,6 +110,7 @@ namespace wtl
     {
       LOGIC_INVARIANT(exists());
 
+      // Query current result attributes
       return (FileAttribute::Directory & Result.dwFileAttributes) != default<FileAttribute>();
     }
     
@@ -119,6 +126,7 @@ namespace wtl
     {
       LOGIC_INVARIANT(exists());
 
+      // Return current result filename
       return Result.cFileName;
     }
 
@@ -134,6 +142,7 @@ namespace wtl
     {
       LOGIC_INVARIANT(exists());
 
+      // Prepend folder to current result filename
       return Folder + Result.cFileName;
     }
 
@@ -200,12 +209,6 @@ namespace wtl
       next();
       return *this;
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    result_t   Result;      //!< Storage for current result
-    handle_t   Handle;      //!< Search handle
-    path_t     Folder;      //!< Absolute path of target folder (with trailing backslash)
   };
 
 

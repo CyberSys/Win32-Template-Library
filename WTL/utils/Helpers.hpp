@@ -17,6 +17,9 @@ namespace wtl
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct auto_cast - Cast from any type A to any type B  (work in progress)
+  //!
+  //! \tparam BASE - Base type
+  //! \tparam DERIED - Deried type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename BASE, typename DERIVED>
   DERIVED auto_cast(BASE b);
@@ -48,11 +51,102 @@ namespace wtl
 
   // --------------------------------- CO-VARIANCE ---------------------------------
 
-  template <template <typename> class BASE, 
-            template <typename> class DERIVED, 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct is_covariant - Query whether a type is co-variant
+  //!
+  //! \tparam BASE - Base template type
+  //! \tparam DERIED - Deried template type
+  //! \tparam T - Common enclosed type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <template <typename> typename BASE, 
+            template <typename> typename DERIVED, 
             typename T>
   struct is_covariant : std::is_base_of<BASE<T>, DERIVED<T>>
   {};
+
+  
+  // --------------------------------- C RUNTIME LIBRARY ---------------------------------
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strlen_t
+  //! Get length of narrow character string 
+  //! 
+  //! \param[in] const* str - Narrow character string
+  //! \return size_t - Length in characters
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline size_t strlen_t(const char* str)
+  {
+    return strlen(str);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strlen_t
+  //! Get length of wide character string 
+  //! 
+  //! \param[in] const* str - Wide character string
+  //! \return size_t - Length in characters
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline size_t strlen_t(const wchar_t* str)
+  {
+    return wcslen(str);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcmp_t
+  //! Case sensitive narrow character comparison
+  //! 
+  //! \param[in] const* a - Narrow char string
+  //! \param[in] const* b - Another narrow char string
+  //! \return int32 - -1 if less, 0 if equal, 1 if greater
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline int32 strcmp_t(const char* a, const char* b)
+  {
+    return strcmp(a,b);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcmp_t
+  //! Case sensitive wide character comparison
+  //! 
+  //! \param[in] const* a - Wide char string
+  //! \param[in] const* b - Another wide char string
+  //! \return int32 - -1 if less, 0 if equal, 1 if greater
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline int32 strcmp_t(const wchar_t* a, const wchar_t* b)
+  {
+    return wcscmp(a,b);
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcpy_t
+  //! Copy narrow character string
+  //! 
+  //! \param[in] *dest - Narrow char string
+  //! \param[in] const* src - Another narrow char string
+  //! \return char* - Returns 'dest'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline char* strcpy_t(char* dest, const char* src)
+  {
+    return strcpy(dest,src);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcpy_t
+  //! Copy wide character string
+  //! 
+  //! \param[in] *dest - Wide char string
+  //! \param[in] const* src - Another wide char string
+  //! \return wchar_t* - Returns 'dest'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline wchar_t* strcpy_t(wchar_t* dest, const wchar_t* src)
+  {
+    return wcscpy(dest,src);
+  }
+  
+
+
   
 }
 

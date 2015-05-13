@@ -42,9 +42,9 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     point_t  Points[3];     //!< Points
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // Triangle::Triangle constexpr
     //! Create empty size of zero width and height
@@ -86,17 +86,15 @@ namespace wtl
       Points[1] = btmLeft + Point<Z>(width/2,-height);
       Points[2] = btmLeft + Point<W>(width,0);
     }
-
-    ENABLE_COPY(Triangle);   //!< Performs a deep copy
-    ENABLE_MOVE(Triangle);   //!< Performs a deep copy
-     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Triangle::~Triangle 
-    //! Virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*virtual ~Triangle()
-    {};*/
-
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    CONSTEXPR_COPY_CTOR(Triangle);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(Triangle);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(Triangle);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(Triangle);       //!< Can be move-assigned
+    DISABLE_POLY(Triangle);             //!< Cannot be polymorphic
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

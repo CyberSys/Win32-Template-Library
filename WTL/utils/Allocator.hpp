@@ -33,6 +33,25 @@ namespace wtl
   template <typename T>
   struct static_alloc<T, enable_if_not_class_t<T>>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = static_alloc<T>;
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(static_alloc);     //!< Cannot instantiate
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(static_alloc);     //!< Cannot instantiate
+    DISABLE_MOVE(static_alloc);     //!< Cannot instantiate
+    DISABLE_DTOR(static_alloc);     //!< Cannot instantiate
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // static_alloc::construct
     //! Default-construct value to zero
@@ -100,6 +119,10 @@ namespace wtl
 		{	
       *addr = U(args...);
 		}
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   }; 
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -110,6 +133,25 @@ namespace wtl
   template <typename T>
   struct static_alloc<T, enable_if_class_t<T>> 
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = static_alloc<T>;
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(static_alloc);     //!< Cannot instantiate
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(static_alloc);     //!< Cannot instantiate
+    DISABLE_MOVE(static_alloc);     //!< Cannot instantiate
+    DISABLE_DTOR(static_alloc);     //!< Cannot instantiate
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // static_alloc::construct
     //! Default-construct object
@@ -178,6 +220,10 @@ namespace wtl
       destroy(addr);
       construct(addr, std::forward<ARGS>(args)...);
 		}
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
 

@@ -56,6 +56,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
      
+    //! \alias type - Define own type
+    using type = Path;
+  
     //! \alias base - Define base type
     using base = CharArray<ENCODING,MAX_PATH>;
 
@@ -65,7 +68,7 @@ namespace wtl
     //! \alias const_pointer - String type
     using const_pointer = typename base::const_pointer;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
  
     //////////////////////////////////////////////////////////////////////////////////////////
     //! Path::Path
@@ -96,32 +99,25 @@ namespace wtl
     Path(const std::string& path) : base(path.c_str())
     {}
 
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    ENABLE_COPY_CTOR(Path);      //!< Can be deep copied
+    ENABLE_MOVE_CTOR(Path);      //!< Can be moved 
+    ENABLE_POLY(Path);           //!< Can be polymorphic
+    
     //////////////////////////////////////////////////////////////////////////////////////////
-    //! Path::Path
-    //! Copy-create from another path
+    //! Path::operator=
+    //! Overwrite contents with that of another path
     //! 
     //! \param[in] const& r - Another path
+    //! \return Path& - Reference to self, containing new path
     //////////////////////////////////////////////////////////////////////////////////////////
-    Path(const Path& r) : base(r)
-    {}
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! Path::Path
-    //! Move-create from another path
-    //! 
-    //! \param[in] && r - Another path
-    //////////////////////////////////////////////////////////////////////////////////////////
-    Path(Path&& r) : base(r)
+    Path& operator=(const Path& r)
     {
+      CharArray::assign(r.c_str());
+      return *this;
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! Path::~Path
-    //! Virtual d-tor
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Path()
-    {}
-
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -476,19 +472,6 @@ namespace wtl
         fn[0] = null_t;
         base::append(name);
       }
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! Path::operator=
-    //! Overwrite contents with that of another path
-    //! 
-    //! \param[in] const& r - Another path
-    //! \return Path& - Reference to self, containing new path
-    //////////////////////////////////////////////////////////////////////////////////////////
-    Path& operator=(const Path& r)
-    {
-      CharArray::assign(r.c_str());
-      return *this;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

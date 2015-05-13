@@ -43,7 +43,7 @@ namespace wtl
     //! \var encoding - Inherit program character encoding
     static constexpr Encoding encoding = msgpump_base::encoding;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Application::Application
@@ -54,6 +54,11 @@ namespace wtl
     Application(::HMODULE app) : module_base(app), 
                                  msgpump_base(app)
     {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(Module);       //!< Cannot be copied
+    ENABLE_MOVE(Module);        //!< Can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 

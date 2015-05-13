@@ -16,6 +16,36 @@
 namespace wtl
 {
   
+  // ----------------------------------- COMMON CONTROL VERSION ----------------------------------
+
+  
+  //! \enum ControlVersion - Defines common control library (ComCtl32) versions
+  enum class ControlVersion : ulong32
+  { 
+    Explorer30 = 0x0400,        //!< Internet Explorer 3.00  (Windows 95)
+    Explorer31 = 0x0470,        //!< Internet Explorer 3.01  (Windows NT 4, Windows 95 OSR2)
+
+    Explorer40 = 0x0471,        //!< Internet Explorer 4.00 
+    Explorer41 = 0x0472,        //!< Internet Explorer 4.01  (Windows 98)
+
+    Explorer50 = 0x0580,        //!< Internet Explorer 5.00  (Windows 98 SE)
+    Explorer51 = 0x0581,        //!< Internet Explorer 5.01  (Windows 2000)
+
+    Explorer60 = 0x0582,        //!< Internet Explorer 6.00  (Windows XP)
+    
+    WinXp      = 0x0600,        //!< <Not packaged with OS> (Windows XP)
+    WinVista   = 0x0610,        //!< <Not packaged with OS> (Windows Vista)
+  };
+
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<ControlVersion>  : std::false_type  {};
+  template <> struct is_contiguous<ControlVersion> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::WinVista>    {};
+  template <> struct min_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Explorer30>  {};
+
+  
   // ----------------------------------- RESOURCE TYPES ----------------------------------
   
   
@@ -53,6 +83,30 @@ namespace wtl
   template <> struct max_value<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Cursor>     {};
   template <> struct min_value<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Manifest>   {};
   
+  
+  // ----------------------------------- SHELL VERSION ----------------------------------
+
+
+  //! \enum ShellVersion - Defines shell library (Shell32) versions
+  enum class ShellVersion : ulong32
+  { 
+    Win95      = 0x0400,        //!< Windows 95 / NT4 (Internet Explorer 3.0)
+    Explorer40 = 0x0471,        //!< Windows 95 / NT4 (Internet Explorer 4.0)
+    Win98      = 0x0472,        //!< Windows 98 / 98SE
+    Win2000    = 0x0500,        //!< Windows 2000
+    WinXp      = 0x0600,        //!< Windows XP / Vista
+    Win7       = 0x0610,        //!< Windows 7
+    Future,                     //!< Future
+  };
+  
+  //! Define traits: Non-Contiguous enumeration
+  template <> struct is_attribute<ShellVersion>  : std::false_type  {};
+  template <> struct is_contiguous<ShellVersion> : std::false_type  {};
+
+  //! Define limits traits
+  template <> struct max_value<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win7>  {};
+  template <> struct min_value<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win95> {};
+
 
   // ----------------------------------- SYSTEM CURSORS ----------------------------------
   

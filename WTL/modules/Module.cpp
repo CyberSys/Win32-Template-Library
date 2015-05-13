@@ -11,9 +11,15 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+  // ----------------------------------- REPRESENTATION -----------------------------------
+  
   //! \var LoadedModules - Loaded modules collection
   ModuleCollection  LoadedModules;
-
+  
+  // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
   /////////////////////////////////////////////////////////////////////////////////////////
   // Module::Module
   //! Create from native module handle. Adds module to 'Loaded Modules' collection.
@@ -27,11 +33,16 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // Module::Module
-  //! Virtual d-tor. Removes module from 'Loaded Modules' collection.
+  //! Can be polymorphic. Removes module from 'Loaded Modules' collection.
   /////////////////////////////////////////////////////////////////////////////////////////
   Module::~Module()
   {
     LoadedModules.remove(*this);
   }
 
+  // ----------------------------------- STATIC METHODS -----------------------------------
+
+  // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+  // ----------------------------------- MUTATOR METHODS ----------------------------------
 }

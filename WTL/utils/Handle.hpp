@@ -17,17 +17,6 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_traits - Defines handle traits
-  //!
-  //! \tparam T - Any handle type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  struct native_traits
-  {
-    static constexpr bool cloneable = false;
-  };
-
-  /////////////////////////////////////////////////////////////////////////////////////////
   //! \enum AllocType - Handle allocation type
   /////////////////////////////////////////////////////////////////////////////////////////
   enum class AllocType
@@ -66,6 +55,19 @@ namespace wtl
   //  static HAlloc<T>  clone(HAlloc<T>);
   //  static void       destroy(HAlloc<T>);
   //};
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct handle_traits - Defines handle traits
+  //!
+  //! \tparam T - Any handle type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  struct handle_traits
+  {
+    static constexpr bool cloneable = false;
+  };
+
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -100,14 +102,14 @@ namespace wtl
     using shared_ptr_t = std::shared_ptr<native_t>;
     
     //! \typedef traits_t - Define handle traits type
-    using traits_t = native_traits<native_t>; 
+    using traits_t = handle_traits<native_t>; 
 
     // ----------------------------------- REPRESENTATION ------------------------------------
   protected:
     halloc_t      Allocation;  //!< Allocated handle & method storage
     shared_ptr_t  Storage;     //!< Handle
 
-    // ---------------- CONSTRUCTION / DESTRUCTION ----------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::Handle
@@ -147,8 +149,11 @@ namespace wtl
                                       Storage(toPointer(h), [this](pointer_t ptr) { safeDelete(ptr); } )
     {}
     
-    ENABLE_COPY(type);
-    ENABLE_MOVE(type);
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(Handle);      //!< Can be deep copied
+    ENABLE_MOVE(Handle);      //!< Can be moved 
+    ENABLE_POLY(Handle);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   protected:

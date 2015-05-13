@@ -41,7 +41,7 @@ namespace wtl
     value_t  x,       //!< X co-ordinate
              y;       //!< Y co-ordinate
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::Point constexpr
@@ -86,19 +86,13 @@ namespace wtl
                                   y(static_cast<T>(Y))
     {}
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::~Point 
-    //! Non-virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ~Point() = default;
-
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    CONSTEXPR_COPY_CTOR(Point);   //!< Performs a deep copy
-    CONSTEXPR_MOVE_CTOR(Point);   //!< Performs a deep copy
-
-    ENABLE_COPY_ASSIGN(Point);   //!< Performs a deep copy
-    ENABLE_MOVE_ASSIGN(Point);   //!< Performs a deep copy
+    CONSTEXPR_COPY_CTOR(Point);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(Point);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(Point);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(Point);       //!< Can be move-assigned
+    DISABLE_POLY(Point);             //!< Cannot be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   

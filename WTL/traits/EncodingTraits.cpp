@@ -16,6 +16,8 @@ static wtl::MessageWindow<> wnd;
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
   //! \var enum_values<...>::values - Defines character encodings
   const char*  enum_names<Encoding>::values[] = { "ANSI", "ASCII", "OEM", "MAC", "THREAD_ANSI", "SYMBOL", "UTF7", "UTF8", "UTF16" };
 
@@ -23,6 +25,15 @@ namespace wtl
   const Encoding  enum_values<Encoding>::values[] = { Encoding::ANSI, Encoding::ASCII, Encoding::OEM, Encoding::MAC, Encoding::THREAD_ANSI, 
                                                       Encoding::SYMBOL, Encoding::UTF7, Encoding::UTF8, Encoding::UTF16 };
   
+  // ----------------------------------- REPRESENTATION -----------------------------------
+  
+  // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+	
+  // ----------------------------------- STATIC METHODS -----------------------------------
+
+  // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+  // ----------------------------------- MUTATOR METHODS ----------------------------------
 }
 
 

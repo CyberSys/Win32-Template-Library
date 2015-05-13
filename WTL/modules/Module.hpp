@@ -33,7 +33,7 @@ namespace wtl
   protected:
     HModule   Handle;       //!< Module handle
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Module::Module
@@ -43,14 +43,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Module(::HMODULE m);
     
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(Module);       //!< Cannot be copied
+    ENABLE_MOVE(Module);        //!< Can be moved
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Module::~Module
-    //! Virtual d-tor. Removes module from 'Loaded Modules' collection.
+    //! Can be polymorphic
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~Module();
-
-    DISABLE_COPY(Module);           //!< Modules are unique
-    ENABLE_MOVE(Module);      //!< Modules can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -166,7 +168,7 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

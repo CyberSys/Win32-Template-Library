@@ -30,10 +30,16 @@ namespace wtl
     struct StringTableEntry
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+      
+      // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+      DISABLE_CTOR(StringTableEntry);     //!< Cannot instantiate
 
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-    
-      StringTableEntry() = delete;
+      // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+      DISABLE_COPY(StringTableEntry);     //!< Cannot instantiate
+      DISABLE_MOVE(StringTableEntry);     //!< Cannot instantiate
+      DISABLE_DTOR(StringTableEntry);     //!< Cannot instantiate
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
@@ -62,7 +68,7 @@ namespace wtl
     const StringTableEntry*  Entry;       //!< Desired entry
     uint16                   Ident;       //!< String id
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // StringResource::StringResource
@@ -93,6 +99,12 @@ namespace wtl
       if (!Entry)
         throw logic_error(HERE, "String resource %d does not exist", Ident);
     }
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    ENABLE_COPY(StringResource);       //!< Can be shallow copied  
+    ENABLE_MOVE(StringResource);       //!< Can be moved
+    ENABLE_POLY(StringResource);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

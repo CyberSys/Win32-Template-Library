@@ -29,8 +29,8 @@ namespace wtl
     ::HDC      Handle;      //!< Handle
     AllocType  Method;      //!< Allocation method
     ::HWND     Window;      //!< Owner window
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
     // HAlloc<::HDC>::HAlloc
@@ -53,7 +53,11 @@ namespace wtl
     HAlloc(::HDC dc, ::HWND wnd, AllocType at) : Handle(dc), Method(at), Window(wnd)
     {}
   
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    ENABLE_COPY(HAlloc);       //!< Can be shallow copied
+    ENABLE_MOVE(HAlloc);       //!< Can be moved
+    ENABLE_POLY(HAlloc);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -83,9 +87,15 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 	
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    DISABLE_CTOR(handle_alloc);     //!< Cannot instantiate
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(handle_alloc);     //!< Cannot instantiate
+    DISABLE_MOVE(handle_alloc);     //!< Cannot instantiate
+    DISABLE_DTOR(handle_alloc);     //!< Cannot instantiate
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

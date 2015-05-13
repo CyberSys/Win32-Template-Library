@@ -40,16 +40,17 @@ namespace wtl
 
     //! \alias collection_t - Define collection type
     using collection_t = Stack<storage_t>;
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::ActionQueue
-    //! Create empty Gui command queue
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ActionQueue()
-    {}
-
+    ENABLE_CTOR(ActionQueue);           //!< Can be default-constructed
+    
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+  public:
+    DISABLE_COPY(ActionQueue);          //!< Cannot be copied
+    ENABLE_MOVE_CTOR(ActionQueue);      //!< Can be moved 
+    ENABLE_POLY(ActionQueue);           //!< Can be polymorphic
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------		

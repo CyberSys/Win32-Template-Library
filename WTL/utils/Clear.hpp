@@ -29,8 +29,8 @@ namespace wtl
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename = void> 
-  struct clear_t; 
-  /* Undefined */
+  struct clear_t;   /* Undefined */
+  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct clear_t<method> - Invoke a 'clear()' mutator method if available
@@ -38,17 +38,50 @@ namespace wtl
   template <typename T> 
   struct clear_t<T,std::enable_if_t<has_clear_method<T>::value>>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(clear_t);     //!< Cannot instantiate
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(clear_t);     //!< Cannot instantiate
+    DISABLE_MOVE(clear_t);     //!< Cannot instantiate
+    DISABLE_DTOR(clear_t);     //!< Cannot instantiate
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // clear_t::exec
+    //! Clear object using provided .clear() method
+    //! 
+    //! \param[in] obj - Object 
+    /////////////////////////////////////////////////////////////////////////////////////////
     static void exec(T& obj)
     {
       obj.clear();
     }
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // clear_t::exec
+    //! Clear array of objects using provided .clear() method
+    //! 
+    //! \param[in] &arr - Array of objects
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <unsigned LEN>
     static void exec(T (&arr)[LEN])
     {
       for (uint32 i = 0; i < LEN; ++i)
         arr[i].clear();
     }
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -57,16 +90,49 @@ namespace wtl
   template <typename T> 
   struct clear_t<T, enable_if_standard_t<T>>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(clear_t);     //!< Cannot instantiate
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(clear_t);     //!< Cannot instantiate
+    DISABLE_MOVE(clear_t);     //!< Cannot instantiate
+    DISABLE_DTOR(clear_t);     //!< Cannot instantiate
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // clear_t::exec
+    //! Clear object using memset()
+    //! 
+    //! \param[in] obj - Object 
+    /////////////////////////////////////////////////////////////////////////////////////////
     static void exec(T& obj)
     {
       memset(&obj, 0x00, sizeof(T));
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // clear_t::exec
+    //! Clear array of objects using memset()
+    //! 
+    //! \param[in] &arr - Array of objects
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <unsigned LEN>
     static void exec(T (&arr)[LEN])
     {
       memset(&arr, 0x00, sizeof(T)*LEN);
     }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
   };
 
   
@@ -120,67 +186,6 @@ namespace wtl
 	  clear_t<T>::exec(arr);
 	}
   
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::clear
-  //! Clears any object 
-  //! 
-  //! \tparam T - Object type
-  //!
-  //! \param[in,out] &obj - Object 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename T, unsigned LEN> 
-	void  clear(T (&arr)[LEN]) 
-	{	
-	  clear_t<T>::exec(arr);
-	}*/
-
-
-
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::clear
-  //! Clears any object of class type 
-  //! 
-  //! \tparam T - Object type
-  //!
-  //! \param[in,out] &obj - Object containing a .clear() method
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename T> 
-	enable_if_not_pod_t<T>  clear(T& obj) 
-	{	
-	  obj.clear();
-	}*/
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::clear
-  //! Clears any object of POD type using memset 
-  //! 
-  //! \tparam T - Object type
-  //!
-  //! \param[in,out] &obj - Object of POD type
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename T> 
-	enable_if_pod_t<T>  clear(T& obj) 
-	{	
-	  memset(&obj, 0x00, sizeof(T));
-	}*/
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::clear
-  //! Clears any array of POD type using memset 
-  //! 
-  //! \tparam T - Object type
-  //! \tparam LEN - Array capacity
-  //!
-  //! \param[in,out] &arr - Array of objects of POD type
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename T, unsigned LEN> 
-	enable_if_pod_t<T>  clear(T (&arr)[LEN]) 
-	{	
-	  memset(&arr, 0x00, sizeof(T)*LEN);
-	}*/
-
 }
 
 

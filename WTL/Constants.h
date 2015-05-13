@@ -13,8 +13,11 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  constexpr ::BOOL  True = TRUE;      //!< Win32 boolean true
-  constexpr ::BOOL  False = FALSE;    //!< Win32 boolean false
+  //! \var wtl::True - Win32 boolean TRUE
+  constexpr ::BOOL  True = TRUE;      
+
+  //! \var wtl::False - Win32 boolean FALSE
+  constexpr ::BOOL  False = FALSE;    
 }
 
 #endif // WTL_CONSTANTS_HPP

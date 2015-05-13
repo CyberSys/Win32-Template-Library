@@ -88,10 +88,13 @@ namespace wtl
       Value.Numeral = enum_cast(type);
     }
 
-    CONSTEXPR_COPY_CTOR(ResourceId);
-    CONSTEXPR_MOVE_CTOR(ResourceId);
-    ENABLE_COPY_ASSIGN(ResourceId);
-    ENABLE_MOVE_ASSIGN(ResourceId);
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    CONSTEXPR_COPY_CTOR(ResourceId);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(ResourceId);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(ResourceId);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(ResourceId);       //!< Can be move-assigned
+    DISABLE_POLY(ResourceId);             //!< Cannot be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

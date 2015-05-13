@@ -33,6 +33,9 @@ namespace wtl
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias type - Define own type
+    using type = MessagePump;
+  
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
 
@@ -65,8 +68,8 @@ namespace wtl
     DialogCollection  Dialogs;    //!< Currently active modeless dialogs
     window_t          Window;     //!< Main thread window
     PumpState         State;      //!< Current state
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // MessagePump::MessagePump
@@ -79,6 +82,12 @@ namespace wtl
                                       Window(instance)
     {}
     
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(MessagePump);      //!< Cannot be copied
+    ENABLE_MOVE(MessagePump);       //!< Can be moved
+    ENABLE_POLY(MessagePump);       //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

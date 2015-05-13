@@ -314,6 +314,18 @@ namespace wtl
   template <typename RESULT>
   struct MsgResult
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = MsgResult<RESULT>;
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    MsgRoute  Route;        //!< Message routing
+    RESULT    Result;       //!< Message result
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     //! MsgResult::MsgResult
     //! Create unhandled result
@@ -338,8 +350,20 @@ namespace wtl
     MsgResult(MsgRoute route, RESULT res = -1) noexcept : Route(route), Result(res)
     {}
     
-    MsgRoute  Route;        //!< Message routing
-    RESULT    Result;       //!< Message result
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    CONSTEXPR_COPY_CTOR(MsgResult);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(MsgResult);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(MsgResult);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(MsgResult);       //!< Can be move-assigned
+    DISABLE_POLY(MsgResult);             //!< Cannot be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+    
   };
 
   //! \alias LResult - Default window message return type

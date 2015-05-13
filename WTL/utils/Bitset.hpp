@@ -15,9 +15,6 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  /*template <typename STREAM>
-  struct BinaryReader;*/
-
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Bitset - Simple implementation of a bitset
   //! 
@@ -26,10 +23,6 @@ namespace wtl
   template <typename MASK>
   struct Bitset 
   {
-    //! \friend wtl::operator >> - Allow 
-    /*template <typename STREAM, typename DATA> friend
-    BinaryReader<STREAM>& operator >> (BinaryReader<STREAM>& r, Bitset<DATA>& bs);*/
-
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   public:
     //! \typedef mask_t - Mask type
@@ -81,31 +74,69 @@ namespace wtl
       static void flatten(const mask_t& mask, BitArray& out)
       { /*no-op*/ }
     };
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    mask_t  Mask;       //!< Underlying representation
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Bitset::Bitset
+    // Bitset::Bitset constexpr 
     //! Initialize an empty/clear bitset 
     //////////////////////////////////////////////////////////////////////////////////////////
-    Bitset() : Mask(default<mask_t>())
+    constexpr Bitset() : Mask(default<mask_t>())
     {}
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Bitset::Bitset
+    // Bitset::Bitset constexpr 
     //! Initialize a bitset with an initial value
     //! 
     //! \param[in] m - Initial value for mask
     //////////////////////////////////////////////////////////////////////////////////////////
-    explicit Bitset(mask_t m) : Mask(m)
+    explicit constexpr Bitset(mask_t m) : Mask(m)
     {}
 
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+  public:
+    CONSTEXPR_COPY_CTOR(Bitset);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(Bitset);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(Bitset);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(Bitset);       //!< Can be move-assigned
+    ENABLE_POLY(Bitset);              //!< Can be polymorphic
+
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Bitset::~Bitset
-    //! Nothing
+    // Bitset::operator =
+    //! Overwrite the bitset mask 
+    //!
+    //! \param[in] m - Mask
+    //! \return Bitset& - Reference to self containing new mask
     //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Bitset()
-    {}
+    Bitset& operator= (mask_t m) 
+    {
+      Mask = m;
+      return *this;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Bitset::operator =
+    //! Copies the mask from another Bitset of different type
+    //!
+    //! \tparam M - Foreign bitset mask type
+    //! 
+    //! \param[in] const& r - Another bitset (of different type)
+    //! \return Bitset& - Reference to self containing new mask
+    //////////////////////////////////////////////////////////////////////////////////////////
+    template <typename M>
+    Bitset& operator= (const Bitset<M>& r) 
+    {
+      // Perform implicit conversion upon foreign mask
+      if (static_cast<void*>(this) != static_cast<const void*>(&r))
+        Mask = static_cast<mask_t>(r.Mask);
+
+      return *this;
+    }
+
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:
@@ -267,57 +298,6 @@ namespace wtl
       // Set bit
       Mask |= static_cast<mask_t>(1 << index);
     }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Bitset::operator =
-    //! Overwrite the bitset mask 
-    //!
-    //! \param[in] m - Mask
-    //! \return Bitset& - Reference to self containing new mask
-    //////////////////////////////////////////////////////////////////////////////////////////
-    Bitset& operator= (mask_t m) 
-    {
-      Mask = m;
-      return *this;
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Bitset::operator =
-    //! Copies the mask from another Bitset of equal type
-    //!
-    //! \param[in] const& r - Another bitset (of equal type)
-    //! \return Bitset& - Reference to self containing new mask
-    //////////////////////////////////////////////////////////////////////////////////////////
-    Bitset& operator= (const Bitset& r) 
-    {
-      if (this != &r)
-        Mask = r.Mask;
-
-      return *this;
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Bitset::operator =
-    //! Copies the mask from another Bitset of different type
-    //!
-    //! \tparam M - Foreign bitset mask type
-    //! 
-    //! \param[in] const& r - Another bitset (of different type)
-    //! \return Bitset& - Reference to self containing new mask
-    //////////////////////////////////////////////////////////////////////////////////////////
-    template <typename M>
-    Bitset& operator= (const Bitset<M>& r) 
-    {
-      // Perform implicit conversion upon foreign mask
-      if (static_cast<void*>(this) != static_cast<const void*>(&r))
-        Mask = static_cast<mask_t>(r.Mask);
-
-      return *this;
-    }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    mask_t  Mask;   //!< Underlying representation
   };
   
   

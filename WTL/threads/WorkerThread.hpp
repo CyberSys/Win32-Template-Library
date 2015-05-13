@@ -9,6 +9,7 @@
 #define WTL_WORKER_THREAD_HPP
 
 #include "wtl/WTL.hpp"
+#include <thread>
 
 //! \namespace wtl - Windows template library
 namespace wtl

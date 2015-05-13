@@ -51,8 +51,8 @@ namespace wtl
              top,         //!< Top extent
              right,       //!< Right extent
              bottom;      //!< Bottom extent
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::Rect constexpr
@@ -136,20 +136,14 @@ namespace wtl
                                                          top(topLeft.y),
                                                          bottom(topLeft.y+size.height)
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::~Rect 
-    //! Non-Virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ~Rect() = default;
     
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    CONSTEXPR_COPY_CTOR(Rect);   //!< Performs a deep copy
-    CONSTEXPR_MOVE_CTOR(Rect);   //!< Performs a deep copy
-
-    ENABLE_COPY_ASSIGN(Rect);   //!< Performs a deep copy
-    ENABLE_MOVE_ASSIGN(Rect);   //!< Performs a deep copy
+    CONSTEXPR_COPY_CTOR(Rect);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(Rect);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(Rect);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(Rect);       //!< Can be move-assigned
+    DISABLE_POLY(Rect);             //!< Cannot be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   

@@ -72,6 +72,9 @@ namespace wtl
   template <typename RET, typename ...ARGS>
   struct Delegate<0,RET,ARGS...> : std::function<RET (ARGS...)>
   {
+    //! \alias type - Define own type
+    using type = Delegate<0,RET,ARGS...>;
+  
     //! \alias base - Define base type
     using base = std::function<RET (ARGS...)>;
 
@@ -96,9 +99,18 @@ namespace wtl
   template <typename RET, typename ...ARGS>
   struct Delegate<1,RET,ARGS...> : std::function<RET (ARGS...)>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = Delegate<1,RET,ARGS...>;
+  
     //! \alias base - Define base type
     using base = std::function<RET (ARGS...)>;
-
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION --------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // Delegate::Delegate
     //! Create from instance method pointer
@@ -109,6 +121,14 @@ namespace wtl
     template <typename OBJ>
     Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj, std::placeholders::_1))
     {}
+    
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -120,9 +140,18 @@ namespace wtl
   template <typename RET, typename ...ARGS>
   struct Delegate<2,RET,ARGS...> : std::function<RET (ARGS...)>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias type - Define own type
+    using type = Delegate<2,RET,ARGS...>;
+  
     //! \alias base - Define base type
     using base = std::function<RET (ARGS...)>;
-
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // Delegate::Delegate
     //! Create from instance method pointer
@@ -133,6 +162,14 @@ namespace wtl
     template <typename OBJ>
     Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj, std::placeholders::_1, std::placeholders::_2))
     {}
+
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
   

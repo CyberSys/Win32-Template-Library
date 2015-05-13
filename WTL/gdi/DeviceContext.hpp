@@ -19,10 +19,10 @@
 #include "wtl/traits/PenTraits.hpp"               //!< HPen
 #include "wtl/platform/Colours.hpp"               //!< Colours
 #include "wtl/platform/DrawingFlags.hpp"          //!< DrawTextFlags
-#include "wtl/utils/Rectangle.hpp"             //!< Rectangle
-#include "wtl/utils/Point.hpp"                 //!< Point
-#include "wtl/utils/Size.hpp"                  //!< Size
-#include "wtl/utils/Triangle.hpp"              //!< Triangle
+#include "wtl/utils/Rectangle.hpp"                //!< Rectangle
+#include "wtl/utils/Point.hpp"                    //!< Point
+#include "wtl/utils/Size.hpp"                     //!< Size
+#include "wtl/utils/Triangle.hpp"                 //!< Triangle
 #include <deque>                                  //!< std::deque
 
 //! \namespace wtl - Windows template library
@@ -47,8 +47,13 @@ namespace wtl
     //! \typedef stack_t - Define handle stack type
     using stack_t = std::deque<OBJ>;
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    HDeviceContext DC;     //!< Device context handle
+    stack_t        Stack;  //!< Previous handles
 
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ObjectStack::ObjectStack
     //! Selects a brush into the device, and preserves the old one
@@ -66,6 +71,11 @@ namespace wtl
     {
       clear();
     }
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(ObjectStack);      //!< Cannot be copied
+    ENABLE_MOVE(ObjectStack);       //!< Can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -135,11 +145,6 @@ namespace wtl
       // Wrap in weak reference
       return handle_t((native_t)::SelectObject(DC, obj), AllocType::WeakRef);
     }
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    HDeviceContext DC;     //!< Device context handle
-    stack_t        Stack;  //!< Previous handles
   };
 
   
@@ -155,9 +160,13 @@ namespace wtl
     
     //! \var ScreenDC - Screen device context
     static DeviceContext  ScreenDC;
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    HDeviceContext   Handle;    //!< DC Handle
+      
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // DeviceContext::DeviceContext
     //! Create device context from a native handle
@@ -179,18 +188,12 @@ namespace wtl
                                               ObjectStack<HFont>(dc)
     {}
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // DeviceContext::DeviceContext
-    //! Create device context
-    //! 
-    //! \param[in] dc - Device context handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*DeviceContext(HDeviceContext&& dc) : Handle(std::move(dc)),
-                                         ObjectStack<HBrush>(dc),
-                                         ObjectStack<HPen>(dc),
-                                         ObjectStack<HFont>(dc)
-    {}*/
-
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(DeviceContext);      //!< Cannot be copied
+    ENABLE_MOVE(DeviceContext);       //!< Can be moved
+    ENABLE_POLY(DeviceContext);      //!< Can be polymorphic
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +203,7 @@ namespace wtl
     //! \return Handle<T> - Weak reference to stock object handle 
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename T>
-    static Handle<T> getStock(StockObject obj)
+    static ::wtl::Handle<T> getStock(StockObject obj)
     {
       return (T)::GetStockObject(enum_cast(obj));
     }
@@ -527,10 +530,6 @@ namespace wtl
       // Failure
       throw platform_error(HERE, "Unable to draw text"); //, *CharArray<Encoding::ANSI,LEN>(txt).c_str());
     }
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    HDeviceContext   Handle;    //!< DC Handle
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////

@@ -10,89 +10,13 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/FixedArray.hpp"
+#include "wtl/utils/Helpers.hpp"
 #include "wtl/traits/EncodingTraits.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::strlen_t
-  //! Get length of narrow character string 
-  //! 
-  //! \param[in] const* str - Narrow character string
-  //! \return size_t - Length in characters
-  /////////////////////////////////////////////////////////////////////////////////////////
-  inline size_t strlen_t(const char* str)
-  {
-    return strlen(str);
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::strlen_t
-  //! Get length of wide character string 
-  //! 
-  //! \param[in] const* str - Wide character string
-  //! \return size_t - Length in characters
-  /////////////////////////////////////////////////////////////////////////////////////////
-  inline size_t strlen_t(const wchar_t* str)
-  {
-    return wcslen(str);
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::strcmp_t
-  //! Case sensitive narrow character comparison
-  //! 
-  //! \param[in] const* a - Narrow char string
-  //! \param[in] const* b - Another narrow char string
-  //! \return int32 - -1 if less, 0 if equal, 1 if greater
-  /////////////////////////////////////////////////////////////////////////////////////////
-  inline int32 strcmp_t(const char* a, const char* b)
-  {
-    return strcmp(a,b);
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::strcmp_t
-  //! Case sensitive wide character comparison
-  //! 
-  //! \param[in] const* a - Wide char string
-  //! \param[in] const* b - Another wide char string
-  //! \return int32 - -1 if less, 0 if equal, 1 if greater
-  /////////////////////////////////////////////////////////////////////////////////////////
-  inline int32 strcmp_t(const wchar_t* a, const wchar_t* b)
-  {
-    return wcscmp(a,b);
-  }
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::strcpy_t
-  //! Copy narrow character string
-  //! 
-  //! \param[in] *dest - Narrow char string
-  //! \param[in] const* src - Another narrow char string
-  //! \return char* - Returns 'dest'
-  /////////////////////////////////////////////////////////////////////////////////////////
-  inline char* strcpy_t(char* dest, const char* src)
-  {
-    return strcpy(dest,src);
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::strcpy_t
-  //! Copy wide character string
-  //! 
-  //! \param[in] *dest - Wide char string
-  //! \param[in] const* src - Another wide char string
-  //! \return wchar_t* - Returns 'dest'
-  /////////////////////////////////////////////////////////////////////////////////////////
-  inline wchar_t* strcpy_t(wchar_t* dest, const wchar_t* src)
-  {
-    return wcscpy(dest,src);
-  }
-  
-
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct CharArray - Fixed capacity character array with a dynamic runtime length, supporting any character type and encoding 
   //!
@@ -334,7 +258,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------   
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::CharArray 
@@ -402,15 +326,6 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::CharArray 
-    //! Copy-create from a character array of equal type
-    //! 
-    //! \param[in] const& r - Character array of equal type
-    /////////////////////////////////////////////////////////////////////////////////////////
-    CharArray(const type& r) : CharArray(r.begin(), r.end())    // Copy from input buffer, truncate if necessary
-    {}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // CharArray::CharArray 
     //! Copy-create from another character array of dissimilar type
     //! 
     //! \tparam N - Foreign character encoding
@@ -423,18 +338,6 @@ namespace wtl
     {
       // Copy from input buffer, truncate if necessary, convert encoding if necessary.
       CharArray::assign<N>(r.begin(), r.end());
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // CharArray::CharArray 
-    //! Move-create from a character array of equal type 
-    //! 
-    //! \param[in] && r - Character array of equal type (unaffected)
-    /////////////////////////////////////////////////////////////////////////////////////////
-    CharArray(type&& r) : CharArray()
-    {
-      // Copy from input buffer
-      CharArray::assign<encoding>(r.begin(), r.end());
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -453,14 +356,87 @@ namespace wtl
       CharArray::assign<N>(r.begin(), r.end());
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // CharArray::~CharArray 
-    //! Virtual destructor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~CharArray()
-    {
-    }
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CharArray::CharArray 
+    //! Copy-create from a character array of equal type
+    //! 
+    //! \param[in] const& r - Character array of equal type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CharArray(const type& r) : CharArray(r.begin(), r.end())    // Copy from input buffer, truncate if necessary
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CharArray::CharArray 
+    //! Move-create from a character array of equal type 
+    //! 
+    //! \param[in] && r - Character array of equal type (unaffected)
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CharArray(type&& r) : CharArray(r.begin(), r.end())    // Copy from input buffer, truncate if necessary
+    {}
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //! CharArray::operator = 
+    //! Overwrite contents with that of a null-terminated string of equivalent encoding
+    //! 
+    //! \param[in] str - Null-terminated string of equivalent encoding
+    //! \return CharArray& - Reference to self with updated contents
+    //////////////////////////////////////////////////////////////////////////////////////////
+    type& operator = (const char_t* str)
+    {
+      CharArray::assign(str, encoding);
+      return *this;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //! CharArray::operator = 
+    //! Overwrite contents with that of a statically allocated null-terminated string of equivalent encoding 
+    //! 
+    //! \tparam LEN - Capacity of foreign array
+    //! 
+    //! \param[in] str - Statically allocated null-terminated string of equivalent encoding
+    //! \return CharArray& - Reference to self with updated contents
+    //////////////////////////////////////////////////////////////////////////////////////////
+    template <unsigned LEN>
+    type& operator = (array_ptr_t<const char_t,LEN> str)
+    {
+      CharArray::assign(str, encoding);
+      return *this;
+    }
+       
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //! CharArray::operator = 
+    //! Overwrite contents with that of another character array (of equal type and encoding)
+    //! 
+    //! \param[in] const& r - Another character array (of equal type and encoding)
+    //! \return CharArray& - Reference to self with updated contents
+    //////////////////////////////////////////////////////////////////////////////////////////
+    type& operator = (const type& r)
+    {
+      CharArray::assign(r, encoding);
+      return *this;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //! CharArray::operator = 
+    //! Overwrite contents with that of another character array (of different type)
+    //! 
+    //! \tparam N - Foreign character encoding
+    //! \tparam L - Foreign array capacity 
+    //! 
+    //! \param[in] const& r - Char array of different type
+    //! \return CharArray& - Reference to self with updated contents
+    //////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding N, unsigned L>
+    type& operator = (const CharArray<N,L>& r)
+    {
+      CharArray::assign<N>(r);
+      return *this;
+    }
+    
+    ENABLE_POLY(CharArray);         //!< Can be polymorphic
+    
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -875,65 +851,6 @@ namespace wtl
       this->Count = strlen_t(this->Data);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! CharArray::operator=
-    //! Overwrite contents with that of a null-terminated string of equivalent encoding
-    //! 
-    //! \param[in] str - Null-terminated string of equivalent encoding
-    //! \return CharArray& - Reference to self with updated contents
-    //////////////////////////////////////////////////////////////////////////////////////////
-    type& operator=(const char_t* str)
-    {
-      CharArray::assign(str, encoding);
-      return *this;
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! CharArray::operator=
-    //! Overwrite contents with that of a statically allocated null-terminated string of equivalent encoding 
-    //! 
-    //! \tparam LEN - Capacity of foreign array
-    //! 
-    //! \param[in] str - Statically allocated null-terminated string of equivalent encoding
-    //! \return CharArray& - Reference to self with updated contents
-    //////////////////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN>
-    type& operator=(array_ptr_t<const char_t,LEN> str)
-    {
-      CharArray::assign(str, encoding);
-      return *this;
-    }
-       
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! CharArray::operator=
-    //! Overwrite contents with that of another character array (of equal type and encoding)
-    //! 
-    //! \param[in] const& r - Another character array (of equal type and encoding)
-    //! \return CharArray& - Reference to self with updated contents
-    //////////////////////////////////////////////////////////////////////////////////////////
-    type& operator=(const type& r)
-    {
-      CharArray::assign(r, encoding);
-      return *this;
-    }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! CharArray::operator=
-    //! Overwrite contents with that of another character array (of different type)
-    //! 
-    //! \tparam N - Foreign character encoding
-    //! \tparam L - Foreign array capacity 
-    //! 
-    //! \param[in] const& r - Char array of different type
-    //! \return CharArray& - Reference to self with updated contents
-    //////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding N, unsigned L>
-    type& operator=(const CharArray<N,L>& r)
-    {
-      CharArray::assign<N>(r);
-      return *this;
-    }
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::operator +=
     //! Concatenate with another string

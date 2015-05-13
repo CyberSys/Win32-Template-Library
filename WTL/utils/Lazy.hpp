@@ -30,8 +30,10 @@ namespace wtl
     
     //! \alias object_t - Object type
     using object_t = DATA;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Lazy::Lazy
@@ -39,7 +41,12 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Lazy()
     {}
-
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    ENABLE_COPY(Lazy);     //!< Move semantics inherited from enclosed type
+    ENABLE_MOVE(Lazy);     //!< Move semantics inherited from enclosed type
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Lazy::~Lazy
     //! Ensures the object is destroyed
@@ -173,9 +180,6 @@ namespace wtl
 
       return this->Data;
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
   };
   
 

@@ -37,17 +37,22 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef storage_t - Attributes collection
-    typedef std::tuple<ARGS...> storage_t;
+    //! \alias storage_t - Attributes collection
+    using storage_t = std::tuple<ARGS...>;
 
     //! \var Count - Number of attribute name/value pairs
     static constexpr uint32  Count = sizeof...(ARGS);   
     
     //! \var HasAttributes - Whether element has any attributes
     static constexpr bool  HasAttributes = Count != 0;
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    const char*  Name;          //!< Type name
+    storage_t    Attributes;    //!< Attribute name/value pair storage
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     //////////////////////////////////////////////////////////////////////////////////////////
     // DebugInfo::DebugInfo
     //! Define type name and attributes
@@ -58,11 +63,12 @@ namespace wtl
     DebugInfo(const char* name, ARGS&&... args) : Name(name), 
                                                   Attributes(std::forward<ARGS>(args)...)
     {}
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    const char*  Name;          //!< Type name
-    storage_t    Attributes;    //!< Attribute name/value pair storage
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    ENABLE_COPY(DebugInfo);      //!< Can be deep copied
+    ENABLE_MOVE(DebugInfo);      //!< Can be moved 
+    ENABLE_POLY(DebugInfo);      //!< Can be polymorphic
   };
 
 
@@ -130,10 +136,6 @@ namespace wtl
   template <> struct is_attribute<Cons>  : std::true_type  {};
   template <> struct is_contiguous<Cons> : std::false_type {};
 
-  //! Define limits traits
-  template <> struct max_value<Cons>     : std::integral_constant<Cons,Cons::Break> {};
-  template <> struct min_value<Cons>     : std::integral_constant<Cons,Cons::Black> {};
-
   //! Define names and values
   template <> struct enum_names<Cons>  { static const char* names[]; };
   template <> struct enum_values<Cons> { static const Cons values[]; };
@@ -152,54 +154,63 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias base - Define base type
+    using base = ::COORD;
+
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Coord::Coord
+    // Coord::Coord constexpr
     //! Create co-ordinate (NB: Values are truncated to 16-bit)
+    //! 
+    //! \tparam U - x co-ordinate type
+    //! \tparam V - y co-ordinate type
+    //!
     //! \param[in] x - x co-ordinate
     //! \param[in] y - y co-ordinate
     //////////////////////////////////////////////////////////////////////////////////////////
-    Coord(int32 x, int32 y) 
-    {
-      X = static_cast<int16>(x);
-      Y = static_cast<int16>(y);
-    }
+    template <typename U, typename V>
+    constexpr Coord(U x, V y) : base {static_cast<int16>(x), static_cast<int16>(y)}
+    {}
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Coord::Coord
-    //! Creates co-ordinate from COORD
+    // Coord::Coord constexpr
+    //! Creates co-ordinate from Win32 ::COORD
+    //! 
     //! \param[in] const &c - Co-ordinate
     //////////////////////////////////////////////////////////////////////////////////////////
-    Coord(const COORD& c) 
-    {
-      X = c.X;
-      Y = c.Y;
-    }
+    constexpr Coord(const ::COORD& c) : base {c.X, c.Y}
+    {}
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Coord::Coord
-    //! Creates co-ordinate from POINT
+    // Coord::Coord constexpr
+    //! Creates co-ordinate from Win32 ::POINT
+    //! 
     //! \param[in] const &p - Point defining co-ordinate
     //////////////////////////////////////////////////////////////////////////////////////////
-    Coord(const POINT& p)
-    {
-      X = static_cast<int16>(p.x);
-      Y = static_cast<int16>(p.y);
-    }
+    constexpr Coord(const ::POINT& p) : base {static_cast<int16>(p.x), static_cast<int16>(p.y)}
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    CONSTEXPR_COPY_CTOR(Coord);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(Coord);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(Coord);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(Coord);       //!< Can be move-assigned
+    DISABLE_POLY(Coord);             //!< Cannot be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Coord::operator+
+    // Coord::operator +
     //! Add two co-ordinates together
     //! 
     //! \param[in] const &p - Point defining co-ordinate to add
     //! \return Coord - Sum of both points
     //////////////////////////////////////////////////////////////////////////////////////////
-    Coord operator+(const Coord& r) const
+    Coord operator + (const Coord& r) const
     {
       return Coord(X+r.X, Y+r.Y);
     }
@@ -207,13 +218,13 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // Coord::operator+=
+    // Coord::operator +=
     //! Add co-ordinate to another
     //! 
     //! \param[in] const &p - Point defining co-ordinate to add
     //! \return Coord - Reference to self
     //////////////////////////////////////////////////////////////////////////////////////////
-    Coord& operator+=(const Coord& r) 
+    Coord& operator += (const Coord& r) 
     {
       X += r.X;
       Y += r.Y;
@@ -235,17 +246,32 @@ namespace wtl
   struct Console
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  protected:
-    //! \var AttributeMask - 
-    static constexpr std::underlying_type_t<IoManip> AttributeMask = 0x0000ffff;
-
-    //! \var OutputMask - 
-    static constexpr std::underlying_type_t<IoManip> OutputMask = 0xf0000000;                          
-
   public:
+    //! \alias delegate_t - Defines signature of output overload
+    using delegate_t = Console& (*)(Console&);
+    
+    //! \alias lock_t - Define scoped console lock type
+    using lock_t = ConsoleLock;
+    
+    //! \alias pointer_t - Void pointer 
+    using pointer_t = void*;
+
+    //! \alias mutex_t - Define mutex type 
+    using mutex_t = std::recursive_mutex;
+
     //! \struct CursorState - Preserves cursor position
     struct CursorState
     {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+      // ----------------------------------- REPRESENTATION -----------------------------------
+    protected:
+      Console& Owner;       //!< Console
+      Coord    Position;    //!< Original cursor position
+      IoManip  Attributes;  //!< Original console attributes
+
+      // ------------------------------------ CONSTRUCTION ------------------------------------
+    public:
       //////////////////////////////////////////////////////////////////////////////////////////
       // CursorState::CursorState
       //! Stores the position of the console cursor
@@ -255,7 +281,12 @@ namespace wtl
       CursorState(Console& c) : Owner(c), Position(c.getPosition()), Attributes(c.getAttributes())
       {
       }
+      
+      // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
+      DISABLE_COPY(CursorState);    //!< Cannot be copied
+      DISABLE_MOVE(CursorState);    //!< Cannot be moved
+      
       //////////////////////////////////////////////////////////////////////////////////////////
       // CursorState::~CursorState
       //! Restores the position of the console cursor
@@ -266,28 +297,28 @@ namespace wtl
         Owner.setAttributes(Attributes);
       }
 
-      DISABLE_COPY_ASSIGN(CursorState);
+      // ----------------------------------- STATIC METHODS -----------------------------------
 
-    protected:
-      Console& Owner;       //!< Console
-      Coord    Position;    //!< Original cursor position
-      IoManip  Attributes;  //!< Original console attributes
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
     };
 
-    //! \typedef delegate_t - Defines signature of output overload
-    typedef Console& (*delegate_t)(Console&);
+  protected:
+    //! \var AttributeMask - 
+    static constexpr std::underlying_type_t<IoManip> AttributeMask = 0x0000ffff;
+
+    //! \var OutputMask - 
+    static constexpr std::underlying_type_t<IoManip> OutputMask = 0xf0000000;                          
     
-    //! \typedef lock_t - Define scoped console lock type
-    typedef ConsoleLock  lock_t;
-    
-    //! \typedef pointer_t - Void pointer 
-    typedef void*  pointer_t;
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    HANDLE   Handle;     //!< Console handle
+    IoManip  Mode;       //!< Output mode
+    mutex_t  Mutex;      //!< Mutex
 
-    //! \typedef mutex_t - Define mutex type 
-    typedef std::recursive_mutex  mutex_t;
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
     //////////////////////////////////////////////////////////////////////////////////////////
     // Console::Console
     //! Creates a console attached to standard output
@@ -328,21 +359,23 @@ namespace wtl
       }
     }
 
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    
+    DISABLE_COPY(Console);     //!< Cannot be copied
+    ENABLE_MOVE(Console);      //!< Can be moved
     
     //////////////////////////////////////////////////////////////////////////////////////////
     // Console::~Console
     //! Detaches the console
     //////////////////////////////////////////////////////////////////////////////////////////
-    ~Console()
+    virtual ~Console()
     {
       Write("Detaching Console from process");
       ::FreeConsole();
     }
     
-    //DISABLE_COPY(Console);     //!< Mutex can't be copied
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // -------------------------- STATIC --------------------------
-  
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -511,12 +544,6 @@ namespace wtl
     //! \param[in] *str - String
     //////////////////////////////////////////////////////////////////////////////////////////
     void log(const char* str);
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    HANDLE   Handle;     //!< Console handle
-    IoManip  Mode;       //!< Output mode
-    mutex_t  Mutex;      //!< Mutex
   };
 
 //! \ifnot WIN32 - Not implemented
@@ -535,11 +562,16 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-    //! \typedef lock_t - Define scoped console lock type
-    typedef std::lock_guard<Console>  lock_t;
+    //! \alias lock_t - Define scoped console lock type
+    using lock_t = std::lock_guard<Console>;
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    Console&   Output;      //!< Output console
+    lock_t     Lock;        //!< Scoped lock whose lifetime mirrors the wrapper
 
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
     //////////////////////////////////////////////////////////////////////////////////////////
     // ConsoleLock::ConsoleLock
     //! Attempts to create the wrapper, blocking until the lock is accquired
@@ -556,6 +588,13 @@ namespace wtl
       // Flush output
       Output.flush();
     }
+
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    
+    DISABLE_COPY(ConsoleLock);     //!< Cannot be copied
+    ENABLE_MOVE(ConsoleLock);      //!< Can be moved
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -578,11 +617,6 @@ namespace wtl
       Output << obj;
       return *this;
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    Console&   Output;      //!< Output console
-    lock_t     Lock;        //!< Scoped lock whose lifetime mirrors the wrapper
   };
   
 

@@ -34,9 +34,15 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 	
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    DISABLE_CTOR(handle_alloc);     //!< Cannot instantiate
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(handle_alloc);     //!< Cannot instantiate
+    DISABLE_MOVE(handle_alloc);     //!< Cannot instantiate
+    DISABLE_DTOR(handle_alloc);     //!< Cannot instantiate
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

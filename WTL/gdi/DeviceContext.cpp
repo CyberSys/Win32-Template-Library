@@ -12,7 +12,20 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+  // ----------------------------------- REPRESENTATION -----------------------------------
+  
   //! \var DeviceContext::ScreenDC - Screen device context
   DeviceContext  DeviceContext::ScreenDC = default<HDeviceContext>();
+  
+  // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
+  // ----------------------------------- STATIC METHODS -----------------------------------
+
+  // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+  // ----------------------------------- MUTATOR METHODS ----------------------------------
 }

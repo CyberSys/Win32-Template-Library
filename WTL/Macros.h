@@ -36,11 +36,9 @@
     
   #endif
 #endif
-
-// --------------------------------------------------------------
-// ----------------------- GLOBAL MACROS ------------------------
-// --------------------------------------------------------------
-
+// --------------------------------------------------------------------------------------------------------
+// ------------------------------------------ GLOBAL MACROS -----------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 //! \def STR - Stringifies a symbol
 #define STR2(s)  #s
 #define STR(s) STR2(s)
@@ -51,10 +49,19 @@
 #else
   #define HERE  __FUNCTION__
 #endif
+// --------------------------------------------------------------------------------------------------------
+// --------------------------------------- CONSTRUCTION SEMANTICS -----------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------
-// ------------------------ CONSTEXPR SEMANTICS ------------------------
-// ---------------------------------------------------------------------
+//! \def DISABLE_CTOR - Disables trivial default-contructor
+#define DISABLE_CTOR(type)          type() = delete
+
+//! \def ENABLE_CTOR - Enables trivial default-contructor
+#define ENABLE_CTOR(type)           type() = default
+
+// --------------------------------------------------------------------------------------------------------
+// ---------------------------------------- CONSTEXPR SEMANTICS -------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 //! \def CONSTEXPR_CTOR - Enables constexpr default-construction
 #define CONSTEXPR_CTOR(type)        constexpr type() noexcept {}
@@ -68,10 +75,9 @@
 //! \def DEFAULT_CONSTEXPR - Enables constexpr default-construction
 #define DEFAULT_CONSTEXPR(type)     CONSTEXPR_CTOR(type);  CONSTEXPR_COPY_CTOR(type);  CONSTEXPR_MOVE_CTOR(type)
 
-// ---------------------------------------------------------------------
-// -------------------------- COPY SEMANTICS ---------------------------
-// ---------------------------------------------------------------------
-
+// --------------------------------------------------------------------------------------------------------
+// ------------------------------------------- COPY SEMANTICS ---------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 //! \def DISABLE_COPY_CTOR - Prevents copy-construction
 #define DISABLE_COPY_CTOR(type)     type(const type& r) = delete
 
@@ -91,9 +97,9 @@
 //! \def ENABLE_COPY - Enables copy-construction and copy-assignment
 #define ENABLE_COPY(type)          ENABLE_COPY_CTOR(type);  ENABLE_COPY_ASSIGN(type)
 
-// ---------------------------------------------------------------------
-// -------------------------- MOVE SEMANTICS ---------------------------
-// ---------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
+// ------------------------------------------ MOVE SEMANTICS ----------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 //! \def DISABLE_MOVE_CTOR - Prevents move-construction
 #define DISABLE_MOVE_CTOR(type)     type(type&& r) = delete
@@ -114,24 +120,24 @@
 //! \def ENABLE_MOVE - Enables move-construction and move-assignment
 #define ENABLE_MOVE(type)           ENABLE_MOVE_CTOR(type);  ENABLE_MOVE_ASSIGN(type)
 
-// ---------------------------------------------------------------------
-// ------------------------ DESTROY SEMANTICS --------------------------
-// ---------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
+// ---------------------------------------- DESTROY SEMANTICS ---------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
-//! \def DISABLE_DTOR - Removes destructor
+//! \def DISABLE_DTOR - Disables destruction entirely
 #define DISABLE_DTOR(type)          ~type() = delete
 
-//! \def ENABLE_DTOR - Generates a trivial non-virtual destructor
-#define ENABLE_DTOR(type)           ~type() = default
+//! \def DISABLE_POLY - Disables polymorphism by enabling the non-virtual destructor
+#define DISABLE_POLY(type)          ~type() = default
 
-//! \def VIRTUAL_DTOR - Generates a trivial virtual destructor
-#define VIRTUAL_DTOR(type)          virtual ~type() = default
+//! \def ENABLE_POLY - Enables polymorphism by enabling the virtual destructor
+#define ENABLE_POLY(type)           virtual ~type() = default
 
-// --------------------------------------------------------------
-// ------------------------ DEVELOPMENT -------------------------
-// --------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
+// -------------------------------------------- DEVELOPMENT -----------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
-//! if DEVELOPMENT_MODE - Activate  Query whether in release mode  (Can be manually set)
+//! if DEVELOPMENT_MODE - Activate debugging checks 
 #ifdef DEVELOPMENT_MODE
   //! \def CHECKED_ARGUMENTS - Activate argument checks
   #define CHECKED_ARGUMENTS
@@ -142,13 +148,18 @@
   //! \def CHECKED_INVARIANTS - Activate invariant checks
   #define CHECKED_INVARIANTS
 
+//! \ifnot DEVELOPMENT_MODE - Deactivates debugging checks 
 #else
   //! \def RELEASE_MODE - Enables optimizations and disables debugging checks
   #define RELEASE_MODE
 #endif
 
 
-//! \if CHECKED_ARGUMENTS - Activates function argument verification
+// --------------------------------------------------------------------------------------------------------
+// ------------------------------------------ CHECKED ARGUMENTS -------------------------------------------
+// --------------------------------------------------------------------------------------------------------
+
+//! \if CHECKED_ARGUMENTS - Activates argument verification
 #ifdef CHECKED_ARGUMENTS
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def REQUIRED_PARAM - Throws an exception when a parameter is missing
@@ -170,11 +181,16 @@
   #define PARAM_INVARIANT(arg,exp)      { if ((exp) == false) throw wtl::invalid_argument(HERE, "Missing argument"); }
 #endif
 
+//! \ifnot CHECKED_ARGUMENTS - Deactivates argument verification
 #else
   //! \def REQUIRED_PARAM - Deactivated
   #define REQUIRED_PARAM(arg)       
 #endif
 
+
+// --------------------------------------------------------------------------------------------------------
+// ----------------------------------------- CHECKED BOUNDARIES -------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 //! \if CHECKED_BOUNDARIES - Activates boundary verification
 #ifdef CHECKED_BOUNDARIES
@@ -209,6 +225,7 @@
   #define LENGTH_INVARIANT(exp)       { if ((exp) == false) throw wtl::length_error(HERE, "Insufficient space"); }
 #endif
 
+//! \ifnot CHECKED_BOUNDARIES - Deactivates boundary verification
 #else
   //! \def CHECKED_INDEX - Deactivated
   #define CHECKED_INDEX(idx, min, max)  
@@ -217,6 +234,10 @@
   #define CHECKED_LENGTH(len, max) 
 #endif
 
+
+// --------------------------------------------------------------------------------------------------------
+// ---------------------------------------- CHECKED INVARIANTS --------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
   
 //! \if CHECKED_INVARIANTS - Activates invariant verification
@@ -241,6 +262,7 @@
   #define LOGIC_INVARIANT(exp)          { if ((exp) == false) throw wtl::logic_error(HERE, "Logic invariant violated"); }
 #endif
 
+//! \ifnot CHECKED_INVARIANTS - Deactivates invariant verification
 #else
   //! \def DOMAIN_INVARIANT - Deactivated
   #define DOMAIN_INVARIANT(exp) 

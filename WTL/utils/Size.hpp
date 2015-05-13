@@ -42,7 +42,7 @@ namespace wtl
     value_t  width,        //!< Width extent
              height;       //!< Height extent
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::Size constexpr
@@ -76,20 +76,13 @@ namespace wtl
                                  height(static_cast<T>(h))
     {}
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::~Size 
-    //! Non-virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ~Size()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
-    
-    CONSTEXPR_COPY_CTOR(Size);   //!< Performs a deep copy
-    CONSTEXPR_MOVE_CTOR(Size);   //!< Performs a deep copy
-
-    ENABLE_COPY_ASSIGN(Size);   //!< Performs a deep copy
-    ENABLE_MOVE_ASSIGN(Size);   //!< Performs a deep copy
+    CONSTEXPR_COPY_CTOR(Size);      //!< Can be deep copied at compile-time
+    CONSTEXPR_MOVE_CTOR(Size);      //!< Can be moved at compile-time
+    ENABLE_COPY_ASSIGN(Size);       //!< Can be assigned
+    ENABLE_MOVE_ASSIGN(Size);       //!< Can be move-assigned
+    DISABLE_POLY(Size);             //!< Cannot be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   

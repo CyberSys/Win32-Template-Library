@@ -454,32 +454,6 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::Array 
-    //! Copy-create with elements copy-constructed from another array of equal type
-    //! 
-    //! \param[in] const& r - Another array
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Array(const Array& r) : Array(Unique::Signature)
-    {
-      // Copy-construct all elements
-      for (uint32 i = 0; i < length; ++i)
-        traits::alloc_t::construct(&Data[i], r.Data[i]);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::Array 
-    //! Copy/move-create with elements copy-constructed from another array of equal type
-    //! 
-    //! \param[in] &&r - Another array
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Array(Array&& r) : Array(Unique::Signature)
-    {
-      // Copy-construct all elements
-      for (uint32 i = 0; i < length; ++i)
-        traits::alloc_t::construct(&Data[i], r.Data[i]);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Array::Array
     //! Copy-create with elements copy-constructed from another array of different type
     //!
@@ -552,23 +526,67 @@ namespace wtl
         traits::alloc_t::construct(&Data[i], *(it++));
     }
 
+    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::Array 
-    //! Create array with elements from built-in array 
+    //! Copy-create with elements copy-constructed from another array of equal type
+    //! 
+    //! \param[in] const& r - Another array
     /////////////////////////////////////////////////////////////////////////////////////////
-    /*Array(pointer p, uint32 num) : Array(Unique::Signature)
+    Array(const Array& r) : Array(Unique::Signature)
     {
-      assign(p, p+num);
-    }*/
-
+      // Copy-construct all elements
+      for (uint32 i = 0; i < length; ++i)
+        traits::alloc_t::construct(&Data[i], r.Data[i]);
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::~Array 
-    //! Virtual destructor
+    // Array::Array 
+    //! Copy/move-create with elements copy-constructed from another array of equal type
+    //! 
+    //! \param[in] &&r - Another array
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Array()
+    Array(Array&& r) : Array(Unique::Signature)
     {
+      // Copy-construct all elements
+      for (uint32 i = 0; i < length; ++i)
+        traits::alloc_t::construct(&Data[i], r.Data[i]);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Array::operator =
+    //! Replace elements with those copy-constructed from an array of same type
+    //!
+    //! \param[in] &r - Another array 
+    //! \return Array& - Reference to self
+    /////////////////////////////////////////////////////////////////////////////////////////
+    Array& operator = (const Array& r)
+    {
+      assign(r);
+      return *this;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Array::operator =
+    //! Replace elements with those copy-constructed from an array of different type
+    //!
+    //! \tparam E - Foreign element type
+    //! \tparam L - Foreign array length
+    //! \tparam D - Whether foreign array is dynamic
+    //!
+    //! \param[in] &r - Foreign array
+    //! \return Array& - Reference to self
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename E, uint32 L, bool D>
+    Array& operator = (const Array<E,L,D>& r)
+    {
+      assign(r);
+      return *this;
+    }
+    
+    ENABLE_POLY(Array);       //!< Can be polymorphic
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
@@ -1743,37 +1761,6 @@ namespace wtl
       return transform_n(begin(), end(), n, output, fn);
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::operator=
-    //! Replace elements with those copy-constructed from an array of same type
-    //!
-    //! \param[in] &r - Another array 
-    //! \return Array& - Reference to self
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Array& operator=(const Array& r)
-    {
-      assign(r);
-      return *this;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::operator=
-    //! Replace elements with those copy-constructed from an array of different type
-    //!
-    //! \tparam E - Foreign element type
-    //! \tparam L - Foreign array length
-    //! \tparam D - Whether foreign array is dynamic
-    //!
-    //! \param[in] &r - Foreign array
-    //! \return Array& - Reference to self
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename E, uint32 L, bool D>
-    Array& operator=(const Array<E,L,D>& r)
-    {
-      assign(r);
-      return *this;
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator[]
     //! Provides access to array elements without bounds checking

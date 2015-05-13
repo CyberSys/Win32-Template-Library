@@ -13,7 +13,6 @@
 #include "wtl/casts/EnumCast.hpp"                           //!< EnumCast
 #include "wtl/casts/OpaqueCast.hpp"                         //!< OpaqueCast
 #include "wtl/traits/EncodingTraits.hpp"                    //!< Encoding
-#include "wtl/traits/WindowMessageTraits.hpp"               //!< WindowMesssage
 #include "wtl/traits/WindowTraits.hpp"                      //!< HWnd
 #include "wtl/utils/Exception.hpp"                          //!< exception
 #include "wtl/utils/List.hpp"                               //!< List
@@ -24,6 +23,7 @@
 #include "wtl/platform/ResourceId.hpp"                      //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"                     //!< WindowStyle
 #include "wtl/platform/CommonApi.hpp"                       //!< send_message
+#include "wtl/platform/WindowMessage.hpp"                   //!< WindowMesssage
 #include "wtl/windows/Action.hpp"                           //!< Action
 #include "wtl/windows/ActionGroup.hpp"                      //!< ActionGroup
 #include "wtl/windows/ActionQueue.hpp"                      //!< ActionQueue
@@ -43,7 +43,6 @@
 #include "wtl/windows/events/PaintWindowEvent.hpp"          //!< PaintWindowEvent
 #include "wtl/windows/events/ShowWindowEvent.hpp"           //!< ShowWindowEvent
 #include "wtl/windows/events/PositionChangedEvent.hpp"      //!< PositionChangedEvent
-
 #include <map>                                              //!< std::map
 
 
@@ -1186,7 +1185,7 @@ namespace wtl
   public:
     DISABLE_COPY(WindowBase);
     ENABLE_MOVE(WindowBase);
-    VIRTUAL_DTOR(WindowBase);
+    ENABLE_POLY(WindowBase);
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:

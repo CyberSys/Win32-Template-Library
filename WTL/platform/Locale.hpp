@@ -34,7 +34,7 @@ namespace wtl
   protected:
     ::LANGID   Value;     //!< Language identifier
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // LanguageId::LanguageId constexpr
@@ -55,10 +55,11 @@ namespace wtl
     constexpr LanguageId(::LANGID lang) noexcept : Value(lang) 
     {}
     
-	  // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    ENABLE_COPY(LanguageId);
-    ENABLE_MOVE(LanguageId);
+    ENABLE_COPY(LanguageId);      //!< Can be deep copied
+    ENABLE_MOVE(LanguageId);      //!< Can be moved 
+    DISABLE_POLY(LanguageId);      //!< Cannot be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -123,7 +124,7 @@ namespace wtl
   protected:
     ::LCID Value;       //!< Win32 locale identifier
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // LocaleId::LocaleId constexpr
@@ -143,8 +144,12 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr LocaleId(::LCID locale) : Value(locale) 
     {}
+    
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
+    ENABLE_COPY(LocaleId);      //!< Can be deep copied
+    ENABLE_MOVE(LocaleId);      //!< Can be moved 
+    DISABLE_POLY(LocaleId);     //!< Cannot be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

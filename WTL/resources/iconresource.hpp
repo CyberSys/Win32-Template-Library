@@ -35,9 +35,9 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     HIcon   Handle;     //!< Shared icon handle
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // IconResource::IconResource
     //! Loads an icon resource
@@ -77,6 +77,12 @@ namespace wtl
         Handle(const_cast<byte*>(get<byte>()), base::size(), size)
     {}
     
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    ENABLE_COPY(IconResource);       //!< Can be shallow copied  
+    ENABLE_MOVE(IconResource);       //!< Can be moved
+    ENABLE_POLY(IconResource);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////

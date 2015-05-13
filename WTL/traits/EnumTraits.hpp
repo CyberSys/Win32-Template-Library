@@ -59,11 +59,12 @@ namespace wtl
   //! \tparam E - Enumeration type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename E>
-  struct enum_names
-  {
-    //! \var values - String representations of values
-    static const char* values[];
-  };
+  struct enum_names; /* Undefined */
+
+  //{
+  //  //! \var values - String representations of values
+  //  static const char* values[];
+  //};
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct enum_values - Provides a contiguous values array for enumeration literals
@@ -71,7 +72,8 @@ namespace wtl
   //! \tparam E - Enumeration type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename E>
-  struct enum_values;
+  struct enum_values; /* Undefined */
+
   //{
   //  //! \var values - Values array
   //  static constexpr E values[1] = { E() };

@@ -31,31 +31,20 @@ namespace wtl
   
   private:
     const void* Data;       //!< ResourceBlob data
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ResourceBlob::ResourceBlob
     //! Create empty
     /////////////////////////////////////////////////////////////////////////////////////////
     ResourceBlob() : Module(default<HModule>()),
-                 Handle(default<HResource>()),
-                 Block(default<HGlobal>()),
-                 Data(nullptr)
+                     Handle(default<HResource>()),
+                     Block(default<HGlobal>()),
+                     Data(nullptr)
     {
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceBlob::ResourceBlob
-    //! Copy create
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ResourceBlob(const ResourceBlob& r) : Module(r.Module),
-                                  Handle(r.Handle),
-                                  Block(r.Block),
-                                  Data(r.Data)
-    {
-    }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // ResourceBlob::ResourceBlob
     //! Create from resource handle
@@ -66,24 +55,21 @@ namespace wtl
     //! \throw platform_error - Unable to load resource
     /////////////////////////////////////////////////////////////////////////////////////////
     ResourceBlob(const HModule& module, const HResource& resource) : Module(module),
-                                                                 Handle(resource),
-                                                                 Block(module,resource),
-                                                                 Data(::LockResource(Block))
+                                                                     Handle(resource),
+                                                                     Block(module,resource),
+                                                                     Data(::LockResource(Block))
     {
+      // Ensure data exists
       if (!Data)
         throw platform_error(HERE, "Unable to lock resource");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ResourceBlob::~ResourceBlob
-    //! Virtual d-tor
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~ResourceBlob()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    ENABLE_COPY(ResourceBlob);       //!< Can be shallow copied  
+    ENABLE_MOVE(ResourceBlob);       //!< Can be moved
+    ENABLE_POLY(ResourceBlob);      //!< Can be polymorphic
 
-    //ENABLE_COPY(ResourceBlob);
-    //ENABLE_COPY_ASSIGN(ResourceBlob);
-    
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

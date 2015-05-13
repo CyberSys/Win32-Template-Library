@@ -10,7 +10,6 @@
 
 #include "wtl/WTL.hpp"
 
-
 //! \namespace wtl - Windows template library
 namespace wtl
 {
@@ -23,6 +22,15 @@ namespace wtl
   template <typename VALUE>
   struct NameValuePair
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    const char*   Name;     //!< Name
+    const VALUE&  Value;    //!< Value reference
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // NameValuePair::NameValuePair 
     //! Create a name-value pair
@@ -32,9 +40,18 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     NameValuePair(const char* name, const VALUE& value) : Name(name), Value(value)
     {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    ENABLE_COPY(NameValuePair);      //!< Can be deep copied
+    ENABLE_MOVE(NameValuePair);      //!< Can be moved 
 
-    const char*   Name;     //!< Name
-    const VALUE&  Value;    //!< Value reference
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+    
   };
 
 

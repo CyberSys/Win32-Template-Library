@@ -35,16 +35,15 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // integral_constant::integral_constant constexpr
-    //! Default construct
-    /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr 
-    integral_constant()
-    {}
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
+    DEFAULT_CONSTEXPR(integral_constant);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(integral_constant);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(integral_constant);       //!< Immutable
+    ENABLE_POLY(integral_constant);               //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // -------------------------------------- ACCESSORS -------------------------------------
@@ -104,16 +103,15 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // reference_constant::reference_constant constexpr
-    //! Default construct
-    /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr 
-    reference_constant()
-    {}
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
+    DEFAULT_CONSTEXPR(reference_constant);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(reference_constant);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(reference_constant);       //!< Immutable
+    ENABLE_POLY(reference_constant);               //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // -------------------------------------- ACCESSORS -------------------------------------
@@ -186,16 +184,15 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // literal_constant::literal_constant constexpr
-    //! Default construct
-    /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr 
-    literal_constant()
-    {}
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
+    DEFAULT_CONSTEXPR(literal_constant);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(literal_constant);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(literal_constant);       //!< Immutable
+    ENABLE_POLY(literal_constant);               //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // -------------------------------------- ACCESSORS -------------------------------------

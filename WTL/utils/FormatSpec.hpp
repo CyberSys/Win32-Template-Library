@@ -24,8 +24,8 @@ namespace wtl
 
   //! \var format_spec<char_t>::value - Define type specs for fundemental types
   template <typename char_t> struct format_spec<char_t,double>         { static constexpr const char_t* value = getValue<char_t>("%llf", L"%llf");  };
-  template <typename char_t> struct format_spec<char_t,uint64>         { static constexpr const char_t* value = getValue<char_t>("%llu", L"%llu");  };
-  template <typename char_t> struct format_spec<char_t,int64>          { static constexpr const char_t* value = getValue<char_t>("%lld", L"%lld");  };
+  template <typename char_t> struct format_spec<char_t,ulong64>        { static constexpr const char_t* value = getValue<char_t>("%llu", L"%llu");  };
+  template <typename char_t> struct format_spec<char_t,long64>         { static constexpr const char_t* value = getValue<char_t>("%lld", L"%lld");  };
   template <typename char_t> struct format_spec<char_t,float>          { static constexpr const char_t* value = getValue<char_t>("%lf", L"%lf");    };
   template <typename char_t> struct format_spec<char_t,ulong32>        { static constexpr const char_t* value = getValue<char_t>("%lu", L"%lu");    };
   template <typename char_t> struct format_spec<char_t,long32>         { static constexpr const char_t* value = getValue<char_t>("%ld", L"%ld");    };

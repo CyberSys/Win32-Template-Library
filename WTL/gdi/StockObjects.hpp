@@ -17,9 +17,13 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct StockBrush - Provides stock brushes
-  struct StockBrush
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct StockBrush final
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     // Define solid brushes
     static const HBrush Black,       //!< Black brush
                         Blue,        //!< Blue brush
@@ -46,21 +50,50 @@ namespace wtl
                         Snow,        //!< Snow brush
                         White,       //!< White brush
                         Null;        //!< Special: Null brush
+	
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(StockBrush);       //!< Cannot instantiate
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(StockBrush);       //!< Cannot instantiate
+    DISABLE_MOVE(StockBrush);       //!< Cannot instantiate
+    DISABLE_DTOR(StockBrush);       //!< Cannot instantiate
   };
 
 
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct StockFont - Provides stock fonts
-  struct StockFont
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct StockFont final
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    // Define common fonts
     static const HFont  System,        //!< System font
                         Tooltip,       //!< Tooltip font
                         Window;        //!< Window font
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(StockFont);       //!< Cannot instantiate
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(StockFont);       //!< Cannot instantiate
+    DISABLE_MOVE(StockFont);       //!< Cannot instantiate
+    DISABLE_DTOR(StockFont);       //!< Cannot instantiate
   };
 
   
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct StockPen - Provides stock pens
-  struct StockPen
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct StockPen final
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     // Define solid pens
     static const HPen   Black,       //!< Black pen
                         Blue,        //!< Blue pen
@@ -87,6 +120,16 @@ namespace wtl
                         Snow,        //!< Snow pen
                         White,       //!< White pen
                         Null;        //!< Special: Null pen
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
+    DISABLE_CTOR(StockPen);       //!< Cannot instantiate
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    DISABLE_COPY(StockPen);       //!< Cannot instantiate
+    DISABLE_MOVE(StockPen);       //!< Cannot instantiate
+    DISABLE_DTOR(StockPen);       //!< Cannot instantiate
   };
 
 }

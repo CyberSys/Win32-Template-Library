@@ -9,6 +9,11 @@
 #define WTL_MESSAGE_THREAD_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Console.hpp"                //!< Console
+#include "wtl/utils/Exception.hpp"              //!< exception
+#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
+#include "wtl/platform/WindowFlags.hpp"         //!< ShowWindowFlags
+#include "wtl/windows/MessageBox.hpp"           //!< MessageBox
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -45,18 +50,30 @@ namespace wtl
       //MsgBoxModal,    //!< Pumping within modal msgbox loop
     };
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-  public:
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    ::HINSTANCE       Instance;   //!< Module instance
+    DialogCollection  Dialogs;    //!< Currently active modeless dialogs
+    window_t          Window;     //!< Main thread window
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // MessageThread::MessageThread
     //! Creates a message pump thread
     //! 
     //! \param[in] instance - Instance handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    MessageThread(HINSTANCE instance) : Instance(instance),
+    MessageThread(::HINSTANCE instance) : Instance(instance),
                                         Window(instance)
     {}
     
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    DISABLE_COPY(MessageThread);      //!< Cannot be copied
+    ENABLE_MOVE(MessageThread);       //!< Can be moved
+    ENABLE_POLY(MessageThread);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
@@ -198,12 +215,6 @@ namespace wtl
 
       return msg.wParam;
     }
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    HINSTANCE         Instance;   //!< Module instance
-    DialogCollection  Dialogs;    //!< Currently active modeless dialogs
-    window_t          Window;     //!< Main thread window
   };
 
 }
