@@ -73,7 +73,7 @@ namespace wtl
   protected:
     value_t   Value;      //!< Property value  
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::PropertyImpl
@@ -85,14 +85,11 @@ namespace wtl
     explicit PropertyImpl(ARGS&&... args) : Value(std::forward<ARGS>(args)...)
     {}
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyImpl::~PropertyImpl
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~PropertyImpl() = default;
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
 
     ENABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
     ENABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
+    ENABLE_POLY(PropertyImpl);       //!< Can be polymorphic
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     

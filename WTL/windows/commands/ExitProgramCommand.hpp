@@ -25,7 +25,10 @@ namespace wtl
   struct ExitProgramCommand : Action<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
+    
+    //! \alias type - Define own type
+    using type = ExitProgramCommand<ENC>;
+  
     //! \alias base - Define base type
     using base = Action<ENC>;
 
@@ -36,7 +39,7 @@ namespace wtl
   protected:
     window_t&  AppWnd;        //!< Application window
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ExitProgramCommand::ExitProgramCommand
@@ -49,6 +52,14 @@ namespace wtl
         AppWnd(appWnd)
     {}
     
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(ExitProgramCommand);      //!< Can be shallow copied
+    ENABLE_MOVE(ExitProgramCommand);      //!< Can be moved 
+    ENABLE_POLY(ExitProgramCommand);      //!< Can be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////

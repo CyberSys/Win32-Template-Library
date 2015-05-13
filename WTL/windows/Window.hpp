@@ -20,6 +20,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias type - Define own type
+    using type = Window<ENC>;
+  
     //! \alias base - Define base type
     using base = WindowBase<ENC>;
 
@@ -29,8 +32,10 @@ namespace wtl
     //! \alias encoding - Inherit window character encoding 
     static constexpr Encoding encoding = base::encoding;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-  protected:
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    // ------------------------------------- CONSTRUCTION -----------------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::Window
     //! Creates the window object (but not window handle) for an instance of a registered window class
@@ -41,14 +46,20 @@ namespace wtl
     {
     }
 
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    
+    DISABLE_COPY(Window);     //!< Cannot be copied
+    ENABLE_MOVE(Window);      //!< Can be moved
+    ENABLE_POLY(Window);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
+    
+  
   };
 
   

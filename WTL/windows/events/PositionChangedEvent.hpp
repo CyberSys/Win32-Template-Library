@@ -45,8 +45,17 @@ namespace events
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    ::WINDOWPOS&  Data;     //!< Message data, must be initialized first
 
+  public:
+    HWnd   Previous,        //!< Preceeding window in the Z-order
+           Window;          //!< Window
+    RectL  Rect;            //!< New window rectangle
+
+    // ------------------------------------- CONSTRUCTION -----------------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<WindowMessage::WINDOWPOSCHANGED>::EventArgs
     //! Creates arguments for 'PositionChanged' Event (ie. WM_WINDOWPOSCHANGED)
@@ -60,27 +69,17 @@ namespace events
                                         Rect(PointL(Data.x,Data.y), SizeL(Data.cx,Data.cy))
                                                          
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs::~EventArgs
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~EventArgs() = default;
     
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    ENABLE_POLY(EventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    ::WINDOWPOS&  Data;     //!< Message data, must be initialized first
-
-  public:
-    HWnd   Previous,        //!< Preceeding window in the Z-order
-           Window;          //!< Window
-    RectL  Rect;            //!< New window rectangle
   };
   
   

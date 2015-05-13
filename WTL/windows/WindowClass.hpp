@@ -59,7 +59,7 @@ namespace wtl
     int32       ClassStorage,      //!< Size of class storage, in bytes
                 WindowStorage;     //!< Size of window storage, in bytes
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
@@ -163,6 +163,11 @@ namespace wtl
                                       WindowStorage(wndBytes),
                                       WndProc(proc)
     {}
+
+    // --------------------------------- COPYING & DESTRUCTION ------------------------------
+   public:
+    DISABLE_COPY(WindowClass);     //!< Cannot be copied
+    ENABLE_MOVE(WindowClass);      //!< Can be moved
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::~WindowClass
@@ -178,12 +183,6 @@ namespace wtl
         cdebug << Cons::Error << "Unable to unregister window class" << Cons::Endl;
     }
     
-    // -------------------------------- COPY & MOVE SEMANTICS -------------------------------
-
-    // Deep copy semantics
-    WindowClass(const WindowClass&) = default;
-    WindowClass(WindowClass&&) = default;
-
     // ----------------------------------- STATIC METHODS -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////

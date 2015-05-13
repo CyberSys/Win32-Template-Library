@@ -44,8 +44,8 @@ namespace events
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
+    // ------------------------------------- CONSTRUCTION -----------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<WindowMessage::COMMAND>::EventArgs
     //! Decode arguments for win32 message 'WM_COMMAND' 
@@ -57,6 +57,12 @@ namespace events
                                         Source(enum_cast<ActionSource>(HIWORD(w)))
     {}
     
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    ENABLE_POLY(EventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

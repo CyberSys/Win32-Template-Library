@@ -60,7 +60,7 @@ namespace events
     HWnd              Sender;           //!< Originator handle
     SizeL             Size;             //!< Item size
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<MEASUREITEM>::ControlEventArgs
@@ -82,7 +82,12 @@ namespace events
     {
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
     }
-
+    
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
+ 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs::~ControlEventArgs
     //! Save values

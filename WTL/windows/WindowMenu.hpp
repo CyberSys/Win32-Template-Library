@@ -37,12 +37,12 @@ namespace wtl
   struct MenuItemInfo : getType_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias type - Define own type
+    using type = MenuItemInfo<ENC>;
 
     //! \alias base - Define base type
     using base = getType_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>;
-
-    //! \alias type - Define own type
-    using type = MenuItemInfo<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -52,7 +52,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // MenuItemInfo::MenuItemInfo
@@ -107,13 +107,12 @@ namespace wtl
     }
 
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // MenuItemInfo::~MenuItemInfo
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~MenuItemInfo()
-    {}
-    
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  public:
+    ENABLE_COPY(MenuItemInfo);      //!< Can be shallow copied
+    ENABLE_MOVE(MenuItemInfo);      //!< Can be moved
+    ENABLE_POLY(MenuItemInfo);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////

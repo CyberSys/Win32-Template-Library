@@ -126,9 +126,8 @@ namespace wtl
     decoder_t   NameString;      //!< Name + Description
     execute_t   ExecuteFn;       //!< Command execution functor
     revert_t    RevertFn;        //!< Command reversion functor
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Action::Action
@@ -161,13 +160,14 @@ namespace wtl
                                                           RevertFn(undo)
     {}
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::~Action
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Action() 
-    {}
-    
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(Action);      //!< Can be shallow copied
+    ENABLE_MOVE(Action);      //!< Can be moved 
+    ENABLE_POLY(Action);      //!< Can be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////

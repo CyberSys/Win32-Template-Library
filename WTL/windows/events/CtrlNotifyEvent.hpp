@@ -60,7 +60,7 @@ namespace events
     HWnd      Sender;    //!< Originator window handle
     event_t   Message;   //!< Notification code
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<WindowMessage::NOTIFY>::ControlEventArgs
@@ -89,16 +89,12 @@ namespace events
                                                                                   Message(static_cast<event_t>(r.Message))
     {}
     
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ControlEventArgs::~ControlEventArgs
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~ControlEventArgs()
-    {}
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
+    ENABLE_POLY(ControlEventArgs);      //!< Can be polymorphic
 
-    ENABLE_COPY(ControlEventArgs);
-    
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

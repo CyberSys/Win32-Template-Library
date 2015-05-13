@@ -122,7 +122,7 @@ namespace wtl
     Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj, std::placeholders::_1))
     {}
     
-    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -163,7 +163,7 @@ namespace wtl
     Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj, std::placeholders::_1, std::placeholders::_2))
     {}
 
-    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

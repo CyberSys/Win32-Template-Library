@@ -75,8 +75,21 @@ namespace events
       const HWnd&   Window;     //!< Handle of window being painted
     };
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    PaintCycle     Data;             //!< Encapsulates the paint cycle (NB: Must be initialized before following fields)
 
+  public:
+    DeviceContext  Graphics;         //!< Device context clipped to non-client area 
+    RectL          Rect;             //!< Drawing/update rectangle
+    bool           EraseBackground;  //!< Whether to erase window background 
+    
+  protected:
+    bool           IncUpdate,        //!< Reserved
+                   Restore;          //!< Reserved
+
+    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<WindowMessage::PAINT>::EventArgs
     //! Creates arguments for 'PaintWindow' Event (ie. WM_PAINT)
@@ -92,32 +105,17 @@ namespace events
                                                          IncUpdate(Data.fIncUpdate != FALSE), 
                                                          Restore(Data.fRestore != FALSE)
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs::~EventArgs
-    //! Ends the paint cycle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~EventArgs()
-    {}
     
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    ENABLE_POLY(EventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    PaintCycle     Data;             //!< Encapsulates the paint cycle (NB: Must be initialized before following fields)
-
-  public:
-    DeviceContext  Graphics;         //!< Device context clipped to non-client area 
-    RectL          Rect;             //!< Drawing/update rectangle
-    bool           EraseBackground;  //!< Whether to erase window background 
-    
-  protected:
-    bool           IncUpdate,        //!< Reserved
-                   Restore;          //!< Reserved
   };
   
   

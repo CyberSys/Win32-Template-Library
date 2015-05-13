@@ -57,7 +57,7 @@ namespace events
     CommandId         Ident;            //!< Action identifier
     SizeL             Size;             //!< Item size
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<MEASUREITEM>::EventArgs
@@ -77,6 +77,11 @@ namespace events
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) == OwnerDrawControl::Menu);
     }
 
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::~EventArgs
     //! Save values

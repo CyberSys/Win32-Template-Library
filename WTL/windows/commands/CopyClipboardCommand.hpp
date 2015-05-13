@@ -26,6 +26,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
+    //! \alias type - Define own type
+    using type = CopyClipboardCommand<ENC>;
+  
     //! \alias base - Define base type
     using base = Action<ENC>;
 
@@ -42,7 +45,7 @@ namespace wtl
   protected:
     window_t*  TargetWnd;       //!< Destination window
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // CopyClipboardCommand::CopyClipboardCommand
@@ -53,7 +56,13 @@ namespace wtl
                                                  TargetWnd->setText(c_arr(L"TODO: Copy text to clipboard")); })
     {}
     
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(CopyClipboardCommand);      //!< Can be shallow copied
+    ENABLE_MOVE(CopyClipboardCommand);      //!< Can be moved 
+    ENABLE_POLY(CopyClipboardCommand);      //!< Can be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     

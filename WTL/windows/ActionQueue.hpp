@@ -45,7 +45,7 @@ namespace wtl
   public:
     ENABLE_CTOR(ActionQueue);           //!< Can be default-constructed
     
-    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
     DISABLE_COPY(ActionQueue);          //!< Cannot be copied
     ENABLE_MOVE_CTOR(ActionQueue);      //!< Can be moved 

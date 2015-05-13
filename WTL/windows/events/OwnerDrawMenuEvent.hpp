@@ -58,8 +58,8 @@ namespace events
     CommandId         Ident;            //!< Action id
     RectL             Rect;             //!< Drawing/update rectangle
     HMenu             Menu;             //!< Control handle
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------- CONSTRUCTION -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<DRAWITEM>::EventArgs
@@ -79,14 +79,13 @@ namespace events
     {
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) == OwnerDrawControl::Menu);
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs::~EventArgs
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~EventArgs()
-    {}
     
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    ENABLE_POLY(EventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

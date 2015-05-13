@@ -27,6 +27,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
+    //! \alias type - Define own type
+    using type = AboutProgramCommand<ENC>;
+  
     //! \alias base - Define base type
     using base = Action<ENC>;
 
@@ -41,7 +44,7 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // AboutProgramCommand::AboutProgramCommand
@@ -53,7 +56,13 @@ namespace wtl
       : base(CommandId::App_About, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
     {}
     
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(AboutProgramCommand);      //!< Can be shallow copied
+    ENABLE_MOVE(AboutProgramCommand);      //!< Can be moved 
+    ENABLE_POLY(AboutProgramCommand);      //!< Can be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     

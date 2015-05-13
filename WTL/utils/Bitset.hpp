@@ -25,6 +25,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   public:
+    //! \alias type - Define own type
+    using type = Bitset<MASK>;
+  
     //! \typedef mask_t - Mask type
     using mask_t = MASK;
 
@@ -97,7 +100,7 @@ namespace wtl
     explicit constexpr Bitset(mask_t m) : Mask(m)
     {}
 
-    // --------------------------------- COPY, MOVE & DESTROY -------------------------------
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
     CONSTEXPR_COPY_CTOR(Bitset);      //!< Can be deep copied at compile-time
     CONSTEXPR_MOVE_CTOR(Bitset);      //!< Can be moved at compile-time
@@ -112,7 +115,7 @@ namespace wtl
     //! \param[in] m - Mask
     //! \return Bitset& - Reference to self containing new mask
     //////////////////////////////////////////////////////////////////////////////////////////
-    Bitset& operator= (mask_t m) 
+    type& operator= (mask_t m) 
     {
       Mask = m;
       return *this;
@@ -128,7 +131,7 @@ namespace wtl
     //! \return Bitset& - Reference to self containing new mask
     //////////////////////////////////////////////////////////////////////////////////////////
     template <typename M>
-    Bitset& operator= (const Bitset<M>& r) 
+    type& operator= (const Bitset<M>& r) 
     {
       // Perform implicit conversion upon foreign mask
       if (static_cast<void*>(this) != static_cast<const void*>(&r))
@@ -227,7 +230,7 @@ namespace wtl
     //! \param[in] r - Another bitset
     //! \return mask_t - Returns result of 'mask bitwise-and value'
     //////////////////////////////////////////////////////////////////////////////////////////
-    mask_t operator& (const Bitset& r) const
+    mask_t operator& (const type& r) const
     {
       return Mask & r.Mask;
     }
@@ -251,7 +254,7 @@ namespace wtl
     //! \param[in] r - Another bitset
     //! \return mask_t - Returns result of 'mask bitwise-or value'
     //////////////////////////////////////////////////////////////////////////////////////////
-    mask_t operator| (const Bitset& r) const
+    mask_t operator| (const type& r) const
     {
       return Mask | r.Mask;
     }

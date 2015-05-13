@@ -15,15 +15,19 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \class accumulate_t - Function object that sums each element
+  //! \struct accumulate_t - Function object that sums each element
   //! \tparam ELEM - Type of the elements / Type of resultant sum
   //!                    *TYPE MUST IMPLEMENT += OPERATOR*
   //!
   //! \remarks Clients must pass this by reference since it maintains state
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename ELEM>
-  class accumulate_t : public std::unary_function<ELEM,ELEM>
+  struct accumulate_t : public std::unary_function<ELEM,ELEM>
   {
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    mutable ELEM Sum;     //!< Resultant sum
+
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +40,7 @@ namespace wtl
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-  public:
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // accumulate_t::sum const
     //! Get the sum of all elements
@@ -49,7 +53,7 @@ namespace wtl
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-  public:
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // accumulate_t::operator()
     //! Sums the value of each element
@@ -61,10 +65,6 @@ namespace wtl
     {
       return Sum += d;   
     }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    mutable ELEM Sum;     //!< Resultant sum
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -85,18 +85,22 @@ namespace wtl
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \class compose_f_gx_t - Composes one function object within another
+  //! \struct compose_f_gx_t - Composes one function object within another
   //! 
   //! \tparam FIRST - First operation applied
   //! \tparam SECOND - Second operation applied
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename FIRST, typename SECOND>
-  class compose_f_gx_t : public std::unary_function<typename FIRST::argument_type,
-                                                    typename SECOND::result_type>
+  struct compose_f_gx_t : public std::unary_function<typename FIRST::argument_type,
+                                                     typename SECOND::result_type>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  protected:
   
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    FIRST  g;    //!< First operation function object representing g(x)
+    SECOND f;    //!< Second operation function object representing f(x)
+
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +117,7 @@ namespace wtl
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-  public:
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // compose_f_gx_t::fx() const
     //! Get the f(x) function
@@ -150,10 +154,6 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    FIRST  g;    //!< First operation function object representing g(x)
-    SECOND f;    //!< Second operation function object representing f(x)
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -179,18 +179,23 @@ namespace wtl
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \class compose_f_gx_hx_t - Composes two unary functions within a binary function : f(g(x), h(x))
+  //! \struct compose_f_gx_hx_t - Composes two unary functions within a binary function : f(g(x), h(x))
   //! 
   //! \tparam OPERATION - Binary function to apply
   //! \tparam LEFT - Unary function, used as input for left-hand-side
   //! \tparam RIGHT - Unary function, used as input for right-hand-side
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename LEFT, typename OPERATION, typename RIGHT>
-  class compose_f_gx_hx_t : public std::unary_function<typename LEFT::argument_type,
-                                                       typename OPERATION::result_type>
+  struct compose_f_gx_hx_t : public std::unary_function<typename LEFT::argument_type,
+                                                        typename OPERATION::result_type>
   {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
+    OPERATION f;     //!< Function object representing f(g(x), h(x))
+    LEFT      g;     //!< Function object representing g(x)
+    RIGHT     h;     //!< Function object representing h(x)
+
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
@@ -209,7 +214,7 @@ namespace wtl
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-  public:
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // compose_f_gx_hx_t::fx() const
     //! Get the binary f(x,y) function
@@ -256,12 +261,6 @@ namespace wtl
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    OPERATION f;     //!< Function object representing f(g(x), h(x))
-    LEFT      g;     //!< Function object representing g(x)
-    RIGHT     h;     //!< Function object representing h(x)
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -289,19 +288,24 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \class execute_method_t - Executes a single parameter method upon an object
+  //! \struct execute_method_t - Executes a single parameter method upon an object
   //! 
   //! \tparam RESULT - Method result type
   //! \tparam TYPE - Object type
   //! \tparam PARAM - Parameter type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename RESULT, typename TYPE, typename PARAM>
-  class execute_method_t : public std::unary_function<TYPE, RESULT>
+  struct execute_method_t : public std::unary_function<TYPE, RESULT>
   {	
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   public:
-    // \typedef MethodPtr - Friendly name for a method pointer
-    typedef RESULT (TYPE::*MethodPtr)(PARAM) const; 
+    // \alias MethodPtr - Friendly name for a method pointer
+    using MethodPtr = RESULT (TYPE::*)(PARAM) const; 
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    MethodPtr Method;         //!< Method pointer to execute
+    PARAM     Argument;       //!< Argument to use as input
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
@@ -317,7 +321,7 @@ namespace wtl
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-  public:
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // execute_method_t::operator() const
     //! Create method execution adapter
@@ -331,10 +335,6 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    MethodPtr Method;         //!< Method pointer to execute
-    PARAM     Argument;       //!< Argument to use as input
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -361,7 +361,7 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // \class execute_upon_t - Passes an element to a method of an object
+  // \struct execute_upon_t - Passes an element to a method of an object
   //! 
   //! \tparam RESULT - Method result type
   //! \tparam TYPE - Object type
@@ -370,13 +370,22 @@ namespace wtl
   template <typename RESULT, typename TYPE, typename PARAM>
   struct execute_upon_t : public std::unary_function<PARAM, RESULT>
   {
+    //! \alias base - Define base type
     using base = std::unary_function<PARAM, RESULT>;
 
+    //! \alias argument_type - Define argument type
     using argument_type = typename base::argument_type;
+
+    //! \alias result_type - Define result type
     using result_type = typename base::result_type;
 
-    //! \typedef function_type - Defines the method type
-    typedef result_type (TYPE::*function_type)(argument_type);
+    //! \alias function_type - Define method type
+    using function_type = result_type (TYPE::*)(argument_type);
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    function_type Method;     //!< method pointer
+    TYPE&         Object;     //!< Object instance
 
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public: 
@@ -387,9 +396,8 @@ namespace wtl
     //! \param[in,out] &obj - Object instance
     //! \param[in] &m - Pointer to class method
     /////////////////////////////////////////////////////////////////////////////////////////
-    execute_upon_t(TYPE& obj, function_type& m) 
-      : Method(m), 
-        Object(obj)
+    execute_upon_t(TYPE& obj, function_type& m) : Method(m), 
+                                                  Object(obj)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -407,10 +415,6 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    function_type Method;     //!< method pointer
-    TYPE&         Object;     //!< Object instance
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -434,18 +438,22 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \class if_then_t - Unary operation that executes a function upon operands
+  //! \struct if_then_t - Unary operation that executes a function upon operands
   //!                     that satisfy a predicate.
   //! 
   //! \tparam PRED - Unary predicate
   //! \tparam FUNC - Unary function
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename PRED, typename FUNC>
-  class if_then_t : public std::unary_function<typename PRED::argument_type, bool>
+  struct if_then_t : public std::unary_function<typename PRED::argument_type, bool>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-  
+    PRED p;     //!< Predicate
+    FUNC f;     //!< Operation
+
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -504,11 +512,6 @@ namespace wtl
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    PRED p;     //!< Predicate
-    FUNC f;     //!< Operation
   };
   
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -529,13 +532,13 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \class implicit_cast - Function object that casts an element to another type
+  //! \struct implicit_cast - Function object that casts an element to another type
   //! 
   //! \tparam INPUT - Type of the elements
   //! \tparam OUTPUT - Desired type of the elements
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename INPUT, typename OUTPUT>
-  class implicit_cast : public std::unary_function<INPUT,OUTPUT>
+  struct implicit_cast : public std::unary_function<INPUT,OUTPUT>
   {
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
@@ -563,8 +566,12 @@ namespace wtl
   template <typename STRUCT, typename FIELD>
   struct select_field_t : public std::unary_function<STRUCT, FIELD>
   {
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    const FIELD STRUCT::* FieldPtr;     //!< Class field pointer
+
     // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-  
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     //! select_field_t::select_field_t
     //! Create transformation selector that extracts a class/structure field
@@ -602,10 +609,6 @@ namespace wtl
     {
       return s.*FieldPtr;   // Dereference field pointer 
     }
-  
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    const FIELD STRUCT::* FieldPtr;     //!< Class field pointer
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////

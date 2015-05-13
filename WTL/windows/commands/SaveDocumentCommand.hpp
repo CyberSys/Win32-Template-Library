@@ -27,6 +27,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
+    //! \alias type - Define own type
+    using type = SaveDocumentCommand<ENC>;
+  
     //! \alias base - Define base type
     using base = Action<ENC>;
 
@@ -41,7 +44,7 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // SaveDocumentCommand::SaveDocumentCommand
@@ -53,7 +56,13 @@ namespace wtl
       : base(CommandId::File_Save, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
     {}
     
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(SaveDocumentCommand);      //!< Can be shallow copied
+    ENABLE_MOVE(SaveDocumentCommand);      //!< Can be moved 
+    ENABLE_POLY(SaveDocumentCommand);      //!< Can be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     

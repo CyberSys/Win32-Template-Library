@@ -62,8 +62,8 @@ namespace events
     int32             Item;             //!< Zero-based item index
     RectL             Rect;             //!< Drawing/update rectangle
     HWnd              Sender;           //!< Control handle
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    
+    // ------------------------------------- CONSTRUCTION -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<DRAWITEM>::ControlEventArgs
@@ -86,13 +86,12 @@ namespace events
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ControlEventArgs::~ControlEventArgs
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~ControlEventArgs()
-    {}
-    
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
+    ENABLE_POLY(ControlEventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

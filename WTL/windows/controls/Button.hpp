@@ -27,6 +27,9 @@ namespace controls
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias type - Define own type
+    using type = Button<ENC>;
+  
     //! \alias base - Define base type
     using base = WindowBase<ENC>;
     

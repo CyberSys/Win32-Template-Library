@@ -82,14 +82,12 @@ namespace wtl
         *this += c;
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::~ActionGroup
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~ActionGroup() 
-    {}
-    
-    
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  public:
+    ENABLE_COPY(ActionGroup);      //!< Can be shallow copied
+    ENABLE_MOVE(ActionGroup);      //!< Can be moved
+    ENABLE_POLY(ActionGroup);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

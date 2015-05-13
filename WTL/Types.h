@@ -70,7 +70,7 @@ namespace wtl
   using uintptr_t = uint32;
 
   //! \alias size_t - Unsigned integer type large enough to represent any memory address
-  using size_t = uint32;
+  //using size_t = uint32;
 
   //! \alias ptrdiff_t - Signed integer type able to represent any memory offset
   using ptrdiff_t = int32;

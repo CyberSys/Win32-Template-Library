@@ -26,6 +26,9 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
+    //! \alias type - Define own type
+    using type = PasteClipboardCommand<ENC>;
+  
     //! \alias base - Define base type
     using base = Action<ENC>;
 
@@ -42,7 +45,7 @@ namespace wtl
   protected:
     window_t*  TargetWnd;       //!< Destination window
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PasteClipboardCommand::PasteClipboardCommand
@@ -55,7 +58,13 @@ namespace wtl
                                                   TargetWnd->setText(c_arr(L"TODO: Restore previous text")); })
     {}
     
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(PasteClipboardCommand);      //!< Can be shallow copied
+    ENABLE_MOVE(PasteClipboardCommand);      //!< Can be moved 
+    ENABLE_POLY(PasteClipboardCommand);      //!< Can be polymorphic
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     

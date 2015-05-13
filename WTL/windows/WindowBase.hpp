@@ -1149,7 +1149,7 @@ namespace wtl
     HWnd                             Handle;        //!< Window handle
     SubClassCollection               SubClasses;    //!< Sub-classed windows collection
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
   public: 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::WindowBase
@@ -1180,12 +1180,12 @@ namespace wtl
       // Paint window background by default
       Paint += new events::PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
-    
-    // --------------------------- COPY, MOVE & DESTROY SEMANTICS ---------------------------
+
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
-    DISABLE_COPY(WindowBase);
-    ENABLE_MOVE(WindowBase);
-    ENABLE_POLY(WindowBase);
+    DISABLE_COPY(WindowBase);     //!< Cannot be copied
+    ENABLE_MOVE(WindowBase);      //!< Can be moved
+    ENABLE_POLY(WindowBase);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:

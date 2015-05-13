@@ -57,7 +57,7 @@ namespace events
     HWnd      Sender;    //!< Originator window handle
     event_t   Message;   //!< Notification code
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------- CONSTRUCTION -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ControlEventArgs<COMMAND>::ControlEventArgs
@@ -67,8 +67,8 @@ namespace events
     //! \param[in] l - Originator window handle
     /////////////////////////////////////////////////////////////////////////////////////////
     ControlEventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<WindowId>(LOWORD(w))), 
-                                            Sender(reinterpret_cast<HWND>(l), AllocType::WeakRef), 
-                                            Message(static_cast<EVENT>(HIWORD(w)))
+                                               Sender(reinterpret_cast<HWND>(l), AllocType::WeakRef), 
+                                               Message(static_cast<EVENT>(HIWORD(w)))
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -79,20 +79,16 @@ namespace events
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, typename EVENT, EVENT CODE>
     ControlEventArgs(const ControlEventArgs<ENC,WindowMessage::COMMAND,EVENT,CODE>& r) : Ident(r.Ident),
-                                                                                   Sender(r.Sender),
-                                                                                   Message(static_cast<event_t>(r.Message))
+                                                                                         Sender(r.Sender),
+                                                                                         Message(static_cast<event_t>(r.Message))
     {}
     
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ControlEventArgs::~ControlEventArgs
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~ControlEventArgs()
-    {}
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  
+    ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
+    ENABLE_POLY(ControlEventArgs);      //!< Can be polymorphic
 
-    ENABLE_COPY(ControlEventArgs);
-    
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

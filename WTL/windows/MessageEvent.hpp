@@ -44,9 +44,9 @@ namespace wtl
     static constexpr ::LRESULT  unhandled = unhandled_result<WM>::value;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
     
+    // ------------------------------------- CONSTRUCTION -----------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::EventArgs
     //! Create argument decoder for messages with zero arguments
@@ -63,14 +63,13 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     EventArgs(::WPARAM w, ::LPARAM l)
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs::~EventArgs
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~EventArgs()
-    {}
     
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+  public:
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    ENABLE_POLY(EventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

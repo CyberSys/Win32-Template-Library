@@ -43,8 +43,13 @@ namespace events
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    bool            Showing;      //!< Whether window is being shown or hidden
+    ShowWindowType  Status;       //!< Status of window
+    
+    // ------------------------------------- CONSTRUCTION -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::EventArgs
@@ -57,16 +62,15 @@ namespace events
                                         Status(opaque_cast<ShowWindowType>(l))
     {}
     
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    ENABLE_POLY(EventArgs);      //!< Can be polymorphic
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    bool            Showing;      //!< Whether window is being shown or hidden
-    ShowWindowType  Status;       //!< Status of window
   };
   
   
