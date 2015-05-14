@@ -272,7 +272,7 @@ namespace wtl
     void  ellipse(const Rect<T>& rc)
     {
       // Fill & outline ellipse 
-      if (::Ellipse(Handle, rc.left, rc.top, rc.right, rc.bottom) == FALSE)
+      if (::Ellipse(Handle, rc.left, rc.top, rc.right, rc.bottom) == False)
         throw platform_error(HERE, "Unable to draw ellipse");
     }
     
@@ -288,7 +288,7 @@ namespace wtl
     void  fill(const Rect<T>& rc)
     {
       // Fill target rectangle with current brush
-      if (::FillRect(Handle, rc, (HBRUSH)::GetCurrentObject(Handle, enum_cast(DrawObjectType::Brush))) == FALSE)
+      if (::FillRect(Handle, rc, (HBRUSH)::GetCurrentObject(Handle, enum_cast(DrawObjectType::Brush))) == False)
         throw platform_error(HERE, "Unable to fill rect");
     }
     
@@ -305,7 +305,7 @@ namespace wtl
     void  fill(const Rect<T>& rc, const HBrush& brush)
     {
       // Fill target rectangle with custom brush
-      if (::FillRect(Handle, (const ::RECT*)rc, brush) == FALSE)
+      if (::FillRect(Handle, (const ::RECT*)rc, brush) == False)
         throw platform_error(HERE, "Unable to fill custom rect");
     }
     
@@ -327,7 +327,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), (::SIZE*)sz) == FALSE)
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), (::SIZE*)sz) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -351,7 +351,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), sz) == FALSE)
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), sz) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -394,7 +394,7 @@ namespace wtl
     void  rect(const Rect<T>& rc)
     {
       // Outline target rectangle with current pen
-      if (::Rectangle(Handle, rc.left, rc.top, rc.right, rc.bottom) == FALSE)
+      if (::Rectangle(Handle, rc.left, rc.top, rc.right, rc.bottom) == False)
         throw platform_error(HERE, "Unable to draw rectangle");
     }
     
@@ -410,7 +410,7 @@ namespace wtl
     void  polygon(::POINT (&points)[LENGTH])
     {
       // Fill & outline polygon
-      if (::Polygon(Handle, points, lengthof(points)) == FALSE)
+      if (::Polygon(Handle, points, lengthof(points)) == False)
         throw platform_error(HERE, "Unable to draw polygon");
     }
     
@@ -426,7 +426,7 @@ namespace wtl
     void  triangle(const Triangle<T>& triangle)
     {
       // Draw triangle with current pen and brush
-      if (::Polygon(Handle, triangle, 3) == FALSE)
+      if (::Polygon(Handle, triangle, 3) == False)
         throw platform_error(HERE, "Unable to draw triangle");
     }
 

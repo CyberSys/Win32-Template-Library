@@ -141,8 +141,8 @@ namespace wtl
       // Delete without checking if handle is valid
       switch (dc.Method)
       {
-      case AllocType::Accquire: return ::ReleaseDC(dc.Window, dc.Handle) != FALSE;
-      case AllocType::Create:   return ::DeleteDC(dc.Handle) != FALSE;
+      case AllocType::Accquire: return ::ReleaseDC(dc.Window, dc.Handle) != False;
+      case AllocType::Create:   return ::DeleteDC(dc.Handle) != False;
       case AllocType::WeakRef:  return true;
       }
       return false;

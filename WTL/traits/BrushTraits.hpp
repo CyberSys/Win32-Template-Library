@@ -160,7 +160,7 @@ namespace wtl
       switch (brush.Method)
       {
       case AllocType::Accquire: return true;
-      case AllocType::Create:   return ::DeleteObject(brush.Handle) != FALSE;
+      case AllocType::Create:   return ::DeleteObject(brush.Handle) != False;
       case AllocType::WeakRef:  return true;
       }
       return false;

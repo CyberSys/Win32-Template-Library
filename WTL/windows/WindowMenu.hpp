@@ -306,7 +306,7 @@ namespace wtl
       MenuItemInfo<encoding> item(*cmd);     //!< Generate Gui Command menu item
 
       // Insert item into menu
-      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, TRUE, &item))
+      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
 
       // Insert Action into collection 
@@ -524,7 +524,7 @@ namespace wtl
       MenuItemInfo<encoding> item(*group, popup->handle());     //!< Generate pop-up menu item 
 
       // Insert menu item 
-      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, TRUE, &item))
+      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
     }
 

@@ -180,7 +180,7 @@ namespace wtl
       static const auto unregisterClass = getFunc<ENC>(::UnregisterClassA,::UnregisterClassW);
 
       // Unregister window class
-      if (unregisterClass(Name, Instance) == FALSE)
+      if (unregisterClass(Name, Instance) == False)
         cdebug << Cons::Error << "Unable to unregister window class" << Cons::Endl;
     }
     

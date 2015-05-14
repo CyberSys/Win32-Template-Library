@@ -12,6 +12,7 @@
 #include "wtl/utils/Handle.hpp"               //!< Handle
 #include "wtl/utils/CharArray.hpp"            //!< CharArray
 #include "wtl/platform/DrawingFlags.hpp"      //!< StockObject, FontStyles
+#include "wtl/casts/BooleanCast.hpp"          //!< BooleanCast
 #include "wtl/casts/EnumCast.hpp"             //!< EnumCast
 
 //! \namespace wtl - Windows template library
@@ -94,8 +95,13 @@ namespace wtl
       static const auto createFont = getFunc<ENC>(::CreateFontA,::CreateFontW);
 
       // Create font 
-      if (::HFONT font = createFont(height, width, escape, orient, enum_cast(weight), italic ? TRUE : FALSE, underline ? TRUE : FALSE, strike ? TRUE : FALSE, 
-                                  enum_cast(charSet), enum_cast(precision), enum_cast(clipping), enum_cast(quality), enum_cast(family), name))
+      if (::HFONT font = createFont(height, width, 
+                                    escape, orient, 
+                                    enum_cast(weight), 
+                                    boolean_cast(italic), boolean_cast(underline), boolean_cast(strike), 
+                                    enum_cast(charSet), 
+                                    enum_cast(precision), enum_cast(clipping), enum_cast(quality), 
+                                    enum_cast(family), name))
         return { font, AllocType::Create };
 
       // Error: Failed  
@@ -154,7 +160,7 @@ namespace wtl
       // Delete without checking if handle is valid
       switch (font.Method)
       {
-      case AllocType::Accquire: return ::DeleteObject(font.Handle) != FALSE;
+      case AllocType::Accquire: return ::DeleteObject(font.Handle) != False;
       case AllocType::Create:   return false;
       case AllocType::WeakRef:  return true;
       }

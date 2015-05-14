@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\casts\BooleanCast.hpp
-//! \brief Casts values and pointers to Win32 'BOOL' type (ie. int32)
+//! \brief Converts any type to a Win32 BOOL, and handles conversion between C++/Win32 booleans
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.

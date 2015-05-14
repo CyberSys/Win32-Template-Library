@@ -123,8 +123,8 @@ namespace wtl
       // Delete without checking if handle is valid
       switch (menu.Method)
       {
-      case AllocType::Accquire: return ::DestroyMenu(menu.Handle) != FALSE;
-      case AllocType::Create:   return ::DestroyMenu(menu.Handle) != FALSE;
+      case AllocType::Accquire: return ::DestroyMenu(menu.Handle) != False;
+      case AllocType::Create:   return ::DestroyMenu(menu.Handle) != False;
       case AllocType::WeakRef:  return true;
       }
       return false;

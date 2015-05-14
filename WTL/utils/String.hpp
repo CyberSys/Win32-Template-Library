@@ -162,7 +162,7 @@ namespace wtl
   //      REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
 
   //      // wide -> narrow
-  //      int32  useDefault = TRUE;
+  //      int32  useDefault = True;
   //      return WideCharToMultiByte(enum_cast(TO), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), std::addressof(*first), last-first, output, lastOut-output, "?", &useDefault);
   //    }
   //  };

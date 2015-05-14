@@ -92,7 +92,7 @@ namespace wtl
       switch (module.Method)
       {
       case AllocType::Accquire: return true;
-      case AllocType::Create:   return ::FreeLibrary(module.Handle) != FALSE;
+      case AllocType::Create:   return ::FreeLibrary(module.Handle) != False;
       case AllocType::WeakRef:  return true;
       }
       return false;

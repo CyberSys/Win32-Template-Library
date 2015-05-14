@@ -58,7 +58,7 @@ namespace events
     //! \param[in] w - Whether showing or hiding
     //! \param[in] l - Window status
     /////////////////////////////////////////////////////////////////////////////////////////
-    EventArgs(::WPARAM w, ::LPARAM l) : Showing(w != FALSE), 
+    EventArgs(::WPARAM w, ::LPARAM l) : Showing(w != False), 
                                         Status(opaque_cast<ShowWindowType>(l))
     {}
     

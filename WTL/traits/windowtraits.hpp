@@ -151,7 +151,7 @@ namespace wtl
       switch (wnd.Method)
       {
       case AllocType::Accquire: return true;
-      case AllocType::Create:   return ::DestroyWindow(wnd.Handle) != FALSE;
+      case AllocType::Create:   return ::DestroyWindow(wnd.Handle) != False;
       }
       return false;
     }

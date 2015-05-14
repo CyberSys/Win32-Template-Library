@@ -86,7 +86,7 @@ namespace wtl
       //PARAM_INVARIANT(search, search != npos);
 
       // Close search query
-      return ::FindClose(search) != FALSE;
+      return ::FindClose(search) != False;
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

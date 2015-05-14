@@ -119,7 +119,7 @@ namespace wtl
       // Delete without checking if handle is valid
       switch (pen.Method)
       {
-      case AllocType::Accquire: return ::DeleteObject(pen.Handle) != FALSE;
+      case AllocType::Accquire: return ::DeleteObject(pen.Handle) != False;
       case AllocType::Create:   return false;
       case AllocType::WeakRef:  return true;
       }

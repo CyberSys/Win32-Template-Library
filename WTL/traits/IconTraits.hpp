@@ -113,7 +113,7 @@ namespace wtl
     static HAlloc<::HICON> create(byte* buffer, int32 len, SizeL size) 
     { 
       // Create icon handle from bits
-      if (::HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
+      if (::HICON icon = CreateIconFromResourceEx(buffer, len, True, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
         return { icon, AllocType::Create };
 
       // Error: Failed  
@@ -135,7 +135,7 @@ namespace wtl
     static HAlloc<::HICON> create(byte* buffer, int32 len, bool defaultSize) 
     { 
       // Create icon handle from bits
-      if (::HICON icon = CreateIconFromResourceEx(buffer, len, TRUE, enum_cast(IconFormat::v3), 0, 0, defaultSize ? LR_DEFAULTCOLOR|LR_DEFAULTSIZE : LR_DEFAULTCOLOR))
+      if (::HICON icon = CreateIconFromResourceEx(buffer, len, True, enum_cast(IconFormat::v3), 0, 0, defaultSize ? LR_DEFAULTCOLOR|LR_DEFAULTSIZE : LR_DEFAULTCOLOR))
         return { icon, AllocType::Create };
 
       // Error: Failed  

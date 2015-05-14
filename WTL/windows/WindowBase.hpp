@@ -1865,7 +1865,7 @@ namespace wtl
     //void setText(const CharArray<encoding,LEN>& txt)
     //{
     //  // Set window text
-    //  if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt) == FALSE)
+    //  if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt) == False)
     //    throw platform_error(HERE, "Unable to set window text");
     //}
     

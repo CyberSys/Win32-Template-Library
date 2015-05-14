@@ -101,9 +101,9 @@ namespace events
     EventArgs(const HWnd& wnd, ::WPARAM w, ::LPARAM l) : Data(wnd), 
                                                          Graphics(Data.hdc),
                                                          Rect(Data.rcPaint),
-                                                         EraseBackground(Data.fErase != FALSE), 
-                                                         IncUpdate(Data.fIncUpdate != FALSE), 
-                                                         Restore(Data.fRestore != FALSE)
+                                                         EraseBackground(Data.fErase != False), 
+                                                         IncUpdate(Data.fIncUpdate != False), 
+                                                         Restore(Data.fRestore != False)
     {}
     
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
