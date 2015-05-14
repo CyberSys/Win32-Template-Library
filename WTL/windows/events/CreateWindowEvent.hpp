@@ -44,9 +44,9 @@ namespace events
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
-
+    
+    // ------------------------------------- CONSTRUCTION -----------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::EventArgs
     //! Decode the arguments for win32 message 'WM_CREATE' 
@@ -64,6 +64,11 @@ namespace events
                                         Name(Data.lpszName)
     {}
 
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+
+    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    ENABLE_MOVE(EventArgs);      //!< Can be moved
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::~EventArgs
     //! Saves changes to the window data

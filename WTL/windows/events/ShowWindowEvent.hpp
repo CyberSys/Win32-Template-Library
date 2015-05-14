@@ -62,6 +62,8 @@ namespace events
                                         Status(opaque_cast<ShowWindowType>(l))
     {}
     
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved
     ENABLE_POLY(EventArgs);      //!< Can be polymorphic

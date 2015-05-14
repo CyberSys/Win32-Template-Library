@@ -47,9 +47,15 @@ namespace events
     //! \struct PaintCycle - Encapsulates the paint cycle for a window's client area
     struct PaintCycle : PAINTSTRUCT
     {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
       //! \alias base - Define base type
       using base = PAINTSTRUCT;
-
+      
+      // ----------------------------------- REPRESENTATION -----------------------------------
+  
+      // ------------------------------------- CONSTRUCTION -----------------------------------
+	
       /////////////////////////////////////////////////////////////////////////////////////////
       // PaintCycle::PaintCycle
       //! Initiates the paint cycle for a window
@@ -71,6 +77,8 @@ namespace events
         // End paint cycle (Validate update region)
         ::EndPaint(Window, static_cast<base*>(this));
       }
+      
+	    // -------------------------------- COPYING & DESTRUCTION -------------------------------
 
       const HWnd&   Window;     //!< Handle of window being painted
     };
@@ -106,6 +114,8 @@ namespace events
                                                          Restore(Data.fRestore != False)
     {}
     
+	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved
     ENABLE_POLY(EventArgs);      //!< Can be polymorphic
