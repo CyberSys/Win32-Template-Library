@@ -1367,19 +1367,6 @@ namespace wtl
         // [HANDLED/REFLECTED] Return result
         if (msg.Route != MsgRoute::Unhandled)
           return msg.Result;
-
-        // TODO: Gui Commands
-
-        //// [UNHANDLED GUI-COMMAND] Search for a handler
-        //for (window_t* parent = wnd->parent(); parent; parent = parent->parent())
-        //{
-        //  // Delegate to parent's instance procedure
-        //  msg = wnd->routeMessage(static_cast<WindowMessage>(message), wParam, lParam);
-
-        //  // [PARENT HANDLED/REFLECTED] Return result
-        //  if (msg.Route != MsgRoute::Unhandled)
-        //    return msg.Result;
-        //}
       }
       // [ERROR] Exception thrown by handler
       catch (wtl::exception& e)
@@ -1640,12 +1627,6 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onCreate(events::CreateWindowEventArgs<encoding>& args) 
     { 
-      // Initialise properties
-      /*Font.init(StockObject::SystemFont);   
-      Style.init(args.Style);
-      StyleEx.init(args.StyleEx);
-      WindowRect.init(args.Rect);*/
-      
       // [Handled] Accept parameters
       return 0; 
     }
