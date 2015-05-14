@@ -11,12 +11,14 @@
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Handle.hpp"           //!< Handle
 #include "wtl/utils/CharArray.hpp"        //!< CharArray
+#include "wtl/utils/String.hpp"           //!< String
 #include "wtl/traits/EnumTraits.hpp"      //!< is_attribute
 #include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
 #include "wtl/platform/ResourceId.hpp"    //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"   //!< WindowId, WindowStyle, WindowStyleEx
-#include "wtl/utils/Point.hpp"         //!< Point
-#include "wtl/utils/Size.hpp"          //!< Size
+#include "wtl/utils/Point.hpp"            //!< Point
+#include "wtl/utils/Size.hpp"             //!< Size
+#include "wtl/windows/WindowClass.hpp"    //!< WindowClass
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -58,16 +60,14 @@ namespace wtl
     //! Create window handle
     //! 
     //! \tparam ENC - String encoding
-    //! \tparam LEN - Title string length
-    //! \tparam OBJ - Custom data type
+    //! \tparam OBJ - Window object type
     //!
-    //! \param[in] instance - Module instance
-    //! \param[in] const& wndClass - Window class atom
+    //! \param[in] const& wndClass - Win32 Window class 
+    //! \param[in] object - WTL Window object
     //! \param[in] owner - [optional] Parent/owner window
-    //! \param[in] object - Creation parameter (Typically Window object pointer)
-    //! \param[in] menu - [optional] Window Menu
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
+    //! \param[in] menu - [optional] Window Menu if any, otherwise nullptr
     //! \param[in] const& title - Window title
     //! \param[in] pos - Initial position
     //! \param[in] size - Initial size
@@ -75,8 +75,8 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND owner, OBJ* object, ::HMENU menu, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, PointL pos, SizeL size)
+    template <Encoding ENC, typename OBJ>
+    static HAlloc<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
     { 
       using char_t = encoding_char_t<ENC>;    //!< Character encoding type
 
@@ -84,22 +84,20 @@ namespace wtl
       auto createWindow = getFunc<char_t>(::CreateWindowExA,::CreateWindowExW);
 
       // Create window
-      ::HWND hwnd = createWindow(enum_cast(ext), 
-                                 wndClass.toString(), 
-                                 title, 
-                                 enum_cast(style), 
-                                 pos.x, pos.y, size.width, size.height, 
-                                 owner, 
-                                 menu, 
-                                 instance,     //!< Instance handle
-                                 object);      //!< Pass object as parameter data
-      // Success
-      if (hwnd)
+      if (::HWND hwnd = createWindow(enum_cast(exStyle),                        //!< Extended style
+                                     wndClass.Name.toString(),                  //!< Class name
+                                     title.c_str(),                             //!< Text
+                                     enum_cast(style),                          //!< Style
+                                     pos.x, pos.y, size.width, size.height,     //!< Size/Position
+                                     owner,                                     //!< Owner/parent
+                                     menu,                                      //!< Menu or ChildID
+                                     wndClass.Instance,                         //!< Module containing class
+                                     &object))                                  //!< Associate WTL window object
+        // Success!
         return { hwnd, AllocType::Create };
       
-      // Error: Failed  
-      //throw platform_error(HERE, "Unable to create window: class='%s' title='%s'", CharArray<Encoding::ANSI>(wndClass), CharArray<Encoding::ANSI>(title));
-      throw platform_error(HERE, "Unable to create window");
+      // [ERROR] Failed to create
+      throw platform_error(HERE, "Unable to create window");    //throw platform_error(HERE, "Unable to create window: class='%s' title='%s'", CharArray<Encoding::ANSI>(wndClass), CharArray<Encoding::ANSI>(title));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -107,13 +105,11 @@ namespace wtl
     //! Create child window handle
     //! 
     //! \tparam ENC - String encoding
-    //! \tparam LEN - Title string length
-    //! \tparam OBJ - Custom data type
+    //! \tparam OBJ - Window object type
     //!
-    //! \param[in] instance - Module instance
-    //! \param[in] const& wndClass - Window class atom
+    //! \param[in] const& wndClass - Win32 Window class 
+    //! \param[in] &object - WTL window object
     //! \param[in] parent - Parent window
-    //! \param[in] object - Creation parameter (Typically Window object pointer)
     //! \param[in] id - Window id
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
@@ -124,11 +120,11 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN, typename OBJ>
-    static HAlloc<::HWND> create(::HINSTANCE instance, const ResourceId<ENC>& wndClass, ::HWND parent, OBJ* object, WindowId id, WindowStyle style, WindowStyleEx ext, const CharArray<ENC,LEN>& title, PointL pos, SizeL size)
+    template <Encoding ENC, typename OBJ>
+    static HAlloc<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND parent, WindowId id, WindowStyle style, WindowStyleEx ext, const String<ENC>& title, PointL pos, SizeL size)
     { 
       // Create child window
-      return create(instance, wndClass, parent, object, reinterpret_cast<::HMENU>(enum_cast(id)), style, ext, title, pos, size);
+      return create(wndClass, object, parent, style, ext, reinterpret_cast<::HMENU>(enum_cast(id)), title, pos, size);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

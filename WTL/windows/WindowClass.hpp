@@ -17,6 +17,7 @@
 #include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
 #include "wtl/traits/BrushTraits.hpp"           //!< HBrush
 #include "wtl/traits/CursorTraits.hpp"          //!< HCursor
+#include "wtl/traits/IconTraits.hpp"            //!< HIcon
 #include "wtl/traits/WindowClassTraits.hpp"     //!< HAtom
 
 //! \namespace wtl - Windows template library

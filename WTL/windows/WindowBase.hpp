@@ -45,7 +45,6 @@
 #include "wtl/windows/events/PositionChangedEvent.hpp"      //!< PositionChangedEvent
 #include <map>                                              //!< std::map
 
-
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
@@ -187,24 +186,19 @@ namespace wtl
       // ChildWindowCollection::create
       //! Creates a child window and inserts it into the collection
       //! 
-      //! \tparam ENC - Window text string encoding
-      //! \tparam LEN - Window text buffer capacity
-      //!
       //! \param[in,out] &child - Child window object  (Handle must not exist)
-      //! \param[in] const& text - Window text
       //! 
       //! \throw wtl::logic_error - Window already exists
       //! \throw wtl::platform_error - Unable to create window
       /////////////////////////////////////////////////////////////////////////////////////////
-      template <Encoding ENC, unsigned LEN>
-      void create(window_t& child, const CharArray<ENC,LEN>& text)
+      void create(window_t& child)
       {
         // Ensure child doesn't already exist
         if (child.Handle.exists())
           throw logic_error(HERE, "Window already exists");
 
         // Create child window  (calls 'insert()' if successful)
-        child.create(&Parent, text);
+        child.create(&Parent);
       }
       
       /////////////////////////////////////////////////////////////////////////////////////////
@@ -468,7 +462,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowFontPropertyImpl - Implements the window font property [Mutable,Reference]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableRef>
+    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableReference>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
       
@@ -476,7 +470,7 @@ namespace wtl
       using type = WindowFontPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<HFont,PropertyType::MutableRef>;
+      using base = WindowPropertyImpl<HFont,PropertyType::MutableReference>;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -714,9 +708,88 @@ namespace wtl
         base::set(style);
       }
     };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowTextPropertyImpl - Implements the window text property [Mutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowTextPropertyImpl : WindowPropertyImpl<String<ENC>,PropertyType::MutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowTextPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<String<ENC>,PropertyType::MutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowTextPropertyImpl::WindowTextPropertyImpl
+      //! Create with initial value 
+      //! 
+      //! \param[in,out] &wnd - Owner window
+      //! \param[in] init - Initial value
+      /////////////////////////////////////////////////////////////////////////////////////////
+      WindowTextPropertyImpl(window_t& wnd, argument_t init = default<argument_t>()) : base(wnd, init)
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowTextPropertyImpl::get const
+      //! Get the window text
+      //! 
+      //! \return argument_t - Current window text
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Query window text
+        if (this->Window.exists())
+        {
+          int32           length = getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);    //!< Length in chars
+          CharVector<ENC> str(length+1, '\0');
+
+          // Get window text
+          if (length && !getFunc<encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, &str.front(), length+1))
+            throw platform_error(HERE, "Unable to retrieve window text");
+
+          // Return as string
+          return { str.begin(), str.end() };
+        }
+        
+        // [OFFLINE] Return cached
+        return this->Value;
+      }
+
+      // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowTextPropertyImpl::set 
+      //! Set the window text
+      //! 
+      //! \param[in] text - New window text
+      /////////////////////////////////////////////////////////////////////////////////////////
+      void set(argument_t text) override
+      {
+        // [EXISTS] Set window text
+        if (this->Window.exists() && !getFunc<encoding>(::SetWindowTextA,::SetWindowTextW)(this->Window, text.c_str()))
+          throw platform_error(HERE, "Unable to set window text");
+
+        // Store value
+        base::set(text);
+      }
+    };
 
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowRectPropertyImpl - Implements the window rectangle property [Mutable,Value]
+    //! 
+    //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
     /////////////////////////////////////////////////////////////////////////////////////////
     struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::MutableValue>
     {
@@ -1099,6 +1172,9 @@ namespace wtl
     //! \alias WindowStyleExProperty - Define extended window style property type 
     using WindowStyleExProperty = Property<WindowStyleExPropertyImpl>;
     
+    //! \alias WindowTextProperty - Define window text property type  
+    using WindowTextProperty = Property<WindowTextPropertyImpl>;
+    
     //! \alias WindowVisibilityProperty - Define window visibliity property type 
     using WindowVisibilityProperty = Property<WindowVisibilityPropertyImpl>;
 
@@ -1141,6 +1217,7 @@ namespace wtl
     WindowSizeProperty               Size;          //!< Window size property
     WindowStyleProperty              Style;         //!< Window style property
     WindowStyleExProperty            StyleEx;       //!< Extended window style property
+    WindowTextProperty               Text;          //!< Window text property
     WindowVisibilityProperty         Visible;       //!< Visibility property
     WindowRectProperty               WindowRect;    //!< Window rectangle property
 
@@ -1167,6 +1244,7 @@ namespace wtl
                                   Position(*this, DefaultPosition),
                                   Size(*this, DefaultSize),
                                   Style(*this, WindowStyle::OverlappedWindow),
+                                  Text(*this),
                                   StyleEx(*this, WindowStyleEx::None),
                                   Visible(*this, Visibility::ShowNormal),
                                   WindowRect(*this)
@@ -1435,12 +1513,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::create
     //! Creates the window (as a child, popup, or overlapped window)
-    //! 
-    //! \tparam ENC - Window text string encoding
-    //! \tparam LEN - Window text buffer capacity
     //!
     //! \param[in,out] *owner - [optional] Parent/owner window   (Required for child windows)
-    //! \param[in] const& text - Window text
     //! 
     //! \throw wtl::invalid_argument - Attempting to create a child window without a parent window
     //! \throw wtl::logic_error - Window already exists
@@ -1452,8 +1526,7 @@ namespace wtl
     //!
     //! \remarks Child windows are automatically added to the ChildWindowCollection of the parent
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    void create(window_t* owner, const CharArray<ENC,LEN>& text)
+    void create(window_t* owner = nullptr)
     {
       // Ensure window does not exist
       if (Handle.exists())
@@ -1470,8 +1543,8 @@ namespace wtl
         if (!owner->exists())
           throw logic_error(HERE, "Parent window does not exist");
 
-        // Create as child using window Ident
-        Handle = HWnd(Class.Instance, Class.Name, owner->handle(), this, Ident, Style, StyleEx, CharArray<encoding,LEN>(text), Position, Size);
+        // Create as child 
+        Handle = HWnd(Class, *this, owner->handle(), Ident(), Style, StyleEx, Text, Position, Size);
 
         // Add to parent's collection of child windows
         owner->Children.insert(*this);
@@ -1482,7 +1555,7 @@ namespace wtl
         ::HWND parent = owner ? (::HWND)owner->handle() : default<::HWND>();          //!< Use parent if any
 
         // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
-        Handle = HWnd(Class.Instance, Class.Name, parent, this, nullptr, Style, StyleEx, CharArray<encoding,LEN>(text), Position, Size);
+        Handle = HWnd(Class, *this, parent, Style, StyleEx, default<::HMENU>(), Text, Position, Size);
 
         // [MENU] Attach menu if populated during onCreate(..)
         if (!Menu.empty())
@@ -1745,19 +1818,6 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::setFont
-    //! Set the window font
-    //! 
-    //! \param[in] const& f - New window font
-    //! \param[in] l - Second parameter
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //void setFont(const HFont& f, bool redraw)
-    //{
-    //  // Update shared window font
-    //  send<WindowMessage::SETFONT>((uintptr_t)(Font=f).get(), boolean_cast(redraw));
-    //}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::show
     //! Show or hide the window
     //! 
@@ -1779,17 +1839,17 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to get window text
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN>
-    int32 getText(const CharArray<encoding,LEN>& txt)
-    {
-      // Lookup window text
-      int32 n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(Handle, txt, LEN);
-      if (n || !::GetLastError())
-        return n;
+    //template <unsigned LEN>
+    //int32 getText(const CharArray<encoding,LEN>& txt)
+    //{
+    //  // Lookup window text
+    //  int32 n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(Handle, txt, LEN);
+    //  if (n || !::GetLastError())
+    //    return n;
 
-      // Failed: Error
-      throw platform_error(HERE, "Unable to get window text");
-    }
+    //  // Failed: Error
+    //  throw platform_error(HERE, "Unable to get window text");
+    //}
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::setText
@@ -1801,13 +1861,13 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unable to set window text
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN>
-    void setText(const CharArray<encoding,LEN>& txt)
-    {
-      // Set window text
-      if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt) == FALSE)
-        throw platform_error(HERE, "Unable to set window text");
-    }
+    //template <unsigned LEN>
+    //void setText(const CharArray<encoding,LEN>& txt)
+    //{
+    //  // Set window text
+    //  if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt) == FALSE)
+    //    throw platform_error(HERE, "Unable to set window text");
+    //}
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::update

@@ -53,9 +53,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     CutClipboardCommand()  
       : base(CommandId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
-                                                TargetWnd->setText(c_arr(L"TODO: Cut text to clipboard")); },
+                                                TargetWnd->Text = c_str(L"TODO: Cut text to clipboard"); },
                                   [this] () { if (TargetWnd)
-                                                TargetWnd->setText(c_arr(L"TODO: Restore previous text")); })
+                                                TargetWnd->Text = c_str(L"TODO: Restore previous text"); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------

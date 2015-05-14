@@ -25,7 +25,7 @@ namespace wtl
     Reference = 2,      //!< Reference type
     Value = 4,          //!< Value type
     
-    MutableRef = Mutable|Reference, 
+    MutableReference = Mutable|Reference, 
     MutableValue = Mutable|Value,
     ImmutableValue = Immutable|Value,
     ImmutableReference = Immutable|Reference,
@@ -343,10 +343,10 @@ namespace wtl
     //! 
     //! \return auto - Value  or  immutable reference to value
     /////////////////////////////////////////////////////////////////////////////////////////
-    argument_t operator->() const
+    /*argument_t operator->() const
     {
       return get();
-    }
+    }*/
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator == const
@@ -468,37 +468,46 @@ namespace wtl
       // Update value
       Impl.update(std::forward<ARGS>(args)...);
     }
-
   };
 
+
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Property_t - Encapsulates any value with getter/setters. Provides update verification and change notification.
+  // wtl::operator | 
+  //! Provides bitwise-OR operations on properties that support it
   //! 
-  //! \tparam VALUE - Value type
-  //! \tparam TYPE - Property type 
-  //! \tparam INTERNAL - [optional] Internal representation type
+  //! \tparam IMPL - Property implementation type
+  //! \tparam F1 - [optional] First property friend
+  //! \tparam F2 - [optional] Second property friend
+  //! 
+  //! \param[in,out] &p - Property
+  //! \param[in] v - Value to combine
+  //! \return argument_t - Combination of 'v' and value of 'p'
   /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename VALUE, PropertyType TYPE, typename INTERNAL = VALUE>
-  using Property_t = Property<PropertyImpl<VALUE,TYPE,INTERNAL>>;*/
+  template <typename IMPL, typename F1, typename F2>
+  typename IMPL::argument_t  operator | (Property<IMPL,F1,F2>& p, typename IMPL::argument_t v)
+  {
+    return p.get() | v;
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PropertyChangedEventHandler - Define property 'Value Changed' event delegate type
+  //! wtl::operator |=
+  //! Provides bitwise-OR assignment upon properties that support bitwise-OR operations
   //! 
-  //! \tparam VALUE - Value type
-  //! \tparam PROVIDER - [optional] Property implementation provider type
+  //! \tparam IMPL - Property implementation type
+  //! \tparam F1 - [optional] First property friend
+  //! \tparam F2 - [optional] Second property friend
+  //! 
+  //! \param[in,out] &p - Property
+  //! \param[in] v - Value to combine
+  //! \return Property& - Reference to updated 'p' 
   /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename PROPERTY>
-  using PropertyChangedEventHandler = EventHandler< typename PROPERTY::ChangedEvent >;*/
-    
+  template <typename IMPL, typename F1, typename F2>
+  Property<IMPL,F1,F2>&  operator |= (Property<IMPL,F1,F2>& p, typename IMPL::argument_t v)
+  {
+    return p = p.get() | v;
+  }
 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PropertyChangingEventHandler - Define property 'Value Changing' event delegate type
-  //! 
-  //! \tparam VALUE - Value type
-  //! \tparam PROVIDER - [optional] Property implementation provider type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename PROPERTY>
-  using PropertyChangingEventHandler = EventHandler< typename PROPERTY::ChangingEvent >;*/
   
       
 } // namespace wtl

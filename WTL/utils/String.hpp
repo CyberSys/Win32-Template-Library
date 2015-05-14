@@ -12,6 +12,7 @@
 #include "wtl/traits/EncodingTraits.hpp"        //!< Character encoding
 #include "wtl/utils/Exception.hpp"              //!< Exceptions
 #include <string>                               //!< std::basic_string
+#include <vector>                               //!< std::vector
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -23,6 +24,32 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using String = std::basic_string<encoding_char_t<ENC>>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct String - Character string with an unlimited capacity and variable runtime length
+  //!
+  //! \tparam ENC - Character encoding 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using CharVector = std::vector<encoding_char_t<ENC>>;
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::c_str
+  //! Creates a dynamic string from a character array or string literal
+  //! 
+  //! \tparam char_t - Character type
+  //! \tparam encoding - [optional] Character encoding (if unspecified the default encoding for the character type is used)
+  //!
+  //! \param[in] const* str - Null terminated string
+  //! \return String<ENC> - String containing 'str'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename char_t, Encoding encoding = default_encoding<char_t>::value>
+  String<encoding>  c_str(const char_t* str) 
+  {
+    return String<encoding>(str);
+  };
+
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct String - Character string with an unlimited capacity and variable runtime length

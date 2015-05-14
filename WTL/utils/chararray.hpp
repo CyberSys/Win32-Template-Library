@@ -948,13 +948,16 @@ namespace wtl
 	  }
   };
 
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \var CharArray<ENC,LEN>::EMPTY - Empty character array
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, unsigned LEN>
   const CharArray<ENC,LEN>  CharArray<ENC,LEN>::EMPTY;
   
+
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::c_arr
-  //! Creates an appropriately encoded character array from a statically allocated string buffer
+  //! Creates a character array from a character array or string literal
   //! 
   //! \tparam char_t - Character type
   //! \tparam encoding - [optional] Character encoding (if unspecified the default encoding for the character type is used)
