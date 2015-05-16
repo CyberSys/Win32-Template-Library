@@ -14,7 +14,7 @@
 #include "wtl/utils/Handle.hpp"           //!< Handle
 #include "wtl/utils/Clear.hpp"            //!< Clear
 #include "wtl/utils/Default.hpp"          //!< Default
-#include "wtl/platform/CommandId.hpp"     //!< CommandId
+#include "wtl/platform/ActionId.hpp"     //!< ActionId
 #include "wtl/platform/ResourceId.hpp"    //!< ResourceId
 #include "wtl/platform/MenuFlags.hpp"     //!< MenuItemState
 #include "wtl/gdi/StockObjects.hpp"       //!< StockBrush
@@ -265,7 +265,7 @@ namespace wtl
     //! \param[in] id - Action Id
     //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding> find(CommandId id) const
+    ActionPtr<encoding> find(ActionId id) const
     {
       // Lookup item
       auto pos = Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
@@ -473,7 +473,7 @@ namespace wtl
     //! \param[in] id - Action id
     //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding> find(CommandId id) const
+    ActionPtr<encoding> find(ActionId id) const
     {
       // Search popups for a matching action
       for (auto& popup : Popups)
@@ -491,7 +491,7 @@ namespace wtl
     //! \param[in] id - Group id
     //! \return ActionGroupPtr<encoding> - Shared group pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroupPtr<encoding> find(CommandGroupId id) const
+    ActionGroupPtr<encoding> find(ActionGroupId id) const
     {
       // Search for matching popup
       auto pos = Popups.find_if([id] (const popup_t& popup) { return popup.Group->ident() == id; });
@@ -558,11 +558,11 @@ namespace wtl
       args.Graphics.fill(args.Rect, StockBrush::Blue);
 
       // [GROUP] Draw name
-      if (auto group = find(command_group_id(args.Ident)))
+      if (auto group = find(action_group_id(args.Ident)))
         args.Graphics.write(group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // [ACTION] Draw name
-      else if (auto action = find(command_id(args.Ident)))
+      else if (auto action = find(action_id(args.Ident)))
         args.Graphics.write(action->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
@@ -579,17 +579,17 @@ namespace wtl
     virtual wtl::LResult  onOwnerMeasure(events::OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
       // [GROUP] Measure group name
-      if (auto group = find(command_group_id(args.Ident)))
+      if (auto group = find(action_group_id(args.Ident)))
       {
         args.Size = args.Graphics.measure(group->name());
         cdebug << "onOwnerMeasure() group_id=" << (int32)args.Ident << " size=" << args.Size << endl;
       }
 
       // [ACTION] Measure action name
-      else if (auto action = find(command_id(args.Ident)))
+      else if (auto action = find(action_id(args.Ident)))
       {
         args.Size = args.Graphics.measure(action->name());
-        cdebug << "onOwnerMeasure() command_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+        cdebug << "onOwnerMeasure() action_id=" << (int32)args.Ident << " size=" << args.Size << endl;
       }
         
       // Handled

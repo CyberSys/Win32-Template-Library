@@ -96,12 +96,12 @@ namespace wtl
     using ActionQueue = ActionQueue<ENC>;
     
     //! \struct ActionGroupCollection - Collection of Action groups, indexed by Id
-    struct ActionGroupCollection : std::map<CommandGroupId,ActionGroupPtr<ENC>>
+    struct ActionGroupCollection : std::map<ActionGroupId,ActionGroupPtr<ENC>>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias base - Define base type
-      using base = std::map<CommandGroupId,ActionGroupPtr<ENC>>;
+      using base = std::map<ActionGroupId,ActionGroupPtr<ENC>>;
       
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
@@ -111,7 +111,7 @@ namespace wtl
       //! 
       //! \return ActionPtr<ENC> - Shared Action pointer, possibly empty
       /////////////////////////////////////////////////////////////////////////////////////////
-      ActionPtr<ENC>  find(CommandId id) const 
+      ActionPtr<ENC>  find(ActionId id) const 
       {
         // Lookup action
         for (const auto& group : *this)
@@ -1581,7 +1581,7 @@ namespace wtl
     //!
     //! \throw wtl::logic_error - Action not found
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  execute(CommandId id) 
+    void  execute(ActionId id) 
     { 
       // Lookup action and execute 
       if (auto cmd = ActionGroups.find(id))

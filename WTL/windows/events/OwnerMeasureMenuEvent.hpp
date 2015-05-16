@@ -15,7 +15,7 @@
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
 #include "wtl/windows/MessageEvent.hpp"         //!< EventArgs
-#include "wtl/platform/CommandId.hpp"           //!< CommandId
+#include "wtl/platform/ActionId.hpp"           //!< ActionId
 #include "wtl/utils/Rectangle.hpp"           //!< Rect
 
 //! \namespace wtl - Windows template library
@@ -54,7 +54,7 @@ namespace events
 
   public:
     DeviceContext     Graphics;         //!< Device context
-    CommandId         Ident;            //!< Action identifier
+    ActionId         Ident;            //!< Action identifier
     SizeL             Size;             //!< Item size
     
     // ------------------------------------- CONSTRUCTION -----------------------------------
@@ -71,7 +71,7 @@ namespace events
     /////////////////////////////////////////////////////////////////////////////////////////
     EventArgs(const HWnd& wnd, ::WPARAM w, ::LPARAM l) : Data(*opaque_cast<MeasureData>(l)), 
                                                          Graphics(HDeviceContext(wnd)),
-                                                         Ident(static_cast<CommandId>(Data.itemID)),
+                                                         Ident(static_cast<ActionId>(Data.itemID)),
                                                          Size(Data.itemWidth, Data.itemHeight)
     {
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) == OwnerDrawControl::Menu);

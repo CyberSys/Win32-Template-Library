@@ -48,7 +48,7 @@ namespace wtl
     //! \param[in] appWnd - Main application window
     /////////////////////////////////////////////////////////////////////////////////////////
     ExitProgramCommand(window_t& appWnd) 
-      : base(CommandId::App_Exit, [&appWnd] () { appWnd.post<WindowMessage::CLOSE>(); } ),
+      : base(ActionId::App_Exit, [&appWnd] () { appWnd.post<WindowMessage::CLOSE>(); } ),
         AppWnd(appWnd)
     {}
     

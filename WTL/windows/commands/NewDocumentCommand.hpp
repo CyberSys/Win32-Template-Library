@@ -53,7 +53,7 @@ namespace wtl
     //! \param[in] appWnd - Main application window
     /////////////////////////////////////////////////////////////////////////////////////////
     NewDocumentCommand(window_t& appWnd)  
-      : base(CommandId::File_New, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
+      : base(ActionId::File_New, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------

@@ -11,7 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
 #include "wtl/utils/CharArray.hpp"                //!< CharArray
-#include "wtl/platform/CommandId.hpp"             //!< CommandId
+#include "wtl/platform/ActionId.hpp"             //!< ActionId
 #include "wtl/platform/ResourceId.hpp"            //!< ResourceId
 #include "wtl/resources/StringResource.hpp"       //!< StringResource
 #include "wtl/resources/IconResource.hpp"         //!< IconResource
@@ -120,7 +120,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    CommandId   Ident;           //!< Command Id
+    ActionId   Ident;           //!< Command Id
     icon_t      Icon;            //!< Command Icon
     bool        Permanent;       //!< Whether command is permanent
     decoder_t   NameString;      //!< Name + Description
@@ -136,7 +136,7 @@ namespace wtl
     //! \param[in] id - Command identifier (Defining name, description, and icon resource)
     //! \param[in] exec - Callable target which implements executing command
     /////////////////////////////////////////////////////////////////////////////////////////
-    Action(CommandId id, execute_t exec) : Ident(id),
+    Action(ActionId id, execute_t exec) : Ident(id),
                                            Icon(resource_id(id)),
                                            NameString(resource_id(id)),
                                            Permanent(true),
@@ -152,7 +152,7 @@ namespace wtl
     //! \param[in] exec - Callable target which implements executing command
     //! \param[in] undo - Callable target which implements reverting command
     /////////////////////////////////////////////////////////////////////////////////////////
-    Action(CommandId id, execute_t exec, revert_t undo) : Ident(id),
+    Action(ActionId id, execute_t exec, revert_t undo) : Ident(id),
                                                           Icon(resource_id(id)),
                                                           NameString(resource_id(id)),
                                                           Permanent(false),
@@ -204,9 +204,9 @@ namespace wtl
     // Action::ident const
     //! Get the command identifier
     //! 
-    //! \return CommandId - Command identifier
+    //! \return ActionId - Command identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual CommandId  ident() const 
+    virtual ActionId  ident() const 
     {
       return Ident;
     }

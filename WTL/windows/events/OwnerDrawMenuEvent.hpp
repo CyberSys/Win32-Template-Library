@@ -55,7 +55,7 @@ namespace events
   public:
     OwnerDrawAction   Action;           //!< Type of drawing requested
     DeviceContext     Graphics;         //!< Device context clipped to menu area 
-    CommandId         Ident;            //!< Action id
+    ActionId         Ident;            //!< Action id
     RectL             Rect;             //!< Drawing/update rectangle
     HMenu             Menu;             //!< Control handle
     
@@ -73,7 +73,7 @@ namespace events
     EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
                                         Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
                                         Graphics(Data.hDC),
-                                        Ident(static_cast<CommandId>(Data.itemID)), 
+                                        Ident(static_cast<ActionId>(Data.itemID)), 
                                         Menu((::HMENU)Data.hwndItem, AllocType::WeakRef),
                                         Rect(Data.rcItem)
     {

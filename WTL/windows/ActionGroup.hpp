@@ -22,10 +22,10 @@ namespace wtl
   //! \tparam ENC - Command character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ActionGroup : std::map<CommandId,ActionPtr<ENC>>
+  struct ActionGroup : std::map<ActionId,ActionPtr<ENC>>
   {
     //! \alias base - Define base type
-    using base = std::map<CommandId,ActionPtr<ENC>>;
+    using base = std::map<ActionId,ActionPtr<ENC>>;
 
     //! \alias type - Define own type
     using type = ActionGroup<ENC>;
@@ -51,7 +51,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    CommandGroupId  Ident;           //!< Command Id
+    ActionGroupId  Ident;           //!< Command Id
     decoder_t       NameString;      //!< Name + Description
     icon_t          Icon;            //!< Command Icon
     
@@ -63,7 +63,7 @@ namespace wtl
     //! 
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroup(CommandGroupId id) : Ident(id),
+    ActionGroup(ActionGroupId id) : Ident(id),
                                      NameString(resource_id(id)),
                                      Icon(resource_id(id))
     {}
@@ -75,7 +75,7 @@ namespace wtl
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     //! \param[in] cmds - List of actions
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroup(CommandGroupId id, std::initializer_list<action_t*>&& cmds) : ActionGroup(id)
+    ActionGroup(ActionGroupId id, std::initializer_list<action_t*>&& cmds) : ActionGroup(id)
     {
       // Populate
       for (action_t* c : cmds)
@@ -109,7 +109,7 @@ namespace wtl
     //! 
     //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding>  find(CommandId id) const 
+    ActionPtr<encoding>  find(ActionId id) const 
     {
       // Lookup action & return if found
       auto pos = base::find(id);
@@ -135,9 +135,9 @@ namespace wtl
     // ActionGroup::ident const
     //! Get the group identifier
     //! 
-    //! \return CommandGroupId - Group identifier
+    //! \return ActionGroupId - Group identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual CommandGroupId  ident() const 
+    virtual ActionGroupId  ident() const 
     {
       return Ident;
     }

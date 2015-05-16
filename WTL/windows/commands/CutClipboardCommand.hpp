@@ -52,7 +52,7 @@ namespace wtl
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
     CutClipboardCommand()  
-      : base(CommandId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
+      : base(ActionId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
                                                 TargetWnd->Text = c_str(L"TODO: Cut text to clipboard"); },
                                   [this] () { if (TargetWnd)
                                                 TargetWnd->Text = c_str(L"TODO: Restore previous text"); })

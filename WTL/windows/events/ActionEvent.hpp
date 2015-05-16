@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"             //!< EnumCast
-#include "wtl/platform/CommandId.hpp"         //!< CommandId
+#include "wtl/platform/ActionId.hpp"         //!< ActionId
 #include "wtl/windows/Action.hpp"             //!< ActionSource/ActionState
 #include "wtl/windows/MessageEvent.hpp"       //!< MessageEvent
 
@@ -53,7 +53,7 @@ namespace events
     //! \param[in] w - Originator window id in the LO word, NotificationId in the HO word
     //! \param[in] l - Originator window handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    EventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<CommandId>(LOWORD(w))), 
+    EventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<ActionId>(LOWORD(w))), 
                                         Source(enum_cast<ActionSource>(HIWORD(w)))
     {}
     
@@ -71,7 +71,7 @@ namespace events
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    CommandId      Ident;     //!< Action id 
+    ActionId      Ident;     //!< Action id 
     ActionSource  Source;     //!< How command was raised
   };
   

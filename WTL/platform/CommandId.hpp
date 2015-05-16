@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\platform\CommandIds.hpp
+//! \file wtl\platform\ActionId.hpp
 //! \brief Defines WTL Command Ids
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -18,9 +18,9 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \enum CommandId - Defines GUI Command Ids
+  //! \enum ActionId - Defines GUI Command Ids
   /////////////////////////////////////////////////////////////////////////////////////////
-  enum class CommandId : uint16
+  enum class ActionId : uint16
   {
     File_New = ID_FILE_NEW,			                    //!< 0xE100
     File_Open = ID_FILE_OPEN,			                  //!< 0xE101
@@ -107,36 +107,36 @@ namespace wtl
   
   
   //! Define traits: Non-contiguous Enumeration
-  template <> struct is_attribute<CommandId>  : std::false_type  {};
-  template <> struct is_contiguous<CommandId> : std::false_type  {};
+  template <> struct is_attribute<ActionId>  : std::false_type  {};
+  template <> struct is_contiguous<ActionId> : std::false_type  {};
 
   //! Define limits traits
-  /*template <> struct max_value<CommandId>     : std::integral_constant<CommandId,CommandId::Invalid>   {};
-  template <> struct min_value<CommandId>     : std::integral_constant<CommandId,CommandId::Black>     {};*/
+  /*template <> struct max_value<ActionId>     : std::integral_constant<ActionId,ActionId::Invalid>   {};
+  template <> struct min_value<ActionId>     : std::integral_constant<ActionId,ActionId::Black>     {};*/
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::command_id
+  //! wtl::action_id
   //! Creates a strongly typed command id from any integral or enumeration type
   //!
   //! \tparam TYPE - Integral or enumeration type
   //! 
   //! \param[in] id - Value representing command id
-  //! \return CommandId - CommandId representation of 'id'
+  //! \return ActionId - ActionId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
-  CommandId  command_id(VALUE id)
+  ActionId  action_id(VALUE id)
   {
     // Convert into underlying type then cast to enumeration
-    return enum_cast<CommandId>( static_cast<std::underlying_type_t<CommandId>>(id) );
+    return enum_cast<ActionId>( static_cast<std::underlying_type_t<ActionId>>(id) );
   }
 
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \enum CommandGroupId - Defines GUI Command Ids
+  //! \enum ActionGroupId - Defines GUI Command Ids
   /////////////////////////////////////////////////////////////////////////////////////////
-  enum class CommandGroupId : uint16
+  enum class ActionGroupId : uint16
   {
     File = ID_FILE_GROUP,           //!< File commands group
     Edit = ID_EDIT_GROUP,           //!< Edit commands group
@@ -147,28 +147,28 @@ namespace wtl
   
   
   //! Define traits: Contiguous Enumeration
-  template <> struct is_attribute<CommandGroupId>  : std::false_type  {};
-  template <> struct is_contiguous<CommandGroupId> : std::true_type   {};
+  template <> struct is_attribute<ActionGroupId>  : std::false_type  {};
+  template <> struct is_contiguous<ActionGroupId> : std::true_type   {};
 
   //! Define limits traits
-  template <> struct max_value<CommandGroupId>     : std::integral_constant<CommandGroupId,CommandGroupId::Help>   {};
-  template <> struct min_value<CommandGroupId>     : std::integral_constant<CommandGroupId,CommandGroupId::File>   {};
+  template <> struct max_value<ActionGroupId>     : std::integral_constant<ActionGroupId,ActionGroupId::Help>   {};
+  template <> struct min_value<ActionGroupId>     : std::integral_constant<ActionGroupId,ActionGroupId::File>   {};
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::command_group_id
+  //! wtl::action_group_id
   //! Creates a strongly typed command group id from any integral or enumeration type
   //!
   //! \tparam TYPE - Integral or enumeration type
   //! 
   //! \param[in] id - Value representing command group id
-  //! \return CommandGroupId - CommandGroupId representation of 'id'
+  //! \return ActionGroupId - ActionGroupId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
-  CommandGroupId  command_group_id(VALUE id)
+  ActionGroupId  action_group_id(VALUE id)
   {
     // Convert into underlying type then cast to enumeration
-    return enum_cast<CommandGroupId>( static_cast<std::underlying_type_t<CommandGroupId>>(id) );
+    return enum_cast<ActionGroupId>( static_cast<std::underlying_type_t<ActionGroupId>>(id) );
   }
 }
 
