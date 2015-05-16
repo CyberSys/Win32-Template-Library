@@ -39,7 +39,7 @@
     <ClInclude Include="modules\Application.hpp" />
     <ClInclude Include="modules\Module.hpp" />
     <ClInclude Include="platform\Colours.hpp" />
-    <ClInclude Include="platform\CommandId.hpp" />
+    <ClInclude Include="platform\ActionId.hpp" />
     <ClInclude Include="platform\CommonApi.hpp" />
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />

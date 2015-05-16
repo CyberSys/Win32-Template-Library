@@ -419,9 +419,6 @@
     <ClInclude Include="resources\ResourceBlob.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="platform\CommandId.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="windows\events\OwnerDrawMenuEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
@@ -472,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="utils\ExceptionLog.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\ActionId.hpp">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
