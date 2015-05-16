@@ -9,10 +9,11 @@
 #define WTL_MESSAGE_THREAD_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Console.hpp"                //!< Console
-#include "wtl/utils/Exception.hpp"              //!< exception
 #include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
 #include "wtl/platform/WindowFlags.hpp"         //!< ShowWindowFlags
+#include "wtl/utils/ExceptionLog.hpp"           //!< exception_log
+#include "wtl/utils/Exception.hpp"              //!< exception
+#include "wtl/io/Console.hpp"                   //!< Console
 #include "wtl/windows/MessageBox.hpp"           //!< MessageBox
 
 //! \namespace wtl - Windows template library
@@ -128,21 +129,15 @@ namespace wtl
         onThreadExit();
         return ret;
       }
-      catch (wtl::exception& e)
-      {
-        cdebug.log(HERE, e);
-        errorBox(Window, c_arr("Program Error"), e);
-        return -1;
-      }
       catch (std::exception& e)
       {
-        cdebug.log(HERE, e);
+        cdebug << exception_log(HERE,e,"Unable to dispatch message") << endl;
         errorBox(Window, c_arr("Program Error"), e);
         return -1;
       }
       catch (...)
       {
-        cdebug << wtl::Cons::Error << "Unknown exception" << wtl::endl;
+        cdebug << exception_log(HERE,"Unable to dispatch message") << endl;
         errorBox(Window, c_arr("Program Error"), c_arr("An unrecognised terminal error has occurred, the program will now exit."));
         return -2;
       }

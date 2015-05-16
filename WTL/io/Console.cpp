@@ -1,11 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\utils\Console.cpp
+//! \file wtl\io\Console.cpp
 //! \brief Provides debug console and logfile
 //! \date 7 March 2015
 //! \author Nick Crowley
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-
 #include "Console.hpp"
 
 //! \namespace wtl - Windows template library

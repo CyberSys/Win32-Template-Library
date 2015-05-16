@@ -15,6 +15,7 @@
     <ClInclude Include="casts\BooleanCast.hpp" />
     <ClInclude Include="casts\ConstExprCast.hpp" />
     <ClInclude Include="casts\EnumCast.hpp" />
+    <ClInclude Include="casts\NativeCast.hpp" />
     <ClInclude Include="casts\OpaqueCast.hpp" />
     <ClInclude Include="casts\StaticPtrCast.hpp" />
     <ClInclude Include="Constants.h" />
@@ -22,6 +23,7 @@
     <ClInclude Include="gdi\DeviceContext.hpp" />
     <ClInclude Include="io\BinaryReader.hpp" />
     <ClInclude Include="io\BinaryWriter.hpp" />
+    <ClInclude Include="io\Console.hpp" />
     <ClInclude Include="io\LocalFileStream.hpp" />
     <ClInclude Include="io\LogFileWriter.hpp" />
     <ClInclude Include="io\MemoryStream.hpp" />
@@ -74,6 +76,10 @@
     <ClInclude Include="traits\WindowClassTraits.hpp" />
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="utils\Array.hpp" />
+    <ClInclude Include="utils\DebugInfo.hpp" />
+    <ClInclude Include="utils\ExceptionLog.hpp" />
+    <ClInclude Include="utils\Iterator.hpp" />
     <ClInclude Include="utils\Point.hpp" />
     <ClInclude Include="utils\Rectangle.hpp" />
     <ClInclude Include="utils\Size.hpp" />
@@ -90,7 +96,6 @@
     <ClInclude Include="utils\Adapters.hpp" />
     <ClInclude Include="utils\Bitset.hpp" />
     <ClInclude Include="utils\chararray.hpp" />
-    <ClInclude Include="utils\console.hpp" />
     <ClInclude Include="utils\DynamicArray.hpp" />
     <ClInclude Include="utils\Exception.hpp" />
     <ClInclude Include="utils\FixedArray.hpp" />
@@ -151,11 +156,11 @@
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp" />
     <ClCompile Include="gdi\StockObjects.cpp" />
+    <ClCompile Include="io\Console.cpp" />
     <ClCompile Include="modules\Module.cpp" />
     <ClCompile Include="platform\DrawingFlags.cpp" />
     <ClCompile Include="platform\Locale.cpp" />
     <ClCompile Include="traits\EncodingTraits.cpp" />
-    <ClCompile Include="utils\Console.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>

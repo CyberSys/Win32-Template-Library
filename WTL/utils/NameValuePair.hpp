@@ -9,6 +9,8 @@
 #define WTL_NAME_VALUE_PAIR_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/io/Console.hpp"       //!< Console
+#include "wtl/utils/Point.hpp"      //!< Point
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -70,6 +72,44 @@ namespace wtl
     return NameValuePair<VALUE>(name, value);
   }
   
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Writes a name-value pair to the debug console, with the name in yellow and value in white
+  //!
+  //! \tparam VALUE - Value type
+  //! 
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& value - Name-Value pair representing a named value
+  //! \return Console& : Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE>
+  enable_if_is_not_t<VALUE,const char*,Console&>  operator << (Console& c, const NameValuePair<VALUE>& value)
+  {
+    // Write: Name=Value
+    return c << Cons::Yellow << value.Name << '='
+             << Cons::White  << value.Value;
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Writes a name-value pair to the debug console, with the name in yellow and value in white
+  //!
+  //! \tparam VALUE - const char*
+  //! 
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& value - Name-Value pair representing a named value
+  //! \return Console& : Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE>
+  Console& operator << (Console& c, const NameValuePair<const char*>& value)
+  {
+    // Write: Name='Value'
+    return c << Cons::Yellow << value.Name << "='"
+             << Cons::White  << value.Value 
+             << Cons::Yellow << "'";
+  }
+
 }
 
 

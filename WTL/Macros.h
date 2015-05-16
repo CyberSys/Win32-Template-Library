@@ -53,11 +53,11 @@
 // --------------------------------------- CONSTRUCTION SEMANTICS -----------------------------------------
 // --------------------------------------------------------------------------------------------------------
 
+//! \def DEFAULT_CTOR - Enables trivial default-contructor
+#define DEFAULT_CTOR(type)          type() = default
+
 //! \def DISABLE_CTOR - Disables trivial default-contructor
 #define DISABLE_CTOR(type)          type() = delete
-
-//! \def ENABLE_CTOR - Enables trivial default-contructor
-#define ENABLE_CTOR(type)           type() = default
 
 // --------------------------------------------------------------------------------------------------------
 // ---------------------------------------- CONSTEXPR SEMANTICS -------------------------------------------

@@ -12,6 +12,7 @@
 #include "wtl/traits/EnumTraits.hpp"
 #include "wtl/traits/EncodingTraits.hpp"
 #include "wtl/utils/CharArray.hpp"
+#include "wtl/io/Console.hpp"       //!< Console
 #include <string>
 
 //! \namespace wtl - Windows template library
@@ -489,7 +490,22 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   };
-
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator<<
+  //! Writes a path to the debugging console in yellow, then resets the output colour
+  //! 
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& path - Path
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  inline Console& operator<< (Console& c, const Path<ENC>& path)
+  { 
+    return c << Cons::Yellow << path.c_str() << Cons::Reset;
+  }
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct AppPath - Represents the path of a file/folder in the application folder

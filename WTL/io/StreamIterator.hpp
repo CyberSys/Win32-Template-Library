@@ -9,6 +9,7 @@
 #define WTL_STREAM_ITERATOR_HPP
 
 #include "wtl/WTL.hpp"
+#include <iterator>           //!< Iterator traits
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -112,7 +113,20 @@ namespace wtl
 	  stream_t&  Stream;	// Output stream
   };
   
-
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::stream_iterator
+  //! Creates a stream iterator
+  //! 
+  //! \tparam T- Stream type
+  //! \param[in,out] &s - Input stream
+  //! \return StreamIterator<T> - Stream iterator
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  StreamIterator<T> stream_iterator(T& s)
+  {
+    return StreamIterator<T>(s)
+  }
 }
 
 

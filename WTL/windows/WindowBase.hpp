@@ -11,15 +11,17 @@
 #include "wtl/WTL.hpp"
 #include "wtl/casts/BooleanCast.hpp"                        //!< BooleanCast
 #include "wtl/casts/EnumCast.hpp"                           //!< EnumCast
+#include "wtl/casts/NativeCast.hpp"                         //!< NativeCast
 #include "wtl/casts/OpaqueCast.hpp"                         //!< OpaqueCast
 #include "wtl/traits/EncodingTraits.hpp"                    //!< Encoding
 #include "wtl/traits/WindowTraits.hpp"                      //!< HWnd
 #include "wtl/utils/Exception.hpp"                          //!< exception
+#include "wtl/utils/ExceptionLog.hpp"                       //!< exception_log
 #include "wtl/utils/List.hpp"                               //!< List
 #include "wtl/utils/Default.hpp"                            //!< Default
 #include "wtl/utils/CharArray.hpp"                          //!< CharArray
-#include "wtl/utils/Console.hpp"                            //!< Console
 #include "wtl/utils/Zero.hpp"                               //!< Zero
+#include "wtl/io/Console.hpp"                               //!< Console
 #include "wtl/platform/ResourceId.hpp"                      //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"                     //!< WindowStyle
 #include "wtl/platform/CommonApi.hpp"                       //!< send_message
@@ -350,7 +352,7 @@ namespace wtl
           argument_t rc;    //!< Client rectangle
         
           // Query & return client rectangle
-          if (!::GetClientRect(this->Window, (::RECT*)rc))
+          if (!::GetClientRect(this->Window, &native_cast(rc)))
             throw platform_error(HERE, "Unable to query window rectangle");
           return rc;
         }
@@ -378,7 +380,7 @@ namespace wtl
         argument_t wnd(client);   //!< New window rectangle
 
         // Calculate window rectangle 
-        if (!::AdjustWindowRectEx((::RECT*)wnd, 
+        if (!::AdjustWindowRectEx(&native_cast(wnd), 
                                   enum_cast(this->Window.Style.get()), 
                                   boolean_cast(!this->Window.Menu.empty()), 
                                   enum_cast(this->Window.StyleEx.get())))
@@ -838,7 +840,7 @@ namespace wtl
           argument_t wnd;    //!< Window rectangle
         
           // Query & return window rectangle
-          if (!::GetWindowRect(this->Window, (::RECT*)wnd))
+          if (!::GetWindowRect(this->Window, &native_cast(wnd)))
             throw platform_error(HERE, "Unable to query window rectangle");
           return wnd;
         }
@@ -1371,7 +1373,7 @@ namespace wtl
       // [ERROR] Exception thrown by handler
       catch (wtl::exception& e)
       {
-        cdebug.log(HERE, e);
+        cdebug << exception_log(HERE,e,"Unable to route message") << endl;
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
@@ -1775,7 +1777,7 @@ namespace wtl
       }
       catch (wtl::exception& e)
       {
-        cdebug.log(HERE, e);
+        cdebug << exception_log(HERE,e,"Unable to route message") << endl;
         
         // [ERROR] Unhandled
         return MsgRoute::Unhandled;

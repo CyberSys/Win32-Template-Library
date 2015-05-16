@@ -43,7 +43,7 @@ namespace wtl
     
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
-    ENABLE_CTOR(ActionQueue);           //!< Can be default-constructed
+    DEFAULT_CTOR(ActionQueue);           //!< Can be default-constructed
     
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:

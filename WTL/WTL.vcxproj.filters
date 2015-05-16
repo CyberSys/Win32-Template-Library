@@ -98,9 +98,6 @@
     <ClInclude Include="utils\chararray.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\console.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\DynamicArray.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -458,11 +455,26 @@
     <ClInclude Include="platform\WindowMessage.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="io\Console.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="casts\NativeCast.hpp">
+      <Filter>Casts</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\DebugInfo.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Iterator.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Array.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\ExceptionLog.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="utils\Console.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="gdi\StockObjects.cpp">
       <Filter>GDI</Filter>
     </ClCompile>
@@ -480,6 +492,9 @@
     </ClCompile>
     <ClCompile Include="platform\DrawingFlags.cpp">
       <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="io\Console.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

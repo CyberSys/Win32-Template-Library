@@ -9,9 +9,9 @@
 #define WTL_RECT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Point.hpp"
-#include "wtl/utils/Size.hpp"
-#include <type_traits>          //!< std::enable_if
+#include "wtl/utils/Point.hpp"          //!< Point
+#include "wtl/utils/Size.hpp"           //!< Size
+#include "wtl/utils/DebugInfo.hpp"      //!< DebugInfo
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -42,9 +42,6 @@ namespace wtl
     //! \var EMPTY - Sentinel empty rectangle
     static const type EMPTY;
 
-    //! \var native - Whether binary compatible with ::RECT
-    static constexpr bool native = sizeof(value_t) == sizeof(long32);
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     value_t  left,        //!< Left extent
@@ -292,31 +289,6 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT& const 
-    //! Implicit user conversion to win32 ::RECT reference
-    //! 
-    //! \return const ::RECT& - Immutable reference to win32 ::RECT
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    operator const ::RECT& () const
-    {
-      return *reinterpret_cast<const ::RECT*>(this);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT* const 
-    //! Explicit user conversion to win32 ::RECT pointer
-    //! 
-    //! \return const ::RECT* - Immutable pointer to win32 ::RECT
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    explicit operator const ::RECT* () const
-    {
-      return reinterpret_cast<const ::RECT*>(this);
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::operator+ const
     //! Create new rectangle from adding a horizontal and vertical offset 
     //! 
@@ -326,7 +298,7 @@ namespace wtl
     type  operator+ (const point_t&  pt) const
     {
       return type(left + static_cast<value_t>(pt.x),  top + static_cast<value_t>(pt.y),
-                    right + static_cast<value_t>(pt.x), bottom + static_cast<value_t>(pt.y));
+                  right + static_cast<value_t>(pt.x), bottom + static_cast<value_t>(pt.y));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -339,7 +311,7 @@ namespace wtl
     type  operator- (const point_t&  pt) const
     {
       return type(left - static_cast<value_t>(pt.x),  top - static_cast<value_t>(pt.y),
-                    right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
+                  right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -392,33 +364,11 @@ namespace wtl
     {
       return *this = *this - pt;
     }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT& 
-    //! Implicit user conversion to win32 ::RECT reference
-    //! 
-    //! \return ::RECT& - Mutable reference to win32 ::RECT
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    operator ::RECT& ()
-    {
-      return *reinterpret_cast<::RECT*>(this);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT*
-    //! Explicit user conversion to win32 ::RECT pointer
-    //! 
-    //! \return ::RECT* - Mutable pointer to win32 ::RECT
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    explicit operator ::RECT* ()
-    {
-      return reinterpret_cast<::RECT*>(this);
-    }
   };
   
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \var Rect<T>::EMPTY - 'Empty' sentinel value 
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   const Rect<T>  Rect<T>::EMPTY;
 
@@ -430,7 +380,39 @@ namespace wtl
   using RectF = Rect<float>;
   
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct native_conversion<32-bit>> - Defines a conversion from Rect<32-bit> to ::RECT
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct native_conversion<Rect<T>, enable_if_sizeof_t<T,int32>> 
+  {
+    //! \alias input_t - Define input type
+    using input_t = Rect<T>;
 
+    //! \alias result_t - Define output type
+    using result_t = ::RECT;
+  };
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a Rect to the debug console
+  //!
+  //! \tparam T - Rect field type
+  //! 
+  //! \param[in,out] &c - Debugging console
+  //! \param[in] const &rc - Rect
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  Console& operator << (Console& c, const Rect<T>& rc)
+  {
+    return c << debug_info("Rect", name_value_pair("left", rc.left), 
+                                   name_value_pair("top", rc.top),
+                                   name_value_pair("right", rc.right),
+                                   name_value_pair("bottom", rc.bottom));
+  };
 
 } // WTL namespace
 

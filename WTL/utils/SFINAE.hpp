@@ -106,6 +106,29 @@ namespace wtl
   template <typename T, typename RET = void>
   using enable_if_integral_t = std::enable_if_t<std::is_integral<T>::value, RET>;
 
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_is_t - Defines an SFINAE expression requiring a specific type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam U - Required type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U, typename RET = void>
+  using enable_if_is_t = std::enable_if_t<std::is_same<T,U>::value, RET>;
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_is_not_t - Defines an SFINAE expression blocking a specific type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam U - Required type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U, typename RET = void>
+  using enable_if_is_not_t = std::enable_if_t<!std::is_same<T,U>::value, RET>;
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_not_pod_t - Defines an SFINAE expression requiring an object of class type
@@ -125,6 +148,17 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename RET = void>
   using enable_if_pod_t = std::enable_if_t<std::is_pod<T>::value, RET>;
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_sizeof_t - Defines an SFINAE expression requiring a type of exact size
+  //! 
+  //! \tparam T - Input type
+  //! \tparam SZ - Type defining the required size
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename SZ, typename RET = void>
+  using enable_if_sizeof_t = std::enable_if_t<sizeof(T) == sizeof(SZ), RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////

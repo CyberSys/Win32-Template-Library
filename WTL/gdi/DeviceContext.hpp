@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"                 //!< EnumCast
+#include "wtl/casts/NativeCast.hpp"               //!< NativeCast
 #include "wtl/utils/Handle.hpp"                   //!< Handle
 #include "wtl/utils/CharArray.hpp"                //!< CharArray
 #include "wtl/utils/LengthOf.hpp"                 //!< LengthOf
@@ -305,7 +306,7 @@ namespace wtl
     void  fill(const Rect<T>& rc, const HBrush& brush)
     {
       // Fill target rectangle with custom brush
-      if (::FillRect(Handle, (const ::RECT*)rc, brush) == False)
+      if (::FillRect(Handle, &native_cast(rc), brush) == False)
         throw platform_error(HERE, "Unable to fill custom rect");
     }
     
@@ -327,7 +328,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), (::SIZE*)sz) == False)
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -351,7 +352,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), sz) == False)
+      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -524,7 +525,7 @@ namespace wtl
     int32 write(const encoding_char_t<ENC>* txt, int32 len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, (::RECT*)rc, enum_cast(flags)))
+      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
         return height;
 
       // Failure

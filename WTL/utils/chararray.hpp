@@ -9,14 +9,24 @@
 #define WTL_CHAR_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/FixedArray.hpp"
-#include "wtl/utils/Helpers.hpp"
-#include "wtl/traits/EncodingTraits.hpp"
+#include "wtl/utils/DynamicArray.hpp"           //!< Array
+#include "wtl/utils/String.hpp"                 //!< String utilities
+#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding 
+#include "wtl/io/Console.hpp"                   //!< Console
+#include <vector>                               //!< std::vector
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct CharVector - Character vector
+  //!
+  //! \tparam ENC - Character encoding 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using CharVector = std::vector<encoding_char_t<ENC>>;
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct CharArray - Fixed capacity character array with a dynamic runtime length, supporting any character type and encoding 
   //!
@@ -972,6 +982,27 @@ namespace wtl
   {
     return CharArray<encoding,capacity>(str);
   };
+
+
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Write a character array to the console
+  //!
+  //! \tparam ENC - Character encoding 
+  //! \tparam LENGTH - Character buffer capacity
+  //!
+  //! \param[in,out] &s - Console
+  //! \param[in] const &r - Character array
+  //! \return Console& : Reference to console
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, unsigned LENGTH>
+  Console& operator << (Console& c, const CharArray<ENC,LENGTH>& r) 
+  {
+    // Write text and length
+    return c << debug_info("CharArray", name_value_pair("Text", r.c_str()), 
+                                        name_value_pair("Length", r.size()) );
+  }
 
   
   /////////////////////////////////////////////////////////////////////////////////////////

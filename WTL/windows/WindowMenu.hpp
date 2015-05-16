@@ -580,11 +580,17 @@ namespace wtl
     { 
       // [GROUP] Measure group name
       if (auto group = find(command_group_id(args.Ident)))
+      {
         args.Size = args.Graphics.measure(group->name());
+        cdebug << "onOwnerMeasure() group_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+      }
 
       // [ACTION] Measure action name
       else if (auto action = find(command_id(args.Ident)))
+      {
         args.Size = args.Graphics.measure(action->name());
+        cdebug << "onOwnerMeasure() command_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+      }
         
       // Handled
       return 0;

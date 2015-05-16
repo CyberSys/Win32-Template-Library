@@ -11,12 +11,94 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"        //!< Character encoding
 #include "wtl/utils/Exception.hpp"              //!< Exceptions
+#include "wtl/io/Console.hpp"                   //!< Console
 #include <string>                               //!< std::basic_string
-#include <vector>                               //!< std::vector
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strlen_t
+  //! Get length of narrow character string 
+  //! 
+  //! \param[in] const* str - Narrow character string
+  //! \return size_t - Length in characters
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline size_t strlen_t(const char* str)
+  {
+    return strlen(str);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strlen_t
+  //! Get length of wide character string 
+  //! 
+  //! \param[in] const* str - Wide character string
+  //! \return size_t - Length in characters
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline size_t strlen_t(const wchar_t* str)
+  {
+    return wcslen(str);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcmp_t
+  //! Case sensitive narrow character comparison
+  //! 
+  //! \param[in] const* a - Narrow char string
+  //! \param[in] const* b - Another narrow char string
+  //! \return int32 - -1 if less, 0 if equal, 1 if greater
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline int32 strcmp_t(const char* a, const char* b)
+  {
+    return strcmp(a,b);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcmp_t
+  //! Case sensitive wide character comparison
+  //! 
+  //! \param[in] const* a - Wide char string
+  //! \param[in] const* b - Another wide char string
+  //! \return int32 - -1 if less, 0 if equal, 1 if greater
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline int32 strcmp_t(const wchar_t* a, const wchar_t* b)
+  {
+    return wcscmp(a,b);
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcpy_t
+  //! Copy narrow character string
+  //! 
+  //! \param[in] *dest - Narrow char string
+  //! \param[in] const* src - Another narrow char string
+  //! \return char* - Returns 'dest'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline char* strcpy_t(char* dest, const char* src)
+  {
+    return strcpy(dest,src);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::strcpy_t
+  //! Copy wide character string
+  //! 
+  //! \param[in] *dest - Wide char string
+  //! \param[in] const* src - Another wide char string
+  //! \return wchar_t* - Returns 'dest'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  inline wchar_t* strcpy_t(wchar_t* dest, const wchar_t* src)
+  {
+    return wcscpy(dest,src);
+  }
+  
+
+
+
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct String - Character string with an unlimited capacity and variable runtime length
   //!
@@ -25,32 +107,6 @@ namespace wtl
   template <Encoding ENC>
   using String = std::basic_string<encoding_char_t<ENC>>;
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct String - Character string with an unlimited capacity and variable runtime length
-  //!
-  //! \tparam ENC - Character encoding 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using CharVector = std::vector<encoding_char_t<ENC>>;
-
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::c_str
-  //! Creates a dynamic string from a character array or string literal
-  //! 
-  //! \tparam char_t - Character type
-  //! \tparam encoding - [optional] Character encoding (if unspecified the default encoding for the character type is used)
-  //!
-  //! \param[in] const* str - Null terminated string
-  //! \return String<ENC> - String containing 'str'
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename char_t, Encoding encoding = default_encoding<char_t>::value>
-  String<encoding>  c_str(const char_t* str) 
-  {
-    return String<encoding>(str);
-  };
-
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct String - Character string with an unlimited capacity and variable runtime length
   //!
@@ -222,6 +278,39 @@ namespace wtl
   //  };
 
   //};
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::c_str
+  //! Creates a dynamic string from a character array or string literal
+  //! 
+  //! \tparam char_t - Character type
+  //! \tparam encoding - [optional] Character encoding (if unspecified the default encoding for the character type is used)
+  //!
+  //! \param[in] const* str - Null terminated string
+  //! \return String<ENC> - String containing 'str'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename char_t, Encoding encoding = default_encoding<char_t>::value>
+  String<encoding>  c_str(const char_t* str) 
+  {
+    return String<encoding>(str);
+  };
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Writes a STL string to the debugging console
+  //! 
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& s - String
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  inline Console& operator << (Console& c, const std::string& s)
+  { 
+    return c << s.c_str();
+  }
+  
+
 
 } // WTL namespace
 

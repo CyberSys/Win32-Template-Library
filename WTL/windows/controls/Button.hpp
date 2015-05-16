@@ -176,9 +176,9 @@ namespace controls
         // [UNHANDLED] Return result & routing
         return base::routeMessage(message, w, l);
       }
-      catch (wtl::exception& e)
+      catch (exception& e)
       {
-        cdebug.log(HERE, e);
+        cdebug << exception_log(HERE,e,"Unable to route message") << endl;
         
         // [ERROR] Unhandled
         return MsgRoute::Unhandled;
@@ -199,7 +199,7 @@ namespace controls
     virtual LResult  onOwnerDraw(events::OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       // Draw background
-      args.Graphics.fill(args.Rect, wtl::StockBrush::Green);
+      args.Graphics.fill(args.Rect, StockBrush::Green);
 
       // Handled
       return 0;

@@ -9,7 +9,8 @@
 #define WTL_POINT_HPP
 
 #include "wtl/WTL.hpp"
-#include <type_traits>          //!< std::enable_if
+#include "wtl/casts/NativeCast.hpp"    //!< NativeCast
+#include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -32,9 +33,6 @@ namespace wtl
     
     //! \var EMPTY - Empty sentinel value 
     static const type EMPTY;
-    
-    //! \var native - Whether binary compatible with ::POINT
-    static constexpr bool native = sizeof(value_t) == sizeof(long32);
     
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -171,33 +169,12 @@ namespace wtl
     {
       *this = default<type>();
     }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::POINT& 
-    //! Implicit user conversion to win32 ::POINT reference
-    //! 
-    //! \return ::POINT& - Mutable reference to win32 ::POINT
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    operator ::POINT& ()
-    {
-      return *reinterpret_cast<::POINT*>(this);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::POINT*
-    //! Explicit user conversion to win32 ::POINT pointer
-    //! 
-    //! \return ::POINT* - Mutable pointer to win32 ::POINT
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    explicit operator ::POINT* ()
-    {
-      return reinterpret_cast<::POINT*>(this);
-    }
   };
   
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \var Point<T>::EMPTY - 'Empty' sentinel value 
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   const Point<T>  Point<T>::EMPTY;
 
@@ -206,11 +183,48 @@ namespace wtl
   
   //! \alias PointF - Point using floating point fields
   using PointF = Point<float>;
+  
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct native_conversion<Point<32-bit>> - Defines a conversion from Point<32-bit> to ::POINT
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct native_conversion<Point<T>, enable_if_sizeof_t<T,long32>> 
+  {
+    //! \alias input_t - Define input type
+    using input_t = Point<T>;
 
+    //! \alias result_t - Define output type
+    using result_t = ::POINT;
+  };
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct native_conversion<Point<16-bit>> - Defines a conversion from Point<16-bit> to ::COORD
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct native_conversion<Point<T>, enable_if_sizeof_t<T,int16>> 
+  {
+    //! \alias input_t - Define input type
+    using input_t = Point<T>;
 
-} // WTL namespace
+    //! \alias result_t - Define output type
+    using result_t = ::COORD;
+  };
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct native_conversion<::COORD> - Defines a conversion from ::COORD to Point<int16>
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename U> 
+  struct native_conversion<::COORD,U> 
+  {
+    //! \alias input_t - Define input type
+    using input_t = ::COORD;
 
+    //! \alias result_t - Define output type
+    using result_t = Point<int16>;
+  };
+}
 
 
 #endif // WTL_POINT_HPP

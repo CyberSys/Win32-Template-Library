@@ -9,7 +9,9 @@
 #define WTL_SIZE_HPP
 
 #include "wtl/WTL.hpp"
-#include <type_traits>          //!< std::enable_if
+#include "wtl/casts/NativeCast.hpp"    //!< NativeCast
+#include "wtl/utils/DebugInfo.hpp"     //!< DebugInfo
+#include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -34,9 +36,6 @@ namespace wtl
     //! \var EMPTY - Empty sentinel value 
     static const type EMPTY;
 
-    //! \var native - Whether binary compatible with ::SIZE
-    static constexpr bool native = sizeof(value_t) == sizeof(long32);
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     value_t  width,        //!< Width extent
@@ -134,33 +133,11 @@ namespace wtl
       *this = EMPTY;
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::SIZE& 
-    //! Implicit user conversion to win32 ::SIZE reference
-    //! 
-    //! \return ::SIZE& - Mutable reference to win32 ::SIZE
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    operator ::SIZE& ()
-    {
-      return *reinterpret_cast<::SIZE*>(this);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::SIZE*
-    //! Explicit user conversion to win32 ::SIZE pointer
-    //! 
-    //! \return ::SIZE* - Mutable pointer to win32 ::SIZE
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<native>>
-    explicit operator ::SIZE* ()
-    {
-      return reinterpret_cast<::SIZE*>(this);
-    }
   };
   
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \var Size<T>::EMPTY - 'Empty' sentinel value 
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   const Size<T>  Size<T>::EMPTY;
 
@@ -171,6 +148,38 @@ namespace wtl
   //! \alias SizeF - Size using floating point fields
   using SizeF = Size<float>;
 
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct native_conversion<32-bit>> - Defines a conversion from Size<32-bit> to ::SIZE
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  struct native_conversion<Size<T>, enable_if_sizeof_t<T,int32>> 
+  {
+    //! \alias input_t - Define input type
+    using input_t = Size<T>;
+
+    //! \alias result_t - Define output type
+    using result_t = ::SIZE;
+  };
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a Size to the debug console
+  //!
+  //! \tparam T - Size field type
+  //! 
+  //! \param[in,out] &c - Debugging console
+  //! \param[in] const &sz - Size
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  Console& operator << (Console& c, const Size<T>& sz)
+  {
+    return c << debug_info("Size", name_value_pair("width", sz.width), 
+                                   name_value_pair("height", sz.height));
+  };
 
 
 } // WTL namespace

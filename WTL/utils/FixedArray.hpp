@@ -10,8 +10,13 @@
 #define WTL_FIXED_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/DynamicArray.hpp"
-#include "wtl/utils/Range.hpp"
+#include "wtl/utils/Array.hpp"              //!< Array
+#include "wtl/utils/Exception.hpp"          //!< Exceptions
+#include "wtl/io/Console.hpp"               //!< Debug console
+#include <iterator>                         //!< std::iterator
+#include <functional>                       //!< std::
+#include <algorithm>                        //!< std::equals,std::find_if,etc.
+#include <initializer_list>                 //!< std::initializer_list
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -1791,99 +1796,6 @@ namespace wtl
       return reinterpret_cast<value_type (&)[length]>(*Data);
     }
   };
-
-  
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::delimited_range
-  //! Makes an delimited range for reading/writing elements to/from an stream 
-  //!
-  //! \tparam ITERATOR - Iterator type
-  //!
-  //! \param[in] const &a - Array
-  //! \param[in] delimiter - Delimiter character
-  //! \return delimited_range_t<ITERATOR> : Pair containing an array and delimiter character
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ITERATOR>
-  delimited_range_t<ITERATOR>  delimited_range(ITERATOR first, ITERATOR last, char delimiter)
-  {
-    return {first, last, delimiter};
-  }
-
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::delimited_range
-  //! Makes an delimited range pair for reading/writing elements to/from an stream 
-  //!
-  //! \tparam D - Array element type
-  //! \tparam L - Array capacity
-  //! \tparam S - Whether array can be resized
-  //!
-  //! \param[in] const &a - Array
-  //! \param[in] delimiter - Delimiter character
-  //! \return delimited_range_t<ITERATOR> : Pair containing an array and delimiter character
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename D, unsigned L, bool S>
-  delimited_range_t<typename Array<D,L,S>::iterator>  delimited_range(Array<D,L,S>& container, char delimiter)
-  {
-    return {container.begin(), container.end(), delimiter};
-  }
-  
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::delimited_range
-  //! Makes an delimited range pair for reading/writing elements to/from an stream 
-  //!
-  //! \tparam D - Array element type
-  //! \tparam L - Array capacity
-  //! \tparam S - Whether array can be resized
-  //!
-  //! \param[in] const &a - Array
-  //! \param[in] delimiter - Delimiter character
-  //! \return delimited_range_t<ITERATOR> : Pair containing an array and delimiter character
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename D, unsigned L, bool S>
-  delimited_range_t<typename Array<D,L,S>::const_iterator>  delimited_range(const Array<D,L,S>& container, char delimiter)
-  {
-    return {container.begin(), container.end(), delimiter};
-  }
-
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::delimited_range
-  //! Makes an delimited range pair for reading/writing elements to/from an stream 
-  //!
-  //! \tparam D - Array element type
-  //! \tparam L - Array capacity
-  //! \tparam S - Whether array can be resized
-  //!
-  //! \param[in] const &a - Array
-  //! \param[in] delimiter - Delimiter character
-  //! \return delimited_range_t<ITERATOR> : Pair containing an array and delimiter character
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename CONTAINER>
-  auto  delimited_range(CONTAINER& arr, char delimiter) -> decltype(delimited_range(arr.begin(), arr.end(), delimiter)) 
-  {
-    return {arr, delimiter};
-  }*/
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::delimit_array
-  //! Makes an {array,delimiter} pair for reading/writing arrays to/from an stream 
-  //!
-  //! \tparam D - Array element type
-  //! \tparam L - Array capacity
-  //! \tparam S - Whether array can be resized
-  //!
-  //! \param[in] const &a - Array
-  //! \param[in] delimiter - Delimiter character
-  //! \return std::pair<const Array<D,L,S>&, char> : Pair containing an array and delimiter character
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename D, uint32 L, bool S>
-  std::pair<const Array<D,L,S>&, char>  delimit_array(const Array<D,L,S>& arr, char delimiter)
-  {
-    return {arr, delimiter};
-  }*/
 
   
 

@@ -9,8 +9,9 @@
 #define WTL_DYNAMIC_ARRAY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Allocator.hpp"          //!< StaticAlloc
+#include "wtl/utils/Array.hpp"              //!< Array
 #include "wtl/utils/Exception.hpp"          //!< Exceptions
+#include "wtl/io/Console.hpp"               //!< Debug console
 #include <iterator>                         //!< std::iterator
 #include <functional>                       //!< std::
 #include <algorithm>                        //!< std::equals,std::find_if,etc.
@@ -19,32 +20,6 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct array_traits - Defines array traits
-  //! 
-  //! \tparam DATA - Type used to specialize traits
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename DATA>
-  struct array_traits
-  {
-    //! typedef alloc_t - Element allocator 
-    typedef static_alloc<DATA> alloc_t;
-  };
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Array - Statically allocated, variable length, fixed capacity array. 
-  //! This container is designed to be compatible with the standard template library algorithms.
-  //! 
-  //! \tparam DATA - Type of each element
-  //! \tparam LENGTH - Maximum number of elements within the array
-  //! \tparam DYNAMIC - Whether array can have a variable number of elements
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename DATA, uint32 LENGTH, bool DYNAMIC>
-  struct Array
-  { /*Undefined*/ };
-
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias DynamicArray - Statically allocated fixed capacity array with variable runtime length 
   //! 

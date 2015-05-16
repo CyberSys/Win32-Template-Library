@@ -9,8 +9,10 @@
 #define WTL_BITSET_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Default.hpp"
-#include "wtl/utils/DynamicArray.hpp"
+#include "wtl/utils/Default.hpp"            //!< Default
+#include "wtl/utils/DynamicArray.hpp"       //!< Array
+#include "wtl/utils/Range.hpp"              //!< delimited_range
+#include "wtl/utils/DebugInfo.hpp"          //!< DebugInfo
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -178,15 +180,15 @@ namespace wtl
     // Bitset::flatten const
     //! Generates an array containing the zero-based indicies of any high bits 
     //!
-    //! \param[in,out] &b - Array to populate with high-bit indicies
-    //! \return BitArray : Reference to 'b'
-    //! 
-    //! \remarks The array is not cleared before it is populated
+    //! \return BitArray : Array containing indicies of high bits
     //////////////////////////////////////////////////////////////////////////////////////////
-    BitArray& flatten(BitArray& bits) const
+    BitArray flatten() const
     {
+      BitArray bits;    //!< 
+      
       // Populate array with indicies of high bits
-      return loop<0>::flatten(Mask, bits), bits;
+      loop<0>::flatten(Mask, bits);
+      return bits;
     };
 
 
@@ -304,6 +306,32 @@ namespace wtl
   };
   
   
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints the valid bits of a BitSet to the debugging console
+  //!
+  //! \tparam DATA - Bitset data type
+  //! \param[in,out] &c - Debugging console
+  //! \param[in] const &b - Bitset 
+  //! \return Console& - Reference to input console
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename DATA>
+  Console& operator << (Console& c, const Bitset<DATA>& b)
+  {
+    auto bits = b.flatten();    //!< Storage for bit indicies
+
+    // Open
+    c << debug_info("Bitset");
+
+    // Print comma separated zero-based indicies of high-bits
+    if (!b.empty())
+      c << Cons::White << delimited_range(bits, ',');
+    
+    // Close
+    return c << Cons::Yellow << '}';
+  };
+
 
 } //namespace wtl
 
