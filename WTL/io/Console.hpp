@@ -248,12 +248,9 @@ namespace wtl
     };
 
   protected:
-    //! \var AttributeMask - 
+    //! \var AttributeMask - Bitmask exposing text formatting bits 
     static constexpr std::underlying_type_t<IoManip> AttributeMask = 0x0000ffff;
 
-    //! \var OutputMask - 
-    static constexpr std::underlying_type_t<IoManip> OutputMask = 0xf0000000;                          
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     HANDLE   Handle;     //!< Console handle
@@ -284,16 +281,9 @@ namespace wtl
         // Adjust console size
         SetConsoleScreenBufferSize(Handle, native_cast(Coord(150,3000)));
 
-        // Maximize window
-        /*if (HWND wnd = ::GetConsoleWindow())
-          ::ShowWindow(wnd, SW_HIDE);*/
-        
-        // Hide window
+        // Show window
         if (HWND wnd = ::GetConsoleWindow())
           ::ShowWindow(wnd, SW_SHOW);
-
-        // Feedback
-        write("Console attached to process");
       }
       // [ERROR] Unable to attach console
       catch (exception& e)
@@ -313,7 +303,6 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     virtual ~Console()
     {
-      write("Detaching Console from process");
       ::FreeConsole();
     }
     
@@ -377,7 +366,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void setAttributes(IoManip attr) 
     {
-      SetConsoleTextAttribute(Handle, static_cast<uint16>(attr & AttributeMask)); 
+      SetConsoleTextAttribute(Handle, enum_cast(attr & AttributeMask)); 
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
