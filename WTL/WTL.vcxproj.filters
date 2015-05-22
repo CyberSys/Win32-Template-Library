@@ -473,6 +473,9 @@
     <ClInclude Include="platform\ActionId.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="platform\DateTime.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

@@ -33,6 +33,7 @@
     <ClInclude Include="io\TextWriter.hpp" />
     <ClInclude Include="io\XmlReader.hpp" />
     <ClInclude Include="io\XmlWriter.hpp" />
+    <ClInclude Include="platform\DateTime.hpp" />
     <ClInclude Include="platform\WindowMessage.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Macros.h" />
