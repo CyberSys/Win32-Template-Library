@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\platform\SystemVersion.hpp
-//! \brief Provides Windows OS version info
+//! \brief Encapsulates platform version info
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -9,55 +9,67 @@
 #define WTL_SYSTEM_VERSION_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
-#include "wtl/traits/EncodingTraits.hpp"
+#include "wtl/traits/EncodingTraits.hpp"      //!< Encoding
+#include "wtl/utils/CharArray.hpp"            //!< CharArray
+#include "wtl/platform/SystemFlags.hpp"       //!< WindowVersion
 #include <utility>
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct OperatingSystem - Encapsulates operating system info
+  //! \struct SystemVersion - Encapsulates operating system info
   //! 
   //! \tparam ENC - Character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct OperatingSystem : getType<encoding_char_t<ENC>,::OSVERSIONINFOA,::OSVERSIONINFOW>
+  struct SystemVersion : protected getType<encoding_char_t<ENC>,::OSVERSIONINFOA,::OSVERSIONINFOW>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
+  protected:
+    //! \alias base - Define base type
+    using base = getType<encoding_char_t<ENC>,::OSVERSIONINFOA,::OSVERSIONINFOW>;
+
+  public:
+    //! \alias char_t - Define character type
+    using char_t = encoding_char_t<ENC>;
+
     // ----------------------------------- REPRESENTATION -----------------------------------
-  
-    WindowVersion  Version;         //!< Windows version identifier
+  protected:
+    WindowVersion       Ident;         //!< Windows version identifier
+    CharArray<ENC,64>   LongName;      //!< Long name
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
-	
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // OperatingSystem::OperatingSystem
+    // SystemVersion::SystemVersion
     //! Create operating system data
     /////////////////////////////////////////////////////////////////////////////////////////
-    OperatingSystem() : Version(WindowVersion::Future)
+    SystemVersion() : Ident(WindowVersion::Future)
     {
       static const auto getVersion = getFunc<encoding_char_t<ENC>>(::GetVersionExA,::GetVersionExW);
 
       // Prepare
-      dwOSVersionInfoSize = sizeof(::OSVERSIONINFO);
+      this->dwOSVersionInfoSize = sizeof(base);
 
       // Query windows version
       if (getVersion(this))
-        Version = identify(dwMajorVersion, dwMinorVersion);
+        Ident = identify(this->dwMajorVersion, this->dwMinorVersion);
+
+      // Format long name
+      LongName.format(L"%s %s (v%d.%d)", name(), this->szCSDVersion, this->dwMajorVersion, this->dwMinorVersion);
     }
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
-    ENABLE_COPY(OperatingSystem);       //!< Can be deep copied
-    ENABLE_MOVE(OperatingSystem);       //!< Can be moved
-    ENABLE_POLY(OperatingSystem);       //!< Can be polymorphic
-
+    ENABLE_COPY(SystemVersion);       //!< Can be deep copied
+    ENABLE_MOVE(SystemVersion);       //!< Can be moved
+    ENABLE_POLY(SystemVersion);       //!< Can be polymorphic
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // OperatingSystem::identify
+    // SystemVersion::identify
     //! Identifies the operating system 
     //! 
     //! \param[in] major - Major version number
@@ -87,22 +99,73 @@ namespace wtl
       case 6:
         switch (minor)
         {
-        case 0:  return WindowVersion::WinVista;   
+        case 0:  return WindowVersion::Vista;   
         case 1:  return WindowVersion::Win7; 
         case 2:  return WindowVersion::Win8; 
         case 3:  return WindowVersion::Win81; 
         default: return WindowVersion::Future;     
         }
         break;
+      }
 
       // [FUTURE] Newer
-      default: 
-        return WindowVersion::Future;
-      }
+      return WindowVersion::Future;
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
+  public:   
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // SystemVersion::fullname const
+    //! Get the full name
+    //! 
+    //! \return const char_t* - Operating system name
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const char_t* fullname() const
+    {
+      // Return full name
+      return LongName.c_str();
+    }
+     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // SystemVersion::ident const
+    //! Get the version identifier
+    //! 
+    //! \return WindowVersion - Operating system version
+    /////////////////////////////////////////////////////////////////////////////////////////
+    WindowVersion  ident() const
+    {
+      // Return ident
+      return Ident;
+    }
+     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // SystemVersion::name const
+    //! Get the short name
+    //! 
+    //! \return const char_t* - Operating system name
+    //!
+    //! \throw wtl::logic_error - Unrecognised window version
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const char_t* name() const
+    {
+      // Return full name
+      switch (Ident)
+      {
+      case WindowVersion::WinNT:   return L"Windows 2000";
+      case WindowVersion::Win2000: return L"Windows 2000";
+      case WindowVersion::WinXp:   return L"Windows XP";
+      case WindowVersion::Win2003: return L"Windows Server 2003";
+      case WindowVersion::Vista:   return L"Windows Vista";
+      case WindowVersion::Win7:    return L"Windows 7";
+      case WindowVersion::Win8:    return L"Windows 8";
+      case WindowVersion::Win81:   return L"Windows 8.1";
+      case WindowVersion::Future:  return L"Windows Future";
+      }
 
+      // Error: 
+      throw logic_error(HERE, "Unrecognised window version");
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
   };

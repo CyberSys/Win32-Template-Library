@@ -96,7 +96,7 @@ namespace events
     bool           IncUpdate,        //!< Reserved
                    Restore;          //!< Reserved
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs<WindowMessage::PAINT>::EventArgs

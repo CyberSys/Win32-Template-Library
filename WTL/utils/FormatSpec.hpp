@@ -12,6 +12,7 @@
 #include "wtl/traits/EncodingTraits.hpp"
 #include <type_traits>
 #include <exception>
+#include <cwchar>          // Wide char
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -111,7 +112,7 @@ namespace wtl
   //! \throw std::logic_error - Incorrect number of formatting arguments
   /////////////////////////////////////////////////////////////////////////////////////////
 	template <typename char_t, typename T, typename... ARGS>		
-  uint32 snprintf_t(char_t* output, uint32 capacity, const char_t* str, T value, ARGS... args)	
+  uint32  snprintf_t(char_t* output, uint32 capacity, const char_t* str, T value, ARGS... args)	
 	{
     char *position = output,         //!< Output iterator
          *eof = output+capacity;     //!< End of buffer position
@@ -128,7 +129,7 @@ namespace wtl
               *++str;
 
           // Append value 
-          int len = _snprintf(position, eof-position, format_spec_t<char,T>::value, value); 
+          int len = getFunc<char_t>(::_snprintf,::_snwprintf)(position, eof-position, format_spec_t<char_t,T>::value, value); 
           
           // Succeeded: Advance
           if (len >= 0 && len < eof-position)
@@ -163,7 +164,7 @@ namespace wtl
   //! \throw std::logic_error - Insufficient arguments
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename char_t>
-  inline uint32 snprintf_t(char_t* output, uint32 capacity, const char_t* str)	
+  inline uint32  snprintf_t(char_t* output, uint32 capacity, const char_t* str)	
 	{
     char *position = output,         //!< Output iterator
          *eof = output+capacity;

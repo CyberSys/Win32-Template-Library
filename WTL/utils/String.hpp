@@ -76,9 +76,10 @@ namespace wtl
   //! \param[in] const* src - Another narrow char string
   //! \return char* - Returns 'dest'
   /////////////////////////////////////////////////////////////////////////////////////////
-  inline char* strcpy_t(char* dest, const char* src)
+  template <unsigned LEN>
+  inline char* strcpy_t(array_ref_t<char,LEN> dest, const char* src)
   {
-    return strcpy(dest,src);
+    return strcpy_s(dest,src);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -89,9 +90,10 @@ namespace wtl
   //! \param[in] const* src - Another wide char string
   //! \return wchar_t* - Returns 'dest'
   /////////////////////////////////////////////////////////////////////////////////////////
-  inline wchar_t* strcpy_t(wchar_t* dest, const wchar_t* src)
+  template <unsigned LEN>
+  inline wchar_t* strcpy_t(array_ref_t<wchar_t,LEN> dest, const wchar_t* src)
   {
-    return wcscpy(dest,src);
+    return wcscpy_s(dest,src);
   }
   
 

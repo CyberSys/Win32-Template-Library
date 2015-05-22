@@ -158,7 +158,7 @@ namespace wtl
   //  accessor_t  Accessor;      //!< Accessor delegate
   //  mutator_t   Mutator;       //!< Mutator delegate
 
-  //  // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  //  // ------------------------------------ CONSTRUCTION ------------------------------------
   //public:
   //  /////////////////////////////////////////////////////////////////////////////////////////
   //  // PropertyFunctor::PropertyFunctor
@@ -277,7 +277,7 @@ namespace wtl
   protected:
     provider_t     Impl;        //!< Implementation provider
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::Property

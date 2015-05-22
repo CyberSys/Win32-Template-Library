@@ -51,7 +51,7 @@ namespace wtl
     //! \typedef position_t - Stream position type
     typedef uint32  position_t;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // MemoryStream::MemoryStream
@@ -483,7 +483,7 @@ namespace wtl
     //! \enum - Stream capacity
     enum { capacity = CAPACITY };   
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     //////////////////////////////////////////////////////////////////////////////////////////
     // BufferStream::BufferStream 

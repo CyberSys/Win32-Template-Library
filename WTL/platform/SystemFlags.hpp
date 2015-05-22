@@ -34,7 +34,7 @@ namespace wtl
     Explorer60 = 0x0582,        //!< Internet Explorer 6.00  (Windows XP)
     
     WinXp      = 0x0600,        //!< <Not packaged with OS> (Windows XP)
-    WinVista   = 0x0610,        //!< <Not packaged with OS> (Windows Vista)
+    Vista   = 0x0610,        //!< <Not packaged with OS> (Windows Vista)
   };
 
   //! Define traits: Non-Contiguous enumeration
@@ -42,10 +42,27 @@ namespace wtl
   template <> struct is_contiguous<ControlVersion> : std::false_type  {};
 
   //! Define limits traits
-  template <> struct max_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::WinVista>    {};
+  template <> struct max_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Vista>    {};
   template <> struct min_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Explorer30>  {};
-
   
+  // ----------------------------------- DATE FORMAT FLAGS ----------------------------------
+
+  //! \enum DateFlags - Define GetDateFormat() flags
+  enum class DateFlags : long32
+  {
+    ShortDate = 0x00000001,			      //!< Use short date picture
+    LongDate = 0x00000002,			      //!< Use long date picture
+    AltCalendar = 0x00000004,		      //!< Use alternate calendar (if any)
+    YearMonth = 0x00000008,			      //!< [Windows 5.00] Use year month picture
+    LtrReading = 0x00000010,			    //!< [Windows 5.00] Add marks for left to right reading order layout
+    RtlReading = 0x00000020,			    //!< [Windows 5.00] Add marks for right to left reading order layout
+    AutoLayout = 0x00000040,			    //!< [Windows 6.01] add appropriate marks for left-to-right or right-to-left reading order layout
+  };
+
+  //! Define traits: Non-Contiguous attribute
+  template <> struct is_attribute<DateFlags>  : std::true_type  {};
+  template <> struct is_contiguous<DateFlags> : std::false_type {};
+
   // ----------------------------------- RESOURCE TYPES ----------------------------------
   
   
@@ -176,7 +193,7 @@ namespace wtl
     Win2000  = 0x0500,      //!< Windows 2000
     WinXp    = 0x0501,      //!< Windows XP 
     Win2003  = 0x0502,      //!< Windows Server 2003
-    WinVista = 0x0600,      //!< Windows Vista
+    Vista    = 0x0600,      //!< Windows Vista
     Win7     = 0x0601,      //!< Windows 7
     Win8     = 0x0602,      //!< Windows 8
     Win81    = 0x0603,      //!< Windows 8.1

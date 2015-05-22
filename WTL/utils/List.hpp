@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\List.hpp
-//! \brief Provides a singly or doubly linked list exposing a simple interface
+//! \brief Provides a linked list exposing a simple interface
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -45,7 +45,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::List

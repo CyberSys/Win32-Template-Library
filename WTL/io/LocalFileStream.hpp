@@ -36,7 +36,7 @@ namespace wtl
     //! \typedef position_t - Stream position type
     typedef ulong32  position_t;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // LocalFileStream::LocalFileStream

@@ -12,6 +12,8 @@
 //#include "wtl/traits/ApplicationTraits.hpp"
 #include "wtl/modules/Module.hpp"                   //!< Module
 #include "wtl/threads/MessagePump.hpp"              //!< MessagePump
+#include "wtl/platform/DateTime.hpp"                //!< DateTime
+#include "wtl/platform/SystemVersion.hpp"           //!< SystemVersion
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -64,7 +66,46 @@ namespace wtl
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Application::name const 
+    //! Get the application name
+    //!
+    //! \return const char_t* - Full application name
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual const char_t* name() const = 0;
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Application::version const 
+    //! Get the application version
+    //!
+    //! \return const char_t* - Version string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual const char_t* version() const = 0;
+
     // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Application::run
+    //! Executes the application
+    //! 
+    //! \param[in] mode - Initial display mode
+    //! \return int32 - Return code
+    /////////////////////////////////////////////////////////////////////////////////////////
+    int32  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal) override
+    {
+      // Feedback: AppName + Operating System
+      cdebug << Cons::Cyan << "--------------------------------------------------------------------------" << endl
+             << (Cons::Cyan|Cons::Bold) << "\t\t\t" << this->name() << " " << this->version() << Cons::Yellow << LongDateString<ENC>() << endl
+             << Cons::Cyan << "--------------------------------------------------------------------------" << endl 
+             << endl
+         
+             // Operating System
+             << Cons::Bold << "Operating System: " << Cons::Yellow << SystemVersion<ENC>().fullname() << endl
+             << Cons::Bold << "Module Path: "      << Cons::Yellow << this->path<ENC>()               << endl;
+
+      // Execute
+      return this->run(mode);
+    }
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:

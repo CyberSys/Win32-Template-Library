@@ -182,7 +182,7 @@ namespace wtl
     HMenu         Handle;     //!< Menu handle
     collection_t  Items;      //!< Menu command items
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PopupMenu::PopupMenu
@@ -375,7 +375,7 @@ namespace wtl
     HMenu         Handle;     //!< Menu handle
     collection_t  Popups;     //!< Popup menu collection
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::WindowMenu

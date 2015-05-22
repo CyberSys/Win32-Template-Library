@@ -67,7 +67,7 @@ namespace wtl
     //! \alias stream_t - Defines memory stream type
     using stream_t = MemoryStream<uint8>;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct DialogItemTemplate - Variable length dialog item template
@@ -79,7 +79,7 @@ namespace wtl
       //! \alias ByteVector - User data storage type
       using ByteVector = std::vector<uint8>;
 
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+      // ------------------------------------ CONSTRUCTION ------------------------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
       // DialogItemTemplate::DialogItemTemplate 
@@ -157,7 +157,7 @@ namespace wtl
 
       using ItemCollection = std::vector<DialogItemTemplate>;
 
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+      // ------------------------------------ CONSTRUCTION ------------------------------------
 
       /////////////////////////////////////////////////////////////////////////////////////////
       // DialogTemplate::DialogTemplate 

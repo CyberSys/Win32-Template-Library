@@ -208,20 +208,20 @@ namespace wtl
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-      //! \using const_array_ref_t - Immutable array reference type
-      using const_array_ref_t = typename base::const_array_ref_t;
+      //! \using const_array_ref - Immutable array reference type
+      using const_array_ref = const typename base::const_array_ref;
 
-      //! \using array_ref_t - Array reference type
-      using array_ref_t = typename base::array_ref_t;
+      //! \using array_ref - Array reference type
+      using array_ref = typename base::array_ref;
       
       // ----------------------------------- REPRESENTATION -----------------------------------
     public:
-      array_ref_t  Text;        //!< Character array text buffer
+      array_ref  Text;        //!< Character array text buffer
 
     protected:
-      type&        Owner;       //!< Character array
+      type&      Owner;       //!< Character array
 
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------  
+      // ------------------------------------ CONSTRUCTION ------------------------------------  
     public:
       /////////////////////////////////////////////////////////////////////////////////////////
       // buffer_proxy::buffer_proxy 
@@ -246,19 +246,19 @@ namespace wtl
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
       /////////////////////////////////////////////////////////////////////////////////////////
-      // buffer_proxy::operator const_array_ref_t const
+      // buffer_proxy::operator const_array_ref const
       //! Implicit user conversion to immutable buffer
       /////////////////////////////////////////////////////////////////////////////////////////
-      operator const_array_ref_t () const
+      operator const_array_ref () const
       {
         return Text;
       }
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      // buffer_proxy::operator array_ref_t 
+      // buffer_proxy::operator array_ref 
       //! Implicit user conversion to mutable buffer
       /////////////////////////////////////////////////////////////////////////////////////////
-      operator array_ref_t () 
+      operator array_ref () 
       {
         return Text;
       }
@@ -457,9 +457,9 @@ namespace wtl
     //! 
     //! \return buffer_proxy - Buffer proxy
     /////////////////////////////////////////////////////////////////////////////////////////
-    buffer_proxy buffer() const
+    buffer_proxy buffer() 
     {
-      return {*this};
+      return buffer_proxy(*this);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -890,7 +890,7 @@ namespace wtl
     //! \throw wtl::length_error - Insufficent capacity
     //! \throw wtl::logic_error - Incorrect number of arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-	  template<typename T, typename... ARGS>		
+	  template <typename T, typename... ARGS>		
 	  void format_t(const char_t* str, T value, ARGS... args)	
 	  {
       REQUIRED_PARAM(str);
@@ -907,7 +907,7 @@ namespace wtl
                 *++str;
 
             // Append value 
-            int len = snprintf(this->Data+this->Count, (size_t)length-this->Count, format_spec_t<T>::value, value); 
+            int len = getFunc<char_t>(::_snprintf,::_snwprintf)(this->Data + this->Count, (int32)length - this->Count, format_spec_t<char_t,T>::value, value); 
           
             // Succeeded: Advance count
             if (len >= 0 && len < length)
@@ -1016,6 +1016,7 @@ namespace wtl
   {
     //! \alias base - Define base type
     using base = CharArray<ENC,LEN>;
+    using type = LastErrorString<ENC,LEN>;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // LastErrorString::LastErrorString
@@ -1027,7 +1028,7 @@ namespace wtl
       static const auto formatMsg = getFunc<encoding_char_t<ENC>>(::FormatMessageA,::FormatMessageW);
 
       // Lookup system error and append to user error
-      formatMsg(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, ::GetLastError(), 0UL, *base::c_str(), base::length, nullptr);
+      formatMsg(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, ::GetLastError(), 0, *base::c_str(), base::length, nullptr);
     }
   };
 

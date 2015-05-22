@@ -26,8 +26,8 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef base - Base class type
-    typedef std::exception base;
+    //! \alias base - Define base type
+    using base = std::exception;
 
     //! \typedef location_string_t - Location string type
     using location_string_t = char [1024];
@@ -35,7 +35,7 @@ namespace wtl
     //! \typedef error_string_t - Error message string type
     using error_string_t = char [16*1024];
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // exception::exception
@@ -46,7 +46,7 @@ namespace wtl
     exception(const char* location) : base(Message)
     { 
       // Copy location 
-      strncpy(Location, location, sizeof(Location));
+      strncpy_s(Location, location, sizeof(Location));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -119,10 +119,10 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef base - Base class type
-    typedef wtl::exception base;
+    //! \alias base - Define base type
+    using base = wtl::exception;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // domain_error::domain_error
@@ -161,10 +161,10 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef base - Base class type
-    typedef wtl::exception base;
+    //! \alias base - Define base type
+    using base = wtl::exception;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // logic_error::logic_error
@@ -203,10 +203,10 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef base - Base class type
-    typedef wtl::exception base;
+    //! \alias base - Define base type
+    using base = wtl::exception;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // invalid_argument::invalid_argument
@@ -247,7 +247,7 @@ namespace wtl
     //! \typedef base - Base class type
     typedef wtl::exception base;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // length_error::length_error
@@ -286,10 +286,10 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef base - Base class type
-    typedef wtl::exception base;
+    //! \alias base - Define base type
+    using base = wtl::exception;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // out_of_range::out_of_range
@@ -327,10 +327,10 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \typedef base - Base class type
-    typedef wtl::exception base;
+    //! \alias base - Define base type
+    using base = wtl::exception;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // platform_error::platform_error

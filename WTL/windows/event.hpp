@@ -116,7 +116,7 @@ namespace wtl
   protected:
     collection_t  Subscribers;          //!< Subscribers collection (delegates to handler functions)
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Event::Event

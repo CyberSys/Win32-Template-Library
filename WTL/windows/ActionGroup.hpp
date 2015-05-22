@@ -55,7 +55,7 @@ namespace wtl
     decoder_t       NameString;      //!< Name + Description
     icon_t          Icon;            //!< Command Icon
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ActionGroup::ActionGroup

@@ -45,7 +45,7 @@ namespace controls
     events::OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::Button

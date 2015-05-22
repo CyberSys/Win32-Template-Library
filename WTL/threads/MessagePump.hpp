@@ -126,7 +126,7 @@ namespace wtl
     //! \param[in] mode - Initial display mode
     //! \return int32 - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32 run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
+    virtual int32  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
     {
       //! \var dispatchMessage - Functor for 'DispatchMessage'
       static const auto dispatchMessage = getFunc<ENC>(::DispatchMessageA,::DispatchMessageW);

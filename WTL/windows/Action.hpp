@@ -81,7 +81,7 @@ namespace wtl
       name_t         Name;            //!< Command Name
       description_t  Description;     //!< Command Description
 
-      // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+      // ------------------------------------ CONSTRUCTION ------------------------------------
     
       /////////////////////////////////////////////////////////////////////////////////////////
       // NameStringResource::NameStringResource

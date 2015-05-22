@@ -43,7 +43,7 @@ namespace wtl
     /*template <unsigned LENGTH>
     using literal_t = const element_t (&)[LENGTH];*/
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextWriter::TextWriter 

@@ -51,7 +51,7 @@ namespace wtl
       FOREGROUND_GREY = FOREGROUND_INTENSITY|FOREGROUND_BLACK,
     };
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // LogFileWriter::LogFileWriter 

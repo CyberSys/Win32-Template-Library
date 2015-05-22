@@ -28,7 +28,7 @@ namespace wtl
     //! \typedef stream_t - Stream type
 	  typedef STREAM stream_t;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // StreamIterator::StreamIterator

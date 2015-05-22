@@ -10,6 +10,8 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EnumTraits.hpp"      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
+#include "wtl/platform/SystemFlags.hpp"   //!< WindowVersion
+#include <type_traits>                    //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -21,13 +23,7 @@ namespace wtl
   //! \tparam T - Type used to specialize traits
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct build_traits;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct build_traits<void> - Defines project build target traits 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <> 
-  struct build_traits<void>
+  struct build_traits   /* Undefined */
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -45,7 +41,6 @@ namespace wtl
     DISABLE_COPY(build_traits);     //!< Cannot instantiate
     DISABLE_MOVE(build_traits);     //!< Cannot instantiate
     DISABLE_DTOR(build_traits);     //!< Cannot instantiate
-
   };
 
   

@@ -18,7 +18,7 @@ namespace wtl
   //! \var LoadedModules - Loaded modules collection
   ModuleCollection  LoadedModules;
   
-  // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+  // ------------------------------------ CONSTRUCTION ------------------------------------
 	
   /////////////////////////////////////////////////////////////////////////////////////////
   // Module::Module

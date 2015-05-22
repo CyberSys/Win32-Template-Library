@@ -40,7 +40,7 @@ namespace wtl
     //! \var Type - Element type
     static constexpr ElementType  Type = TYPE;
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
     
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlElement::XmlElement
@@ -143,7 +143,7 @@ namespace wtl
     //! \typedef position_t - Stream position type
     typedef typename stream_t::position_t position_t;
     
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlWriter::XmlWriter 

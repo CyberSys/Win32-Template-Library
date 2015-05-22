@@ -53,7 +53,7 @@ namespace wtl
     HDeviceContext DC;     //!< Device context handle
     stack_t        Stack;  //!< Previous handles
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ObjectStack::ObjectStack

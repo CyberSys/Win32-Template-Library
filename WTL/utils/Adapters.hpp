@@ -28,7 +28,7 @@ namespace wtl
   protected:
     mutable ELEM Sum;     //!< Resultant sum
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // accumulate_t::accumulate_t
@@ -101,7 +101,7 @@ namespace wtl
     FIRST  g;    //!< First operation function object representing g(x)
     SECOND f;    //!< Second operation function object representing f(x)
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // compose_f_gx_t::compose_f_gx_t
@@ -197,7 +197,7 @@ namespace wtl
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // compose_f_gx_hx_t::compose_f_gx_hx_t
@@ -307,7 +307,7 @@ namespace wtl
     MethodPtr Method;         //!< Method pointer to execute
     PARAM     Argument;       //!< Argument to use as input
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // execute_method_t::execute_method_t
@@ -387,7 +387,7 @@ namespace wtl
     function_type Method;     //!< method pointer
     TYPE&         Object;     //!< Object instance
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public: 
     /////////////////////////////////////////////////////////////////////////////////////////
     // execute_upon_t::execute_upon_t
@@ -454,7 +454,7 @@ namespace wtl
     PRED p;     //!< Predicate
     FUNC f;     //!< Operation
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // if_then_t::if_then_t
@@ -570,7 +570,7 @@ namespace wtl
   protected:
     const FIELD STRUCT::* FieldPtr;     //!< Class field pointer
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     //! select_field_t::select_field_t

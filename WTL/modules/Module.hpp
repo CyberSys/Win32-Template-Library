@@ -17,6 +17,7 @@
 #include "wtl/traits/ResourceTraits.hpp"    //!< HResource
 #include "wtl/resources/ResourceBlob.hpp"   //!< ResourceBlob
 #include "wtl/platform/ResourceId.hpp"      //!< ResourceId
+#include "wtl/platform/Path.hpp"            //!< Path
 #include <functional>                       //!< std::forward
 
 //! \namespace wtl - Windows template library
@@ -146,6 +147,27 @@ namespace wtl
     //  // Load string from module
     //  str = StringResource(Handle, id, lang);
     //}
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Module::path const
+    //! Get the full path of the module
+    //! 
+    //! \tparam ENC - Path character encoding
+    //! 
+    //! \return Path<ENC> - Full path of module
+    //! 
+    //! \throw wtl::platform_error - Unable to query path
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC>
+    Path<ENC>  path() const
+    {
+      Path<ENC>  p;
+
+      // Query module path
+      if (!getFunc<ENC>(::GetModuleFileNameA,::GetModuleFileNameW)(Handle, p.buffer(), Path<ENC>::length))
+        throw platform_error(HERE, "Unable to query module path");
+      return p;
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 

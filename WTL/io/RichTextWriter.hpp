@@ -61,7 +61,7 @@ namespace wtl
     const static COLORREF Yellow  = RGB(249,192,0);
     const static COLORREF White   = RGB(255,255,255);
 
-    // ------------------------------ CONSTRUCTION & DESTRUCTION ----------------------------
+    // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // RichTextWriter::RichTextWriter 
