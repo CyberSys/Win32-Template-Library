@@ -98,26 +98,11 @@ namespace wtl
     //! \param[in] const r - Right
     //! \param[in] const b - Bottom
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U> constexpr
-    Rect(const U l, const U t, const U r, const U b) : left(static_cast<T>(l)), 
+    template <typename A, typename B, typename C, typename D> constexpr
+    Rect(const A l, const B t, const C r, const D b) : left(static_cast<T>(l)), 
                                                        top(static_cast<T>(t)), 
                                                        right(static_cast<T>(r)), 
                                                        bottom(static_cast<T>(b))
-    {}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::Rect constexpr
-    //! Create from a mid point and rectangle dimensions
-    //! 
-    //! \param[in] const &middle - Mid-point
-    //! \param[in] const width - Width
-    //! \param[in] const height - Height
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U> constexpr
-    Rect(const Point<U>&  middle, const value_t  width, const value_t  height) : left(static_cast<value_t>(middle.x) - (width / 2)),
-                                                                                 right(static_cast<value_t>(middle.x) + (width / 2)),
-                                                                                 top(static_cast<value_t>(middle.y) - (height / 2)),
-                                                                                 bottom(static_cast<value_t>(middle.y) + (height / 2))
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -127,8 +112,8 @@ namespace wtl
     //! \param[in] const& topLeft - Top left co-ordinate
     //! \param[in] const& size - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U> constexpr
-    Rect(const Point<U>& topLeft, const Size<U>& size) : left(topLeft.x),
+    template <typename A, typename B> constexpr
+    Rect(const Point<A>& topLeft, const Size<B>& size) : left(topLeft.x),
                                                          right(topLeft.x+size.width),
                                                          top(topLeft.y),
                                                          bottom(topLeft.y+size.height)
@@ -143,7 +128,23 @@ namespace wtl
     DISABLE_POLY(Rect);             //!< Cannot be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
-  
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::FromMidPoint constexpr
+    //! Create from a mid point and rectangle dimensions
+    //! 
+    //! \param[in] const& middle - Mid-point
+    //! \param[in] const& size - Size of rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename A, typename B> constexpr
+    static Rect FromMidPoint(const Point<A>&  middle, const Size<B>& size)
+    {
+      return  Rect(static_cast<value_t>(middle.x) - (width / 2), 
+                   static_cast<value_t>(middle.y) - (height / 2), 
+                   static_cast<value_t>(middle.x) + (width / 2), 
+                   static_cast<value_t>(middle.y) + (height / 2));
+    }
+    
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -289,26 +290,26 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator+ const
+    // Rect::operator + const
     //! Create new rectangle from adding a horizontal and vertical offset 
     //! 
     //! \param[in] const& pt - Offset
     //! \return type - New instance added by 'x' horizontal units, and 'y' vertical units
     /////////////////////////////////////////////////////////////////////////////////////////
-    type  operator+ (const point_t&  pt) const
+    type  operator + (const point_t& pt) const
     {
       return type(left + static_cast<value_t>(pt.x),  top + static_cast<value_t>(pt.y),
                   right + static_cast<value_t>(pt.x), bottom + static_cast<value_t>(pt.y));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator- const
+    // Rect::operator - const
     //! Create new rectangle from subtracting a horizontal and vertical offset 
     //! 
     //! \param[in] const& pt - Offset
     //! \return type - New instance subtracted by 'x' horizontal units, and 'y' vertical units
     /////////////////////////////////////////////////////////////////////////////////////////
-    type  operator- (const point_t&  pt) const
+    type  operator - (const point_t& pt) const
     {
       return type(left - static_cast<value_t>(pt.x),  top - static_cast<value_t>(pt.y),
                   right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
@@ -408,10 +409,10 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Rect<T>& rc)
   {
-    return c << debug_info("Rect", name_value_pair("left", rc.left), 
-                                   name_value_pair("top", rc.top),
-                                   name_value_pair("right", rc.right),
-                                   name_value_pair("bottom", rc.bottom));
+    return c << name_value_pairs("left", rc.left, 
+                                 "top", rc.top,
+                                 "right", rc.right,
+                                 "bottom", rc.bottom);
   };
 
 } // WTL namespace

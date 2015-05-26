@@ -107,7 +107,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator == (const type& r)
     {
-      return width == r.width && height == r.height;
+      return width  == r.width 
+          && height == r.height;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +120,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator != (const type& r)
     {
-      return width != r.width || height != r.height;
+      return width != r.width 
+         || height != r.height;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -171,14 +173,14 @@ namespace wtl
   //! \tparam T - Size field type
   //! 
   //! \param[in,out] &c - Debugging console
-  //! \param[in] const &sz - Size
+  //! \param[in] const& sz - Size
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   Console& operator << (Console& c, const Size<T>& sz)
   {
-    return c << debug_info("Size", name_value_pair("width", sz.width), 
-                                   name_value_pair("height", sz.height));
+    return c << name_value_pairs("width", sz.width, 
+                                 "height", sz.height);
   };
 
 

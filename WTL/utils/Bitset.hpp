@@ -312,24 +312,18 @@ namespace wtl
   //! Prints the valid bits of a BitSet to the debugging console
   //!
   //! \tparam DATA - Bitset data type
+  //! 
   //! \param[in,out] &c - Debugging console
-  //! \param[in] const &b - Bitset 
+  //! \param[in] const& b - Bitset 
   //! \return Console& - Reference to input console
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename DATA>
   Console& operator << (Console& c, const Bitset<DATA>& b)
   {
-    auto bits = b.flatten();    //!< Storage for bit indicies
-
-    // Open
-    c << debug_info("Bitset");
-
     // Print comma separated zero-based indicies of high-bits
-    if (!b.empty())
-      c << Cons::White << delimited_range(bits, ',');
-    
-    // Close
-    return c << Cons::Yellow << '}';
+    return c << Cons::Grey  << '{' 
+             << Cons::White << delimited_range(b.flatten(), ',')
+             << Cons::Grey  << '}';
   };
 
 

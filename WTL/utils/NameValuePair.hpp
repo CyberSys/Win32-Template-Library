@@ -74,8 +74,47 @@ namespace wtl
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::name_value_pairs
+  //! Base-case for creating tuples of name/value pairs
+  //! 
+  //! \tparam VALUE - Value type
+  //! 
+  //! \param[in] const* name - Name
+  //! \param[in] const& value - Value
+  //! \return std::tuple<NameValuePair<VALUE>> - Tuple containing a single pair
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE>
+  std::tuple<NameValuePair<VALUE>>  name_value_pairs(const char* name, const VALUE& value)
+  {
+    return std::make_tuple(NameValuePair<VALUE>(name, value));
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::name_value_pairs
+  //! Creates a tuple of name/value pairs
+  //! 
+  //! \tparam VALUE - First pair value type
+  //! 
+  //! \param[in] const* name - First pair name
+  //! \param[in] const& value - First pair value
+  //! \param[in] &&...args - [optional] Subsequent name/value pair arguments
+  //! \return std::tuple<NameValuePair<V1>, NameValuePair<V2>, ...> - Tuple of name-value pairs
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, typename... ARGS>
+  auto  name_value_pairs(const char* name, const VALUE& value, ARGS&&... args)
+  {
+    static_assert(sizeof...(ARGS) % 2 == 0, "Cannot create name-value pairs from an odd number of arguments");
+
+    // Prepend & return first pair to anonymous sequence generated recursively
+    return std::tuple_cat(name_value_pairs(name,value), name_value_pairs(args...));
+  }
+  
+  
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes a name-value pair to the debug console, with the name in yellow and value in white
+  //! Writes a non-string name-value pair to the debug console
   //!
   //! \tparam VALUE - Value type
   //! 
@@ -84,30 +123,34 @@ namespace wtl
   //! \return Console& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE>
-  enable_if_is_not_t<VALUE,const char*,Console&>  operator << (Console& c, const NameValuePair<VALUE>& value)
+  auto  operator << (Console& c, const NameValuePair<VALUE>& value) -> std::enable_if_t<!std::is_convertible<VALUE,const char*>::value 
+                                                                                     && !std::is_convertible<VALUE,const wchar_t*>::value, Console&>
   {
     // Write: Name=Value
-    return c << Cons::Yellow << value.Name << '='
-             << Cons::White  << value.Value;
+    return c << Cons::White  << value.Name 
+             << Cons::Grey   << '='
+             << Cons::Yellow << value.Value;
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes a name-value pair to the debug console, with the name in yellow and value in white
+  //! Writes a string-based name-value pair to the debug console
   //!
-  //! \tparam VALUE - const char*
+  //! \tparam VALUE - Value type
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in] const& value - Name-Value pair representing a named value
   //! \return Console& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE>
-  Console& operator << (Console& c, const NameValuePair<const char*>& value)
+  auto  operator << (Console& c, const NameValuePair<VALUE>& value) -> std::enable_if_t<std::is_convertible<VALUE,const char*>::value 
+                                                                                     || std::is_convertible<VALUE,const wchar_t*>::value, Console&>
   {
     // Write: Name='Value'
-    return c << Cons::Yellow << value.Name << "='"
-             << Cons::White  << value.Value 
-             << Cons::Yellow << "'";
+    return c << Cons::White  << value.Name 
+             << Cons::Grey   << "='"
+             << Cons::Yellow << value.Value 
+             << Cons::Grey   << "'";
   }
 
 }

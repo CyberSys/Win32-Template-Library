@@ -9,9 +9,11 @@
 #define WTL_DEBUG_INFO_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/ForEach.hpp"            //!< for_each
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/NameValuePair.hpp"      //!< NameValuePair
 #include "wtl/io/Console.hpp"               //!< wtl::Console
+#include "wtl/io/StreamIterator.hpp"        //!< wtl::StreamIterator
 #include <tuple>                            //!< std::tuple
 #include <type_traits>                      //!< std::enable_if
 
@@ -34,9 +36,6 @@ namespace wtl
     //! \var length - Number of attribute name/value pairs
     static constexpr uint32  length = sizeof...(ARGS);   
     
-    //! \var attributes - Whether element has any attributes
-    static constexpr bool  attributes = (length != 0);
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     const char*  Name;          //!< Type name
@@ -46,7 +45,7 @@ namespace wtl
 	
     //////////////////////////////////////////////////////////////////////////////////////////
     // DebugInfo::DebugInfo
-    //! Define type name and attributes
+    //! Create from type name and attributes
     //! 
     //! \param[in] const* name - Type name
     //! \param[in] &&... args - [optional] Attribute name/value pairs
@@ -65,56 +64,54 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::debug_info
-  //! Create debug info for an instance and specify its attributes
+  //! Create debug info for an object 
   //! 
-  //! \param[in] const& name - Type name 
-  //! \param[in] &&... args - [optional] Attribute name/value pairs
+  //! \param[in] const* name - Name of the type 
+  //! \param[in] &&... args - [optional] Alternating sequence of attribute name/value pair c-tor arguments
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename... ARGS>
   DebugInfo<ARGS...>  debug_info(const char* name, ARGS&&... args)
   {
-    return DebugInfo<ARGS...>(name, std::forward<ARGS>(args)...);
+    static_assert(sizeof...(ARGS) % 2 == 0, "Cannot create debug-info from an odd number of arguments");
+
+    // Interpret arguments as pairs of nvp c-tor arguments
+    return DebugInfo<ARGS...>(name, name_value_pairs(std::forward<ARGS>(args)...));
   }
 
-
+  
   //////////////////////////////////////////////////////////////////////////////////////////
-	//! \struct info_unpacker - Writes a name/value pair tuple to an output stream
+  // wtl::operator << 
+  //! Write a tuple to the console
+  //!
+  //! \tparam ARGS... - Tuple element types
   //! 
-  //! \tparam IDX - Zero-based iteration index
-  //! \tparam ARGS - Name/value pairs
+  //! \param[in,out] &c - Console
+  //! \param[in] const& t - Any tuple
+  //! \return Console& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <unsigned IDX, unsigned COUNT, typename... ARGS>
-  struct info_unpacker
+  template <typename... ARGS>
+  Console&  operator << (Console& c, const std::tuple<ARGS...>& t)
   {
-    //////////////////////////////////////////////////////////////////////////////////////////
-	  //! info_unpacker::unpack
-    //! Unpacks attributes and writes them as a sequence of space-delimited name/value pairs
-    //! 
-    //! \param[in,out] &c - Console
-    //! \param[in] const& info - Debug info
-    //////////////////////////////////////////////////////////////////////////////////////////
-    static void unpack(Console& c, const DebugInfo<ARGS...>& info)
+    // Write opening tag
+    c << Cons::Grey << '{';
+
+    // Write elements
+    if (sizeof...(ARGS) > 0)
     {
-      c << ' ' << std::get<IDX>(info.Attributes);
-      info_unpacker<IDX+1,COUNT,ARGS...>::unpack(c, info);
+      // Write first 
+      c << std::get<0>(t);
+
+      // Delimit remainder, if any
+      for_each<1>(t, [&c] (auto& e) { c << ' ' << e;  } );
     }
-  };
 
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct info_unpacker - Base case 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <unsigned COUNT, typename... ARGS>
-  struct info_unpacker<COUNT, COUNT, ARGS...>
-  {
-    static void unpack(Console& c, const DebugInfo<ARGS...>& info)
-    { /*no-op*/ }
-  };
-
+    // Write closing tag
+    return c << Cons::Grey << '}';
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes object debug info to the debug console
+  //! Write debug-info and attributes to the console
   //!
   //! \tparam ARGS... - Attribute name/value pair types
   //! 
@@ -123,42 +120,10 @@ namespace wtl
   //! \return Console& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename... ARGS>
-  std::enable_if_t<DebugInfo<ARGS...>::length != 0, Console&>
-  /*Console&*/ operator << (Console& c, const DebugInfo<ARGS...>& info)
+  Console&  operator << (Console& c, const DebugInfo<ARGS...>& info)
   {
-    static_assert(sizeof...(ARGS) != 0, "Invalid parameter pack size");
-
-    // Open tag
-    c << Cons::Yellow << '{';
-    
-    // Write attributes
-    c << Cons::White  << info.Name << ':';
-    info_unpacker<0,sizeof...(ARGS),ARGS...>::unpack(c, info);
-
-    // Close
-    return c << Cons::Yellow << '}';
-  }
-
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator << 
-  //! Writes the opening tag of object debug info to the debug console
-  //!
-  //! \tparam ARGS... - Empty pack
-  //! 
-  //! \param[in,out] &c - Console
-  //! \param[in] const& info - Debug info
-  //! \return Console& : Reference to 'c'
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename... ARGS>
-  std::enable_if_t<DebugInfo<ARGS...>::length == 0, Console&>
-  /*Console&*/ operator << (Console& c, const DebugInfo<ARGS...>& info)
-  {
-    static_assert(sizeof...(ARGS) == 0, "Invalid parameter pack size");
-
-    // Write opening tag
-    return c << Cons::Yellow << '{'
-             << Cons::White  << info.Name << ':';
+    // Preface attributes with name
+    return c << Cons::Cyan << info.Name << info.Attributes;
   }
 
 
@@ -175,8 +140,8 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Point<T>& pt)
   {
-    return c << debug_info("Point", name_value_pair("x", pt.x), 
-                                    name_value_pair("y", pt.y));
+    return c << name_value_pairs("x", pt.x, 
+                                 "y", pt.y);
   }
 } // namespace wtl
 
