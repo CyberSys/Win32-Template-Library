@@ -6,6 +6,9 @@
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 #include "Console.hpp"
+#include "wtl/utils/CharArray.hpp"
+#include "wtl/utils/Encoding.hpp"
+#include "wtl/utils/Iterator.hpp"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -35,6 +38,22 @@ namespace wtl
     // Write to log-file
     //logFile.write(str, getAttributes());
   }
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a wide-char string to the debug console
+  //! 
+  //! \param[in,out] &c - Debugging console
+  //! \param[in] const *str - Null-terminated string
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  Console& operator << (Console& c, const wchar_t* str)
+  { 
+    // Convert into a fixed length buffer
+    return c << CharArray<Encoding::ANSI,2048>(str).c_str();
+  }
+  
 }
 
 
