@@ -582,7 +582,12 @@ namespace wtl
       if (auto group = find(action_group_id(args.Ident)))
       {
         args.Size = args.Graphics.measure(group->name());
-        cdebug << "onOwnerMeasure() group_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+        //cdebug << "onOwnerMeasure() group_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+
+        //cdebug << debug_info(__func__, name_value_pair("group", (int32)args.Ident), 
+        //                               name_value_pair("size", args.Size)) << endl;
+
+        cdebug << name_value_pairs("group", (int32)args.Ident, "size", args.Size);
       }
 
       // [ACTION] Measure action name

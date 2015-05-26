@@ -88,23 +88,24 @@ namespace wtl
     // Application::run
     //! Executes the application
     //! 
+    //! \param[in] cmdLine - Command line
     //! \param[in] mode - Initial display mode
     //! \return int32 - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal) override
+    int32  run(const char_t* cmdLine, ShowWindowFlags mode = ShowWindowFlags::ShowNormal) 
     {
       // Feedback: AppName + Operating System
-      cdebug << Cons::Cyan << "--------------------------------------------------------------------------" << endl
-             << (Cons::Cyan|Cons::Bold) << "\t\t\t" << this->name() << " " << this->version() << Cons::Yellow << LongDateString<ENC>() << endl
-             << Cons::Cyan << "--------------------------------------------------------------------------" << endl 
+      cdebug << Cons::Cyan              << "--------------------------------------------------------------------------" << endl
+             << (Cons::Cyan|Cons::Bold) << "\t\t\t"       << this->name() << "\t" << this->version()                    << endl  
+             << Cons::Cyan              << "--------------------------------------------------------------------------" << endl 
              << endl
-         
-             // Operating System
-             << Cons::Bold << "Operating System: " << Cons::Yellow << SystemVersion<ENC>().fullname() << endl
-             << Cons::Bold << "Module Path: "      << Cons::Yellow << this->path<ENC>()               << endl;
+             << name_value_pair("Date/Time", LongDateString<ENC>().c_str())          << endl
+             << name_value_pair("Command Line", cmdLine)                             << endl
+             << name_value_pair("Operating System", SystemVersion<ENC>().fullname()) << endl
+             << name_value_pair("Module Path", module_base::path<ENC>().c_str())     << endl;
 
       // Execute
-      return this->run(mode);
+      return msgpump_base::run(mode);
     }
 
     // ----------------------------------- REPRESENTATION -----------------------------------
