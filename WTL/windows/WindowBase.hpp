@@ -163,6 +163,12 @@ namespace wtl
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+      //! \alias base - Define base type
+      using base = WindowIdCollection;
+  
+      //! \alias type - Define own type
+      using type = ChildWindowCollection;
+  
       // ----------------------------------- REPRESENTATION -----------------------------------
     protected:
       window_t&  Parent;        //!< Parent/owner of collection
@@ -362,23 +368,32 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       argument_t  get() const override
       {
+        RectL rc;    //!< New client rectangle
+
         // [EXISTS] Return current window rectangle
         if (this->Window.exists())
         {
-          argument_t rc;    //!< Client rectangle
-        
-          // Query & return client rectangle
+          // Query client rectangle
           if (!::GetClientRect(this->Window, &native_cast(rc)))
             throw platform_error(HERE, "Unable to query window rectangle");
-          return rc;
+        }
+        else
+        {
+          // [¬EXISTS] Ensure size/position not 'default'
+          if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+            throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
+
+          // Calculate client from window rectangle 
+          rc = RectL(this->Window.Position(), this->Window.Size());
+          if (!::AdjustWindowRectEx(&native_cast(rc), 
+                                    enum_cast(this->Window.Style.get()), 
+                                    boolean_cast(!this->Window.Menu.empty()), 
+                                    enum_cast(this->Window.StyleEx.get())))
+            throw platform_error(HERE, "Unable to calculate window rectangle from client");
         }
 
-        // [DEFAULT] Cannot generate a window rectangle from default co-ordinates
-        if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
-
-        // [~EXISTS] Return cached, if any
-        return this->Value;
+        // Return client rectangle
+        return rc;
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -393,19 +408,17 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       void set(argument_t client) override
       {
-        argument_t wnd(client);   //!< New window rectangle
+        RectL rc(client);   //!< New window rectangle
 
         // Calculate window rectangle 
-        if (!::AdjustWindowRectEx(&native_cast(wnd), 
+        if (!::AdjustWindowRectEx(&native_cast(rc), 
                                   enum_cast(this->Window.Style.get()), 
                                   boolean_cast(!this->Window.Menu.empty()), 
                                   enum_cast(this->Window.StyleEx.get())))
           throw platform_error(HERE, "Unable to calculate window rectangle from client");
 
-        // Set value silently 
-        this->Value = client;
-        // Set window rectangle, raising chain of 'Changed' events
-        this->Window.WindowRect = wnd;
+        // Set window rectangle
+        this->Window.WindowRect = rc;
       }
     };
     
@@ -455,7 +468,7 @@ namespace wtl
           return boolean_cast(::IsWindowVisible(this->Window));
 
         // Return cached
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -571,7 +584,7 @@ namespace wtl
           return static_cast<WindowId>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_ID) );
         
         // Return cached
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -638,7 +651,7 @@ namespace wtl
           return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
         
         // Return cached
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -705,7 +718,7 @@ namespace wtl
           return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
 
         // Return cached
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -782,7 +795,7 @@ namespace wtl
         }
         
         // [OFFLINE] Return cached
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -831,10 +844,9 @@ namespace wtl
       //! Create with initial value
       //! 
       //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowRectPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      WindowRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -898,27 +910,16 @@ namespace wtl
             flags |= MoveWindowFlags::NoMove;
 
           // Resize/reposition window
-          if (!::SetWindowPos(Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+          if (!::SetWindowPos(this->Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
             throw platform_error(HERE, "Unable to set window position");
         }
 
-        // Update value 
-        this->update(rc);
-        // Internally set sibling properties
-        this->Window.Size.update(rc.size());
-        this->Window.Position.update(rc.topLeft());
-
-        // Raise WindowRect->Changed & ClientRect->Changed
-        this->Window.WindowRect.Changed.raise();
-        this->Window.ClientRect.Changed.raise();
-
-        // [RESIZED] Raise Size->Changed
-        if (resized)
-          this->Window.Size.Changed.raise();
-
-        // [MOVED] Raise Position->Changed
-        if (moved)
-          this->Window.Position.Changed.raise();
+        // [¬EXISTS] Set size/position
+        if (!this->Window.exists())
+        {
+          this->Window.Size = rc.size();
+          this->Window.Position = rc.topLeft();
+        }
       }
     };
     
@@ -971,7 +972,7 @@ namespace wtl
           return this->Window.WindowRect().size();
 
         // [~EXISTS] Return cached size  (Offline window rectangle derived from size)
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -984,21 +985,12 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       void set(argument_t sz) override
       {
-        RectL wnd(this->Window.Position(), sz);   //!< New window rectangle
-
-        // [EXISTS] Resize window rectangle    [Raises WindowRect->Changed, ClientRect->Changed, Size->Changed]
+        // [EXISTS] Set window rectangle   
         if (this->Window.exists())
-          this->Window.WindowRect = wnd;
-        else
-        {
-          // Update Size + WindowRect
-          this->update(sz);
-          this->Window.WindowRect.update(wnd);
-          
-          // Raise WindowRect->Changed then Size->Changed  (But not ClientRect->Changed)
-          this->Window.WindowRect.Changed.raise();
-          this->Window.Size.Changed.raise();
-        }
+          this->Window.WindowRect = RectL(this->Window.Position(), sz);
+        
+        // Store size
+        base::set(sz);
       }
     };
     
@@ -1050,8 +1042,8 @@ namespace wtl
         if (this->Window.exists())
           return this->Window.WindowRect().topLeft();
 
-        // [~EXISTS] Return cached position  (Offline window rectangle derived from position)
-        return this->Value;
+        // [~EXISTS] Return cached position  
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -1064,21 +1056,12 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       void set(argument_t pt) override
       {
-        RectL wnd(pt, this->Window.Size.get());   //!< New window rectangle
-
-        // [EXISTS] Reposition window rectangle   [Raises WindowRect->Changed, ClientRect->Changed, Position->Changed]
+        // [EXISTS] Set window rectangle   
         if (this->Window.exists())
-          this->Window.WindowRect = wnd;
-        else
-        {
-          // Update Position + WindowRect
-          this->update(pt);
-          this->Window.WindowRect.update(wnd);
-          
-          // Raise WindowRect->Changed then Position->Changed   (But not ClientRect->Changed)
-          this->Window.WindowRect.Changed.raise();
-          this->Window.Position.Changed.raise();
-        }
+          this->Window.WindowRect = RectL(pt, this->Window.Size());
+        
+        // Store position
+        base::set(pt);
       }
     };
     
@@ -1137,7 +1120,7 @@ namespace wtl
         }
 
         // Return cached
-        return this->Value;
+        return base::get();
       }
 
       // ----------------------------------- MUTATOR METHODS ----------------------------------

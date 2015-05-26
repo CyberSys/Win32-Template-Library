@@ -116,15 +116,6 @@ namespace wtl
     {
       Value = value;
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::update
-    //! Silent value mutator
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual void  update(argument_t value) 
-    {
-      Value = value;
-    }
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -257,12 +248,6 @@ namespace wtl
     //! \alias value_t - Inherit value type
     using value_t = typename IMPL::value_t;
 
-    //! \alias ChangedEvent - Defines post-update event
-    using ChangedEvent = Event<void>;
-
-    //! \alias ChangingEvent - Defines pre-update event
-    using ChangingEvent = Event<bool,/*argument_t,*/argument_t>;
-
     //! \var readonly - Define whether property is read-only or mutable
     static constexpr bool readonly = IMPL::readonly;
 
@@ -270,10 +255,6 @@ namespace wtl
     static constexpr bool reference = IMPL::reference;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
-  public:
-    ChangedEvent   Changed;     //!< Raised after value changes
-    ChangingEvent  Changing;    //!< Raised before value changes
-
   protected:
     provider_t     Impl;        //!< Implementation provider
 
@@ -407,13 +388,8 @@ namespace wtl
     template <typename = std::enable_if_t<!readonly>>
     void  set(argument_t value) 
     {
-      // Raise 'Changing'
-      //if (Changing.raise(/*Impl.get(),*/ value))
-      {
-        // Set and raise 'Changed'
-        Impl.set(value);
-        Changed.raise();
-      }
+      // Set value
+      Impl.set(value);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -453,20 +429,6 @@ namespace wtl
     {
       set(r.get());
       return *this;
-    }
-
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::update
-    //! Set value without raising events
-    //! 
-    //! \param[in] &&... args - [optional] Value constructor arguments
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    void  update(ARGS&&... args) 
-    {
-      // Update value
-      Impl.update(std::forward<ARGS>(args)...);
     }
   };
 
