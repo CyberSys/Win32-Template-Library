@@ -16,6 +16,15 @@ namespace wtl
 {
   
   //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_always_t - Sentinel SFINAE expression that always succeeds
+  //! 
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename RET = void>
+  using enable_always_t = std::enable_if_t<true, RET>;
+
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_array_t - Defines an SFINAE expression requiring an object of array type 
   //! 
   //! \tparam T - Input type
@@ -64,8 +73,29 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename RET = void, typename... ARGS>
   using enable_if_class_constructible_t = std::enable_if_t<std::is_class<T>::value && std::is_constructible<T,ARGS...>, RET>;
-
   
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_convertible_t - Defines an SFINAE expression requiring an accessible conversion from A to B
+  //! 
+  //! \tparam FROM - Input type
+  //! \tparam TO - Desired type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename FROM, typename TO, typename RET = void>
+  using enable_if_convertible_t = std::enable_if_t<std::is_convertible<FROM,TO>::value, RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_not_convertible_t - Defines an SFINAE expression requiring no accessible conversion from A to B
+  //! 
+  //! \tparam FROM - Input type
+  //! \tparam TO - Desired type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename FROM, typename TO, typename RET = void>
+  using enable_if_not_convertible_t = std::enable_if_t<!std::is_convertible<FROM,TO>::value, RET>;
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct enable_if_enum_t - Defines an SFINAE expression requiring an enumeration
   //! 
@@ -74,6 +104,27 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename E, typename RET = void>
   using enable_if_enum_t = std::enable_if_t<std::is_enum<E>::value, RET>;
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_equal_t - Defines an SFINAE expression requiring two integers, A and B, be equal
+  //! 
+  //! \tparam A - Value
+  //! \tparam B - Value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <size_t A, size_t B, typename RET = void>
+  using enable_if_equal_t = std::enable_if_t<A == B, RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_not_equal_t - Defines an SFINAE expression requiring two integers, A and B, be unequal
+  //! 
+  //! \tparam A - Value
+  //! \tparam B - Value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <size_t A, size_t B, typename RET = void>
+  using enable_if_not_equal_t = std::enable_if_t<A != B, RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +135,26 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename RET = void>
   using enable_if_floating_t = std::enable_if_t<std::is_floating_point<T>::value, RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_greater_t - Defines an SFINAE expression requiring an integer A be greater than an integer B
+  //! 
+  //! \tparam A - Value
+  //! \tparam B - Value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <size_t A, size_t B, typename RET = void>
+  using enable_if_greater_t = std::enable_if_t<(A > B), RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_less_t - Defines an SFINAE expression requiring an integer A be less than an integer B
+  //! 
+  //! \tparam A - Value
+  //! \tparam B - Value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <size_t A, size_t B, typename RET = void>
+  using enable_if_less_t = std::enable_if_t<(A < B), RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
