@@ -35,7 +35,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = MessagePump;
+    using type = MessagePump<ENC,WINDOW>;
   
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;

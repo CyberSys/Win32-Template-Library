@@ -46,7 +46,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct encoding_traits - Defines encoding traits
   //! 
-  //! \tparam E - Type used to define specialization
+  //! \tparam E - Encoding type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding E> struct encoding_traits                   { using char_t = char;    };
   template <>           struct encoding_traits<Encoding::UTF16>  { using char_t = wchar_t; };
@@ -55,7 +55,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias encoding_char_t - Encoding character type accessor
   //! 
-  //! \tparam E - Type used to define specialization
+  //! \tparam E - Encoding type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding E>
   using encoding_char_t = typename encoding_traits<E>::char_t;
@@ -64,11 +64,19 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_encoding - Defines default encoding for character types
   //! 
-  //! \tparam E - Type used to define specialization
+  //! \tparam T - Character type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> struct default_encoding                                                              {};
   template <>           struct default_encoding<char>    : std::integral_constant<Encoding,Encoding::ANSI>   {};
   template <>           struct default_encoding<wchar_t> : std::integral_constant<Encoding,Encoding::UTF16>  {};
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct default_encoding_t - Type accessor for default encoding
+  //! 
+  //! \tparam T - Type used to define specialization
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> 
+  using default_encoding_t = default_encoding< std::remove_const_t<std::remove_reference_t<T>> >;
 
   
   // --------------------------------- SFINAE ---------------------------------

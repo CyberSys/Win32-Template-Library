@@ -500,11 +500,11 @@ namespace wtl
   //! \param[in] const& path - Path
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
+  /*template <Encoding ENC>
   inline Console& operator<< (Console& c, const Path<ENC>& path)
   { 
     return c << Cons::Yellow << path.c_str() << Cons::Reset;
-  }
+  }*/
   
 
   //////////////////////////////////////////////////////////////////////////////////////////

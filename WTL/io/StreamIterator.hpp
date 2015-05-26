@@ -18,18 +18,28 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct StreamIterator - Output stream iterator which overloads both assignment & function operators
   //! 
-  //! \tparam STREAM - Stream type
+  //! \tparam STREAM - Any type that overloads the output stream operator
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename STREAM>
   struct StreamIterator : std::_Outit
   {	
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
-    //! \typedef stream_t - Stream type
-	  typedef STREAM stream_t;
+    //! \alias type - Define own type
+    using type = StreamIterator<STREAM>;
+
+    //! \alias base - Define base type
+    using base = std::_Outit;
+
+    //! \alias stream_t - Define output stream type
+	  using stream_t = STREAM;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+	  stream_t&  Stream;	// Output stream
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
-  
+  public:
     //////////////////////////////////////////////////////////////////////////////////////////
     // StreamIterator::StreamIterator
     //! Create from output stream
@@ -107,10 +117,6 @@ namespace wtl
 	  {	
 		  return *this;
 	  }
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-	  stream_t&  Stream;	// Output stream
   };
   
   
@@ -125,7 +131,7 @@ namespace wtl
   template <typename T>
   StreamIterator<T> stream_iterator(T& s)
   {
-    return StreamIterator<T>(s)
+    return StreamIterator<T>(s);
   }
 }
 
