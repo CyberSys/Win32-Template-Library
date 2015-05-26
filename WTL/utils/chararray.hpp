@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/DynamicArray.hpp"           //!< Array
+#include "wtl/utils/Encoding.hpp"               //!< string_encoder_t
 #include "wtl/utils/String.hpp"                 //!< String utilities
 #include "wtl/traits/EncodingTraits.hpp"        //!< Encoding 
 #include "wtl/io/Console.hpp"                   //!< Console
@@ -59,148 +60,6 @@ namespace wtl
     static const CharArray<ENCODING,LENGTH> EMPTY;
     
   protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy - Handles conversion between character encoding types
-    //! 
-    //! \tparam FROM - Input character encoding
-    //! \tparam TO - Output character encoding
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding FROM, Encoding TO, typename>
-    struct conversion_proxy;
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy<FROM,Encoding::UTF16> - Handles narrow character -> wide character conversion
-    //! 
-    //! \tparam FROM - Input character encoding
-    //! \tparam TO - Output character encoding
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding FROM>
-    struct conversion_proxy<FROM,Encoding::UTF16,enable_if_not_encoding_t<FROM,Encoding::UTF16>>
-    {
-      //! \alias input_t - Input character type
-      using input_t = encoding_char_t<FROM>;
-
-      //! \alias output_t - Output character type
-      using output_t = encoding_char_t<Encoding::UTF16>;
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // conversion_proxy::convert
-      //! Copy a narrow character string into a wide character buffer
-      //! 
-      //! \tparam INPUT - Input iterator type
-      //! 
-      //! \param[in] const* first - First character
-      //! \param[in] const* last - Position beyond final character
-      //! \param[in,out] *output - First character in output range
-      //! \param[in] const* lastOut - Position immediately beyond final character of output range
-      //!
-      //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename INPUT = const input_t*>
-      static int32  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
-      {
-        REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
-        REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
-        
-        // narrow -> wide
-        return MultiByteToWideChar(enum_cast(FROM), enum_cast(MultiByteFlags::PreComposed), std::addressof(*first), last-first, output, lastOut-output);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy<Encoding::UTF16,TO> - Handles wide character -> narrow character conversion
-    //! 
-    //! \tparam FROM - Input character encoding
-    //! \tparam TO - Output character encoding
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding TO>
-    struct conversion_proxy<Encoding::UTF16,TO,enable_if_not_encoding_t<TO,Encoding::UTF16>>
-    {
-      //! \alias input_t - Input character type
-      using input_t = encoding_char_t<Encoding::UTF16>;
-      
-      //! \alias output_t - Output character type
-      using output_t = encoding_char_t<TO>;
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // conversion_proxy::convert
-      //! Copy an wide character string into a narrow character buffer
-      //! 
-      //! \tparam INPUT - Input iterator type
-      //! 
-      //! \param[in] const* first - First character
-      //! \param[in] const* last - Position beyond final character
-      //! \param[in,out] *output - First character in output range
-      //! \param[in] const* lastOut - Position immediately beyond final character of output range
-      //!
-      //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename INPUT = const input_t*>
-      static int32  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
-      {
-        REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
-        REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
-
-        // wide -> narrow
-        int32  useDefault = True;
-        return WideCharToMultiByte(enum_cast(TO), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), std::addressof(*first), last-first, output, lastOut-output, "?", &useDefault);
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy<E,E> - Handles no conversion required
-    //! 
-    //! \tparam E - Character encoding of both strings
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding E>
-    struct conversion_proxy<E,E,void>
-    {
-      //! \alias input_t - Input character type
-      using input_t = encoding_char_t<E>;
-
-      //! \alias output_t - Output character type
-      using output_t = input_t;
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // conversion_proxy::convert
-      //! Copy an input string of equal encoding
-      //! 
-      //! \tparam INPUT - Input iterator type
-      //! 
-      //! \param[in] const* first - First character
-      //! \param[in] const* last - Position beyond final character
-      //! \param[in,out] *output - First character in output range
-      //! \param[in] const* lastOut - Position immediately beyond final character of output range
-      //!
-      //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename INPUT = const input_t*>
-      static int32  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
-      {
-        /*REQUIRED_PARAM(first);*/  REQUIRED_PARAM(output);
-        /*REQUIRED_PARAM(last);*/   REQUIRED_PARAM(lastOut);
-
-        const int32 CAPACITY = lastOut-output-1;   //!< Output buffer character capacity 
-
-        // Clear output
-        output[0] = default<output_t>();
-
-        // Prevent output buffer overrun
-        if (last - first > CAPACITY)
-          last = first + CAPACITY;
-
-        // Copy characters from input range
-        for (INPUT pos = first; pos != last; ++pos, ++output)
-          *output = *pos;
-
-        // null terminate
-        *output = default<output_t>();
-        
-        // Return number of characters copied
-        return last-first;
-      }
-    };
-
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct buffer_proxy - Encapsulates updating the 'Count' property after external modification
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -304,12 +163,16 @@ namespace wtl
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
     //! \throw wtl::logic_error - [Debug only] String exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    explicit CharArray(const char_t* str) : CharArray()
+    template <typename CHR>
+    explicit CharArray(const CHR* str) : CharArray()
     {
       REQUIRED_PARAM(str);
 
+      // Assume equal encoding for equal character type, assume default for foreign character type
+      constexpr Encoding enc = std::is_same<char_t,CHR>::value ? encoding : default_encoding_t<CHR>::value;
+
       // Copy from input buffer, truncate if necessary, assume equal encoding
-      CharArray::assign<encoding>(str, str+strlen_t(str));
+      CharArray::assign<enc>(str, str+strlen_t(str));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -671,7 +534,7 @@ namespace wtl
       LOGIC_INVARIANT(last-first < this->Count+length-1);
       
       // Convert/Append input string
-      int32 num = conversion_proxy<E,encoding,void>::convert(first, last, &this->Data[this->Count], &this->Data[length]);
+      int32 num = string_encoder_t<E,encoding>::transform(first, last, &this->Data[this->Count], &this->Data[length]);
       this->Count += num;
 
       // Ensure succeeded
@@ -734,12 +597,10 @@ namespace wtl
     template <Encoding E = encoding, typename CHR = const encoding_char_t<E>*>
     int32 assign(CHR first, CHR last)
     {
-      //REQUIRED_PARAM(first);
-      //REQUIRED_PARAM(last);
       LOGIC_INVARIANT(last-first < length-1);
       
       // Convert/Assign input string
-      this->Count = conversion_proxy<E,encoding,void>::convert(first, last, &this->Data[0], &this->Data[length]);
+      this->Count = string_encoder_t<E,encoding>::transform(first, last, &this->Data[0], &this->Data[length]);
 
       // Ensure succeeded
       if (last-first && !this->Count)

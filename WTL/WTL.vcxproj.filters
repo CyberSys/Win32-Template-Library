@@ -476,6 +476,9 @@
     <ClInclude Include="platform\DateTime.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="utils\Encoding.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

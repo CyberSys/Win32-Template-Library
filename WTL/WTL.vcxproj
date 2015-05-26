@@ -78,6 +78,7 @@
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="utils\Array.hpp" />
+    <ClInclude Include="utils\Encoding.hpp" />
     <ClInclude Include="utils\DebugInfo.hpp" />
     <ClInclude Include="utils\ExceptionLog.hpp" />
     <ClInclude Include="utils\Iterator.hpp" />
