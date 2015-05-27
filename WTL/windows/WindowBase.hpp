@@ -86,9 +86,6 @@ namespace wtl
     //! \alias wtlproc_t - Instance window procedure signature
     using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  
 
-    //! \alias window_t - Define window type
-    using window_t = type;
-    
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
 
@@ -171,7 +168,7 @@ namespace wtl
   
       // ----------------------------------- REPRESENTATION -----------------------------------
     protected:
-      window_t&  Parent;        //!< Parent/owner of collection
+      WindowBase<ENC>&  Parent;        //!< Parent/owner of collection
       
       // ------------------------------------ CONSTRUCTION ------------------------------------
     public:
@@ -181,7 +178,7 @@ namespace wtl
       //! 
       //! \param[in] &parent - Parent/owner of collection
       /////////////////////////////////////////////////////////////////////////////////////////
-      ChildWindowCollection(window_t& parent) : Parent(parent)
+      ChildWindowCollection(WindowBase<ENC>& parent) : Parent(parent)
       {}
       
       // ----------------------------------- STATIC METHODS -----------------------------------
@@ -199,7 +196,7 @@ namespace wtl
       //! \throw wtl::logic_error - Window already exists
       //! \throw wtl::platform_error - Unable to create window
       /////////////////////////////////////////////////////////////////////////////////////////
-      void create(window_t& child)
+      void create(WindowBase<ENC>& child)
       {
         // Ensure child doesn't already exist
         if (child.Handle.exists())
@@ -217,7 +214,7 @@ namespace wtl
       //! 
       //! \throw wtl::logic_error - Window does not exist
       /////////////////////////////////////////////////////////////////////////////////////////
-      void insert(window_t& child)
+      void insert(WindowBase<ENC>& child)
       {
         // Ensure child exists
         if (!child.Handle.exists())
@@ -291,7 +288,7 @@ namespace wtl
     template <typename VALUE, PropertyType TYPE>
     struct WindowPropertyImpl : PropertyImpl<VALUE,TYPE>
     {
-      friend window_t;    //!< Allow WindowBase to internally set value
+      friend WindowBase<ENC>;    //!< Allow WindowBase to internally set value
 
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -303,7 +300,7 @@ namespace wtl
 
       // ----------------------------------- REPRESENTATION -----------------------------------
     protected:
-      window_t&  Window;      //!< Owner window
+      WindowBase<ENC>&  Window;      //!< Owner window
 
       // ------------------------------------ CONSTRUCTION ------------------------------------
     public:
@@ -315,7 +312,7 @@ namespace wtl
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowPropertyImpl(window_t& wnd, ARGS&&... args) : base(std::forward<ARGS>(args)...),
+      WindowPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(std::forward<ARGS>(args)...),
                                                           Window(wnd)
       {}
 
@@ -352,7 +349,7 @@ namespace wtl
       //! 
       //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      ClientRectPropertyImpl(window_t& wnd) : base(wnd, default<argument_t>())
+      ClientRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<argument_t>())
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -450,7 +447,7 @@ namespace wtl
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowEnabledPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      WindowEnabledPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -515,7 +512,7 @@ namespace wtl
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowFontPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      WindowFontPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -566,7 +563,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowIdPropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
+      WindowIdPropertyImpl(WindowBase<ENC>& wnd, argument_t init) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -633,7 +630,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStylePropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
+      WindowStylePropertyImpl(WindowBase<ENC>& wnd, argument_t init) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -700,7 +697,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStyleExPropertyImpl(window_t& wnd, argument_t init) : base(wnd, init)
+      WindowStyleExPropertyImpl(WindowBase<ENC>& wnd, argument_t init) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -767,7 +764,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowTextPropertyImpl(window_t& wnd, argument_t init = default<argument_t>()) : base(wnd, init)
+      WindowTextPropertyImpl(WindowBase<ENC>& wnd, argument_t init = default<argument_t>()) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -846,7 +843,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowRectPropertyImpl(window_t& wnd) : base(wnd, default<RectL>())
+      WindowRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<RectL>())
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -954,7 +951,7 @@ namespace wtl
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowSizePropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      WindowSizePropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -1025,7 +1022,7 @@ namespace wtl
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowPositionPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      WindowPositionPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -1093,7 +1090,7 @@ namespace wtl
       //! \param[in] &&... args - [optional] Value constructor arguments
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
-      WindowVisibilityPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+      WindowVisibilityPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -1272,11 +1269,11 @@ namespace wtl
     // WindowBase::getFocus
     //! Get the window with input focus
     //!
-    //! \return window_t* - Window with input focus, or nullptr if focus belongs to another thread
+    //! \return WindowBase<ENC>* - Window with input focus, or nullptr if focus belongs to another thread
     //!
     //! \throw wtl::domain_error - Input focus belongs to native window on current thread
     /////////////////////////////////////////////////////////////////////////////////////////
-    static window_t*  getFocus()
+    static WindowBase<ENC>*  getFocus()
     {
       if (::HWND focus = ::GetFocus())
       {
@@ -1450,11 +1447,11 @@ namespace wtl
     // WindowBase::parent const
     //! Get the parent window
     //! 
-    //! \return window_t* - Parent window if any, otherwise nullptr
+    //! \return WindowBase<ENC>* - Parent window if any, otherwise nullptr
     //!
     //! \throw wtl::domain_error - Parent is native window
     /////////////////////////////////////////////////////////////////////////////////////////
-    window_t* parent() const
+    WindowBase<ENC>* parent() const
     {
       // Query parent
       if (::HWND wnd = ::GetParent(Handle))
@@ -1514,7 +1511,7 @@ namespace wtl
     //!
     //! \remarks Child windows are automatically added to the ChildWindowCollection of the parent
     /////////////////////////////////////////////////////////////////////////////////////////
-    void create(window_t* owner = nullptr)
+    void create(WindowBase<ENC>* owner = nullptr)
     {
       // Ensure window does not exist
       if (Handle.exists())
@@ -1600,7 +1597,7 @@ namespace wtl
     //! \throw wtl::domain_error - Mismatched child window type
     //! \throw wtl::logic_error - Missing child window
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename WINDOW = window_t, typename IDENT = WindowId>
+    template <typename WINDOW = WindowBase<ENC>, typename IDENT = WindowId>
     WINDOW& find(IDENT child) 
     {
       // Lookup child window
