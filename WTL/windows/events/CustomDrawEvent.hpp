@@ -11,11 +11,8 @@
 #include "wtl/WTL.hpp"
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias StandardNotifyEventHandler - Handler for standard button events sent via COMMAND messages
   //! 
@@ -38,7 +35,6 @@ namespace events
   template <Encoding ENC, typename SENDER> using RightClickNotifyHandler = StandardNotifyEventHandler<ENC, SENDER, NotifyMessage::RClick>;*/
   
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_CUSTOM_DRAW_EVENT_HPP

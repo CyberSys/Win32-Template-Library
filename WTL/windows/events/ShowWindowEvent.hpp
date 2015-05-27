@@ -14,11 +14,8 @@
 #include "wtl/platform/WindowFlags.hpp"            //!< ShowWindowType
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<ENC,WindowMessage::SHOWWINDOW> - Event arguments for Win32 message 'WM_SHOWWINDOW'
   //! 
@@ -100,7 +97,6 @@ namespace events
   template <Encoding ENC>
   using ShowWindowEventHandler = MessageEventHandler<ENC,WindowMessage::SHOWWINDOW>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_SHOW_WINDOW_EVENT_HPP

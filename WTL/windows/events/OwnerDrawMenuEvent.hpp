@@ -18,11 +18,8 @@
 #include "wtl/utils/Rectangle.hpp"           //!< Rect
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised for menus
   //! 
@@ -118,7 +115,6 @@ namespace events
   using OwnerDrawMenuEventHandler = MessageEventHandler<ENC,WindowMessage::DRAWITEM>;
 
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_OWNER_DRAW_EVENT_HPP

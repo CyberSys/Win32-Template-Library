@@ -19,9 +19,7 @@
 #include "wtl/traits/WindowTraits.hpp"          //!< HWnd
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ControlEventArgs<WindowMessage::MEASUREITEM> - Event arguments for Win32 message 'WM_MEASUREITEM' raised by controls
@@ -141,7 +139,6 @@ namespace events
   template <Encoding ENC>
   using OwnerMeasureCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::MEASUREITEM>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_OWNER_MEASURE_CTRL_EVENT_HPP

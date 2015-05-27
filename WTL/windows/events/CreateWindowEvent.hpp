@@ -13,10 +13,7 @@
 
 //! \namespace wtl - Windows template library
 namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
-{
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<ENC,WindowMessage::CREATE> - Event arguments for Win32 message 'WM_CREATE'
   //! 
@@ -135,7 +132,6 @@ namespace events
   template <Encoding ENC>
   using CreateWindowEventHandler = MessageEventHandler<ENC,WindowMessage::CREATE>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_CREATE_WINDOW_EVENT_HPP

@@ -15,9 +15,7 @@
 #include "wtl/traits/WindowTraits.hpp"             //!< HWnd
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::PAINT> - Event arguments for Win32 message 'WM_PAINT'
@@ -154,7 +152,6 @@ namespace events
   template <Encoding ENC>
   using PaintWindowEventHandler = MessageEventHandler<ENC,WindowMessage::PAINT>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_PAINT_WINDOW_EVENT_HPP

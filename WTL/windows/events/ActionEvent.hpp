@@ -16,9 +16,7 @@
 
 //! \namespace wtl - Windows template library
 namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
-{
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::COMMAND> - Arguments decoder for Gui commands raised via menu or accelerator
   //! 
@@ -100,7 +98,6 @@ namespace events
   using ActionEventHandler = MessageEventHandler<ENC,WindowMessage::COMMAND>;
 
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_COMMAND_EVENT_HPP

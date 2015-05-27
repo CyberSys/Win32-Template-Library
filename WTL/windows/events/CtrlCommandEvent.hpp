@@ -16,11 +16,9 @@
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl 
 {
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ControlEventArgs<WindowMessage::COMMAND> - Arguments decoder for events from controls passed via 'WM_COMMAND'
   //! 
@@ -141,7 +139,6 @@ namespace events
   using CtrlCommandEventHandler = ControlEventHandler<ENC,WindowMessage::COMMAND,EVENT,CODE>;
 
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_CONTROL_COMMAND_EVENT_HPP

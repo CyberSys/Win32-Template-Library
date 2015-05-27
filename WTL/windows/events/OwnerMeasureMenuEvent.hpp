@@ -19,9 +19,7 @@
 #include "wtl/utils/Rectangle.hpp"           //!< Rect
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::MEASUREITEM> - Event arguments for Win32 message 'WM_MEASUREITEM'
@@ -123,7 +121,6 @@ namespace events
   template <Encoding ENC>
   using OwnerMeasureMenuEventHandler = MessageEventHandler<ENC,WindowMessage::MEASUREITEM>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_OWNER_MEASURE_MENU_EVENT_HPP

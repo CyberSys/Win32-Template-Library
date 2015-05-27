@@ -20,11 +20,8 @@
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct ControlEventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised from controls
   //! 
@@ -135,7 +132,6 @@ namespace events
   template <Encoding ENC>
   using OwnerDrawCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::DRAWITEM>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_OWNER_DRAW_CONTROL_EVENT_HPP

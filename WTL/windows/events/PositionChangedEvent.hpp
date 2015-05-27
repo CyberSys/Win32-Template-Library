@@ -15,11 +15,8 @@
 #include "wtl/traits/WindowTraits.hpp"             //!< HWnd
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
+namespace wtl 
 {
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::WINDOWPOSCHANGED> - Event arguments for Win32 message 'WM_WINDOWPOSCHANGED'
   //! 
@@ -110,7 +107,6 @@ namespace events
   template <Encoding ENC>
   using PositionChangedEventHandler = MessageEventHandler<ENC,WindowMessage::WINDOWPOSCHANGED>;
   
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_POSITION_CHANGED_EVENT

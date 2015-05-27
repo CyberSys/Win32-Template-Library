@@ -13,9 +13,6 @@
 
 //! \namespace wtl - Windows template library
 namespace wtl {
-//! \namespace events - WTL Window events
-namespace events 
-{
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CloseWindowEvent - Defines 'CloseWindow' event (ie. WM_CLOSE)
@@ -33,7 +30,6 @@ namespace events
   template <Encoding ENC>
   using CloseWindowEventHandler = typename CloseWindowEvent<ENC>::delegate_t;
 
-} // namespace events
 } // namespace wtl
 
 #endif // WTL_CLOSE_WINDOW_EVENT_HPP
