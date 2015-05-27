@@ -9,9 +9,8 @@
 #define WTL_RANGE_TRAITS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Constant.hpp"     //!< constant
+#include "wtl/utils/Constant.hpp"     //!< static_constant
 #include <type_traits>                //!< std::integral_constant
-#include <cfloat>                     //!< 
 #include <limits>                     //!< std::numeric_limits
 
 //! \namespace wtl - Windows template library
@@ -31,7 +30,7 @@ namespace wtl
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct min_value<T,enable_if_scalar_t<T>> : constant<T,std::numeric_limits<T>::min>
+  struct min_value<T,enable_if_scalar_t<T>> : static_constant<T,std::numeric_limits<T>::min>
   {};
 
 
@@ -49,7 +48,7 @@ namespace wtl
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct max_value<T,enable_if_scalar_t<T>> : constant<T,std::numeric_limits<T>::max>
+  struct max_value<T,enable_if_scalar_t<T>> : static_constant<T,std::numeric_limits<T>::max>
   {};
 
   

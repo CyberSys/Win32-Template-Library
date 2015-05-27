@@ -76,18 +76,18 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct constant - Encapsulates any compile-time constant available via a static accessor
+  //! \struct static_constant - Encapsulates any compile-time static_constant available via a static accessor
   //! 
   //! \tparam T - Any type
   //! \tparam GET - Any accessor function (with linkage) of signature "T (*)()"
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, T (*GET)()> 
-  struct constant 
+  struct static_constant 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = constant<T,GET>;
+    using type = static_constant<T,GET>;
 
     //! \alias value_type - Define value type
     using value_type = T;
@@ -110,17 +110,17 @@ namespace wtl
 	
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    DEFAULT_CONSTEXPR(constant);         //!< Can be deep copied at compile-time
-    DISABLE_COPY_ASSIGN(constant);       //!< Immutable
-    DISABLE_MOVE_ASSIGN(constant);       //!< Immutable
-    ENABLE_POLY(constant);               //!< Can be polymorphic
+    DEFAULT_CONSTEXPR(static_constant);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(static_constant);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(static_constant);       //!< Immutable
+    ENABLE_POLY(static_constant);               //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // -------------------------------------- ACCESSORS -------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // constant::operator() constexpr
+    // static_constant::operator() constexpr
     //! Query value
     //! 
     //! \return reference_type - Reference to value
@@ -132,7 +132,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // constant::operator reference_type constexpr
+    // static_constant::operator reference_type constexpr
     //! Implicit user conversion to reference type
     //! 
     //! \return reference_type - Reference to value
@@ -149,7 +149,7 @@ namespace wtl
 //! \ifnot CONSTEXPR_SDMI_CAP - Initialize at runtime
 #ifndef CONSTEXPR_SDMI_CAP
   template <typename T, T (*GET)()> 
-  const T  constant<T,GET>::value = GET();
+  const T  static_constant<T,GET>::value = GET();
 #endif
 
 }

@@ -480,7 +480,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="traits\RangeTraits.hpp">
-      <Filter>Utils</Filter>
+      <Filter>Traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
