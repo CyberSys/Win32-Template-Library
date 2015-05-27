@@ -375,7 +375,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::operator == const
+    // CharArray::operator == const
     //! Case sensitive equality operator for arrays of any type
     //! 
     //! \tparam V - Array element data type
@@ -388,7 +388,7 @@ namespace wtl
     //using base::operator==;
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::operator == const
+    // CharArray::operator == const
     //! Case sensitive equality operator for character arrays of equal type
     //! 
     //! \param[in] const &r - Character array of equal type
@@ -418,7 +418,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::operator != const
+    // CharArray::operator != const
     //! Case sensitive inequality operator for arrays of any type
     //! 
     //! \tparam V - Array element data type
@@ -861,8 +861,8 @@ namespace wtl
   Console& operator << (Console& c, const CharArray<ENC,LENGTH>& r) 
   {
     // Write text and length
-    return c << instance_info("CharArray", make_nvpair("Text", r.c_str()), 
-                                           make_nvpair("Length", r.size()) );
+    return c << instance_info( "CharArray", make_nvpair("text", r.c_str()), 
+                                            make_nvpair("length", r.size()) );
   }
 
   
@@ -875,10 +875,18 @@ namespace wtl
   template <Encoding ENC = Encoding::ANSI, unsigned LEN = 1024>
   struct LastErrorString : CharArray<ENC,LEN>
   {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
     //! \alias base - Define base type
     using base = CharArray<ENC,LEN>;
-    using type = LastErrorString<ENC,LEN>;
 
+    //! \alias type - Define 
+    using type = LastErrorString<ENC,LEN>;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+	
     /////////////////////////////////////////////////////////////////////////////////////////
     // LastErrorString::LastErrorString
     //! Create from last system error
@@ -891,6 +899,14 @@ namespace wtl
       // Lookup system error and append to user error
       formatMsg(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, ::GetLastError(), 0, *base::c_str(), base::length, nullptr);
     }
+    
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
 } // WTL namespace
