@@ -15,6 +15,7 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::range
   //! Bounds a value to within a half open range
@@ -96,6 +97,7 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::delimited_range

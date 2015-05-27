@@ -1,0 +1,59 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+//! \file wtl\traits\RangeTraits.hpp
+//! \brief Defines limit traits 
+//! \date 6 March 2015
+//! \author Nick Crowley
+//! \copyright Nick Crowley. All rights reserved.
+//////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_RANGE_TRAITS_HPP
+#define WTL_RANGE_TRAITS_HPP
+
+#include "wtl/WTL.hpp"
+#include "wtl/utils/Constant.hpp"     //!< constant
+#include <type_traits>                //!< std::integral_constant
+#include <cfloat>                     //!< 
+#include <limits>                     //!< std::numeric_limits
+
+//! \namespace wtl - Windows template library
+namespace wtl
+{
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct min_value - Defines minimum value for a type
+  //! 
+  //! \tparam T - Any type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename = void>
+  struct min_value;  /*Undefined*/
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct min_value<scalar> - Defines minimum value for a type
+  //! 
+  //! \tparam T - Any type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  struct min_value<T,enable_if_scalar_t<T>> : constant<T,std::numeric_limits<T>::min>
+  {};
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct max_value - Defines maximum value for a type
+  //! 
+  //! \tparam T - Any type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename = void>
+  struct max_value;  /*Undefined*/
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct max_value<scalar> - Defines maximum value for a type
+  //! 
+  //! \tparam T - Any type
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  struct max_value<T,enable_if_scalar_t<T>> : constant<T,std::numeric_limits<T>::max>
+  {};
+
+  
+
+} //namespace wtl
+#endif // WTL_RANGE_TRAITS_HPP
+

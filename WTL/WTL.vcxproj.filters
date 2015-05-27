@@ -479,6 +479,9 @@
     <ClInclude Include="utils\DebugInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="traits\RangeTraits.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

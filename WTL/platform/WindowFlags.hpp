@@ -201,7 +201,7 @@ namespace wtl
     }
   };
 
-  template <> struct default_t<WindowPlacement> : literal_constant<::WINDOWPLACEMENT> {};
+  //template <> struct default_t<WindowPlacement> : literal_constant<::WINDOWPLACEMENT> {};
   
   // ----------------------------------- ::ShowWindow(..) Flags ----------------------------------
   

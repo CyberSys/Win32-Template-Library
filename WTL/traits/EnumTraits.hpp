@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/SFINAE.hpp"             //!< Type traits
+#include "wtl/traits/RangeTraits.hpp"       //!< wtl::min_value, wtl::max_value
 #include <iterator>                         //!< std::begin, std::end
 
 //! \namespace wtl - Windows template library
@@ -124,28 +125,6 @@ namespace std
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct min_value - Defines minimum value for a type
-  //! 
-  //! \tparam E - Type used to define specialization
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename = void>
-  struct min_value : std::integral_constant<E,(E)0>
-  {};
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct max_value - Defines maximum value for a type
-  //! 
-  //! \tparam E - Type used to define specialization
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, typename = void>
-  struct max_value : std::integral_constant<E,(E)0>
-  {
-    //! \var value - Maximum allowed value (inclusive)
-    //static constexpr E  value = (E)0;
-  };
-
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | constexpr

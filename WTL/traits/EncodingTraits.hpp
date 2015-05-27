@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EnumTraits.hpp"      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
+#include "wtl/traits/RangeTraits.hpp"     //!< wtl::min_value, wtl::max_value
 #include <type_traits>                    //!< std::enable_if_t, std::integral_constant
 
 //! \namespace wtl - Windows template library

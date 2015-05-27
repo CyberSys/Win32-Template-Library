@@ -220,7 +220,17 @@ namespace wtl
   template <typename T, typename RET = void>
   using enable_if_pod_t = std::enable_if_t<std::is_pod<T>::value, RET>;
   
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_scalar_t - Defines an SFINAE expression requiring an scalar type (integral,float,enum,pointer,mem-pointer,nullptr)
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_scalar_t = std::enable_if_t<std::is_scalar<E>::value, RET>;
+  
+  
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_sizeof_t - Defines an SFINAE expression requiring a type of exact size
   //! 

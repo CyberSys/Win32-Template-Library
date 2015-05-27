@@ -73,6 +73,7 @@
     <ClInclude Include="traits\MenuTraits.hpp" />
     <ClInclude Include="traits\ModuleTraits.hpp" />
     <ClInclude Include="traits\PenTraits.hpp" />
+    <ClInclude Include="traits\RangeTraits.hpp" />
     <ClInclude Include="traits\ResourceTraits.hpp" />
     <ClInclude Include="traits\WindowClassTraits.hpp" />
     <ClInclude Include="traits\WindowTraits.hpp" />

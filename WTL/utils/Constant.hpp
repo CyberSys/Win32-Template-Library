@@ -76,18 +76,18 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct reference_constant - Encapsulates a reference type compile-time constant
+  //! \struct constant - Encapsulates any compile-time constant available via a static accessor
   //! 
-  //! \tparam T - Integral or enumeration type  
-  //! \tparam VALUE - (Compile-time) Value
+  //! \tparam T - Any type
+  //! \tparam GET - Any accessor function (with linkage) of signature "T (*)()"
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, const T& VALUE> 
-  struct reference_constant 
+  template <typename T, T (*GET)()> 
+  struct constant 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = reference_constant<T,VALUE>;
+    using type = constant<T,GET>;
 
     //! \alias value_type - Define value type
     using value_type = T;
@@ -95,10 +95,13 @@ namespace wtl
     //! \alias reference_type - Define reference type
     using reference_type = const T&;
 
-//! \if CONSTEXPR_SDMI_CAP - Use static scope if SDMI supported
+//! \if CONSTEXPR_SDMI_CAP - Initialize if SDMI supported
 #ifdef CONSTEXPR_SDMI_CAP
     //! \var value - Define value
-    static constexpr value_type value = VALUE;
+    static constexpr value_type value = GET();
+#else
+    //! \var value - Define value
+    static const value_type value;
 #endif
 
     // ----------------------------------- REPRESENTATION -----------------------------------
@@ -107,17 +110,17 @@ namespace wtl
 	
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    DEFAULT_CONSTEXPR(reference_constant);         //!< Can be deep copied at compile-time
-    DISABLE_COPY_ASSIGN(reference_constant);       //!< Immutable
-    DISABLE_MOVE_ASSIGN(reference_constant);       //!< Immutable
-    ENABLE_POLY(reference_constant);               //!< Can be polymorphic
+    DEFAULT_CONSTEXPR(constant);         //!< Can be deep copied at compile-time
+    DISABLE_COPY_ASSIGN(constant);       //!< Immutable
+    DISABLE_MOVE_ASSIGN(constant);       //!< Immutable
+    ENABLE_POLY(constant);               //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // -------------------------------------- ACCESSORS -------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // reference_constant::operator() constexpr
+    // constant::operator() constexpr
     //! Query value
     //! 
     //! \return reference_type - Reference to value
@@ -125,16 +128,11 @@ namespace wtl
   	constexpr 
     reference_type operator ()() const noexcept 
     { 
-//! \ifnot CONSTEXPR_SDMI_CAP - Copy-create 
-#ifndef CONSTEXPR_SDMI_CAP
-      return VALUE;
-#else
       return value;
-#endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // reference_constant::operator reference_type constexpr
+    // constant::operator reference_type constexpr
     //! Implicit user conversion to reference type
     //! 
     //! \return reference_type - Reference to value
@@ -142,96 +140,18 @@ namespace wtl
   	constexpr
     operator reference_type() const noexcept 
     { 
-//! \ifnot CONSTEXPR_SDMI_CAP - Copy-create 
-#ifndef CONSTEXPR_SDMI_CAP
-      return VALUE;
-#else
-      return value;
-#endif
-    }
-    
-    // --------------------------------------- MUTATORS -------------------------------------
-  };
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct literal_constant - Encapsulates a literal/reference compile-time constant 
-  //! 
-  //! \tparam T - Literal or reference type (NB: Must be default constructible)
-  //!
-  //! \remarks This is a temporary workaround until we get extended constexpr
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> 
-  struct literal_constant 
-  {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
-    //! \alias type - Define own type
-    using type = literal_constant<T>;
-
-    //! \alias value_type - Define value type
-    using value_type = T;
-  
-//! \if CONSTEXPR_SDMI_CAP - Use compile-initialization if SDMI supported
-#ifdef CONSTEXPR_SDMI_CAP
-    //! \var value - Define value
-    static constexpr value_type value = value_type();
-
-#else
-    //! \var value - Declare value at compile-time
-    static const value_type value;
-#endif
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-	
-    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-    
-    DEFAULT_CONSTEXPR(literal_constant);         //!< Can be deep copied at compile-time
-    DISABLE_COPY_ASSIGN(literal_constant);       //!< Immutable
-    DISABLE_MOVE_ASSIGN(literal_constant);       //!< Immutable
-    ENABLE_POLY(literal_constant);               //!< Can be polymorphic
-
-    // ----------------------------------- STATIC METHODS -----------------------------------
-
-    // -------------------------------------- ACCESSORS -------------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // literal_constant::operator() constexpr
-    //! Query value
-    //! 
-    //! \return value_type - Value
-    /////////////////////////////////////////////////////////////////////////////////////////
-  	constexpr 
-    value_type operator ()() const noexcept 
-    { 
-      return value;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // literal_constant::operator value_type constexpr
-    //! Implicit user conversion to value type
-    //! 
-    //! \return value_type - Value
-    /////////////////////////////////////////////////////////////////////////////////////////
-  	constexpr
-    operator value_type() const noexcept 
-    { 
       return value;
     }
     
     // --------------------------------------- MUTATORS -------------------------------------
   };
 
-//! \ifnot CONSTEXPR_SDMI_CAP - Rely upon runtime initialization 
+//! \ifnot CONSTEXPR_SDMI_CAP - Initialize at runtime
 #ifndef CONSTEXPR_SDMI_CAP
-
-  //! \var literal_constant<T>::value - Default construct
-  template <typename T> 
-  const T  literal_constant<T>::value;
-
+  template <typename T, T (*GET)()> 
+  const T  constant<T,GET>::value = GET();
 #endif
+
 }
 
 
