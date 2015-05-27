@@ -174,8 +174,8 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
-    events::OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< 'Owner draw' event 
-    events::OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< 'Owner Measure' event 
+    OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< 'Owner draw' event 
+    OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< 'Owner Measure' event 
     ActionGroupPtr<encoding>                  Group;            //!< Shared Action group
 
   protected:
@@ -368,8 +368,8 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
-    events::OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
-    events::OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
+    OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< Raised by 'WM_DRAWITEM'
+    OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< Raised by 'WM_MEASUREITEM'
 
   protected:
     HMenu         Handle;     //!< Menu handle
@@ -384,8 +384,8 @@ namespace wtl
     WindowMenu() : Handle(MenuType::Window) 
     {
       // Owner draw handler
-      OwnerDraw += new events::OwnerDrawMenuEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
-      OwnerMeasure += new events::OwnerMeasureMenuEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
+      OwnerDraw += new OwnerDrawMenuEventHandler<encoding>(this, &WindowMenu::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureMenuEventHandler<encoding>(this, &WindowMenu::onOwnerMeasure);
     }
 
     // ----------------------------------- STATIC METHODS -----------------------------------
@@ -552,7 +552,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(events::OwnerDrawMenuEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args) 
     { 
       // Draw background
       args.Graphics.fill(args.Rect, StockBrush::Blue);
@@ -576,25 +576,24 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(events::OwnerMeasureMenuEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
-      // [GROUP] Measure group name
+      // [HEADING] Lookup ActionGroup
       if (auto group = find(action_group_id(args.Ident)))
       {
+        // Measure group name
         args.Size = args.Graphics.measure(group->name());
-        //cdebug << "onOwnerMeasure() group_id=" << (int32)args.Ident << " size=" << args.Size << endl;
-
-        //cdebug << debug_info(__func__, name_value_pair("group", (int32)args.Ident), 
-        //                               name_value_pair("size", args.Size)) << endl;
-
-        cdebug << name_value_pairs("group", (int32)args.Ident, "size", args.Size);
+        
+        // debug
+        cdebug << object_info(__func__, "group", (int32)args.Ident, "size", args.Size) << endl;
       }
 
-      // [ACTION] Measure action name
+      // [ITEM] Lookup Action
       else if (auto action = find(action_id(args.Ident)))
       {
+        // Measure Action name
         args.Size = args.Graphics.measure(action->name());
-        cdebug << "onOwnerMeasure() action_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+        //cdebug << "onOwnerMeasure() action_id=" << (int32)args.Ident << " size=" << args.Size << endl;
       }
         
       // Handled

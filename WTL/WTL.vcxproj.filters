@@ -458,9 +458,6 @@
     <ClInclude Include="casts\NativeCast.hpp">
       <Filter>Casts</Filter>
     </ClInclude>
-    <ClInclude Include="utils\DebugInfo.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Iterator.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -477,6 +474,9 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="utils\Encoding.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\DebugInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

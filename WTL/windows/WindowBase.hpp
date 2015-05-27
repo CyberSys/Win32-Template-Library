@@ -80,13 +80,13 @@ namespace wtl
     //! \alias wndmenu_t - Window menu type
     using wndmenu_t = WindowMenu<ENC>;
 
-    //! \alias wndproc_t - Win32 Window procedure type
+    //! \alias wndproc_t - Class window procedure signature
     using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32, WPARAM, LPARAM);
 
-    //! \alias wtlproc_t - WTL Window procedure type
-    using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  // = decltype(onMessage);
+    //! \alias wtlproc_t - Instance window procedure signature
+    using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  
 
-    //! \alias window_t - Define own type
+    //! \alias window_t - Define window type
     using window_t = type;
     
     //! \var encoding - Define window character encoding
@@ -1196,13 +1196,13 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
-    events::ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
-    events::CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
-    events::CloseWindowEvent<encoding>       Close;         //!< Raised in response to WM_CLOSE
-    events::DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
-    events::PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
-    events::ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-    events::PositionChangedEvent<encoding>   Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
+    ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
+    CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
+    CloseWindowEvent<encoding>       Close;         //!< Raised in response to WM_CLOSE
+    DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
+    PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
+    ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
+    PositionChangedEvent<encoding>   Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
     ActionQueue                      Actions;       //!< Actions queue
@@ -1251,13 +1251,13 @@ namespace wtl
                                   WindowRect(*this)
     {
       // Accept window creation by default
-      Create += new events::CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
+      Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
       
       // Execute gui commands by default
-      Action += new events::ActionEventHandler<encoding>(this, &WindowBase::onAction);
+      Action += new ActionEventHandler<encoding>(this, &WindowBase::onAction);
         
       // Paint window background by default
-      Paint += new events::PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
+      Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
 
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
@@ -1626,7 +1626,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCreate(events::CreateWindowEventArgs<encoding>& args) 
+    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // [Handled] Accept parameters
       return 0; 
@@ -1641,7 +1641,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onAction(events::ActionEventArgs<encoding>& args) 
+    virtual LResult  onAction(ActionEventArgs<encoding>& args) 
     { 
       // Execute associated command
       execute(args.Ident);
@@ -1657,7 +1657,7 @@ namespace wtl
     //! \param[in,out] args - Message arguments containing drawing data
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onPaint(events::PaintWindowEventArgs<encoding>& args) 
+    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
     { 
       // [Handled] Validate client area
       return 0; 
@@ -1696,53 +1696,53 @@ namespace wtl
         // [EVENT] Raise event associated with message
         switch (message)
         {
-        case WindowMessage::CREATE:           ret = Create.raise(events::CreateWindowEventArgs<encoding>(w,l));             break;
+        case WindowMessage::CREATE:           ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
         case WindowMessage::CLOSE:            ret = Close.raise();                                                          break;
         case WindowMessage::DESTROY:          ret = Destroy.raise();                                                        break;
-        case WindowMessage::SHOWWINDOW:       ret = Show.raise(events::ShowWindowEventArgs<encoding>(w,l));                 break;
-        case WindowMessage::WINDOWPOSCHANGED: ret = Repositioned.raise(events::PositionChangedEventArgs<encoding>(w,l));    break;
+        case WindowMessage::SHOWWINDOW:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+        case WindowMessage::WINDOWPOSCHANGED: ret = Repositioned.raise(PositionChangedEventArgs<encoding>(w,l));    break;
 
         // [COMMAND] Reflect control events. Raise Gui events.
         case WindowMessage::COMMAND:  
           if (l != 0)
             // [CONTROL] Reflect to sender
-            ret = events::CtrlCommandEventArgs<encoding>(w,l).reflect();
+            ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
           else
             // [ACTION] Raise event (Default executes the appropriate command object)
-            ret = Action.raise(events::ActionEventArgs<encoding>(w,l));
+            ret = Action.raise(ActionEventArgs<encoding>(w,l));
           break;
 
         // [NOTIFY] Reflect to sender
         case WindowMessage::NOTIFY:  
-          ret = events::CtrlNotifyEventArgs<encoding>(w,l).reflect();   
+          ret = CtrlNotifyEventArgs<encoding>(w,l).reflect();   
           break;
 
         // [OWNER-DRAW] Reflect to sender
         case WindowMessage::DRAWITEM:       
           // [CONTROL] Reflect to originator control
           if (w != 0)
-            ret = events::OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
+            ret = OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
 
           // [MENU] Raise menu's OwnerDraw event
           else 
-            ret = Menu.OwnerDraw.raise(events::OwnerDrawMenuEventArgs<encoding>(w,l));
+            ret = Menu.OwnerDraw.raise(OwnerDrawMenuEventArgs<encoding>(w,l));
           break;
         
         // [OWNER-MEASURE] Reflect to sender
         case WindowMessage::MEASUREITEM: 
           // [CONTROL] Reflect to originator
           if (w != 0)
-            ret = events::OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(),w,l).reflect();
+            ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(),w,l).reflect();
 
           // [MENU] Raise associated menu event
           else 
-            ret = Menu.OwnerMeasure.raise(events::OwnerMeasureMenuEventArgs<encoding>(Handle,w,l));
+            ret = Menu.OwnerMeasure.raise(OwnerMeasureMenuEventArgs<encoding>(Handle,w,l));
           break;
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
         case WindowMessage::PAINT:          
           if (!Paint.empty())
-            ret = Paint.raise(events::PaintWindowEventArgs<encoding>(Handle,w,l));       
+            ret = Paint.raise(PaintWindowEventArgs<encoding>(Handle,w,l));       
           break;
         }
 

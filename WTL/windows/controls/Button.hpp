@@ -13,9 +13,7 @@
 #include "wtl/windows/events/StandardControls.hpp"    //!< ButtonClickEvent
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-//! \namespace control - WTL Controls
-namespace controls 
+namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Button - Encapsulates a button control
@@ -38,11 +36,11 @@ namespace controls
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    events::ButtonClickEvent<encoding>        Click;         //!< Button click
-    events::ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
-    events::ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
-    events::OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
-    events::OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
+    ButtonClickEvent<encoding>        Click;         //!< Button click
+    ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
+    ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
+    OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
+    OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
@@ -64,8 +62,8 @@ namespace controls
       this->Paint.clear();
 
       // Owner draw handler
-      OwnerDraw += new events::OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
-      OwnerMeasure += new events::OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
+      OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
       // Subclass prior to creation
       SubClasses.push_back(SubClass(WindowType::Native, getSystemWndProc()));
@@ -160,17 +158,17 @@ namespace controls
         // [COMMAND (REFLECTED)] Raise associated event
         case WindowMessage::REFLECT_COMMAND:  
           // Extract notification
-          switch (static_cast<ButtonNotification>(events::CtrlCommandEventArgs<encoding>(w,l).Message))
+          switch (static_cast<ButtonNotification>(CtrlCommandEventArgs<encoding>(w,l).Message))
           {
-          case ButtonNotification::Click:      ret = Click.raise(events::ButtonClickEventArgs<encoding>(w,l));            break;
-          case ButtonNotification::SetFocus:   ret = GainFocus.raise(events::ButtonGainFocusEventArgs<encoding>(w,l));    break;
-          case ButtonNotification::KillFocus:  ret = LoseFocus.raise(events::ButtonLoseFocusEventArgs<encoding>(w,l));    break;
+          case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
+          case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;
+          case ButtonNotification::KillFocus:  ret = LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(w,l));    break;
           }
           break;
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' or 'Owner Measure'
-        case WindowMessage::REFLECT_DRAWITEM:     ret = OwnerDraw.raise(events::OwnerDrawCtrlEventArgs<encoding>(w,l));                      break;
-        case WindowMessage::REFLECT_MEASUREITEM:  ret = OwnerMeasure.raise(events::OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l));   break;
+        case WindowMessage::REFLECT_DRAWITEM:     ret = OwnerDraw.raise(OwnerDrawCtrlEventArgs<encoding>(w,l));                      break;
+        case WindowMessage::REFLECT_MEASUREITEM:  ret = OwnerMeasure.raise(OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l));   break;
         }
 
         // [UNHANDLED] Return result & routing
@@ -196,7 +194,7 @@ namespace controls
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerDraw(events::OwnerDrawCtrlEventArgs<encoding>& args) 
+    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       // Draw background
       args.Graphics.fill(args.Rect, StockBrush::Green);
@@ -212,7 +210,7 @@ namespace controls
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerMeasure(events::OwnerMeasureCtrlEventArgs<encoding>& args) 
+    virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
       //CharArray<encoding,128> text;
 
@@ -227,7 +225,7 @@ namespace controls
     }
   };
 
-} // namespace controls
+
 } // namespace wtl
 
 #endif // WTL_BUTTON_HPP
