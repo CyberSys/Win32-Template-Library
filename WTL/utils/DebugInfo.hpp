@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\utils\DebugInfo.hpp
-//! \brief Provides a variadic helper type for writing any object to the debug console
+//! \file wtl\utils\RTVI.hpp
+//! \brief Provides run-time value introspection for any type
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -21,12 +21,12 @@
 namespace wtl
 {
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct DebugInfo - Helper object for writing object instances to the debug console
+  //! \struct ObjectInfo - Encapsulates the name of an object, its properties, and their values to enable runtime value introspection
   //! 
   //! \tparam ARGS... - Attribute name/value pair types
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename... ARGS>
-  struct DebugInfo
+  struct ObjectInfo
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -44,38 +44,55 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
 	
     //////////////////////////////////////////////////////////////////////////////////////////
-    // DebugInfo::DebugInfo
+    // ObjectInfo::ObjectInfo
     //! Create from type name and attributes
     //! 
     //! \param[in] const* name - Type name
-    //! \param[in] &&... args - [optional] Attribute name/value pairs
+    //! \param[in] const& attr - Tuple of attribute name/value pairs
     //////////////////////////////////////////////////////////////////////////////////////////
-    DebugInfo(const char* name, ARGS&&... args) : Name(name), 
-                                                  Attributes(std::forward<ARGS>(args)...)
+    ObjectInfo(const char* name, const std::tuple<ARGS...>& attr) : Name(name), Attributes(attr)
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    ENABLE_COPY(DebugInfo);      //!< Can be deep copied
-    ENABLE_MOVE(DebugInfo);      //!< Can be moved 
-    ENABLE_POLY(DebugInfo);      //!< Can be polymorphic
+    ENABLE_COPY(ObjectInfo);      //!< Can be deep copied
+    ENABLE_MOVE(ObjectInfo);      //!< Can be moved 
+    ENABLE_POLY(ObjectInfo);      //!< Can be polymorphic
   };
-
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::debug_info
-  //! Create debug info for an object 
+  // wtl::make_object_info
+  //! Create runtime value
+  //! 
+  //! \tparam PAIRS - Name/value pair types
+  //! 
+  //! \param[in] const* name - Name of the type 
+  //! \param[in] const& attr - Tuple of attribute name-value pairs
+  //! \return ObjectInfo<PAIRS...> - Debug info
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename... PAIRS>
+  ObjectInfo<PAIRS...>  make_object_info(const char* name, std::tuple<PAIRS...>& attr)
+  {
+    // Create debug info
+    return ObjectInfo<PAIRS...>(name, attr);
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::object_info
+  //! Create debug-info for an object from a list of names and values
   //! 
   //! \param[in] const* name - Name of the type 
   //! \param[in] &&... args - [optional] Alternating sequence of attribute name/value pair c-tor arguments
+  //! \return ObjectInfo<auto> - Debug info
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename... ARGS>
-  DebugInfo<ARGS...>  debug_info(const char* name, ARGS&&... args)
+  auto  object_info(const char* name, ARGS&&... args)
   {
     static_assert(sizeof...(ARGS) % 2 == 0, "Cannot create debug-info from an odd number of arguments");
 
     // Interpret arguments as pairs of nvp c-tor arguments
-    return DebugInfo<ARGS...>(name, name_value_pairs(std::forward<ARGS>(args)...));
+    return make_object_info(name, make_nvpair_tuple(std::forward<ARGS>(args)...));
   }
 
   
@@ -109,6 +126,7 @@ namespace wtl
     return c << Cons::Grey << '}';
   }
 
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
   //! Write debug-info and attributes to the console
@@ -120,7 +138,7 @@ namespace wtl
   //! \return Console& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename... ARGS>
-  Console&  operator << (Console& c, const DebugInfo<ARGS...>& info)
+  Console&  operator << (Console& c, const ObjectInfo<ARGS...>& info)
   {
     // Preface attributes with name
     return c << Cons::Cyan << info.Name << info.Attributes;
@@ -140,8 +158,8 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Point<T>& pt)
   {
-    return c << name_value_pairs("x", pt.x, 
-                                 "y", pt.y);
+    return c << make_nvpair_tuple("x", pt.x, 
+                                  "y", pt.y);
   }
 } // namespace wtl
 

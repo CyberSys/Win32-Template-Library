@@ -60,8 +60,8 @@ namespace wtl
   enable_if_class_t<E,Console&> operator << (Console& c, const Array<E,L,D>& r) 
   {
     // Write comma separated elements
-    return c << debug_info("Array", name_value_pair(" Size", r.size()),
-                                    name_value_pair(" Elements", delimited_range(r, ',')));
+    return c << instance_info("Array", make_nvpair("size", r.size()),
+                                       make_nvpair("values", delimited_range(r, ',')) );
   }
 
   
@@ -81,14 +81,14 @@ namespace wtl
   enable_if_not_class_t<E,Console&> operator << (Console& c, const Array<E,L,D>& r) 
   {
     // Write tag + size
-    c << debug_info("Array")
-      << name_value_pair(" Size", r.size())
+    c << instance_info("Array")
+      << make_nvpair("size", r.size())
       << endl;
 
     // Write N index/elements pairs
     for (uint32 i = 0UL, count = r.size(); i < count; ++i) 
-      c << name_value_pair(" Index", i)
-        << name_value_pair(" Element", r[i])
+      c << make_nvpair("index", i)
+        << make_nvpair("value", r[i])
         << Cons::Break;
     
     // Close

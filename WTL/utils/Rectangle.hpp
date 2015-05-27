@@ -409,7 +409,7 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Rect<T>& rc)
   {
-    return c << name_value_pairs("left", rc.left, 
+    return c << make_nvpair_tuple("left", rc.left, 
                                  "top", rc.top,
                                  "right", rc.right,
                                  "bottom", rc.bottom);

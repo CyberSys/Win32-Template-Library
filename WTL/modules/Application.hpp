@@ -88,7 +88,7 @@ namespace wtl
     // Application::run
     //! Executes the application
     //! 
-    //! \param[in] cmdLine - Command line
+    //! \param[in] const* cmdLine - Command line
     //! \param[in] mode - Initial display mode
     //! \return int32 - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -99,10 +99,10 @@ namespace wtl
              << (Cons::Cyan|Cons::Bold) << "\t\t\t"       << this->name() << "\t" << this->version()                    << endl  
              << Cons::Cyan              << "--------------------------------------------------------------------------" << endl 
              << endl
-             << name_value_pair("Date/Time", LongDateString<ENC>().c_str())          << endl
-             << name_value_pair("Command Line", cmdLine)                             << endl
-             << name_value_pair("Operating System", SystemVersion<ENC>().fullname()) << endl
-             << name_value_pair("Module Path", module_base::path<ENC>().c_str())     << endl;
+             << make_nvpair("Date/Time", LongDateString<ENC>().c_str())          << endl
+             << make_nvpair("Command Line", cmdLine)                             << endl
+             << make_nvpair("Operating System", SystemVersion<ENC>().fullname()) << endl
+             << make_nvpair("Module Path", module_base::path<ENC>().c_str())     << endl;
 
       // Execute
       return msgpump_base::run(mode);

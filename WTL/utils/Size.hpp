@@ -179,8 +179,8 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Size<T>& sz)
   {
-    return c << name_value_pairs("width", sz.width, 
-                                 "height", sz.height);
+    return c << make_nvpair_tuple("width",  sz.width, 
+                                  "height", sz.height);
   };
 
 

@@ -328,7 +328,7 @@ namespace wtl
 
       // Print attributes
       for (auto attr = node.first_attribute(); attr; attr = attr.next_attribute())
-        //cdebug << ' ' << name_value_pair(attr.name(), attr.value());
+        //cdebug << ' ' << make_nvpair(attr.name(), attr.value());
         c << ' ' << colAttribute << attr.name() 
                  << colDelimiter << "='" 
                  << colText      << attr.value() 

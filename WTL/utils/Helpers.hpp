@@ -66,7 +66,24 @@ namespace wtl
   {};
 
   
-  // --------------------------------- C RUNTIME LIBRARY ---------------------------------
+  // --------------------------------- CONSTRUCTION ---------------------------------
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::construct
+  //! Constructs any object using any constructor
+  //! 
+  //! \tparam OBJ - Object type
+  //! \tparam ARGS... - [optional] Constructor argument types
+  //! 
+  //! \param[in] &&... args - [optional] Constructor argument values
+  //! \return auto - Object instance
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename OBJ, typename... ARGS>
+  auto  construct(ARGS&&... args)
+  {
+    // Construct object
+    return OBJ(std::forward<ARGS>(args)...);
+  }
 
 
 
