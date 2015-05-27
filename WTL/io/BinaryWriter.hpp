@@ -266,7 +266,7 @@ namespace wtl
     w << r.size();
 
     // Write 'Count' elements
-    for (uint32 i = 0UL; i < r.size(); ++i) 
+    for (uint32_t i = 0UL; i < r.size(); ++i) 
       w << r[i];
 
     return w;
@@ -294,7 +294,7 @@ namespace wtl
     enum { LENGTH = L };
 
     // Write all elements
-    for (uint32 i = 0UL; i < LENGTH; ++i) 
+    for (uint32_t i = 0UL; i < LENGTH; ++i) 
       w << r[i];
 
     return w;

@@ -33,7 +33,7 @@ namespace wtl
     union Ident
     {
       const char_t*  Name;       //!< Resource name
-      uint32         Numeral;    //!< Resource ID
+      uint32_t         Numeral;    //!< Resource ID
     };
     
     // ----------------------------------- REPRESENTATION -----------------------------------
@@ -71,7 +71,7 @@ namespace wtl
     //! \param[in] id - 16-bit ordinal representation
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    ResourceId(uint16 id) 
+    ResourceId(uint16_t id) 
     {
       Value.Numeral = id;
     }
@@ -126,11 +126,11 @@ namespace wtl
     // ResourceId::toOrdinal constexpr 
     //! Get the Ordinal representation
     //! 
-    //! \return uint16 - Ordinal representation
+    //! \return uint16_t - Ordinal representation
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr uint16 toOrdinal() const noexcept 
+    constexpr uint16_t toOrdinal() const noexcept 
     {
-      return static_cast<uint16>(Value.Numeral);
+      return static_cast<uint16_t>(Value.Numeral);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

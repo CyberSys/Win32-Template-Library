@@ -225,7 +225,7 @@ namespace wtl
     //! \return HFont - Handle to new font
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
-    HFont getFont(const CharArray<ENC,LEN>& name, int32 points, FontWeight weight = FontWeight::Normal, bool italic = false, bool underline = false, FontQuality quality = FontQuality::AntiAliased, FontCharSet charSet = FontCharSet::Default)
+    HFont getFont(const CharArray<ENC,LEN>& name, int32_t points, FontWeight weight = FontWeight::Normal, bool italic = false, bool underline = false, FontQuality quality = FontQuality::AntiAliased, FontCharSet charSet = FontCharSet::Default)
     {
       return HFont(name, getFontHeight(points), weight, italic, underline, false, charSet, quality);
     }
@@ -235,9 +235,9 @@ namespace wtl
     //! Calculates the height of a font
     //! 
     //! \param[in] points - Size in points
-    //! \return int32 - Height in twips
+    //! \return int32_t - Height in twips
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32 getFontHeight(int32 points)
+    int32_t getFontHeight(int32_t points)
     {
       // Query logical pixel height & convert
       if (auto logPixels = ::GetDeviceCaps(Handle, LOGPIXELSY))
@@ -497,13 +497,13 @@ namespace wtl
     //! \param[in] txt - Text
     //! \param[in] rc - Drawing rectangle
     //! \param[in] flags - Drawing flags
-    //! \return int32 - Height of the text in logical units iff successful. (If DT_VCENTER or DT_BOTTOM is specified then the offset from lpRect->top to the bottom of the drawn text)
+    //! \return int32_t - Height of the text in logical units iff successful. (If DT_VCENTER or DT_BOTTOM is specified then the offset from lpRect->top to the bottom of the drawn text)
     //!                 Zero upon failure.
     //!
     //! \throw wtl::platform_error - Unable to draw text
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
-    int32 write(const CharArray<ENC,LEN>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
+    int32_t write(const CharArray<ENC,LEN>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
       return write<ENC>(txt, txt.size(), rc, flags);
@@ -516,16 +516,16 @@ namespace wtl
     //! \param[in] txt - Text
     //! \param[in] rc - Drawing rectangle
     //! \param[in] flags - Drawing flags
-    //! \return int32 - Height of the text in logical units iff successful. (If DT_VCENTER or DT_BOTTOM is specified then the offset from lpRect->top to the bottom of the drawn text)
+    //! \return int32_t - Height of the text in logical units iff successful. (If DT_VCENTER or DT_BOTTOM is specified then the offset from lpRect->top to the bottom of the drawn text)
     //!                 Zero upon failure.
     //!
     //! \throw wtl::platform_error - Unable to draw text
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    int32 write(const encoding_char_t<ENC>* txt, int32 len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
+    int32_t write(const encoding_char_t<ENC>* txt, int32_t len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32 height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
+      if (int32_t height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
         return height;
 
       // Failure

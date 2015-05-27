@@ -76,7 +76,7 @@ namespace wtl
     //! \param[in] minor - Minor version number
     //! \return WindowVersion - Windows version identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    static WindowVersion identify(long32 major, long32 minor)
+    static WindowVersion identify(long32_t major, long32_t minor)
     {
       switch (major)
       {

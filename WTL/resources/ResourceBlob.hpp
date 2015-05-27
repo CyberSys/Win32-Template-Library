@@ -103,9 +103,9 @@ namespace wtl
     // ResourceBlob::size const
     //! Query the resource size
     //! 
-    //! \return long32 - ResourceBlob size (Not sure of format)
+    //! \return long32_t - ResourceBlob size (Not sure of format)
     /////////////////////////////////////////////////////////////////////////////////////////
-    long32 size() const
+    long32_t size() const
     {
       return ::SizeofResource(Module, Handle);
     }

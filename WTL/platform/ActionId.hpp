@@ -20,7 +20,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \enum ActionId - Defines GUI Command Ids
   /////////////////////////////////////////////////////////////////////////////////////////
-  enum class ActionId : uint16
+  enum class ActionId : uint16_t
   {
     File_New = ID_FILE_NEW,			                    //!< 0xE100
     File_Open = ID_FILE_OPEN,			                  //!< 0xE101
@@ -136,7 +136,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \enum ActionGroupId - Defines GUI Command Ids
   /////////////////////////////////////////////////////////////////////////////////////////
-  enum class ActionGroupId : uint16
+  enum class ActionGroupId : uint16_t
   {
     File = ID_FILE_GROUP,           //!< File commands group
     Edit = ID_EDIT_GROUP,           //!< Edit commands group

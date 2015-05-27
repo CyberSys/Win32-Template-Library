@@ -18,7 +18,7 @@ namespace wtl
 
 
   //! \enum Colour - Defines common RGB colours
-  enum class Colour : ulong32
+  enum class Colour : ulong32_t
   {
     Black = RGB(0x00,0x00,0x00),      //!< 
     

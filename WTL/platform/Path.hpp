@@ -19,7 +19,7 @@
 namespace wtl
 {
   //! \enum FileAttribute - Defines file attributes
-  enum class FileAttribute : ulong32
+  enum class FileAttribute : ulong32_t
   {
     ReadOnly = 0x00000001,  
     Hidden = 0x00000002,  
@@ -465,7 +465,7 @@ namespace wtl
       if (const_pointer fn = getFunc<char_t>(::PathFindFileNameA,::PathFindFileNameW)(Data))
       {
         // Verify new length
-        int32 remaining = (length-1) - (fn-Data);
+        int32_t remaining = (length-1) - (fn-Data);
         if (strlen(name) > remaining)
           throw wtl::platform_error(HERE, "Insufficient buffer to change filename");
 

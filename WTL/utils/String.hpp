@@ -48,9 +48,9 @@ namespace wtl
   //! 
   //! \param[in] const* a - Narrow char string
   //! \param[in] const* b - Another narrow char string
-  //! \return int32 - -1 if less, 0 if equal, 1 if greater
+  //! \return int32_t - -1 if less, 0 if equal, 1 if greater
   /////////////////////////////////////////////////////////////////////////////////////////
-  inline int32 strcmp_t(const char* a, const char* b)
+  inline int32_t strcmp_t(const char* a, const char* b)
   {
     return strcmp(a,b);
   }
@@ -61,9 +61,9 @@ namespace wtl
   //! 
   //! \param[in] const* a - Wide char string
   //! \param[in] const* b - Another wide char string
-  //! \return int32 - -1 if less, 0 if equal, 1 if greater
+  //! \return int32_t - -1 if less, 0 if equal, 1 if greater
   /////////////////////////////////////////////////////////////////////////////////////////
-  inline int32 strcmp_t(const wchar_t* a, const wchar_t* b)
+  inline int32_t strcmp_t(const wchar_t* a, const wchar_t* b)
   {
     return wcscmp(a,b);
   }
@@ -175,7 +175,7 @@ namespace wtl
   //    //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
   //    /////////////////////////////////////////////////////////////////////////////////////////
   //    template <typename INPUT = const input_t*>
-  //    static int32  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
+  //    static int32_t  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
   //    {
   //      REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
   //      REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
@@ -214,13 +214,13 @@ namespace wtl
   //    //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
   //    /////////////////////////////////////////////////////////////////////////////////////////
   //    template <typename INPUT = const input_t*>
-  //    static int32  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
+  //    static int32_t  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
   //    {
   //      REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
   //      REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
 
   //      // wide -> narrow
-  //      int32  useDefault = True;
+  //      int32_t  useDefault = True;
   //      return WideCharToMultiByte(enum_cast(TO), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), std::addressof(*first), last-first, output, lastOut-output, "?", &useDefault);
   //    }
   //  };
@@ -253,12 +253,12 @@ namespace wtl
   //    //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
   //    /////////////////////////////////////////////////////////////////////////////////////////
   //    template <typename INPUT = const input_t*>
-  //    static int32  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
+  //    static int32_t  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
   //    {
   //      /*REQUIRED_PARAM(first);*/  REQUIRED_PARAM(output);
   //      /*REQUIRED_PARAM(last);*/   REQUIRED_PARAM(lastOut);
 
-  //      const int32 CAPACITY = lastOut-output-1;   //!< Output buffer character capacity 
+  //      const int32_t CAPACITY = lastOut-output-1;   //!< Output buffer character capacity 
 
   //      // Clear output
   //      output[0] = default<output_t>();

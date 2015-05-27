@@ -26,7 +26,7 @@ namespace wtl
   //! \tparam DATA - Type of each element
   //! \tparam LENGTH - Maximum number of elements within the array
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename DATA, uint32 LENGTH>
+  template <typename DATA, uint32_t LENGTH>
   using DynamicArray = Array<DATA,LENGTH,true>;
 
 
@@ -36,7 +36,7 @@ namespace wtl
   //! \tparam DATA - Type of each element
   //! \tparam LENGTH - Maximum number of elements within the array
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename DATA, uint32 LENGTH>
+  template <typename DATA, uint32_t LENGTH>
   struct Array<DATA,LENGTH,true>
   {
     friend struct Array;                     // Unbound friend of itself
@@ -85,10 +85,10 @@ namespace wtl
     static constexpr bool dynamic = true;
 
     //! \var length - Capacity of the array
-    static constexpr uint32 length = LENGTH;
+    static constexpr uint32_t length = LENGTH;
 
     //! \var npos - Sentinel value for 'item not found'
-    static constexpr uint32 npos = static_cast<uint32>(-1L);
+    static constexpr uint32_t npos = static_cast<uint32_t>(-1L);
 
 //!\ if DEVELOPMENT_MODE - Use iterators instead of pointers to aide development
 #ifdef DEVELOPMENT_MODE
@@ -113,7 +113,7 @@ namespace wtl
       //! \param[in,out] &a - Array over which to iterate
       //! \param[in] n - Zero-based Initial index
       /////////////////////////////////////////////////////////////////////////////////////////
-      iterator_t(CONTAINER& a, uint32 n) : Container(&a), 
+      iterator_t(CONTAINER& a, uint32_t n) : Container(&a), 
                                            Index(n)
       {}
 
@@ -136,9 +136,9 @@ namespace wtl
       //! iterator_t::getIndex const
       //! Get the index of the current element
       //!
-      //! \return uint32 - Zero based index of the current element
+      //! \return uint32_t - Zero based index of the current element
       /////////////////////////////////////////////////////////////////////////////////////////
-      uint32 getIndex() const
+      uint32_t getIndex() const
       {
         return Index;
       }
@@ -277,7 +277,7 @@ namespace wtl
       //! \throw wtl::out_of_range - [Debug only] Position is invalid
       //! \return const_reference - Immutable reference to element 
       /////////////////////////////////////////////////////////////////////////////////////////
-      const_reference operator[] (int32 i) const
+      const_reference operator[] (int32_t i) const
       {
         CHECKED_INDEX(Index, 0, Container->size());
 
@@ -292,7 +292,7 @@ namespace wtl
       //! \param[in] i - Number of elements to advance
       //! \return iterator_t - New position
       /////////////////////////////////////////////////////////////////////////////////////////
-      iterator_t operator + (uint32 i) const
+      iterator_t operator + (uint32_t i) const
       {
         return iterator_t(*Container, Index+i);
       }
@@ -304,7 +304,7 @@ namespace wtl
       //! \param[in] i - Number of elements to retreat
       //! \return iterator_t - New position
       /////////////////////////////////////////////////////////////////////////////////////////
-      iterator_t operator- (uint32 i) const
+      iterator_t operator- (uint32_t i) const
       {
         return iterator_t(*Container, Index-i);
       }
@@ -332,7 +332,7 @@ namespace wtl
       //! \param[in] i - Number of elements to advance
       //! \return iterator_t - Reference to self at new position
       /////////////////////////////////////////////////////////////////////////////////////////
-      iterator_t& operator += (uint32 n) 
+      iterator_t& operator += (uint32_t n) 
       {
         Index += n;
         return *this;
@@ -391,7 +391,7 @@ namespace wtl
       // ----------------------------------- REPRESENTATION -----------------------------------
     protected:
       CONTAINER*  Container;     //!< Array over which to iterate
-      uint32      Index;         //!< Zero-based index of the element representing the current position
+      uint32_t      Index;         //!< Zero-based index of the element representing the current position
     };
 
     //! \typedef iterator - Friendly name for a mutable iterator
@@ -426,7 +426,7 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     array_ref  Data;    //!< Provides strongly typed access to element storage
-    uint32     Count;   //!< Number of valid elements
+    uint32_t     Count;   //!< Number of valid elements
 
   private:
     byte       Storage[sizeof(DATA)*LENGTH];   //!< Actual element storage
@@ -464,7 +464,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename V, uint32 L, bool D>
+    template <typename V, uint32_t L, bool D>
     Array(const Array<V,L,D>& r) : Array(Unique::Signature)
     {
       assign(r);
@@ -549,7 +549,7 @@ namespace wtl
     //! \param[in] &r - Foreign array
     //! \return Array& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename E, uint32 L, bool D>
+    template <typename E, uint32_t L, bool D>
     Array& operator=(const Array<E,L,D>& r)
     {
       assign(r);
@@ -730,7 +730,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Index out of bounds
     /////////////////////////////////////////////////////////////////////////////////////////
-    const_reference at(uint32 index) const
+    const_reference at(uint32_t index) const
     {
       CHECKED_INDEX(index, 0, size());
 
@@ -768,9 +768,9 @@ namespace wtl
     // Array::capacity() const
     //! Get the maximum number of elements allowed in the array
     //!
-    //! \return uint32 - Maximum number of elements
+    //! \return uint32_t - Maximum number of elements
     //////////////////////////////////////////////////////////////////////////////////////////
-    uint32 capacity() const
+    uint32_t capacity() const
     {
       return length;
     }
@@ -819,12 +819,12 @@ namespace wtl
     //! Searches for a value using a forward linear search
     //!
     //! \param[in] value - Value to find
-    //! \return uint32 - Zero-based index of first matching item if found, otherwise npos
+    //! \return uint32_t - Zero-based index of first matching item if found, otherwise npos
     //////////////////////////////////////////////////////////////////////////////////////////
-    uint32 find(const_reference value) const
+    uint32_t find(const_reference value) const
     {
       // Forward linear search
-      for (uint32 i = 0UL; i < length; ++i)
+      for (uint32_t i = 0UL; i < length; ++i)
         if (Data[i] == value)
           return i;
 
@@ -998,9 +998,9 @@ namespace wtl
     // Array::size
     //! Get number of elements currently in the array
     //! 
-    //! \return uint32 - Element count
+    //! \return uint32_t - Element count
     /////////////////////////////////////////////////////////////////////////////////////////
-    uint32 size() const
+    uint32_t size() const
     {
       return Count;
     }
@@ -1082,7 +1082,7 @@ namespace wtl
     // Array::operator[] const
     //! Provides read-only access to array elements without bounds checking
     //! 
-    //! \tparam INDEX - Type of the index parameter (Must be implicitly convertible to uint32)
+    //! \tparam INDEX - Type of the index parameter (Must be implicitly convertible to uint32_t)
     //! 
     //! \param[in] index - Zero-based index of the element to access. If the index is invalid the result is undefined.
     //! \return const_reference - Immutable reference to the desired element
@@ -1095,7 +1095,7 @@ namespace wtl
       CHECKED_INDEX((int)index, 0L, (int)size());
 
       // Retrieve element
-      return Data[static_cast<uint32>(index)]; 
+      return Data[static_cast<uint32_t>(index)]; 
     }    
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -1263,13 +1263,13 @@ namespace wtl
       LOGIC_INVARIANT((last-first) <= length);
       static_assert(std::is_convertible<decltype(*first),value_type>::value, "Cannot convert between element types");
       
-      uint32 i(0UL);
+      uint32_t i(0UL);
 
       // Clear existing
       clear();
       
       // Copy-construct (up to) LENGTH elements
-      for (Count = std::min(static_cast<uint32>(length), last-first); i < Count; ++i)
+      for (Count = std::min(static_cast<uint32_t>(length), last-first); i < Count; ++i)
         traits::alloc_t::construct(Data+i, *(first++));
     }
 
@@ -1285,7 +1285,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename V, uint32 L, bool D>
+    template <typename V, uint32_t L, bool D>
     void assign(const Array<V,L,D>& r)
     {
       static_assert(std::is_convertible<V,value_type>::value, "Cannot convert between element types");
@@ -1369,7 +1369,7 @@ namespace wtl
     //!
     //! \throw wtl::out_of_range - [Debug only] Index out of bounds
     /////////////////////////////////////////////////////////////////////////////////////////
-    reference at(uint32 index) 
+    reference at(uint32_t index) 
     {
       CHECKED_INDEX(index, 0, size());
 
@@ -1410,7 +1410,7 @@ namespace wtl
     void clear()
     {
       // Destroy elements in descending order, updating count in real-time
-      for (int32 i = Count-1; i >= 0; --i)
+      for (int32_t i = Count-1; i >= 0; --i)
         traits::alloc_t::destroy(Data + (Count=i));
     }
 
@@ -1457,10 +1457,10 @@ namespace wtl
     //! \tparam PRED - Unary predicate function object
     //! 
     //! \param[in,out] &p - Element predicate
-    //! \return uint32 - Number of matching elements
+    //! \return uint32_t - Number of matching elements
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    uint32 count_if(PRED& p) 
+    uint32_t count_if(PRED& p) 
     {
       return count_if(begin(), end(), p); 
     }
@@ -1474,10 +1474,10 @@ namespace wtl
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &p - Element predicate
-    //! \return uint32 - Number of matching elements
+    //! \return uint32_t - Number of matching elements
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    uint32 count_if(iterator first, iterator last, PRED& p) 
+    uint32_t count_if(iterator first, iterator last, PRED& p) 
     {
       return std::count_if<iterator,PRED&>(first, last, p);
     }
@@ -1755,7 +1755,7 @@ namespace wtl
     //! \return OUTPUT - Position in output range immediately beyond last element transformed
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT, typename OUTPUT, typename FUNC>
-    OUTPUT transform_n(INPUT first, INPUT last, uint32 n, OUTPUT output, FUNC fn)
+    OUTPUT transform_n(INPUT first, INPUT last, uint32_t n, OUTPUT output, FUNC fn)
     {
       // Transform inputs into outputs while n > 0
       while (n-- > 0L && first != last)
@@ -1777,7 +1777,7 @@ namespace wtl
     //! \return OUTPUT - Position in output range immediately beyond last element transformed
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename OUTPUT, typename FUNC>
-    OUTPUT transform_n(uint32 n, OUTPUT output, FUNC fn)
+    OUTPUT transform_n(uint32_t n, OUTPUT output, FUNC fn)
     {
       return transform_n(begin(), end(), n, output, fn);
     }
@@ -1786,7 +1786,7 @@ namespace wtl
     // Array::operator[]
     //! Provides access to array elements without bounds checking
     //! 
-    //! \tparam INDEX - Type of the index parameter (Must be implicitly convertible to uint32)
+    //! \tparam INDEX - Type of the index parameter (Must be implicitly convertible to uint32_t)
     //! 
     //! \param[in] index - Zero-based index of the element to access. If the index is invalid the result is undefined.
     //! \return reference - Reference to the desired element
@@ -1796,9 +1796,9 @@ namespace wtl
     template <typename INDEX>    
     reference operator[](INDEX index)    
     { 
-      CHECKED_INDEX(static_cast<uint32>(index),0,size());
+      CHECKED_INDEX(static_cast<uint32_t>(index),0,size());
 
-      return Data[static_cast<uint32>(index)]; 
+      return Data[static_cast<uint32_t>(index)]; 
     }   
   };
 

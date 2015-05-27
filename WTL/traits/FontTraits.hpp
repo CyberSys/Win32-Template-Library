@@ -77,7 +77,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
     static HAlloc<::HFONT> create(const CharArray<ENC,LEN>& name, 
-                                int32       height,  
+                                int32_t       height,  
                                 FontWeight  weight = FontWeight::Normal, 
                                 bool        italic = false, 
                                 bool        underline = false, 
@@ -87,9 +87,9 @@ namespace wtl
                                 FontFamily  family = FontFamily::Default, 
                                 FontPrecision precision = FontPrecision::Default, 
                                 FontClipping clipping = FontClipping::Default,
-                                int32       width = 0,  
-                                int32       escape = 0, 
-                                int32       orient = 0) 
+                                int32_t       width = 0,  
+                                int32_t       escape = 0, 
+                                int32_t       orient = 0) 
     { 
       //! \var createFont - Functor for CreateFont
       static const auto createFont = getFunc<ENC>(::CreateFontA,::CreateFontW);

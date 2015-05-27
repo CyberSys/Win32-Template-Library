@@ -96,7 +96,7 @@ namespace wtl
         // [NAME/DESCRIPTION] Extract name & description
         if (text.contains(LineFeed))
         {
-          int32 sep = text.find(LineFeed);
+          int32_t sep = text.find(LineFeed);
 
           // Assign description and truncate name
           Name.assign<encoding>(text.begin(), text.begin()+(sep+1));

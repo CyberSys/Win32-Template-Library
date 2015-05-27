@@ -59,7 +59,7 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HPEN> create(PenStyle style, int32 width, Colour colour) 
+    static HAlloc<::HPEN> create(PenStyle style, int32_t width, Colour colour) 
     { 
       // Create solid colour brush handle
       if (::HPEN pen = ::CreatePen(enum_cast(style), width, enum_cast(colour)))

@@ -19,7 +19,7 @@ namespace wtl
   // ----------------------------------- ::DrawText(..) Flags ----------------------------------
   
   //! \enum DrawTextFlags - Defines DrawText flags
-  enum class DrawTextFlags : ulong32
+  enum class DrawTextFlags : ulong32_t
   {
     Top = 0x00000000, 			            //!< 
     Left = 0x00000000, 			            //!< 
@@ -59,7 +59,7 @@ namespace wtl
   // ----------------------------------- ::GetCurrentObject(..) Flags ----------------------------------
   
   //! \enum DrawObjectType - Defines drawing object types
-  enum class DrawObjectType : uint32
+  enum class DrawObjectType : uint32_t
   {
     Pen = 1, 			      //!< 
     Brush = 2, 	        //!< 
@@ -91,7 +91,7 @@ namespace wtl
   
 
   //! \enum DrawingMode - Defines background drawing modes
-  enum class DrawingMode : uint32
+  enum class DrawingMode : uint32_t
   {
     Transparent = 1, 			//!< Transparent background
     Opaque = 2, 	        //!< Opaque background
@@ -106,7 +106,7 @@ namespace wtl
   template <> struct min_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Transparent>  {};
   
   //! \enum FontWeight - Defines font weights
-  enum class FontWeight : ulong32
+  enum class FontWeight : ulong32_t
   { 
     DontCare = 0, 			        //!< 
     Thin = 100, 			          //!< 
@@ -138,7 +138,7 @@ namespace wtl
  
 
   //! \enum FontCharSet - Defines font character sets
-  enum class FontCharSet : ulong32
+  enum class FontCharSet : ulong32_t
   { 
     Ansi = 0,			      //!<
     Default = 1,			  //!<
@@ -173,7 +173,7 @@ namespace wtl
 
 
   //! \enum FontQuality - Defines font quality
-  enum class FontQuality : ulong32
+  enum class FontQuality : ulong32_t
   {
     Default = 0,			      //!<
     Draft = 1,			        //!<
@@ -195,7 +195,7 @@ namespace wtl
 
 
   //! \enum FontPrecision - Defines font output precision
-  enum class FontPrecision : ulong32
+  enum class FontPrecision : ulong32_t
   {
     Default = 0, 			  //!< 
     String = 1, 			  //!< 
@@ -221,7 +221,7 @@ namespace wtl
 
 
   //! \enum FontClipping - Defines font output precision
-  enum class FontClipping : ulong32
+  enum class FontClipping : ulong32_t
   {
     Default = 0, 			        //!< 
     Character = 1, 			      //!< 
@@ -243,7 +243,7 @@ namespace wtl
 
   
   //! \enum FontFamily - Defines font families
-  enum class FontFamily : ulong32
+  enum class FontFamily : ulong32_t
   { 
     Default = 0,          //!< Default pitch
     Fixed = 1,            //!< Fixed pitch
@@ -269,7 +269,7 @@ namespace wtl
 
   
   //! \enum OwnerDrawAction - Defines owner drawing requests
-  enum class OwnerDrawAction : uint32
+  enum class OwnerDrawAction : uint32_t
   {
     Entire = ODA_DRAWENTIRE, 			//!< Entire control
     Focus = ODA_FOCUS, 	          //!< Focus rectange
@@ -287,7 +287,7 @@ namespace wtl
 
 
   //! \enum OwnerDrawControl - Defines controls that support owner draw
-  enum class OwnerDrawControl : uint32
+  enum class OwnerDrawControl : uint32_t
   {
     Button = ODT_BUTTON,      //!< Button control
     ComboBox = ODT_COMBOBOX,  //!< ComboBox control
@@ -308,7 +308,7 @@ namespace wtl
   
   
   //! \enum OwnerDrawState - Defines controls that support owner draw
-  enum class OwnerDrawState : uint16
+  enum class OwnerDrawState : uint16_t
   {
     Checked = ODS_CHECKED,              //!< The menu item is to be checked. This bit is used only in a menu.
     ComboBoxEdit = ODS_COMBOBOXEDIT,    //!< The drawing takes place in the selection field (edit control) of an owner-drawn combo box.
@@ -336,7 +336,7 @@ namespace wtl
   
   
   //! \enum HatchStyle - Defines brush hatch styles
-  enum class HatchStyle : uint32
+  enum class HatchStyle : uint32_t
   {
     Horizontal = 0, 			  //!<        /* ----- */
     Vertical = 1, 			    //!<        /* ||||| */
@@ -362,7 +362,7 @@ namespace wtl
   
   
   //! \enum PenStyle - Defines cosmetic and geometric pen styles
-  enum class PenStyle : int32
+  enum class PenStyle : int32_t
   {
     Solid = 0, 			                //!< 
     Dash = 1, 			                //!<        /* -------  */
@@ -404,7 +404,7 @@ namespace wtl
   
 
    //! \enum StockObject - Defines stock drawing objects
-  enum class StockObject : int32
+  enum class StockObject : int32_t
   {
     WhiteBrush = 0, 			    //!< 
     LtGreyBrush = 1, 			    //!< 

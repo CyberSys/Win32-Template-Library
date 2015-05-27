@@ -90,9 +90,9 @@ namespace wtl
     //! 
     //! \param[in] const* cmdLine - Command line
     //! \param[in] mode - Initial display mode
-    //! \return int32 - Return code
+    //! \return int32_t - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32  run(const char_t* cmdLine, ShowWindowFlags mode = ShowWindowFlags::ShowNormal) 
+    int32_t  run(const char_t* cmdLine, ShowWindowFlags mode = ShowWindowFlags::ShowNormal) 
     {
       // Feedback: AppName + Operating System
       cdebug << Cons::Cyan              << "--------------------------------------------------------------------------" << endl

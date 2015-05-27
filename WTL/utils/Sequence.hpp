@@ -40,7 +40,7 @@ namespace wtl
     using value_type = T;
 
     //! \var length - Length of sequence
-    static constexpr int32 length = sizeof...(VALUES);
+    static constexpr int32_t length = sizeof...(VALUES);
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   
@@ -155,7 +155,7 @@ namespace wtl
     using type = sequence<TYPES...>;
 
     //! \var length - Define number of elements
-    static constexpr int32 length = sizeof...(TYPES);
+    static constexpr int32_t length = sizeof...(TYPES);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \alias index - Element accessor

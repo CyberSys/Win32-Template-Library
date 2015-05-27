@@ -24,7 +24,7 @@ namespace wtl
   // ----------------------------------- ::FormatMessage(..) Flags ----------------------------------
 
   //! \enum FormatMessageFlags - 
-  enum class FormatMessageFlags : ulong32
+  enum class FormatMessageFlags : ulong32_t
   { 
     AllocateBuffer = 0x00000100, 
     IgnoreInserts = 0x00000200, 
@@ -48,7 +48,7 @@ namespace wtl
 
 
   //! \enum MultiByteFlags - Defines narrow character conversion flags
-  enum class MultiByteFlags : ulong32
+  enum class MultiByteFlags : ulong32_t
   {
     PreComposed = 0x00000001,         // use precomposed chars
     Composite = 0x00000002,           // use composite chars
@@ -69,7 +69,7 @@ namespace wtl
 
 
   //! \enum WideCharFlags - Defines wide character conversion flags
-  enum class WideCharFlags : ulong32
+  enum class WideCharFlags : ulong32_t
   {
     CompositeCheck = 0x00000200,  // convert composite to precomposed
     DiscardNs = 0x00000010,       // discard non-spacing chars
@@ -93,7 +93,7 @@ namespace wtl
   
 
   //! \enum MessageBoxFlags - Defines MessageBox() flags
-  enum class MessageBoxFlags : ulong32
+  enum class MessageBoxFlags : ulong32_t
   {
     Ok = 0x00000000l,			                  //!< 
     OkCancel = 0x00000001l,			            //!< 
@@ -149,7 +149,7 @@ namespace wtl
   
 
   //! \enum MoveWindowFlags - Defines flags for the Win32 API function ::SetWindowPos(..) 
-  enum class MoveWindowFlags : int32
+  enum class MoveWindowFlags : int32_t
   {
     NoSize = 0x0001,			          //!< 
 		NoMove = 0x0002,			          //!< 
@@ -208,7 +208,7 @@ namespace wtl
 
 
   //! \enum ShowWindowFlags - Defines flags for the Win32 API function ::ShowWindow(..) 
-  enum class ShowWindowFlags : int32
+  enum class ShowWindowFlags : int32_t
   {
     Hide = 0,			          //!< 
     ShowNormal = 1,			    //!< 
@@ -244,7 +244,7 @@ namespace wtl
   
 
   //! \enum ShowWindowType - Defines flags for the Win32 message 'WM_SHOWWINDOW'
-  enum class ShowWindowType : ulong32
+  enum class ShowWindowType : ulong32_t
   {
     ParentClosing = 1, 			//!< The window is being uncovered because a maximize window was restored or minimized.
     OtherZoom = 2, 			    //!< The window is being covered by another window that has been maximized.
@@ -269,7 +269,7 @@ namespace wtl
 
   
   //! \enum SystemClass - Defines system window classes
-  enum class SystemClass : uint16
+  enum class SystemClass : uint16_t
   {
     // Common Controls
     Animate,                //!< Creates animation controls. These controls silently display an audio video interleaved (AVI) clip.
@@ -324,7 +324,7 @@ namespace wtl
   // ----------------------------------- WINDOW ID ----------------------------------
   
   //! \enum WindowId - Represents a Window Id
-  enum class WindowId : uint16
+  enum class WindowId : uint16_t
   {
     Ok = 1,			        //!< 'Ok' button
     Cancel = 2,			    //!< 'Cancel' button
@@ -369,7 +369,7 @@ namespace wtl
   // ----------------------------------- WINDOW STYLE ----------------------------------
   
   //! \enum WindowStyle - Defines basic window styles
-  enum class WindowStyle : ulong32
+  enum class WindowStyle : ulong32_t
   {
     Overlapped = 0x00000000L,
     Popup = 0x80000000L,
@@ -414,7 +414,7 @@ namespace wtl
   // ----------------------------------- EXTENDED WINDOW STYLE ----------------------------------
 
   //! \enum WindowStyleEx - Defines extended window styles
-  enum class WindowStyleEx : ulong32
+  enum class WindowStyleEx : ulong32_t
   {
     None = 0x00000000L,                 //!< None
 
@@ -463,7 +463,7 @@ namespace wtl
   // ----------------------------------- WINDOW CLASS STYLE ----------------------------------
 
   //! \enum ClassStyle - Defines window class styles
-  enum class ClassStyle : uint32
+  enum class ClassStyle : uint32_t
   {
     VRedraw         = 0x0001,          //!< Redraw upon vertical resize
     HRedraw         = 0x0002,          //!< Redraw upon horiontal resize

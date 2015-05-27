@@ -109,9 +109,9 @@ namespace wtl
     // MessageThread::operator()
     //! Executes the thread logic (a message pump)
     //! 
-    //! \return int32 - Thread return code
+    //! \return int32_t - Thread return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32 operator()()
+    int32_t operator()()
     {
       try
       {
@@ -123,7 +123,7 @@ namespace wtl
           throw platform_error(HERE, "Failed to initialise application");
 
         // Run message pump
-        int32 ret = messagePump();
+        int32_t ret = messagePump();
 
         // [EVENT] Raise 'onExit'
         onThreadExit();
@@ -162,9 +162,9 @@ namespace wtl
     // MessageThread::messagePump
     //! Thread message pump
     //! 
-    //! \return int32 - Return code
+    //! \return int32_t - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32 messagePump()
+    int32_t messagePump()
     {
       //! \var dispatchMessage - Functor for 'DispatchMessage'
       static const auto dispatchMessage = getFunc<ENC>(::DispatchMessageA,::DispatchMessageW);

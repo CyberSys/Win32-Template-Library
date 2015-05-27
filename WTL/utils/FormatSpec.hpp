@@ -33,63 +33,63 @@ namespace wtl
   template <typename CHR> struct format_spec<CHR,ulong64>        { static constexpr const CHR* value = getValue<CHR>("%llu", L"%llu");  };
   template <typename CHR> struct format_spec<CHR,long64>         { static constexpr const CHR* value = getValue<CHR>("%lld", L"%lld");  };
   template <typename CHR> struct format_spec<CHR,float>          { static constexpr const CHR* value = getValue<CHR>("%lf", L"%lf");    };
-  template <typename CHR> struct format_spec<CHR,ulong32>        { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
-  template <typename CHR> struct format_spec<CHR,long32>         { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
-  template <typename CHR> struct format_spec<CHR,uint32>         { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
-  template <typename CHR> struct format_spec<CHR,int32>          { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
-  template <typename CHR> struct format_spec<CHR,uint16>         { static constexpr const CHR* value = getValue<CHR>("%hu", L"%hu");    };
-  template <typename CHR> struct format_spec<CHR,int16>          { static constexpr const CHR* value = getValue<CHR>("%hd", L"%hd");    };
+  template <typename CHR> struct format_spec<CHR,ulong32_t>        { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
+  template <typename CHR> struct format_spec<CHR,long32_t>         { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
+  template <typename CHR> struct format_spec<CHR,uint32_t>         { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
+  template <typename CHR> struct format_spec<CHR,int32_t>          { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
+  template <typename CHR> struct format_spec<CHR,uint16_t>         { static constexpr const CHR* value = getValue<CHR>("%hu", L"%hu");    };
+  template <typename CHR> struct format_spec<CHR,int16_t>          { static constexpr const CHR* value = getValue<CHR>("%hd", L"%hd");    };
   template <typename CHR> struct format_spec<CHR,CHR>            { static constexpr const CHR* value = getValue<CHR>("%c", L"%c");      };
-  template <typename CHR> struct format_spec<CHR,uint8>          { static constexpr const CHR* value = getValue<CHR>("%cu", L"%cu");    };
-  template <typename CHR> struct format_spec<CHR,int8>           { static constexpr const CHR* value = getValue<CHR>("%c", L"%c");      };
+  template <typename CHR> struct format_spec<CHR,uint8_t>          { static constexpr const CHR* value = getValue<CHR>("%cu", L"%cu");    };
+  template <typename CHR> struct format_spec<CHR,int8_t>           { static constexpr const CHR* value = getValue<CHR>("%c", L"%c");      };
   template <typename CHR> struct format_spec<CHR,CHR*>           { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
-  template <typename CHR> struct format_spec<CHR,uint8*>         { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
+  template <typename CHR> struct format_spec<CHR,uint8_t*>         { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
   template <typename CHR> struct format_spec<CHR,const CHR*>     { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
-  template <typename CHR> struct format_spec<CHR,const uint8*>   { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
+  template <typename CHR> struct format_spec<CHR,const uint8_t*>   { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
 #else
   //! \var format_spec<CHR>::value - Define type specs for fundemental types
-  template <typename CHR> struct format_spec<CHR,double>         { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,ulong64>        { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,long64>         { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,float>          { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,ulong32>        { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,long32>         { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,uint32>         { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,int32>          { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,uint16>         { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,int16>          { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,CHR>            { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,uint8>          { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,int8>           { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,CHR*>           { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,uint8*>         { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,const CHR*>     { static const CHR* value;  };
-  template <typename CHR> struct format_spec<CHR,const uint8*>   { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,ulong64_t>        { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,long64_t>         { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,float64_t>        { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,float32_t>        { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,ulong32_t>        { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,long32_t>         { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,uint32_t>         { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,int32_t>          { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,uint16_t>         { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,int16_t>          { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,CHR>              { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,uint8_t>          { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,int8_t>           { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,CHR*>             { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,uint8_t*>         { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,const CHR*>       { static const CHR* value;  };
+  template <typename CHR> struct format_spec<CHR,const uint8_t*>   { static const CHR* value;  };
 
-  template <typename CHR> const CHR* format_spec<CHR,double>::value = getValue<CHR>("%llf", L"%llf");
-  template <typename CHR> const CHR* format_spec<CHR,ulong64>::value = getValue<CHR>("%llu", L"%llu");
-  template <typename CHR> const CHR* format_spec<CHR,long64>::value = getValue<CHR>("%lld", L"%lld"); 
-  template <typename CHR> const CHR* format_spec<CHR,float>::value = getValue<CHR>("%lf", L"%lf"); 
-  template <typename CHR> const CHR* format_spec<CHR,ulong32>::value = getValue<CHR>("%lu", L"%lu");
-  template <typename CHR> const CHR* format_spec<CHR,long32>::value = getValue<CHR>("%ld", L"%ld");
-  template <typename CHR> const CHR* format_spec<CHR,uint32>::value = getValue<CHR>("%lu", L"%lu");
-  template <typename CHR> const CHR* format_spec<CHR,int32>::value = getValue<CHR>("%ld", L"%ld");
-  template <typename CHR> const CHR* format_spec<CHR,uint16>::value = getValue<CHR>("%hu", L"%hu");
-  template <typename CHR> const CHR* format_spec<CHR,int16>::value = getValue<CHR>("%hd", L"%hd");
+  template <typename CHR> const CHR* format_spec<CHR,float64_t>::value = getValue<CHR>("%llf", L"%llf");
+  template <typename CHR> const CHR* format_spec<CHR,ulong64_t>::value = getValue<CHR>("%llu", L"%llu");
+  template <typename CHR> const CHR* format_spec<CHR,long64_t>::value = getValue<CHR>("%lld", L"%lld"); 
+  template <typename CHR> const CHR* format_spec<CHR,float32_t>::value = getValue<CHR>("%lf", L"%lf"); 
+  template <typename CHR> const CHR* format_spec<CHR,ulong32_t>::value = getValue<CHR>("%lu", L"%lu");
+  template <typename CHR> const CHR* format_spec<CHR,long32_t>::value = getValue<CHR>("%ld", L"%ld");
+  template <typename CHR> const CHR* format_spec<CHR,uint32_t>::value = getValue<CHR>("%lu", L"%lu");
+  template <typename CHR> const CHR* format_spec<CHR,int32_t>::value = getValue<CHR>("%ld", L"%ld");
+  template <typename CHR> const CHR* format_spec<CHR,uint16_t>::value = getValue<CHR>("%hu", L"%hu");
+  template <typename CHR> const CHR* format_spec<CHR,int16_t>::value = getValue<CHR>("%hd", L"%hd");
   template <typename CHR> const CHR* format_spec<CHR,CHR>::value = getValue<CHR>("%c", L"%c"); 
-  template <typename CHR> const CHR* format_spec<CHR,uint8>::value = getValue<CHR>("%cu", L"%cu"); 
-  template <typename CHR> const CHR* format_spec<CHR,int8>::value = getValue<CHR>("%c", L"%c"); 
+  template <typename CHR> const CHR* format_spec<CHR,uint8_t>::value = getValue<CHR>("%cu", L"%cu"); 
+  template <typename CHR> const CHR* format_spec<CHR,int8_t>::value = getValue<CHR>("%c", L"%c"); 
   template <typename CHR> const CHR* format_spec<CHR,CHR*>::value = getValue<CHR>("%s", L"%s"); 
-  template <typename CHR> const CHR* format_spec<CHR,uint8*>::value = getValue<CHR>("%s", L"%s"); 
+  template <typename CHR> const CHR* format_spec<CHR,uint8_t*>::value = getValue<CHR>("%s", L"%s"); 
   template <typename CHR> const CHR* format_spec<CHR,const CHR*>::value = getValue<CHR>("%s", L"%s");
-  template <typename CHR> const CHR* format_spec<CHR,const uint8*>::value = getValue<CHR>("%s", L"%s");
+  template <typename CHR> const CHR* format_spec<CHR,const uint8_t*>::value = getValue<CHR>("%s", L"%s");
 #endif
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias format_spec_t - Type accessor for format_spec<>
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename CHR, typename T> 
-  using format_spec_t = format_spec<CHR, std::conditional_t<std::is_enum<T>::value, int32, std::remove_const_t<T>> >;
+  using format_spec_t = format_spec<CHR, std::conditional_t<std::is_enum<T>::value, int32_t, std::remove_const_t<T>> >;
 
 
 
@@ -106,13 +106,13 @@ namespace wtl
   //! \param[in] const* str - Formatting string
   //! \param[in] value - First pack value
   //! \param[in] args - [optional] Remaining arguments
-  //! \return uint32 - Number of characters written
+  //! \return uint32_t - Number of characters written
   //! 
   //! \throw std::length_error - Insufficent capacity to format string
   //! \throw std::logic_error - Incorrect number of formatting arguments
   /////////////////////////////////////////////////////////////////////////////////////////
 	template <typename char_t, typename T, typename... ARGS>		
-  uint32  snprintf_t(char_t* output, uint32 capacity, const char_t* str, T value, ARGS... args)	
+  uint32_t  snprintf_t(char_t* output, uint32_t capacity, const char_t* str, T value, ARGS... args)	
 	{
     char *position = output,         //!< Output iterator
          *eof = output+capacity;     //!< End of buffer position
@@ -159,12 +159,12 @@ namespace wtl
   //! \param[in] *output - Output buffer
   //! \param[in] capacity - Output buffer capacity
   //! \param[in] const* str - Formatting string
-  //! \return uint32 - Number of characters written
+  //! \return uint32_t - Number of characters written
   //! 
   //! \throw std::logic_error - Insufficient arguments
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename char_t>
-  inline uint32  snprintf_t(char_t* output, uint32 capacity, const char_t* str)	
+  inline uint32_t  snprintf_t(char_t* output, uint32_t capacity, const char_t* str)	
 	{
     char *position = output,         //!< Output iterator
          *eof = output+capacity;

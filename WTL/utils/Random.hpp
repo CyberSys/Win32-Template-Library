@@ -28,7 +28,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     Random() 
     {
-      srand((int32)time(0));
+      srand((int32_t)time(0));
     }
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -45,9 +45,9 @@ namespace wtl
     //! 
     //! \param[in] begin - Inclusive lower bound
     //! \param[in] end - Exclusive upper bound
-    //! \return int32 - Random number between begin and end
+    //! \return int32_t - Random number between begin and end
     //////////////////////////////////////////////////////////////////////////////////////////
-    static int32 number(int32 begin, int32 end)
+    static int32_t number(int32_t begin, int32_t end)
     {
       return begin + (rand() % (end-begin));
     }

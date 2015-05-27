@@ -38,7 +38,7 @@ namespace wtl
   //! \tparam LENGTH - Maximum number of elements within the array
   //! \tparam DYNAMIC - Whether array can have a variable number of elements
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename DATA, uint32 LENGTH, bool DYNAMIC>
+  template <typename DATA, uint32_t LENGTH, bool DYNAMIC>
   struct Array
   { /*Undefined*/ };
 
@@ -56,7 +56,7 @@ namespace wtl
   //! \param[in] const &r - Array
   //! \return Console& : Reference to console
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32 L, bool D>
+  template <typename E, uint32_t L, bool D>
   enable_if_class_t<E,Console&> operator << (Console& c, const Array<E,L,D>& r) 
   {
     // Write comma separated elements
@@ -77,7 +77,7 @@ namespace wtl
   //! \param[in] const &r - Array
   //! \return Console& : Reference to console
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32 L, bool D>
+  template <typename E, uint32_t L, bool D>
   enable_if_not_class_t<E,Console&> operator << (Console& c, const Array<E,L,D>& r) 
   {
     // Write tag + size
@@ -86,7 +86,7 @@ namespace wtl
       << endl;
 
     // Write N index/elements pairs
-    for (uint32 i = 0UL, count = r.size(); i < count; ++i) 
+    for (uint32_t i = 0UL, count = r.size(); i < count; ++i) 
       c << make_nvpair("index", i)
         << make_nvpair("value", r[i])
         << Cons::Break;

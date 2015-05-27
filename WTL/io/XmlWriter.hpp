@@ -32,7 +32,7 @@ namespace wtl
     typedef std::tuple<ARGS...> storage_t;
 
     //! \var Count - Number of attribute name/value pairs
-    static constexpr uint32  Count = sizeof...(ARGS);   
+    static constexpr uint32_t  Count = sizeof...(ARGS);   
     
     //! \var HasAttributes - Whether element has any attributes
     static constexpr bool  HasAttributes = Count != 0;

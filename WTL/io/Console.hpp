@@ -26,7 +26,7 @@ namespace wtl
   struct ConsoleLock;
 
   //! \enum IoManip - Console stream manipulators 
-  enum class IoManip : uint32
+  enum class IoManip : uint32_t
   { 
     Bold   = FOREGROUND_INTENSITY,                 //!< Set bold text
     Black  = 0,                                    //!< Set black text
@@ -103,7 +103,7 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   // \struct Coord - Wrapper for Win32 COORD structure
   //////////////////////////////////////////////////////////////////////////////////////////
-  using Coord = Point<int16>;
+  using Coord = Point<int16_t>;
   
   
   
@@ -412,7 +412,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void write(const char* str)
     {
-      ulong32 bytes = 0;
+      ulong32_t bytes = 0;
       
       // write '(null)' for nullptr
       if (!str)

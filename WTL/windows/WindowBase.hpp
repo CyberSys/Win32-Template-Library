@@ -81,7 +81,7 @@ namespace wtl
     using wndmenu_t = WindowMenu<ENC>;
 
     //! \alias wndproc_t - Class window procedure signature
-    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32, WPARAM, LPARAM);
+    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32_t, WPARAM, LPARAM);
 
     //! \alias wtlproc_t - Instance window procedure signature
     using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  
@@ -99,6 +99,9 @@ namespace wtl
 
       //! \alias base - Define base type
       using base = std::map<ActionGroupId,ActionGroupPtr<ENC>>;
+      
+      //! \alias type - Define own type
+      using type = ActionGroupCollection;
       
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
@@ -313,7 +316,7 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       template <typename... ARGS>
       WindowPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(std::forward<ARGS>(args)...),
-                                                          Window(wnd)
+                                                                 Window(wnd)
       {}
 
       // -------------------------------- COPYING & DESTRUCTION -------------------------------
@@ -780,7 +783,7 @@ namespace wtl
         // [EXISTS] Query window text
         if (this->Window.exists())
         {
-          int32           length = getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);    //!< Length in chars
+          int32_t           length = getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);    //!< Length in chars
           CharVector<ENC> str(length+1, '\0');
 
           // Get window text
@@ -1325,7 +1328,7 @@ namespace wtl
     //! \param[in] lParam - [optional] Parameter2
     //! \return LRESULT - Typically zero if handled, non-zero if not    (but not always)
     /////////////////////////////////////////////////////////////////////////////////////////
-    static LRESULT WINAPI  WndProc(::HWND hWnd, uint32 message, WPARAM wParam, LPARAM lParam)
+    static LRESULT WINAPI  WndProc(::HWND hWnd, uint32_t message, WPARAM wParam, LPARAM lParam)
     {
       WindowBase* wnd(nullptr);   //!< Window object associated with message, if any
        
@@ -1814,15 +1817,15 @@ namespace wtl
     //! \tparam LEN - Output buffer capacity
     //! 
     //! \param[in,out] &txt - On return this contains the window text
-    //! \return int32 - Length in characters
+    //! \return int32_t - Length in characters
     //! 
     //! \throw wtl::platform_error - Unable to get window text
     /////////////////////////////////////////////////////////////////////////////////////////
     //template <unsigned LEN>
-    //int32 getText(const CharArray<encoding,LEN>& txt)
+    //int32_t getText(const CharArray<encoding,LEN>& txt)
     //{
     //  // Lookup window text
-    //  int32 n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(Handle, txt, LEN);
+    //  int32_t n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(Handle, txt, LEN);
     //  if (n || !::GetLastError())
     //    return n;
 

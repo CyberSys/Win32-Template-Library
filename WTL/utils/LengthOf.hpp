@@ -18,10 +18,10 @@ namespace wtl
   //! Get the length of any object
   //! 
   //! \tparam T - Any type
-  //! \return int32 - 1
+  //! \return int32_t - 1
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  constexpr int32 lengthof(const T&)
+  constexpr int32_t lengthof(const T&)
   {
     return 1;
   };
@@ -32,10 +32,10 @@ namespace wtl
   //! 
   //! \tparam T - Element type
   //! \tparam L - Length of array
-  //! \return int32 - Number of elements
+  //! \return int32_t - Number of elements
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, unsigned L> 
-  constexpr int32 lengthof(const T (&array)[L])
+  constexpr int32_t lengthof(const T (&array)[L])
   {
     return L;
   };
@@ -47,10 +47,10 @@ namespace wtl
   //! \tparam T - Element type
   //! \tparam X - Rank of first dimension
   //! \tparam Y - Rank of second dimension
-  //! \return int32 - Total number of elements in array
+  //! \return int32_t - Total number of elements in array
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, unsigned X, unsigned Y> 
-  constexpr int32 lengthof(const T (&array)[X][Y])
+  constexpr int32_t lengthof(const T (&array)[X][Y])
   {
     return X * Y;
   };

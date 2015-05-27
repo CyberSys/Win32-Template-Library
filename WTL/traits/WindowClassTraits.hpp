@@ -85,8 +85,8 @@ namespace wtl
                                  ::HBRUSH brush, 
                                  ::HICON smIcon, 
                                  ::HICON bgIcon, 
-                                 int32 clsBytes = 0, 
-                                 int32 wndBytes = 0)
+                                 int32_t clsBytes = 0, 
+                                 int32_t wndBytes = 0)
     {
       // Init window class
       WndClassEx<ENC> wndCls = {sizeof(wndCls), enum_cast(style), proc, clsBytes, wndBytes, instance, bgIcon, cursor, brush, menu, name, smIcon};

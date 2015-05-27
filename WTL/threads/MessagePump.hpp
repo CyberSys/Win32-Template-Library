@@ -124,9 +124,9 @@ namespace wtl
     //! Executes the message pump
     //! 
     //! \param[in] mode - Initial display mode
-    //! \return int32 - Return code
+    //! \return int32_t - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual int32  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
+    virtual int32_t  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
     {
       //! \var dispatchMessage - Functor for 'DispatchMessage'
       static const auto dispatchMessage = getFunc<ENC>(::DispatchMessageA,::DispatchMessageW);

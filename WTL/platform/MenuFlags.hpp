@@ -23,7 +23,7 @@ namespace wtl
   
 
   //! \enum MenuItemFlag - Menu Item flags
-  enum class MenuItemFlag : uint32
+  enum class MenuItemFlag : uint32_t
   {
     State = 0x00000001,			  //!< [Windows 4.00] 
     Id = 0x00000002,		    	//!< [Windows 4.00] 
@@ -48,7 +48,7 @@ namespace wtl
     
   
   //! \enum MenuItemState - Menu item states
-  enum class MenuItemState : uint32
+  enum class MenuItemState : uint32_t
   {
     Grayed = 0x00000003L,			  //!< [Windows 4.00] 
     Disabled = MFS_GRAYED,			//!< [Windows 4.00] 
@@ -71,7 +71,7 @@ namespace wtl
 
 
   //! \enum MenuItemType - Menu item types
-  enum class MenuItemType : uint32
+  enum class MenuItemType : uint32_t
   {
     String       = MF_STRING,			      //!< [Windows 4.00] 
     Bitmap       = MF_BITMAP,			      //!< [Windows 4.00] 

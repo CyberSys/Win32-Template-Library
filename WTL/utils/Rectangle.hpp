@@ -374,8 +374,8 @@ namespace wtl
   const Rect<T>  Rect<T>::EMPTY;
 
 
-  //! \alias RectL - Rectangle using long32 fields (binary compatible with Win32 ::RECT)
-  using RectL = Rect<long32>;
+  //! \alias RectL - Rectangle using long32_t fields (binary compatible with Win32 ::RECT)
+  using RectL = Rect<long32_t>;
 
   //! \alias RectF - Rectangle using floating point fields
   using RectF = Rect<float>;
@@ -386,7 +386,7 @@ namespace wtl
   //! \struct native_conversion<32-bit>> - Defines a conversion from Rect<32-bit> to ::RECT
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct native_conversion<Rect<T>, enable_if_sizeof_t<T,int32>> 
+  struct native_conversion<Rect<T>, enable_if_sizeof_t<T,int32_t>> 
   {
     //! \alias input_t - Define input type
     using input_t = Rect<T>;

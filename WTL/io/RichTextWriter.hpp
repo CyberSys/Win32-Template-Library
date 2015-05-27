@@ -447,7 +447,7 @@ namespace wtl
           writeChar(ch);
         else
         {  // UNICODE char:
-          StringCchPrintfA(buf, 10, "\\u%u?", (uint32)ch);
+          StringCchPrintfA(buf, 10, "\\u%u?", (uint32_t)ch);
           writeString(buf);
         }
         break;

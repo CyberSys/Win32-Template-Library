@@ -155,13 +155,13 @@ namespace wtl
     //! \throw wtl::length_error - Formatted string would exceed buffer capacity
     //! \throw wtl::out_of_range - [Debug only] Initial stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
-    //int32 readf(const element_t* format, ...)
+    //int32_t readf(const element_t* format, ...)
     //{
     //  va_list args;
     //  va_start(args, format);
 
     //  // Attempt to read from stream
-    //  int32 numMatches = vsscanf(Stream.buffer(), format, args);
+    //  int32_t numMatches = vsscanf(Stream.buffer(), format, args);
     //  Stream.release();
 
     //  return numMatches < 0 ? 0 : numMatches;

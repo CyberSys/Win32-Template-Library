@@ -74,7 +74,7 @@ namespace wtl
     template <unsigned LEN>
     static void exec(T (&arr)[LEN])
     {
-      for (uint32 i = 0; i < LEN; ++i)
+      for (uint32_t i = 0; i < LEN; ++i)
         arr[i].clear();
     }
 

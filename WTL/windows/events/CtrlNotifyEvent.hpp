@@ -117,30 +117,30 @@ namespace wtl
   //! \alias CtrlNotifyEvent - Defines an event type for a child control event raised by WM_NOTIFY
   //! 
   //! \tparam ENC - Window character encoding
-  //! \tparam EVENT - [optional] Notification message type (Default is uint16)
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT = uint16, EVENT CODE = default<EVENT>()>
+  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = default<EVENT>()>
   using CtrlNotifyEvent = ControlEvent<ENC,WindowMessage::NOTIFY,EVENT,CODE>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CtrlNotifyEventArgs - Defines arguments for event from controls raised via WM_NOTIFY 
   //! 
   //! \tparam ENC - Window character encoding
-  //! \tparam EVENT - [optional] Notification message type (Default is uint16)
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT = uint16, EVENT CODE = default<EVENT>()>
+  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = default<EVENT>()>
   using CtrlNotifyEventArgs = ControlEventArgs<ENC,WindowMessage::NOTIFY,EVENT,CODE>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CtrlNotifyEventHandler - Defines handler for event from controls raised via WM_NOTIFY 
   //! 
   //! \tparam ENC - Window character encoding
-  //! \tparam EVENT - [optional] Notification message type (Default is uint16)
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT = uint16, EVENT CODE = default<EVENT>()>
+  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = default<EVENT>()>
   using CtrlNotifyEventHandler = ControlEventHandler<ENC,WindowMessage::NOTIFY,EVENT,CODE>;
   
 } // namespace wtl

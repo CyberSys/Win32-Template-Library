@@ -148,7 +148,7 @@ namespace wtl
     //!
     //! \throw wtl::logic_error - [Debug only] Num exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    CharArray(char_t chr, uint32 num) : CharArray()
+    CharArray(char_t chr, uint32_t num) : CharArray()
     {
       // Fill character array with 'num' of character 'chr'
       fill(chr, num)
@@ -520,21 +520,21 @@ namespace wtl
     //!
     //! \param[in] const* first - First character
     //! \param[in] const* last - Position immediately beyond last character
-    //! \return int32 - New length of string, in characters
+    //! \return int32_t - New length of string, in characters
     //! 
     //! \throw wtl::platform_error - Unable to perform conversion
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
     //! \throw wtl::logic_error - [Debug only] String will be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E = encoding, typename CHR = encoding_char_t<E>>
-    int32 append(const CHR* first, const CHR* last)
+    int32_t append(const CHR* first, const CHR* last)
     {
       REQUIRED_PARAM(first);
       REQUIRED_PARAM(last);
       LOGIC_INVARIANT(last-first < this->Count+length-1);
       
       // Convert/Append input string
-      int32 num = string_encoder_t<E,encoding>::transform(first, last, &this->Data[this->Count], &this->Data[length]);
+      int32_t num = string_encoder_t<E,encoding>::transform(first, last, &this->Data[this->Count], &this->Data[length]);
       this->Count += num;
 
       // Ensure succeeded
@@ -550,11 +550,11 @@ namespace wtl
     //! Assign from a character array of equal type
     //!
     //! \param[in] &r - Another array of same type and length
-    //! \return int32 - New length of string
+    //! \return int32_t - New length of string
     //!
     //! \throw wtl::logic_error - [Debug only] String would be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32 assign(const type& r)
+    int32_t assign(const type& r)
     {
       // Assign from foreign array
       return CharArray::assign<encoding>(r.begin(), r.end());
@@ -568,12 +568,12 @@ namespace wtl
     //! \tparam L - Foreign character array length
     //! 
     //! \param[in] &r - Another array
-    //! \return int32 - New length of string
+    //! \return int32_t - New length of string
     //! 
     //! \throw wtl::logic_error - [Debug only] String would be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E, unsigned L>
-    int32 assign(const CharArray<E,L>& r) 
+    int32_t assign(const CharArray<E,L>& r) 
     {
       // Assign from foreign array
       return CharArray::assign<E>(r.begin(), r.end()); 
@@ -588,14 +588,14 @@ namespace wtl
     //!
     //! \param[in] const* first - First character
     //! \param[in] const* last - Position immediately beyond last character
-    //! \return int32 - New length of string, in characters
+    //! \return int32_t - New length of string, in characters
     //! 
     //! \throw wtl::platform_error - Unable to perform conversion
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
     //! \throw wtl::logic_error - [Debug only] String will be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E = encoding, typename CHR = const encoding_char_t<E>*>
-    int32 assign(CHR first, CHR last)
+    int32_t assign(CHR first, CHR last)
     {
       LOGIC_INVARIANT(last-first < length-1);
       
@@ -645,12 +645,12 @@ namespace wtl
     //!
     //! \throw wtl::logic_error - [Debug only] Num exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    void fill(char_t chr, uint32 num) 
+    void fill(char_t chr, uint32_t num) 
     {
       LOGIC_INVARIANT(num > 0 && num <= LENGTH);
 
       // Prevent buffer overrun
-      num = std::min(num, (uint32)LENGTH);
+      num = std::min(num, (uint32_t)LENGTH);
 
       // Fill 'num' characters
       for (this->Count = 0; this->Count < num; ++this->Count)
@@ -667,14 +667,14 @@ namespace wtl
     //!
     //! \param[in] const* str - Formatting string
     //! \param[in] &&... args - [optional] Formatting arguments
-    //! \return uint32 - Number of characters written 
+    //! \return uint32_t - Number of characters written 
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
     //! \throw wtl::length_error - Insufficent capacity
     //! \throw wtl::logic_error - Incorrect number of arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>		
-    uint32 format(const char_t* str, ARGS&&... args) 
+    uint32_t format(const char_t* str, ARGS&&... args) 
     {
       // Clear & format
       clear();
@@ -690,16 +690,16 @@ namespace wtl
     //!
     //! \param[in] const* format - Formatting string
     //! \param[in] args - Formatting arguments
-    //! \return uint32 - Number of characters written iff successful, otherwise zero
+    //! \return uint32_t - Number of characters written iff successful, otherwise zero
     //! 
     //! \throw std::invalid_argument - [Debug only] Missing formatting string
     /////////////////////////////////////////////////////////////////////////////////////////
-    uint32 formatv(const char_t* format, va_list args) 
+    uint32_t formatv(const char_t* format, va_list args) 
     {
       REQUIRED_PARAM(format);
 
       // Attempt to format
-      int32 n = vsnprintf(this->Data, this->length, format, args);
+      int32_t n = vsnprintf(this->Data, this->length, format, args);
 
       // Succeeded:
       if (n >= 0 && n < this->length)
@@ -768,7 +768,7 @@ namespace wtl
                 *++str;
 
             // Append value 
-            int len = getFunc<char_t>(::_snprintf,::_snwprintf)(this->Data + this->Count, (int32)length - this->Count, format_spec_t<char_t,T>::value, value); 
+            int len = getFunc<char_t>(::_snprintf,::_snwprintf)(this->Data + this->Count, (int32_t)length - this->Count, format_spec_t<char_t,T>::value, value); 
           
             // Succeeded: Advance count
             if (len >= 0 && len < length)

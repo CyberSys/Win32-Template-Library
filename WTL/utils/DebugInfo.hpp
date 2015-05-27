@@ -34,7 +34,7 @@ namespace wtl
     using storage_t = std::tuple<ARGS...>;
 
     //! \var length - Number of attribute name/value pairs
-    static constexpr uint32  length = sizeof...(ARGS);   
+    static constexpr uint32_t  length = sizeof...(ARGS);   
     
     // ----------------------------------- REPRESENTATION -----------------------------------
 

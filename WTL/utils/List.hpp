@@ -83,7 +83,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    const_iterator  at(uint32 idx) const 
+    const_iterator  at(uint32_t idx) const 
     {
       CHECKED_INDEX(idx,0,size()+1);    //!< Permit query of position beyond last element
 
@@ -118,7 +118,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    const value_type&  operator [] (uint32 idx) const 
+    const value_type&  operator [] (uint32_t idx) const 
     {
       CHECKED_INDEX(idx,0,size());
 
@@ -137,7 +137,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    iterator  at(uint32 idx) 
+    iterator  at(uint32_t idx) 
     {
       CHECKED_INDEX(idx,0,size()+1);    //!< Permit query of position beyond last element
 
@@ -172,7 +172,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    value_type&  operator [] (uint32 idx)
+    value_type&  operator [] (uint32_t idx)
     {
       CHECKED_INDEX(idx,0,size());
 

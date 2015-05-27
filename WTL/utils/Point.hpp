@@ -178,8 +178,8 @@ namespace wtl
   template <typename T>
   const Point<T>  Point<T>::EMPTY;
 
-  //! \alias PointL - Point using long32 fields (binary compatible with Win32 ::RECT)
-  using PointL = Point<long32>;
+  //! \alias PointL - Point using long32_t fields (binary compatible with Win32 ::RECT)
+  using PointL = Point<long32_t>;
   
   //! \alias PointF - Point using floating point fields
   using PointF = Point<float>;
@@ -189,7 +189,7 @@ namespace wtl
   //! \struct native_conversion<Point<32-bit>> - Defines a conversion from Point<32-bit> to ::POINT
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct native_conversion<Point<T>, enable_if_sizeof_t<T,long32>> 
+  struct native_conversion<Point<T>, enable_if_sizeof_t<T,long32_t>> 
   {
     //! \alias input_t - Define input type
     using input_t = Point<T>;
@@ -203,7 +203,7 @@ namespace wtl
   //! \struct native_conversion<Point<16-bit>> - Defines a conversion from Point<16-bit> to ::COORD
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct native_conversion<Point<T>, enable_if_sizeof_t<T,int16>> 
+  struct native_conversion<Point<T>, enable_if_sizeof_t<T,int16_t>> 
   {
     //! \alias input_t - Define input type
     using input_t = Point<T>;
@@ -213,7 +213,7 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_conversion<::COORD> - Defines a conversion from ::COORD to Point<int16>
+  //! \struct native_conversion<::COORD> - Defines a conversion from ::COORD to Point<int16_t>
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename U> 
   struct native_conversion<::COORD,U> 
@@ -222,7 +222,7 @@ namespace wtl
     using input_t = ::COORD;
 
     //! \alias result_t - Define output type
-    using result_t = Point<int16>;
+    using result_t = Point<int16_t>;
   };
 }
 

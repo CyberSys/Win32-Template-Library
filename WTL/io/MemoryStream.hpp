@@ -16,7 +16,7 @@ namespace wtl
   
   //! \enum FileAccess - file access modes for the GLS file system (Formerly GLS_FILE_ACCESS)
   //! \ingroup dox_GLSSPMGroup
-  enum class FileAccess : int32 
+  enum class FileAccess : int32_t 
   {
     Create,         //!< Create a new file. If it exists, overwrite by truncating to zero. (Equivalent to "wb" in fopen) (Formerly GLS_FILE_CREATE)
     OpenExisting,   //!< Open existing file for append mode. If it does not exist, will be created. (Equivalent to "ab" in fopen) (Formerly GLS_FILE_OPEN_EXISTING)
@@ -25,7 +25,7 @@ namespace wtl
 
 
   //! \enum FileSeek - File seek type
-  enum class FileSeek : int32
+  enum class FileSeek : int32_t
   {
     Begin,       //!< Seek from beginning of stream
     Current,     //!< Seek from current stream position
@@ -43,13 +43,13 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \typedef distance_t - Stream distance type
-    typedef uint32  distance_t;
+    typedef uint32_t  distance_t;
     
     //! \typedef element_t - Stream element type
     typedef ELEMENT  element_t;
     
     //! \typedef position_t - Stream position type
-    typedef uint32  position_t;
+    typedef uint32_t  position_t;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -287,7 +287,7 @@ namespace wtl
     //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
     template <unsigned LENGTH>
-    uint32 read(std::remove_const_t<element_t> (&buffer)[LENGTH]) 
+    uint32_t read(std::remove_const_t<element_t> (&buffer)[LENGTH]) 
     {
       CHECKED_INDEX(Position, Start, End+1);
       CHECKED_LENGTH(LENGTH, remaining());
@@ -311,7 +311,7 @@ namespace wtl
     //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
     //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
-    uint32 read(std::remove_const_t<element_t>* buffer, uint32 length) 
+    uint32_t read(std::remove_const_t<element_t>* buffer, uint32_t length) 
     {
       CHECKED_INDEX(Position, Start, End+1);
       CHECKED_LENGTH(length, remaining());
@@ -331,7 +331,7 @@ namespace wtl
     //!
     //! \throw wtl::out_of_range - [Debug only] Initial or final stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
-    void release(uint32 count)
+    void release(uint32_t count)
     {
       CHECKED_INDEX(Position, Start, End+1);
       CHECKED_INDEX(Position+count, Start, End+1);
@@ -365,11 +365,11 @@ namespace wtl
     //! 
     //! \param[in] offset - Distance to move, in elements
     //! \param[in] origin - Seek origin
-    //! \return int32 - Number of unused elements remaining in the stream buffer 
+    //! \return int32_t - Number of unused elements remaining in the stream buffer 
     //! 
     //! \throw wtl::out_of_range - [Debug only] Initial position or destination position is out-of-bounds
     //////////////////////////////////////////////////////////////////////////////////////////
-    int32 seek(int32 offset, FileSeek origin) 
+    int32_t seek(int32_t offset, FileSeek origin) 
     {
       CHECKED_INDEX(Position, Start, End+1);
 
@@ -411,7 +411,7 @@ namespace wtl
     //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
     template <unsigned LENGTH>
-    uint32 write(const element_t (&buffer)[LENGTH]) 
+    uint32_t write(const element_t (&buffer)[LENGTH]) 
     {
       CHECKED_INDEX(Position, Start, End+1);
       CHECKED_LENGTH(LENGTH * sizeof(element_t), remaining());
@@ -435,7 +435,7 @@ namespace wtl
     //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
     //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
-    uint32 write(const element_t* buffer, uint32 length) 
+    uint32_t write(const element_t* buffer, uint32_t length) 
     {
       CHECKED_INDEX(Position, Start, End+1);
       CHECKED_LENGTH(length * sizeof(element_t), remaining());

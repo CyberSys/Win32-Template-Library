@@ -144,8 +144,8 @@ namespace wtl
   const Size<T>  Size<T>::EMPTY;
 
   
-  //! \alias SizeL - Size using long32 fields (binary compatible with Win32 ::RECT)
-  using SizeL = Size<long32>;
+  //! \alias SizeL - Size using long32_t fields (binary compatible with Win32 ::RECT)
+  using SizeL = Size<long32_t>;
 
   //! \alias SizeF - Size using floating point fields
   using SizeF = Size<float>;
@@ -156,7 +156,7 @@ namespace wtl
   //! \struct native_conversion<32-bit>> - Defines a conversion from Size<32-bit> to ::SIZE
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct native_conversion<Size<T>, enable_if_sizeof_t<T,int32>> 
+  struct native_conversion<Size<T>, enable_if_sizeof_t<T,int32_t>> 
   {
     //! \alias input_t - Define input type
     using input_t = Size<T>;

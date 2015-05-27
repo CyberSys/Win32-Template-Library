@@ -118,15 +118,15 @@ namespace wtl
     //! 
     //! \return array_t - Mutable pointer to array of win32 points
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32)>>
+    template <typename = std::enable_if_t<sizeof(value_t) == sizeof(long32_t)>>
     operator const ::POINT* () const
     {
       return reinterpret_cast<const ::POINT*>(Points);
     }
   };
   
-  //! \alias TriangleL - Triangle using long32 fields
-  using TriangleL = Triangle<long32>;
+  //! \alias TriangleL - Triangle using long32_t fields
+  using TriangleL = Triangle<long32_t>;
 
   //! \alias TriangleF - Triangle using floating point fields
   using TriangleF = Triangle<float>;

@@ -166,7 +166,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static native_t toHandle(pointer_t ptr)
     {
-      return (native_t)(long32)ptr;
+      return (native_t)(long32_t)ptr;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static pointer_t toPointer(native_t h)
     {
-      return (pointer_t)(long32)h;
+      return (pointer_t)(long32_t)h;
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

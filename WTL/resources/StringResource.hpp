@@ -58,7 +58,7 @@ namespace wtl
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
-      uint16         Length;        //!< Length of current entry, in characters
+      uint16_t         Length;        //!< Length of current entry, in characters
       const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
     };
 
@@ -66,7 +66,7 @@ namespace wtl
   protected:
     ResourceBlob             Table;       //!< Table resource
     const StringTableEntry*  Entry;       //!< Desired entry
-    uint16                   Ident;       //!< String id
+    uint16_t                   Ident;       //!< String id
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -92,7 +92,7 @@ namespace wtl
         throw platform_error(HERE, "String resource %d does not exist", Ident);
 
       // Find desired string
-      for (int32 i = 1, index = Ident % 16; Entry && i < index; i++)
+      for (int32_t i = 1, index = Ident % 16; Entry && i < index; i++)
         Entry = Entry->next();
 
       // [NOT-FOUND] Return false & empty string 

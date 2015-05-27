@@ -19,7 +19,7 @@ namespace wtl
   // ----------------------------------- COMMON NOTIFICATIONS ----------------------------------
 
   //! \enum NotifyMessage - Windows standard notifications
-  enum class NotifyMessage : int16
+  enum class NotifyMessage : int16_t
   {
     First = NM_FIRST,
     OutOfMemory = (First - 1),			        //!< Control has run out of memory
@@ -60,7 +60,7 @@ namespace wtl
 
 
   //! \enum ButtonStyle - Defines standard Button window styles
-  enum class ButtonStyle : ulong32
+  enum class ButtonStyle : ulong32_t
   {
     PushButton    = 0x00000000L, 			  //!< 
     DefPushButton = 0x00000001L, 		    //!< 
@@ -103,7 +103,7 @@ namespace wtl
 
   
   //! \enum ButtonNotification - Defines standard Button notifications
-  enum class ButtonNotification : ulong32
+  enum class ButtonNotification : ulong32_t
   {
     Click       = 0x00000000L,			        //!< [Windows 3.11] 
     Paint       = 0x00000001L,			        //!< [Windows 3.11] 
@@ -132,7 +132,7 @@ namespace wtl
 
 
   //! \enum EditStyle - Defines standard Edit window styles
-  enum class EditStyle : ulong32
+  enum class EditStyle : ulong32_t
   {
     Left = 0x0000l,			      //!<  
     Center = 0x0001l,			    //!< 
@@ -160,7 +160,7 @@ namespace wtl
 
   
   //! \enum EditNotification - Defines standard Edit notifications
-  enum class EditNotification : uint16
+  enum class EditNotification : uint16_t
   {
     SetFocus = 0x0100,			        //!< [Explorer 3.00]
     KillFocus = 0x0200,			        //!< [Explorer 3.00]
@@ -187,7 +187,7 @@ namespace wtl
 
 
   //! \enum ComboBoxNotification - Defines standard ComboBox notification
-  enum class ComboBoxNotification : int16
+  enum class ComboBoxNotification : int16_t
   {
     ErrSpace = -0x0001,			  //!< [Explorer 3.00]
     SelChange = 0x0001,			  //!< [Explorer 3.00]
@@ -212,7 +212,7 @@ namespace wtl
   
 
   //! \enum ComboBoxStyle - Defines standard ComboBox window styles
-  enum class ComboBoxStyle : ulong32
+  enum class ComboBoxStyle : ulong32_t
   {
     Simple = 0x0001L,			          //!< [Explorer 3.00]
     DropDown = 0x0002L,			        //!< [Explorer 3.00]
@@ -242,7 +242,7 @@ namespace wtl
 
 
   //! \enum ListBoxNotification - Defines standard ListBox notifications
-  enum class ListBoxNotification : int16
+  enum class ListBoxNotification : int16_t
   {
     ErrSpace = -0x0002,			//!< [Windows 3.11]
     SelChange = 0x0001,			//!< [Windows 3.11]
@@ -262,7 +262,7 @@ namespace wtl
   
 
   //! \enum ListBoxStyle - Defines standard ListBox window styles
-  enum class ListBoxStyle : ulong32
+  enum class ListBoxStyle : ulong32_t
   {
     Notify = 0x0001L,			            //!< [Windows 3.11]
     Sort = 0x0002L,			              //!< [Windows 3.11]
@@ -297,9 +297,9 @@ namespace wtl
 
 
   //! \enum ListViewNotification - Defines standard ListView notifications
-  enum class ListViewNotification : int16
+  enum class ListViewNotification : int16_t
   {
-    First               = int16(LVN_FIRST),           //!< First notification
+    First               = int16_t(LVN_FIRST),           //!< First notification
     ItemChanging 				= First - 0,			            //!< [Windows 4.00] 
     ItemChanged 				= First - 1,			            //!< [Windows 4.00] 
     InsertItem 				  = First - 2,			            //!< [Windows 4.00] 
@@ -345,7 +345,7 @@ namespace wtl
     //GetDispInfo = LVN_GETDISPINFO,			  //!< 
     //SetDispInfo = LVN_SETDISPINFO,			  //!< 
 
-    CustomDraw = (int16)NotifyMessage::CustomDraw, //!< Library extension
+    CustomDraw = (int16_t)NotifyMessage::CustomDraw, //!< Library extension
   };
   
   //! Define traits: Non-contiguous enumeration
@@ -360,7 +360,7 @@ namespace wtl
 
 
   //! \enum ListViewStyle - Defines standard ListView window styles
-  enum class ListViewStyle : ulong32
+  enum class ListViewStyle : ulong32_t
   {
     Icon = 0x0000,			          //!< [Explorer 3.00] This style specifies icon view. 
     Report = 0x0001,			        //!< [Explorer 3.00] 
@@ -401,7 +401,7 @@ namespace wtl
 
 
   //! \enum ListViewStyleEx - Defines standard ListView extended window styles
-  enum class ListViewStyleEx : ulong32
+  enum class ListViewStyleEx : ulong32_t
   {
     GridLines             = 0x00000001,			    //!< [Explorer 3.00] Displays gridlines around items and subitems
     SubItemImages         = 0x00000002,		      //!< [Explorer 3.00] Allows images to be displayed for subitems
@@ -451,7 +451,7 @@ namespace wtl
   
 
   //! \enum StaticNotification - Defines standard Static notification
-  enum class StaticNotification : int16
+  enum class StaticNotification : int16_t
   {
     Clicked  = 0x00000000L,			//!< [Windows 3.11] (MuEx)
     DblClick = 0x00000001L,			//!< [Windows 3.11] (MuEx)
@@ -469,7 +469,7 @@ namespace wtl
   
 
   //! \enum StaticStyle - Defines standard Static window styles
-  enum class StaticStyle : ulong32
+  enum class StaticStyle : ulong32_t
   {
     Left            = 0x00000000L,			//!< [Windows 3.11] (MuEx)
     Center          = 0x00000001L,			//!< [Windows 3.11] (MuEx)
@@ -519,9 +519,9 @@ namespace wtl
 
 
   //! \enum ToolTipNotification - Defines standard ToolTip notifications
-  enum class ToolTipNotification : int16
+  enum class ToolTipNotification : int16_t
   {
-    First         = int16(TTN_FIRST), //!< First notification
+    First         = int16_t(TTN_FIRST), //!< First notification
 
     GetDispInfoA  = First - 0,			  //!< [Explorer 3.00] Retrieve information needed to display a tooltip window
     GetDispInfoW  = First - 10,		    //!< [Explorer 3.00] Retrieve information needed to display a tooltip window
@@ -542,7 +542,7 @@ namespace wtl
   
 
   //! \enum ToolTipStyle - Defines standard ToolTip window styles
-  enum class ToolTipStyle : ulong32
+  enum class ToolTipStyle : ulong32_t
   {
     AlwaysTip      = 0x01,			//!< [Explorer 3.00] Indicates that the tooltip control appears when the cursor is on a tool, even if the tooltip control's owner window is inactive.
     NoPrefix       = 0x02,			//!< [Explorer 3.00] Prevents the system from stripping ampersand characters from a string or terminating a string at a tab character
@@ -566,9 +566,9 @@ namespace wtl
 
 
   //! \enum TreeViewNotification - Defines standard TreeView notifications
-  enum class TreeViewNotification : int16
+  enum class TreeViewNotification : int16_t
   {
-    First           = int16(TVN_FIRST), //!< First notification
+    First           = int16_t(TVN_FIRST), //!< First notification
     
     SelChangingA    = First - 1,			//!< [Explorer 3.00] 
     SelChangingW    = First - 50,			//!< [Explorer 3.00] 
@@ -606,7 +606,7 @@ namespace wtl
     ItemChangedW    = First - 19,			//!< [Explorer 6.00] 
     AsyncDraw       = First - 20,			//!< [Explorer 6.00] 
 
-    CustomDraw      = int16(NotifyMessage::CustomDraw), //!< Library extension
+    CustomDraw      = int16_t(NotifyMessage::CustomDraw), //!< Library extension
   };
   
   //! Define traits: Non-contiguous enumeration
@@ -620,7 +620,7 @@ namespace wtl
 
 
   //! \enum TreeViewStyle - Defines standard TreeView window styles
-  enum class TreeViewStyle : ulong32
+  enum class TreeViewStyle : ulong32_t
   {
     HasButtons      = 0x0001,			//!< [Explorer 3.00] Displays plus (+) and minus (-) buttons next to parent items
     HasLines        = 0x0002,			//!< [Explorer 3.00] Uses lines to show the hierarchy of items.
@@ -654,7 +654,7 @@ namespace wtl
 
 
   //! \enum TreeViewStyleEx - Defines standard TreeView extended window styles
-  enum class TreeViewStyleEx : ulong32
+  enum class TreeViewStyleEx : ulong32_t
   {    
     NoSingleCollapse    = 0x0001,			//!< [Windows XP] (Internal) Do not collapse the previously selected tree-view item unless it has the same parent as the new selection.
     MultiSelect         = 0x0002,			//!< [Windows Vista] Not supported. Do not use.

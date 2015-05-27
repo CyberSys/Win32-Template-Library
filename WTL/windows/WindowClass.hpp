@@ -57,7 +57,7 @@ namespace wtl
                 Menu;              //!< Window menu name
     HIcon       SmallIcon,         //!< Small icon
                 LargeIcon;         //!< Large icon
-    int32       ClassStorage,      //!< Size of class storage, in bytes
+    int32_t       ClassStorage,      //!< Size of class storage, in bytes
                 WindowStorage;     //!< Size of window storage, in bytes
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
@@ -150,8 +150,8 @@ namespace wtl
                 const HBrush& background, 
                 const HIcon& smIcon, 
                 const HIcon& bgIcon, 
-                int32 clsBytes = 0, 
-                int32 wndBytes = 0) : Atom(instance, name, style, proc, menu, (::HCURSOR)cursor, (::HBRUSH)background, (::HICON)smIcon, (::HICON)bgIcon, clsBytes, wndBytes),
+                int32_t clsBytes = 0, 
+                int32_t wndBytes = 0) : Atom(instance, name, style, proc, menu, (::HCURSOR)cursor, (::HBRUSH)background, (::HICON)smIcon, (::HICON)bgIcon, clsBytes, wndBytes),
                                       Background(background),
                                       ClassStorage(clsBytes),
                                       Cursor(cursor),

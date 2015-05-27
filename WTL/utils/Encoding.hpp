@@ -64,18 +64,18 @@ namespace wtl
     //! \param[in] lastIn - Position immediately beyond final character in input range
     //! \param[in,out] firstOut - First character in output range
     //! \param[in] lastOut - Position immediately beyond final character of output range
-    //! \return int32 - Length of output string (in characters)
+    //! \return int32_t - Length of output string (in characters)
     //!
     //! \throw wtl::platform_error - Unable to convert string
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT1, typename INPUT2, typename OUTPUT1, typename OUTPUT2> 
-    static int32  transform(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
+    static int32_t  transform(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
     {
-      constexpr uint32  codepage   = enum_cast(FROM);
-      constexpr ulong32 flags      = enum_cast(MultiByteFlags::PreComposed);
+      constexpr uint32_t  codepage   = enum_cast(FROM);
+      constexpr ulong32_t flags      = enum_cast(MultiByteFlags::PreComposed);
   
       // Narrow -> wide
-      if (int32 len = MultiByteToWideChar(codepage, flags, &*firstIn, lastIn-firstIn+1, &*firstOut, lastOut-firstOut))
+      if (int32_t len = MultiByteToWideChar(codepage, flags, &*firstIn, lastIn-firstIn+1, &*firstOut, lastOut-firstOut))
         return len;
       
       // Succeed on empty string
@@ -132,19 +132,19 @@ namespace wtl
     //! \param[in] lastIn - Position immediately beyond final character in input range
     //! \param[in,out] firstOut - First character in output range
     //! \param[in] lastOut - Position immediately beyond final character of output range
-    //! \return int32 - Length of output string (in characters)
+    //! \return int32_t - Length of output string (in characters)
     //!
     //! \throw wtl::platform_error - Unable to convert string
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT1, typename INPUT2, typename OUTPUT1, typename OUTPUT2> 
-    static int32  transform(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
+    static int32_t  transform(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
     {
-      /*const*/ int32   useDefault = True;
-      constexpr uint32  codepage   = enum_cast(TO);
-      constexpr ulong32 flags      = enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars);
+      /*const*/ int32_t   useDefault = True;
+      constexpr uint32_t  codepage   = enum_cast(TO);
+      constexpr ulong32_t flags      = enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars);
 
       // Wide -> Narrow
-      if (int32 len = WideCharToMultiByte(codepage, flags, &*firstIn, lastIn-firstIn+1, &*firstOut, lastOut-firstOut, "?", &useDefault))
+      if (int32_t len = WideCharToMultiByte(codepage, flags, &*firstIn, lastIn-firstIn+1, &*firstOut, lastOut-firstOut, "?", &useDefault))
         return len;
       
       // Succeed on empty string
@@ -204,9 +204,9 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to convert string
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT1, typename INPUT2, typename OUTPUT1, typename OUTPUT2> 
-    static int32  transform(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
+    static int32_t  transform(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
     {
-      const int32 CAPACITY = lastOut-firstOut-1;   //!< Output buffer character capacity 
+      const int32_t CAPACITY = lastOut-firstOut-1;   //!< Output buffer character capacity 
 
       // Clear output
       firstOut[0] = default<output_t>();
@@ -249,7 +249,7 @@ namespace wtl
   //! \throw wtl::platform_error - Unable to convert string
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename INPUT1, typename INPUT2, typename OUTPUT1, typename OUTPUT2> 
-  int32  encode_string(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
+  int32_t  encode_string(INPUT1 firstIn, INPUT2 lastIn, OUTPUT1 firstOut, OUTPUT2 lastOut)
   {
     constexpr Encoding FROM = default_encoding_t<decltype(*firstIn)>::value,
                          TO = default_encoding_t<decltype(*firstOut)>::value;

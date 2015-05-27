@@ -20,7 +20,7 @@ namespace wtl
 
   
   //! \enum ControlVersion - Defines common control library (ComCtl32) versions
-  enum class ControlVersion : ulong32
+  enum class ControlVersion : ulong32_t
   { 
     Explorer30 = 0x0400,        //!< Internet Explorer 3.00  (Windows 95)
     Explorer31 = 0x0470,        //!< Internet Explorer 3.01  (Windows NT 4, Windows 95 OSR2)
@@ -48,7 +48,7 @@ namespace wtl
   // ----------------------------------- DATE FORMAT FLAGS ----------------------------------
 
   //! \enum DateFlags - Define GetDateFormat() flags
-  enum class DateFlags : long32
+  enum class DateFlags : long32_t
   {
     ShortDate = 0x00000001,			      //!< Use short date picture
     LongDate = 0x00000002,			      //!< Use long date picture
@@ -67,7 +67,7 @@ namespace wtl
   
   
   //! \enum ResourceType - Defines resource types
-  enum class ResourceType : uint32
+  enum class ResourceType : uint32_t
   {
     Cursor = 1,           //!< 
     Bitmap = 2,           //!< 
@@ -105,7 +105,7 @@ namespace wtl
 
 
   //! \enum ShellVersion - Defines shell library (Shell32) versions
-  enum class ShellVersion : ulong32
+  enum class ShellVersion : ulong32_t
   { 
     Win95      = 0x0400,        //!< Windows 95 / NT4 (Internet Explorer 3.0)
     Explorer40 = 0x0471,        //!< Windows 95 / NT4 (Internet Explorer 4.0)
@@ -187,7 +187,7 @@ namespace wtl
   // ----------------------------------- WINDOWS OS VERSION ----------------------------------
   
   //! \enum WindowVersion - Defines operating system (Kernel32) versions
-  enum class WindowVersion : ulong32
+  enum class WindowVersion : ulong32_t
   { 
     WinNT    = 0x0400,      //!< Windows 9x / NT4
     Win2000  = 0x0500,      //!< Windows 2000

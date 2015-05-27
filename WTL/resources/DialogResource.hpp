@@ -41,14 +41,14 @@ namespace wtl
   //! \struct DLGITEMTEMPLATEEX - Extended Dialog Item Template
   struct DLGITEMTEMPLATEEX
   {
-    ulong32       helpId;     //!< Control help Id
+    ulong32_t       helpId;     //!< Control help Id
     WindowStyleEx styleEx;    //!< Extended style
     WindowStyle   style;      //!< Style
-    int16         x,          //!< X co-ordinate in dialog units
+    int16_t         x,          //!< X co-ordinate in dialog units
                   y,          //!< Y co-ordinate in dialog units
                   cx,         //!< Width in dialog units
                   cy;         //!< Height in dialog units
-    ulong32       ctrlId;     //!< Control Id
+    ulong32_t       ctrlId;     //!< Control Id
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ namespace wtl
     using char_t = encoding_char_t<ENC>;
 
     //! \alias stream_t - Defines memory stream type
-    using stream_t = MemoryStream<uint8>;
+    using stream_t = MemoryStream<uint8_t>;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -77,7 +77,7 @@ namespace wtl
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias ByteVector - User data storage type
-      using ByteVector = std::vector<uint8>;
+      using ByteVector = std::vector<uint8_t>;
 
       // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -94,7 +94,7 @@ namespace wtl
                >> StyleEx 
                >> Style;
 
-        int16 x, y, cx, cy;   //!< Item position and size (in dialog units)
+        int16_t x, y, cx, cy;   //!< Item position and size (in dialog units)
 
         // Read position
         stream >> x >> y >> cx >> cy;
@@ -117,7 +117,7 @@ namespace wtl
         in >> DlgTitle;
 
         // Read amount of creation data
-        int16 numBytes;
+        int16_t numBytes;
         in >> numBytes;
 
         // Read creation data, if any
@@ -136,8 +136,8 @@ namespace wtl
       WindowStyle    Style;          //!< Window style
       WindowStyleEx  StyleEx;        //!< Extended window style
       WindowId       Ident;          //!< Control id
-      long32         HelpId;         //!< Help id context
-      Rect<int16>    Position;       //!< Position
+      long32_t         HelpId;         //!< Help id context
+      Rect<int16_t>    Position;       //!< Position
       std::wstring   Text,           //!< Item text
                      WndClass;       //!< Window class name
       ByteVector     UserData;       //!< Creation data
@@ -167,7 +167,7 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       DialogTemplate(BinaryReader<stream_t>& stream) 
       {
-        int16  version,       //!< Version
+        int16_t  version,       //!< Version
                signature;     //!< Signature
         
         // Read version 
@@ -178,7 +178,7 @@ namespace wtl
         if (version != 1 || signature != 0xFFFF)
           throw;
 
-        int16 numItems;
+        int16_t numItems;
 
         // Read dialog data
         stream >> HelpId 
@@ -186,7 +186,7 @@ namespace wtl
                >> StyleEx
                >> numItems;
 
-        int16 x, y, cx, cy;   //!< Dialog position and size (in dialog units)
+        int16_t x, y, cx, cy;   //!< Dialog position and size (in dialog units)
 
         // Read position
         stream >> x >> y >> cx >> cy;
@@ -196,7 +196,7 @@ namespace wtl
         in >> MenuId;
 
         // Read items
-        for (uint32 idx = 0; idx < numItems; ++idx)
+        for (uint32_t idx = 0; idx < numItems; ++idx)
           Items.emplace_back(stream);
       }
       
@@ -211,7 +211,7 @@ namespace wtl
       WindowStyle    Style;          //!< Window style
       WindowStyleEx  StyleEx;        //!< Extended window style
       WindowId       Ident;          //!< Window id
-      Rect<int16>    Position;       //!< Position
+      Rect<int16_t>    Position;       //!< Position
       std::wstring   DlgTitle,       //!< Dialog title
                      WndClass,       //!< Window class name
                      CreateData;     //!< Creation data
@@ -253,7 +253,7 @@ namespace wtl
     //! \param[in] res - Resource handle
     //! \return DATA* - Resource data block
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename DATA = uint8>
+    template <typename DATA = uint8_t>
     static DATA* load(HMODULE module, const HResource& res)
     {
       // Load resource

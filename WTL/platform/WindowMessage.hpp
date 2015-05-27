@@ -14,7 +14,7 @@
 namespace wtl
 {
   //! \enum WindowMessage - Windows message identifiers
-  enum class WindowMessage : uint16
+  enum class WindowMessage : uint16_t
   {
     NONE = 0x0000,			//!< WM_NULL
     CREATE = 0x0001,			//!< 

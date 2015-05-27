@@ -350,7 +350,7 @@ namespace wtl
     platform_error(const char* location, const char* format, ARGS&&... args) : base(location), Code(::GetLastError())
     { 
       // Format message
-      int32 n = snprintf_t(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
+      int32_t n = snprintf_t(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
 
       if (Code != 0)
       {

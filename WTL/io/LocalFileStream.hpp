@@ -28,13 +28,13 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \typedef distance_t - Stream distance type
-    typedef ulong32  distance_t;
+    typedef ulong32_t  distance_t;
     
     //! \typedef element_t - Stream element type
     typedef ELEMENT  element_t;
     
     //! \typedef position_t - Stream position type
-    typedef ulong32  position_t;
+    typedef ulong32_t  position_t;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   
@@ -250,11 +250,11 @@ namespace wtl
     // LocalFileStream::flush
     //! Flush any unwritten data in the stream to disc
     //! 
-    //! \return int32 - Undocumented
+    //! \return int32_t - Undocumented
     //! 
     //! \throw wtl::logic_error - [Debug only] Stream has been closed
     //////////////////////////////////////////////////////////////////////////////////////////
-    int32 flush() 
+    int32_t flush() 
     {
       LOGIC_INVARIANT(Handle != nullptr);
 
@@ -305,11 +305,11 @@ namespace wtl
     //! 
     //! \param[in] offset - Distance to move, in elements
     //! \param[in] origin - Seek origin: Start/Current/End
-    //! \return int32 - Zero upon success, non-zero upon failure
+    //! \return int32_t - Zero upon success, non-zero upon failure
     //! 
     //! \throw wtl::logic_error - [Debug only] Stream has been closed
     //////////////////////////////////////////////////////////////////////////////////////////
-    int32 seek(int32 offset, FileSeek origin) 
+    int32_t seek(int32_t offset, FileSeek origin) 
     {
       LOGIC_INVARIANT(Handle != nullptr);
 

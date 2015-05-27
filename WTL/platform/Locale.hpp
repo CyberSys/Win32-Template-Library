@@ -43,7 +43,7 @@ namespace wtl
     //! \param[in] pri - Primary language
     //! \param[in] sub - Sub language
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr LanguageId(uint8 pri, uint8 sub) noexcept : Value(MAKELANGID(pri,sub)) 
+    constexpr LanguageId(uint8_t pri, uint8_t sub) noexcept : Value(MAKELANGID(pri,sub)) 
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +69,9 @@ namespace wtl
     // LanguageId::sublang constexpr
     //! Query the sublanguage
     //! 
-    //! \return uint16 - Sublanguage identifier
+    //! \return uint16_t - Sublanguage identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr uint16 sublang() const noexcept
+    constexpr uint16_t sublang() const noexcept
     { 
       return SUBLANGID(Value);     
     }
@@ -80,9 +80,9 @@ namespace wtl
     // LanguageId::primary constexpr
     //! Query the primary language
     //! 
-    //! \return uint16 - Primary language identifier
+    //! \return uint16_t - Primary language identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr uint16 primary() const noexcept
+    constexpr uint16_t primary() const noexcept
     { 
       return PRIMARYLANGID(Value);     
     }
@@ -91,7 +91,7 @@ namespace wtl
     // LanguageId::operator ::LANGID constexpr
     //! Implicit user conversion to Win32 language identifier
     //! 
-    //! \return uint16 - Win32 language identifier
+    //! \return uint16_t - Win32 language identifier
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr operator ::LANGID() const noexcept
     { 
@@ -104,7 +104,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias SortOrderId - Win32 Sort order identifier
   /////////////////////////////////////////////////////////////////////////////////////////
-  using SortOrderId = uint16;
+  using SortOrderId = uint16_t;
 
   
   /////////////////////////////////////////////////////////////////////////////////////////

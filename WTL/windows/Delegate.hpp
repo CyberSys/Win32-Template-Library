@@ -32,7 +32,7 @@ namespace wtl
   //struct delegate_traits<std::function<RET (ARGS...)>>
   //{
   //  //! \var arguments - Number of arguments
-  //  static constexpr uint32  arguments = sizeof...(ARGS);
+  //  static constexpr uint32_t  arguments = sizeof...(ARGS);
 
   //  //! \alias result_t - Define return type
   //  using result_t = RET;

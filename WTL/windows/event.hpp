@@ -48,7 +48,7 @@ namespace wtl
     using signature_t = RET (ARGS...);
   
     //! \var arguments - Number of arguments
-    static constexpr uint32  arguments = sizeof...(ARGS);
+    static constexpr uint32_t  arguments = sizeof...(ARGS);
 
   protected:
     //! \alias storage_t - Define delegate storage type

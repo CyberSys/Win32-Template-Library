@@ -243,14 +243,14 @@ namespace wtl
     // PopupMenu::size const
     //! Get the number of items
     //! 
-    //! \return int32 - Number of items
+    //! \return int32_t - Number of items
     //! 
     //! \throw wtl::platform_error - Unable to query item count
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32  size() const
+    int32_t  size() const
     {
       // Query item count
-      int32 num = GetMenuItemCount(Handle);
+      int32_t num = GetMenuItemCount(Handle);
       if (num != -1)
         return num;
 
@@ -299,7 +299,7 @@ namespace wtl
     //! \throw wtl::invalid_argument - [Debug only] Missing command
     //! \throw wtl::platform_error - Unable to insert menu item
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  insert(int32 idx, const ActionPtr<encoding>& cmd)
+    void  insert(int32_t idx, const ActionPtr<encoding>& cmd)
     {
       REQUIRED_PARAM(cmd);
 
@@ -440,14 +440,14 @@ namespace wtl
     // WindowMenu::size const
     //! Get the number of pop-up menus
     //! 
-    //! \return int32 - Number of pop-up menus
+    //! \return int32_t - Number of pop-up menus
     //!
     //! \throw wtl::platform_error - Unable to query menu item count
     /////////////////////////////////////////////////////////////////////////////////////////
-    int32  size() const
+    int32_t  size() const
     {
       // Query item count
-      int32 num = GetMenuItemCount(Handle);
+      int32_t num = GetMenuItemCount(Handle);
       if (num != -1)
         return num;
 
@@ -514,7 +514,7 @@ namespace wtl
     //! \throw wtl::invalid_argument - [Debug only] Missing command group
     //! \throw wtl::platform_error - Unable to insert menu item
     /////////////////////////////////////////////////////////////////////////////////////////
-    void insert(int32 idx, const ActionGroupPtr<encoding>& group)
+    void insert(int32_t idx, const ActionGroupPtr<encoding>& group)
     {
       REQUIRED_PARAM(group);
 
@@ -585,7 +585,7 @@ namespace wtl
         args.Size = args.Graphics.measure(group->name());
         
         // debug
-        cdebug << object_info(__func__, "group", (int32)args.Ident, "size", args.Size) << endl;
+        cdebug << object_info(__func__, "group", (int32_t)args.Ident, "size", args.Size) << endl;
       }
 
       // [ITEM] Lookup Action
@@ -593,7 +593,7 @@ namespace wtl
       {
         // Measure Action name
         args.Size = args.Graphics.measure(action->name());
-        //cdebug << "onOwnerMeasure() action_id=" << (int32)args.Ident << " size=" << args.Size << endl;
+        //cdebug << "onOwnerMeasure() action_id=" << (int32_t)args.Ident << " size=" << args.Size << endl;
       }
         
       // Handled

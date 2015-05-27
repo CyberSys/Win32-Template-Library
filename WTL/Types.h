@@ -9,7 +9,7 @@
 #define WTL_TYPES_HPP
 
 #include "WTL.hpp"
-#include <stdint.h>
+#include <cstdint>
 
 // Remove 'CHAR' typedef
 #ifdef CHAR
@@ -23,70 +23,39 @@ namespace wtl
   // ----------------------------------------- FUNDEMENTAL TYPES ---------------------------------------------
   // ---------------------------------------------------------------------------------------------------------
 
-  //! \alias int8 - Signed 8-bit integer
-  using int8 = int8_t;
+  //! \alias ulong32_t - Signed 32-bit long integer
+  using long32_t  = signed long int;
 
-  //! \alias uint8 - Unsigned 8-bit integer
-  using uint8 = uint8_t;
+  //! \alias ulong32_t - Unsigned 32-bit long integer
+  using ulong32_t = unsigned long int;
 
-  //! \alias int16 - Signed 16-bit integer
-  using int16 = int16_t;
+  //! \alias long64_t - Signed 64-bit long long integer
+  using long64_t = int64_t;
 
-  //! \alias uint16 - Unsigned 16-bit integer
-  using uint16 = uint16_t;
+  //! \alias ulong64_t - Unsigned 64-bit long long integer
+  using ulong64_t = uint64_t;
 
-  //! \alias int32 - Signed 32-bit integer
-  using int32 = int32_t;
+  //! \alias float32_t - 32-bit floating point
+  using float32_t = float;
 
-  //! \alias uint32 - Unsigned 32-bit integer
-  using uint32  = uint32_t;
-
-  //! \alias long32 - Signed 32-bit long integer
-  using long32  = signed long int;
-
-  //! \alias ulong32 - Unsigned 32-bit long integer
-  using ulong32 = unsigned long int;
-
-  //! \alias long64 - Signed 64-bit long long integer
-  using long64 = int64_t;
-
-  //! \alias uint64 - Unsigned 64-bit long long integer
-  using ulong64 = uint64_t;
-
-  //! \alias float32 - 32-bit floating point
-  using float32 = float;
-
-  //! \alias float64 - 64-bit floating point
-  using float64 = double;
-
-  // ---------------------------------------------------------------------------------------------------------
-  // ------------------------------------------- STANDARD TYPES ----------------------------------------------
-  // ---------------------------------------------------------------------------------------------------------
+  //! \alias float64_t - 64-bit floating point
+  using float64_t = double;
   
-  //! \alias intptr_t - Signed integer type large enough to hold a pointer
-  using intptr_t = int32;
+  //! \alias float80_t - Implementation dependant extended floating point type (80-bit on x86 as 12/16 bytes)
+  using float80_t = long double;
 
-  //! \alias uintptr_t - Unsigned integer type large enough to hold a pointer
-  using uintptr_t = uint32;
-
-  //! \alias size_t - Unsigned integer type large enough to represent any memory address
-  //using size_t = uint32;
-
-  //! \alias ptrdiff_t - Signed integer type able to represent any memory offset
-  using ptrdiff_t = int32;
-  
   // ---------------------------------------------------------------------------------------------------------
   // --------------------------------------------- COMMON NAMES ----------------------------------------------
   // ---------------------------------------------------------------------------------------------------------
 
   //! \alias byte - Unsigned 8-bit integer 
-  using byte = uint8;
+  using byte = uint8_t;
 
   //! \alias word - Unsigned 16-bit integer 
-  using word = uint16;
+  using word = uint16_t;
 
   //! \alias dword - Unsigned 32-bit integer 
-  using dword = ulong32;
+  using dword = ulong32_t;
 
   
   // ---------------------------------------------------------------------------------------------------------
@@ -95,11 +64,11 @@ namespace wtl
 
 
   //! \alias array_ref_t - Defines array reference types
-  template <typename ELEMENT, uint32 LENGTH>
+  template <typename ELEMENT, uint32_t LENGTH>
   using array_ref_t = ELEMENT (&)[LENGTH];
   
   //! \alias array_ptr_t - Defines array pointer types
-  template <typename ELEMENT, uint32 LENGTH>
+  template <typename ELEMENT, uint32_t LENGTH>
   using array_ptr_t = ELEMENT (*)[LENGTH];
 }
 

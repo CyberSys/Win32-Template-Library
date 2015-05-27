@@ -20,24 +20,24 @@ namespace wtl
   //! \tparam N - Base 
   //! \tparam EXP - Exponent
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <int32 N, int32 EXP>
+  template <int32_t N, int32_t EXP>
   struct power_of
   {
     static_assert(N > 0, "Base cannot be negative");
     static_assert(EXP > 0, "Exponent cannot be negative");
 
     // Multiply N by N, EXP times
-    static constexpr int32 value = N * power_of<N,EXP-1>::value;
+    static constexpr int32_t value = N * power_of<N,EXP-1>::value;
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct power_of<0> - Handle the base case
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <int32 N>
+  template <int32_t N>
   struct power_of<N, 0>
   {
     //! \var value = Define base case
-    static constexpr int32 value = 1;
+    static constexpr int32_t value = 1;
   };
 
 }

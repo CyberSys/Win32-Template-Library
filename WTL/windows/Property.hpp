@@ -18,7 +18,7 @@
 namespace wtl 
 {
   //! \enum PropertyType - Defines property types
-  enum class PropertyType : int32 
+  enum class PropertyType : int32_t 
   { 
     Mutable = 0,        //!< Read/Write
     Immutable = 1,      //!< Read only

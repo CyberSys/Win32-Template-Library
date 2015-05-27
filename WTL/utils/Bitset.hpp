@@ -34,20 +34,20 @@ namespace wtl
     using mask_t = MASK;
 
     //! \var bytes - Defines the number of bits in the set
-    static constexpr uint32 bytes = sizeof(mask_t);
+    static constexpr uint32_t bytes = sizeof(mask_t);
       
     //! \var bits - Defines the number of bytes in the set
-    static constexpr uint32 bits = 8 * bytes;
+    static constexpr uint32_t bits = 8 * bytes;
     
     //! \alias BitArray - Array large enough to hold all bit indicies
-    using BitArray = DynamicArray<uint32,bits>;
+    using BitArray = DynamicArray<uint32_t,bits>;
   
     //////////////////////////////////////////////////////////////////////////////////////////
     //! \struct loop - Unfurls the high bits of the mask into a variable length array
     //!
     //! \tparam IDX - Zero-based iteration index
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <uint32 IDX>
+    template <uint32_t IDX>
     struct loop
     {
       static_assert((IDX >= 0) && (IDX < bits), "Invalid loop index");
@@ -157,7 +157,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Index out of range
     //////////////////////////////////////////////////////////////////////////////////////////
-    bool get(uint32 index) const
+    bool get(uint32_t index) const
     {
       CHECKED_INDEX(index, 0, bits);
 
@@ -208,7 +208,7 @@ namespace wtl
     //! \param[in] index - zero-based index of bit to query
     //! \return bool - State of desired bit
     //////////////////////////////////////////////////////////////////////////////////////////
-    bool operator[](uint32 index) const
+    bool operator[](uint32_t index) const
     {
       return get(index);
     }
@@ -280,7 +280,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Index out of range
     //////////////////////////////////////////////////////////////////////////////////////////
-    void  clear(uint32 index)
+    void  clear(uint32_t index)
     {
       CHECKED_INDEX(index, 0, bits);
 
@@ -296,7 +296,7 @@ namespace wtl
     //! 
     //! \throw wtl::out_of_range - [Debug only] Index out of range
     //////////////////////////////////////////////////////////////////////////////////////////
-    void  set(uint32 index)
+    void  set(uint32_t index)
     {
       CHECKED_INDEX(index, 0, bits);
       

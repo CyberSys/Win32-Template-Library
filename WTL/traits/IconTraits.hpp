@@ -33,7 +33,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   protected:
     //! \enum IconFormat - Define data format
-    enum class IconFormat : long32 { v2 = 0x00020000, v3 = 0x00030000 };
+    enum class IconFormat : long32_t { v2 = 0x00020000, v3 = 0x00030000 };
     
   public:
     //! \var npos - Invalid handle sentinel value
@@ -110,7 +110,7 @@ namespace wtl
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC = Encoding::UTF16, typename = enable_if_build_t<WindowVersion::Win2000>>
-    static HAlloc<::HICON> create(byte* buffer, int32 len, SizeL size) 
+    static HAlloc<::HICON> create(byte* buffer, int32_t len, SizeL size) 
     { 
       // Create icon handle from bits
       if (::HICON icon = CreateIconFromResourceEx(buffer, len, True, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
@@ -132,7 +132,7 @@ namespace wtl
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC = Encoding::UTF16, typename = enable_if_build_t<WindowVersion::Win2000>>
-    static HAlloc<::HICON> create(byte* buffer, int32 len, bool defaultSize) 
+    static HAlloc<::HICON> create(byte* buffer, int32_t len, bool defaultSize) 
     { 
       // Create icon handle from bits
       if (::HICON icon = CreateIconFromResourceEx(buffer, len, True, enum_cast(IconFormat::v3), 0, 0, defaultSize ? LR_DEFAULTCOLOR|LR_DEFAULTSIZE : LR_DEFAULTCOLOR))

@@ -182,7 +182,7 @@ namespace wtl
     //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
     //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
     //////////////////////////////////////////////////////////////////////////////////////////
-    void write(const element_t* str, uint32 length)
+    void write(const element_t* str, uint32_t length)
     {
       CHECKED_LENGTH(length, remaining());
 
@@ -278,7 +278,7 @@ namespace wtl
     void writevf(const element_t* format, va_list args)
     {
       // Attempt to format directly into stream
-      int32 capacity(Stream.remaining()),
+      int32_t capacity(Stream.remaining()),
             written(vsnprintf(Stream.buffer(), capacity, format, args));
 
       // Ensure successful

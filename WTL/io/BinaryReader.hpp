@@ -150,8 +150,8 @@ namespace wtl
   //template <typename VALUE, typename STORAGE = VALUE, typename STREAM>
   //VALUE  deserialize_construct(BinaryReader<STREAM>& r)
   //{
-  //  //Array<uint8,size_of<STORAGE>::value,false> storage;
-  //  uint8   storage[size_of<STORAGE>::value];                             //!< Byte storage buffer
+  //  //Array<uint8_t,size_of<STORAGE>::value,false> storage;
+  //  uint8_t   storage[size_of<STORAGE>::value];                             //!< Byte storage buffer
   //  STORAGE (&element)[1] = reinterpret_cast<STORAGE (&)[1]>(storage);    //!< Strongly typed, single element, value array
 
   //  // Read into storage buffer
@@ -230,11 +230,11 @@ namespace wtl
     E value;
     
     // Read count
-    uint32 count;
+    uint32_t count;
     r >> count;
 
     // Copy-construct elements from an element constructed from the stream
-    for (uint32 i = 0UL; i < count; ++i) 
+    for (uint32_t i = 0UL; i < count; ++i) 
     {
       r >> value;
       arr.emplace_back(value);
@@ -266,7 +266,7 @@ namespace wtl
     enum { LENGTH = L };
 
     // Read/overwrite each element
-    for (uint32 i = 0UL; i < LENGTH; ++i) 
+    for (uint32_t i = 0UL; i < LENGTH; ++i) 
       r >> arr[i];
 
     return r;

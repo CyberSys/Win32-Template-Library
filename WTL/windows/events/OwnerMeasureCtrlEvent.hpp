@@ -27,7 +27,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ControlEventArgs<ENC,WindowMessage::MEASUREITEM,uint16,default<uint16>()>
+  struct ControlEventArgs<ENC,WindowMessage::MEASUREITEM,uint16_t,default<uint16_t>()>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -53,7 +53,7 @@ namespace wtl
   public:
     OwnerDrawControl  CtrlType;         //!< Control type
     WindowId          Ident;            //!< Originator identifier
-    int32             Item;             //!< Zero-based item index
+    int32_t             Item;             //!< Zero-based item index
     DeviceContext     Graphics;         //!< Device context
     HWnd              Sender;           //!< Originator handle
     SizeL             Size;             //!< Item size
