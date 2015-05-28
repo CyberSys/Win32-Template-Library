@@ -43,12 +43,13 @@
 #define STR2(s)  #s
 #define STR(s) STR2(s)
 
-//! \def HERE - Generates a source file error location string: '<function>() on line <line> of <file> : '
+//! \def HERE - Generates a source file error location string: '<function>() on line <line> of <file>'
 #ifdef STRINGIFY_CAP
-  #define HERE  __FUNCTION__ "() on line " STR(__LINE__) " of " __FILE__ " : "
+  #define HERE  (__FUNCTION__ "() on line " STR(__LINE__) " of " __FILE__) 
 #else
-  #define HERE  __FUNCTION__
+  #define HERE  (__FUNCTION__ "() in " __FILE__)
 #endif
+
 // --------------------------------------------------------------------------------------------------------
 // --------------------------------------- CONSTRUCTION SEMANTICS -----------------------------------------
 // --------------------------------------------------------------------------------------------------------
