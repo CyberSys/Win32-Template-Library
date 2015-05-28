@@ -46,53 +46,78 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Write an array of elements not of class type to the debug console
+  //! Writes a DynamicArray (with elements of non-class type) to the debug console
   //!
   //! \tparam E - Array element type
   //! \tparam L - Array capacity
-  //! \tparam D - Whether array can be resized
   //!
   //! \param[in,out] &c - Console
   //! \param[in] const &r - Array
   //! \return Console& : Reference to console
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32_t L, bool D>
-  enable_if_class_t<E,Console&> operator << (Console& c, const Array<E,L,D>& r) 
+  template <typename E, uint32_t L>
+  auto operator << (Console& c, const Array<E,L,true>& r) -> enable_if_not_class_t<E,Console&>
   {
-    // Write comma separated elements
-    return c << instance_info("Array", make_nvpair("size", r.size()),
-                                       make_nvpair("values", delimited_range(r, ',')) );
+    // Number of elements + comma separated values
+    return c << object_info("Array", "size", r.size(), 
+                                     "values", delimited_range(r, ','));
   }
-
-  
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Write an array of elements of class type to the debug console
+  //! Writes a DynamicArray (with elements of class type) to the debug console
   //!
   //! \tparam E - Array element type
   //! \tparam L - Array capacity
-  //! \tparam D - Whether array can be resized
   //!
-  //! \param[in,out] &s - Console
+  //! \param[in,out] &c - Console
   //! \param[in] const &r - Array
   //! \return Console& : Reference to console
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32_t L, bool D>
-  enable_if_not_class_t<E,Console&> operator << (Console& c, const Array<E,L,D>& r) 
+  template <typename E, uint32_t L>
+  auto operator << (Console& c, const Array<E,L,true>& r) -> enable_if_class_t<E,Console&>
   {
-    // Write tag + size
-    c << instance_info("Array")
-      << make_nvpair("size", r.size())
-      << endl;
+    // Number of elements + values on separate lines
+    return c << object_info("Array", "size", r.size(), 
+                                     "values", delimited_range(r, '\n'));
+  }
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Writes a FixedArray (with elements of non-class type) to the debug console
+  //!
+  //! \tparam E - Array element type
+  //! \tparam L - Array capacity
+  //!
+  //! \param[in,out] &c - Console
+  //! \param[in] const &r - Array
+  //! \return Console& : Reference to console
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, uint32_t L>
+  auto operator << (Console& c, const Array<E,L,false>& r) -> enable_if_not_class_t<E,Console&>
+  {
+    // Comma separated values
+    return c << object_info("Array", "values", delimited_range(r, ','));
+  }
 
-    // Write N index/elements pairs
-    for (uint32_t i = 0UL, count = r.size(); i < count; ++i) 
-      c << make_nvpair("index", i)
-        << make_nvpair("value", r[i])
-        << Cons::Break;
-    
-    // Close
-    return c << Cons::Yellow << '}';
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Writes a FixedArray (with elements of class type) to the debug console
+  //!
+  //! \tparam E - Array element type
+  //! \tparam L - Array capacity
+  //!
+  //! \param[in,out] &c - Console
+  //! \param[in] const &r - Array
+  //! \return Console& : Reference to console
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, uint32_t L>
+  auto operator << (Console& c, const Array<E,L,false>& r) -> enable_if_class_t<E,Console&>
+  {
+    // Write elements on separate lines
+    return c << object_info("Array", "values", delimited_range(r, '\n'));
   }
   
   

@@ -861,8 +861,8 @@ namespace wtl
   Console& operator << (Console& c, const CharArray<ENC,LENGTH>& r) 
   {
     // Write text and length
-    return c << instance_info( "CharArray", make_nvpair("text", r.c_str()), 
-                                            make_nvpair("length", r.size()) );
+    return c << make_nvpair_tuple( "length", r.size(), 
+                                   "text", r.c_str() );
   }
 
   
