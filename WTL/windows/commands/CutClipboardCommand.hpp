@@ -51,11 +51,10 @@ namespace wtl
     // CutClipboardCommand::CutClipboardCommand
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
-    CutClipboardCommand()  
-      : base(ActionId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
-                                                TargetWnd->Text = c_str(L"TODO: Cut text to clipboard"); },
-                                  [this] () { if (TargetWnd)
-                                                TargetWnd->Text = c_str(L"TODO: Restore previous text"); })
+    CutClipboardCommand() : base(ActionId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
+                                                                   TargetWnd->Text = c_str(L"TODO: Cut text to clipboard"); },
+                                                     [this] () { if (TargetWnd)
+                                                                   TargetWnd->Text = c_str(L"TODO: Restore previous text"); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -74,7 +73,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    typename base::type*  clone() const 
+    type*  clone() const 
     {
       return new CutClipboardCommand(*this);
     }

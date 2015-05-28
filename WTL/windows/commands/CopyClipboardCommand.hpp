@@ -51,9 +51,8 @@ namespace wtl
     // CopyClipboardCommand::CopyClipboardCommand
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
-    CopyClipboardCommand()  
-      : base(ActionId::Edit_Copy, [this] () { if (TargetWnd = window_t::getFocus())
-                                                 TargetWnd->Text = c_str(L"TODO: Copy text to clipboard"); })
+    CopyClipboardCommand() : base(ActionId::Edit_Copy, [this] () { if (TargetWnd = window_t::getFocus())
+                                                                     TargetWnd->Text = c_str(L"TODO: Copy text to clipboard"); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -72,7 +71,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    typename base::type*  clone() const 
+    type*  clone() const 
     {
       return new CopyClipboardCommand(*this);
     }

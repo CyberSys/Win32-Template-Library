@@ -74,7 +74,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    typename base::type*  clone() const 
+    type*  clone() const 
     {
       return new PasteClipboardCommand(*this);
     }
