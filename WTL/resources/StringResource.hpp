@@ -26,11 +26,17 @@ namespace wtl
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
+    //!
+    //! \remarks String table is a block of 16 PASCAL-style strings (Prefixed with length as WORD)
+    //! \remarks Some of the 16 entries may be blank (Zero length, null string)
     /////////////////////////////////////////////////////////////////////////////////////////
     struct StringTableEntry
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
       
+      //! \var size - 
+      static constexpr int32_t  size = sizeof(wchar_t) + sizeof(uint16_t);
+
       // ------------------------------------ CONSTRUCTION ------------------------------------
 	
       DISABLE_CTOR(StringTableEntry);     //!< Cannot instantiate
@@ -51,22 +57,28 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       const StringTableEntry* next() const
       {
+        // [EMPTY] Skip entry
+        if (!Length)
+          return reinterpret_cast<const StringTableEntry*>(Text);
+
+        // [NON-EMPTY] Skip entry text 
         return reinterpret_cast<const StringTableEntry*>(Text + Length);
       }
       
       // ----------------------------------- MUTATOR METHODS ----------------------------------
 
       // ----------------------------------- REPRESENTATION -----------------------------------
-
-      uint16_t         Length;        //!< Length of current entry, in characters
+#pragma pack (push, 1)
+      uint16_t       Length;        //!< Length of current entry, in characters
       const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
+#pragma pack (pop)
     };
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     ResourceBlob             Table;       //!< Table resource
     const StringTableEntry*  Entry;       //!< Desired entry
-    uint16_t                   Ident;       //!< String id
+    uint16_t                 Ident;       //!< String id
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -92,11 +104,11 @@ namespace wtl
         throw platform_error(HERE, "String resource %d does not exist", Ident);
 
       // Find desired string
-      for (int32_t i = 1, index = Ident % 16; Entry && i < index; i++)
+      for (int32_t i = 0, index = Ident % 16; Entry && i < index; i++)
         Entry = Entry->next();
 
       // [NOT-FOUND] Return false & empty string 
-      if (!Entry)
+      if (!Entry || !Entry->Length)
         throw logic_error(HERE, "String resource %d does not exist", Ident);
     }
     
@@ -104,7 +116,7 @@ namespace wtl
   public:
     ENABLE_COPY(StringResource);       //!< Can be shallow copied  
     ENABLE_MOVE(StringResource);       //!< Can be moved
-    ENABLE_POLY(StringResource);      //!< Can be polymorphic
+    ENABLE_POLY(StringResource);       //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
