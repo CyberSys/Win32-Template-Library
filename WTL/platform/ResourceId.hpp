@@ -9,8 +9,9 @@
 #define WTL_RESOURCE_ID_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"
-#include "wtl/platform/SystemFlags.hpp"
+#include "wtl/traits/EncodingTraits.hpp"      //!< encoding_char_t
+#include "wtl/utils/DebugInfo.hpp"            //!< DebugInfo
+#include "wtl/platform/SystemFlags.hpp"       //!< ResourceType
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -33,7 +34,7 @@ namespace wtl
     union Ident
     {
       const char_t*  Name;       //!< Resource name
-      uint32_t         Numeral;    //!< Resource ID
+      uint32_t       Numeral;    //!< Resource ID
     };
     
     // ----------------------------------- REPRESENTATION -----------------------------------
@@ -205,6 +206,25 @@ namespace wtl
   }
 
   
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a Size to the debug console
+  //!
+  //! \tparam T - Size field type
+  //! 
+  //! \param[in,out] &c - Debugging console
+  //! \param[in] const& sz - Size
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  Console& operator << (Console& c, const ResourceId<ENC>& id)
+  {
+    if (id.isOrdinal())
+      return c << id.toOrdinal();
+    else
+      return c << id.toString();
+  };
+
 
 } // WTL namespace
 
