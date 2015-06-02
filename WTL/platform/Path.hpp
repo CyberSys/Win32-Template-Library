@@ -494,7 +494,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator<<
-  //! Writes a path to the debugging console in yellow, then resets the output colour
+  //! Writes a path to the debug console in yellow, then resets the output colour
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in] const& path - Path

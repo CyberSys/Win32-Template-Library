@@ -309,7 +309,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Prints the valid bits of a BitSet to the debugging console
+  //! Prints the valid bits of a BitSet to the debug console
   //!
   //! \tparam DATA - Bitset data type
   //! 

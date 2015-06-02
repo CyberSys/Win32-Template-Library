@@ -122,7 +122,7 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes an exception to the debugging console
+  //! Writes an exception to the debug console
   //!
   //! \param[in,out] &c - Debug console
   //! \param[in] const& - Exception details

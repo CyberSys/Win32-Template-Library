@@ -314,7 +314,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes the entire contents of a text writer stream to the debugging console
+  //! Writes the entire contents of a text writer stream to the debug console
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in,out] &writer - Text writer

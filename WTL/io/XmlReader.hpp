@@ -292,7 +292,7 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes a formatted xml fragment to the debugging console
+  //! Writes a formatted xml fragment to the debug console
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in,out] &reader - Xml reader
@@ -403,7 +403,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes a formatted xml fragment to the debugging console
+  //! Writes a formatted xml fragment to the debug console
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in,out] &reader - Xml reader

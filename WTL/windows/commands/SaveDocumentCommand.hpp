@@ -83,7 +83,7 @@ namespace wtl
     //! 
     //! \return ActionState - Current state of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionState state() const override
+    ActionState  state() const override
     {
       // Always enabled
       return ActionState::Enabled;

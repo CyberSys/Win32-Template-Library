@@ -301,7 +301,7 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes a STL string to the debugging console
+  //! Writes a STL string to the debug console
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in] const& s - String
