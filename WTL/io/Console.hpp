@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\Console.hpp
-//! \brief Provides coloured text output to the debugging console
+//! \brief Provides coloured text output to the debug console
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -16,6 +16,7 @@
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/Exception.hpp"          //!< wtl::exception
 #include <stdexcept>                        //!< std::exception
+#include <string>                           //!< std::basic_string
 #include <mutex>                            //!< std::lock_guard, std::recursive_mutex
 #include <type_traits>                      //!< std::enable_if
 
@@ -60,7 +61,7 @@ namespace wtl
     Break   = 0x00800000,      //!< LineBreak that preserves formatting
   };
 
-  //! \alias Cons - Alias for debugging console i/o manipulators
+  //! \alias Cons - Alias for debug console i/o manipulators
   using Cons = IoManip;
 
   //! Define traits: Non-contiguous Attribute
@@ -109,7 +110,7 @@ namespace wtl
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Console - Provides a debugging console attached to std out 
+  //! \struct Console - Provides a debug console attached to std out 
   //! 
   //! \remarks Provides support for coloured text and cursor control.
   //! \remarks This object is designed to be thread-unsafe for performance reasons. 
@@ -477,10 +478,10 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes a string to the debugging console
+  //! Writes a null-terminated narrow character string to the debug console
   //! 
   //! \param[in,out] &c - Debug console
-  //! \param[in] const* str - String
+  //! \param[in] const* str - Null-terminated narrow character string
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   inline Console& operator << (Console& c, const char* str)
@@ -491,22 +492,33 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes a string to the debugging console
+  //! Writes a null-terminated wide character string to the debug console
   //! 
   //! \param[in,out] &c - Debug console
-  //! \param[in] const* str - String
+  //! \param[in] const* str - Null-terminated wide character string
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   Console& operator << (Console& c, const wchar_t* str);
-  /*{ 
-    c.write(str);
-    return c;
-  }*/
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Writes an STL string to the debug console
+  //! 
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& str - STL string
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHR, typename TRAITS = std::char_traits<CHR>, typename ALLOC = std::allocator<CHR>>
+  Console& operator << (Console& c, const std::basic_string<CHR,TRAITS,ALLOC>& str)
+  {
+    return c << str.c_str();
+  }
+  
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes an address to the debugging console
+  //! Writes an address to the debug console
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in] const* ptr - Address
@@ -521,7 +533,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes a boolean to the debugging console
+  //! Writes a boolean to the debug console
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in] val - Boolean
@@ -536,7 +548,7 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes an integral type to the debugging console
+  //! Writes an integral type to the debug console
   //! 
   //! \tparam T - Value type
   //!
@@ -554,7 +566,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes any floating-point type to the debugging console
+  //! Writes any floating-point type to the debug console
   //! 
   //! \tparam T - Value type
   //!
@@ -572,7 +584,7 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes the string representation of any enumeration type to the debugging console
+  //! Writes the string representation of any enumeration type to the debug console
   //! 
   //! \tparam T - Enumeration type
   //!
