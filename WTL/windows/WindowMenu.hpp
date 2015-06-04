@@ -585,7 +585,8 @@ namespace wtl
         args.Size = args.Graphics.measure(group->name());
         
         // debug
-        cdebug << object_info(__func__, "group", (int32_t)args.Ident, "size", args.Size) << endl;
+        cdebug << object_info(__func__, "group", (int32_t)args.Ident, 
+                                        "size", args.Size) << endl;
       }
 
       // [ITEM] Lookup Action
@@ -593,7 +594,11 @@ namespace wtl
       {
         // Measure Action name
         args.Size = args.Graphics.measure(action->name());
-        //cdebug << "onOwnerMeasure() action_id=" << (int32_t)args.Ident << " size=" << args.Size << endl;
+
+        // debug
+        cdebug << object_info(__func__, "action", (int32_t)args.Ident, 
+                                        "size", args.Size, 
+                                        "name", action->name()) << endl;
       }
         
       // Handled
