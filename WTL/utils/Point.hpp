@@ -169,6 +169,25 @@ namespace wtl
     {
       *this = default<type>();
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator= 
+    //! Assignment operator
+    //! 
+    //! \tparam U - Another value type
+    //!
+    //! \param[in] const& pt - Another point of any type
+    //! \return type& - Reference to self
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    type& operator= (const Point<U>&  pt)  
+    { 
+      this->x = static_cast<value_t>(pt.x);
+      this->y = static_cast<value_t>(pt.y);
+
+      return *this;
+    }
+    
   };
   
 

@@ -17,67 +17,54 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
-  //! \enum PropertyType - Defines property types
-  enum class PropertyType : int32_t 
+  //! \enum PropertyAccess - Defines property access
+  enum class PropertyAccess : int32_t 
   { 
-    Mutable = 0,        //!< Read/Write
-    Immutable = 1,      //!< Read only
-    Reference = 2,      //!< Reference type
-    Value = 4,          //!< Value type
-    
-    MutableReference = Mutable|Reference, 
-    MutableValue = Mutable|Value,
-    ImmutableValue = Immutable|Value,
-    ImmutableReference = Immutable|Reference,
+    Read = 1,                   //!< Read access
+    Write = 2,                  //!< Write access
+    ReadWrite = Read|Write,     //!< Read & write access
   };
 
-  //! Define traits: Non-contiguous Attribute
-  template <> struct is_attribute<PropertyType>  : std::true_type  {};
-  template <> struct is_contiguous<PropertyType> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<PropertyType>     : std::integral_constant<PropertyType,PropertyType::Value>   {};
-  template <> struct min_value<PropertyType>     : std::integral_constant<PropertyType,PropertyType::Mutable> {};
+  //! Define traits: Contiguous Attribute
+  template <> struct is_attribute<PropertyAccess>  : std::true_type {};
+  template <> struct is_contiguous<PropertyAccess> : std::true_type {};
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct PropertyImpl - Encapsulates a property value
+  //! \struct PropertyImpl - Base class for property implementations
   //! 
-  //! \tparam VALUE - External value type
-  //! \tparam TYPE - Accessibility and representation
+  //! \tparam VALUE - Value type
+  //! \tparam ACCESS - Access type(s)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, PropertyType TYPE>
+  template <typename VALUE, PropertyAccess ACCESS>
   struct PropertyImpl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = PropertyImpl<VALUE,TYPE>;
-
-    //! \alias reference_t - Define immutable reference type
-    using reference_t = const VALUE&;
+    using type = PropertyImpl<VALUE,ACCESS>;
+    
+    //! \alias reference_t - Define lvalue reference type
+    using reference_t = VALUE;  //const VALUE&;
 
     //! \alias value_t - Define value type
     using value_t = VALUE;
 
-    //! \var readonly - Define whether property is read-only or mutable
-    static constexpr bool readonly = TYPE && PropertyType::Immutable;
+    //! \var read - Define whether property supports read access
+    static constexpr bool read = ACCESS && PropertyAccess::Read;
 
-    //! \var readonly - Define whether property is a reference or value type
-    static constexpr bool reference = !(TYPE && PropertyType::Value);
-
-    //! \alias argument_t - Define accessor/mutator argument type (Value vs Reference)
-    using argument_t = std::conditional_t<reference, reference_t, value_t>;
+    //! \var write - Define whether property supports write access
+    static constexpr bool write = ACCESS && PropertyAccess::Write;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    value_t   Value;      //!< Property value  
+    value_t   Value;      //!< Value storage
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::PropertyImpl
-    //! Create initial value
+    //! Create implementation, optionally with initial value
     //! 
     //! \param[in] &&... args - [optional] Value constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -87,8 +74,8 @@ namespace wtl
 
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
 
-    ENABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
-    ENABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
+    //ENABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
+    //ENABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
     ENABLE_POLY(PropertyImpl);       //!< Can be polymorphic
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
@@ -97,125 +84,85 @@ namespace wtl
     // PropertyImpl::get const
     //! Value accessor
     //! 
-    //! \return auto - Value  or  immutable reference to value
+    //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual argument_t  get() const
+    virtual value_t  get() const
     {
       return Value;
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // PropertyImpl::operator == const
+    //! Equality operator 
+    //! 
+    //! \tparam T - Any type
+    //! 
+    //! \param[in] && val - (Forwarding-reference) Any value 
+    //! \return bool - True iff equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    bool  operator == (T&& val) const 
+    {
+      return Value == val;   
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // PropertyImpl::operator != const
+    //! Inequality operator 
+    //! 
+    //! \tparam T - Any type
+    //! 
+    //! \param[in] && val - (Forwarding-reference) Any value 
+    //! \return bool - True iff unequal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    bool  operator != (T&& val) const
+    {
+      return Value != val;   
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::set 
     //! Value mutator
     //! 
-    //! \param[in] auto value - New value  or  immutable reference to new value
+    //! \param[in] val - New value 
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual void  set(argument_t value) 
+    virtual void  set(value_t val) 
     {
-      Value = value;
+      Value = val;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // PropertyImpl::operator =
+    //! Assignment operator
+    //! 
+    //! \param[in] const& r - Another property of equal type
+    //! \return type& - Reference to self
+    /////////////////////////////////////////////////////////////////////////////////////////
+    type& operator = (const type& r) 
+    {
+      Value = r.get();
+      return *this;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // PropertyImpl::operator =
+    //! Delegating assignment operator (for all types except self)
+    //! 
+    //! \tparam T - Any type
+    //! 
+    //! \param[in] && val - (Forwarding-reference) Any value 
+    //! \return type& - Reference to self
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    auto  operator = (T&& val) -> enable_if_is_not_t<type,T,type&>
+    {
+      Value = std::forward(val);   //!< Delegate to implementation
+      return *this;
     }
   };
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct PropertyFunctor - Encapsulates property mutation within a delegate 
-  //! 
-  //! \tparam VALUE - External value type
-  //! \tparam TYPE - Property properties 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename VALUE, PropertyType TYPE>
-  //struct PropertyFunctor : PropertyImpl<VALUE,TYPE>
-  //{
-  //  // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-  //  //! \alias base - Define base type
-  //  using base = PropertyImpl<VALUE,TYPE>;
-
-  //  //! \alias type - Define own type
-  //  using type = PropertyFunctor<VALUE,TYPE>;
-
-  //  //! \alias argument_t - Inherit accessor/mutator argument type (Value vs Reference)
-  //  using argument_t = typename base::argument_t;
-
-  //  //! \alias accessor_t - Define accessor delegate type
-  //  using accessor_t = std::function<argument_t (void)>;
-
-  //  //! \alias mutator_t - Define mutator delegate type
-  //  using mutator_t = std::function<void (argument_t)>;
-
-  //  // ----------------------------------- REPRESENTATION -----------------------------------
-  //protected:
-  //  accessor_t  Accessor;      //!< Accessor delegate
-  //  mutator_t   Mutator;       //!< Mutator delegate
-
-  //  // ------------------------------------ CONSTRUCTION ------------------------------------
-  //public:
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  // PropertyFunctor::PropertyFunctor
-  //  //! Create from accessor/mutator delegates and initialize value
-  //  //! 
-  //  //! \param[in] get - Accessor delegate
-  //  //! \param[in] set - Mutator delegate
-  //  //! \param[in] &&... args - [optional] Value constructor arguments
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  template <typename... ARGS>
-  //  PropertyFunctor(accessor_t get, mutator_t set, ARGS&&... args) : base(std::forward<ARGS>(args)...),
-  //                                                                   Accessor(set), 
-  //                                                                   Mutator(get)
-  //  {}
-  //  
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  // PropertyFunctor::PropertyFunctor
-  //  //! Create from mutator delegate and initialize value
-  //  //! 
-  //  //! \param[in] set - Mutator delegate
-  //  //! \param[in] &&... args - [optional] Value constructor arguments
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  template <typename... ARGS>
-  //  PropertyFunctor(mutator_t set, ARGS&&... args) : base(std::forward<ARGS>(args)...),
-  //                                                   Accessor(std::bind(&this::get, this)), 
-  //                                                   Mutator(set)
-  //  {}
-
-  //  DISABLE_COPY(PropertyFunctor);       //!< Copy semantics determined by value type
-  //  DISABLE_MOVE(PropertyFunctor);       //!< Move semantics determined by value type
-  //  
-  //  // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  // PropertyFunctor::get const
-  //  //! Value accessor
-  //  //! 
-  //  //! \return auto - Value  or  immutable reference to value
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  argument_t  get() const override
-  //  {
-  //    return Accessor();
-  //  }
-
-  //  // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  // PropertyFunctor::set 
-  //  //! Value mutator
-  //  //! 
-  //  //! \param[in] auto value - New value  or  immutable reference to new value
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  void  set(argument_t value)  override
-  //  {
-  //    // Mutator and update value
-  //    Mutator(value);
-  //    base::set(value);
-  //  }
-  //};
-
-  /*template <typename VALUE, PropertyType TYPE, typename ACCESSOR, typename MUTATOR, typename... ARGS>
-  PropertyFunctor<VALUE,TYPE>  make_property(ACCESSOR get, MUTATOR set, ARGS&&... args)
-  {
-    return PropertyFunctor<VALUE,TYPE>(get, set, std::forward<ARGS>(args)...);
-  }*/
-
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -235,34 +182,31 @@ namespace wtl
     
     //! \alias type - Define own type
     using type = Property<IMPL,INTERNAL1,INTERNAL2>;
-
-    //! \alias argument_t - Inherit argument type (Value vs Reference)
-    using argument_t = typename IMPL::argument_t;
-
-    //! \alias provider_t - Define implementation type
-    using provider_t = IMPL;
+    
+    //! \alias impl_t - Define implementation type
+    using impl_t = IMPL;
 
     //! \alias reference_t - Inherit reference type
     using reference_t = typename IMPL::reference_t;
 
     //! \alias value_t - Inherit value type
     using value_t = typename IMPL::value_t;
+    
+    //! \var read - Inherit whether property supports read access
+    static constexpr bool read = IMPL::read;
 
-    //! \var readonly - Define whether property is read-only or mutable
-    static constexpr bool readonly = IMPL::readonly;
-
-    //! \var reference - Define whether property is a reference or value type
-    static constexpr bool reference = IMPL::reference;
+    //! \var write - Inherit whether property supports write access
+    static constexpr bool write = IMPL::write;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    provider_t     Impl;        //!< Implementation provider
+    impl_t   Impl;     //!< Implementation provider
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::Property
-    //! Create property and implementation
+    //! Explicitly creates a property with an optional initial value
     //! 
     //! \param[in] &&... args - [optional] Property implementation constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -270,11 +214,11 @@ namespace wtl
     explicit Property(ARGS&&... args) : Impl(std::forward<ARGS>(args)...)
     {}
 
-    DISABLE_COPY_CTOR(Property);       //!< Copy semantics determined by implementation
-    DISABLE_MOVE_CTOR(Property);       //!< Move semantics determined by implementation
+    DISABLE_COPY_CTOR(Property);       //!< Cannot be cloned
+    DISABLE_MOVE_CTOR(Property);       //!< Cannot be moved
 
-    /*ENABLE_COPY_ASSIGN(Property);
-    ENABLE_MOVE_ASSIGN(Property);*/
+    /*ENABLE_COPY_ASSIGN(Property);    //!< Copy semantics determined by implementation
+    ENABLE_MOVE_ASSIGN(Property);      //!< Move semantics determined by implementation*/
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::~Property
@@ -289,65 +233,41 @@ namespace wtl
     // Property::get const
     //! Value accessor
     //! 
-    //! \return auto - Value  or  immutable reference to value
+    //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
-    argument_t  get() const
+    value_t  get() const
     {
       return Impl.get();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator argument_t const
-    //! Implicit user conversion to value
+    // Property::operator value_t const
+    //! (Implicit) User conversion to value
     //! 
-    //! \return auto - Value  or  immutable reference to value
+    //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator argument_t() const
+    operator value_t() const
     {
-      return get();
+      return Impl.get();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator() const
-    //! Value accessor
+    //! Value accessor using function operator
     //! 
-    //! \return auto - Value  or  immutable reference to value
+    //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
-    argument_t operator ()() const
+    value_t operator ()() const
     {
-      return get();
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator-> const
-    //! Access pointer to value  [Reference types only]
-    //! 
-    //! \return const value_t* - Immutable pointer to value
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*template <typename = std::enable_if_t<reference>>
-    const value_t* operator->() const
-    {
-      return &get();
-    }*/
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator == const
-    //! Equality operator for values
-    //! 
-    //! \param[in] auto value - Value  
-    //! \return bool - True iff equal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    bool  operator == (argument_t value) const
-    {
-      return get() == value;
+      return Impl.get();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator == const
-    //! Equality operator for properties
+    //! Equality operator 
     //! 
-    //! \param[in] auto r - Another property
-    //! \return bool - True iff equal
+    //! \param[in] const& r - Another property
+    //! \return bool - True iff current values are equal
     /////////////////////////////////////////////////////////////////////////////////////////
     bool  operator == (const type& r) const
     {
@@ -356,26 +276,44 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator != const
-    //! Inequality operator for values
+    //! Inequality operator 
     //! 
-    //! \param[in] auto value - Value  
-    //! \return bool - True iff unequal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    bool  operator != (argument_t value) const
-    {
-      return get() != value;
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator != const
-    //! Inequality operator for properties
-    //! 
-    //! \param[in] auto r - Another property
-    //! \return bool - True iff unequal
+    //! \param[in] const& r - Another property
+    //! \return bool - True iff current values are not equal
     /////////////////////////////////////////////////////////////////////////////////////////
     bool  operator != (const type& r) const
     {
       return get() != r.get();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator == const
+    //! Delegating equality operator - delegates equality logic to the implementation for all types except self
+    //! 
+    //! \tparam T - Any type
+    //! 
+    //! \param[in] && val - (Forwarding-reference) Another value 
+    //! \return bool - True iff equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    bool  operator == (T&& val) const //-> enable_if_is_not_t<type,T,bool>
+    {
+      return Impl == val;   //!< Delegate to implementation
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator != const
+    //! Delegating inequality operator - delegates inequality logic to the implementation for all types except self
+    //! 
+    //! \tparam T - Any type
+    //! 
+    //! \param[in] && val - (Forwarding-reference) Another value 
+    //! \return bool - True iff equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    bool  operator != (T&& val) const //-> enable_if_is_not_t<type,T,bool>
+    {
+      return Impl != val;   //!< Delegate to implementation
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -384,10 +322,10 @@ namespace wtl
     // Property::set 
     //! Value mutator
     //! 
-    //! \param[in] auto value - New value  or  immutable reference to new value
+    //! \param[in] value - New value
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<!readonly>>
-    void  set(argument_t value) 
+    template <typename = std::enable_if_t<write>>
+    void  set(value_t value) 
     {
       // Set value
       Impl.set(value);
@@ -395,42 +333,33 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator =
-    //! Assign from value or reference
+    //! Assignment operator
     //! 
-    //! \param[in] auto value - New value  or  immutable reference to new value
-    //! \return type& - Reference to self
-    /////////////////////////////////////////////////////////////////////////////////////////
-    type& operator = (argument_t value) 
-    {
-      set(value);
-      return *this;
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator =
-    //! Assign from property
-    //! 
-    //! \param[in] const& r - Another property
+    //! \param[in] const& r - Another property of equal type
     //! \return type& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
     type& operator = (const type& r) 
     {
-      set(r.get());
+      Impl.set(r.get());
       return *this;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator =
-    //! Transfer from a property
+    //! Delegating assignment operator - delegates assignment logic to the implementation (for all types except self)
     //! 
-    //! \param[in] && r - Another property
+    //! \tparam T - Any type
+    //! 
+    //! \param[in] && val - (Forwarding-reference) New value 
     //! \return type& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
-    type& operator = (type&& r) 
+    template <typename T>
+    auto  operator = (T&& val) -> enable_if_is_not_t<type,T,type&>
     {
-      set(r.get());
+      Impl = std::forward<T>(val);   //!< Delegate to implementation
       return *this;
     }
+    
   };
 
 
@@ -445,10 +374,10 @@ namespace wtl
   //! 
   //! \param[in,out] &p - Property
   //! \param[in] v - Value to combine
-  //! \return argument_t - Combination of 'v' and value of 'p'
+  //! \return value_t - Combination of 'v' and value of 'p'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename F1, typename F2>
-  typename IMPL::argument_t  operator | (Property<IMPL,F1,F2>& p, typename IMPL::argument_t v)
+  typename IMPL::value_t  operator | (Property<IMPL,F1,F2>& p, typename IMPL::value_t v)
   {
     return p.get() | v;
   }
@@ -466,7 +395,7 @@ namespace wtl
   //! \return Property& - Reference to updated 'p' 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename F1, typename F2>
-  Property<IMPL,F1,F2>&  operator |= (Property<IMPL,F1,F2>& p, typename IMPL::argument_t v)
+  Property<IMPL,F1,F2>&  operator |= (Property<IMPL,F1,F2>& p, typename IMPL::value_t v)
   {
     return p = p.get() | v;
   }

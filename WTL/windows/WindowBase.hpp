@@ -288,7 +288,7 @@ namespace wtl
     //! \tparam VALUE - Value type
     //! \tparam TYPE - [optional] Accessibility and representation (Default is mutable reference type)
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename VALUE, PropertyType TYPE>
+    template <typename VALUE, PropertyAccess TYPE>
     struct WindowPropertyImpl : PropertyImpl<VALUE,TYPE>
     {
       friend WindowBase<ENC>;    //!< Allow WindowBase to internally set value
@@ -329,18 +329,21 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ClientRectPropertyImpl - Implements the client rectangle property [Immutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct ClientRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::ImmutableValue>
+    struct ClientRectPropertyImpl : WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<RectL,PropertyType::ImmutableValue>;
+      using base = WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>;
       
       //! \alias type - Define own type
       using type = ClientRectPropertyImpl;
+      
+      //! \alias reference_t - Inherit reference type
+      //using reference_t = typename base::reference_t;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -352,7 +355,7 @@ namespace wtl
       //! 
       //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      ClientRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<argument_t>())
+      ClientRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<value_t>())
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -361,12 +364,12 @@ namespace wtl
       // ClientRectPropertyImpl::get const
       //! Get the client rectangle
       //! 
-      //! \return argument_t - Current client rectangle
+      //! \return value_t - Current client rectangle
       //! 
       //! \throw wtl::logic_error - Window is using default size or location
       //! \throw wtl::platform_error - Unable to query client rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         RectL rc;    //!< New client rectangle
 
@@ -380,8 +383,8 @@ namespace wtl
         else
         {
           // [¬EXISTS] Ensure size/position not 'default'
-          if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-            throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
+          /*if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+            throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");*/
 
           // Calculate client from window rectangle 
           rc = RectL(this->Window.Position(), this->Window.Size());
@@ -402,13 +405,13 @@ namespace wtl
       // ClientRectPropertyImpl::set 
       //! Set the client rectangle
       //! 
-      //! \param[in] client - New client rectangle
+      //! \param[in] val - New client rectangle
       //! 
       //! \throw wtl::platform_error - Unable to calculate window rectangle from client
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t client) override
+      void set(value_t val) override
       {
-        RectL rc(client);   //!< New window rectangle
+        RectL rc(val);   //!< New window rectangle
 
         // Calculate window rectangle 
         if (!::AdjustWindowRectEx(&native_cast(rc), 
@@ -418,14 +421,14 @@ namespace wtl
           throw platform_error(HERE, "Unable to calculate window rectangle from client");
 
         // Set window rectangle
-        this->Window.WindowRect = rc;
+        //this->Window.WindowRect = rc;
       }
     };
     
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowEnabledPropertyImpl - Implements the window state property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowEnabledPropertyImpl : WindowPropertyImpl<bool,PropertyType::MutableValue>
+    struct WindowEnabledPropertyImpl : WindowPropertyImpl<bool,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -433,10 +436,13 @@ namespace wtl
       using type = WindowEnabledPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<bool,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<bool,PropertyAccess::ReadWrite>;
+      
+      //! \alias reference_t - Inherit reference type
+      using reference_t = typename base::reference_t;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -459,9 +465,9 @@ namespace wtl
       // WindowEnabledPropertyImpl::get const
       //! Get the window state
       //! 
-      //! \return argument_t - Window state
+      //! \return value_t - Window state
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Query window state
         if (this->Window.exists())
@@ -479,7 +485,7 @@ namespace wtl
       //! 
       //! \param[in] state - Window state
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t state) override
+      void set(reference_t state) override
       {
         // Set window state
         if (this->Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
@@ -493,7 +499,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowFontPropertyImpl - Implements the window font property [Mutable,Reference]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyType::MutableReference>
+    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
       
@@ -501,7 +507,10 @@ namespace wtl
       using type = WindowFontPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<HFont,PropertyType::MutableReference>;
+      using base = WindowPropertyImpl<HFont,PropertyAccess::ReadWrite>;
+      
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -526,23 +535,24 @@ namespace wtl
       // WindowFontPropertyImpl::set 
       //! Set the window font
       //! 
-      //! \param[in] auto font - New font
+      //! \param[in] font - New font
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(typename base::argument_t font) override
+      void set(value_t font) override
       {
         // Set window font & redraw
         if (this->Window.exists())
           this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
 
         // Update value
-        base::set(font);
+        //base::set(font);
+        this->Value = font;
       }
     };
     
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowIdPropertyImpl - Implements the window Id property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowIdPropertyImpl : WindowPropertyImpl<WindowId,PropertyType::MutableValue>
+    struct WindowIdPropertyImpl : WindowPropertyImpl<WindowId,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -550,10 +560,10 @@ namespace wtl
       using type = WindowIdPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowId,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<WindowId,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -566,7 +576,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowIdPropertyImpl(WindowBase<ENC>& wnd, argument_t init) : base(wnd, init)
+      WindowIdPropertyImpl(WindowBase<ENC>& wnd, value_t init) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -575,9 +585,9 @@ namespace wtl
       // WindowIdPropertyImpl::get const
       //! Get the window Id
       //! 
-      //! \return argument_t - Current window Id
+      //! \return value_t - Current window Id
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Query window Id
         if (this->Window.exists())
@@ -595,7 +605,7 @@ namespace wtl
       //! 
       //! \param[in] id - New window Id
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t id) override
+      void set(value_t id) override
       {
         // [EXISTS] Set window Id
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
@@ -609,7 +619,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowStylePropertyImpl - Implements the window style property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowStylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>
+    struct WindowStylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -617,10 +627,10 @@ namespace wtl
       using type = WindowStylePropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowStyle,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<WindowStyle,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -633,7 +643,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStylePropertyImpl(WindowBase<ENC>& wnd, argument_t init) : base(wnd, init)
+      WindowStylePropertyImpl(WindowBase<ENC>& wnd, value_t init) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -642,9 +652,9 @@ namespace wtl
       // WindowStylePropertyImpl::get const
       //! Get the window style
       //! 
-      //! \return argument_t - Current window style
+      //! \return value_t - Current window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Query window style
         if (this->Window.exists())
@@ -662,7 +672,7 @@ namespace wtl
       //! 
       //! \param[in] style - New window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t style) override
+      void set(value_t style) override
       {
         // [EXISTS] Set window style
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
@@ -676,7 +686,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowStyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowStyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>
+    struct WindowStyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -684,10 +694,10 @@ namespace wtl
       using type = WindowStyleExPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowStyleEx,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<WindowStyleEx,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -700,7 +710,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - Initial value
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStyleExPropertyImpl(WindowBase<ENC>& wnd, argument_t init) : base(wnd, init)
+      WindowStyleExPropertyImpl(WindowBase<ENC>& wnd, value_t init) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -709,9 +719,9 @@ namespace wtl
       // WindowStyleExPropertyImpl::get const
       //! Get the extended window style
       //! 
-      //! \return argument_t - Current extended window style
+      //! \return value_t - Current extended window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Query extended window style
         if (this->Window.exists())
@@ -729,7 +739,7 @@ namespace wtl
       //! 
       //! \param[in] style - New extended window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t style) override
+      void set(value_t style) override
       {
         // [EXISTS] Set extended window style
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
@@ -743,7 +753,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowTextPropertyImpl - Implements the window text property [Mutable,Reference]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowTextPropertyImpl : WindowPropertyImpl<String<encoding>,PropertyType::MutableValue>
+    struct WindowTextPropertyImpl : WindowPropertyImpl<String<encoding>,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -751,10 +761,10 @@ namespace wtl
       using type = WindowTextPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<String<encoding>,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<String<encoding>,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -767,7 +777,7 @@ namespace wtl
       //! \param[in,out] &wnd - Owner window
       //! \param[in] init - [optional] Initial window text
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowTextPropertyImpl(WindowBase<encoding>& wnd, argument_t init = default<argument_t>()) : base(wnd, init)
+      WindowTextPropertyImpl(WindowBase<encoding>& wnd, value_t init = default<value_t>()) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -776,9 +786,9 @@ namespace wtl
       // WindowTextPropertyImpl::get const
       //! Get the window text
       //! 
-      //! \return argument_t - Dynamic string containing current Window text (using window character encoding)
+      //! \return value_t - Dynamic string containing current Window text (using window character encoding)
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Query window text
         if (this->Window.exists())
@@ -827,7 +837,7 @@ namespace wtl
       //! 
       //! \param[in] text - New window text
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t text) override
+      void set(value_t text) override
       {
         // [EXISTS] Set window text
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowTextA,::SetWindowTextW)(this->Window, text.c_str()))
@@ -841,7 +851,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowTextLengthPropertyImpl - Implements the window text length property [Immutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowTextLengthPropertyImpl : WindowPropertyImpl<uint32_t,PropertyType::ImmutableValue>
+    struct WindowTextLengthPropertyImpl : WindowPropertyImpl<uint32_t,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -849,10 +859,10 @@ namespace wtl
       using type = WindowTextLengthPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<uint32_t,PropertyType::ImmutableValue>;
+      using base = WindowPropertyImpl<uint32_t,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -864,7 +874,7 @@ namespace wtl
       //! 
       //! \param[in,out] &wnd - Owner window
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowTextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<argument_t>())
+      WindowTextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<value_t>())
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -873,9 +883,9 @@ namespace wtl
       // WindowTextLengthPropertyImpl::get const
       //! Get length of text, in characters
       //! 
-      //! \return argument_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
+      //! \return value_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Return length in characters
         if (this->Window.exists())
@@ -891,7 +901,7 @@ namespace wtl
     //! 
     //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyType::MutableValue>
+    struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -899,10 +909,10 @@ namespace wtl
       using type = WindowRectPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<RectL,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -924,17 +934,17 @@ namespace wtl
       // WindowRectPropertyImpl::get const
       //! Get the window rectangle
       //! 
-      //! \return argument_t - Current window rectangle
+      //! \return value_t - Current window rectangle
       //!
       //! \throw wtl::logic_error - Window is using default size or location
       //! \throw wtl::platform_error - Unable to query window rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Return current window rectangle
         if (this->Window.exists())
         {
-          argument_t wnd;    //!< Window rectangle
+          value_t wnd;    //!< Window rectangle
         
           // Query & return window rectangle
           if (!::GetWindowRect(this->Window, &native_cast(wnd)))
@@ -943,8 +953,8 @@ namespace wtl
         }
 
         // [DEFAULT] Error: Cannot generate a window rectangle from default co-ordinates
-        if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
+        /*if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");*/
 
         // [~EXISTS] Generate from cached size & position
         return { this->Window.Position(), this->Window.Size() };
@@ -960,7 +970,7 @@ namespace wtl
       //! 
       //! \throw wtl::platform_error - Unable to set window position
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t rc) override
+      void set(value_t rc) override
       {
         bool resized = this->Value.width() == rc.width() && this->Value.height() == rc.height(),    //!< Whether resized
                moved = this->Value.left == rc.left && this->Value.top == rc.top;                    //!< Whethe rmoved
@@ -986,8 +996,8 @@ namespace wtl
         // [¬EXISTS] Set size/position
         if (!this->Window.exists())
         {
-          this->Window.Size = rc.size();
-          this->Window.Position = rc.topLeft();
+          /*this->Window.Size = rc.size();
+          this->Window.Position = rc.topLeft();*/
         }
       }
     };
@@ -998,7 +1008,7 @@ namespace wtl
     //! \remarks [EXISTS]  Derived from Window Rectangle 
     //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowSizePropertyImpl : WindowPropertyImpl<SizeL,PropertyType::MutableValue>
+    struct WindowSizePropertyImpl : WindowPropertyImpl<SizeL,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -1006,10 +1016,10 @@ namespace wtl
       using type = WindowSizePropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<SizeL,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<SizeL,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -1032,9 +1042,9 @@ namespace wtl
       // WindowSizePropertyImpl::get const
       //! Get the window size
       //! 
-      //! \return argument_t - Current window size
+      //! \return value_t - Current window size
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Derive window size from window rectangle 
         if (this->Window.exists())
@@ -1052,11 +1062,11 @@ namespace wtl
       //! 
       //! \param[in] sz - New window size
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t sz) override
+      void set(value_t sz) override
       {
         // [EXISTS] Set window rectangle   
-        if (this->Window.exists())
-          this->Window.WindowRect = RectL(this->Window.Position(), sz);
+        /*if (this->Window.exists())
+          this->Window.WindowRect = RectL(this->Window.Position(), sz);*/
         
         // Store size
         base::set(sz);
@@ -1069,7 +1079,7 @@ namespace wtl
     //! \remarks [EXISTS]  Derived from Window Rectangle 
     //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowPositionPropertyImpl : WindowPropertyImpl<PointL,PropertyType::MutableValue>
+    struct WindowPositionPropertyImpl : WindowPropertyImpl<PointL,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -1077,10 +1087,10 @@ namespace wtl
       using type = WindowPositionPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<PointL,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<PointL,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -1103,9 +1113,9 @@ namespace wtl
       // WindowPositionPropertyImpl::get const
       //! Get the window position
       //! 
-      //! \return argument_t - Current window position
+      //! \return value_t - Current window position
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Derive window position from window rectangle 
         if (this->Window.exists())
@@ -1123,21 +1133,22 @@ namespace wtl
       //! 
       //! \param[in] pt - New window position
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t pt) override
+      void set(value_t pt) override
       {
         // [EXISTS] Set window rectangle   
-        if (this->Window.exists())
-          this->Window.WindowRect = RectL(pt, this->Window.Size());
+        /*if (this->Window.exists())
+          this->Window.WindowRect = RectL(pt, this->Window.Size());*/
         
         // Store position
-        base::set(pt);
+        //base::set(pt);
+        this->Value = pt;
       }
     };
     
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct WindowVisibilityPropertyImpl - Implements the window visibility property [Mutable,Value]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowVisibilityPropertyImpl : WindowPropertyImpl<Visibility,PropertyType::MutableValue>
+    struct WindowVisibilityPropertyImpl : WindowPropertyImpl<Visibility,PropertyAccess::ReadWrite>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -1145,10 +1156,10 @@ namespace wtl
       using type = WindowVisibilityPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<Visibility,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<Visibility,PropertyAccess::ReadWrite>;
 
-      //! \alias argument_t - Inherit argument type
-      using argument_t = typename base::argument_t;
+      //! \alias value_t - Inherit argument type
+      using value_t = typename base::value_t;
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -1171,9 +1182,9 @@ namespace wtl
       // WindowVisibilityPropertyImpl::get const
       //! Get the window visibility
       //! 
-      //! \return argument_t - Window visibility
+      //! \return value_t - Window visibility
       /////////////////////////////////////////////////////////////////////////////////////////
-      argument_t  get() const override
+      value_t  get() const override
       {
         // [EXISTS] Query window visibility
         if (this->Window.exists())
@@ -1200,7 +1211,7 @@ namespace wtl
       //! 
       //! \param[in] state - Window visibility
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(argument_t state) override
+      void set(value_t state) override
       {
         // Set window visibility
         if (this->Window.exists() && !::ShowWindow(Window, enum_cast(state)))
