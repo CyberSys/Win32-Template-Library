@@ -189,15 +189,21 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onOwnerDraw
-    //! Called in response to a reflected 'owner draw' message 
+    //! Called in response to a reflected 'owner draw' message to draw the button
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
-      // Draw background
-      args.Graphics.fill(args.Rect, StockBrush::Green);
+      HBrush background(SystemColour::BtnFace);
+
+      // Draw button background
+      args.Graphics.fill(args.Rect, background);
+
+      // Draw button text
+      args.Graphics.setTextColour(Colour::Black);
+      args.Graphics.write<encoding>(this->Text().c_str(), this->TextLength, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
       return 0;
@@ -205,20 +211,15 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onOwnerMeasure
-    //! Called in response to a reflected 'owner measure' message 
+    //! Called in response to a reflected 'owner measure' message to 
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
-      //CharArray<encoding,128> text;
-
-      // Measure text
-      //args.Graphics.write(text, args.Rect, MeasureTextFlags::Centre|MeasureTextFlags::VCentre);
-
-      // Set size
-      args.Size = SizeL(150,18);
+      // Measure button text
+      args.Size = args.Graphics.measure(this->Text().c_str());
 
       // Handled
       return 0;

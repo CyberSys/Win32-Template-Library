@@ -320,13 +320,14 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator-> const
-    //! Value accessor
+    //! Access pointer to value  [Reference types only]
     //! 
-    //! \return auto - Value  or  immutable reference to value
+    //! \return const value_t* - Immutable pointer to value
     /////////////////////////////////////////////////////////////////////////////////////////
-    /*argument_t operator->() const
+    /*template <typename = std::enable_if_t<reference>>
+    const value_t* operator->() const
     {
-      return get();
+      return &get();
     }*/
     
     /////////////////////////////////////////////////////////////////////////////////////////

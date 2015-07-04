@@ -741,9 +741,9 @@ namespace wtl
     };
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowTextPropertyImpl - Implements the window text property [Mutable,Value]
+    //! \struct WindowTextPropertyImpl - Implements the window text property [Mutable,Reference]
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowTextPropertyImpl : WindowPropertyImpl<String<ENC>,PropertyType::MutableValue>
+    struct WindowTextPropertyImpl : WindowPropertyImpl<String<encoding>,PropertyType::MutableValue>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -751,7 +751,7 @@ namespace wtl
       using type = WindowTextPropertyImpl;
 
       //! \alias base - Define base type
-      using base = WindowPropertyImpl<String<ENC>,PropertyType::MutableValue>;
+      using base = WindowPropertyImpl<String<encoding>,PropertyType::MutableValue>;
 
       //! \alias argument_t - Inherit argument type
       using argument_t = typename base::argument_t;
@@ -765,9 +765,9 @@ namespace wtl
       //! Create with initial value 
       //! 
       //! \param[in,out] &wnd - Owner window
-      //! \param[in] init - Initial value
+      //! \param[in] init - [optional] Initial window text
       /////////////////////////////////////////////////////////////////////////////////////////
-      WindowTextPropertyImpl(WindowBase<ENC>& wnd, argument_t init = default<argument_t>()) : base(wnd, init)
+      WindowTextPropertyImpl(WindowBase<encoding>& wnd, argument_t init = default<argument_t>()) : base(wnd, init)
       {}
 
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -776,22 +776,43 @@ namespace wtl
       // WindowTextPropertyImpl::get const
       //! Get the window text
       //! 
-      //! \return argument_t - Current window text
+      //! \return argument_t - Dynamic string containing current Window text (using window character encoding)
       /////////////////////////////////////////////////////////////////////////////////////////
       argument_t  get() const override
       {
         // [EXISTS] Query window text
         if (this->Window.exists())
         {
-          int32_t           length = getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);    //!< Length in chars
-          CharVector<ENC> str(length+1, '\0');
+          int32_t length = this->Window.TextLength;    //!< Length in chars
 
-          // Get window text
-          if (length && !getFunc<encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, &str.front(), length+1))
-            throw platform_error(HERE, "Unable to retrieve window text");
+          // [EMPTY] Return epsilon string
+          if (!length)
+            return {};
 
-          // Return as string
-          return { str.begin(), str.end() };
+          // [SMALL] 99% of window classes do not require a gigabyte text buffer
+          if (length < 256)
+          {
+            char_t  buffer[256];
+
+            // Get window text
+            if (!getFunc<encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, &buffer[0], 256))
+              throw platform_error(HERE, "Unable to retrieve window text");
+
+            // Generate dynamic string
+            return { &buffer[0], &buffer[length] };
+          }
+          // [LARGE] Remaining classes (Text, RichText, etc.) require dynamic storage
+          else
+          {
+            std::vector<char_t>  buffer(length+1);    //!< Encapsulates 'buffer = new char_t[length+1]'
+
+            // Get window text
+            if (!getFunc<encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, buffer.data(), length+1))
+              throw platform_error(HERE, "Unable to retrieve window text");
+
+            // Convert to string
+            return { buffer.begin(), buffer.end() };
+          }
         }
         
         // [OFFLINE] Return cached
@@ -814,6 +835,54 @@ namespace wtl
 
         // Store value
         base::set(text);
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct WindowTextLengthPropertyImpl - Implements the window text length property [Immutable,Value]
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct WindowTextLengthPropertyImpl : WindowPropertyImpl<uint32_t,PropertyType::ImmutableValue>
+    {
+      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+      //! \alias type - Define own type
+      using type = WindowTextLengthPropertyImpl;
+
+      //! \alias base - Define base type
+      using base = WindowPropertyImpl<uint32_t,PropertyType::ImmutableValue>;
+
+      //! \alias argument_t - Inherit argument type
+      using argument_t = typename base::argument_t;
+
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      // ------------------------------------ CONSTRUCTION ------------------------------------
+    public:
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowTextLengthPropertyImpl::WindowTextLengthPropertyImpl
+      //! Create without initial value
+      //! 
+      //! \param[in,out] &wnd - Owner window
+      /////////////////////////////////////////////////////////////////////////////////////////
+      WindowTextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<argument_t>())
+      {}
+
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // WindowTextLengthPropertyImpl::get const
+      //! Get length of text, in characters
+      //! 
+      //! \return argument_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
+      /////////////////////////////////////////////////////////////////////////////////////////
+      argument_t  get() const override
+      {
+        // [EXISTS] Return length in characters
+        if (this->Window.exists())
+          return getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);
+        
+        // [OFFLINE] Always zero
+        return 0;
       }
     };
 
@@ -1176,6 +1245,9 @@ namespace wtl
     //! \alias WindowTextProperty - Define window text property type  
     using WindowTextProperty = Property<WindowTextPropertyImpl>;
     
+    //! \alias WindowTextLengthProperty - Define window text length property type  
+    using WindowTextLengthProperty = Property<WindowTextLengthPropertyImpl>;
+    
     //! \alias WindowVisibilityProperty - Define window visibliity property type 
     using WindowVisibilityProperty = Property<WindowVisibilityPropertyImpl>;
 
@@ -1219,6 +1291,7 @@ namespace wtl
     WindowStyleProperty              Style;         //!< Window style property
     WindowStyleExProperty            StyleEx;       //!< Extended window style property
     WindowTextProperty               Text;          //!< Window text property
+    WindowTextLengthProperty         TextLength;    //!< Window text length property
     WindowVisibilityProperty         Visible;       //!< Visibility property
     WindowRectProperty               WindowRect;    //!< Window rectangle property
 
@@ -1246,6 +1319,7 @@ namespace wtl
                                   Size(*this, DefaultSize),
                                   Style(*this, WindowStyle::OverlappedWindow),
                                   Text(*this),
+                                  TextLength(*this),
                                   StyleEx(*this, WindowStyleEx::None),
                                   Visible(*this, Visibility::ShowNormal),
                                   WindowRect(*this)

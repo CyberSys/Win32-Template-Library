@@ -39,14 +39,14 @@
     <Filter Include="Windows\Events">
       <UniqueIdentifier>{cde07ef2-4070-4f6e-94a4-31cce50156af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Commands">
-      <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{822d32d8-6b48-4e4e-b249-2cf7dba0b501}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows\Skins">
       <UniqueIdentifier>{057bd3f3-5e0d-4c11-b455-019d0b3622d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Actions">
+      <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -255,7 +255,7 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="utils\Queue.hpp">
       <Filter>Utils</Filter>
@@ -285,7 +285,7 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="utils\toString.hpp">
       <Filter>Utils</Filter>
@@ -324,22 +324,22 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\CutClipboardCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\NewDocumentCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\OpenDocumentCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\SaveDocumentCommand.hpp">
-      <Filter>Windows\Commands</Filter>
+      <Filter>Windows\Actions</Filter>
     </ClInclude>
     <ClInclude Include="utils\SFINAE.hpp">
       <Filter>Utils</Filter>

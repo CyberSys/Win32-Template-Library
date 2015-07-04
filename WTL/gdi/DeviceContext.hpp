@@ -514,6 +514,7 @@ namespace wtl
     //! Writes text into a rectangle
     //! 
     //! \param[in] txt - Text
+    //! \param[in] len - Text length, in characters
     //! \param[in] rc - Drawing rectangle
     //! \param[in] flags - Drawing flags
     //! \return int32_t - Height of the text in logical units iff successful. (If DT_VCENTER or DT_BOTTOM is specified then the offset from lpRect->top to the bottom of the drawn text)
