@@ -31,7 +31,7 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct PropertyImpl - Base class for property implementations
+  //! \struct PropertyImpl - Encapsulates property value access & mutation. Typically used as a base class.
   //! 
   //! \tparam VALUE - Value type
   //! \tparam ACCESS - Access type(s)
@@ -74,9 +74,11 @@ namespace wtl
 
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
 
-    //ENABLE_COPY(PropertyImpl);       //!< Copy semantics determined by value type
-    //ENABLE_MOVE(PropertyImpl);       //!< Move semantics determined by value type
-    ENABLE_POLY(PropertyImpl);       //!< Can be polymorphic
+    ENABLE_COPY_CTOR(PropertyImpl);       //!< Can be cloned
+    DISABLE_COPY_ASSIGN(PropertyImpl);    //!< Value mutator cannot be circumvented
+    ENABLE_POLY(PropertyImpl);            //!< Can be polymorphic
+    
+    // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
@@ -85,40 +87,13 @@ namespace wtl
     //! Value accessor
     //! 
     //! \return value_t - Current value
+    //! 
+    //! \remarks Using this method requires read access
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual value_t  get() const
+    template <typename = std::enable_if_t<read>>
+    value_t  get() const
     {
       return Value;
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyImpl::operator == const
-    //! Equality operator 
-    //! 
-    //! \tparam T - Any type
-    //! 
-    //! \param[in] && val - (Forwarding-reference) Any value 
-    //! \return bool - True iff equal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    bool  operator == (T&& val) const 
-    {
-      return Value == val;   
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyImpl::operator != const
-    //! Inequality operator 
-    //! 
-    //! \tparam T - Any type
-    //! 
-    //! \param[in] && val - (Forwarding-reference) Any value 
-    //! \return bool - True iff unequal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    bool  operator != (T&& val) const
-    {
-      return Value != val;   
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -128,49 +103,25 @@ namespace wtl
     //! Value mutator
     //! 
     //! \param[in] val - New value 
+    //! 
+    //! \remarks Using this method requires write access
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual void  set(value_t val) 
+    template <typename = std::enable_if_t<write>>
+    void  set(value_t val) 
     {
       Value = val;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyImpl::operator =
-    //! Assignment operator
-    //! 
-    //! \param[in] const& r - Another property of equal type
-    //! \return type& - Reference to self
-    /////////////////////////////////////////////////////////////////////////////////////////
-    type& operator = (const type& r) 
-    {
-      Value = r.get();
-      return *this;
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // PropertyImpl::operator =
-    //! Delegating assignment operator (for all types except self)
-    //! 
-    //! \tparam T - Any type
-    //! 
-    //! \param[in] && val - (Forwarding-reference) Any value 
-    //! \return type& - Reference to self
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    auto  operator = (T&& val) -> enable_if_is_not_t<type,T,type&>
-    {
-      Value = std::forward(val);   //!< Delegate to implementation
-      return *this;
     }
   };
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Property - Encapsulates any value with getter/setters. Provides update verification and change notification.
+  //! \struct Property - Provides a HLL style property for values of any type, and overloads convenient operators.
   //! 
-  //! \tparam IMPL - Implementation type
+  //! \tparam IMPL - Type providing the implementation of the property value
   //! \tparam INTERNAL1 - [optional] Type permitted to perform internal mutation
   //! \tparam INTERNAL2 - [optional] Type permitted to perform internal mutation
+  //! 
+  //! \remarks Equality, comparison, and logical operations are implemented as non-member operators
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename INTERNAL1 = void, typename INTERNAL2 = void>
   struct Property 
@@ -214,19 +165,14 @@ namespace wtl
     explicit Property(ARGS&&... args) : Impl(std::forward<ARGS>(args)...)
     {}
 
+    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    
     DISABLE_COPY_CTOR(Property);       //!< Cannot be cloned
     DISABLE_MOVE_CTOR(Property);       //!< Cannot be moved
-
-    /*ENABLE_COPY_ASSIGN(Property);    //!< Copy semantics determined by implementation
-    ENABLE_MOVE_ASSIGN(Property);      //!< Move semantics determined by implementation*/
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::~Property
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Property() 
-    {}
+    ENABLE_POLY(Property);             //!< Can be polymorphic
     
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -235,6 +181,7 @@ namespace wtl
     //! 
     //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = std::enable_if_t<read>>
     value_t  get() const
     {
       return Impl.get();
@@ -253,7 +200,7 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator() const
-    //! Value accessor using function operator
+    //! Another value accessor using function operator syntax
     //! 
     //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -261,60 +208,20 @@ namespace wtl
     {
       return Impl.get();
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator == const
-    //! Equality operator 
-    //! 
-    //! \param[in] const& r - Another property
-    //! \return bool - True iff current values are equal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    bool  operator == (const type& r) const
-    {
-      return get() == r.get();
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator != const
-    //! Inequality operator 
-    //! 
-    //! \param[in] const& r - Another property
-    //! \return bool - True iff current values are not equal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    bool  operator != (const type& r) const
-    {
-      return get() != r.get();
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator == const
-    //! Delegating equality operator - delegates equality logic to the implementation for all types except self
     //! 
     //! \tparam T - Any type
     //! 
-    //! \param[in] && val - (Forwarding-reference) Another value 
+    //! \param[in] && val - Value to compare against
     //! \return bool - True iff equal
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    bool  operator == (T&& val) const //-> enable_if_is_not_t<type,T,bool>
+    /*template <typename T>
+    bool  operator == (T&& val)
     {
-      return Impl == val;   //!< Delegate to implementation
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator != const
-    //! Delegating inequality operator - delegates inequality logic to the implementation for all types except self
-    //! 
-    //! \tparam T - Any type
-    //! 
-    //! \param[in] && val - (Forwarding-reference) Another value 
-    //! \return bool - True iff equal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    bool  operator != (T&& val) const //-> enable_if_is_not_t<type,T,bool>
-    {
-      return Impl != val;   //!< Delegate to implementation
-    }
+      return Impl.get() == val;
+    }*/
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
@@ -338,7 +245,7 @@ namespace wtl
     //! \param[in] const& r - Another property of equal type
     //! \return type& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
-    type& operator = (const type& r) 
+    type&  operator = (const type& r) 
     {
       Impl.set(r.get());
       return *this;
@@ -354,14 +261,48 @@ namespace wtl
     //! \return type& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename T>
-    auto  operator = (T&& val) -> enable_if_is_not_t<type,T,type&>
+    type&  operator = (T&& val) //-> enable_if_is_not_t<type,T,type&>
     {
-      Impl = std::forward<T>(val);   //!< Delegate to implementation
+      Impl.set(std::forward<T>(val));     //!< Delegate to implementation
       return *this;
     }
     
   };
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator ==
+  //! Non-member equality operator for Property types
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const& p - Property
+  //! \param[in] val - Value to compare against
+  //! \return bool - True iff equal
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename F1, typename F2, typename T>
+  bool  operator == (Property<IMPL,F1,F2>& p, T&& val)
+  {
+    return p.get() == val;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator !=
+  //! Non-member inequality operator for Property types
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const& p - Property
+  //! \param[in] val - Value to compare against
+  //! \return bool - True iff unequal
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename F1, typename F2, typename T>
+  bool  operator != (Property<IMPL,F1,F2>& p, T&& val)
+  {
+    return p.get() != val;
+  }
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -376,11 +317,11 @@ namespace wtl
   //! \param[in] v - Value to combine
   //! \return value_t - Combination of 'v' and value of 'p'
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename F1, typename F2>
-  typename IMPL::value_t  operator | (Property<IMPL,F1,F2>& p, typename IMPL::value_t v)
+  /*template <typename IMPL, typename F1, typename F2, typename T>
+  typename IMPL::value_t  operator | (Property<IMPL,F1,F2>& p, T&& val)
   {
     return p.get() | v;
-  }
+  }*/
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::operator |=
@@ -394,11 +335,11 @@ namespace wtl
   //! \param[in] v - Value to combine
   //! \return Property& - Reference to updated 'p' 
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename F1, typename F2>
+  /*template <typename IMPL, typename F1, typename F2>
   Property<IMPL,F1,F2>&  operator |= (Property<IMPL,F1,F2>& p, typename IMPL::value_t v)
   {
     return p = p.get() | v;
-  }
+  }*/
 
   
       

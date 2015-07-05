@@ -300,7 +300,7 @@ namespace wtl
 
       //! \alias base - Define base type
       using base = PropertyImpl<VALUE,TYPE>;
-
+      
       // ----------------------------------- REPRESENTATION -----------------------------------
     protected:
       WindowBase<ENC>&  Window;      //!< Owner window
@@ -369,7 +369,7 @@ namespace wtl
       //! \throw wtl::logic_error - Window is using default size or location
       //! \throw wtl::platform_error - Unable to query client rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         RectL rc;    //!< New client rectangle
 
@@ -383,8 +383,8 @@ namespace wtl
         else
         {
           // [¬EXISTS] Ensure size/position not 'default'
-          /*if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-            throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");*/
+          if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+            throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
 
           // Calculate client from window rectangle 
           rc = RectL(this->Window.Position(), this->Window.Size());
@@ -409,7 +409,7 @@ namespace wtl
       //! 
       //! \throw wtl::platform_error - Unable to calculate window rectangle from client
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t val) override
+      void set(value_t val) 
       {
         RectL rc(val);   //!< New window rectangle
 
@@ -421,7 +421,7 @@ namespace wtl
           throw platform_error(HERE, "Unable to calculate window rectangle from client");
 
         // Set window rectangle
-        //this->Window.WindowRect = rc;
+        this->Window.WindowRect = rc;
       }
     };
     
@@ -467,7 +467,7 @@ namespace wtl
       //! 
       //! \return value_t - Window state
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Query window state
         if (this->Window.exists())
@@ -485,7 +485,7 @@ namespace wtl
       //! 
       //! \param[in] state - Window state
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(reference_t state) override
+      void set(reference_t state) 
       {
         // Set window state
         if (this->Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
@@ -537,7 +537,7 @@ namespace wtl
       //! 
       //! \param[in] font - New font
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t font) override
+      void set(value_t font) 
       {
         // Set window font & redraw
         if (this->Window.exists())
@@ -587,7 +587,7 @@ namespace wtl
       //! 
       //! \return value_t - Current window Id
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Query window Id
         if (this->Window.exists())
@@ -605,7 +605,7 @@ namespace wtl
       //! 
       //! \param[in] id - New window Id
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t id) override
+      void set(value_t id) 
       {
         // [EXISTS] Set window Id
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
@@ -654,7 +654,7 @@ namespace wtl
       //! 
       //! \return value_t - Current window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Query window style
         if (this->Window.exists())
@@ -672,7 +672,7 @@ namespace wtl
       //! 
       //! \param[in] style - New window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t style) override
+      void set(value_t style) 
       {
         // [EXISTS] Set window style
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
@@ -721,7 +721,7 @@ namespace wtl
       //! 
       //! \return value_t - Current extended window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Query extended window style
         if (this->Window.exists())
@@ -739,7 +739,7 @@ namespace wtl
       //! 
       //! \param[in] style - New extended window style
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t style) override
+      void set(value_t style) 
       {
         // [EXISTS] Set extended window style
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
@@ -788,7 +788,7 @@ namespace wtl
       //! 
       //! \return value_t - Dynamic string containing current Window text (using window character encoding)
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Query window text
         if (this->Window.exists())
@@ -837,7 +837,7 @@ namespace wtl
       //! 
       //! \param[in] text - New window text
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t text) override
+      void set(value_t text) 
       {
         // [EXISTS] Set window text
         if (this->Window.exists() && !getFunc<encoding>(::SetWindowTextA,::SetWindowTextW)(this->Window, text.c_str()))
@@ -885,7 +885,7 @@ namespace wtl
       //! 
       //! \return value_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Return length in characters
         if (this->Window.exists())
@@ -939,7 +939,7 @@ namespace wtl
       //! \throw wtl::logic_error - Window is using default size or location
       //! \throw wtl::platform_error - Unable to query window rectangle
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Return current window rectangle
         if (this->Window.exists())
@@ -953,8 +953,8 @@ namespace wtl
         }
 
         // [DEFAULT] Error: Cannot generate a window rectangle from default co-ordinates
-        /*if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");*/
+        if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
 
         // [~EXISTS] Generate from cached size & position
         return { this->Window.Position(), this->Window.Size() };
@@ -970,7 +970,7 @@ namespace wtl
       //! 
       //! \throw wtl::platform_error - Unable to set window position
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t rc) override
+      void set(value_t rc) 
       {
         bool resized = this->Value.width() == rc.width() && this->Value.height() == rc.height(),    //!< Whether resized
                moved = this->Value.left == rc.left && this->Value.top == rc.top;                    //!< Whethe rmoved
@@ -996,8 +996,8 @@ namespace wtl
         // [¬EXISTS] Set size/position
         if (!this->Window.exists())
         {
-          /*this->Window.Size = rc.size();
-          this->Window.Position = rc.topLeft();*/
+          this->Window.Size = rc.size();
+          this->Window.Position = rc.topLeft();
         }
       }
     };
@@ -1044,7 +1044,7 @@ namespace wtl
       //! 
       //! \return value_t - Current window size
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Derive window size from window rectangle 
         if (this->Window.exists())
@@ -1062,11 +1062,11 @@ namespace wtl
       //! 
       //! \param[in] sz - New window size
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t sz) override
+      void set(value_t sz) 
       {
         // [EXISTS] Set window rectangle   
-        /*if (this->Window.exists())
-          this->Window.WindowRect = RectL(this->Window.Position(), sz);*/
+        if (this->Window.exists())
+          this->Window.WindowRect = RectL(this->Window.Position(), sz);
         
         // Store size
         base::set(sz);
@@ -1115,7 +1115,7 @@ namespace wtl
       //! 
       //! \return value_t - Current window position
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Derive window position from window rectangle 
         if (this->Window.exists())
@@ -1133,15 +1133,14 @@ namespace wtl
       //! 
       //! \param[in] pt - New window position
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t pt) override
+      void set(value_t pt) 
       {
         // [EXISTS] Set window rectangle   
-        /*if (this->Window.exists())
-          this->Window.WindowRect = RectL(pt, this->Window.Size());*/
+        if (this->Window.exists())
+          this->Window.WindowRect = RectL(pt, this->Window.Size());
         
         // Store position
-        //base::set(pt);
-        this->Value = pt;
+        base::set(pt);
       }
     };
     
@@ -1184,7 +1183,7 @@ namespace wtl
       //! 
       //! \return value_t - Window visibility
       /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const override
+      value_t  get() const 
       {
         // [EXISTS] Query window visibility
         if (this->Window.exists())
@@ -1211,7 +1210,7 @@ namespace wtl
       //! 
       //! \param[in] state - Window visibility
       /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t state) override
+      void set(value_t state) 
       {
         // Set window visibility
         if (this->Window.exists() && !::ShowWindow(Window, enum_cast(state)))
