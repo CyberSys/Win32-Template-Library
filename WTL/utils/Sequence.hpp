@@ -9,8 +9,9 @@
 #define WTL_SEQUENCE_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Constant.hpp"         //!< 
-#include <type_traits>
+#include "wtl/utils/Constant.hpp"       //!< integral_constant
+#include <type_traits>                  //!< 
+#include <utility>                      //!< std::tuple_element
 
 //! \namespace wtl - Windows template library
 namespace wtl

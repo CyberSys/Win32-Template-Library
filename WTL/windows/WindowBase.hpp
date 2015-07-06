@@ -9,43 +9,55 @@
 #define WTL_WINDOW_BASE_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/casts/BooleanCast.hpp"                        //!< BooleanCast
-#include "wtl/casts/EnumCast.hpp"                           //!< EnumCast
-#include "wtl/casts/NativeCast.hpp"                         //!< NativeCast
-#include "wtl/casts/OpaqueCast.hpp"                         //!< OpaqueCast
-#include "wtl/traits/EncodingTraits.hpp"                    //!< Encoding
-#include "wtl/traits/WindowTraits.hpp"                      //!< HWnd
-#include "wtl/utils/Exception.hpp"                          //!< exception
-#include "wtl/utils/ExceptionLog.hpp"                       //!< exception_log
-#include "wtl/utils/List.hpp"                               //!< List
-#include "wtl/utils/Default.hpp"                            //!< Default
-#include "wtl/utils/CharArray.hpp"                          //!< CharArray
-#include "wtl/utils/Zero.hpp"                               //!< Zero
-#include "wtl/io/Console.hpp"                               //!< Console
-#include "wtl/platform/ResourceId.hpp"                      //!< ResourceId
-#include "wtl/platform/WindowFlags.hpp"                     //!< WindowStyle
-#include "wtl/platform/CommonApi.hpp"                       //!< send_message
-#include "wtl/platform/WindowMessage.hpp"                   //!< WindowMesssage
-#include "wtl/windows/Action.hpp"                           //!< Action
-#include "wtl/windows/ActionGroup.hpp"                      //!< ActionGroup
-#include "wtl/windows/ActionQueue.hpp"                      //!< ActionQueue
-#include "wtl/windows/Property.hpp"                         //!< Property
-#include "wtl/windows/WindowClass.hpp"                      //!< WindowClass
-#include "wtl/windows/WindowMenu.hpp"                       //!< WindowMenu
-#include "wtl/windows/events/ActionEvent.hpp"               //!< ActionEvent
-#include "wtl/windows/events/CloseWindowEvent.hpp"          //!< CloseWindowEvent
-#include "wtl/windows/events/CreateWindowEvent.hpp"         //!< CreateWindowEven
-#include "wtl/windows/events/CtrlCommandEvent.hpp"          //!< CtrlCommandEvent
-#include "wtl/windows/events/CtrlNotifyEvent.hpp"           //!< CtrlNotifyEvent
-#include "wtl/windows/events/DestroyWindowEvent.hpp"        //!< DestroyWindowEvent
-#include "wtl/windows/events/OwnerDrawCtrlEvent.hpp"        //!< OwnerDrawCtrlEvent
-#include "wtl/windows/events/OwnerDrawMenuEvent.hpp"        //!< OwnerDrawMenuEvent
-#include "wtl/windows/events/OwnerMeasureCtrlEvent.hpp"     //!< OwnerMeasureCtrlEvent
-#include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"     //!< OwnerMeasureMenuEvent
-#include "wtl/windows/events/PaintWindowEvent.hpp"          //!< PaintWindowEvent
-#include "wtl/windows/events/ShowWindowEvent.hpp"           //!< ShowWindowEvent
-#include "wtl/windows/events/PositionChangedEvent.hpp"      //!< PositionChangedEvent
-#include <map>                                              //!< std::map
+#include "wtl/casts/BooleanCast.hpp"                              //!< BooleanCast
+#include "wtl/casts/EnumCast.hpp"                                 //!< EnumCast
+#include "wtl/casts/NativeCast.hpp"                               //!< NativeCast
+#include "wtl/casts/OpaqueCast.hpp"                               //!< OpaqueCast
+#include "wtl/traits/EncodingTraits.hpp"                          //!< Encoding
+#include "wtl/traits/WindowTraits.hpp"                            //!< HWnd
+#include "wtl/utils/Exception.hpp"                                //!< exception
+#include "wtl/utils/ExceptionLog.hpp"                             //!< exception_log
+#include "wtl/utils/List.hpp"                                     //!< List
+#include "wtl/utils/Default.hpp"                                  //!< Default
+#include "wtl/utils/CharArray.hpp"                                //!< CharArray
+#include "wtl/utils/Zero.hpp"                                     //!< Zero
+#include "wtl/io/Console.hpp"                                     //!< Console
+#include "wtl/platform/ResourceId.hpp"                            //!< ResourceId
+#include "wtl/platform/WindowFlags.hpp"                           //!< WindowStyle
+#include "wtl/platform/CommonApi.hpp"                             //!< send_message
+#include "wtl/platform/WindowMessage.hpp"                         //!< WindowMesssage
+#include "wtl/windows/Action.hpp"                                 //!< Action
+#include "wtl/windows/ActionGroup.hpp"                            //!< ActionGroup
+#include "wtl/windows/ActionQueue.hpp"                            //!< ActionQueue
+#include "wtl/windows/Property.hpp"                               //!< Property
+#include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
+#include "wtl/windows/WindowMenu.hpp"                             //!< WindowMenu
+#include "wtl/windows/events/ActionEvent.hpp"                     //!< ActionEvent
+#include "wtl/windows/events/CloseWindowEvent.hpp"                //!< CloseWindowEvent
+#include "wtl/windows/events/CreateWindowEvent.hpp"               //!< CreateWindowEven
+#include "wtl/windows/events/CtrlCommandEvent.hpp"                //!< CtrlCommandEvent
+#include "wtl/windows/events/CtrlNotifyEvent.hpp"                 //!< CtrlNotifyEvent
+#include "wtl/windows/events/DestroyWindowEvent.hpp"              //!< DestroyWindowEvent
+#include "wtl/windows/events/OwnerDrawCtrlEvent.hpp"              //!< OwnerDrawCtrlEvent
+#include "wtl/windows/events/OwnerDrawMenuEvent.hpp"              //!< OwnerDrawMenuEvent
+#include "wtl/windows/events/OwnerMeasureCtrlEvent.hpp"           //!< OwnerMeasureCtrlEvent
+#include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"           //!< OwnerMeasureMenuEvent
+#include "wtl/windows/events/PaintWindowEvent.hpp"                //!< PaintWindowEvent
+#include "wtl/windows/events/ShowWindowEvent.hpp"                 //!< ShowWindowEvent
+#include "wtl/windows/events/PositionChangedEvent.hpp"            //!< PositionChangedEvent
+#include "wtl/windows/properties/ClientRectProperty.hpp"          //!< ClientRectProperty
+#include "wtl/windows/properties/WindowEnabledProperty.hpp"       //!< WindowEnabledProperty
+#include "wtl/windows/properties/WindowFontProperty.hpp"          //!< WindowFontProperty
+#include "wtl/windows/properties/WindowIdProperty.hpp"            //!< WindowIdProperty
+#include "wtl/windows/properties/WindowPositionProperty.hpp"      //!< WindowPositionProperty
+#include "wtl/windows/properties/WindowRectProperty.hpp"          //!< WindowRectProperty
+#include "wtl/windows/properties/WindowSizeProperty.hpp"          //!< WindowSizeProperty
+#include "wtl/windows/properties/WindowStyleProperty.hpp"         //!< WindowStyleProperty
+#include "wtl/windows/properties/WindowStyleExProperty.hpp"       //!< WindowStyleExProperty
+#include "wtl/windows/properties/WindowTextProperty.hpp"          //!< WindowTextProperty
+#include "wtl/windows/properties/WindowTextLengthProperty.hpp"    //!< WindowTextLengthProperty
+#include "wtl/windows/properties/WindowVisibilityProperty.hpp"    //!< WindowVisibilityProperty
+#include <map>                                                    //!< std::map
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -92,7 +104,9 @@ namespace wtl
     //! \alias ActionQueue - Define gui command queue type
     using ActionQueue = ActionQueue<ENC>;
     
+    /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ActionGroupCollection - Collection of Action groups, indexed by Id
+    /////////////////////////////////////////////////////////////////////////////////////////
     struct ActionGroupCollection : std::map<ActionGroupId,ActionGroupPtr<ENC>>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
@@ -158,7 +172,9 @@ namespace wtl
     //! \alias ActiveWindowCollection - Define 'Active Windows' collection type
     using ActiveWindowCollection = WindowHandleCollection;
 
-    //! \alias ChildWindowCollection - Define child window collection type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct ChildWindowCollection - Define child window collection type
+    /////////////////////////////////////////////////////////////////////////////////////////
     struct ChildWindowCollection : WindowIdCollection
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
@@ -281,986 +297,6 @@ namespace wtl
     //! \alias SubClassCollection - Define subclassed windows collection
     using SubClassCollection = List<SubClass>;
     
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowPropertyImpl - Base class for window properties
-    //!
-    //! \tparam VALUE - Value type
-    //! \tparam TYPE - [optional] Accessibility and representation (Default is mutable reference type)
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename VALUE, PropertyAccess TYPE>
-    struct WindowPropertyImpl : PropertyImpl<VALUE,TYPE>
-    {
-      friend WindowBase<ENC>;    //!< Allow WindowBase to internally set value
-
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowPropertyImpl<VALUE,TYPE>;
-
-      //! \alias base - Define base type
-      using base = PropertyImpl<VALUE,TYPE>;
-      
-      // ----------------------------------- REPRESENTATION -----------------------------------
-    protected:
-      WindowBase<ENC>&  Window;      //!< Owner window
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowPropertyImpl::WindowPropertyImpl
-      //! Stores the owner window
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(std::forward<ARGS>(args)...),
-                                                                 Window(wnd)
-      {}
-
-      // -------------------------------- COPYING & DESTRUCTION -------------------------------
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct ClientRectPropertyImpl - Implements the client rectangle property [Immutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct ClientRectPropertyImpl : WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>;
-      
-      //! \alias type - Define own type
-      using type = ClientRectPropertyImpl;
-      
-      //! \alias reference_t - Inherit reference type
-      //using reference_t = typename base::reference_t;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ClientRectPropertyImpl::ClientRectPropertyImpl
-      //! Create with empty rectangle
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      ClientRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<value_t>())
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ClientRectPropertyImpl::get const
-      //! Get the client rectangle
-      //! 
-      //! \return value_t - Current client rectangle
-      //! 
-      //! \throw wtl::logic_error - Window is using default size or location
-      //! \throw wtl::platform_error - Unable to query client rectangle
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        RectL rc;    //!< New client rectangle
-
-        // [EXISTS] Return current window rectangle
-        if (this->Window.exists())
-        {
-          // Query client rectangle
-          if (!::GetClientRect(this->Window, &native_cast(rc)))
-            throw platform_error(HERE, "Unable to query window rectangle");
-        }
-        else
-        {
-          // [¬EXISTS] Ensure size/position not 'default'
-          if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-            throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
-
-          // Calculate client from window rectangle 
-          rc = RectL(this->Window.Position(), this->Window.Size());
-          if (!::AdjustWindowRectEx(&native_cast(rc), 
-                                    enum_cast(this->Window.Style.get()), 
-                                    boolean_cast(!this->Window.Menu.empty()), 
-                                    enum_cast(this->Window.StyleEx.get())))
-            throw platform_error(HERE, "Unable to calculate window rectangle from client");
-        }
-
-        // Return client rectangle
-        return rc;
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-      
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ClientRectPropertyImpl::set 
-      //! Set the client rectangle
-      //! 
-      //! \param[in] val - New client rectangle
-      //! 
-      //! \throw wtl::platform_error - Unable to calculate window rectangle from client
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t val) 
-      {
-        RectL rc(val);   //!< New window rectangle
-
-        // Calculate window rectangle 
-        if (!::AdjustWindowRectEx(&native_cast(rc), 
-                                  enum_cast(this->Window.Style.get()), 
-                                  boolean_cast(!this->Window.Menu.empty()), 
-                                  enum_cast(this->Window.StyleEx.get())))
-          throw platform_error(HERE, "Unable to calculate window rectangle from client");
-
-        // Set window rectangle
-        this->Window.WindowRect = rc;
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowEnabledPropertyImpl - Implements the window state property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowEnabledPropertyImpl : WindowPropertyImpl<bool,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowEnabledPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<bool,PropertyAccess::ReadWrite>;
-      
-      //! \alias reference_t - Inherit reference type
-      using reference_t = typename base::reference_t;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowEnabledPropertyImpl::WindowEnabledPropertyImpl
-      //! Create with initial value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowEnabledPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowEnabledPropertyImpl::get const
-      //! Get the window state
-      //! 
-      //! \return value_t - Window state
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Query window state
-        if (this->Window.exists())
-          return boolean_cast(::IsWindowVisible(this->Window));
-
-        // Return cached
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowEnabledPropertyImpl::set 
-      //! Set the window state
-      //! 
-      //! \param[in] state - Window state
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(reference_t state) 
-      {
-        // Set window state
-        if (this->Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
-          throw platform_error(HERE, "Unable to set window state");
-
-        // Update value
-        base::set(state);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowFontPropertyImpl - Implements the window font property [Mutable,Reference]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowFontPropertyImpl : WindowPropertyImpl<HFont,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-      
-      //! \alias type - Define own type
-      using type = WindowFontPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<HFont,PropertyAccess::ReadWrite>;
-      
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowFontPropertyImpl::WindowFontPropertyImpl
-      //! Create with initial value of 'npos'
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowFontPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowFontPropertyImpl::set 
-      //! Set the window font
-      //! 
-      //! \param[in] font - New font
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t font) 
-      {
-        // Set window font & redraw
-        if (this->Window.exists())
-          this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(true)); 
-
-        // Update value
-        //base::set(font);
-        this->Value = font;
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowIdPropertyImpl - Implements the window Id property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowIdPropertyImpl : WindowPropertyImpl<WindowId,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowIdPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowId,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowIdPropertyImpl::WindowIdPropertyImpl
-      //! Create with initial value 
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] init - Initial value
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowIdPropertyImpl(WindowBase<ENC>& wnd, value_t init) : base(wnd, init)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowIdPropertyImpl::get const
-      //! Get the window Id
-      //! 
-      //! \return value_t - Current window Id
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Query window Id
-        if (this->Window.exists())
-          return static_cast<WindowId>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_ID) );
-        
-        // Return cached
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowIdPropertyImpl::set 
-      //! Set the window Id
-      //! 
-      //! \param[in] id - New window Id
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t id) 
-      {
-        // [EXISTS] Set window Id
-        if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
-          throw platform_error(HERE, "Unable to set window Id");
-
-        // Store value
-        base::set(id);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowStylePropertyImpl - Implements the window style property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowStylePropertyImpl : WindowPropertyImpl<WindowStyle,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowStylePropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowStyle,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStylePropertyImpl::WindowStylePropertyImpl
-      //! Create with initial value 
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] init - Initial value
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStylePropertyImpl(WindowBase<ENC>& wnd, value_t init) : base(wnd, init)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStylePropertyImpl::get const
-      //! Get the window style
-      //! 
-      //! \return value_t - Current window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Query window style
-        if (this->Window.exists())
-          return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
-        
-        // Return cached
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStylePropertyImpl::set 
-      //! Set the window style
-      //! 
-      //! \param[in] style - New window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t style) 
-      {
-        // [EXISTS] Set window style
-        if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
-          throw platform_error(HERE, "Unable to set window style");
-
-        // Store value
-        base::set(style);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowStyleExPropertyImpl - Implements the extended window style property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowStyleExPropertyImpl : WindowPropertyImpl<WindowStyleEx,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowStyleExPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<WindowStyleEx,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStyleExPropertyImpl::WindowStyleExPropertyImpl
-      //! Create with default value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] init - Initial value
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowStyleExPropertyImpl(WindowBase<ENC>& wnd, value_t init) : base(wnd, init)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStyleExPropertyImpl::get const
-      //! Get the extended window style
-      //! 
-      //! \return value_t - Current extended window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Query extended window style
-        if (this->Window.exists())
-          return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
-
-        // Return cached
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowStyleExPropertyImpl::set 
-      //! Set the extended window style
-      //! 
-      //! \param[in] style - New extended window style
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t style) 
-      {
-        // [EXISTS] Set extended window style
-        if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
-          throw platform_error(HERE, "Unable to set extended window style");
-
-        // Update value
-        base::set(style);
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowTextPropertyImpl - Implements the window text property [Mutable,Reference]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowTextPropertyImpl : WindowPropertyImpl<String<encoding>,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowTextPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<String<encoding>,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowTextPropertyImpl::WindowTextPropertyImpl
-      //! Create with initial value 
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] init - [optional] Initial window text
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowTextPropertyImpl(WindowBase<encoding>& wnd, value_t init = default<value_t>()) : base(wnd, init)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowTextPropertyImpl::get const
-      //! Get the window text
-      //! 
-      //! \return value_t - Dynamic string containing current Window text (using window character encoding)
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Query window text
-        if (this->Window.exists())
-        {
-          int32_t length = this->Window.TextLength;    //!< Length in chars
-
-          // [EMPTY] Return epsilon string
-          if (!length)
-            return {};
-
-          // [SMALL] 99% of window classes do not require a gigabyte text buffer
-          if (length < 256)
-          {
-            char_t  buffer[256];
-
-            // Get window text
-            if (!getFunc<encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, &buffer[0], 256))
-              throw platform_error(HERE, "Unable to retrieve window text");
-
-            // Generate dynamic string
-            return { &buffer[0], &buffer[length] };
-          }
-          // [LARGE] Remaining classes (Text, RichText, etc.) require dynamic storage
-          else
-          {
-            std::vector<char_t>  buffer(length+1);    //!< Encapsulates 'buffer = new char_t[length+1]'
-
-            // Get window text
-            if (!getFunc<encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, buffer.data(), length+1))
-              throw platform_error(HERE, "Unable to retrieve window text");
-
-            // Convert to string
-            return { buffer.begin(), buffer.end() };
-          }
-        }
-        
-        // [OFFLINE] Return cached
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowTextPropertyImpl::set 
-      //! Set the window text
-      //! 
-      //! \param[in] text - New window text
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t text) 
-      {
-        // [EXISTS] Set window text
-        if (this->Window.exists() && !getFunc<encoding>(::SetWindowTextA,::SetWindowTextW)(this->Window, text.c_str()))
-          throw platform_error(HERE, "Unable to set window text");
-
-        // Store value
-        base::set(text);
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowTextLengthPropertyImpl - Implements the window text length property [Immutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowTextLengthPropertyImpl : WindowPropertyImpl<uint32_t,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowTextLengthPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<uint32_t,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowTextLengthPropertyImpl::WindowTextLengthPropertyImpl
-      //! Create without initial value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      WindowTextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<value_t>())
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowTextLengthPropertyImpl::get const
-      //! Get length of text, in characters
-      //! 
-      //! \return value_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Return length in characters
-        if (this->Window.exists())
-          return getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);
-        
-        // [OFFLINE] Always zero
-        return 0;
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowRectPropertyImpl - Implements the window rectangle property [Mutable,Value]
-    //! 
-    //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowRectPropertyImpl : WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowRectPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<RectL,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowRectPropertyImpl::WindowRectPropertyImpl
-      //! Create with initial value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<RectL>())
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowRectPropertyImpl::get const
-      //! Get the window rectangle
-      //! 
-      //! \return value_t - Current window rectangle
-      //!
-      //! \throw wtl::logic_error - Window is using default size or location
-      //! \throw wtl::platform_error - Unable to query window rectangle
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Return current window rectangle
-        if (this->Window.exists())
-        {
-          value_t wnd;    //!< Window rectangle
-        
-          // Query & return window rectangle
-          if (!::GetWindowRect(this->Window, &native_cast(wnd)))
-            throw platform_error(HERE, "Unable to query window rectangle");
-          return wnd;
-        }
-
-        // [DEFAULT] Error: Cannot generate a window rectangle from default co-ordinates
-        if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
-          throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
-
-        // [~EXISTS] Generate from cached size & position
-        return { this->Window.Position(), this->Window.Size() };
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowRectPropertyImpl::set 
-      //! Set the window rectangle
-      //! 
-      //! \param[in] rc - New window rectangle
-      //! 
-      //! \throw wtl::platform_error - Unable to set window position
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t rc) 
-      {
-        bool resized = this->Value.width() == rc.width() && this->Value.height() == rc.height(),    //!< Whether resized
-               moved = this->Value.left == rc.left && this->Value.top == rc.top;                    //!< Whethe rmoved
-
-        // [EXISTS] Resize window
-        if (this->Window.exists())
-        {
-          MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
-          
-          // [¬RESIZED] Add appropriate flag
-          if (!resized)
-            flags |= MoveWindowFlags::NoSize;
-
-          // [¬MOVED] Add appropriate flag
-          if (!moved)
-            flags |= MoveWindowFlags::NoMove;
-
-          // Resize/reposition window
-          if (!::SetWindowPos(this->Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
-            throw platform_error(HERE, "Unable to set window position");
-        }
-
-        // [¬EXISTS] Set size/position
-        if (!this->Window.exists())
-        {
-          this->Window.Size = rc.size();
-          this->Window.Position = rc.topLeft();
-        }
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowSizePropertyImpl - Implements the window size property [Mutable,Value]
-    //! 
-    //! \remarks [EXISTS]  Derived from Window Rectangle 
-    //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowSizePropertyImpl : WindowPropertyImpl<SizeL,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowSizePropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<SizeL,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowSizePropertyImpl::WindowSizePropertyImpl
-      //! Create with initial value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowSizePropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowSizePropertyImpl::get const
-      //! Get the window size
-      //! 
-      //! \return value_t - Current window size
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Derive window size from window rectangle 
-        if (this->Window.exists())
-          return this->Window.WindowRect().size();
-
-        // [~EXISTS] Return cached size  (Offline window rectangle derived from size)
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowSizePropertyImpl::set 
-      //! Set the window size
-      //! 
-      //! \param[in] sz - New window size
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t sz) 
-      {
-        // [EXISTS] Set window rectangle   
-        if (this->Window.exists())
-          this->Window.WindowRect = RectL(this->Window.Position(), sz);
-        
-        // Store size
-        base::set(sz);
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowPositionPropertyImpl - Implements the window position property [Mutable,Value]
-    //! 
-    //! \remarks [EXISTS]  Derived from Window Rectangle 
-    //! \remarks [~EXISTS] Window Rectangle derived from cached Window Size & Position
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowPositionPropertyImpl : WindowPropertyImpl<PointL,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowPositionPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<PointL,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowPositionPropertyImpl::WindowPositionPropertyImpl
-      //! Create with initial value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowPositionPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowPositionPropertyImpl::get const
-      //! Get the window position
-      //! 
-      //! \return value_t - Current window position
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Derive window position from window rectangle 
-        if (this->Window.exists())
-          return this->Window.WindowRect().topLeft();
-
-        // [~EXISTS] Return cached position  
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowPositionPropertyImpl::set 
-      //! Set the window position
-      //! 
-      //! \param[in] pt - New window position
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t pt) 
-      {
-        // [EXISTS] Set window rectangle   
-        if (this->Window.exists())
-          this->Window.WindowRect = RectL(pt, this->Window.Size());
-        
-        // Store position
-        base::set(pt);
-      }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct WindowVisibilityPropertyImpl - Implements the window visibility property [Mutable,Value]
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct WindowVisibilityPropertyImpl : WindowPropertyImpl<Visibility,PropertyAccess::ReadWrite>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias type - Define own type
-      using type = WindowVisibilityPropertyImpl;
-
-      //! \alias base - Define base type
-      using base = WindowPropertyImpl<Visibility,PropertyAccess::ReadWrite>;
-
-      //! \alias value_t - Inherit argument type
-      using value_t = typename base::value_t;
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowVisibilityPropertyImpl::WindowVisibilityPropertyImpl
-      //! Create with initial value
-      //! 
-      //! \param[in,out] &wnd - Owner window
-      //! \param[in] &&... args - [optional] Value constructor arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      WindowVisibilityPropertyImpl(WindowBase<ENC>& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
-      {}
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowVisibilityPropertyImpl::get const
-      //! Get the window visibility
-      //! 
-      //! \return value_t - Window visibility
-      /////////////////////////////////////////////////////////////////////////////////////////
-      value_t  get() const 
-      {
-        // [EXISTS] Query window visibility
-        if (this->Window.exists())
-        {
-          WindowPlacement info;
-
-          // Query window placement
-          if (!::GetWindowPlacement(this->Window, &info))
-            throw platform_error(HERE, "Unable to query window placement");
-
-          // Extract visibility
-          return enum_cast<Visibility>(info.flags);
-        }
-
-        // Return cached
-        return base::get();
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // WindowVisibilityPropertyImpl::set 
-      //! Set the window visibility
-      //! 
-      //! \param[in] state - Window visibility
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void set(value_t state) 
-      {
-        // Set window visibility
-        if (this->Window.exists() && !::ShowWindow(Window, enum_cast(state)))
-          throw platform_error(HERE, "Unable to set window visibility");
-
-        // Update value
-        base::set(state);
-      }
-    };
-
-  public:
-    struct WindowPositionPropertyImpl;
-    struct WindowSizePropertyImpl;
-
-    //! \alias ClientRectProperty - Define client rectangle property type  
-    using ClientRectProperty = Property<ClientRectPropertyImpl>;
-    
-    //! \alias WindowEnabledProperty - Define window visibliity property type 
-    using WindowEnabledProperty = Property<WindowEnabledPropertyImpl>;
-
-    //! \alias WindowFontProperty - Define window font property type  
-    using WindowFontProperty = Property<WindowFontPropertyImpl>;
-    
-    //! \alias WindowIdProperty - Define window id property type  
-    using WindowIdProperty = Property<WindowIdPropertyImpl>;
-    
-    //! \alias WindowRectProperty - Define window rectangle property type  
-    using WindowRectProperty = Property<WindowRectPropertyImpl,WindowPositionPropertyImpl,WindowSizePropertyImpl>;
-    
-    //! \alias WindowPositionProperty - Define window position property type  
-    using WindowPositionProperty = Property<WindowPositionPropertyImpl,WindowRectPropertyImpl>;
-
-    //! \alias WindowSizeProperty - Define window size property type  
-    using WindowSizeProperty = Property<WindowSizePropertyImpl,WindowRectPropertyImpl>;
-
-    //! \alias WindowStyleProperty - Define window style property type 
-    using WindowStyleProperty = Property<WindowStylePropertyImpl>;
-
-    //! \alias WindowStyleExProperty - Define extended window style property type 
-    using WindowStyleExProperty = Property<WindowStyleExPropertyImpl>;
-    
-    //! \alias WindowTextProperty - Define window text property type  
-    using WindowTextProperty = Property<WindowTextPropertyImpl>;
-    
-    //! \alias WindowTextLengthProperty - Define window text length property type  
-    using WindowTextLengthProperty = Property<WindowTextLengthPropertyImpl>;
-    
-    //! \alias WindowVisibilityProperty - Define window visibliity property type 
-    using WindowVisibilityProperty = Property<WindowVisibilityPropertyImpl>;
-
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     //! \var ActiveWindows - Static collection of all existing WTL windows 
@@ -1278,37 +314,37 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
-    ActionEvent<encoding>            Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
-    CreateWindowEvent<encoding>      Create;        //!< Raised in response to WM_CREATE
-    CloseWindowEvent<encoding>       Close;         //!< Raised in response to WM_CLOSE
-    DestroyWindowEvent<encoding>     Destroy;       //!< Raised in response to WM_DESTROY
-    PaintWindowEvent<encoding>       Paint;         //!< Raised in response to WM_PAINT
-    ShowWindowEvent<encoding>        Show;          //!< Raised in response to WM_SHOWWINDOW
-    PositionChangedEvent<encoding>   Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
+    ActionEvent<encoding>               Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
+    CreateWindowEvent<encoding>         Create;        //!< Raised in response to WM_CREATE
+    CloseWindowEvent<encoding>          Close;         //!< Raised in response to WM_CLOSE
+    DestroyWindowEvent<encoding>        Destroy;       //!< Raised in response to WM_DESTROY
+    PaintWindowEvent<encoding>          Paint;         //!< Raised in response to WM_PAINT
+    ShowWindowEvent<encoding>           Show;          //!< Raised in response to WM_SHOWWINDOW
+    PositionChangedEvent<encoding>      Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
-    ActionQueue                      Actions;       //!< Actions queue
-    ChildWindowCollection            Children;      //!< Child window collection
-    WindowMenu<encoding>             Menu;          //!< Window menu, possibly empty
+    ActionQueue                         Actions;       //!< Actions queue
+    ChildWindowCollection               Children;      //!< Child window collection
+    WindowMenu<encoding>                Menu;          //!< Window menu, possibly empty
 
     // Properties
-    ClientRectProperty               ClientRect;    //!< Client rectangle property
-    WindowEnabledProperty            Enabled;       //!< Window enabled property
-    WindowFontProperty               Font;          //!< Window font property
-    WindowIdProperty                 Ident;         //!< Child Window Id property
-    WindowPositionProperty           Position;      //!< Window position property
-    WindowSizeProperty               Size;          //!< Window size property
-    WindowStyleProperty              Style;         //!< Window style property
-    WindowStyleExProperty            StyleEx;       //!< Extended window style property
-    WindowTextProperty               Text;          //!< Window text property
-    WindowTextLengthProperty         TextLength;    //!< Window text length property
-    WindowVisibilityProperty         Visible;       //!< Visibility property
-    WindowRectProperty               WindowRect;    //!< Window rectangle property
+    ClientRectProperty<encoding>        ClientRect;    //!< Client rectangle property
+    WindowEnabledProperty<encoding>     Enabled;       //!< Window enabled property
+    WindowFontProperty<encoding>        Font;          //!< Window font property
+    WindowIdProperty<encoding>          Ident;         //!< Child Window Id property
+    WindowPositionProperty<encoding>    Position;      //!< Window position property
+    WindowSizeProperty<encoding>        Size;          //!< Window size property
+    WindowStyleProperty<encoding>       Style;         //!< Window style property
+    WindowStyleExProperty<encoding>     StyleEx;       //!< Extended window style property
+    WindowTextProperty<encoding>        Text;          //!< Window text property
+    WindowTextLengthProperty<encoding>  TextLength;    //!< Window text length property
+    WindowVisibilityProperty<encoding>  Visible;       //!< Visibility property
+    WindowRectProperty<encoding>        WindowRect;    //!< Window rectangle property
 
   protected:
-    WindowClass<encoding>&           Class;         //!< Window class reference
-    HWnd                             Handle;        //!< Window handle
-    SubClassCollection               SubClasses;    //!< Sub-classed windows collection
+    WindowClass<encoding>&              Class;         //!< Window class reference
+    HWnd                                Handle;        //!< Window handle
+    SubClassCollection                  SubClasses;    //!< Sub-classed windows collection
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public: 

@@ -34,7 +34,7 @@ namespace wtl
   //! \struct PropertyImpl - Encapsulates property value access & mutation. Typically used as a base class.
   //! 
   //! \tparam VALUE - Value type
-  //! \tparam ACCESS - Access type(s)
+  //! \tparam ACCESS - Access type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE, PropertyAccess ACCESS>
   struct PropertyImpl
@@ -44,9 +44,6 @@ namespace wtl
     //! \alias type - Define own type
     using type = PropertyImpl<VALUE,ACCESS>;
     
-    //! \alias reference_t - Define lvalue reference type
-    using reference_t = VALUE;  //const VALUE&;
-
     //! \alias value_t - Define value type
     using value_t = VALUE;
 
@@ -136,9 +133,6 @@ namespace wtl
     
     //! \alias impl_t - Define implementation type
     using impl_t = IMPL;
-
-    //! \alias reference_t - Inherit reference type
-    using reference_t = typename IMPL::reference_t;
 
     //! \alias value_t - Inherit value type
     using value_t = typename IMPL::value_t;

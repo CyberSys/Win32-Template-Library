@@ -59,8 +59,8 @@ namespace wtl
     //! \param[in] const& sz - Input size
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Size(const ::SIZE&  sz) : width(static_cast<T>(sz.cx)), 
-                              height(static_cast<T>(sz.cy))
+    Size(const ::SIZE& sz) : width(static_cast<T>(sz.cx)), 
+                             height(static_cast<T>(sz.cy))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////

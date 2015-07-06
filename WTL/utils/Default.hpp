@@ -9,9 +9,10 @@
 #define WTL_DEFAULT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Constant.hpp"
-#include "wtl/utils/Sequence.hpp"
-#include "wtl/utils/SFINAE.hpp"
+#include "wtl/traits/EnumTraits.hpp"        //!< enum_values
+#include "wtl/utils/Constant.hpp"           //!< integral_constant
+#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
+#include "wtl/utils/SFINAE.hpp"             //!< enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl

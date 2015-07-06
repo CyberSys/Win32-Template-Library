@@ -94,11 +94,7 @@ namespace wtl
   //! \param[in] const* message - [optional] Catch message console
   //! \return exception_log_t - Exception log
   //////////////////////////////////////////////////////////////////////////////////////////
-  exception_log_t  exception_log(const char* sink, const char* message = nullptr)
-	{	
-    // Exceptionless
-    return exception_log_t(sink,message);
-	};
+  exception_log_t  exception_log(const char* sink, const char* message = nullptr);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // std::exception_log
@@ -109,15 +105,7 @@ namespace wtl
   //! \param[in] const* message - [optional] Catch message console
   //! \return exception_log_t - Exception log
   //////////////////////////////////////////////////////////////////////////////////////////
-  exception_log_t  exception_log(const char* sink, const std::exception& e, const char* message = nullptr)
-	{	
-    // Upcast to wtl::exception if possible
-    if (auto ptr = dynamic_cast<const exception*>(&e))
-      return exception_log_t(sink,*ptr,message);
-
-    // Standard exception
-    return exception_log_t(sink,e,message);
-	};
+  exception_log_t  exception_log(const char* sink, const std::exception& e, const char* message = nullptr);
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -128,13 +116,7 @@ namespace wtl
   //! \param[in] const& - Exception details
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  Console& operator << (Console& c, const exception_log_t& ex)
-  {
-    return c << Cons::Endl 
-             << (Cons::Purple|Cons::Bold) << "EXCEPTION: " << Cons::White  << ex.Context << ": " << ex.Error << "..." << Cons::Endl
-             << (Cons::Purple|Cons::Bold) << "SOURCE: "    << Cons::Yellow <<            ex.Source           << "..." << Cons::Endl
-             << (Cons::Purple|Cons::Bold) << "SINK: "      << Cons::Yellow <<             ex.Sink            << "..." << Cons::Endl;
-  };
+  Console& operator << (Console& c, const exception_log_t& ex);
   
   
 

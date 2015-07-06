@@ -48,6 +48,9 @@
     <Filter Include="Windows\Actions">
       <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\Properties">
+      <UniqueIdentifier>{db7c4fd7-5d47-4b72-9970-194a584151c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="io\BinaryReader.hpp">
@@ -482,6 +485,45 @@
     <ClInclude Include="traits\RangeTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
+    <ClInclude Include="windows\properties\WindowProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowEnabledProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowIdProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowStyleExProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowStyleProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowTextLengthProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowVisibilityProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowFontProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowTextProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowSizeProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowPositionProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowRectProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\ClientRectProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
@@ -504,6 +546,45 @@
     </ClCompile>
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowEnabledProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowIdProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowStyleExProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowStyleProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowTextLengthProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowVisibilityProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowFontProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowTextProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowSizeProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowPositionProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\WindowRectProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\properties\ClientRectProperty.cpp">
+      <Filter>Windows\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\ExceptionLog.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

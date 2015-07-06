@@ -77,19 +77,19 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
     static HAlloc<::HFONT> create(const CharArray<ENC,LEN>& name, 
-                                int32_t       height,  
-                                FontWeight  weight = FontWeight::Normal, 
-                                bool        italic = false, 
-                                bool        underline = false, 
-                                bool        strike = false, 
-                                FontCharSet charSet = FontCharSet::Default, 
-                                FontQuality quality = FontQuality::Default,
-                                FontFamily  family = FontFamily::Default, 
-                                FontPrecision precision = FontPrecision::Default, 
-                                FontClipping clipping = FontClipping::Default,
-                                int32_t       width = 0,  
-                                int32_t       escape = 0, 
-                                int32_t       orient = 0) 
+                                  int32_t       height,  
+                                  FontWeight    weight = FontWeight::Normal, 
+                                  bool          italic = false, 
+                                  bool          underline = false, 
+                                  bool          strike = false, 
+                                  FontCharSet   charSet = FontCharSet::Default, 
+                                  FontQuality   quality = FontQuality::Default,
+                                  FontFamily    family = FontFamily::Default, 
+                                  FontPrecision precision = FontPrecision::Default, 
+                                  FontClipping  clipping = FontClipping::Default,
+                                  int32_t       width = 0,  
+                                  int32_t       escape = 0, 
+                                  int32_t       orient = 0) 
     { 
       //! \var createFont - Functor for CreateFont
       static const auto createFont = getFunc<ENC>(::CreateFontA,::CreateFontW);
