@@ -28,6 +28,7 @@
 #include "wtl/platform/WindowMessage.hpp"                         //!< WindowMesssage
 #include "wtl/windows/Action.hpp"                                 //!< Action
 #include "wtl/windows/ActionGroup.hpp"                            //!< ActionGroup
+#include "wtl/windows/ActionGroupCollection.hpp"                  //!< ActionGroup
 #include "wtl/windows/ActionQueue.hpp"                            //!< ActionQueue
 #include "wtl/windows/Property.hpp"                               //!< Property
 #include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
@@ -62,6 +63,35 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
+  // Forward declaration
+  template <Encoding ENC>
+  struct WindowBase;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias WindowCollection - Window collection type
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using WindowCollection = List<WindowBase<ENC>*>;
+    
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias WindowHandleCollection - Provides an association between native window handles and WindowBase objects
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using WindowHandleCollection = std::map<::HWND,WindowBase<ENC>*>;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias WindowIdCollection - Provides an association between window Ids and WindowBase objects
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using WindowIdCollection = std::map<WindowId,WindowBase<ENC>*>;
+    
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct WindowBase - Base for all window types
   //! 
@@ -74,113 +104,45 @@ namespace wtl
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \alias type - Define own type
-    using type = WindowBase<ENC>;
-    
-    //! \alias char_t - Define window character type
-    using char_t = encoding_char_t<ENC>;
-    
-    //! \alias action_t - Define Action type
-    using action_t = Action<ENC>;
-    
-    //! \alias resource_t - Resource identifier type
-    using resource_t = ResourceId<ENC>;
-    
-    //! \alias wndclass_t - Window class type
-    using wndclass_t = WindowClass<ENC>;
-    
-    //! \alias wndmenu_t - Window menu type
-    using wndmenu_t = WindowMenu<ENC>;
-
-    //! \alias wndproc_t - Class window procedure signature
-    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32_t, WPARAM, LPARAM);
-
-    //! \alias wtlproc_t - Instance window procedure signature
-    using wtlproc_t = LResult (__thiscall*)(WindowMessage, WPARAM, LPARAM);  
-
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
 
-    //! \alias ActionQueue - Define gui command queue type
-    using ActionQueue = ActionQueue<ENC>;
+    //! \alias type - Define own type
+    using type = WindowBase<encoding>;
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct ActionGroupCollection - Collection of Action groups, indexed by Id
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct ActionGroupCollection : std::map<ActionGroupId,ActionGroupPtr<ENC>>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-      //! \alias base - Define base type
-      using base = std::map<ActionGroupId,ActionGroupPtr<ENC>>;
-      
-      //! \alias type - Define own type
-      using type = ActionGroupCollection;
-      
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ActionGroupCollection::find const
-      //! Find an action within the collection
-      //! 
-      //! \return ActionPtr<ENC> - Shared Action pointer, possibly empty
-      /////////////////////////////////////////////////////////////////////////////////////////
-      ActionPtr<ENC>  find(ActionId id) const 
-      {
-        // Lookup action
-        for (const auto& group : *this)
-          if (auto cmd = group.second->find(id))
-            return cmd;
-
-        // [NOT FOUND] Return empty pointer
-        return ActionPtr<ENC>(nullptr);
-      }
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-      
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ActionGroupCollection::operator +=
-      //! Add a group to the collection
-      //!
-      //! \param[in] *group - Command group
-      //! \return ActionGroupCollection& - Reference to self
-      //! 
-      //! \throw wtl::invalid_argument - [Debug only] Missing group
-      /////////////////////////////////////////////////////////////////////////////////////////
-      ActionGroupCollection& operator += (ActionGroup<ENC>* group)
-      {
-        REQUIRED_PARAM(group);
-
-        // Insert/overwrite
-        emplace(group->ident(), ActionGroupPtr<ENC>(group));
-        return *this;
-      }
-    };
+    //! \alias char_t - Define window character type
+    using char_t = encoding_char_t<encoding>;
     
+    //! \alias action_t - Define Action type
+    using action_t = Action<encoding>;
+    
+    //! \alias resource_t - Resource identifier type
+    using resource_t = ResourceId<encoding>;
+    
+    //! \alias wndclass_t - Window class type
+    using wndclass_t = WindowClass<encoding>;
+    
+    //! \alias wndmenu_t - Window menu type
+    using wndmenu_t = WindowMenu<encoding>;
+
+    //! \alias wndproc_t - Class window procedure signature
+    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32_t, ::WPARAM, ::LPARAM);
+
+    //! \alias wtlproc_t - Instance window procedure signature
+    using wtlproc_t = LResult (__thiscall*)(WindowMessage, ::WPARAM, ::LPARAM);  
+
     //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
     using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
-
-    //! \alias WindowCollection - Window collection type
-    using WindowCollection = List<WindowBase*>;
-    
-    //! \alias WindowHandleCollection - Provides an association between native window handles and WindowBase objects
-    using WindowHandleCollection = std::map<::HWND,WindowBase*>;
-
-    //! \alias WindowIdCollection - Provides an association between window Ids and WindowBase objects
-    using WindowIdCollection = std::map<WindowId,WindowBase*>;
-    
-    //! \alias ActiveWindowCollection - Define 'Active Windows' collection type
-    using ActiveWindowCollection = WindowHandleCollection;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ChildWindowCollection - Define child window collection type
     /////////////////////////////////////////////////////////////////////////////////////////
-    struct ChildWindowCollection : WindowIdCollection
+    struct ChildWindowCollection : WindowIdCollection<encoding>
     {
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
       //! \alias base - Define base type
-      using base = WindowIdCollection;
+      using base = WindowIdCollection<encoding>;
   
       //! \alias type - Define own type
       using type = ChildWindowCollection;
@@ -218,7 +180,7 @@ namespace wtl
       void create(WindowBase<ENC>& child)
       {
         // Ensure child doesn't already exist
-        if (child.Handle.exists())
+        if (child.exists())
           throw logic_error(HERE, "Window already exists");
 
         // Create child window  (calls 'insert()' if successful)
@@ -236,7 +198,7 @@ namespace wtl
       void insert(WindowBase<ENC>& child)
       {
         // Ensure child exists
-        if (!child.Handle.exists())
+        if (!child.exists())
           throw logic_error(HERE, "Window does not exist");
 
         // Add to collection
@@ -300,17 +262,17 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     //! \var ActiveWindows - Static collection of all existing WTL windows 
-    static WindowHandleCollection  ActiveWindows;
+    static WindowHandleCollection<encoding>  ActiveWindows;
 
     //! \var ActionGroups - Static collection of all Actions groups
-    static ActionGroupCollection   ActionGroups;
+    static ActionGroupCollection<encoding>   ActionGroups;
 
     //! \var DefaultPosition - Default window creation position
-    static const PointL  DefaultPosition;
+    static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
 
     //! \var DefaultSize - Default window creation size
-    static const SizeL  DefaultSize;
-    
+    static constexpr SizeL  DefaultSize = {CW_USEDEFAULT, CW_USEDEFAULT};
+
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
@@ -323,7 +285,7 @@ namespace wtl
     PositionChangedEvent<encoding>      Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
-    ActionQueue                         Actions;       //!< Actions queue
+    ActionQueue<encoding>               Actions;       //!< Actions queue
     ChildWindowCollection               Children;      //!< Child window collection
     WindowMenu<encoding>                Menu;          //!< Window menu, possibly empty
 
@@ -552,7 +514,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool exists() const
     {
-      return Handle;
+      return Handle.exists();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -709,18 +671,18 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::find
-    //! Find a child window
+    //! Find a child window of any type
     //! 
-    //! \tparam WINDOW - [optional] Child window type (If unspecified a base window pointer is returned)
-    //! \tparam IDENT - [optional] Window id type (If unspecified, WindowId is used)
+    //! \tparam WINDOW - [optional] Child window type (Default is WindowBase)
+    //! \tparam IDENT - [optional] Window id type (Default is WindowId)
     //! 
     //! \param[in] child - Child window Id
-    //! \return WINDOW& - Reference to child window
+    //! \return WINDOW& - Strongly-typed child window reference
     //! 
-    //! \throw wtl::domain_error - Mismatched child window type
-    //! \throw wtl::logic_error - Missing child window
+    //! \throw wtl::domain_error - Mismatched window type
+    //! \throw wtl::logic_error - Child not found
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename WINDOW = WindowBase<ENC>, typename IDENT = WindowId>
+    template <typename WINDOW = type, typename IDENT = WindowId>
     WINDOW& find(IDENT child) 
     {
       // Lookup child window
@@ -789,11 +751,11 @@ namespace wtl
     //! 
     //! \tparam WM - Window Message 
     //!
-    //! \param[in] w- First parameter
-    //! \param[in] l - Second parameter
+    //! \param[in] w - [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
     /////////////////////////////////////////////////////////////////////////////////////////
     template <WindowMessage WM> 
-    void post(WPARAM w = 0, LPARAM l = 0)
+    void post(::WPARAM w = 0, ::LPARAM l = 0)
     {
       post_message<encoding,WM>(Handle, w, l);
     }
@@ -807,7 +769,7 @@ namespace wtl
     //! \param[in] l - [optional] Second message parameter
     //! \return LResult - Message routing and result 
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult routeMessage(WindowMessage message, WPARAM w, LPARAM l)
+    virtual LResult routeMessage(WindowMessage message, ::WPARAM w, ::LPARAM l)
     {
       try
       {
@@ -909,12 +871,12 @@ namespace wtl
     //! 
     //! \tparam WM - Window Message 
     //!
-    //! \param[in] w- First parameter
-    //! \param[in] l - Second parameter
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
     //! \return LResult - Message result & routing
     /////////////////////////////////////////////////////////////////////////////////////////
     template <WindowMessage WM> 
-    LResult send(WPARAM w = 0, LPARAM l = 0)
+    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
     {
       return send_message<encoding,WM>(Handle, w, l);
     }
@@ -925,7 +887,7 @@ namespace wtl
     //! 
     //! \param[in] mode - Display method
     /////////////////////////////////////////////////////////////////////////////////////////
-    void show(ShowWindowFlags mode)
+    void show(ShowWindowFlags mode = ShowWindowFlags::Show)
     {
       ::ShowWindow(Handle, enum_cast(mode));
     }
@@ -940,24 +902,20 @@ namespace wtl
     }
   };
 
-  
-  //! \var WindowBase<ENC>::ActionGroups - Collection of all Action groups 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var WindowBase::ActionGroups - Collection of all Action groups 
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowBase<ENC>::ActionGroupCollection   WindowBase<ENC>::ActionGroups;
+  ActionGroupCollection<ENC>   WindowBase<ENC>::ActionGroups;
   
-  //! \var WindowBase<ENC>::ActiveWindows - Collection of all WTL windows 
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var WindowBase::ActiveWindows - Collection of all WTL windows 
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowBase<ENC>::WindowHandleCollection   WindowBase<ENC>::ActiveWindows;
+  WindowHandleCollection<ENC>   WindowBase<ENC>::ActiveWindows;
 
   
-  //! \var WindowBase<ENC>::DefaultPosition - Default window creation position
-  template <Encoding ENC>
-  const PointL  WindowBase<ENC>::DefaultPosition(CW_USEDEFAULT, CW_USEDEFAULT);
-
-  //! \var WindowBase<ENC>::DefaultSize - Default window creation size
-  template <Encoding ENC>
-  const SizeL  WindowBase<ENC>::DefaultSize(CW_USEDEFAULT, CW_USEDEFAULT);
-    
 } // namespace wtl
 
 

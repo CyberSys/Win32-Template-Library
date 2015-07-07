@@ -560,6 +560,9 @@
     <ClInclude Include="windows\properties\WindowVisibilityPropertyImpl.hpp">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="windows\ActionGroupCollection.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

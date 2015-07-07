@@ -115,6 +115,7 @@
     <ClInclude Include="utils\Default.hpp" />
     <ClInclude Include="utils\Triangle.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
+    <ClInclude Include="windows\ActionGroupCollection.hpp" />
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp" />
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\CutClipboardCommand.hpp" />

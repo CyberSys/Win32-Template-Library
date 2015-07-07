@@ -14,6 +14,7 @@
 #include "wtl/platform/ResourceId.hpp"              //!< ResourceId
 #include "wtl/platform/WindowFlags.hpp"             //!< ShowWindowFlags
 #include "wtl/windows/MessageBox.hpp"               //!< MessageBox
+//#include "wtl/windows/WindowBase.hpp"               //!< WindowBase
 #include "wtl/io/Console.hpp"                       //!< Console
 #include "wtl/utils/ExceptionLog.hpp"               //!< exception_log
 #include <stdexcept>                                //!< std::exception
@@ -22,32 +23,29 @@
 namespace wtl
 {
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct MessagePump - Message pump
+  //! \struct MessagePump - Provides a message pump for, and encapsulates within, a top-level window
   //! 
-  //! \tparam ENC - Character encoding type 
   //! \tparam WINDOW - Window type
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename WINDOW>
+  template <typename WINDOW>
   struct MessagePump 
   {
-    static_assert(ENC == WINDOW::encoding, "Message thread and window must have the same character encoding");
-
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \var encoding - Define character encoding
+    static constexpr Encoding encoding = WINDOW::encoding;
+    
     //! \alias type - Define own type
-    using type = MessagePump<ENC,WINDOW>;
+    using type = MessagePump<WINDOW>;
   
     //! \alias char_t - Define character type
-    using char_t = encoding_char_t<ENC>;
+    using char_t = encoding_char_t<encoding>;
 
     //! \alias resource_t - Define resource id type
-    using resource_t = ResourceId<ENC>;
+    using resource_t = ResourceId<encoding>;
     
     //! \alias window_t - Define window type
     using window_t = WINDOW;
-
-    //! \alias DialogCollection - Define dialog windows collection type
-    using DialogCollection = typename window_t::WindowCollection;
 
     //! \enum PumpState - Define message pump states
     enum class PumpState
@@ -60,13 +58,10 @@ namespace wtl
       //MsgBoxModal,    //!< Pumping within modal msgbox loop
     };
     
-    //! \var encoding - Define character encoding
-    static constexpr Encoding encoding = ENC;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     HINSTANCE         Instance;   //!< Module instance
-    DialogCollection  Dialogs;    //!< Currently active modeless dialogs
+    List<window_t*>   Dialogs;    //!< Currently active modeless dialogs
     window_t          Window;     //!< Main thread window
     PumpState         State;      //!< Current state
     
@@ -129,16 +124,16 @@ namespace wtl
     virtual int32_t  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
     {
       //! \var dispatchMessage - Functor for 'DispatchMessage'
-      static const auto dispatchMessage = getFunc<ENC>(::DispatchMessageA,::DispatchMessageW);
+      static constexpr auto dispatchMessage = getFunc<encoding>(::DispatchMessageA,::DispatchMessageW);
 
       //! \var getMessage - Functor for 'GetMessage'
-      static const auto getMessage = getFunc<ENC>(::GetMessageA,::GetMessageW);
+      static constexpr auto getMessage = getFunc<encoding>(::GetMessageA,::GetMessageW);
 
       //! \var isDialogMessage - Functor for 'isDialogMessage'
-      static const auto isDialogMessage = getFunc<ENC>(::IsDialogMessageA,::IsDialogMessageW);
+      static constexpr auto isDialogMessage = getFunc<encoding>(::IsDialogMessageA,::IsDialogMessageW);
 
       //! \var translateAccelerator - Functor for 'TranslateAccelerator'
-      static const auto translateAccelerator = getFunc<ENC>(::TranslateAcceleratorA,::TranslateAcceleratorW);
+      static constexpr auto translateAccelerator = getFunc<encoding>(::TranslateAcceleratorA,::TranslateAcceleratorW);
 
       MSG msg;
 

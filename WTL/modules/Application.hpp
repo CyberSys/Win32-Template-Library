@@ -19,32 +19,34 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Application - Encapsulates a program
+  //! \struct Application - Encapsulates the executing module and the top-level application window.
   //! 
-  //! \tparam ENC - Program character encoding 
   //! \tparam WINDOW - Main window type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename WINDOW>
-  struct Application : Module,
-                       MessagePump<ENC,WINDOW>
+  template <typename WINDOW>
+  struct Application : Module, 
+                       MessagePump<WINDOW>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \var encoding - Inherit window character encoding
+    static constexpr Encoding encoding = WINDOW::encoding;
+    
+    //! \alias type - Define own type
+    using type = Application<WINDOW>;
   
     //! \alias module_base - Define module base type
     using module_base = Module;
     
     //! \alias msgpump_base - Define message pump base type
-    using msgpump_base = MessagePump<ENC,WINDOW>;
-
-    //! \alias char_t - Inherit program character type
-    using char_t = typename msgpump_base::char_t;
-
-    //! \alias resource_t - Inherit program resource id type
-    using resource_t = typename msgpump_base::resource_t;
+    using msgpump_base = MessagePump<WINDOW>;
     
-    //! \var encoding - Inherit program character encoding
-    static constexpr Encoding encoding = msgpump_base::encoding;
+    //! \alias char_t - Define character type
+    using char_t = encoding_char_t<encoding>;
 
+    //! \alias resource_t - Define resource id type
+    using resource_t = ResourceId<encoding>;
+    
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -99,10 +101,10 @@ namespace wtl
              << (Cons::Cyan|Cons::Bold) << "\t\t\t"       << this->name() << "\t" << this->version()                    << endl  
              << Cons::Cyan              << "--------------------------------------------------------------------------" << endl 
              << endl
-             << make_nvpair("Date/Time", LongDateString<ENC>().c_str())          << endl
-             << make_nvpair("Command Line", cmdLine)                             << endl
-             << make_nvpair("Operating System", SystemVersion<ENC>().fullname()) << endl
-             << make_nvpair("Module Path", module_base::path<ENC>().c_str())     << endl;
+             << make_nvpair("Date/Time", LongDateString<encoding>().c_str())          << endl
+             << make_nvpair("Command Line", cmdLine)                                  << endl
+             << make_nvpair("Operating System", SystemVersion<encoding>().fullname()) << endl
+             << make_nvpair("Module Path", module_base::path<encoding>().c_str())     << endl;
 
       // Execute
       return msgpump_base::run(mode);
