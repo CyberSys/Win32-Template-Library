@@ -410,7 +410,7 @@ namespace wtl
     //! \param[in] lParam - [optional] Parameter2
     //! \return LRESULT - Typically zero if handled, non-zero if not    (but not always)
     /////////////////////////////////////////////////////////////////////////////////////////
-    static LRESULT WINAPI  WndProc(::HWND hWnd, uint32_t message, WPARAM wParam, LPARAM lParam)
+    static ::LRESULT WINAPI  WndProc(::HWND hWnd, uint32_t message, ::WPARAM wParam, ::LPARAM lParam)
     {
       WindowBase* wnd(nullptr);   //!< Window object associated with message, if any
        
@@ -458,7 +458,7 @@ namespace wtl
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
-      LRESULT result = getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
+      ::LRESULT result = getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
       
       // [CREATE/NCCREATE] Cleanup
       switch (auto msg = static_cast<WindowMessage>(message))
@@ -477,19 +477,6 @@ namespace wtl
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::clientRect const
-    //! Get the client rectangle
-    //! 
-    //! \return RectL - Client rectangle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*RectL clientRect() const
-    {
-      RectL rc;
-      ::GetClientRect(Handle, rc);
-      return rc;
-    }*/
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::data const
     //! Get window data
@@ -555,19 +542,6 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::windowRect const
-    //! Get the window rectangle
-    //! 
-    //! \return RectL - Window rectangle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*RectL windowRect() const
-    {
-      RectL rc;
-      ::GetWindowRect(Handle, rc);
-      return rc;
-    }*/
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::operator ::HWND const
     //! Implicit user conversion to native window handle 
     //! 
@@ -596,7 +570,7 @@ namespace wtl
     //!
     //! \remarks Child windows are automatically added to the ChildWindowCollection of the parent
     /////////////////////////////////////////////////////////////////////////////////////////
-    void create(WindowBase<ENC>* owner = nullptr)
+    void create(type* owner = nullptr)
     {
       // Ensure window does not exist
       if (Handle.exists())
