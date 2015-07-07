@@ -79,9 +79,9 @@ namespace wtl
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
-    DISABLE_COPY(MessagePump);      //!< Cannot be copied
-    ENABLE_MOVE(MessagePump);       //!< Can be moved
-    ENABLE_POLY(MessagePump);       //!< Can be polymorphic  [Closes the query handle]
+    DISABLE_COPY(FileSearch);      //!< Cannot be copied
+    ENABLE_MOVE(FileSearch);       //!< Can be moved
+    ENABLE_POLY(FileSearch);       //!< Can be polymorphic  [Closes the query handle]
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   
