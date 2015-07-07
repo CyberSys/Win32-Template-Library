@@ -1,17 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowEnabledPropertyImpl.hpp
-//! \brief Implementation for window enabled property accessors/mutators (resolves circular dependency)
+//! \file wtl\windows\properties\VisibilityPropertyImpl.hpp
+//! \brief Implementation for window visibility property accessors/mutators (resolves circular dependency)
 //! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_ENABLED_PROPERTY_IMPL_HPP
-#define WTL_WINDOW_ENABLED_PROPERTY_IMPL_HPP
+#ifndef WTL_WINDOW_VISIBLE_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_VISIBLE_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/BooleanCast.hpp"                              //!< BooleanCast
-#include "wtl/windows/properties/WindowEnabledProperty.hpp"       //!< WindowEnabledProperty
+#include "wtl/casts/EnumCast.hpp"                                 //!< EnumCast
+#include "wtl/windows/properties/VisibilityProperty.hpp"       //!< VisibilityProperty
 #include "wtl/windows/WindowBase.hpp"                             //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -23,17 +24,26 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowEnabledPropertyImpl::get const
-  //! Get the window state
+  // VisibilityPropertyImpl::get const
+  //! Get the window visibility
   //! 
-  //! \return value_t - Current state if window exists, otherwise 'initial' state
+  //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowEnabledPropertyImpl<ENC>::value_t  WindowEnabledPropertyImpl<ENC>::get() const 
+  typename VisibilityPropertyImpl<ENC>::value_t  VisibilityPropertyImpl<ENC>::get() const 
   {
-    // [EXISTS] Query window state
+    // [EXISTS] Query window visibility
     if (this->Window.exists())
-      return boolean_cast(::IsWindowVisible(this->Window));
+    {
+      WindowPlacement info;
+
+      // Query window placement
+      if (!::GetWindowPlacement(this->Window, &info))
+        throw platform_error(HERE, "Unable to query window visibility");
+
+      // Extract visibility
+      return enum_cast<value_t>(info.flags);
+    }
 
     // Return cached
     return base::get();
@@ -42,23 +52,24 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowEnabledPropertyImpl::set 
-  //! Set the current window state iff window exists, otherwise 'initial' state
+  // VisibilityPropertyImpl::set 
+  //! Set the current window visibility iff window exists, otherwise 'initial' visibility
   //! 
-  //! \param[in] state - Window state
+  //! \param[in] visibility - Window visibility
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowEnabledPropertyImpl<ENC>::set(value_t state) 
+  void  VisibilityPropertyImpl<ENC>::set(value_t visibility) 
   {
-    // Set window state
-    if (this->Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
-      throw platform_error(HERE, "Unable to set window state");
+    // Set window visibility
+    if (this->Window.exists() && !::ShowWindow(Window, enum_cast(visibility)))
+      throw platform_error(HERE, "Unable to set window visibility");
 
     // Update value
-    base::set(state);
+    base::set(visibility);
   }
 
       
 } // namespace wtl
 
-#endif    // WTL_WINDOW_ENABLED_PROPERTY_IMPL_HPP
+#endif // WTL_WINDOW_VISIBLE_PROPERTY_IMPL_HPP
+

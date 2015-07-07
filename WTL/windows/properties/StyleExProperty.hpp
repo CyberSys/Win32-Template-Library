@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowStyleExProperty.hpp
+//! \file wtl\windows\properties\StyleExProperty.hpp
 //! \brief Encapsulates the extended window style in an appropriate enumeration property
 //! \date 5 July 2015
 //! \author Nick Crowley
@@ -20,19 +20,19 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowStyleExPropertyImpl - Encapsulates the extended-window-style in a read/write property.
+  //! \struct StyleExPropertyImpl - Encapsulates the extended-window-style in a read/write property.
   //! 
   //! \tparam ENC - Window encoding
   //!
   //! \remarks When the window does not exist this provides the initial value used during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowStyleExPropertyImpl : WindowPropertyImpl<ENC,WindowStyleEx,PropertyAccess::ReadWrite>
+  struct StyleExPropertyImpl : WindowPropertyImpl<ENC,WindowStyleEx,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowStyleExPropertyImpl;
+    using type = StyleExPropertyImpl;
 
     //! \alias base - Define base type
     using base = WindowPropertyImpl<ENC,WindowStyleEx,PropertyAccess::ReadWrite>;
@@ -45,19 +45,19 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowStyleExPropertyImpl::WindowStyleExPropertyImpl
+    // StyleExPropertyImpl::StyleExPropertyImpl
     //! Create with initial value
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial extended window style
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowStyleExPropertyImpl(WindowBase<ENC>& wnd, WindowStyleEx style) : base(wnd, style)
+    StyleExPropertyImpl(WindowBase<ENC>& wnd, WindowStyleEx style) : base(wnd, style)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowStyleExPropertyImpl::get const
+    // StyleExPropertyImpl::get const
     //! Get the extended window style
     //! 
     //! \return value_t - Current style if window exists, otherwise 'initial' style
@@ -67,7 +67,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowStyleExPropertyImpl::set 
+    // StyleExPropertyImpl::set 
     //! Set the current extended window style iff window exists, otherwise 'initial' style
     //! 
     //! \param[in] style - Extended window style
@@ -78,12 +78,12 @@ namespace wtl
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowStyleExProperty - Define extended window style property type 
+  //! \alias StyleExProperty - Define extended window style property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowStyleExProperty = Property<WindowStyleExPropertyImpl<ENC>>;
+  using StyleExProperty = Property<StyleExPropertyImpl<ENC>>;
 
       
 } // namespace wtl

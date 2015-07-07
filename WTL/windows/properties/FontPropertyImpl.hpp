@@ -1,16 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowSizePropertyImpl.hpp
-//! \brief Implementation for window size property accessors/mutators (resolves circular dependency)
+//! \file wtl\windows\properties\FontPropertyImpl.hpp
+//! \brief Implementation for window font property accessors/mutators (resolves circular dependency)
 //! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_SIZE_PROPERTY_IMPL_HPP
-#define WTL_WINDOW_SIZE_PROPERTY_IMPL_HPP
+#ifndef WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/properties/WindowSizeProperty.hpp"     //!< WindowSizeProperty
+#include "wtl/casts/BooleanCast.hpp"                         //!< BooleanCast
+#include "wtl/windows/properties/FontProperty.hpp"     //!< FontProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -22,43 +23,43 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowSizePropertyImpl::get const
-  //! Get the window size
+  // FontPropertyImpl::get const
+  //! Get the window font
   //! 
-  //! \return value_t - Current size if window exists, otherwise 'initial' size
+  //! \return value_t - Current font if window exists, otherwise 'initial' font
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowSizePropertyImpl<ENC>::value_t  WindowSizePropertyImpl<ENC>::get() const 
+  typename FontPropertyImpl<ENC>::value_t  FontPropertyImpl<ENC>::get() const 
   {
-    // [EXISTS] Derive window size from window rectangle 
-    if (this->Window.exists())
-      return this->Window.WindowRect().size();
-
-    // [~EXISTS] Return cached size  (Offline window rectangle derived from size)
+    // Return shared handle
     return base::get();
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowSizePropertyImpl::set 
-  //! Set the current window size iff window exists, otherwise 'initial' size
+  // FontPropertyImpl::set 
+  //! Set the current window font iff window exists. If the window does not exist, this has no affect.
   //! 
-  //! \param[in] size - Window size
+  //! \param[in] font - Window font
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowSizePropertyImpl<ENC>::set(value_t size) 
+  void  FontPropertyImpl<ENC>::set(value_t font) 
   {
-    // [EXISTS] Resize current window rectangle 
+    static constexpr bool redraw = true;
+
+    // [EXISTS] Operation is ignored if ¬exists
     if (this->Window.exists())
-      this->Window.WindowRect = RectL(this->Window.Position(), size);
-        
-    // Store size
-    base::set(size);
+    {
+      // Set window font & redraw
+      this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(redraw)); 
+
+      // Updated ref-counted shared handle
+      base::set(font);
+    }
   }
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_SIZE_PROPERTY_IMPL_HPP
-
+#endif // WTL_WINDOW_FONT_PROPERTY_IMPL_HPP

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowTextPropertyImpl.hpp
+//! \file wtl\windows\properties\TextPropertyImpl.hpp
 //! \brief Implementation for window text property accessors/mutators (resolves circular dependency)
 //! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
@@ -11,7 +11,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"                            //!< EnumCast
-#include "wtl/windows/properties/WindowTextProperty.hpp"     //!< WindowTextProperty
+#include "wtl/windows/properties/TextProperty.hpp"     //!< TextProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -23,13 +23,13 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowTextPropertyImpl::get const
+  // TextPropertyImpl::get const
   //! Get the current text if window exists, otherwise 'initial' text
   //! 
   //! \return value_t - Dynamic string containing current Window text (using window character encoding)
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowTextPropertyImpl<ENC>::value_t  WindowTextPropertyImpl<ENC>::get() const 
+  typename TextPropertyImpl<ENC>::value_t  TextPropertyImpl<ENC>::get() const 
   {
     // [EXISTS] Query window text
     if (this->Window.exists())
@@ -73,13 +73,13 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowTextPropertyImpl::set 
+  // TextPropertyImpl::set 
   //! Set the current window text iff window exists, otherwise 'initial' text
   //! 
   //! \param[in] text - Window text
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowTextPropertyImpl<ENC>::set(value_t text) 
+  void  TextPropertyImpl<ENC>::set(value_t text) 
   {
     // [EXISTS] Set window text
     if (this->Window.exists() && !getFunc<encoding>(::SetWindowTextA,::SetWindowTextW)(this->Window, text.c_str()))

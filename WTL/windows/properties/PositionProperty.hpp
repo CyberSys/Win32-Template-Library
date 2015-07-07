@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowFontProperty.hpp
-//! \brief Encapsulates the basic window font in a class-type property
+//! \file wtl\windows\properties\PositionProperty.hpp
+//! \brief Encapsulates the window position in a class-type property
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_FONT_PROPERTY_HPP
-#define WTL_WINDOW_FONT_PROPERTY_HPP
+#ifndef WTL_WINDOW_POSITION_PROPERTY_HPP
+#define WTL_WINDOW_POSITION_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Point.hpp"                            //!< PointL
 #include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/traits/FontTraits.hpp"                      //!< HFont
 #include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -20,73 +20,73 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowFontPropertyImpl - Encapsulates the window font in a read/write ref-counted shared-handle property
+  //! \struct PositionPropertyImpl - Encapsulates the window-position in a read/write class-type property.
   //! 
   //! \tparam ENC - Window encoding
   //!
-  //! \remarks All windows are created using the default system font, therefore this property does not define the 'initial' font.
-  //! \remarks The font is stored as a shared window handle, it is not necessarily destroyed, therefore, when the window is destroyed.
+  //! \remarks When the window does NOT exist, this provides the initial position used during window creation.
+  //! \remarks When the window DOES exist, the position is determined from the WindowRect, and vice versa when it does not exist.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowFontPropertyImpl : WindowPropertyImpl<ENC,HFont,PropertyAccess::ReadWrite>
+  struct PositionPropertyImpl : WindowPropertyImpl<ENC,PointL,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowFontPropertyImpl;
+    using type = PositionPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,HFont,PropertyAccess::ReadWrite>;
+    using base = WindowPropertyImpl<ENC,PointL,PropertyAccess::ReadWrite>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
-
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowFontPropertyImpl::WindowFontPropertyImpl
-    //! Create with initial font used by all window-classes (System font)
+    // PositionPropertyImpl::PositionPropertyImpl
+    //! Create with initial value
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial font
+    //! \param[in] init - Initial window position
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowFontPropertyImpl(WindowBase<ENC>& wnd, StockObject init) : base(wnd, init)
+    PositionPropertyImpl(WindowBase<ENC>& wnd, value_t position) : base(wnd, position)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowFontPropertyImpl::get const
-    //! Get the window font
+    // PositionPropertyImpl::get const
+    //! Get the window position
     //! 
-    //! \return value_t - Current font if window exists, otherwise 'initial' font
+    //! \return value_t - Current position if window exists, otherwise 'initial' position
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowFontPropertyImpl::set 
-    //! Set the current window font iff window exists, otherwise 'initial' font
+    // PositionPropertyImpl::set 
+    //! Set the current window position iff window exists, otherwise 'initial' position
     //! 
-    //! \param[in] font - Window font
+    //! \param[in] position - Window position
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t font);
+    void  set(value_t position);
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowFontProperty - Define window font property type 
+  //! \alias PositionProperty - Define window position property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowFontProperty = Property<WindowFontPropertyImpl<ENC>>;
+  using PositionProperty = Property<PositionPropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_FONT_PROPERTY_HPP
+#endif // WTL_WINDOW_POSITION_PROPERTY_HPP

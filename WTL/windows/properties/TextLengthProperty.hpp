@@ -1,16 +1,15 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowStyleProperty.hpp
-//! \brief Encapsulates the basic window style in an appropriate enumeration property
+//! \file wtl\windows\properties\TextLengthProperty.hpp
+//! \brief Encapsulates a window's text length in an integer property
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_STYLE_PROPERTY_HPP
-#define WTL_WINDOW_STYLE_PROPERTY_HPP
+#ifndef WTL_WINDOW_TEXT_LEN_PROPERTY_HPP
+#define WTL_WINDOW_TEXT_LEN_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"                   //!< WindowStyle
 #include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -20,22 +19,22 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowStylePropertyImpl - Encapsulates the basic-window-style in a read/write property.
+  //! \struct TextLengthPropertyImpl - Encapsulates the window-text length in a read-only property.
   //! 
   //! \tparam ENC - Window encoding
   //!
-  //! \remarks When the window does not exist this provides the initial value used during window creation
+  //! \remarks When the window does not exist this is zero
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowStylePropertyImpl : WindowPropertyImpl<ENC,WindowStyle,PropertyAccess::ReadWrite>
+  struct TextLengthPropertyImpl : WindowPropertyImpl<ENC,uint32_t,PropertyAccess::Read>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowStylePropertyImpl;
+    using type = TextLengthPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,WindowStyle,PropertyAccess::ReadWrite>;
+    using base = WindowPropertyImpl<ENC,uint32_t,PropertyAccess::Read>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
@@ -45,47 +44,38 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowStylePropertyImpl::WindowStylePropertyImpl
-    //! Create with initial value
+    // TextLengthPropertyImpl::TextLengthPropertyImpl
+    //! Create with initial value of zero
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial window style
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowStylePropertyImpl(WindowBase<ENC>& wnd, WindowStyle style) : base(wnd, style)
+    TextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<value_t>())
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowStylePropertyImpl::get const
-    //! Get the window style
+    // TextLengthPropertyImpl::get const
+    //! Get length of text, in characters
     //! 
-    //! \return value_t - Current style if window exists, otherwise 'initial' style
+    //! \return value_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowStylePropertyImpl::set 
-    //! Set the current window style iff window exists, otherwise 'initial' style
-    //! 
-    //! \param[in] style - Window style
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t style);
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowStyleProperty - Define window style property type 
+  //! \alias TextLengthProperty - Define window-text length property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowStyleProperty = Property<WindowStylePropertyImpl<ENC>>;
+  using TextLengthProperty = Property<TextLengthPropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_STYLE_PROPERTY_HPP
+#endif // WTL_WINDOW_TEXT_LEN_PROPERTY_HPP

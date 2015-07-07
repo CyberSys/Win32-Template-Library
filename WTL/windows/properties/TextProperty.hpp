@@ -1,16 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowTextLengthProperty.hpp
-//! \brief Encapsulates a window's text length in an integer property
+//! \file wtl\windows\properties\TextProperty.hpp
+//! \brief Encapsulates the window text in a read/write dynamic-string property
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_TEXT_LEN_PROPERTY_HPP
-#define WTL_WINDOW_TEXT_LEN_PROPERTY_HPP
+#ifndef WTL_WINDOW_TEXT_PROPERTY_HPP
+#define WTL_WINDOW_TEXT_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
 #include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/utils/String.hpp"                           //!< String
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -19,23 +20,26 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowTextLengthPropertyImpl - Encapsulates the window-text length in a read-only property.
+  //! \struct TextPropertyImpl - Encapsulates the window-text in a read/write dynamic-string property.
   //! 
   //! \tparam ENC - Window encoding
   //!
-  //! \remarks When the window does not exist this is zero
+  //! \remarks When the window does not exist this provides the initial value used during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowTextLengthPropertyImpl : WindowPropertyImpl<ENC,uint32_t,PropertyAccess::Read>
+  struct TextPropertyImpl : WindowPropertyImpl<ENC,String<ENC>,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowTextLengthPropertyImpl;
+    using type = TextPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,uint32_t,PropertyAccess::Read>;
+    using base = WindowPropertyImpl<ENC,String<ENC>,PropertyAccess::ReadWrite>;
       
+    //! \alias char_t - Define window character type
+    using char_t = encoding_char_t<ENC>;
+    
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
 
@@ -44,38 +48,47 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowTextLengthPropertyImpl::WindowTextLengthPropertyImpl
-    //! Create with initial value of zero
+    // TextPropertyImpl::TextPropertyImpl
+    //! Create with initial value
     //! 
     //! \param[in,out] &wnd - Owner window
+    //! \param[in] init - Initial window text
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowTextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<value_t>())
+    TextPropertyImpl(WindowBase<ENC>& wnd, value_t init = default<value_t>()) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowTextLengthPropertyImpl::get const
-    //! Get length of text, in characters
+    // TextPropertyImpl::get const
+    //! Get the current text if window exists, otherwise 'initial' text
     //! 
-    //! \return value_t - Length of current window text, in characters.  (Always zero when window doesn't exist)
+    //! \return value_t - Dynamic string containing current Window text (using window character encoding)
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // TextPropertyImpl::set 
+    //! Set the current window text iff window exists, otherwise 'initial' text
+    //! 
+    //! \param[in] text - Window text
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void  set(value_t text);
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowTextLengthProperty - Define window-text length property type 
+  //! \alias TextProperty - Define window text property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowTextLengthProperty = Property<WindowTextLengthPropertyImpl<ENC>>;
+  using TextProperty = Property<TextPropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_TEXT_LEN_PROPERTY_HPP
+#endif // WTL_WINDOW_TEXT_PROPERTY_HPP

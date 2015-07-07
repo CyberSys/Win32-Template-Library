@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowVisibilityProperty.hpp
-//! \brief Encapsulates the visibility of a window in an appropriate enumeration property
+//! \file wtl\windows\properties\IdentProperty.hpp
+//! \brief Encapsulates the child-window-id in an appropriate enumeration property
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_VISIBLE_PROPERTY_HPP
-#define WTL_WINDOW_VISIBLE_PROPERTY_HPP
+#ifndef WTL_WINDOW_ID_PROPERTY_HPP
+#define WTL_WINDOW_ID_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"                   //!< ShowWindowFlags
+#include "wtl/platform/WindowFlags.hpp"                   //!< WindowId
 #include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -20,22 +20,22 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowVisibilityPropertyImpl - Encapsulates the visibility of a window in a read/write enumeration property.
+  //! \struct IdentPropertyImpl - Encapsulates the window-id in a read/write property.
   //! 
   //! \tparam ENC - Window encoding
   //!
   //! \remarks When the window does not exist this provides the initial value used during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowVisibilityPropertyImpl : WindowPropertyImpl<ENC,ShowWindowFlags,PropertyAccess::ReadWrite>
+  struct IdentPropertyImpl : WindowPropertyImpl<ENC,WindowId,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowVisibilityPropertyImpl;
+    using type = IdentPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,ShowWindowFlags,PropertyAccess::ReadWrite>;
+    using base = WindowPropertyImpl<ENC,WindowId,PropertyAccess::ReadWrite>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
@@ -45,46 +45,46 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowVisibilityPropertyImpl::WindowVisibilityPropertyImpl
-    //! Create with initial value
+    // IdentPropertyImpl::IdentPropertyImpl
+    //! Create with initial window-id
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial visibility
+    //! \param[in] init - [optional] Initial window id  (Default is zero)
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowVisibilityPropertyImpl(WindowBase<ENC>& wnd, ShowWindowFlags init) : base(wnd, init)
+    IdentPropertyImpl(WindowBase<ENC>& wnd, WindowId init = zero<WindowId>()) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowVisibilityPropertyImpl::get const
-    //! Get the window visibility
+    // IdentPropertyImpl::get const
+    //! Get the window id
     //! 
-    //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
+    //! \return value_t - Current window-id if window exists, otherwise 'initial' window-id
     /////////////////////////////////////////////////////////////////////////////////////////
-    value_t  get() const;
+    value_t  get() const; // { return default<WindowId>(); }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowVisibilityPropertyImpl::set 
-    //! Set the current window visibility iff window exists, otherwise 'initial' visibility
+    // IdentPropertyImpl::set 
+    //! Set the current window id iff window exists, otherwise 'initial' window-id
     //! 
-    //! \param[in] visibility - Window visibility
+    //! \param[in] id - Window id
     /////////////////////////////////////////////////////////////////////////////////////////
-    void set(value_t visibility);
+    void  set(value_t id);
   };
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowVisibilityProperty - Define window visibliity property type 
+  //! \alias IdentProperty - Define window id property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowVisibilityProperty = Property<WindowVisibilityPropertyImpl<ENC>>;
+  using IdentProperty = Property<IdentPropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_VISIBLE_PROPERTY_HPP
+#endif // WTL_WINDOW_ID_PROPERTY_HPP

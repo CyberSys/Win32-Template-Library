@@ -1,17 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowTextProperty.hpp
-//! \brief Encapsulates the window text in a read/write dynamic-string property
+//! \file wtl\windows\properties\SizeProperty.hpp
+//! \brief Encapsulates the basic window size in a class-type property
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_TEXT_PROPERTY_HPP
-#define WTL_WINDOW_TEXT_PROPERTY_HPP
+#ifndef WTL_WINDOW_SIZE_PROPERTY_HPP
+#define WTL_WINDOW_SIZE_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Size.hpp"                             //!< SizeL
 #include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
 #include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
-#include "wtl/utils/String.hpp"                           //!< String
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -20,75 +20,73 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowTextPropertyImpl - Encapsulates the window-text in a read/write dynamic-string property.
+  //! \struct SizePropertyImpl - Encapsulates the window-size in a read/write class-type property.
   //! 
   //! \tparam ENC - Window encoding
   //!
-  //! \remarks When the window does not exist this provides the initial value used during window creation
+  //! \remarks When the window does NOT exist, this provides the initial size used during window creation.
+  //! \remarks When the window DOES exist, the size is determined from the WindowRect, and vice versa when it does not exist.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowTextPropertyImpl : WindowPropertyImpl<ENC,String<ENC>,PropertyAccess::ReadWrite>
+  struct SizePropertyImpl : WindowPropertyImpl<ENC,SizeL,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowTextPropertyImpl;
+    using type = SizePropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,String<ENC>,PropertyAccess::ReadWrite>;
+    using base = WindowPropertyImpl<ENC,SizeL,PropertyAccess::ReadWrite>;
       
-    //! \alias char_t - Define window character type
-    using char_t = encoding_char_t<ENC>;
-    
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
-
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowTextPropertyImpl::WindowTextPropertyImpl
+    // SizePropertyImpl::SizePropertyImpl
     //! Create with initial value
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial window text
+    //! \param[in] init - Initial window size
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowTextPropertyImpl(WindowBase<ENC>& wnd, value_t init = default<value_t>()) : base(wnd, init)
+    SizePropertyImpl(WindowBase<ENC>& wnd, value_t size) : base(wnd, size)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowTextPropertyImpl::get const
-    //! Get the current text if window exists, otherwise 'initial' text
+    // SizePropertyImpl::get const
+    //! Get the window size
     //! 
-    //! \return value_t - Dynamic string containing current Window text (using window character encoding)
+    //! \return value_t - Current size if window exists, otherwise 'initial' size
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowTextPropertyImpl::set 
-    //! Set the current window text iff window exists, otherwise 'initial' text
+    // SizePropertyImpl::set 
+    //! Set the current window size iff window exists, otherwise 'initial' size
     //! 
-    //! \param[in] text - Window text
+    //! \param[in] size - Window size
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t text);
+    void  set(value_t size);
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowTextProperty - Define window text property type 
+  //! \alias SizeProperty - Define window size property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowTextProperty = Property<WindowTextPropertyImpl<ENC>>;
+  using SizeProperty = Property<SizePropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_TEXT_PROPERTY_HPP
+#endif // WTL_WINDOW_SIZE_PROPERTY_HPP

@@ -1,17 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowFontPropertyImpl.hpp
-//! \brief Implementation for window font property accessors/mutators (resolves circular dependency)
+//! \file wtl\windows\properties\StylePropertyImpl.hpp
+//! \brief Implementation for window style property accessors/mutators (resolves circular dependency)
 //! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
-#define WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
+#ifndef WTL_WINDOW_STYLE_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_STYLE_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/casts/BooleanCast.hpp"                         //!< BooleanCast
-#include "wtl/windows/properties/WindowFontProperty.hpp"     //!< WindowFontProperty
+#include "wtl/casts/EnumCast.hpp"                            //!< EnumCast
+#include "wtl/windows/properties/StyleProperty.hpp"    //!< StyleProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -23,43 +23,43 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowFontPropertyImpl::get const
-  //! Get the window font
+  // StylePropertyImpl::get const
+  //! Get the window style
   //! 
-  //! \return value_t - Current font if window exists, otherwise 'initial' font
+  //! \return value_t - Current style if window exists, otherwise 'initial' style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowFontPropertyImpl<ENC>::value_t  WindowFontPropertyImpl<ENC>::get() const 
+  typename StylePropertyImpl<ENC>::value_t  StylePropertyImpl<ENC>::get() const 
   {
-    // Return shared handle
+    // [EXISTS] Query window Style
+    if (this->Window.exists())
+      return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+        
+    // Return cached
     return base::get();
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowFontPropertyImpl::set 
-  //! Set the current window font iff window exists. If the window does not exist, this has no affect.
+  // StylePropertyImpl::set 
+  //! Set the current window style iff window exists, otherwise 'initial' style
   //! 
-  //! \param[in] font - Window font
+  //! \param[in] style - Window style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowFontPropertyImpl<ENC>::set(value_t font) 
+  void  StylePropertyImpl<ENC>::set(value_t style) 
   {
-    static constexpr bool redraw = true;
+    // [EXISTS] Set window Style
+    if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
+      throw platform_error(HERE, "Unable to set window style");
 
-    // [EXISTS] Operation is ignored if ¬exists
-    if (this->Window.exists())
-    {
-      // Set window font & redraw
-      this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(redraw)); 
-
-      // Updated ref-counted shared handle
-      base::set(font);
-    }
+    // Store value
+    base::set(style);
   }
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
+#endif // WTL_WINDOW_STYLE_PROPERTY_IMPL_HPP
+

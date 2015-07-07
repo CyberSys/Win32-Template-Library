@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowEnabledProperty.hpp
+//! \file wtl\windows\properties\EnabledProperty.hpp
 //! \brief Encapsulates the state of a window (enabled/disabled) in a boolean property
 //! \date 5 July 2015
 //! \author Nick Crowley
@@ -19,19 +19,19 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowEnabledPropertyImpl - Encapsulates the state of a window (enabled/disabled) in a read/write boolean property.
+  //! \struct EnabledPropertyImpl - Encapsulates the state of a window (enabled/disabled) in a read/write boolean property.
   //! 
   //! \tparam ENC - Window encoding
   //!
   //! \remarks When the window does not exist this provides the initial value used during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowEnabledPropertyImpl : WindowPropertyImpl<ENC,bool,PropertyAccess::ReadWrite>
+  struct EnabledPropertyImpl : WindowPropertyImpl<ENC,bool,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowEnabledPropertyImpl;
+    using type = EnabledPropertyImpl;
 
     //! \alias base - Define base type
     using base = WindowPropertyImpl<ENC,bool,PropertyAccess::ReadWrite>;
@@ -44,19 +44,19 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowEnabledPropertyImpl::WindowEnabledPropertyImpl
+    // EnabledPropertyImpl::EnabledPropertyImpl
     //! Create with initial value
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial enabled state
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowEnabledPropertyImpl(WindowBase<ENC>& wnd, bool init) : base(wnd, init)
+    EnabledPropertyImpl(WindowBase<ENC>& wnd, bool init) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowEnabledPropertyImpl::get const
+    // EnabledPropertyImpl::get const
     //! Get the window state
     //! 
     //! \return value_t - Current state if window exists, otherwise 'initial' state
@@ -66,7 +66,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowEnabledPropertyImpl::set 
+    // EnabledPropertyImpl::set 
     //! Set the current window state iff window exists, otherwise 'initial' state
     //! 
     //! \param[in] state - Window state
@@ -76,12 +76,12 @@ namespace wtl
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowEnabledProperty - Define window visibliity property type 
+  //! \alias EnabledProperty - Define window visibliity property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowEnabledProperty = Property<WindowEnabledPropertyImpl<ENC>>;
+  using EnabledProperty = Property<EnabledPropertyImpl<ENC>>;
 
       
 } // namespace wtl

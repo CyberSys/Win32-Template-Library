@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowSizeProperty.hpp
-//! \brief Encapsulates the basic window size in a class-type property
+//! \file wtl\windows\properties\StyleProperty.hpp
+//! \brief Encapsulates the basic window style in an appropriate enumeration property
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_SIZE_PROPERTY_HPP
-#define WTL_WINDOW_SIZE_PROPERTY_HPP
+#ifndef WTL_WINDOW_STYLE_PROPERTY_HPP
+#define WTL_WINDOW_STYLE_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Size.hpp"                             //!< SizeL
 #include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
+#include "wtl/platform/WindowFlags.hpp"                   //!< WindowStyle
 #include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -20,73 +20,72 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowSizePropertyImpl - Encapsulates the window-size in a read/write class-type property.
+  //! \struct StylePropertyImpl - Encapsulates the basic-window-style in a read/write property.
   //! 
   //! \tparam ENC - Window encoding
   //!
-  //! \remarks When the window does NOT exist, this provides the initial size used during window creation.
-  //! \remarks When the window DOES exist, the size is determined from the WindowRect, and vice versa when it does not exist.
+  //! \remarks When the window does not exist this provides the initial value used during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowSizePropertyImpl : WindowPropertyImpl<ENC,SizeL,PropertyAccess::ReadWrite>
+  struct StylePropertyImpl : WindowPropertyImpl<ENC,WindowStyle,PropertyAccess::ReadWrite>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowSizePropertyImpl;
+    using type = StylePropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,SizeL,PropertyAccess::ReadWrite>;
+    using base = WindowPropertyImpl<ENC,WindowStyle,PropertyAccess::ReadWrite>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
-    
+
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowSizePropertyImpl::WindowSizePropertyImpl
+    // StylePropertyImpl::StylePropertyImpl
     //! Create with initial value
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial window size
+    //! \param[in] init - Initial window style
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowSizePropertyImpl(WindowBase<ENC>& wnd, value_t size) : base(wnd, size)
+    StylePropertyImpl(WindowBase<ENC>& wnd, WindowStyle style) : base(wnd, style)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowSizePropertyImpl::get const
-    //! Get the window size
+    // StylePropertyImpl::get const
+    //! Get the window style
     //! 
-    //! \return value_t - Current size if window exists, otherwise 'initial' size
+    //! \return value_t - Current style if window exists, otherwise 'initial' style
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowSizePropertyImpl::set 
-    //! Set the current window size iff window exists, otherwise 'initial' size
+    // StylePropertyImpl::set 
+    //! Set the current window style iff window exists, otherwise 'initial' style
     //! 
-    //! \param[in] size - Window size
+    //! \param[in] style - Window style
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t size);
+    void  set(value_t style);
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowSizeProperty - Define window size property type 
+  //! \alias StyleProperty - Define window style property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowSizeProperty = Property<WindowSizePropertyImpl<ENC>>;
+  using StyleProperty = Property<StylePropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_SIZE_PROPERTY_HPP
+#endif // WTL_WINDOW_STYLE_PROPERTY_HPP
