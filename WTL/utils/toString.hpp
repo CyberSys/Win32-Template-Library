@@ -50,11 +50,14 @@ namespace wtl
   template <typename ENUM> 
   const char* toString(ENUM e, std::enable_if_t<!is_attribute<ENUM>::value>* = nullptr)
   {
+    using std::begin;   //!< Best practice (ADL idiom)
+    using std::end;     //!< Best practice (ADL idiom)
+
     CHECKED_INDEX(e, min_value<ENUM>::value, max_value<ENUM>::value+1);
 
     // Lookup value
-    auto first = std::begin(enum_values<ENUM>::values);
-    auto last = std::end(enum_values<ENUM>::values);
+    auto first = begin(enum_values<ENUM>::values);
+    auto last = end(enum_values<ENUM>::values);
     auto v = std::find(first, last, e);
      
     // Return associated name

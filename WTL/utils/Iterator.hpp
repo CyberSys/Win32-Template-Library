@@ -11,13 +11,13 @@
 #include "wtl/WTL.hpp"
 #include <iterator>                   //!< std::iterator
 
-//! \namespace std - Namespace injection
-namespace std
+//! \namespace wtl - Windows template library
+namespace wtl
 {
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  // std::begin
-  //! Get the start of a statically allocated array of unspecified length
+  // wtl::begin
+  //! Returns the position of the first element of a statically allocated array of unspecified length
   //! 
   //! \tparam ELEMENT - Element type
   //!
@@ -32,13 +32,15 @@ namespace std
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // std::end
-  //! Get the end of a statically allocated array of unspecified length
+  // wtl::end
+  //! Returns the position immediately beyond the end of a statically allocated array of unspecified length
   //! 
   //! \tparam ELEMENT - Element type
   //!
   //! \param[in] r - Statically allocated array of unspecified length
   //! \return ELEMENT* - Position beyond final element
+  //! 
+  //! \remarks Best-practice when using non-member
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ELEMENT> 
 	ELEMENT* end(ELEMENT (&r)[]) noexcept

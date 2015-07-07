@@ -62,11 +62,6 @@ namespace wtl
   template <typename E>
   struct enum_names; /* Undefined */
 
-  //{
-  //  //! \var values - String representations of values
-  //  static const char* values[];
-  //};
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct enum_values - Provides a contiguous values array for enumeration literals
   //! 
@@ -75,10 +70,6 @@ namespace wtl
   template <typename E>
   struct enum_values; /* Undefined */
 
-  //{
-  //  //! \var values - Values array
-  //  static constexpr E values[1] = { E() };
-  //};
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enum_values_t - Enumeration literal sequence type accessor
@@ -87,13 +78,11 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename E>
   using enum_values_t = typename enum_values<E>::type;
-}
 
-//! \namespace std - Namespace injection
-namespace std
-{
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
-  // std::begin
+  // wtl::begin
   //! Get the start iterator of an enumeration values collection
   //! 
   //! \tparam T - Enumeration type
@@ -101,13 +90,13 @@ namespace std
   //! \return T* - Position of first value in collection
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  ::wtl::enable_if_enum_t<T,T*>  begin()
+  enable_if_enum_t<T,T*>  begin()
   {
-    return begin(::wtl::enum_values<T>::values);
+    return std::begin(enum_values<T>::values);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // std::end
+  // wtl::end
   //! Get the end iterator of an enumeration values collection
   //! 
   //! \tparam T - Enumeration type
@@ -115,16 +104,11 @@ namespace std
   //! \return T* - Position immediately beyond last value in collection
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  ::wtl::enable_if_enum_t<T,T*>  end()
+  enable_if_enum_t<T,T*>  end()
   {
-    return end(::wtl::enum_values<T>::values);
+    return std::end(::wtl::enum_values<T>::values);
   };
-}
 
-
-//! \namespace wtl - Windows template library
-namespace wtl
-{
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | constexpr
