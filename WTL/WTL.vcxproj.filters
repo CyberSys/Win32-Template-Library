@@ -42,14 +42,14 @@
     <Filter Include="Windows\Skins">
       <UniqueIdentifier>{057bd3f3-5e0d-4c11-b455-019d0b3622d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Properties">
-      <UniqueIdentifier>{db7c4fd7-5d47-4b72-9970-194a584151c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Windows\Events">
       <UniqueIdentifier>{cde07ef2-4070-4f6e-94a4-31cce50156af}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows\Commands">
       <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Properties">
+      <UniqueIdentifier>{db7c4fd7-5d47-4b72-9970-194a584151c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
