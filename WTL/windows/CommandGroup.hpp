@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\CommandGroup.hpp
-//! \brief Provides a collection of gui actions (for usage with menus/toolbars)
+//! \brief Provides a collection of gui commands (for usage with menus/toolbars)
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_ACTION_GROUP_HPP
-#define WTL_ACTION_GROUP_HPP
+#ifndef WTL_COMMAND_GROUP_HPP
+#define WTL_COMMAND_GROUP_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/windows/Command.hpp"          //!< Command
@@ -30,8 +30,8 @@ namespace wtl
     //! \alias type - Define own type
     using type = CommandGroup<ENC>;
     
-    //! \alias action_t - Define action pointer type
-    using action_t = Command<ENC>;
+    //! \alias command_t - Define command pointer type
+    using command_t = Command<ENC>;
     
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -73,12 +73,12 @@ namespace wtl
     //! Create populated collection
     //! 
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
-    //! \param[in] cmds - List of actions
+    //! \param[in] cmds - List of commands
     /////////////////////////////////////////////////////////////////////////////////////////
-    CommandGroup(CommandGroupId id, std::initializer_list<action_t*>&& cmds) : CommandGroup(id)
+    CommandGroup(CommandGroupId id, std::initializer_list<command_t*>&& cmds) : CommandGroup(id)
     {
       // Populate
-      for (action_t* c : cmds)
+      for (command_t* c : cmds)
         *this += c;
     }
     
@@ -105,13 +105,13 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CommandGroup::find const
-    //! Find an action within the group
+    //! Find an command within the group
     //! 
-    //! \return CommandPtr<encoding> - Shared action pointer, possibly empty
+    //! \return CommandPtr<encoding> - Shared command pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
     CommandPtr<encoding>  find(CommandId id) const 
     {
-      // Lookup action & return if found
+      // Lookup command & return if found
       auto pos = base::find(id);
       if (pos != base::end())
         return pos->second; 
@@ -157,12 +157,12 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CommandGroup::operator +=
-    //! Add an action to the group
+    //! Add an command to the group
     //!
     //! \param[in] *cmd - Command
     //! \return CommandGroup& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
-    CommandGroup& operator += (action_t* cmd)
+    CommandGroup& operator += (command_t* cmd)
     {
       // Insert/overwrite
       this->emplace(cmd->ident(), CommandPtr<encoding>(cmd));
@@ -170,6 +170,7 @@ namespace wtl
     }
   };
   
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CommandGroupPtr - Shared Command group pointer
   //! 
@@ -178,6 +179,68 @@ namespace wtl
   template <Encoding ENC>
   using CommandGroupPtr = std::shared_ptr<CommandGroup<ENC>>;
         
+
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct CommandGroupCollection - Provides a convenient container for groups of Gui Commands
+  //! 
+  //! \tparam ENC - Command character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  struct CommandGroupCollection : std::map<CommandGroupId,CommandGroupPtr<ENC>>
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+    //! \alias base - Define base type
+    using base = std::map<CommandGroupId,CommandGroupPtr<ENC>>;
+      
+    //! \alias type - Define own type
+    using type = CommandGroupCollection;
+      
+    //! \var encoding - Define window character encoding
+    static constexpr Encoding encoding = ENC;
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CommandGroupCollection::find const
+    //! Recursively searches each group for a command
+    //! 
+    //! \param[in] id - Command identifier
+    //! \return CommandPtr<ENC> - Shared Command pointer, possibly empty
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CommandPtr<encoding>  find(CommandId id) const 
+    {
+      // Lookup command
+      for (const auto& group : *this)
+        if (auto cmd = group.second->find(id))
+          return cmd;
+
+      // [NOT FOUND] Return empty pointer
+      return CommandPtr<encoding>(nullptr);
+    }
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+      
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CommandGroupCollection::operator +=
+    //! Add a group to the collection
+    //!
+    //! \param[in] *group - Command group
+    //! \return CommandGroupCollection& - Reference to self
+    //! 
+    //! \throw wtl::invalid_argument - [Debug only] Missing group
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CommandGroupCollection& operator += (CommandGroup<encoding>* group)
+    {
+      REQUIRED_PARAM(group);
+
+      // Insert/overwrite
+      emplace(group->ident(), CommandGroupPtr<encoding>(group));
+      return *this;
+    }
+  };
 } // namespace wtl
 
-#endif // WTL_ACTION_GROUP_HPP
+#endif // WTL_COMMAND_GROUP_HPP

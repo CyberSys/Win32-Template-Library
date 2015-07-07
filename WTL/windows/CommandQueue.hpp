@@ -24,19 +24,19 @@ namespace wtl
   struct CommandQueue
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-    //! \alias char_t - Define command character type
-    using char_t = encoding_char_t<ENC>;
-
+    
     //! \var encoding - Define command character encoding 
     static constexpr Encoding encoding = ENC;
 
-    //! \alias action_t - Define command base type
-    using action_t = Command<ENC>;
+    //! \alias char_t - Define command character type
+    using char_t = encoding_char_t<encoding>;
+
+    //! \alias command_t - Define command base type
+    using command_t = Command<encoding>;
 
   protected:
     //! \alias storage_t - Define storage type
-    using storage_t = CommandPtr<ENC>;
+    using storage_t = CommandPtr<encoding>;
 
     //! \alias collection_t - Define collection type
     using collection_t = Stack<storage_t>;
@@ -81,11 +81,11 @@ namespace wtl
     // CommandQueue::peekRepeat const
     //! Peek the last reverted command (next repeatable command)
     //! 
-    //! \return const action_t& - Immutable reference to next repeatable command 
+    //! \return const command_t& - Immutable reference to next repeatable command 
     //! 
     //! \throw logic_error - No repeatable commands exist
     /////////////////////////////////////////////////////////////////////////////////////////
-    const action_t&  peekRepeat() const
+    const command_t&  peekRepeat() const
     {
       // Ensure non-empty
       if (RepeatableCommands.empty())
@@ -99,11 +99,11 @@ namespace wtl
     // CommandQueue::peekRevert const
     //! Peek the last executed command (next revertible command)
     //! 
-    //! \return const action_t& - Immutable reference to next revertible command 
+    //! \return const command_t& - Immutable reference to next revertible command 
     //! 
     //! \throw logic_error - No revertible commands exist
     /////////////////////////////////////////////////////////////////////////////////////////
-    const action_t&  peekRevert() const
+    const command_t&  peekRevert() const
     {
       // Ensure non-empty
       if (ExecutedCommands.empty())
@@ -135,7 +135,7 @@ namespace wtl
     //! 
     //! \remarks If the command logic throws, the queue is unaffected
     /////////////////////////////////////////////////////////////////////////////////////////
-    void execute(action_t* cmd)
+    void execute(command_t* cmd)
     {
       REQUIRED_PARAM(cmd);
 

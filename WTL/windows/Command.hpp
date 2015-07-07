@@ -5,8 +5,8 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_ACTION_HPP
-#define WTL_ACTION_HPP
+#ifndef WTL_COMMAND_HPP
+#define WTL_COMMAND_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
@@ -284,4 +284,4 @@ namespace wtl
   
 } // namespace wtl
 
-#endif // WTL_ACTION_HPP
+#endif // WTL_COMMAND_HPP

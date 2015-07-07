@@ -26,14 +26,13 @@
 #include "wtl/platform/WindowFlags.hpp"                           //!< WindowStyle
 #include "wtl/platform/CommonApi.hpp"                             //!< send_message
 #include "wtl/platform/WindowMessage.hpp"                         //!< WindowMesssage
-#include "wtl/windows/Command.hpp"                                 //!< Command
-#include "wtl/windows/CommandGroup.hpp"                            //!< CommandGroup
-#include "wtl/windows/CommandGroupCollection.hpp"                  //!< CommandGroup
-#include "wtl/windows/CommandQueue.hpp"                            //!< CommandQueue
+#include "wtl/windows/Command.hpp"                                //!< Command
+#include "wtl/windows/CommandGroup.hpp"                           //!< CommandGroup
+#include "wtl/windows/CommandQueue.hpp"                           //!< CommandQueue
 #include "wtl/windows/Property.hpp"                               //!< Property
 #include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
 #include "wtl/windows/WindowMenu.hpp"                             //!< WindowMenu
-#include "wtl/windows/events/CommandEvent.hpp"                     //!< CommandEvent
+#include "wtl/windows/events/CommandEvent.hpp"                    //!< CommandEvent
 #include "wtl/windows/events/CloseWindowEvent.hpp"                //!< CloseWindowEvent
 #include "wtl/windows/events/CreateWindowEvent.hpp"               //!< CreateWindowEven
 #include "wtl/windows/events/CtrlCommandEvent.hpp"                //!< CtrlCommandEvent
@@ -113,8 +112,8 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<encoding>;
     
-    //! \alias action_t - Define Command type
-    using action_t = Command<encoding>;
+    //! \alias command_t - Define Command type
+    using command_t = Command<encoding>;
     
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<encoding>;
@@ -630,7 +629,7 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::execute
-    //! Executes an Command, adding it to the actions queue
+    //! Executes an Command, adding it to the commands queue
     //! 
     //! \param[in] id - Command id
     //!
@@ -638,7 +637,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void  execute(CommandId id) 
     { 
-      // Lookup action and execute 
+      // Lookup command and execute 
       if (auto cmd = CommandGroups.find(id))
         Commands.execute(cmd->clone());
     }
@@ -764,7 +763,7 @@ namespace wtl
             // [CONTROL] Reflect to sender
             ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
           else
-            // [ACTION] Raise event (Default executes the appropriate command object)
+            // [COMMAND] Raise event (Default executes the appropriate command object)
             ret = Command.raise(CommandEventArgs<encoding>(w,l));
           break;
 

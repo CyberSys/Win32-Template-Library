@@ -36,20 +36,20 @@
     <Filter Include="Windows\Controls">
       <UniqueIdentifier>{2c8faf7f-6cc2-42e3-bc97-397a2b7818be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Events">
-      <UniqueIdentifier>{cde07ef2-4070-4f6e-94a4-31cce50156af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{822d32d8-6b48-4e4e-b249-2cf7dba0b501}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows\Skins">
       <UniqueIdentifier>{057bd3f3-5e0d-4c11-b455-019d0b3622d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Actions">
-      <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Windows\Properties">
       <UniqueIdentifier>{db7c4fd7-5d47-4b72-9970-194a584151c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Events">
+      <UniqueIdentifier>{cde07ef2-4070-4f6e-94a4-31cce50156af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Commands">
+      <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -258,7 +258,7 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="utils\Queue.hpp">
       <Filter>Utils</Filter>
@@ -288,7 +288,7 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\ExitProgramCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="utils\toString.hpp">
       <Filter>Utils</Filter>
@@ -327,22 +327,22 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\CutClipboardCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\NewDocumentCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\OpenDocumentCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="windows\commands\SaveDocumentCommand.hpp">
-      <Filter>Windows\Actions</Filter>
+      <Filter>Windows\Commands</Filter>
     </ClInclude>
     <ClInclude Include="utils\SFINAE.hpp">
       <Filter>Utils</Filter>
@@ -549,9 +549,6 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="windows\CommandGroup.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\CommandGroupCollection.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="windows\CommandQueue.hpp">

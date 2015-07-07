@@ -116,7 +116,7 @@ namespace wtl
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::action_id
+  //! wtl::command_id
   //! Creates a strongly typed command id from any integral or enumeration type
   //!
   //! \tparam TYPE - Integral or enumeration type
@@ -125,7 +125,7 @@ namespace wtl
   //! \return CommandId - CommandId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
-  CommandId  action_id(VALUE id)
+  CommandId  command_id(VALUE id)
   {
     // Convert into underlying type then cast to enumeration
     return enum_cast<CommandId>( static_cast<std::underlying_type_t<CommandId>>(id) );
@@ -156,7 +156,7 @@ namespace wtl
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::action_group_id
+  //! wtl::command_group_id
   //! Creates a strongly typed command group id from any integral or enumeration type
   //!
   //! \tparam TYPE - Integral or enumeration type
@@ -165,7 +165,7 @@ namespace wtl
   //! \return CommandGroupId - CommandGroupId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
-  CommandGroupId  action_group_id(VALUE id)
+  CommandGroupId  command_group_id(VALUE id)
   {
     // Convert into underlying type then cast to enumeration
     return enum_cast<CommandGroupId>( static_cast<std::underlying_type_t<CommandGroupId>>(id) );
