@@ -445,7 +445,7 @@ namespace wtl
         }
         
         // Delegate to instance procedure
-        LResult msg = wnd->routeMessage(static_cast<WindowMessage>(message), wParam, lParam);
+        LResult msg = wnd->route(static_cast<WindowMessage>(message), wParam, lParam);
 
         // [HANDLED/REFLECTED] Return result
         if (msg.Route != MsgRoute::Unhandled)
@@ -735,7 +735,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::routeMessage
+    // WindowBase::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
     //!
     //! \param[in] message - Window message identifier
@@ -743,7 +743,7 @@ namespace wtl
     //! \param[in] l - [optional] Second message parameter
     //! \return LResult - Message routing and result 
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult routeMessage(WindowMessage message, ::WPARAM w, ::LPARAM l)
+    virtual LResult route(WindowMessage message, ::WPARAM w, ::LPARAM l)
     {
       try
       {

@@ -138,7 +138,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::routeMessage
+    // Button::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
     //!
     //! \param[in] message - Window message identifier
@@ -146,7 +146,7 @@ namespace wtl
     //! \param[in] l - [optional] Second message parameter
     //! \return LResult - Message routing and result 
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult routeMessage(WindowMessage message, WPARAM w, LPARAM l) override
+    LResult route(WindowMessage message, WPARAM w, LPARAM l) override
     {
       try
       {
@@ -172,7 +172,7 @@ namespace wtl
         }
 
         // [UNHANDLED] Return result & routing
-        return base::routeMessage(message, w, l);
+        return base::route(message, w, l);
       }
       catch (exception& e)
       {
