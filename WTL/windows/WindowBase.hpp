@@ -931,47 +931,6 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::getText
-    //! Get the window text
-    //! 
-    //! \tparam LEN - Output buffer capacity
-    //! 
-    //! \param[in,out] &txt - On return this contains the window text
-    //! \return int32_t - Length in characters
-    //! 
-    //! \throw wtl::platform_error - Unable to get window text
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <unsigned LEN>
-    //int32_t getText(const CharArray<encoding,LEN>& txt)
-    //{
-    //  // Lookup window text
-    //  int32_t n = getFunc<char_t>(::GetWindowTextA,::GetWindowTextW)(Handle, txt, LEN);
-    //  if (n || !::GetLastError())
-    //    return n;
-
-    //  // Failed: Error
-    //  throw platform_error(HERE, "Unable to get window text");
-    //}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::setText
-    //! Set the window text
-    //! 
-    //! \tparam LEN - Input buffer capacity
-    //! 
-    //! \param[in] const& txt - Window text
-    //! 
-    //! \throw wtl::platform_error - Unable to set window text
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <unsigned LEN>
-    //void setText(const CharArray<encoding,LEN>& txt)
-    //{
-    //  // Set window text
-    //  if (getFunc<char_t>(::SetWindowTextA,::SetWindowTextW)(Handle, txt) == False)
-    //    throw platform_error(HERE, "Unable to set window text");
-    //}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::update
     //! Updates the window (Sends a WM_PAINT message if any portion of the window is invalidated)
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -1001,4 +960,18 @@ namespace wtl
     
 } // namespace wtl
 
+
+#include "wtl/windows/properties/ClientRectPropertyImpl.hpp"          //!< ClientRectProperty
+#include "wtl/windows/properties/WindowEnabledPropertyImpl.hpp"       //!< WindowEnabledProperty
+#include "wtl/windows/properties/WindowFontPropertyImpl.hpp"          //!< WindowFontProperty
+#include "wtl/windows/properties/WindowIdPropertyImpl.hpp"            //!< WindowIdProperty
+#include "wtl/windows/properties/WindowPositionPropertyImpl.hpp"      //!< WindowPositionProperty
+#include "wtl/windows/properties/WindowRectPropertyImpl.hpp"          //!< WindowRectProperty
+#include "wtl/windows/properties/WindowSizePropertyImpl.hpp"          //!< WindowSizeProperty
+#include "wtl/windows/properties/WindowStylePropertyImpl.hpp"         //!< WindowStyleProperty
+#include "wtl/windows/properties/WindowStyleExPropertyImpl.hpp"       //!< WindowStyleExProperty
+#include "wtl/windows/properties/WindowTextPropertyImpl.hpp"          //!< WindowTextProperty
+#include "wtl/windows/properties/WindowTextLengthPropertyImpl.hpp"    //!< WindowTextLengthProperty
+#include "wtl/windows/properties/WindowVisibilityPropertyImpl.hpp"    //!< WindowVisibilityProperty
+  
 #endif // WTL_WINDOW_BASE_HPP

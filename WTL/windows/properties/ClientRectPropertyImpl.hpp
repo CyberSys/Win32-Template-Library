@@ -1,10 +1,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\ClientRectProperty.cpp
-//! \brief Implementation for 'ClientRect' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\ClientRectPropertyImpl.hpp
+//! \brief Implementation for 'ClientRect' property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_CLIENT_RECT_PROPERTY_IMPL_HPP
+#define WTL_CLIENT_RECT_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/windows/properties/ClientRectProperty.hpp"     //!< ClientRectProperty
@@ -42,7 +45,7 @@ namespace wtl
     else
     {
       // [¬EXISTS] Ensure size/position not 'default'
-      if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+      if (this->Window.Size == window_t::DefaultSize || this->Window.Position == window_t::DefaultPosition)
         throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
 
       // Calculate client from window rectangle 
@@ -86,4 +89,7 @@ namespace wtl
 
       
 } // namespace wtl
+
+#endif // WTL_CLIENT_RECT_PROPERTY_IMPL_HPP
+
 

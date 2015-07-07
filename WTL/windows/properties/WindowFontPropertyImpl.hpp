@@ -1,13 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowPositionProperty.cpp
-//! \brief Implementation for 'WindowPosition' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowFontPropertyImpl.hpp
+//! \brief Implementation for window font property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_FONT_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/properties/WindowPositionProperty.hpp"     //!< WindowPositionProperty
+#include "wtl/casts/BooleanCast.hpp"                         //!< BooleanCast
+#include "wtl/windows/properties/WindowFontProperty.hpp"     //!< WindowFontProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -19,41 +23,43 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowPositionPropertyImpl::get const
-  //! Get the window position
+  // WindowFontPropertyImpl::get const
+  //! Get the window font
   //! 
-  //! \return value_t - Current position if window exists, otherwise 'initial' position
+  //! \return value_t - Current font if window exists, otherwise 'initial' font
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowPositionPropertyImpl<ENC>::value_t  WindowPositionPropertyImpl<ENC>::get() const 
+  typename WindowFontPropertyImpl<ENC>::value_t  WindowFontPropertyImpl<ENC>::get() const 
   {
-    // [EXISTS] Derive window position from window rectangle 
-    if (this->Window.exists())
-      return this->Window.WindowRect().topLeft();
-
-    // [~EXISTS] Return cached position  (Offline window rectangle derived from position)
+    // Return shared handle
     return base::get();
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowPositionPropertyImpl::set 
-  //! Set the current window position iff window exists, otherwise 'initial' position
+  // WindowFontPropertyImpl::set 
+  //! Set the current window font iff window exists. If the window does not exist, this has no affect.
   //! 
-  //! \param[in] position - Window position
+  //! \param[in] font - Window font
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowPositionPropertyImpl<ENC>::set(value_t position) 
+  void  WindowFontPropertyImpl<ENC>::set(value_t font) 
   {
-    // [EXISTS] Resize current window rectangle   
+    static constexpr bool redraw = true;
+
+    // [EXISTS] Operation is ignored if ¬exists
     if (this->Window.exists())
-      this->Window.WindowRect = RectL(position, this->Window.Size());
-        
-    // Store position
-    base::set(position);
+    {
+      // Set window font & redraw
+      this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(redraw)); 
+
+      // Updated ref-counted shared handle
+      base::set(font);
+    }
   }
 
       
 } // namespace wtl
 
+#endif // WTL_WINDOW_FONT_PROPERTY_IMPL_HPP

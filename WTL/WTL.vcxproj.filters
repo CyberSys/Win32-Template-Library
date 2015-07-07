@@ -524,6 +524,42 @@
     <ClInclude Include="windows\properties\ClientRectProperty.hpp">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="windows\properties\ClientRectPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowEnabledPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowFontPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowIdPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowPositionPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowRectPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowSizePropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowStyleExPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowStylePropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowTextLengthPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowTextPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowVisibilityPropertyImpl.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
@@ -546,42 +582,6 @@
     </ClCompile>
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowEnabledProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowIdProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowStyleExProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowStyleProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowTextLengthProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowVisibilityProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowFontProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowTextProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowSizeProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowPositionProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\WindowRectProperty.cpp">
-      <Filter>Windows\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\properties\ClientRectProperty.cpp">
-      <Filter>Windows\Properties</Filter>
     </ClCompile>
     <ClCompile Include="utils\ExceptionLog.cpp">
       <Filter>Utils</Filter>

@@ -1,14 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowStyleProperty.cpp
-//! \brief Implementation for 'WindowStyle' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowStyleExPropertyImpl.hpp
+//! \brief Implementation for extended window style property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_EX_WINDOW_STYLE_PROPERTY_IMPL_HPP
+#define WTL_EX_WINDOW_STYLE_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"                            //!< EnumCast
-#include "wtl/windows/properties/WindowStyleProperty.hpp"    //!< WindowStyleProperty
+#include "wtl/windows/properties/WindowStyleExProperty.hpp"    //!< WindowStyleExProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -20,17 +23,17 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowStylePropertyImpl::get const
-  //! Get the window style
+  // WindowStyleExPropertyImpl::get const
+  //! Get the extended window style
   //! 
   //! \return value_t - Current style if window exists, otherwise 'initial' style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowStylePropertyImpl<ENC>::value_t  WindowStylePropertyImpl<ENC>::get() const 
+  typename WindowStyleExPropertyImpl<ENC>::value_t  WindowStyleExPropertyImpl<ENC>::get() const 
   {
-    // [EXISTS] Query window Style
+    // [EXISTS] Query window StyleEx
     if (this->Window.exists())
-      return enum_cast<WindowStyle>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+      return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
         
     // Return cached
     return base::get();
@@ -39,17 +42,17 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowStylePropertyImpl::set 
-  //! Set the current window style iff window exists, otherwise 'initial' style
+  // WindowStyleExPropertyImpl::set 
+  //! Set the current extended window style iff window exists, otherwise 'initial' style
   //! 
-  //! \param[in] style - Window style
+  //! \param[in] style - Extended window style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowStylePropertyImpl<ENC>::set(value_t style) 
+  void  WindowStyleExPropertyImpl<ENC>::set(value_t style) 
   {
-    // [EXISTS] Set window Style
-    if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
-      throw platform_error(HERE, "Unable to set window style");
+    // [EXISTS] Set window StyleEx
+    if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
+      throw platform_error(HERE, "Unable to set extended window style");
 
     // Store value
     base::set(style);
@@ -57,4 +60,6 @@ namespace wtl
 
       
 } // namespace wtl
+
+#endif // WTL_EX_WINDOW_STYLE_PROPERTY_IMPL_HPP
 

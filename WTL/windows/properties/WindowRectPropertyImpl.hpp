@@ -1,10 +1,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowRectProperty.cpp
-//! \brief Implementation for 'WindowRect' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowRectPropertyImpl.hpp
+//! \brief Implementation for window rect property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_WINDOW_RECT_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_RECT_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/windows/properties/WindowRectProperty.hpp"     //!< WindowRectProperty
@@ -42,7 +45,7 @@ namespace wtl
     }
 
     // [DEFAULT] Error: Cannot generate a window rectangle from default co-ordinates
-    if (this->Window.Size == DefaultSize || this->Window.Position == DefaultPosition)
+    if (this->Window.Size == window_t::DefaultSize || this->Window.Position == window_t::DefaultPosition)
       throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
 
     // [~EXISTS] Generate from cached size & position
@@ -93,4 +96,6 @@ namespace wtl
 
       
 } // namespace wtl
+
+#endif // WTL_WINDOW_RECT_PROPERTY_IMPL_HPP
 

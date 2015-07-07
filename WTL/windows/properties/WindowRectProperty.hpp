@@ -40,6 +40,9 @@ namespace wtl
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
     
+    //! \alias window_t - Define window type
+    using window_t = WindowBase<ENC>;
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------

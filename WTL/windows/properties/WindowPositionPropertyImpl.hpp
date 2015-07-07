@@ -1,13 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowSizeProperty.cpp
-//! \brief Implementation for 'WindowSize' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowPositionPropertyImpl.hpp
+//! \brief Implementation for window position property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_WINDOW_POSITION_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_POSITION_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/properties/WindowSizeProperty.hpp"     //!< WindowSizeProperty
+#include "wtl/windows/properties/WindowPositionProperty.hpp"     //!< WindowPositionProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -19,41 +22,43 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowSizePropertyImpl::get const
-  //! Get the window size
+  // WindowPositionPropertyImpl::get const
+  //! Get the window position
   //! 
-  //! \return value_t - Current size if window exists, otherwise 'initial' size
+  //! \return value_t - Current position if window exists, otherwise 'initial' position
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowSizePropertyImpl<ENC>::value_t  WindowSizePropertyImpl<ENC>::get() const 
+  typename WindowPositionPropertyImpl<ENC>::value_t  WindowPositionPropertyImpl<ENC>::get() const 
   {
-    // [EXISTS] Derive window size from window rectangle 
+    // [EXISTS] Derive window position from window rectangle 
     if (this->Window.exists())
-      return this->Window.WindowRect().size();
+      return this->Window.WindowRect().topLeft();
 
-    // [~EXISTS] Return cached size  (Offline window rectangle derived from size)
+    // [~EXISTS] Return cached position  (Offline window rectangle derived from position)
     return base::get();
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowSizePropertyImpl::set 
-  //! Set the current window size iff window exists, otherwise 'initial' size
+  // WindowPositionPropertyImpl::set 
+  //! Set the current window position iff window exists, otherwise 'initial' position
   //! 
-  //! \param[in] size - Window size
+  //! \param[in] position - Window position
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowSizePropertyImpl<ENC>::set(value_t size) 
+  void  WindowPositionPropertyImpl<ENC>::set(value_t position) 
   {
-    // [EXISTS] Resize current window rectangle 
+    // [EXISTS] Resize current window rectangle   
     if (this->Window.exists())
-      this->Window.WindowRect = RectL(this->Window.Position(), size);
+      this->Window.WindowRect = RectL(position, this->Window.Size());
         
-    // Store size
-    base::set(size);
+    // Store position
+    base::set(position);
   }
 
       
 } // namespace wtl
+
+#endif // WTL_WINDOW_POSITION_PROPERTY_IMPL_HPP
 

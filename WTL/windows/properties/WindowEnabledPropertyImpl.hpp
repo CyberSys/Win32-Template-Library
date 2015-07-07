@@ -1,10 +1,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowEnabledProperty.cpp
-//! \brief Implementation for 'WindowEnabled' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowEnabledPropertyImpl.hpp
+//! \brief Implementation for window enabled property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_WINDOW_ENABLED_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_ENABLED_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/BooleanCast.hpp"                              //!< BooleanCast
@@ -58,3 +61,4 @@ namespace wtl
       
 } // namespace wtl
 
+#endif    // WTL_WINDOW_ENABLED_PROPERTY_IMPL_HPP

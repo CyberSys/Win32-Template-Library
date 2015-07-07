@@ -1,14 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowStyleExProperty.cpp
-//! \brief Implementation for 'WindowStyleEx' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowSizePropertyImpl.hpp
+//! \brief Implementation for window size property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_WINDOW_SIZE_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_SIZE_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"                            //!< EnumCast
-#include "wtl/windows/properties/WindowStyleExProperty.hpp"    //!< WindowStyleExProperty
+#include "wtl/windows/properties/WindowSizeProperty.hpp"     //!< WindowSizeProperty
 #include "wtl/windows/WindowBase.hpp"                        //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -20,41 +22,43 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowStyleExPropertyImpl::get const
-  //! Get the extended window style
+  // WindowSizePropertyImpl::get const
+  //! Get the window size
   //! 
-  //! \return value_t - Current style if window exists, otherwise 'initial' style
+  //! \return value_t - Current size if window exists, otherwise 'initial' size
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename WindowStyleExPropertyImpl<ENC>::value_t  WindowStyleExPropertyImpl<ENC>::get() const 
+  typename WindowSizePropertyImpl<ENC>::value_t  WindowSizePropertyImpl<ENC>::get() const 
   {
-    // [EXISTS] Query window StyleEx
+    // [EXISTS] Derive window size from window rectangle 
     if (this->Window.exists())
-      return enum_cast<WindowStyleEx>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
-        
-    // Return cached
+      return this->Window.WindowRect().size();
+
+    // [~EXISTS] Return cached size  (Offline window rectangle derived from size)
     return base::get();
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // WindowStyleExPropertyImpl::set 
-  //! Set the current extended window style iff window exists, otherwise 'initial' style
+  // WindowSizePropertyImpl::set 
+  //! Set the current window size iff window exists, otherwise 'initial' size
   //! 
-  //! \param[in] style - Extended window style
+  //! \param[in] size - Window size
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  WindowStyleExPropertyImpl<ENC>::set(value_t style) 
+  void  WindowSizePropertyImpl<ENC>::set(value_t size) 
   {
-    // [EXISTS] Set window StyleEx
-    if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
-      throw platform_error(HERE, "Unable to set extended window style");
-
-    // Store value
-    base::set(style);
+    // [EXISTS] Resize current window rectangle 
+    if (this->Window.exists())
+      this->Window.WindowRect = RectL(this->Window.Position(), size);
+        
+    // Store size
+    base::set(size);
   }
 
       
 } // namespace wtl
+
+#endif // WTL_WINDOW_SIZE_PROPERTY_IMPL_HPP
 

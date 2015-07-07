@@ -85,7 +85,8 @@ namespace wtl
     //! 
     //! \return value_t - Current value
     //! 
-    //! \remarks Using this method requires read access
+    //! \remarks Using this method requires read access. It is not virtual by design, it may be excluded from the candidate pool by an SFINAE expression.
+    //! \remarks Derived implementations should customize behaviour via custom methods (ie. template name-lookup) rather than simple sub-type polymorphism.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = std::enable_if_t<read>>
     value_t  get() const
@@ -101,7 +102,8 @@ namespace wtl
     //! 
     //! \param[in] val - New value 
     //! 
-    //! \remarks Using this method requires write access
+    //! \remarks Using this method requires write access. It is not virtual by design, it may be excluded from the candidate pool by an SFINAE expression.
+    //! \remarks Derived implementations should customize behaviour via custom methods (ie. template name-lookup) rather than simple sub-type polymorphism.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = std::enable_if_t<write>>
     void  set(value_t val) 
@@ -115,24 +117,19 @@ namespace wtl
   //! \struct Property - Provides a HLL style property for values of any type, and overloads convenient operators.
   //! 
   //! \tparam IMPL - Type providing the implementation of the property value
-  //! \tparam INTERNAL1 - [optional] Type permitted to perform internal mutation
-  //! \tparam INTERNAL2 - [optional] Type permitted to perform internal mutation
   //! 
-  //! \remarks Equality, comparison, and logical operations are implemented as non-member operators
+  //! \remarks Equality, comparison, relational, logical operations etc. are implemented as non-member operators
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename INTERNAL1 = void, typename INTERNAL2 = void>
+  template <typename IMPL>
   struct Property 
   {
-    friend INTERNAL1;     //!< Extended friend permits optional internal access
-    friend INTERNAL2;     //!< Extended friend permits optional internal access
-
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = Property<IMPL,INTERNAL1,INTERNAL2>;
+    using type = Property<IMPL>;
     
-    //! \alias impl_t - Define implementation type
-    using impl_t = IMPL;
+    //! \alias implementation_t - Define implementation type
+    using implementation_t = IMPL;
 
     //! \alias value_t - Inherit value type
     using value_t = typename IMPL::value_t;
@@ -145,7 +142,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    impl_t   Impl;     //!< Implementation provider
+    implementation_t   Impl;     //!< Implementation provider
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -203,20 +200,6 @@ namespace wtl
       return Impl.get();
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator == const
-    //! 
-    //! \tparam T - Any type
-    //! 
-    //! \param[in] && val - Value to compare against
-    //! \return bool - True iff equal
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*template <typename T>
-    bool  operator == (T&& val)
-    {
-      return Impl.get() == val;
-    }*/
-    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +238,7 @@ namespace wtl
     //! \return type& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename T>
-    type&  operator = (T&& val) //-> enable_if_is_not_t<type,T,type&>
+    type&  operator = (T&& val) 
     {
       Impl.set(std::forward<T>(val));     //!< Delegate to implementation
       return *this;
@@ -272,11 +255,11 @@ namespace wtl
   //! \tparam T - Any type
   //! 
   //! \param[in] const& p - Property
-  //! \param[in] val - Value to compare against
+  //! \param[in] && val - Value to compare against
   //! \return bool - True iff equal
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename F1, typename F2, typename T>
-  bool  operator == (Property<IMPL,F1,F2>& p, T&& val)
+  template <typename IMPL, typename T>
+  bool  operator == (Property<IMPL>& p, T&& val)
   {
     return p.get() == val;
   }
@@ -289,11 +272,11 @@ namespace wtl
   //! \tparam T - Any type
   //! 
   //! \param[in] const& p - Property
-  //! \param[in] val - Value to compare against
+  //! \param[in] && val - Value to compare against
   //! \return bool - True iff unequal
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename F1, typename F2, typename T>
-  bool  operator != (Property<IMPL,F1,F2>& p, T&& val)
+  template <typename IMPL, typename T>
+  bool  operator != (Property<IMPL>& p, T&& val)
   {
     return p.get() != val;
   }
@@ -301,39 +284,37 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | 
-  //! Provides bitwise-OR operations on properties that support it
+  //! Non-member bitwise-OR operator for Property types that support bitwise-OR
   //! 
   //! \tparam IMPL - Property implementation type
-  //! \tparam F1 - [optional] First property friend
-  //! \tparam F2 - [optional] Second property friend
+  //! \tparam T - Any type
   //! 
-  //! \param[in,out] &p - Property
-  //! \param[in] v - Value to combine
-  //! \return value_t - Combination of 'v' and value of 'p'
+  //! \param[in] &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property::value_t - Combination of 'v' and value of 'p'
   /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename IMPL, typename F1, typename F2, typename T>
-  typename IMPL::value_t  operator | (Property<IMPL,F1,F2>& p, T&& val)
+  template <typename IMPL, typename T>
+  typename IMPL::value_t  operator | (const Property<IMPL>& p, T&& val)
   {
-    return p.get() | v;
-  }*/
+    return p.get() | val;
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::operator |=
-  //! Provides bitwise-OR assignment upon properties that support bitwise-OR operations
+  //! Non-member bitwise-OR assignment operator for Property types that support bitwise-OR assignment
   //! 
   //! \tparam IMPL - Property implementation type
-  //! \tparam F1 - [optional] First property friend
-  //! \tparam F2 - [optional] Second property friend
+  //! \tparam T - Any type
   //! 
   //! \param[in,out] &p - Property
-  //! \param[in] v - Value to combine
-  //! \return Property& - Reference to updated 'p' 
+  //! \param[in] && val - Value to combine
+  //! \return Property& - Reference 'p' whose value is now combined with 'val'
   /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename IMPL, typename F1, typename F2>
-  Property<IMPL,F1,F2>&  operator |= (Property<IMPL,F1,F2>& p, typename IMPL::value_t v)
+  template <typename IMPL, typename T>
+  Property<IMPL>&  operator |= (Property<IMPL>& p, T&& val)
   {
-    return p = p.get() | v;
-  }*/
+    return p = p.get() | val;
+  }
 
   
       

@@ -1,10 +1,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowVisibilityProperty.cpp
-//! \brief Implementation for 'WindowVisibility' property (avoids circular reference regarding WindowBase template)
+//! \file wtl\windows\properties\WindowVisibilityPropertyImpl.hpp
+//! \brief Implementation for window visibility property accessors/mutators (resolves circular dependency)
+//! \remarks Poor naming scheme not to be confused with the PIMPL pattern used by Property templates! 
 //! \date 5 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_WINDOW_VISIBLE_PROPERTY_IMPL_HPP
+#define WTL_WINDOW_VISIBLE_PROPERTY_IMPL_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/BooleanCast.hpp"                              //!< BooleanCast
@@ -67,4 +70,6 @@ namespace wtl
 
       
 } // namespace wtl
+
+#endif // WTL_WINDOW_VISIBLE_PROPERTY_IMPL_HPP
 
