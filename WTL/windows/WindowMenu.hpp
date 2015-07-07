@@ -14,14 +14,14 @@
 #include "wtl/utils/Handle.hpp"           //!< Handle
 #include "wtl/utils/Clear.hpp"            //!< Clear
 #include "wtl/utils/Default.hpp"          //!< Default
-#include "wtl/platform/ActionId.hpp"     //!< ActionId
+#include "wtl/platform/CommandId.hpp"     //!< CommandId
 #include "wtl/platform/ResourceId.hpp"    //!< ResourceId
 #include "wtl/platform/MenuFlags.hpp"     //!< MenuItemState
 #include "wtl/gdi/StockObjects.hpp"       //!< StockBrush
 #include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
 #include "wtl/traits/MenuTraits.hpp"      //!< HMenu
-#include "wtl/windows/Action.hpp"         //!< Action
-#include "wtl/windows/ActionGroup.hpp"    //!< Action
+#include "wtl/windows/Command.hpp"         //!< Command
+#include "wtl/windows/CommandGroup.hpp"    //!< Command
 #include "wtl/windows/events/OwnerDrawMenuEvent.hpp"        //!< OwnerDrawEvent
 #include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"     //!< OwnerMeasureEvent
 
@@ -68,11 +68,11 @@ namespace wtl
     // MenuItemInfo::MenuItemInfo
     //! Create menu item for an action
     //! 
-    //! \param[in] const& cmd - Action
+    //! \param[in] const& cmd - Command
     //! 
     //! \throw wtl::invalid_argument - Unsupported action state
     /////////////////////////////////////////////////////////////////////////////////////////
-    MenuItemInfo(const Action<encoding>& cmd) : MenuItemInfo()
+    MenuItemInfo(const Command<encoding>& cmd) : MenuItemInfo()
     {
       // Populate
       this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::FType);
@@ -88,12 +88,12 @@ namespace wtl
     // MenuItemInfo::MenuItemInfo
     //! Create pop-up menu item for an action group
     //! 
-    //! \param[in] const& group - Action Group
+    //! \param[in] const& group - Command Group
     //! \param[in] const& popup - Popup menu handle
     //! 
     //! \throw wtl::invalid_argument - Unsupported state of action within group
     /////////////////////////////////////////////////////////////////////////////////////////
-    MenuItemInfo(const ActionGroup<encoding>& group, const HMenu& popup) : MenuItemInfo()
+    MenuItemInfo(const CommandGroup<encoding>& group, const HMenu& popup) : MenuItemInfo()
     {
       // Populate
       this->fMask      = enum_cast(MenuItemFlag::String|MenuItemFlag::State|MenuItemFlag::Id|MenuItemFlag::Data|MenuItemFlag::FType|MenuItemFlag::SubMenu);
@@ -119,16 +119,16 @@ namespace wtl
     // MenuItemInfo::toState
     //! Get menu item state from an action state
     //! 
-    //! \param[in] s - Action state
+    //! \param[in] s - Command state
     //! 
     //! \throw wtl::invalid_argument - Unsupported state 
     /////////////////////////////////////////////////////////////////////////////////////////
-    static MenuItemState toState(ActionState s)
+    static MenuItemState toState(CommandState s)
     {
       switch (s)
       {
-      case ActionState::Enabled:   return MenuItemState::Enabled;
-      case ActionState::Disabled:  return MenuItemState::Disabled;
+      case CommandState::Enabled:   return MenuItemState::Enabled;
+      case CommandState::Disabled:  return MenuItemState::Disabled;
       }
 
       // Error: Unsupported
@@ -167,7 +167,7 @@ namespace wtl
 
   protected:
     //! \alias collection_t - Define collection type
-    using collection_t = List<ActionPtr<ENC>>;
+    using collection_t = List<CommandPtr<ENC>>;
 
     //! \alias const_iterator - Define collection iterator type
     using const_iterator = typename collection_t::const_iterator;
@@ -176,7 +176,7 @@ namespace wtl
   public:
     OwnerDrawMenuEvent<encoding>      OwnerDraw;        //!< 'Owner draw' event 
     OwnerMeasureMenuEvent<encoding>   OwnerMeasure;     //!< 'Owner Measure' event 
-    ActionGroupPtr<encoding>                  Group;            //!< Shared Action group
+    CommandGroupPtr<encoding>                  Group;            //!< Shared Command group
 
   protected:
     HMenu         Handle;     //!< Menu handle
@@ -186,11 +186,11 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PopupMenu::PopupMenu
-    //! Populate from an Action Group
+    //! Populate from an Command Group
     //!
-    //! \param[in] const& group - Action group
+    //! \param[in] const& group - Command group
     /////////////////////////////////////////////////////////////////////////////////////////
-    PopupMenu(const ActionGroupPtr<encoding>& group) : Handle(MenuType::Popup), 
+    PopupMenu(const CommandGroupPtr<encoding>& group) : Handle(MenuType::Popup), 
                                                        Group(group)
     {
       // Owner draw handler
@@ -260,20 +260,20 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PopupMenu::find const
-    //! Searches for an Action 
+    //! Searches for an Command 
     //! 
-    //! \param[in] id - Action Id
-    //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
+    //! \param[in] id - Command Id
+    //! \return CommandPtr<encoding> - Shared action pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding> find(ActionId id) const
+    CommandPtr<encoding> find(CommandId id) const
     {
       // Lookup item
-      auto pos = Items.find_if([id] (const ActionPtr<encoding>& action) { return action->ident() == id; });
+      auto pos = Items.find_if([id] (const CommandPtr<encoding>& action) { return action->ident() == id; });
       if (pos != end())
         return *pos;
 
       // [NOT FOUND] Return empty pointer
-      return ActionPtr<encoding>(nullptr);
+      return CommandPtr<encoding>(nullptr);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -291,15 +291,15 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PopupMenu::insert
-    //! Inserts a Gui Action menu item at a position
+    //! Inserts a Gui Command menu item at a position
     //! 
     //! \param[in] idx - Zero-based position 
-    //! \param[in] const& cmd - Gui Action
+    //! \param[in] const& cmd - Gui Command
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing command
     //! \throw wtl::platform_error - Unable to insert menu item
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  insert(int32_t idx, const ActionPtr<encoding>& cmd)
+    void  insert(int32_t idx, const CommandPtr<encoding>& cmd)
     {
       REQUIRED_PARAM(cmd);
 
@@ -309,20 +309,20 @@ namespace wtl
       if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
 
-      // Insert Action into collection 
+      // Insert Command into collection 
       Items.insert(Items.at(idx), cmd);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PopupMenu::operator += 
-    //! Appends a Gui Action menu item 
+    //! Appends a Gui Command menu item 
     //! 
     //! \param[in] const& cmd - Gui action
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing command
     //! \throw wtl::platform_error - Unable to insert menu item
     /////////////////////////////////////////////////////////////////////////////////////////
-    PopupMenu&  operator += (const ActionPtr<encoding>& cmd)
+    PopupMenu&  operator += (const CommandPtr<encoding>& cmd)
     {
       REQUIRED_PARAM(cmd);
 
@@ -468,12 +468,12 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::find const
-    //! Searches for an Action 
+    //! Searches for an Command 
     //! 
-    //! \param[in] id - Action id
-    //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
+    //! \param[in] id - Command id
+    //! \return CommandPtr<encoding> - Shared action pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding> find(ActionId id) const
+    CommandPtr<encoding> find(CommandId id) const
     {
       // Search popups for a matching action
       for (auto& popup : Popups)
@@ -481,17 +481,17 @@ namespace wtl
           return cmd;
       
       // [NOT FOUND] Return empty pointer
-      return ActionPtr<encoding>(nullptr);
+      return CommandPtr<encoding>(nullptr);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::find const
-    //! Searches for an Action group
+    //! Searches for an Command group
     //! 
     //! \param[in] id - Group id
-    //! \return ActionGroupPtr<encoding> - Shared group pointer, possibly empty
+    //! \return CommandGroupPtr<encoding> - Shared group pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroupPtr<encoding> find(ActionGroupId id) const
+    CommandGroupPtr<encoding> find(CommandGroupId id) const
     {
       // Search for matching popup
       auto pos = Popups.find_if([id] (const popup_t& popup) { return popup.Group->ident() == id; });
@@ -499,14 +499,14 @@ namespace wtl
         return pos->Group;
 
       // [NOT FOUND] Return empty pointer
-      return ActionGroupPtr<encoding>(nullptr);
+      return CommandGroupPtr<encoding>(nullptr);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::insert
-    //! Inserts a new popup menu item containing the Actions of an ActionGroup 
+    //! Inserts a new popup menu item containing the Commands of an CommandGroup 
     //! 
     //! \param[in] idx - Zero-based position 
     //! \param[in] const& group - Shared action group
@@ -514,7 +514,7 @@ namespace wtl
     //! \throw wtl::invalid_argument - [Debug only] Missing command group
     //! \throw wtl::platform_error - Unable to insert menu item
     /////////////////////////////////////////////////////////////////////////////////////////
-    void insert(int32_t idx, const ActionGroupPtr<encoding>& group)
+    void insert(int32_t idx, const CommandGroupPtr<encoding>& group)
     {
       REQUIRED_PARAM(group);
 
@@ -530,7 +530,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::operator += 
-    //! Appends a new popup menu item containing the Actions of an ActionGroup 
+    //! Appends a new popup menu item containing the Commands of an CommandGroup 
     //! 
     //! \param[in] const& group - Shared command group
     //! \return type& - Reference to self
@@ -538,7 +538,7 @@ namespace wtl
     //! \throw wtl::invalid_argument - [Debug only] Missing command group
     //! \throw wtl::platform_error - Unable to insert menu item
     /////////////////////////////////////////////////////////////////////////////////////////
-    type&  operator += (const ActionGroupPtr<encoding>& group)
+    type&  operator += (const CommandGroupPtr<encoding>& group)
     {
       insert(size(), group);
       return *this;
@@ -578,7 +578,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
-      // [HEADING] Lookup ActionGroup
+      // [HEADING] Lookup CommandGroup
       if (auto group = find(action_group_id(args.Ident)))
       {
         // Measure group name
@@ -589,10 +589,10 @@ namespace wtl
                                         "size", args.Size) << endl;
       }
 
-      // [ITEM] Lookup Action
+      // [ITEM] Lookup Command
       else if (auto action = find(action_id(args.Ident)))
       {
-        // Measure Action name
+        // Measure Command name
         args.Size = args.Graphics.measure(action->name());
 
         // debug

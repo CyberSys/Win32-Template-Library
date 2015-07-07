@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\ActionGroupCollection.hpp
-//! \brief Provides an 'ActionGroup' container
+//! \file wtl\windows\CommandGroupCollection.hpp
+//! \brief Provides an 'CommandGroup' container
 //! \date 7 July 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"   //!< Encoding
-#include "wtl/windows/ActionGroup.hpp"     //!< ActionGroupPtr
+#include "wtl/windows/CommandGroup.hpp"     //!< CommandGroupPtr
 #include <map>                             //!< std::map
 
 //! \namespace wtl - Windows template library
@@ -18,20 +18,20 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ActionGroupCollection - Collection of Action groups, indexed by Id
+  //! \struct CommandGroupCollection - Collection of Command groups, indexed by Id
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ActionGroupCollection : std::map<ActionGroupId,ActionGroupPtr<ENC>>
+  struct CommandGroupCollection : std::map<CommandGroupId,CommandGroupPtr<ENC>>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias base - Define base type
-    using base = std::map<ActionGroupId,ActionGroupPtr<ENC>>;
+    using base = std::map<CommandGroupId,CommandGroupPtr<ENC>>;
       
     //! \alias type - Define own type
-    using type = ActionGroupCollection;
+    using type = CommandGroupCollection;
       
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
@@ -39,12 +39,12 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroupCollection::find const
+    // CommandGroupCollection::find const
     //! Find an action within the collection
     //! 
-    //! \return ActionPtr<ENC> - Shared Action pointer, possibly empty
+    //! \return CommandPtr<ENC> - Shared Command pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding>  find(ActionId id) const 
+    CommandPtr<encoding>  find(CommandId id) const 
     {
       // Lookup action
       for (const auto& group : *this)
@@ -52,26 +52,26 @@ namespace wtl
           return cmd;
 
       // [NOT FOUND] Return empty pointer
-      return ActionPtr<encoding>(nullptr);
+      return CommandPtr<encoding>(nullptr);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
       
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroupCollection::operator +=
+    // CommandGroupCollection::operator +=
     //! Add a group to the collection
     //!
     //! \param[in] *group - Command group
-    //! \return ActionGroupCollection& - Reference to self
+    //! \return CommandGroupCollection& - Reference to self
     //! 
     //! \throw wtl::invalid_argument - [Debug only] Missing group
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroupCollection& operator += (ActionGroup<encoding>* group)
+    CommandGroupCollection& operator += (CommandGroup<encoding>* group)
     {
       REQUIRED_PARAM(group);
 
       // Insert/overwrite
-      emplace(group->ident(), ActionGroupPtr<encoding>(group));
+      emplace(group->ident(), CommandGroupPtr<encoding>(group));
       return *this;
     }
   };

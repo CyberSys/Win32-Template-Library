@@ -9,7 +9,7 @@
 #define WTL_OPEN_DOCUMENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Action.hpp"             //!< Action
+#include "wtl/windows/Command.hpp"             //!< Command
 #include "wtl/windows/WindowBase.hpp"         //!< WindowBase
 #include "wtl/windows/MessageBox.hpp"         //!< errorBox
 
@@ -23,7 +23,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct OpenDocumentCommand : Action<ENC>
+  struct OpenDocumentCommand : Command<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
@@ -31,7 +31,7 @@ namespace wtl
     using type = OpenDocumentCommand<ENC>;
   
     //! \alias base - Define base type
-    using base = Action<ENC>;
+    using base = Command<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -53,7 +53,7 @@ namespace wtl
     //! \param[in] appWnd - Main application window
     /////////////////////////////////////////////////////////////////////////////////////////
     OpenDocumentCommand(window_t& appWnd)  
-      : base(ActionId::File_Open, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
+      : base(CommandId::File_Open, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -81,12 +81,12 @@ namespace wtl
     // OpenDocumentCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return ActionState - Current state of command
+    //! \return CommandState - Current state of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionState state() const override
+    CommandState state() const override
     {
       // Always enabled
-      return ActionState::Enabled;
+      return CommandState::Enabled;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

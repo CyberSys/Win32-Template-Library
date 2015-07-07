@@ -9,7 +9,7 @@
 #define WTL_COPY_CLIPBOARD_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Action.hpp"             //!< Action
+#include "wtl/windows/Command.hpp"             //!< Command
 #include "wtl/windows/WindowBase.hpp"         //!< WindowBase
 
 //! \namespace wtl - Windows template library
@@ -22,7 +22,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct CopyClipboardCommand : Action<ENC>
+  struct CopyClipboardCommand : Command<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
@@ -30,7 +30,7 @@ namespace wtl
     using type = CopyClipboardCommand<ENC>;
   
     //! \alias base - Define base type
-    using base = Action<ENC>;
+    using base = Command<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -51,7 +51,7 @@ namespace wtl
     // CopyClipboardCommand::CopyClipboardCommand
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
-    CopyClipboardCommand() : base(ActionId::Edit_Copy, [this] () { if (TargetWnd = window_t::getFocus())
+    CopyClipboardCommand() : base(CommandId::Edit_Copy, [this] () { if (TargetWnd = window_t::getFocus())
                                                                      TargetWnd->Text = c_str(L"TODO: Copy text to clipboard"); })
     {}
     
@@ -80,12 +80,12 @@ namespace wtl
     // CopyClipboardCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return ActionState - Current state of command
+    //! \return CommandState - Current state of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionState state() const override
+    CommandState state() const override
     {
       // TODO: Determine whether window has a text selection
-      return ActionState::Enabled;
+      return CommandState::Enabled;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

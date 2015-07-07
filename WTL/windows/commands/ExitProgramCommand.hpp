@@ -9,7 +9,7 @@
 #define WTL_CLOSE_PROGRAM_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Action.hpp"             //!< Action
+#include "wtl/windows/Command.hpp"             //!< Command
 #include "wtl/windows/WindowBase.hpp"         //!< WindowBase
 
 //! \namespace wtl - Windows template library
@@ -22,7 +22,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ExitProgramCommand : Action<ENC>
+  struct ExitProgramCommand : Command<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
@@ -30,7 +30,7 @@ namespace wtl
     using type = ExitProgramCommand<ENC>;
   
     //! \alias base - Define base type
-    using base = Action<ENC>;
+    using base = Command<ENC>;
 
     //! \alias window_t - Define window base type
     using window_t = WindowBase<ENC>;
@@ -48,7 +48,7 @@ namespace wtl
     //! \param[in] appWnd - Main application window
     /////////////////////////////////////////////////////////////////////////////////////////
     ExitProgramCommand(window_t& appWnd) 
-      : base(ActionId::App_Exit, [&appWnd] () { appWnd.post<WindowMessage::CLOSE>(); } ),
+      : base(CommandId::App_Exit, [&appWnd] () { appWnd.post<WindowMessage::CLOSE>(); } ),
         AppWnd(appWnd)
     {}
     
@@ -77,12 +77,12 @@ namespace wtl
     // ExitProgramCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return ActionState - Current state of command
+    //! \return CommandState - Current state of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionState state() const override
+    CommandState state() const override
     {
       // Always enabled
-      return ActionState::Enabled;
+      return CommandState::Enabled;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

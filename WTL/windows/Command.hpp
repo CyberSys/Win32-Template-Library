@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\Action.hpp
-//! \brief Encapsulates commands in the Gui using the 'Action'/'Command' pattern
+//! \file wtl\windows\Command.hpp
+//! \brief Encapsulates commands in the Gui using the 'Command'/'Command' pattern
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -11,7 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
 #include "wtl/utils/CharArray.hpp"                //!< CharArray
-#include "wtl/platform/ActionId.hpp"             //!< ActionId
+#include "wtl/platform/CommandId.hpp"             //!< CommandId
 #include "wtl/platform/ResourceId.hpp"            //!< ResourceId
 #include "wtl/resources/StringResource.hpp"       //!< StringResource
 #include "wtl/resources/IconResource.hpp"         //!< IconResource
@@ -21,15 +21,15 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \enum ActionSource - Defines how a Gui command was raised
-  enum class ActionSource
+  //! \enum CommandSource - Defines how a Gui command was raised
+  enum class CommandSource
   {
     MenuItem = 0,     //!< Command raised via menu item
     Accelerator = 1,  //!< Command raised via accelerator
   };
 
-  //! \enum ActionState - Define states of GUI Commands
-  enum class ActionState
+  //! \enum CommandState - Define states of GUI Commands
+  enum class CommandState
   {
     Disabled = 0,     //!< Command should be disabled
     Enabled = 1,      //!< Command should be enabled
@@ -38,17 +38,17 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Action - Encapsulates a single gui command
+  //! \struct Command - Encapsulates a single gui command
   //! 
   //! \tparam ENC - Command character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct Action 
+  struct Command 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = Action<ENC>;
+    using type = Command<ENC>;
     
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -120,7 +120,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    ActionId   Ident;           //!< Command Id
+    CommandId   Ident;           //!< Command Id
     icon_t      Icon;            //!< Command Icon
     bool        Permanent;       //!< Whether command is permanent
     decoder_t   NameString;      //!< Name + Description
@@ -130,13 +130,13 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::Action
+    // Command::Command
     //! Create a permanent command
     //! 
     //! \param[in] id - Command identifier (Defining name, description, and icon resource)
     //! \param[in] exec - Callable target which implements executing command
     /////////////////////////////////////////////////////////////////////////////////////////
-    Action(ActionId id, execute_t exec) : Ident(id),
+    Command(CommandId id, execute_t exec) : Ident(id),
                                            Icon(resource_id(id)),
                                            NameString(resource_id(id)),
                                            Permanent(true),
@@ -145,14 +145,14 @@ namespace wtl
     
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::Action
+    // Command::Command
     //! Create a revertible command
     //! 
     //! \param[in] id - Command identifier
     //! \param[in] exec - Callable target which implements executing command
     //! \param[in] undo - Callable target which implements reverting command
     /////////////////////////////////////////////////////////////////////////////////////////
-    Action(ActionId id, execute_t exec, revert_t undo) : Ident(id),
+    Command(CommandId id, execute_t exec, revert_t undo) : Ident(id),
                                                           Icon(resource_id(id)),
                                                           NameString(resource_id(id)),
                                                           Permanent(false),
@@ -162,16 +162,16 @@ namespace wtl
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    ENABLE_COPY(Action);      //!< Can be shallow copied
-    ENABLE_MOVE(Action);      //!< Can be moved 
-    ENABLE_POLY(Action);      //!< Can be polymorphic
+    ENABLE_COPY(Command);      //!< Can be shallow copied
+    ENABLE_MOVE(Command);      //!< Can be moved 
+    ENABLE_POLY(Command);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::clone const
+    // Command::clone const
     //! Create a new instance of the command
     //! 
     //! \return type* - New instance of command
@@ -179,7 +179,7 @@ namespace wtl
     virtual type*  clone() const = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::description const
+    // Command::description const
     //! Get the command description
     //! 
     //! \return const decoder_t::description_t& - Command description
@@ -190,7 +190,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::icon const
+    // Command::icon const
     //! Get the command icon
     //! 
     //! \return HIcon - Shared icon handle
@@ -201,18 +201,18 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::ident const
+    // Command::ident const
     //! Get the command identifier
     //! 
-    //! \return ActionId - Command identifier
+    //! \return CommandId - Command identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ActionId  ident() const 
+    virtual CommandId  ident() const 
     {
       return Ident;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::name const
+    // Command::name const
     //! Get the command name
     //! 
     //! \return const decoder_t::name_t& - Command name
@@ -223,7 +223,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::permanent const
+    // Command::permanent const
     //! Query the whether the command can be reverted
     //! 
     //! \return bool - True iff command is permanent (cannot be undone)
@@ -234,21 +234,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::state const
+    // Command::state const
     //! Query the current state of the command 
     //! 
-    //! \return ActionState - Current state of command
+    //! \return CommandState - Current state of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ActionState state() const 
+    virtual CommandState state() const 
     {
       // Always enabled by default
-      return ActionState::Enabled;
+      return CommandState::Enabled;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::execute 
+    // Command::execute 
     //! Executes the command
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual void execute() 
@@ -258,7 +258,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Action::revert
+    // Command::revert
     //! Reverts the command
     //! 
     //! \throw logic_error - Command cannot be reverted
@@ -275,12 +275,12 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ActionPtr - Shared Action/Command pointer
+  //! \alias CommandPtr - Shared Command/Command pointer
   //! 
   //! \tparam ENC - Command character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ActionPtr = std::shared_ptr<Action<ENC>>;
+  using CommandPtr = std::shared_ptr<Command<ENC>>;
   
 } // namespace wtl
 

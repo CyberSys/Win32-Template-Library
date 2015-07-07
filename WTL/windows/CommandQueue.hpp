@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\ActionQueue.hpp
+//! \file wtl\windows\CommandQueue.hpp
 //! \brief Provides an undo/redo queue of all gui commands
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -9,19 +9,19 @@
 #define WTL_GUI_COMMAND_QUEUE_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Action.hpp"          //!< Action
+#include "wtl/windows/Command.hpp"          //!< Command
 #include "wtl/utils/Stack.hpp"             //!< Stack
 
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ActionQueue - Enqueues executed Gui commands, providing an 'Undo' and 'Redo' functionality if supported by the command
+  //! \struct CommandQueue - Enqueues executed Gui commands, providing an 'Undo' and 'Redo' functionality if supported by the command
   //! 
   //! \tparam ENC - Command character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ActionQueue
+  struct CommandQueue
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -32,31 +32,31 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
 
     //! \alias action_t - Define command base type
-    using action_t = Action<ENC>;
+    using action_t = Command<ENC>;
 
   protected:
     //! \alias storage_t - Define storage type
-    using storage_t = ActionPtr<ENC>;
+    using storage_t = CommandPtr<ENC>;
 
     //! \alias collection_t - Define collection type
     using collection_t = Stack<storage_t>;
     
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
-    DEFAULT_CTOR(ActionQueue);           //!< Can be default-constructed
+    DEFAULT_CTOR(CommandQueue);           //!< Can be default-constructed
     
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
-    DISABLE_COPY(ActionQueue);          //!< Cannot be copied
-    ENABLE_MOVE_CTOR(ActionQueue);      //!< Can be moved 
-    ENABLE_POLY(ActionQueue);           //!< Can be polymorphic
+    DISABLE_COPY(CommandQueue);          //!< Cannot be copied
+    ENABLE_MOVE_CTOR(CommandQueue);      //!< Can be moved 
+    ENABLE_POLY(CommandQueue);           //!< Can be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------		
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::canRepeat const
+    // CommandQueue::canRepeat const
     //! Query whether the last reverted command can be repeated
     //! 
     //! \return bool - True if 'Redo' is available
@@ -67,7 +67,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::canRevert const
+    // CommandQueue::canRevert const
     //! Query whether the last executed command can be reverted
     //! 
     //! \return bool - True if 'Undo' is available
@@ -78,7 +78,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::peekRepeat const
+    // CommandQueue::peekRepeat const
     //! Peek the last reverted command (next repeatable command)
     //! 
     //! \return const action_t& - Immutable reference to next repeatable command 
@@ -96,7 +96,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::peekRevert const
+    // CommandQueue::peekRevert const
     //! Peek the last executed command (next revertible command)
     //! 
     //! \return const action_t& - Immutable reference to next revertible command 
@@ -116,7 +116,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::clear
+    // CommandQueue::clear
     //! Clears all commands from the queue
     /////////////////////////////////////////////////////////////////////////////////////////
     void clear()
@@ -126,7 +126,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::execute
+    // CommandQueue::execute
     //! Executes a command and saves it. Clears all repeatable commands.
     //! 
     //! \param[in] *cmd - Gui command
@@ -151,7 +151,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::repeat
+    // CommandQueue::repeat
     //! Repeats the last command to be reverted
     //! 
     //! \throw wtl::logic_error - No commands have been reverted
@@ -172,7 +172,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionQueue::revert
+    // CommandQueue::revert
     //! Reverts the previously executed command 
     //! 
     //! \throw wtl::logic_error - No reverted commands

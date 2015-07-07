@@ -52,7 +52,7 @@ namespace wtl
   public:
     OwnerDrawAction   Action;           //!< Type of drawing requested
     DeviceContext     Graphics;         //!< Device context clipped to menu area 
-    ActionId         Ident;            //!< Action id
+    CommandId         Ident;            //!< Command id
     RectL             Rect;             //!< Drawing/update rectangle
     HMenu             Menu;             //!< Control handle
     
@@ -70,7 +70,7 @@ namespace wtl
     EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<PaintData>(l)), 
                                         Action(enum_cast<OwnerDrawAction>(Data.itemAction)), 
                                         Graphics(Data.hDC),
-                                        Ident(static_cast<ActionId>(Data.itemID)), 
+                                        Ident(static_cast<CommandId>(Data.itemID)), 
                                         Menu((::HMENU)Data.hwndItem, AllocType::WeakRef),
                                         Rect(Data.rcItem)
     {

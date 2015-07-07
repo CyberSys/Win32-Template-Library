@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\ActionEvent.hpp
+//! \file wtl\windows\events\CommandEvent.hpp
 //! \brief Provides argument/delegate/handler types for action events
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -10,8 +10,8 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"             //!< EnumCast
-#include "wtl/platform/ActionId.hpp"         //!< ActionId
-#include "wtl/windows/Action.hpp"             //!< ActionSource/ActionState
+#include "wtl/platform/CommandId.hpp"         //!< CommandId
+#include "wtl/windows/Command.hpp"             //!< CommandSource/CommandState
 #include "wtl/windows/MessageEvent.hpp"       //!< MessageEvent
 
 //! \namespace wtl - Windows template library
@@ -51,8 +51,8 @@ namespace wtl {
     //! \param[in] w - Originator window id in the LO word, NotificationId in the HO word
     //! \param[in] l - Originator window handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    EventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<ActionId>(LOWORD(w))), 
-                                        Source(enum_cast<ActionSource>(HIWORD(w)))
+    EventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<CommandId>(LOWORD(w))), 
+                                        Source(enum_cast<CommandSource>(HIWORD(w)))
     {}
     
 	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
@@ -69,33 +69,33 @@ namespace wtl {
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    ActionId      Ident;     //!< Action id 
-    ActionSource  Source;     //!< How command was raised
+    CommandId      Ident;     //!< Command id 
+    CommandSource  Source;     //!< How command was raised
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ActionEvent - Defines 'Action' event (ie. WM_COMMAND from menus/accelerators/toolbars)
+  //! \alias CommandEvent - Defines 'Command' event (ie. WM_COMMAND from menus/accelerators/toolbars)
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ActionEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
+  using CommandEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ActionEventArgs - Arguments for 'Action' Event (ie. WM_COMMAND from menus/accelerators/toolbars)
+  //! \alias CommandEventArgs - Arguments for 'Command' Event (ie. WM_COMMAND from menus/accelerators/toolbars)
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ActionEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
+  using CommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ActionEventHandler - Handler for 'Action' event (ie. WM_COMMAND from menus/accelerators/toolbars)
+  //! \alias CommandEventHandler - Handler for 'Command' event (ie. WM_COMMAND from menus/accelerators/toolbars)
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ActionEventHandler = MessageEventHandler<ENC,WindowMessage::COMMAND>;
+  using CommandEventHandler = MessageEventHandler<ENC,WindowMessage::COMMAND>;
 
   
 } // namespace wtl

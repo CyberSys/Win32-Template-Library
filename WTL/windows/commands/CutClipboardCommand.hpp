@@ -9,7 +9,7 @@
 #define WTL_CUT_CLIPBOARD_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Action.hpp"             //!< Action
+#include "wtl/windows/Command.hpp"             //!< Command
 #include "wtl/windows/WindowBase.hpp"         //!< WindowBase
 
 //! \namespace wtl - Windows template library
@@ -22,7 +22,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct CutClipboardCommand : Action<ENC>
+  struct CutClipboardCommand : Command<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
@@ -30,7 +30,7 @@ namespace wtl
     using type = CutClipboardCommand<ENC>;
   
     //! \alias base - Define base type
-    using base = Action<ENC>;
+    using base = Command<ENC>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -51,7 +51,7 @@ namespace wtl
     // CutClipboardCommand::CutClipboardCommand
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
-    CutClipboardCommand() : base(ActionId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
+    CutClipboardCommand() : base(CommandId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
                                                                    TargetWnd->Text = c_str(L"TODO: Cut text to clipboard"); },
                                                      [this] () { if (TargetWnd)
                                                                    TargetWnd->Text = c_str(L"TODO: Restore previous text"); })
@@ -82,12 +82,12 @@ namespace wtl
     // CutClipboardCommand::state const
     //! Query the current state of the command 
     //! 
-    //! \return ActionState - Current state of command
+    //! \return CommandState - Current state of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionState state() const override
+    CommandState state() const override
     {
       // TODO: Query window text selection
-      return ActionState::Enabled;
+      return CommandState::Enabled;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

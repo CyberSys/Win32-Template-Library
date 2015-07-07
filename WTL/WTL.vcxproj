@@ -40,7 +40,7 @@
     <ClInclude Include="modules\Application.hpp" />
     <ClInclude Include="modules\Module.hpp" />
     <ClInclude Include="platform\Colours.hpp" />
-    <ClInclude Include="platform\ActionId.hpp" />
+    <ClInclude Include="platform\CommandId.hpp" />
     <ClInclude Include="platform\CommonApi.hpp" />
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
@@ -115,7 +115,7 @@
     <ClInclude Include="utils\Default.hpp" />
     <ClInclude Include="utils\Triangle.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
-    <ClInclude Include="windows\ActionGroupCollection.hpp" />
+    <ClInclude Include="windows\CommandGroupCollection.hpp" />
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp" />
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\CutClipboardCommand.hpp" />
@@ -129,7 +129,7 @@
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
-    <ClInclude Include="windows\events\ActionEvent.hpp" />
+    <ClInclude Include="windows\events\CommandEvent.hpp" />
     <ClInclude Include="windows\events\CtrlCommandEvent.hpp" />
     <ClInclude Include="windows\events\CtrlNotifyEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
@@ -144,9 +144,9 @@
     <ClInclude Include="windows\events\OwnerDrawMenuEvent.hpp" />
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />
     <ClInclude Include="windows\events\ShowWindowEvent.hpp" />
-    <ClInclude Include="windows\Action.hpp" />
-    <ClInclude Include="windows\ActionGroup.hpp" />
-    <ClInclude Include="windows\ActionQueue.hpp" />
+    <ClInclude Include="windows\Command.hpp" />
+    <ClInclude Include="windows\CommandGroup.hpp" />
+    <ClInclude Include="windows\CommandQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\MessageEvent.hpp" />
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />

@@ -26,14 +26,14 @@
 #include "wtl/platform/WindowFlags.hpp"                           //!< WindowStyle
 #include "wtl/platform/CommonApi.hpp"                             //!< send_message
 #include "wtl/platform/WindowMessage.hpp"                         //!< WindowMesssage
-#include "wtl/windows/Action.hpp"                                 //!< Action
-#include "wtl/windows/ActionGroup.hpp"                            //!< ActionGroup
-#include "wtl/windows/ActionGroupCollection.hpp"                  //!< ActionGroup
-#include "wtl/windows/ActionQueue.hpp"                            //!< ActionQueue
+#include "wtl/windows/Command.hpp"                                 //!< Command
+#include "wtl/windows/CommandGroup.hpp"                            //!< CommandGroup
+#include "wtl/windows/CommandGroupCollection.hpp"                  //!< CommandGroup
+#include "wtl/windows/CommandQueue.hpp"                            //!< CommandQueue
 #include "wtl/windows/Property.hpp"                               //!< Property
 #include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
 #include "wtl/windows/WindowMenu.hpp"                             //!< WindowMenu
-#include "wtl/windows/events/ActionEvent.hpp"                     //!< ActionEvent
+#include "wtl/windows/events/CommandEvent.hpp"                     //!< CommandEvent
 #include "wtl/windows/events/CloseWindowEvent.hpp"                //!< CloseWindowEvent
 #include "wtl/windows/events/CreateWindowEvent.hpp"               //!< CreateWindowEven
 #include "wtl/windows/events/CtrlCommandEvent.hpp"                //!< CtrlCommandEvent
@@ -113,8 +113,8 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<encoding>;
     
-    //! \alias action_t - Define Action type
-    using action_t = Action<encoding>;
+    //! \alias action_t - Define Command type
+    using action_t = Command<encoding>;
     
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<encoding>;
@@ -264,8 +264,8 @@ namespace wtl
     //! \var ActiveWindows - Static collection of all existing WTL windows 
     static WindowHandleCollection<encoding>  ActiveWindows;
 
-    //! \var ActionGroups - Static collection of all Actions groups
-    static ActionGroupCollection<encoding>   ActionGroups;
+    //! \var CommandGroups - Static collection of all Commands groups
+    static CommandGroupCollection<encoding>   CommandGroups;
 
     //! \var DefaultPosition - Default window creation position
     static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
@@ -276,7 +276,7 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
-    ActionEvent<encoding>               Action;        //!< Raised in response to WM_COMMAND from menu/accelerators
+    CommandEvent<encoding>               Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
     CreateWindowEvent<encoding>         Create;        //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>          Close;         //!< Raised in response to WM_CLOSE
     DestroyWindowEvent<encoding>        Destroy;       //!< Raised in response to WM_DESTROY
@@ -285,7 +285,7 @@ namespace wtl
     PositionChangedEvent<encoding>      Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
-    ActionQueue<encoding>               Actions;       //!< Actions queue
+    CommandQueue<encoding>               Commands;       //!< Commands queue
     ChildWindowCollection               Children;      //!< Child window collection
     WindowMenu<encoding>                Menu;          //!< Window menu, possibly empty
 
@@ -336,7 +336,7 @@ namespace wtl
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
       
       // Execute gui commands by default
-      Action += new ActionEventHandler<encoding>(this, &WindowBase::onAction);
+      Command += new CommandEventHandler<encoding>(this, &WindowBase::onCommand);
         
       // Paint window background by default
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
@@ -630,17 +630,17 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::execute
-    //! Executes an Action, adding it to the actions queue
+    //! Executes an Command, adding it to the actions queue
     //! 
-    //! \param[in] id - Action id
+    //! \param[in] id - Command id
     //!
-    //! \throw wtl::logic_error - Action not found
+    //! \throw wtl::logic_error - Command not found
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  execute(ActionId id) 
+    void  execute(CommandId id) 
     { 
       // Lookup action and execute 
-      if (auto cmd = ActionGroups.find(id))
-        Actions.execute(cmd->clone());
+      if (auto cmd = CommandGroups.find(id))
+        Commands.execute(cmd->clone());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -689,7 +689,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onAction
+    // WindowBase::onCommand
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -697,7 +697,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onAction(ActionEventArgs<encoding>& args) 
+    virtual LResult  onCommand(CommandEventArgs<encoding>& args) 
     { 
       // Execute associated command
       execute(args.Ident);
@@ -765,7 +765,7 @@ namespace wtl
             ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
           else
             // [ACTION] Raise event (Default executes the appropriate command object)
-            ret = Action.raise(ActionEventArgs<encoding>(w,l));
+            ret = Command.raise(CommandEventArgs<encoding>(w,l));
           break;
 
         // [NOTIFY] Reflect to sender
@@ -877,10 +877,10 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \var WindowBase::ActionGroups - Collection of all Action groups 
+  //! \var WindowBase::CommandGroups - Collection of all Command groups 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  ActionGroupCollection<ENC>   WindowBase<ENC>::ActionGroups;
+  CommandGroupCollection<ENC>   WindowBase<ENC>::CommandGroups;
   
 
   /////////////////////////////////////////////////////////////////////////////////////////

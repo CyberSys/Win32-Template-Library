@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\ActionGroup.hpp
+//! \file wtl\windows\CommandGroup.hpp
 //! \brief Provides a collection of gui actions (for usage with menus/toolbars)
 //! \date 6 March 2015
 //! \author Nick Crowley
@@ -9,7 +9,7 @@
 #define WTL_ACTION_GROUP_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/Action.hpp"          //!< Action
+#include "wtl/windows/Command.hpp"          //!< Command
 #include <map>                             //!< std::map
 #include <memory>                          //!< std::shared_ptr
 
@@ -17,21 +17,21 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ActionGroup - Provides a collection of Gui Commands, indexed by Command Id
+  //! \struct CommandGroup - Provides a collection of Gui Commands, indexed by Command Id
   //! 
   //! \tparam ENC - Command character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ActionGroup : std::map<ActionId,ActionPtr<ENC>>
+  struct CommandGroup : std::map<CommandId,CommandPtr<ENC>>
   {
     //! \alias base - Define base type
-    using base = std::map<ActionId,ActionPtr<ENC>>;
+    using base = std::map<CommandId,CommandPtr<ENC>>;
 
     //! \alias type - Define own type
-    using type = ActionGroup<ENC>;
+    using type = CommandGroup<ENC>;
     
     //! \alias action_t - Define action pointer type
-    using action_t = Action<ENC>;
+    using action_t = Command<ENC>;
     
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -47,35 +47,35 @@ namespace wtl
   
   protected:
     //! \using decoder_t - Name/description string type
-    using decoder_t = typename Action<encoding>::NameStringResource;
+    using decoder_t = typename Command<encoding>::NameStringResource;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    ActionGroupId  Ident;           //!< Command Id
+    CommandGroupId  Ident;           //!< Command Id
     decoder_t       NameString;      //!< Name + Description
     icon_t          Icon;            //!< Command Icon
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::ActionGroup
+    // CommandGroup::CommandGroup
     //! Create empty collection
     //! 
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroup(ActionGroupId id) : Ident(id),
+    CommandGroup(CommandGroupId id) : Ident(id),
                                      NameString(resource_id(id)),
                                      Icon(resource_id(id))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::ActionGroup
+    // CommandGroup::CommandGroup
     //! Create populated collection
     //! 
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     //! \param[in] cmds - List of actions
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroup(ActionGroupId id, std::initializer_list<action_t*>&& cmds) : ActionGroup(id)
+    CommandGroup(CommandGroupId id, std::initializer_list<action_t*>&& cmds) : CommandGroup(id)
     {
       // Populate
       for (action_t* c : cmds)
@@ -84,16 +84,16 @@ namespace wtl
     
 	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
-    ENABLE_COPY(ActionGroup);      //!< Can be shallow copied
-    ENABLE_MOVE(ActionGroup);      //!< Can be moved
-    ENABLE_POLY(ActionGroup);      //!< Can be polymorphic
+    ENABLE_COPY(CommandGroup);      //!< Can be shallow copied
+    ENABLE_MOVE(CommandGroup);      //!< Can be moved
+    ENABLE_POLY(CommandGroup);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::description const
+    // CommandGroup::description const
     //! Get the group description
     //! 
     //! \return const description_t::string_t& - Group description
@@ -104,12 +104,12 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::find const
+    // CommandGroup::find const
     //! Find an action within the group
     //! 
-    //! \return ActionPtr<encoding> - Shared action pointer, possibly empty
+    //! \return CommandPtr<encoding> - Shared action pointer, possibly empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionPtr<encoding>  find(ActionId id) const 
+    CommandPtr<encoding>  find(CommandId id) const 
     {
       // Lookup action & return if found
       auto pos = base::find(id);
@@ -117,11 +117,11 @@ namespace wtl
         return pos->second; 
       
       // [NOT FOUND] Return nullptr sentinel
-      return ActionPtr<encoding>(nullptr);
+      return CommandPtr<encoding>(nullptr);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::icon const
+    // CommandGroup::icon const
     //! Get the group icon
     //! 
     //! \return HIcon - Shared icon handle
@@ -132,18 +132,18 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::ident const
+    // CommandGroup::ident const
     //! Get the group identifier
     //! 
-    //! \return ActionGroupId - Group identifier
+    //! \return CommandGroupId - Group identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ActionGroupId  ident() const 
+    virtual CommandGroupId  ident() const 
     {
       return Ident;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::name const
+    // CommandGroup::name const
     //! Get the group name
     //! 
     //! \return const decoder_t::name_t& - Group name
@@ -156,27 +156,27 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ActionGroup::operator +=
+    // CommandGroup::operator +=
     //! Add an action to the group
     //!
-    //! \param[in] *cmd - Action
-    //! \return ActionGroup& - Reference to self
+    //! \param[in] *cmd - Command
+    //! \return CommandGroup& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
-    ActionGroup& operator += (action_t* cmd)
+    CommandGroup& operator += (action_t* cmd)
     {
       // Insert/overwrite
-      this->emplace(cmd->ident(), ActionPtr<encoding>(cmd));
+      this->emplace(cmd->ident(), CommandPtr<encoding>(cmd));
       return *this;
     }
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ActionGroupPtr - Shared Action group pointer
+  //! \alias CommandGroupPtr - Shared Command group pointer
   //! 
   //! \tparam ENC - Command character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ActionGroupPtr = std::shared_ptr<ActionGroup<ENC>>;
+  using CommandGroupPtr = std::shared_ptr<CommandGroup<ENC>>;
         
 } // namespace wtl
 
