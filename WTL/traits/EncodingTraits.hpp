@@ -164,7 +164,7 @@ namespace wtl
   auto  getValue(NARROW narrow, WIDE wide) noexcept -> enable_if_narrow_t<CHR,NARROW>
   {
     return narrow;
-  };
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::getValue constexpr
@@ -182,7 +182,7 @@ namespace wtl
   auto  getValue(NARROW narrow, WIDE wide) noexcept -> enable_if_wide_t<CHR,WIDE>
   {
     return wide;
-  };
+  }
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::getValue constexpr
@@ -200,7 +200,7 @@ namespace wtl
   getType_t<ENC,NARROW,WIDE>  getValue(NARROW narrow, WIDE wide) noexcept
   {
     return getValue<encoding_char_t<ENC>>(narrow, wide);
-  };
+  }
   
   // --------------------------------- FUNCTION SELECTORS ---------------------------------
 
@@ -220,7 +220,7 @@ namespace wtl
   auto  getFunc(NARROW narrow, WIDE wide) noexcept
   {
     return getValue<CHR>(narrow,wide);
-  };
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::getFunc constexpr
@@ -238,7 +238,7 @@ namespace wtl
   auto  getFunc(NARROW narrow, WIDE wide) noexcept
   {
     return getValue<ENC>(narrow, wide);
-  };
+  }
 
   
 } //namespace wtl
