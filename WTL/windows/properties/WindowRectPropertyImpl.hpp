@@ -43,13 +43,16 @@ namespace wtl
         throw platform_error(HERE, "Unable to query window rectangle");
       return wnd;
     }
+    // [~EXISTS] Calculate from size & position
+    else
+    {
+      // [DEFAULT] Sentinel values are invalid by definition
+      if (this->Window.Size == window_t::DefaultSize || this->Window.Position == window_t::DefaultPosition)
+        throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
 
-    // [DEFAULT] Error: Cannot generate a window rectangle from default co-ordinates
-    if (this->Window.Size == window_t::DefaultSize || this->Window.Position == window_t::DefaultPosition)
-      throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
-
-    // [~EXISTS] Generate from cached size & position
-    return { this->Window.Position(), this->Window.Size() };
+      // [~DEFAULT] Generate rectangle from offline size & position
+      return { this->Window.Position(), this->Window.Size() };
+    }
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -60,7 +63,7 @@ namespace wtl
   //! 
   //! \param[in] rc - Window rectangle
   //! 
-  //! \throw wtl::platform_error - Unable to set window position
+  //! \throw wtl::platform_error - Unable to set window rectangle
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  WindowRectPropertyImpl<ENC>::set(value_t rc) 
@@ -85,9 +88,8 @@ namespace wtl
       if (!::SetWindowPos(this->Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
         throw platform_error(HERE, "Unable to set window position");
     }
-
     // [¬EXISTS] Set size/position
-    if (!this->Window.exists())
+    else
     {
       this->Window.Size = rc.size();
       this->Window.Position = rc.topLeft();

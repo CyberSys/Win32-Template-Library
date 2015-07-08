@@ -46,6 +46,8 @@ namespace wtl
   //! Set the current window style iff window exists, otherwise 'initial' style
   //! 
   //! \param[in] style - Window style
+  //! 
+  //! \throw wtl::platform_error - Unable to set window style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  StylePropertyImpl<ENC>::set(value_t style) 

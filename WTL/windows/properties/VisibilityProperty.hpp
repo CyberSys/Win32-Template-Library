@@ -61,6 +61,8 @@ namespace wtl
     //! Get the window visibility
     //! 
     //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
+    //! 
+    //! \throw wtl::platform_error - Unable to query window visibility
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
@@ -71,6 +73,8 @@ namespace wtl
     //! Set the current window visibility iff window exists, otherwise 'initial' visibility
     //! 
     //! \param[in] visibility - Window visibility
+    //! 
+    //! \throw wtl::platform_error - Unable to set window visibility
     /////////////////////////////////////////////////////////////////////////////////////////
     void set(value_t visibility);
   };

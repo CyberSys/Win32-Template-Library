@@ -64,6 +64,8 @@ namespace wtl
     //! Get the current text if window exists, otherwise 'initial' text
     //! 
     //! \return value_t - Dynamic string containing current Window text (using window character encoding)
+    //! 
+    //! \throw wtl::platform_error - Unable to retrieve window text
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
@@ -74,6 +76,8 @@ namespace wtl
     //! Set the current window text iff window exists, otherwise 'initial' text
     //! 
     //! \param[in] text - Window text
+    //! 
+    //! \throw wtl::platform_error - Unable to set window text
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set(value_t text);
   };

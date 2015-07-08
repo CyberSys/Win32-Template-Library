@@ -71,6 +71,8 @@ namespace wtl
     //! Set the current window id iff window exists, otherwise 'initial' window-id
     //! 
     //! \param[in] id - Window id
+    //! 
+    //! \throw wtl::platform_error - Unable to set window-id
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set(value_t id);
   };

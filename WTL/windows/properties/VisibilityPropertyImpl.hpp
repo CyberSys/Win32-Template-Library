@@ -28,6 +28,8 @@ namespace wtl
   //! Get the window visibility
   //! 
   //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
+  //! 
+  //! \throw wtl::platform_error - Unable to query window visibility
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   typename VisibilityPropertyImpl<ENC>::value_t  VisibilityPropertyImpl<ENC>::get() const 
@@ -56,6 +58,8 @@ namespace wtl
   //! Set the current window visibility iff window exists, otherwise 'initial' visibility
   //! 
   //! \param[in] visibility - Window visibility
+  //! 
+  //! \throw wtl::platform_error - Unable to set window visibility
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  VisibilityPropertyImpl<ENC>::set(value_t visibility) 

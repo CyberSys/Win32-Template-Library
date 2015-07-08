@@ -63,6 +63,9 @@ namespace wtl
     //! Get the window rectangle
     //! 
     //! \return value_t - Current rectangle if window exists, otherwise 'initial' rectangle
+    //!
+    //! \throw wtl::logic_error - Window is using default size or location
+    //! \throw wtl::platform_error - Unable to query window rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
@@ -73,6 +76,8 @@ namespace wtl
     //! Set the current window rectangle iff window exists, otherwise 'initial' rectangle
     //! 
     //! \param[in] rectangle - Window rectangle
+    //! 
+    //! \throw wtl::platform_error - Unable to set window position
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set(value_t rectangle);
   };

@@ -46,6 +46,8 @@ namespace wtl
   //! Set the current window state iff window exists, otherwise 'initial' state
   //! 
   //! \param[in] state - Window state
+  //! 
+  //! \throw wtl::platform_error - Unable to set window state
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  EnabledPropertyImpl<ENC>::set(value_t state) 

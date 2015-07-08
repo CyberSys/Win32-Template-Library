@@ -26,6 +26,8 @@ namespace wtl
   //! Get the window size
   //! 
   //! \return value_t - Current size if window exists, otherwise 'initial' size
+  //! 
+  //! \throw wtl::platform_error - [Exists] Unable to query window rectangle
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   typename SizePropertyImpl<ENC>::value_t  SizePropertyImpl<ENC>::get() const 
@@ -45,6 +47,8 @@ namespace wtl
   //! Set the current window size iff window exists, otherwise 'initial' size
   //! 
   //! \param[in] size - Window size
+  //! 
+  //! \throw wtl::platform_error - [Exists] Unable to set window rectangle
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  SizePropertyImpl<ENC>::set(value_t size) 

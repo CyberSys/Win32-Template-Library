@@ -69,7 +69,7 @@ namespace wtl
   //! 
   //! \param[in] rc - New client rectangle
   //! 
-  //! \throw wtl::platform_error - Unable to calculate window rectangle from client
+  //! \throw wtl::platform_error - Unable to set client rectangle 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  ClientRectPropertyImpl<ENC>::set(value_t rc) 

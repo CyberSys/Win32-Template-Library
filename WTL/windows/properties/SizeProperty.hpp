@@ -62,6 +62,8 @@ namespace wtl
     //! Get the window size
     //! 
     //! \return value_t - Current size if window exists, otherwise 'initial' size
+    //! 
+    //! \throw wtl::platform_error - [Exists] Unable to query window rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
@@ -72,6 +74,8 @@ namespace wtl
     //! Set the current window size iff window exists, otherwise 'initial' size
     //! 
     //! \param[in] size - Window size
+    //! 
+    //! \throw wtl::platform_error - [Exists] Unable to set window rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set(value_t size);
   };
