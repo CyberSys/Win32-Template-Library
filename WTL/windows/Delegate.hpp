@@ -128,11 +128,17 @@ namespace wtl
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Delegate::operator() const
+    //! Execute delegate
+    //! 
+    //! \param[in,out] &&arg - Argument
+    //! \return RET - Return value
+    /////////////////////////////////////////////////////////////////////////////////////////
     template <typename T>
     RET operator()(T&& args) const
     {
-      //return base::operator()(std::forward<ARGS>(args)...);
-      return RET();
+      return base::operator()(std::forward<ARGS>(args)...);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
