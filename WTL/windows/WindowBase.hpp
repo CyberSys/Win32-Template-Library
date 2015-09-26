@@ -266,12 +266,13 @@ namespace wtl
     //! \var CommandGroups - Static collection of all Commands groups
     static CommandGroupCollection<encoding>   CommandGroups;
 
-    //! \var DefaultPosition - Default window creation position
+    //! \var DefaultPosition - Default window position upon creation
     //static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
     static const PointL  DefaultPosition;
 
-    //! \var DefaultSize - Default window creation size
-    static constexpr SizeL  DefaultSize  {CW_USEDEFAULT, CW_USEDEFAULT};
+    //! \var DefaultSize - Default window size upon creation
+    //static constexpr SizeL  DefaultSize  {CW_USEDEFAULT, CW_USEDEFAULT};
+    static const SizeL  DefaultSize;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
@@ -877,10 +878,16 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \var WindowBase::DefaultPosition - Default window position
+  //! \var WindowBase::DefaultPosition - Default window position upon creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  const PointL  WindowBase<ENC>::DefaultPosition {CW_USEDEFAULT, CW_USEDEFAULT};
+  const PointL  WindowBase<ENC>::DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var WindowBase::DefaultSize - Default window size upon creation
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  const SizeL  WindowBase<ENC>::DefaultSize = {CW_USEDEFAULT, CW_USEDEFAULT};
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \var WindowBase::CommandGroups - Collection of all Command groups 
@@ -888,12 +895,11 @@ namespace wtl
   template <Encoding ENC>
   CommandGroupCollection<ENC>   WindowBase<ENC>::CommandGroups;
   
-
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \var WindowBase::ActiveWindows - Collection of all WTL windows 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //template <Encoding ENC>
-  //WindowHandleCollection<ENC>   WindowBase<ENC>::ActiveWindows;
+  template <Encoding ENC>
+  WindowHandleCollection<ENC>   WindowBase<ENC>::ActiveWindows;
 
   
 } // namespace wtl
