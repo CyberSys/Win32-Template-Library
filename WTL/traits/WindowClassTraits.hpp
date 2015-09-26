@@ -34,7 +34,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::ATOM npos = default<::ATOM>(); 
+    static constexpr ::ATOM npos = defvalue<::ATOM>(); 
 
     //! \alias WndClassEx - Window class data type
     template <Encoding ENC>

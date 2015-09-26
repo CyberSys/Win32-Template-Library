@@ -31,7 +31,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HFILESEARCH npos = (::HFILESEARCH)INVALID_HANDLE_VALUE;    //default<::HFILESEARCH>(); 
+    static constexpr ::HFILESEARCH npos = (::HFILESEARCH)INVALID_HANDLE_VALUE;    //defvalue<::HFILESEARCH>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

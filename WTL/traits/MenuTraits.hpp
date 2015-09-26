@@ -31,7 +31,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HMENU npos = default<::HMENU>(); 
+    static constexpr ::HMENU npos = defvalue<::HMENU>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

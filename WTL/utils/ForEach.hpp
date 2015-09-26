@@ -24,13 +24,13 @@ namespace wtl
   //! \tparam ELEMS... - [optional] Tuple types
   //!
   //! \param[in,out] &t - Any tuple
-  //! \param[in,out] &fn - Unary callable target
+  //! \param[in] fn - Unary callable target
   //! \return FUNC - Copy of 'fn' on final pass
   //! 
   //! \remarks The callable target is not copied and may maintain state
   //////////////////////////////////////////////////////////////////////////////////////////
   template <unsigned IDX, typename FUNC, typename... ELEMS>
-  auto for_each(const std::tuple<ELEMS...>& t, FUNC& fn) -> std::enable_if_t<(IDX < sizeof...(ELEMS)), FUNC&>
+  auto for_each(const std::tuple<ELEMS...>& t, FUNC fn) -> std::enable_if_t<(IDX < sizeof...(ELEMS)), FUNC>
   {
     // Call target with current element
     fn(std::get<IDX>(t));
@@ -44,7 +44,7 @@ namespace wtl
   //! Stop after final element
   //////////////////////////////////////////////////////////////////////////////////////////
   template <unsigned IDX, typename FUNC, typename... ELEMS>
-  auto for_each(const std::tuple<ELEMS...>& t, FUNC& fn) -> std::enable_if_t<IDX == sizeof...(ELEMS), FUNC&>
+  auto for_each(const std::tuple<ELEMS...>& t, FUNC fn) -> std::enable_if_t<IDX == sizeof...(ELEMS), FUNC>
   { 
     // Return target in final state
     return fn;

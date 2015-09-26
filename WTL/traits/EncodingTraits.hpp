@@ -217,7 +217,7 @@ namespace wtl
   //! \return auto - 'narrow' if sizeof(CHR) == 1, otherwise 'wide'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename CHR, typename NARROW, typename WIDE> constexpr
-  auto  getFunc(NARROW narrow, WIDE wide) noexcept
+  auto  getFunc(NARROW narrow, WIDE wide) noexcept //-> std::result_of_t<getType<CHR,NARROW,WIDE>>
   {
     return getValue<CHR>(narrow,wide);
   }
@@ -235,7 +235,7 @@ namespace wtl
   //! \return auto - 'narrow' if narrow character encoding, otherwise 'wide'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename NARROW, typename WIDE> constexpr
-  auto  getFunc(NARROW narrow, WIDE wide) noexcept
+  auto  getFunc(NARROW narrow, WIDE wide) noexcept //-> std::result_of_t<getType_t<ENC,NARROW,WIDE>>
   {
     return getValue<ENC>(narrow, wide);
   }

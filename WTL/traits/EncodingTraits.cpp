@@ -11,7 +11,7 @@
 
 // Debug
 #include "wtl/windows/Window.hpp"
-static wtl::MessageWindow<> wnd;
+static wtl::MessageWindow<> wnd;      //!< Forced compilation of library
 
 //! \namespace wtl - Windows template library
 namespace wtl

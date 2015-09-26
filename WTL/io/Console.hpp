@@ -158,7 +158,7 @@ namespace wtl
       // ConsoleLock::ConsoleLock
       //! Attempts to create the wrapper, blocking until the lock is accquired
       //////////////////////////////////////////////////////////////////////////////////////////
-      ConsoleLock(Console& c) : Lock(c), Output(c)
+      ConsoleLock(Console& c) : Output(c), Lock(c)
       {}
 
       //////////////////////////////////////////////////////////////////////////////////////////
@@ -289,7 +289,7 @@ namespace wtl
       // [ERROR] Unable to attach console
       catch (exception& e)
       {
-        ::MessageBoxA(default<::HWND>(), e.what(), "Debug Console", enum_cast(MessageBoxFlags::Ok|MessageBoxFlags::IconError));
+        ::MessageBoxA(defvalue<::HWND>(), e.what(), "Debug Console", enum_cast(MessageBoxFlags::Ok|MessageBoxFlags::IconError));
       }
     }
 

@@ -32,7 +32,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HGLOBAL npos = default<::HGLOBAL>(); 
+    static constexpr ::HGLOBAL npos = defvalue<::HGLOBAL>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

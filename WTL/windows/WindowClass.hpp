@@ -57,7 +57,7 @@ namespace wtl
                 Menu;              //!< Window menu name
     HIcon       SmallIcon,         //!< Small icon
                 LargeIcon;         //!< Large icon
-    int32_t       ClassStorage,      //!< Size of class storage, in bytes
+    int32_t     ClassStorage,      //!< Size of class storage, in bytes
                 WindowStorage;     //!< Size of window storage, in bytes
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
@@ -84,17 +84,17 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to register class
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(resource_t id) : Name(id),
-                                 Atom(default<HAtom>()),
-                                 Background(default<HBrush>()),
-                                 ClassStorage(default(ClassStorage)),
-                                 Cursor(default<HCursor>()),
-                                 Instance(default<::HINSTANCE>()),
-                                 LargeIcon(default<HIcon>()),
-                                 Menu(default<resource_t>()),
-                                 SmallIcon(default<HIcon>()),
-                                 Style(default<ClassStyle>()),
-                                 WindowStorage(default(WindowStorage)),
-                                 WndProc(default<::WNDPROC>())
+                                 Atom(defvalue<HAtom>()),
+                                 Background(defvalue<HBrush>()),
+                                 ClassStorage(defvalue(ClassStorage)),
+                                 Cursor(defvalue<HCursor>()),
+                                 Instance(defvalue<::HINSTANCE>()),
+                                 LargeIcon(defvalue<HIcon>()),
+                                 Menu(defvalue<resource_t>()),
+                                 SmallIcon(defvalue<HIcon>()),
+                                 Style(defvalue<ClassStyle>()),
+                                 WindowStorage(defvalue(WindowStorage)),
+                                 WndProc(defvalue<::WNDPROC>())
     {
       //! \var getClassInfoEx - Functor for 'GetClassInfoEx' 
       static const auto getClassInfoEx = getFunc<ENC>(::GetClassInfoExA,::GetClassInfoExW);

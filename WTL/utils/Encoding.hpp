@@ -209,7 +209,7 @@ namespace wtl
       const int32_t CAPACITY = lastOut-firstOut-1;   //!< Output buffer character capacity 
 
       // Clear output
-      firstOut[0] = default<output_t>();
+      firstOut[0] = defvalue<output_t>();
 
       // Prevent output buffer overrun
       if (lastIn - firstIn > CAPACITY)
@@ -220,7 +220,7 @@ namespace wtl
         *firstOut = *pos;
 
       // null terminate
-      *firstOut = default<output_t>();
+      *firstOut = defvalue<output_t>();
         
       // Return number of characters copied
       return lastIn-firstIn;

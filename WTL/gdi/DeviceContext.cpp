@@ -17,7 +17,7 @@ namespace wtl
   // ----------------------------------- REPRESENTATION -----------------------------------
   
   //! \var DeviceContext::ScreenDC - Screen device context
-  DeviceContext  DeviceContext::ScreenDC = default<HDeviceContext>();
+  DeviceContext  DeviceContext::ScreenDC = defvalue<HDeviceContext>();
   
   // ------------------------------------ CONSTRUCTION ------------------------------------
 	

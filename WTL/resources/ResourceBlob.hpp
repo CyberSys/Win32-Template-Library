@@ -38,9 +38,9 @@ namespace wtl
     // ResourceBlob::ResourceBlob
     //! Create empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    ResourceBlob() : Module(default<HModule>()),
-                     Handle(default<HResource>()),
-                     Block(default<HGlobal>()),
+    ResourceBlob() : Module(defvalue<HModule>()),
+                     Handle(defvalue<HResource>()),
+                     Block(defvalue<HGlobal>()),
                      Data(nullptr)
     {
     }

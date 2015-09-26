@@ -89,7 +89,7 @@ namespace wtl
         return (value = it, true);
 
     // Return false and set value to default
-    return (value = default<ENUM>(), false);
+    return (value = defvalue<ENUM>(), false);
   }
 
 }

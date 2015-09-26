@@ -72,7 +72,7 @@ namespace wtl
   //! \tparam ARGS - [optional] Constructor argument types  (Default is none)
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename RET = void, typename... ARGS>
-  using enable_if_class_constructible_t = std::enable_if_t<std::is_class<T>::value && std::is_constructible<T,ARGS...>, RET>;
+  using enable_if_class_constructible_t = std::enable_if_t<std::is_class<T>::value && std::is_constructible<T,ARGS...>::value, RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////

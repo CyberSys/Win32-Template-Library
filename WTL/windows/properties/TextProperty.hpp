@@ -54,7 +54,7 @@ namespace wtl
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial window text
     /////////////////////////////////////////////////////////////////////////////////////////
-    TextPropertyImpl(WindowBase<ENC>& wnd, value_t init = default<value_t>()) : base(wnd, init)
+    TextPropertyImpl(WindowBase<ENC>& wnd, value_t init = defvalue<value_t>()) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

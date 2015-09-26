@@ -121,7 +121,7 @@ namespace wtl
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::default constexpr
+  //! wtl::defvalue constexpr
   //! Get the default-value for any type
   //! 
   //! \tparam T - Any type
@@ -129,7 +129,7 @@ namespace wtl
   //! \return default_t<T> - Default value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> constexpr
-  T  default() noexcept
+  T  defvalue() noexcept
   {
     // Return default value
     return default_t<T>::value;   
@@ -137,7 +137,7 @@ namespace wtl
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::default constexpr
+  //! wtl::defvalue constexpr
   //! Get the default-value for any type via ATD
   //! 
   //! \tparam T - Any type
@@ -146,7 +146,7 @@ namespace wtl
   //! \return default_t<T> - Default value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> constexpr
-  T  default(const T&) noexcept
+  T  defvalue(const T&) noexcept
   {
     // Return default value
     return default_t<T>::value;   

@@ -37,7 +37,7 @@ namespace wtl
     
   public:
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HICON npos = default<::HICON>(); 
+    static constexpr ::HICON npos = defvalue<::HICON>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

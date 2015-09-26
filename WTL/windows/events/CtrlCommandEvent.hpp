@@ -115,7 +115,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = default<EVENT>()>
+  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
   using CtrlCommandEvent = ControlEvent<ENC,WindowMessage::COMMAND,EVENT,CODE>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +125,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = default<EVENT>()>
+  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
   using CtrlCommandEventArgs = ControlEventArgs<ENC,WindowMessage::COMMAND,EVENT,CODE>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification message (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = default<EVENT>()>
+  template <Encoding ENC, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
   using CtrlCommandEventHandler = ControlEventHandler<ENC,WindowMessage::COMMAND,EVENT,CODE>;
 
   

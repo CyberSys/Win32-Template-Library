@@ -134,7 +134,7 @@ namespace wtl
   //  static constexpr Encoding encoding = ENC;
 
   //  //! \var null_t - Null terminator
-  //  static constexpr char_t null_t = default<char_t>();
+  //  static constexpr char_t null_t = defvalue<char_t>();
   //  
   //protected:
   //  /////////////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ namespace wtl
   //      const int32_t CAPACITY = lastOut-output-1;   //!< Output buffer character capacity 
 
   //      // Clear output
-  //      output[0] = default<output_t>();
+  //      output[0] = defvalue<output_t>();
 
   //      // Prevent output buffer overrun
   //      if (last - first > CAPACITY)
@@ -272,7 +272,7 @@ namespace wtl
   //        *output = *pos;
 
   //      // null terminate
-  //      *output = default<output_t>();
+  //      *output = defvalue<output_t>();
   //      
   //      // Return number of characters copied
   //      return last-first;

@@ -183,10 +183,10 @@ namespace wtl
     //! 
     //! \param[in] dc - Device context handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    DeviceContext(const HDeviceContext& dc) : Handle(dc),
-                                              ObjectStack<HBrush>(dc),
+    DeviceContext(const HDeviceContext& dc) : ObjectStack<HBrush>(dc),
                                               ObjectStack<HPen>(dc),
-                                              ObjectStack<HFont>(dc)
+                                              ObjectStack<HFont>(dc),
+                                              Handle(dc)
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

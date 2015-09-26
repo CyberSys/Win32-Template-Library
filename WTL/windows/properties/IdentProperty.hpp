@@ -62,7 +62,7 @@ namespace wtl
     //! 
     //! \return value_t - Current window-id if window exists, otherwise 'initial' window-id
     /////////////////////////////////////////////////////////////////////////////////////////
-    value_t  get() const; // { return default<WindowId>(); }
+    value_t  get() const; // { return defvalue<WindowId>(); }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 

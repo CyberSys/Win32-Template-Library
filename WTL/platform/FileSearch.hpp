@@ -111,7 +111,7 @@ namespace wtl
       LOGIC_INVARIANT(exists());
 
       // Query current result attributes
-      return (FileAttribute::Directory & Result.dwFileAttributes) != default<FileAttribute>();
+      return (FileAttribute::Directory & Result.dwFileAttributes) != defvalue<FileAttribute>();
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////

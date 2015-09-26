@@ -53,7 +53,7 @@ namespace wtl
     //! 
     //! \param[in,out] &wnd - Owner window
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, default<value_t>())
+    WindowRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, defvalue<value_t>())
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

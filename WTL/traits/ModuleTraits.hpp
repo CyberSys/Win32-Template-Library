@@ -30,7 +30,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HMODULE npos = default<::HMODULE>(); 
+    static constexpr ::HMODULE npos = defvalue<::HMODULE>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

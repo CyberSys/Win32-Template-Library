@@ -28,7 +28,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HACCEL npos = default<::HACCEL>(); 
+    static constexpr ::HACCEL npos = defvalue<::HACCEL>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

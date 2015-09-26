@@ -85,7 +85,7 @@ namespace wtl
         flags |= MoveWindowFlags::NoMove;
 
       // Resize/reposition window
-      if (!::SetWindowPos(this->Window, default<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+      if (!::SetWindowPos(this->Window, defvalue<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
         throw platform_error(HERE, "Unable to set window position");
     }
     // [¬EXISTS] Set size/position

@@ -267,10 +267,11 @@ namespace wtl
     static CommandGroupCollection<encoding>   CommandGroups;
 
     //! \var DefaultPosition - Default window creation position
-    static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
+    //static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
+    static const PointL  DefaultPosition;
 
     //! \var DefaultSize - Default window creation size
-    static constexpr SizeL  DefaultSize = {CW_USEDEFAULT, CW_USEDEFAULT};
+    static constexpr SizeL  DefaultSize  {CW_USEDEFAULT, CW_USEDEFAULT};
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
@@ -321,7 +322,7 @@ namespace wtl
                                   Enabled(*this, true),
                                   Font(*this, StockObject::SystemFont),
                                   Ident(*this, zero<WindowId>()),
-                                  Handle(default<HWnd>()),
+                                  Handle(defvalue<HWnd>()),
                                   Position(*this, DefaultPosition),
                                   Size(*this, DefaultSize),
                                   Style(*this, WindowStyle::OverlappedWindow),
@@ -595,10 +596,10 @@ namespace wtl
       // [POPUP/OVERLAPPED] Create window (possibly with menu)
       else
       {
-        ::HWND parent = owner ? (::HWND)owner->handle() : default<::HWND>();          //!< Use parent if any
+        ::HWND parent = owner ? (::HWND)owner->handle() : defvalue<::HWND>();          //!< Use parent if any
 
         // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
-        Handle = HWnd(Class, *this, parent, Style, StyleEx, default<::HMENU>(), Text, Position, Size);
+        Handle = HWnd(Class, *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text, Position, Size);
 
         // [MENU] Attach menu if populated during onCreate(..)
         if (!Menu.empty())
@@ -747,13 +748,13 @@ namespace wtl
       try
       {
         LResult ret;       //!< Message result, defaults to unhandled
-
+        
         // [EVENT] Raise event associated with message
         switch (message)
         {
         case WindowMessage::CREATE:           ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
-        case WindowMessage::CLOSE:            ret = Close.raise();                                                          break;
-        case WindowMessage::DESTROY:          ret = Destroy.raise();                                                        break;
+        case WindowMessage::CLOSE:            ret = Close.raise();                                                  break;
+        case WindowMessage::DESTROY:          ret = Destroy.raise();                                                break;
         case WindowMessage::SHOWWINDOW:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
         case WindowMessage::WINDOWPOSCHANGED: ret = Repositioned.raise(PositionChangedEventArgs<encoding>(w,l));    break;
 
@@ -876,6 +877,12 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var WindowBase::DefaultPosition - Default window position
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  const PointL  WindowBase<ENC>::DefaultPosition {CW_USEDEFAULT, CW_USEDEFAULT};
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \var WindowBase::CommandGroups - Collection of all Command groups 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
@@ -885,8 +892,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \var WindowBase::ActiveWindows - Collection of all WTL windows 
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  WindowHandleCollection<ENC>   WindowBase<ENC>::ActiveWindows;
+  //template <Encoding ENC>
+  //WindowHandleCollection<ENC>   WindowBase<ENC>::ActiveWindows;
 
   
 } // namespace wtl

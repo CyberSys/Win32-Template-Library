@@ -72,7 +72,7 @@ namespace wtl
   //! \return ObjectInfo<PAIRS...> - Debug info
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename... PAIRS>
-  ObjectInfo<PAIRS...>  make_object_info(const char* name, std::tuple<PAIRS...>& attr)
+  ObjectInfo<PAIRS...>  make_object_info(const char* name, const std::tuple<PAIRS...>& attr)
   {
     // Create debug info
     return ObjectInfo<PAIRS...>(name, attr);

@@ -83,7 +83,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HDC npos = default<::HDC>(); 
+    static constexpr ::HDC npos = defvalue<::HDC>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

@@ -48,8 +48,8 @@ namespace wtl
     //! Create empty size of zero width and height
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Size() : width(default<T>()), 
-             height(default<T>())
+    Size() : width(defvalue<T>()), 
+             height(defvalue<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////

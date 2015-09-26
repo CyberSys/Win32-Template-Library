@@ -32,7 +32,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HBRUSH npos = default<::HBRUSH>(); 
+    static constexpr ::HBRUSH npos = defvalue<::HBRUSH>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

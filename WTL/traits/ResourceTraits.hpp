@@ -33,7 +33,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HRSRC npos = default<::HRSRC>(); 
+    static constexpr ::HRSRC npos = defvalue<::HRSRC>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

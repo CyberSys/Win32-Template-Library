@@ -39,7 +39,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HWND npos = default<::HWND>(); 
+    static constexpr ::HWND npos = defvalue<::HWND>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

@@ -56,10 +56,10 @@ namespace wtl
     //! Create empty rectangle with all fields initialized to zero
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Rect() : left(default<T>()), 
-             top(default<T>()), 
-             right(default<T>()), 
-             bottom(default<T>())
+    Rect() : left(defvalue<T>()), 
+             top(defvalue<T>()), 
+             right(defvalue<T>()), 
+             bottom(defvalue<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -139,10 +139,10 @@ namespace wtl
     template <typename A, typename B> constexpr
     static Rect FromMidPoint(const Point<A>&  middle, const Size<B>& size)
     {
-      return  Rect(static_cast<value_t>(middle.x) - (width / 2), 
-                   static_cast<value_t>(middle.y) - (height / 2), 
-                   static_cast<value_t>(middle.x) + (width / 2), 
-                   static_cast<value_t>(middle.y) + (height / 2));
+      return  Rect(static_cast<value_t>(middle.x) - (size.width() / 2), 
+                   static_cast<value_t>(middle.y) - (size.height() / 2), 
+                   static_cast<value_t>(middle.x) + (size.width() / 2), 
+                   static_cast<value_t>(middle.y) + (size.height() / 2));
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

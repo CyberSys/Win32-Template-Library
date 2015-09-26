@@ -9,6 +9,7 @@
 #define WTL_POINT_HPP
 
 #include "wtl/WTL.hpp"
+#include "wtl/utils/Default.hpp"       //!< Default
 #include "wtl/casts/NativeCast.hpp"    //!< NativeCast
 #include <type_traits>                 //!< std::enable_if
 
@@ -45,8 +46,8 @@ namespace wtl
     // Point::Point constexpr
     //! Create empty point centred at origin
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point() : x(default<T>()), 
-                        y(default<T>())
+    constexpr Point() : x(defvalue<T>()), 
+                        y(defvalue<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +105,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return *this == default<type>();
+      return *this == defvalue<type>();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +168,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void  clear() 
     {
-      *this = default<type>();
+      *this = defvalue<type>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

@@ -102,7 +102,7 @@ namespace wtl
         return ResourceBlob(Handle, HResource(res, AllocType::Accquire));
 
       // [NOT FOUND] Return sentinel
-      return default<ResourceBlob>();
+      return defvalue<ResourceBlob>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -216,12 +216,12 @@ namespace wtl
       for (const element_t& m : *this)
       {
         // [FOUND] Find & return resource
-        if ((res = m.get().findResource(type, name, language)) != default<ResourceBlob>())
+        if ((res = m.get().findResource(type, name, language)) != defvalue<ResourceBlob>())
           return res;
       }
       
       // [NOT FOUND] Return default
-      return default<ResourceBlob>();
+      return defvalue<ResourceBlob>();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

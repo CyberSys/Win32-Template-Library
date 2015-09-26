@@ -47,7 +47,7 @@
 #ifdef STRINGIFY_CAP
   #define HERE  (__FUNCTION__ "() on line " STR(__LINE__) " of " __FILE__) 
 #else
-  #define HERE  (__FUNCTION__ "() in " __FILE__)
+  #define HERE  (/*__FUNCTION__*/ "() in " __FILE__)
 #endif
 
 // --------------------------------------------------------------------------------------------------------

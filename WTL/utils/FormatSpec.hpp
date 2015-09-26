@@ -29,10 +29,10 @@ namespace wtl
 //! \if CONSTEXPR_SDMI_CAP - Enabled iff compiler supports constexpr static data member initialization 
 #ifdef CONSTEXPR_SDMI_CAP
   //! \var format_spec<CHR>::value - Define type specs for fundemental types
-  template <typename CHR> struct format_spec<CHR,double>         { static constexpr const CHR* value = getValue<CHR>("%llf", L"%llf");  };
-  template <typename CHR> struct format_spec<CHR,ulong64>        { static constexpr const CHR* value = getValue<CHR>("%llu", L"%llu");  };
-  template <typename CHR> struct format_spec<CHR,long64>         { static constexpr const CHR* value = getValue<CHR>("%lld", L"%lld");  };
-  template <typename CHR> struct format_spec<CHR,float>          { static constexpr const CHR* value = getValue<CHR>("%lf", L"%lf");    };
+   template <typename CHR> struct format_spec<CHR,ulong64_t>       { static constexpr const CHR* value = getValue<CHR>("%llu", L"%llu");  };
+  template <typename CHR> struct format_spec<CHR,long64_t>         { static constexpr const CHR* value = getValue<CHR>("%lld", L"%lld");  };
+  template <typename CHR> struct format_spec<CHR,float64_t>        { static constexpr const CHR* value = getValue<CHR>("%llf", L"%llf");  };
+  template <typename CHR> struct format_spec<CHR,float32_t>        { static constexpr const CHR* value = getValue<CHR>("%lf", L"%lf");    };
   template <typename CHR> struct format_spec<CHR,ulong32_t>        { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
   template <typename CHR> struct format_spec<CHR,long32_t>         { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
   template <typename CHR> struct format_spec<CHR,uint32_t>         { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };

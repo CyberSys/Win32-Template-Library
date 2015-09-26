@@ -34,7 +34,7 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HFONT npos = default<::HFONT>(); 
+    static constexpr ::HFONT npos = defvalue<::HFONT>(); 
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   

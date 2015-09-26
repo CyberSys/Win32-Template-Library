@@ -128,6 +128,13 @@ namespace wtl
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
+    template <typename T>
+    RET operator()(T&& args) const
+    {
+      //return base::operator()(std::forward<ARGS>(args)...);
+      return RET();
+    }
+
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
