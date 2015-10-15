@@ -17,11 +17,11 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::strlen_t
-  //! Get length of narrow character string 
-  //! 
+  //! Get length of narrow character string
+  //!
   //! \param[in] const* str - Narrow character string
   //! \return size_t - Length in characters
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -32,8 +32,8 @@ namespace wtl
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::strlen_t
-  //! Get length of wide character string 
-  //! 
+  //! Get length of wide character string
+  //!
   //! \param[in] const* str - Wide character string
   //! \return size_t - Length in characters
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::strcmp_t
   //! Case sensitive narrow character comparison
-  //! 
+  //!
   //! \param[in] const* a - Narrow char string
   //! \param[in] const* b - Another narrow char string
   //! \return int32_t - -1 if less, 0 if equal, 1 if greater
@@ -58,7 +58,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::strcmp_t
   //! Case sensitive wide character comparison
-  //! 
+  //!
   //! \param[in] const* a - Wide char string
   //! \param[in] const* b - Another wide char string
   //! \return int32_t - -1 if less, 0 if equal, 1 if greater
@@ -67,11 +67,11 @@ namespace wtl
   {
     return wcscmp(a,b);
   }
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::strcpy_t
   //! Copy narrow character string
-  //! 
+  //!
   //! \param[in] *dest - Narrow char string
   //! \param[in] const* src - Another narrow char string
   //! \return char* - Returns 'dest'
@@ -85,7 +85,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::strcpy_t
   //! Copy wide character string
-  //! 
+  //!
   //! \param[in] *dest - Wide char string
   //! \param[in] const* src - Another wide char string
   //! \return wchar_t* - Returns 'dest'
@@ -95,7 +95,7 @@ namespace wtl
   {
     return wcscpy_s(dest,src);
   }
-  
+
 
 
 
@@ -104,15 +104,15 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct String - Character string with an unlimited capacity and variable runtime length
   //!
-  //! \tparam ENC - Character encoding 
+  //! \tparam ENC - Character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using String = std::basic_string<encoding_char_t<ENC>>;
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct String - Character string with an unlimited capacity and variable runtime length
   //!
-  //! \tparam ENC - Character encoding 
+  //! \tparam ENC - Character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   //template <Encoding ENC>
   //struct String : std::basic_string<encoding_char_t<ENC>>
@@ -123,10 +123,10 @@ namespace wtl
 
   //  //! \alias base - Defines base type
   //  using base = std::basic_string<encoding_char_t<ENC>>;
-  //  
+  //
   //  //! \alias type - Defines own type
   //  using type = String<ENC>;
-  //  
+  //
   //  //! \alias char_t - Character type
   //  using char_t = encoding_char_t<ENC>;
 
@@ -135,11 +135,11 @@ namespace wtl
 
   //  //! \var null_t - Null terminator
   //  static constexpr char_t null_t = defvalue<char_t>();
-  //  
+  //
   //protected:
   //  /////////////////////////////////////////////////////////////////////////////////////////
   //  //! \struct conversion_proxy - Handles conversion between character encoding types
-  //  //! 
+  //  //!
   //  //! \tparam FROM - Input character encoding
   //  //! \tparam TO - Output character encoding
   //  /////////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +148,7 @@ namespace wtl
 
   //  /////////////////////////////////////////////////////////////////////////////////////////
   //  //! \struct conversion_proxy<FROM,Encoding::UTF16> - Handles narrow character -> wide character conversion
-  //  //! 
+  //  //!
   //  //! \tparam FROM - Input character encoding
   //  //! \tparam TO - Output character encoding
   //  /////////////////////////////////////////////////////////////////////////////////////////
@@ -164,9 +164,9 @@ namespace wtl
   //    /////////////////////////////////////////////////////////////////////////////////////////
   //    // conversion_proxy::convert
   //    //! Copy a narrow character string into a wide character buffer
-  //    //! 
+  //    //!
   //    //! \tparam INPUT - Input iterator type
-  //    //! 
+  //    //!
   //    //! \param[in] const* first - First character
   //    //! \param[in] const* last - Position beyond final character
   //    //! \param[in,out] *output - First character in output range
@@ -179,7 +179,7 @@ namespace wtl
   //    {
   //      REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
   //      REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
-  //      
+  //
   //      // narrow -> wide
   //      return MultiByteToWideChar(enum_cast(FROM), enum_cast(MultiByteFlags::PreComposed), std::addressof(*first), last-first, output, lastOut-output);
   //    }
@@ -187,7 +187,7 @@ namespace wtl
 
   //  /////////////////////////////////////////////////////////////////////////////////////////
   //  //! \struct conversion_proxy<Encoding::UTF16,TO> - Handles wide character -> narrow character conversion
-  //  //! 
+  //  //!
   //  //! \tparam FROM - Input character encoding
   //  //! \tparam TO - Output character encoding
   //  /////////////////////////////////////////////////////////////////////////////////////////
@@ -196,16 +196,16 @@ namespace wtl
   //  {
   //    //! \alias input_t - Input character type
   //    using input_t = encoding_char_t<Encoding::UTF16>;
-  //    
+  //
   //    //! \alias output_t - Output character type
   //    using output_t = encoding_char_t<TO>;
 
   //    /////////////////////////////////////////////////////////////////////////////////////////
   //    // conversion_proxy::convert
   //    //! Copy an wide character string into a narrow character buffer
-  //    //! 
+  //    //!
   //    //! \tparam INPUT - Input iterator type
-  //    //! 
+  //    //!
   //    //! \param[in] const* first - First character
   //    //! \param[in] const* last - Position beyond final character
   //    //! \param[in,out] *output - First character in output range
@@ -224,10 +224,10 @@ namespace wtl
   //      return WideCharToMultiByte(enum_cast(TO), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), std::addressof(*first), last-first, output, lastOut-output, "?", &useDefault);
   //    }
   //  };
-  //  
+  //
   //  /////////////////////////////////////////////////////////////////////////////////////////
   //  //! \struct conversion_proxy<E,E> - Handles no conversion required
-  //  //! 
+  //  //!
   //  //! \tparam E - Character encoding of both strings
   //  /////////////////////////////////////////////////////////////////////////////////////////
   //  template <Encoding E>
@@ -242,9 +242,9 @@ namespace wtl
   //    /////////////////////////////////////////////////////////////////////////////////////////
   //    // conversion_proxy::convert
   //    //! Copy an input string of equal encoding
-  //    //! 
+  //    //!
   //    //! \tparam INPUT - Input iterator type
-  //    //! 
+  //    //!
   //    //! \param[in] const* first - First character
   //    //! \param[in] const* last - Position beyond final character
   //    //! \param[in,out] *output - First character in output range
@@ -258,7 +258,7 @@ namespace wtl
   //      /*REQUIRED_PARAM(first);*/  REQUIRED_PARAM(output);
   //      /*REQUIRED_PARAM(last);*/   REQUIRED_PARAM(lastOut);
 
-  //      const int32_t CAPACITY = lastOut-output-1;   //!< Output buffer character capacity 
+  //      const int32_t CAPACITY = lastOut-output-1;   //!< Output buffer character capacity
 
   //      // Clear output
   //      output[0] = defvalue<output_t>();
@@ -273,7 +273,7 @@ namespace wtl
 
   //      // null terminate
   //      *output = defvalue<output_t>();
-  //      
+  //
   //      // Return number of characters copied
   //      return last-first;
   //    }
@@ -285,7 +285,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::c_str
   //! Creates a dynamic string from a character array or string literal
-  //! 
+  //!
   //! \tparam char_t - Character type
   //! \tparam encoding - [optional] Character encoding (if unspecified the default encoding for the character type is used)
   //!
@@ -293,25 +293,25 @@ namespace wtl
   //! \return String<ENC> - String containing 'str'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename char_t, Encoding encoding = default_encoding<char_t>::value>
-  String<encoding>  c_str(const char_t* str) 
+  String<encoding>  c_str(const char_t* str)
   {
     return String<encoding>(str);
-  };
+  }
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
   //! Writes a STL string to the debug console
-  //! 
+  //!
   //! \param[in,out] &c - Debug console
   //! \param[in] const& s - String
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   inline Console& operator << (Console& c, const std::string& s)
-  { 
+  {
     return c << s.c_str();
   }
-  
+
 
 
 } // WTL namespace

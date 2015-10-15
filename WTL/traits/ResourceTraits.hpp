@@ -16,13 +16,13 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias HResource - Shared resource handle
   /////////////////////////////////////////////////////////////////////////////////////////
   using HResource = Handle<::HRSRC>;
-  
-  
+
+
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct handle_alloc<::HRSRC> - Encapsulates allocating resource handles
@@ -31,14 +31,14 @@ namespace wtl
   struct handle_alloc<::HRSRC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
+
     //! \var npos - Invalid handle sentinel value
-    static constexpr ::HRSRC npos = defvalue<::HRSRC>(); 
-    
+    static constexpr ::HRSRC npos = defvalue<::HRSRC>();
+
     // ----------------------------------- REPRESENTATION -----------------------------------
-  
+
     // ------------------------------------ CONSTRUCTION ------------------------------------
-	
+
     DISABLE_CTOR(handle_alloc);     //!< Cannot instantiate
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -52,43 +52,43 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HRSRC>::create
     //! Create resource handle
-    //! 
-    //! \tparam ENC - Resource name character encoding 
+    //!
+    //! \tparam ENC - Resource name character encoding
     //!
     //! \param[in] const& module - Module containing resource
     //! \param[in] name - Resource identifier
     //! \param[in] type - Resource type
     //! \param[in] lang - Resource language
     //! \return HAlloc<::HRSRC> - Accquired handle
-    //! 
+    //!
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<::HRSRC> create(const HModule& module, ResourceId<ENC> name, ResourceType type, LanguageId language) 
-    { 
+    static HAlloc<::HRSRC> create(const HModule& module, ResourceId<ENC> name, ResourceType type, LanguageId language)
+    {
       // Load resource handle
-      if (::HRSRC res = getFunc<ENC>(::FindResourceExA,::FindResourceExW)(module, ResourceId(type), name, language))
+      if (::HRSRC res = getFunc<ENC>(::FindResourceExA,::FindResourceExW)(module, ResourceId<ENC>(type), name, language))
         return { res, AllocType::Accquire };
 
-      // Error: Failed  
+      // Error: Failed
       throw platform_error(HERE, "Unable to find resource");
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HRSRC>::clone
     //! Clone handle
-    //! 
+    //!
     //! \param[in] addr - Handle
     //! \return HAlloc<::HRSRC> - Duplicate of handle
-    //! 
+    //!
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
     static HAlloc<::HRSRC> clone(HAlloc<::HRSRC> addr);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HRSRC>::destroy noexcept
-    //! Release handle 
-    //! 
+    //! Release handle
+    //!
     //! \param[in] addr - Handle
     //! \return bool - Always true
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -97,12 +97,12 @@ namespace wtl
       // Resource handles are not released by module under Win32
       return true;
     }
-    
+
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
-  
+
 } //namespace wtl
 #endif // WTL_RESOURCE_TRAITS_HPP
 

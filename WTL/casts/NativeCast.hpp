@@ -15,20 +15,20 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct native_conversion - Defines a set of meta-functions, each defining a conversion to a native type
-  //! 
+  //!
   //! \tparam T - Any type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename = void> 
+  template <typename T, typename = void>
   struct native_conversion;  /* Undefined */
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::native_cast
   //! Converts any type to an equivalent native type iff a native conversion is defined
-  //! 
+  //!
   //! \tparam T - Input type
   //!
   //! \param[in] &obj - Mutable object reference
@@ -38,13 +38,13 @@ namespace wtl
   typename native_conversion<T>::result_t&  native_cast(T& obj)
   {
     return *reinterpret_cast<typename native_conversion<T>::result_t*>(&obj);
-  };
-  
+  }
+
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::native_cast const
   //! Converts any type to an equivalent native type iff a native conversion is defined
-  //! 
+  //!
   //! \tparam T - Input type
   //!
   //! \param[in] const &obj - Immutable object reference
@@ -54,7 +54,7 @@ namespace wtl
   const typename native_conversion<T>::result_t&  native_cast(const T& obj)
   {
     return *reinterpret_cast<const typename native_conversion<T>::result_t*>(&obj);
-  };
+  }
 }
 
 

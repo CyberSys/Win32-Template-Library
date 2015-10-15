@@ -15,11 +15,11 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::enum_cast constexpr
   //! Converts an enumeration to its underlying type
-  //! 
+  //!
   //! \tparam T - Enumeration type
   //!
   //! \param[in] value - Enumeration value
@@ -29,23 +29,23 @@ namespace wtl
   std::underlying_type_t<T> enum_cast(T value)
   {
     return static_cast<std::underlying_type_t<T>>(value);
-  };
-  
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::enum_cast constexpr
   //! Converts an underlying type to an enumeration value
-  //! 
+  //!
   //! \tparam T - Enumeration type
   //!
   //! \param[in] value - Underlying value
   //! \return T - Enumeration value
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename = enable_if_enum_t<T>> constexpr
-  T enum_cast(std::underlying_type_t<T> value) 
+  T enum_cast(std::underlying_type_t<T> value)
   {
     return static_cast<T>(value);
-  };
-  
+  }
+
 }
 
 

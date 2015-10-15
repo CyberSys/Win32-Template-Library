@@ -31,6 +31,9 @@
   #define NOMINMAX
 #endif
 
+//! \def _GLIBCXX_USE_INT128 - Remove int128 from clang
+#undef _GLIBCXX_USE_INT128
+
 // Target Platform v5.01 (WindowsXP)
 #include <WinSDKVer.h>
 #define _WIN32_WINNT    _WIN32_WINNT_WINXP
@@ -38,8 +41,8 @@
 
 #include <windows.h>        // Main windows header
 #include <commctrl.h>       // Common controls library
-//#include <windowsx.h> 
-#include <tchar.h>          // Defines narrow/wide char Win32 entry points 
+//#include <windowsx.h>
+#include <tchar.h>          // Defines narrow/wide char Win32 entry points
 //#include <strsafe.h>        // StringSafe library - Secure string handling
 #include <shlwapi.h>        // Shell light-weight API - Path handling
 //#include <Shellapi.h>     // Shell API - FileSystem-Shell COM interop  (Disabled)

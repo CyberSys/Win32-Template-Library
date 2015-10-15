@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Array.hpp"              //!< Array
+#include "wtl/utils/Adapters.hpp"           //!< if_then
 #include "wtl/utils/Exception.hpp"          //!< Exceptions
 #include "wtl/io/Console.hpp"               //!< Debug console
 #include <iterator>                         //!< std::iterator
@@ -21,8 +22,8 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias DynamicArray - Statically allocated fixed capacity array with variable runtime length 
-  //! 
+  //! \alias DynamicArray - Statically allocated fixed capacity array with variable runtime length
+  //!
   //! \tparam DATA - Type of each element
   //! \tparam LENGTH - Maximum number of elements within the array
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +33,7 @@ namespace wtl
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Array<DATA,LENGTH,true> - Partial specialization for dynamic arrays
-  //! 
+  //!
   //! \tparam DATA - Type of each element
   //! \tparam LENGTH - Maximum number of elements within the array
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -40,33 +41,33 @@ namespace wtl
   struct Array<DATA,LENGTH,true>
   {
     friend struct Array;                     // Unbound friend of itself
-    
+
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
+
     //! \alias cast - Defines dynamic array of equal length & dissimilar type
     template <typename D>
 		using cast = Array<D,LENGTH,true>;
-    
+
     //! \alias ptrdiff_t - Pointer difference type
     using ptrdiff_t = intptr_t;
-    
-    //! \alias other - Defines fixed array of equal type & length 
+
+    //! \alias other - Defines fixed array of equal type & length
 		using other = Array<DATA,LENGTH,false>;
 
     //! \alias resize - Defines dynamic array of equal type & dissimilar length
     template <unsigned L>
 		using resize = Array<DATA,L,true>;
-    
+
     //! \alias traits - Traits type
     using traits = array_traits<DATA>;
-    
+
     //! \alias value_type - Element data type
     using value_type = DATA;
-    
+
     //! \alias reference/pointer - Mutable element reference/pointer
     using reference = value_type&;
     using pointer   = value_type*;
-    
+
     //! \alias array_t/array_ref/array_ptr - Mutable array value/reference/pointer
     using array_t   = value_type [LENGTH];
     using array_ref = value_type (&)[LENGTH];
@@ -98,14 +99,14 @@ namespace wtl
     //! \tparam CONTAINER - Array type
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename VALUE = value_type, typename CONTAINER = Array>
-    struct iterator_t : public std::iterator<std::random_access_iterator_tag, VALUE> 
+    struct iterator_t : public std::iterator<std::random_access_iterator_tag, VALUE>
     {
       friend struct Array;   // Unbound friend of array
 
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
       // ------------------------------------ CONSTRUCTION ------------------------------------
-    
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::iterator_t
       //! Create iterator at any position
@@ -113,7 +114,7 @@ namespace wtl
       //! \param[in,out] &a - Array over which to iterate
       //! \param[in] n - Zero-based Initial index
       /////////////////////////////////////////////////////////////////////////////////////////
-      iterator_t(CONTAINER& a, uint32_t n) : Container(&a), 
+      iterator_t(CONTAINER& a, uint32_t n) : Container(&a),
                                            Index(n)
       {}
 
@@ -130,8 +131,8 @@ namespace wtl
 
       // ----------------------------------- STATIC METHODS -----------------------------------
 
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-    
+      // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::getIndex const
       //! Get the index of the current element
@@ -166,7 +167,7 @@ namespace wtl
       {
         return Index != r.Index || Container != r.Container;    // Check index first
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator < const
       //! Lesser comparison operator
@@ -202,7 +203,7 @@ namespace wtl
       {
         return Index > r.Index && Container == r.Container;    // Match index first
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator >= const
       //! Greater-or-equal comparison operator
@@ -214,7 +215,7 @@ namespace wtl
       {
         return Index >= r.Index && Container == r.Container;    // Match index first
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator* const
       //! Dereferencing operator
@@ -244,7 +245,7 @@ namespace wtl
         // Retrieve
         return &Container->Data[Index];
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator+ const
       //! Add this position to another
@@ -256,7 +257,7 @@ namespace wtl
       {
         return Index + r.Index;
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator- const
       //! Substract this position from another
@@ -275,7 +276,7 @@ namespace wtl
       //!
       //! \param[in] i - Zero-based offset from current position of element to retrieve
       //! \throw wtl::out_of_range - [Debug only] Position is invalid
-      //! \return const_reference - Immutable reference to element 
+      //! \return const_reference - Immutable reference to element
       /////////////////////////////////////////////////////////////////////////////////////////
       const_reference operator[] (int32_t i) const
       {
@@ -284,7 +285,7 @@ namespace wtl
         // Retrieve
         return Container->Data[Index+i];
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator + const
       //! Calculate a position N elements ahead
@@ -296,7 +297,7 @@ namespace wtl
       {
         return iterator_t(*Container, Index+i);
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator- const
       //! Calculate a position N elements behind
@@ -308,9 +309,9 @@ namespace wtl
       {
         return iterator_t(*Container, Index-i);
       }
-      
+
       // ----------------------------------- MUTATOR METHODS ----------------------------------
-    
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator=
       //! Assignment operator
@@ -326,13 +327,13 @@ namespace wtl
       }
 
       /////////////////////////////////////////////////////////////////////////////////////////
-      //! iterator_t::operator += 
+      //! iterator_t::operator +=
       //! Advance the iterator by N elements
       //!
       //! \param[in] i - Number of elements to advance
       //! \return iterator_t - Reference to self at new position
       /////////////////////////////////////////////////////////////////////////////////////////
-      iterator_t& operator += (uint32_t n) 
+      iterator_t& operator += (uint32_t n)
       {
         Index += n;
         return *this;
@@ -362,7 +363,7 @@ namespace wtl
         operator++();
         return tmp;
       }
-      
+
       /////////////////////////////////////////////////////////////////////////////////////////
       //! iterator_t::operator--
       //! Prefix decrement operator
@@ -399,7 +400,7 @@ namespace wtl
 
     //! \typedef const_iterator - Friendly name for an immutable iterator
     using const_iterator = iterator_t<const value_type, const Array>;
-    
+
     // Bound friend of iterators of matching type
     friend struct iterator_t<value_type, Array>;
     friend struct iterator_t<const value_type, const Array>;
@@ -415,14 +416,14 @@ namespace wtl
 
     //! \typedef reverse_iterator - Friendly name for a mutable reverse iterator
     using reverse_iterator = std::reverse_iterator<iterator>;
-    
+
     //! \typedef const_reverse_iterator - Friendly name for an immutable reverse iterator
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
   private:
     //! \enum Unique - Distinct dummy type
     enum class Unique { Signature };
-    
+
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     array_ref  Data;    //!< Provides strongly typed access to element storage
@@ -434,24 +435,24 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::Array 
-    //! Initialise empty array 
-    //! 
+    // Array::Array
+    //! Initialise empty array
+    //!
     //! \param[in] - Ignored
     /////////////////////////////////////////////////////////////////////////////////////////
     Array(Unique) : Data(reinterpret_cast<array_ref>(Storage)),     // Safe to use address of 'Storage' before init
                     Count(0UL)
     {}
-    
+
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::Array 
-    //! Create empty array 
+    // Array::Array
+    //! Create empty array
     /////////////////////////////////////////////////////////////////////////////////////////
     Array() : Array(Unique::Signature)
     {
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::Array
     //! Copy-create with elements copy-constructed from another array of different type
@@ -459,9 +460,9 @@ namespace wtl
     //! \tparam V - Foreign array element data type
     //! \tparam L - Foreign array length
     //! \tparam D - Whether foreign array can be resized
-    //! 
+    //!
     //! \param[in] &r - Foreign array
-    //! 
+    //!
     //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename V, uint32_t L, bool D>
@@ -469,25 +470,25 @@ namespace wtl
     {
       assign(r);
     }
-    
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // Array::Array
     //! Create with (up to 'length') elements copy-constructed from a static array
     //!
     //! \tparam ELEMENT - Element type
-    //! \tparam LENGTH - Array length
+    //! \tparam LEN - Array length
     //!
     //! \param[in] r - Array
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <typename ELEMENT, unsigned LENGTH>
-    Array(ELEMENT (&r)[LENGTH]) : Array(Unique::Signature)
+    template <typename ELEMENT, unsigned LEN>
+    Array(ELEMENT (&r)[LEN]) : Array(Unique::Signature)
     {
-      assign( &r[0], &r[std::min(LENGTH,length)] );
+      assign( &r[0], &r[std::min(LEN,length)] );
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // Array::Array
-    //! Create with elements copy-constructed from a range of elements 
+    //! Create with elements copy-constructed from a range of elements
     //!
     //! \tparam INPUT - Input iterator type
     //!
@@ -504,32 +505,32 @@ namespace wtl
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::Array 
+    // Array::Array
     //! Copy-create with elements copy-constructed from another array of equal type
-    //! 
+    //!
     //! \param[in] &r - Another array
     /////////////////////////////////////////////////////////////////////////////////////////
     Array(const Array& r) : Array(Unique::Signature)
     {
       assign(r);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::Array 
+    // Array::Array
     //! Copy/move-create with elements copy-constructed from another array of equal type
-    //! 
+    //!
     //! \param[in] &&r - Another array
     /////////////////////////////////////////////////////////////////////////////////////////
     Array(Array&& r) : Array(Unique::Signature)
     {
       assign(r);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator=
     //! Replace elements with those copy-constructed from an array of same type
     //!
-    //! \param[in] &r - Another array 
+    //! \param[in] &r - Another array
     //! \return Array& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
     Array& operator=(const Array& r)
@@ -555,30 +556,30 @@ namespace wtl
       assign(r);
       return *this;
     }
-    
+
     ENABLE_POLY(Array);       //!< Can be polymorphic
-    
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-  
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
 //!\ if DEVELOPMENT_MODE - Use iterators instead of pointers to aide development
 #ifdef DEVELOPMENT_MODE
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::begin() const
     //! Get immutable iterator positioned at first element
-    //! 
+    //!
     //! \return const_iterator - Iterator positioned at first element
     /////////////////////////////////////////////////////////////////////////////////////////
     const_iterator begin() const
     {
       return const_iterator(*this, 0);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::end() const
     //! Get immutable iterator positioned immediately beyond final element
-    //! 
+    //!
     //! \return const_iterator - Iterator positioned immediately beyond array bounds
     /////////////////////////////////////////////////////////////////////////////////////////
     const_iterator end() const
@@ -589,18 +590,18 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::rbegin() const
     //! Get immutable reverse iterator positioned at final element
-    //! 
+    //!
     //! \return const_reverse_iterator - Iterator positioned at final element
     /////////////////////////////////////////////////////////////////////////////////////////
     const_reverse_iterator rbegin() const
     {
       return const_reverse_iterator( const_iterator(*this, size()) );
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::rend() const
     //! Get immutable reverse iterator positioned immediately before first element
-    //! 
+    //!
     //! \return const_reverse_iterator - Iterator positioned immediately before first element
     /////////////////////////////////////////////////////////////////////////////////////////
     const_reverse_iterator rend() const
@@ -613,18 +614,18 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::begin() const
     //! Get immutable iterator positioned at first element
-    //! 
+    //!
     //! \return const_iterator - Iterator positioned at first element
     /////////////////////////////////////////////////////////////////////////////////////////
     const_iterator begin() const
     {
       return const_iterator(Data);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::end() const
     //! Get immutable iterator positioned immediately beyond final element
-    //! 
+    //!
     //! \return const_iterator - Iterator positioned immediately beyond array bounds
     /////////////////////////////////////////////////////////////////////////////////////////
     const_iterator end() const
@@ -635,18 +636,18 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::rbegin() const
     //! Get immutable reverse iterator positioned at final element
-    //! 
+    //!
     //! \return const_reverse_iterator - Iterator positioned at final element
     /////////////////////////////////////////////////////////////////////////////////////////
     const_reverse_iterator rbegin() const
     {
       return const_reverse_iterator( end() );
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::rend() const
     //! Get immutable reverse iterator positioned immediately before first element
-    //! 
+    //!
     //! \return const_reverse_iterator - Iterator positioned immediately before first element
     /////////////////////////////////////////////////////////////////////////////////////////
     const_reverse_iterator rend() const
@@ -655,18 +656,18 @@ namespace wtl
     }
 #endif
 
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::all_of const
-    //! Query whether a predicate is satisfied by all elements 
-    //! 
+    //! Query whether a predicate is satisfied by all elements
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] &p - Element predicate
     //! \return bool - True if all elements satisfy the predicate, False if otherwise. True if the array is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool all_of(const PRED& p) const 
+    bool all_of(const PRED& p) const
     {
       return all_of(begin(), end(), p);
     }
@@ -674,16 +675,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::all_of const
     //! Query whether a predicate is satisfied by all elements within a range
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in] &p - Element predicate
     //! \return bool - True if all elements satisfy the predicate, False if otherwise. True if the subset is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool all_of(const_iterator first, const_iterator last, const PRED& p) const 
+    bool all_of(const_iterator first, const_iterator last, const PRED& p) const
     {
       // Query all
       return std::all_of(first, last, p);   //return any_of(first, last, std::unary_negate<PRED>(p)) == false;
@@ -691,10 +692,10 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::any_of const
-    //! Query whether a predicate is satisfied by any element 
-    //! 
+    //! Query whether a predicate is satisfied by any element
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] const &p - Element predicate
     //! \return bool - True if any elements satisfy the predicate, False if otherwise. False if the array is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -707,9 +708,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::any_of const
     //! Query whether a predicate is satisfied by any element within a range
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in] const &p - Element predicate
@@ -724,10 +725,10 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::at() const
     //! Provides read-only access to array elements without bounds checking
-    //! 
+    //!
     //! \param[in] index - Zero-based index of the element to access
     //! \return const_reference - Immutable reference to the desired element
-    //! 
+    //!
     //! \throw wtl::out_of_range - [Debug only] Index out of bounds
     /////////////////////////////////////////////////////////////////////////////////////////
     const_reference at(uint32_t index) const
@@ -741,7 +742,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::back
     //! Get a immutable reference to the last element
-    //! 
+    //!
     //! \return const_reference - Immutable reference to the last element
     //!
     //! \throw wtl::logic_error - [Debug only] Array is empty
@@ -756,7 +757,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::c_arr() const
     //! Get an immutable pointer to the entire array
-    //! 
+    //!
     //! \return const_array_ptr - Immutable pointer to the entire array
     /////////////////////////////////////////////////////////////////////////////////////////
     const_array_ptr c_arr() const
@@ -786,14 +787,14 @@ namespace wtl
     {
       return find(value) != npos;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::copy const
     //! Copy all elements to an output range of sufficient capacity.
     //! If there is insufficient capacity, the results are undefined
-    //! 
+    //!
     //! \tparam OUTPUT - Type of output iterator
-    //! 
+    //!
     //! \param[in] dest - Position of beginning of destination range
     //! \return iterator - Output iterator positioned one element beyond last element copied
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -835,24 +836,24 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::find_if const
     //! Find the position of the first element that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] const &p - Element predicate
     //! \return const_iterator - Position of matching element if found, otherwise 'end' position
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    const_iterator find_if(const PRED& p) const 
+    const_iterator find_if(const PRED& p) const
     {
-      return find_if(begin(), end(), p); 
+      return find_if(begin(), end(), p);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::find_if
     //! Find the position of the first element that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in] const &p - Element predicate
@@ -868,9 +869,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each
     //! Executes a function upon each element in the array
-    //! 
+    //!
     //! \tparam FUNC - Unary function object
-    //! 
+    //!
     //! \param[in,out] &&f - Unary function object
     //! \return FUNC - Copy of input function object
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -883,9 +884,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each
     //! Executes a function upon each element in a subset of the array
-    //! 
+    //!
     //! \tparam FUNC - Unary function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &f - Unary function object
@@ -900,13 +901,13 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each_if
     //! Executes a function upon each element in the array that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
     //! \tparam FUNC - Unary function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
-    //! \param[in,out] &p - Unary predicate function object 
+    //! \param[in,out] &p - Unary predicate function object
     //! \param[in,out] &f - Unary function object
     //! \return FUNC - Copy of unary function object 'f'
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -919,11 +920,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each_if
     //! Executes a function upon each element in the array that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
     //! \tparam FUNC - Unary function object
-    //! 
-    //! \param[in,out] &p - Unary predicate function object 
+    //!
+    //! \param[in,out] &p - Unary predicate function object
     //! \param[in,out] &f - Unary function object
     //! \return FUNC - Copy of Unary function object 'f'
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -932,7 +933,7 @@ namespace wtl
     {
       return for_each_if(begin(), end(), p, f);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::full() const
     //! Query whether array is full
@@ -947,7 +948,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::front
     //! Get a immutable reference to the first element
-    //! 
+    //!
     //! \return const_reference - Immutable reference to the first element
     //!
     //! \throw wtl::logic_error - [Debug only] Array is empty
@@ -962,8 +963,8 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::none_of const
-    //! Query whether a predicate is not satisfied by any elements 
-    //! 
+    //! Query whether a predicate is not satisfied by any elements
+    //!
     //! \tparam PRED - Unary predicate function object
     //!
     //! \param[in] const &p - Element predicate
@@ -978,7 +979,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::none_of const
     //! Query whether a predicate is not satisfied by any elements within a range
-    //! 
+    //!
     //! \tparam INPUT - Input iterator type
     //! \tparam PRED - Unary predicate function object
     //!
@@ -991,13 +992,13 @@ namespace wtl
     bool none_of(INPUT first, INPUT last, const PRED& p) const
     {
       // Check all fail the predicate
-      return find_if(first, last, p) == last;   
+      return find_if(first, last, p) == last;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::size
     //! Get number of elements currently in the array
-    //! 
+    //!
     //! \return uint32_t - Element count
     /////////////////////////////////////////////////////////////////////////////////////////
     uint32_t size() const
@@ -1044,7 +1045,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator == const
     //! Equality operator
-    //! 
+    //!
     //! \tparam V - Array element data type
     //! \tparam L - Array length
     //! \tparam D - Whether array can be resized
@@ -1058,11 +1059,11 @@ namespace wtl
       // Check all elements are equal
       return std::equal(begin(), end(), r.begin());
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator != const
     //! Inequality operator
-    //! 
+    //!
     //! \tparam V - Array element data type
     //! \tparam L - Array length
     //! \tparam D - Whether array can be resized
@@ -1076,94 +1077,94 @@ namespace wtl
       // Check at least one element is unequal
       return !std::equal(begin(), end(), r.begin());
     }
-    
+
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator[] const
     //! Provides read-only access to array elements without bounds checking
-    //! 
+    //!
     //! \tparam INDEX - Type of the index parameter (Must be implicitly convertible to uint32_t)
-    //! 
+    //!
     //! \param[in] index - Zero-based index of the element to access. If the index is invalid the result is undefined.
     //! \return const_reference - Immutable reference to the desired element
-    //! 
+    //!
     //! \throw wtl::out_of_range - [Debug only] Index out of bounds
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename INDEX>   
+    template <typename INDEX>
     const_reference operator[] (INDEX index) const
-    { 
+    {
       CHECKED_INDEX((int)index, 0L, (int)size());
 
       // Retrieve element
-      return Data[static_cast<uint32_t>(index)]; 
-    }    
-    
+      return Data[static_cast<uint32_t>(index)];
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator const_array_ref() const
     //! Get an immutable reference to the entire array
-    //! 
+    //!
     //! \return const_array_ref - Immutable reference to the entire array
     /////////////////////////////////////////////////////////////////////////////////////////
     operator const_array_ref() const
     {
       return Data;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::operator array_ref() 
+    // Array::operator array_ref()
     //! Get an mutable reference to the entire array
-    //! 
+    //!
     //! \return array_ref - Mutable reference to the entire array
     /////////////////////////////////////////////////////////////////////////////////////////
-    operator array_ref() 
+    operator array_ref()
     {
       return Data;
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-  
+
 //!\ if DEVELOPMENT_MODE - Use iterators instead of pointers to aide development
 #ifdef DEVELOPMENT_MODE
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::begin 
+    // Array::begin
     //! Get mutable iterator positioned at first element
-    //! 
+    //!
     //! \return iterator - Iterator positioned at first element
     /////////////////////////////////////////////////////////////////////////////////////////
     iterator begin()
     {
       return iterator(*this, 0);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::end 
+    // Array::end
     //! Get mutable iterator positioned immediately beyond final element
-    //! 
+    //!
     //! \return iterator - Iterator positioned immediately beyond final element
     /////////////////////////////////////////////////////////////////////////////////////////
-    iterator end() 
+    iterator end()
     {
       return iterator(*this, size());
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::rbegin() 
+    // Array::rbegin()
     //! Get mutable reverse iterator positioned at final element
-    //! 
+    //!
     //! \return reverse_iterator - Iterator positioned at final element
     /////////////////////////////////////////////////////////////////////////////////////////
-    reverse_iterator rbegin() 
+    reverse_iterator rbegin()
     {
       return reverse_iterator( iterator(*this, size()) );
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::rend() 
+    // Array::rend()
     //! Get mutable reverse iterator positioned immediately before first element
-    //! 
+    //!
     //! \return reverse_iterator - Iterator positioned immediately before first element
     /////////////////////////////////////////////////////////////////////////////////////////
-    reverse_iterator rend() 
+    reverse_iterator rend()
     {
       return reverse_iterator( iterator(*this, 0UL) );
     }
@@ -1171,45 +1172,45 @@ namespace wtl
 //! \ifnot DEVELOPMENT_MODE - Use pointers as iterators to increase performance
 #else
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::begin 
+    // Array::begin
     //! Get mutable iterator positioned at first element
-    //! 
+    //!
     //! \return iterator - Iterator positioned at first element
     /////////////////////////////////////////////////////////////////////////////////////////
     iterator begin()
     {
       return iterator(Data);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::end 
+    // Array::end
     //! Get mutable iterator positioned immediately beyond final element
-    //! 
+    //!
     //! \return iterator - Iterator positioned immediately beyond final element
     /////////////////////////////////////////////////////////////////////////////////////////
-    iterator end() 
+    iterator end()
     {
       return iterator(Data + size());
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::rbegin() 
+    // Array::rbegin()
     //! Get mutable reverse iterator positioned at final element
-    //! 
+    //!
     //! \return reverse_iterator - Iterator positioned at final element
     /////////////////////////////////////////////////////////////////////////////////////////
-    reverse_iterator rbegin() 
+    reverse_iterator rbegin()
     {
       return reverse_iterator( iterator(Data + size()) );
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::rend() 
+    // Array::rend()
     //! Get mutable reverse iterator positioned immediately before first element
-    //! 
+    //!
     //! \return reverse_iterator - Iterator positioned immediately before first element
     /////////////////////////////////////////////////////////////////////////////////////////
-    reverse_iterator rend() 
+    reverse_iterator rend()
     {
       return reverse_iterator( iterator(Data) );
     }
@@ -1218,7 +1219,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::accumulate
     //! Accumulates all the elements in the array
-    //! 
+    //!
     //! \param[in] seed - Initial seed value
     //! \return value_type - Sum of all elements
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -1231,11 +1232,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::accumulate
     //! Accumulates the results of a function applied to all elements in the array
-    //! 
+    //!
     //! \tparam RESULT - Type of resultant sum
     //! \tparam FUNC - Unary function object type
-    //! 
-    //! \param[in,out] fn - Unary function object 
+    //!
+    //! \param[in,out] fn - Unary function object
     //! \param[in] seed - Initial seed value
     //! \return RESULT - Sum of all elements
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -1245,7 +1246,7 @@ namespace wtl
       for_each([&](const value_type& v) { seed += fn(v); });
       return seed;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::assign
     //! Replace elements with those copy-constructed from elements from another container
@@ -1254,7 +1255,7 @@ namespace wtl
     //!
     //! \param[in] first - First element in input range
     //! \param[in] last - Position immediately beyond last element in input range
-    //! 
+    //!
     //! \throw wtl::logic_error - [Debug only] Size of input range exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT>
@@ -1262,12 +1263,12 @@ namespace wtl
     {
       LOGIC_INVARIANT((last-first) <= length);
       static_assert(std::is_convertible<decltype(*first),value_type>::value, "Cannot convert between element types");
-      
+
       uint32_t i(0UL);
 
       // Clear existing
       clear();
-      
+
       // Copy-construct (up to) LENGTH elements
       for (Count = std::min(static_cast<uint32_t>(length), last-first); i < Count; ++i)
         traits::alloc_t::construct(Data+i, *(first++));
@@ -1280,9 +1281,9 @@ namespace wtl
     //! \tparam V - Array element data type
     //! \tparam L - Array length
     //! \tparam D - Whether array can be resized
-    //! 
+    //!
     //! \param[in] &r - Foreign array
-    //! 
+    //!
     //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename V, uint32_t L, bool D>
@@ -1296,15 +1297,15 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::all_of
-    //! Query whether a predicate is satisfied by all elements 
-    //! 
+    //! Query whether a predicate is satisfied by all elements
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in,out] &p - Element predicate
     //! \return bool - True if all elements satisfy the predicate, False if otherwise. True if the array is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool all_of(PRED& p) 
+    bool all_of(PRED& p)
     {
       return all_of(begin(), end(), p);
     }
@@ -1312,17 +1313,17 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::all_of
     //! Query whether a predicate is satisfied by all elements within a range
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &p - Element predicate
-    //! 
+    //!
     //! \return bool - True if all elements satisfy the predicate, False if otherwise. True if the subset is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool all_of(iterator first, iterator last, PRED& p)  
+    bool all_of(iterator first, iterator last, PRED& p)
     {
       // Check for none that fail the predicate
       return any_of(first, last, std::unary_negate<PRED>(p)) == false;
@@ -1330,15 +1331,15 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::any_of
-    //! Query whether a predicate is satisfied by any element 
-    //! 
+    //! Query whether a predicate is satisfied by any element
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in,out] &p - Element predicate
     //! \return bool - True if any elements satisfy the predicate, False if otherwise. False if the array is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool any_of(PRED& p) 
+    bool any_of(PRED& p)
     {
       return any_of(begin(), end(), p);
     }
@@ -1346,16 +1347,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::any_of
     //! Query whether a predicate is satisfied by any element within a range
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &p - Element predicate
     //! \return bool - True if any elements satisfy the predicate, False if otherwise. False if the subset is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool any_of(iterator first, iterator last, PRED& p) 
+    bool any_of(iterator first, iterator last, PRED& p)
     {
       return find_if(first, last, p) != last;
     }
@@ -1363,13 +1364,13 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::at
     //! Provides access to array elements without bounds checking
-    //! 
+    //!
     //! \param[in] index - Zero-based index of the element to access
     //! \return reference - Mutable reference to the desired element
     //!
     //! \throw wtl::out_of_range - [Debug only] Index out of bounds
     /////////////////////////////////////////////////////////////////////////////////////////
-    reference at(uint32_t index) 
+    reference at(uint32_t index)
     {
       CHECKED_INDEX(index, 0, size());
 
@@ -1380,7 +1381,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::back
     //! Get a mutable reference to the last element
-    //! 
+    //!
     //! \return reference - Mutable reference to the last element
     //!
     //! \throw wtl::logic_error - [Debug only] Array is empty
@@ -1388,17 +1389,17 @@ namespace wtl
     reference back()
     {
       LOGIC_INVARIANT(size() > 0L);
-      
+
       return Data[size()-1];
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Array::c_arr() 
+    // Array::c_arr()
     //! Get an mutable pointer to the entire array
-    //! 
+    //!
     //! \return array_ptr - Mutable pointer to the entire array
     /////////////////////////////////////////////////////////////////////////////////////////
-    array_ptr c_arr() 
+    array_ptr c_arr()
     {
       return &Data;
     }
@@ -1417,16 +1418,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::copy_if
     //! Copy all elements within the array that satisfy a predicate to another container
-    //! 
+    //!
     //! \tparam OUTPUT - Type of Output iterator
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] dest - Position of beginning of destination range
     //! \param[in,out] &p - Element predicate
     //! \return iterator - Output iterator positioned one element beyond last element copied
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename OUTPUT, typename PRED>
-    iterator copy_if(OUTPUT dest, PRED& p) 
+    iterator copy_if(OUTPUT dest, PRED& p)
     {
       return copy_if(begin(), end(), dest, p);
     }
@@ -1434,10 +1435,10 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::copy_if
     //! Copy elements from a subset that satisfy a predicate to another container
-    //! 
+    //!
     //! \tparam OUTPUT - Type of Output iterator
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in] dest - Position of beginning of destination range
@@ -1445,7 +1446,7 @@ namespace wtl
     //! \return iterator - Output iterator positioned one element beyond last element copied
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename OUTPUT, typename PRED>
-    iterator copy_if(iterator first, iterator last, OUTPUT dest, PRED& p) 
+    iterator copy_if(iterator first, iterator last, OUTPUT dest, PRED& p)
     {
       return std::copy_if<iterator,OUTPUT,PRED&>(first, last, dest, p);
     }
@@ -1453,41 +1454,41 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::count_if
     //! Count the number of elements that satisfy a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in,out] &p - Element predicate
     //! \return uint32_t - Number of matching elements
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    uint32_t count_if(PRED& p) 
+    uint32_t count_if(PRED& p)
     {
-      return count_if(begin(), end(), p); 
+      return count_if(begin(), end(), p);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::count_if
     //! Count the number of elements within a range that satisfy a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &p - Element predicate
     //! \return uint32_t - Number of matching elements
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    uint32_t count_if(iterator first, iterator last, PRED& p) 
+    uint32_t count_if(iterator first, iterator last, PRED& p)
     {
       return std::count_if<iterator,PRED&>(first, last, p);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::emplace_back
     //! Constructs a new elements in place at the back of the array
-    //! 
+    //!
     //! \param[in,out] && args - [optional] Constructor arguments
-    //! 
+    //!
     //! \throw wtl::length_error - [Debug only] Array is full
     /////////////////////////////////////////////////////////////////////////////////////////
     template< class... PARAMS>
@@ -1501,7 +1502,7 @@ namespace wtl
       // Success!
       ++Count;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::fill
     //! Fill all elements with a value
@@ -1516,31 +1517,31 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::find_if
     //! Find the position of the first element that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in,out] &p - Element predicate
     //! \return iterator - Position of matching element if found, otherwise 'end' position
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    iterator find_if(PRED& p) 
+    iterator find_if(PRED& p)
     {
-      return find_if(begin(), end(), p); 
+      return find_if(begin(), end(), p);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::find_if
     //! Find the position of the first element that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &p - Element predicate
     //! \return iterator - Position of matching element if found, otherwise 'end' position
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    iterator find_if(iterator first, iterator last, PRED& p) 
+    iterator find_if(iterator first, iterator last, PRED& p)
     {
       return std::find_if<iterator,PRED&>(first, last, p);
     }
@@ -1548,14 +1549,14 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each
     //! Executes a function upon each element in the array
-    //! 
+    //!
     //! \tparam FUNC - Unary function object
-    //! 
+    //!
     //! \param[in,out] &&f - Unary function object
     //! \return FUNC - Copy of input function object
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename FUNC>
-    FUNC for_each(FUNC&& f) 
+    FUNC for_each(FUNC&& f)
     {
       return for_each(begin(), end(), f);
     }
@@ -1563,16 +1564,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each
     //! Executes a function upon each element in a subset of the array
-    //! 
+    //!
     //! \tparam FUNC - Unary function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
     //! \param[in,out] &f - Unary function object
     //! \return FUNC - Copy of input function object
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename FUNC>
-    FUNC for_each(iterator first, iterator last, FUNC& f) 
+    FUNC for_each(iterator first, iterator last, FUNC& f)
     {
       return std::for_each<iterator, FUNC>(first, last, f);   // Pass function by-ref
     }
@@ -1580,18 +1581,18 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each_if
     //! Executes a function upon each element in the array that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
     //! \tparam FUNC - Unary function object
-    //! 
+    //!
     //! \param[in] first - Position of first element in range
     //! \param[in] last - Position beyond last element in range
-    //! \param[in,out] &p - Unary predicate function object 
+    //! \param[in,out] &p - Unary predicate function object
     //! \param[in,out] &f - Unary function object
     //! \return FUNC - Copy of input Unary function object 'f'
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED, typename FUNC>
-    FUNC for_each_if(iterator first, iterator last, PRED& p, FUNC& f) 
+    FUNC for_each_if(iterator first, iterator last, PRED& p, FUNC& f)
     {
       return std::for_each<iterator,FUNC>(first, last, wtl::if_then(p,f)).fx();
     }
@@ -1599,16 +1600,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::for_each_if
     //! Executes a function upon each element in the array that satisfies a predicate
-    //! 
+    //!
     //! \tparam PRED - Unary predicate function object
     //! \tparam FUNC - Unary function object
-    //! 
-    //! \param[in] const &p - Unary predicate function object 
+    //!
+    //! \param[in] const &p - Unary predicate function object
     //! \param[in,out] &f - Unary function object
     //! \return FUNC - Copy of Unary function object 'f'
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED, typename FUNC>
-    FUNC for_each_if(const PRED& p, FUNC& f) 
+    FUNC for_each_if(const PRED& p, FUNC& f)
     {
       return for_each_if(begin(), end(), p, f);
     }
@@ -1616,7 +1617,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::front
     //! Get a mutable reference to the first element
-    //! 
+    //!
     //! \return reference - Mutable reference to the first element
     //!
     //! \throw wtl::logic_error - [Debug only] Array is empty
@@ -1630,15 +1631,15 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::none_of
-    //! Query whether a predicate is not satisfied by any elements 
-    //! 
+    //! Query whether a predicate is not satisfied by any elements
+    //!
     //! \tparam PRED - Unary predicate function object
-    //! 
+    //!
     //! \param[in,out] &p - Element predicate
     //! \return bool - True if no elements satisfy the predicate, False if otherwise. True if the array is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PRED>
-    bool none_of(PRED& p) 
+    bool none_of(PRED& p)
     {
       return none_of(begin(), end(), p);
     }
@@ -1646,7 +1647,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::none_of
     //! Query whether a predicate is not satisfied by any elements within a range
-    //! 
+    //!
     //! \tparam INPUT - Input iterator type
     //! \tparam PRED - Unary predicate function object
     //!
@@ -1656,19 +1657,19 @@ namespace wtl
     //! \return bool - True if no elements satisfy the predicate, False if otherwise. True if the subset is empty.
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT, typename PRED>
-    bool none_of(INPUT first, INPUT last, PRED& p) 
+    bool none_of(INPUT first, INPUT last, PRED& p)
     {
       // Check all fail the predicate
-      return find_if(first, last, p) == last;   
+      return find_if(first, last, p) == last;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::push_back
     //! Appends an element to the back of the array, without bounds checking.
     //! If the array is full, the results are undefined
-    //! 
+    //!
     //! \param[in] const &d - Element to append
-    //! 
+    //!
     //! \throw wtl::length_error - [Debug only] Array is full
     /////////////////////////////////////////////////////////////////////////////////////////
     bool push_back(const_reference d)
@@ -1682,12 +1683,12 @@ namespace wtl
       ++Count;
       return true;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::pop_back
     //! Removes and return an element from the back of the array, without bounds checking.
     //! If the array is empty, the results are undefined
-    //! 
+    //!
     //! \throw wtl::logic_error - [Debug only] Array is empty
     /////////////////////////////////////////////////////////////////////////////////////////
     value_type pop_back()
@@ -1702,14 +1703,14 @@ namespace wtl
       // Return copy
       return vt;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::tranform
     //! Transforms each element within an input range into an output range
     //!
     //! \tparam OUTPUT - Output iterator
     //! \tparam FUNC - Transformation function
-    //! 
+    //!
     //! \param[in] first - First element in input range
     //! \param[in] last - Position beyond last element in input range
     //! \param[in] output - First element in output range
@@ -1728,7 +1729,7 @@ namespace wtl
     //!
     //! \tparam OUTPUT - Output iterator
     //! \tparam FUNC - Transformation function
-    //! 
+    //!
     //! \param[in] output - First element in output range
     //! \param[in] fn - Transformation function
     //! \return OUTPUT - Position in output range immediately beyond last element transformed
@@ -1785,21 +1786,21 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // Array::operator[]
     //! Provides access to array elements without bounds checking
-    //! 
+    //!
     //! \tparam INDEX - Type of the index parameter (Must be implicitly convertible to uint32_t)
-    //! 
+    //!
     //! \param[in] index - Zero-based index of the element to access. If the index is invalid the result is undefined.
     //! \return reference - Reference to the desired element
-    //! 
+    //!
     //! \throw wtl::out_of_range - [Debug only] Index out of range
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename INDEX>    
-    reference operator[](INDEX index)    
-    { 
+    template <typename INDEX>
+    reference operator[](INDEX index)
+    {
       CHECKED_INDEX(static_cast<uint32_t>(index),0,size());
 
-      return Data[static_cast<uint32_t>(index)]; 
-    }   
+      return Data[static_cast<uint32_t>(index)];
+    }
   };
 
 

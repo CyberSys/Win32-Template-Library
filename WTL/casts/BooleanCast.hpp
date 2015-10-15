@@ -22,7 +22,7 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::boolean_cast
   //! Converts any non-pointer type (except Win32 BOOL) to Win32 BOOL  (As TRUE (1) or FALSE (0))
-  //! 
+  //!
   //! \tparam T - Value type (exception Win32 BOOL)
   //!
   //! \param[in] value - Value
@@ -32,24 +32,24 @@ namespace wtl
   enable_if_not_BOOL_t<T,BOOL>  boolean_cast(T value)
   {
     return value != defvalue<T>() ? True : False;
-  };
-  
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::boolean_cast
   //! Converts a Win32 BOOL to boolean
-  //! 
+  //!
   //! \param[in] value - Win32 BOOL
   //! \return bool - True iff non-zero
   //////////////////////////////////////////////////////////////////////////////////////////
   inline bool boolean_cast(BOOL value)
   {
     return value != defvalue<BOOL>();
-  };
-  
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::enum_cast
   //! Converts a pointer to BOOL as TRUE or FALSE
-  //! 
+  //!
   //! \tparam T - Pointer type
   //!
   //! \param[in] value - Pointer value
@@ -59,8 +59,8 @@ namespace wtl
   BOOL boolean_cast(T* value)
   {
     return value != nullptr ? True : False;
-  };
-  
+  }
+
 }
 
 

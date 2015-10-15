@@ -19,15 +19,15 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct List - Bi-directional indexed Linked list 
-  //! 
+  //! \struct List - Bi-directional indexed Linked list
+  //!
   //! \tparam T - Element type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   struct List : std::list<T>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
+
     //! \alias base - Define base type
     using base = std::list<T>;
 
@@ -44,7 +44,7 @@ namespace wtl
     using value_type = typename base::value_type;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
-    
+
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::List
     //! Create list and populate from initializer list
-    //! 
+    //!
     //! \param[in] &&list - List of elements
     /////////////////////////////////////////////////////////////////////////////////////////
     List(std::initializer_list<T>&& list) : base(std::forward(list))
@@ -69,26 +69,26 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~List()
     {}
-    
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::at const
     //! Finds an element by index
-    //! 
+    //!
     //! \param[in] idx - Zero-based element index
     //! \return const_iterator - Immutable element position
-    //! 
+    //!
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    const_iterator  at(uint32_t idx) const 
+    const_iterator  at(uint32_t idx) const
     {
-      CHECKED_INDEX(idx,0,size()+1);    //!< Permit query of position beyond last element
+      CHECKED_INDEX(idx,0,this->size()+1);    //!< Permit query of position beyond last element
 
       // Return 'end' if querying beyond last element
-      if (idx == size())
+      if (idx == this->size())
         return this->cend();
 
       // Forward linear search
@@ -96,15 +96,15 @@ namespace wtl
       std::advance(pos, idx);
       return pos;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::find_if const
     //! Search entire containiner for an element matching predicate
-    //! 
+    //!
     //! \param[in] pred - Element predicate
     //! \return const_iterator - Immutable element position if found, otherwise 'end'
     /////////////////////////////////////////////////////////////////////////////////////////
-    const_iterator  find_if(std::function<bool (const value_type&)> pred) const 
+    const_iterator  find_if(std::function<bool (const value_type&)> pred) const
     {
       return std::find_if(this->cbegin(), this->cend(), pred);
     }
@@ -112,37 +112,37 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::operator [] const
     //! Access element by index
-    //! 
+    //!
     //! \param[in] idx - Zero-based element index
-    //! \return const value_type& - Immutable element reference 
-    //! 
+    //! \return const value_type& - Immutable element reference
+    //!
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    const value_type&  operator [] (uint32_t idx) const 
+    const value_type&  operator [] (uint32_t idx) const
     {
-      CHECKED_INDEX(idx,0,size());
+      CHECKED_INDEX(idx,0,this->size());
 
       // Lookup element
       return *at(idx);
     }
-    
+
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // List::at 
+    // List::at
     //! Finds an element by index
-    //! 
+    //!
     //! \param[in] idx - Zero-based element index
     //! \return iterator - Mutable element position
-    //! 
+    //!
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
-    iterator  at(uint32_t idx) 
+    iterator  at(uint32_t idx)
     {
-      CHECKED_INDEX(idx,0,size()+1);    //!< Permit query of position beyond last element
+      CHECKED_INDEX(idx,0,this->size()+1);    //!< Permit query of position beyond last element
 
       // Return 'end' if querying beyond last element
-      if (idx == size())
+      if (idx == this->size())
         return this->end();
 
       // Forward linear search
@@ -150,40 +150,40 @@ namespace wtl
       std::advance(pos, idx);
       return pos;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // List::find_if 
+    // List::find_if
     //! Search entire containiner for an element matching predicate
-    //! 
+    //!
     //! \param[in] pred - Element predicate
     //! \return const_iterator - Mutable element position if found, otherwise 'end'
     /////////////////////////////////////////////////////////////////////////////////////////
-    iterator  find_if(std::function<bool (const value_type&)> pred) 
+    iterator  find_if(std::function<bool (const value_type&)> pred)
     {
       return std::find_if(this->begin(), this->end(), pred);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // List::operator [] 
+    // List::operator []
     //! Access element by index
-    //! 
+    //!
     //! \param[in] idx - Zero-based element index
-    //! \return value_type& - Mutable element reference 
-    //! 
+    //! \return value_type& - Mutable element reference
+    //!
     //! \throw wtl::out_of_range - [Debug only] Invalid index
     /////////////////////////////////////////////////////////////////////////////////////////
     value_type&  operator [] (uint32_t idx)
     {
-      CHECKED_INDEX(idx,0,size());
+      CHECKED_INDEX(idx,0,this->size());
 
       // Lookup element
       return *at(idx);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // List::operator += 
+    // List::operator +=
     //! Append an element to the list
-    //! 
+    //!
     //! \param[in] const& value - Item
     /////////////////////////////////////////////////////////////////////////////////////////
     List& operator += (const value_type& value)
@@ -191,7 +191,7 @@ namespace wtl
       // Append
       base::push_back(value);
       return *this;
-    } 
+    }
   };
 
 

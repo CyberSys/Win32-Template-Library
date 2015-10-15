@@ -23,17 +23,17 @@
 
 //! \if __clang__ - Clang
 #ifdef __clang__
-  //! \def CONSTEXPR_SDMI_CAP - Enabled iff compiler supports constexpr static data member initialization 
+  //! \def CONSTEXPR_SDMI_CAP - Enabled iff compiler supports constexpr static data member initialization
   #define CONSTEXPR_SDMI_CAP
 
-//! \if _MSC_VER - Visual Studio 
-#elif _MSC_VER 
+//! \if _MSC_VER - Visual Studio
+#elif _MSC_VER
 //! \def STRINGIFY_CAP - Enabled iff compiler supports 'stringify' preprocessor operator '#'
   #define STRINGIFY_CAP
 
   //! \if _MSC_VER >= 1900 - Visual Studio 2015
   #if _MSC_VER >= 1900
-    
+
   #endif
 #endif
 // --------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@
 
 //! \def HERE - Generates a source file error location string: '<function>() on line <line> of <file>'
 #ifdef STRINGIFY_CAP
-  #define HERE  (__FUNCTION__ "() on line " STR(__LINE__) " of " __FILE__) 
+  #define HERE  (__FUNCTION__ "() on line " STR(__LINE__) " of " __FILE__)
 #else
   #define HERE  (/*__FUNCTION__*/ "() in " __FILE__)
 #endif
@@ -82,7 +82,7 @@
 //! \def DISABLE_COPY_CTOR - Prevents copy-construction
 #define DISABLE_COPY_CTOR(type)     type(const type& r) = delete
 
-//! \def DISABLE_COPY_ASSIGN - Prevents copy-assignment 
+//! \def DISABLE_COPY_ASSIGN - Prevents copy-assignment
 #define DISABLE_COPY_ASSIGN(type)   type& operator=(const type& r) = delete
 
 //! \def DISABLE_COPY - Prevents copy-construction and copy-assignment
@@ -105,7 +105,7 @@
 //! \def DISABLE_MOVE_CTOR - Prevents move-construction
 #define DISABLE_MOVE_CTOR(type)     type(type&& r) = delete
 
-//! \def DISABLE_MOVE_ASSIGN - Prevents move-assignment 
+//! \def DISABLE_MOVE_ASSIGN - Prevents move-assignment
 #define DISABLE_MOVE_ASSIGN(type)   type& operator=(type&& r) = delete
 
 //! \def DISABLE_MOVE - Prevents move-construction and move-assignment
@@ -115,7 +115,7 @@
 //! \def ENABLE_MOVE_CTOR - Enables move-construction
 #define ENABLE_MOVE_CTOR(type)      type(type&& r) = default
 
-//! \def ENABLE_MOVE_ASSIGN - Enables move-assignment 
+//! \def ENABLE_MOVE_ASSIGN - Enables move-assignment
 #define ENABLE_MOVE_ASSIGN(type)    type& operator=(type&& r) = default
 
 //! \def ENABLE_MOVE - Enables move-construction and move-assignment
@@ -138,7 +138,7 @@
 // -------------------------------------------- DEVELOPMENT -----------------------------------------------
 // --------------------------------------------------------------------------------------------------------
 
-//! if DEVELOPMENT_MODE - Activate debugging checks 
+//! if DEVELOPMENT_MODE - Activate debugging checks
 #ifdef DEVELOPMENT_MODE
   //! \def CHECKED_ARGUMENTS - Activate argument checks
   #define CHECKED_ARGUMENTS
@@ -149,7 +149,7 @@
   //! \def CHECKED_INVARIANTS - Activate invariant checks
   #define CHECKED_INVARIANTS
 
-//! \ifnot DEVELOPMENT_MODE - Deactivates debugging checks 
+//! \ifnot DEVELOPMENT_MODE - Deactivates debugging checks
 #else
   //! \def RELEASE_MODE - Enables optimizations and disables debugging checks
   #define RELEASE_MODE
@@ -169,12 +169,13 @@
 #ifdef STRINGIFY_CAP
   #define REQUIRED_PARAM(arg)           { if ((arg) == nullptr) throw wtl::invalid_argument(HERE, "Missing argument: '" #arg "'"); }
 #else
-  #define REQUIRED_PARAM(arg)           { if ((arg) == nullptr) throw wtl::invalid_argument(HERE, "Missing argument"); }
+  #define REQUIRED_PARAM(arg)
+  //#define REQUIRED_PARAM(arg)           { if ((arg) == nullptr) throw wtl::invalid_argument(HERE, "Missing argument"); }
 #endif
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def PARAM_INVARIANT - Throws an exception when a parameter is missing
-  //! \param[in] exp - Expression defining a parameter invariant 
+  //! \param[in] exp - Expression defining a parameter invariant
   //////////////////////////////////////////////////////////////////////////////////////////
 #ifdef STRINGIFY_CAP
   #define PARAM_INVARIANT(arg,exp)      { if ((exp) == false) throw wtl::invalid_argument(HERE, "Missing argument: '" #arg "'"); }
@@ -185,7 +186,7 @@
 //! \ifnot CHECKED_ARGUMENTS - Deactivates argument verification
 #else
   //! \def REQUIRED_PARAM - Deactivated
-  #define REQUIRED_PARAM(arg)       
+  #define REQUIRED_PARAM(arg)
 #endif
 
 
@@ -229,10 +230,10 @@
 //! \ifnot CHECKED_BOUNDARIES - Deactivates boundary verification
 #else
   //! \def CHECKED_INDEX - Deactivated
-  #define CHECKED_INDEX(idx, min, max)  
+  #define CHECKED_INDEX(idx, min, max)
 
   //! \def CHECKED_LENGTH - Deactivated
-  #define CHECKED_LENGTH(len, max) 
+  #define CHECKED_LENGTH(len, max)
 #endif
 
 
@@ -240,11 +241,11 @@
 // ---------------------------------------- CHECKED INVARIANTS --------------------------------------------
 // --------------------------------------------------------------------------------------------------------
 
-  
+
 //! \if CHECKED_INVARIANTS - Activates invariant verification
 #ifdef CHECKED_INVARIANTS
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \def DOMAIN_INVARIANT - Throws an exception upon violation of a domain invariant 
+  //! \def DOMAIN_INVARIANT - Throws an exception upon violation of a domain invariant
   //! \param[in] exp - Expression defining a domain invariant
   //////////////////////////////////////////////////////////////////////////////////////////
 #ifdef STRINGIFY_CAP
@@ -254,7 +255,7 @@
 #endif
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \def LOGIC_INVARIANT - Throws an exception upon violation of a logic invariant 
+  //! \def LOGIC_INVARIANT - Throws an exception upon violation of a logic invariant
   //! \param[in] exp - Expression defining a logic invariant
   //////////////////////////////////////////////////////////////////////////////////////////
 #ifdef STRINGIFY_CAP
@@ -266,10 +267,10 @@
 //! \ifnot CHECKED_INVARIANTS - Deactivates invariant verification
 #else
   //! \def DOMAIN_INVARIANT - Deactivated
-  #define DOMAIN_INVARIANT(exp) 
+  #define DOMAIN_INVARIANT(exp)
 
   //! \def LOGIC_INVARIANT - Deactivated
-  #define LOGIC_INVARIANT(exp) 
+  #define LOGIC_INVARIANT(exp)
 #endif
 
 

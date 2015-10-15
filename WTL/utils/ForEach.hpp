@@ -18,7 +18,7 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::for_each
   //! Passes each tuple element to a unary callable target
-  //! 
+  //!
   //! \tparam IDX - Zero-based iteration index
   //! \tparam FUNC - Any unary callable target type
   //! \tparam ELEMS... - [optional] Tuple types
@@ -26,7 +26,7 @@ namespace wtl
   //! \param[in,out] &t - Any tuple
   //! \param[in] fn - Unary callable target
   //! \return FUNC - Copy of 'fn' on final pass
-  //! 
+  //!
   //! \remarks The callable target is not copied and may maintain state
   //////////////////////////////////////////////////////////////////////////////////////////
   template <unsigned IDX, typename FUNC, typename... ELEMS>
@@ -34,21 +34,21 @@ namespace wtl
   {
     // Call target with current element
     fn(std::get<IDX>(t));
-    
+
     // Unfurl next element, if any, and return target
     return for_each<IDX+1>(t, fn);
-  };
-  
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::for_each<N> 
+  // wtl::for_each<N>
   //! Stop after final element
   //////////////////////////////////////////////////////////////////////////////////////////
   template <unsigned IDX, typename FUNC, typename... ELEMS>
   auto for_each(const std::tuple<ELEMS...>& t, FUNC fn) -> std::enable_if_t<IDX == sizeof...(ELEMS), FUNC>
-  { 
+  {
     // Return target in final state
     return fn;
-  };
+  }
 
 }
 
