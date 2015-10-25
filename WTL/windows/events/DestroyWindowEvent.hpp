@@ -15,7 +15,7 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias DestroyWindowEvent - Defines 'DestroyWindow' event (ie. WM_DESTROY)
+  //! \alias DestroyWindowEvent - Defines the signature of the 'DestroyWindow' event handler  [No arguments]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -23,12 +23,12 @@ namespace wtl
   using DestroyWindowEvent = Event<LResult>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias DestroyWindowEventHandler - Handler for 'DestroyWindow' event (ie. WM_DESTROY)
+  //! \alias DestroyWindowEventHandler - Defines the delegate type for the 'DestroyWindow' event
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using DestroyWindowEventHandler = typename DestroyWindowEvent<ENC>::delegate_t;
+  using DestroyWindowEventHandler = handler_t<DestroyWindowEvent<ENC>>;
 
   
 } // namespace wtl

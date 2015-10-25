@@ -129,15 +129,7 @@ namespace wtl
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PaintWindowEvent - Defines 'PaintWindow' event (ie. WM_PAINT)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using PaintWindowEvent = MessageEvent<ENC,WindowMessage::PAINT>;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PaintWindowEventArgs - Arguments for 'PaintWindow' Event (ie. WM_PAINT)
+  //! \alias PaintWindowEventArgs - Defines arguments type for the 'PaintWindow' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -145,12 +137,20 @@ namespace wtl
   using PaintWindowEventArgs = EventArgs<ENC,WindowMessage::PAINT>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PaintWindowEventHandler - Handler for 'PaintWindow' event (ie. WM_PAINT)
+  //! \alias PaintWindowEvent - Defines the signature of 'PaintWindow' event handlers  [Pass by reference]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using PaintWindowEventHandler = MessageEventHandler<ENC,WindowMessage::PAINT>;
+  using PaintWindowEvent = Event<LResult, PaintWindowEventArgs<ENC>& >;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias PaintWindowEventHandler - Defines the delegate type for the 'PaintWindow' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using PaintWindowEventHandler = handler_t<PaintWindowEvent<ENC>>;
   
 } // namespace wtl
 

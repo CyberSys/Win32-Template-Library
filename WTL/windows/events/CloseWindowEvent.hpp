@@ -14,9 +14,8 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CloseWindowEvent - Defines 'CloseWindow' event (ie. WM_CLOSE)
+  //! \alias CloseWindowEvent - Defines the signature of the 'CloseWindow' event handler  [No arguments]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -24,12 +23,12 @@ namespace wtl
   using CloseWindowEvent = Event<LResult>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CloseWindowEventHandler - Handler for 'CloseWindow' event (ie. WM_CLOSE)
+  //! \alias CloseWindowEventHandler - Defines the delegate type for the 'CloseWindow' event
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CloseWindowEventHandler = typename CloseWindowEvent<ENC>::delegate_t;
+  using CloseWindowEventHandler = handler_t<CloseWindowEvent<ENC>>;
 
 } // namespace wtl
 

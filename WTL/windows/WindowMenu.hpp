@@ -421,6 +421,42 @@ namespace wtl
     {
       return size() == 0;
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowMenu::find const
+    //! Searches for an Command 
+    //! 
+    //! \param[in] id - Command id
+    //! \return CommandPtr<encoding> - Shared command pointer, possibly empty
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CommandPtr<encoding> find(CommandId id) const
+    {
+      // Search popups for a matching command
+      for (auto& popup : Popups)
+        if (auto cmd = popup.find(id))
+          return cmd;
+      
+      // [NOT FOUND] Return empty pointer
+      return CommandPtr<encoding>(nullptr);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowMenu::find const
+    //! Searches for an Command group
+    //! 
+    //! \param[in] id - Group id
+    //! \return CommandGroupPtr<encoding> - Shared group pointer, possibly empty
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CommandGroupPtr<encoding> find(CommandGroupId id) const
+    {
+      // Search for matching popup
+      auto pos = Popups.find_if([id] (const popup_t& popup) { return popup.Group->ident() == id; });
+      if (pos != end())
+        return pos->Group;
+
+      // [NOT FOUND] Return empty pointer
+      return CommandGroupPtr<encoding>(nullptr);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::handle const
@@ -463,42 +499,6 @@ namespace wtl
       return Handle;
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowMenu::find const
-    //! Searches for an Command 
-    //! 
-    //! \param[in] id - Command id
-    //! \return CommandPtr<encoding> - Shared command pointer, possibly empty
-    /////////////////////////////////////////////////////////////////////////////////////////
-    CommandPtr<encoding> find(CommandId id) const
-    {
-      // Search popups for a matching command
-      for (auto& popup : Popups)
-        if (auto cmd = popup.find(id))
-          return cmd;
-      
-      // [NOT FOUND] Return empty pointer
-      return CommandPtr<encoding>(nullptr);
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowMenu::find const
-    //! Searches for an Command group
-    //! 
-    //! \param[in] id - Group id
-    //! \return CommandGroupPtr<encoding> - Shared group pointer, possibly empty
-    /////////////////////////////////////////////////////////////////////////////////////////
-    CommandGroupPtr<encoding> find(CommandGroupId id) const
-    {
-      // Search for matching popup
-      auto pos = Popups.find_if([id] (const popup_t& popup) { return popup.Group->ident() == id; });
-      if (pos != end())
-        return pos->Group;
-
-      // [NOT FOUND] Return empty pointer
-      return CommandGroupPtr<encoding>(nullptr);
-    }
-
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -546,10 +546,10 @@ namespace wtl
     // WindowMenu::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message 
     //! 
-    //! \param[in,out] &args - Message arguments 
+    //! \param[in] args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>&& args) 
+    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding> args) 
     { 
       // Draw background
       args.Graphics.fill(args.Rect, StockBrush::Blue);
@@ -573,7 +573,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>&& args) 
+    virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
       // [HEADING] Lookup CommandGroup
       if (auto group = find(command_group_id(args.Ident)))

@@ -209,12 +209,12 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias EventHandler - Defines the handler type for any event
+  //! \alias handler_t - Defines the handler type for any event
   //! 
   //! \tparam EVENT - Any event type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename EVENT>
-  using EventHandler = typename EVENT::delegate_t;
+  using handler_t = typename EVENT::delegate_t;
         
 } // namespace wtl
 

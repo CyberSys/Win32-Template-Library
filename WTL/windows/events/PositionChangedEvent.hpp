@@ -84,15 +84,7 @@ namespace wtl
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PositionChangedEvent - Defines 'PositionChanged' event (ie. WM_WINDOWPOSCHANGED)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using PositionChangedEvent = MessageEvent<ENC,WindowMessage::WINDOWPOSCHANGED>;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PositionChangedEventArgs - Arguments for 'PositionChanged' Event (ie. WM_WINDOWPOSCHANGED)
+  //! \alias PositionChangedEventArgs - Defines arguments type for the 'PositionChanged' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -100,12 +92,20 @@ namespace wtl
   using PositionChangedEventArgs = EventArgs<ENC,WindowMessage::WINDOWPOSCHANGED>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias PositionChangedEventHandler - Handler for 'PositionChanged' event (ie. WM_WINDOWPOSCHANGED)
+  //! \alias PositionChangedEvent - Defines the signature of 'PositionChanged' event handlers  [Pass by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using PositionChangedEventHandler = MessageEventHandler<ENC,WindowMessage::WINDOWPOSCHANGED>;
+  using PositionChangedEvent = Event<LResult, PositionChangedEventArgs<ENC>>;
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias PositionChangedEventHandler - Defines the delegate type for the 'PositionChanged' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using PositionChangedEventHandler = handler_t<PositionChangedEvent<ENC>>;
   
 } // namespace wtl
 

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\OwnerMeasureCtrlEvent.hpp
-//! \brief Encapsulates the WM_MEASUREITEM message in the 'OwnerMeasure' event
+//! \brief Encapsulates the WM_MEASUREITEM message (when sent for controls) in the 'OwnerMeasureCtrl' event
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -116,15 +116,7 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerMeasureCtrlEvent - Defines 'OwnerMeasure' event from controls (ie. WM_MEASUREITEM)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using OwnerMeasureCtrlEvent = ControlEvent<ENC, WindowMessage::MEASUREITEM>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerMeasureCtrlEventArgs - Arguments for 'OwnerMeasure' Event from controls (ie. WM_MEASUREITEM)
+  //! \alias OwnerMeasureCtrlEventArgs - Defines arguments type for the 'OwnerMeasureCtrl' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -132,12 +124,20 @@ namespace wtl
   using OwnerMeasureCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::MEASUREITEM>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerMeasureCtrlEventHandler - Handler for 'OwnerMeasure' event from controls (ie. WM_MEASUREITEM)
+  //! \alias OwnerMeasureCtrlEvent - Defines the signature of 'OwnerMeasureCtrl' event handlers [Pass by reference]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerMeasureCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::MEASUREITEM>;
+  using OwnerMeasureCtrlEvent = Event<LResult, OwnerMeasureCtrlEventArgs<ENC>& >;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerMeasureCtrlEventHandler - Defines the delegate type for the 'OwnerMeasureCtrl' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerMeasureCtrlEventHandler = handler_t<OwnerMeasureCtrlEvent<ENC>>;
   
 } // namespace wtl
 

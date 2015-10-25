@@ -12,8 +12,8 @@
 #include "wtl/windows/MessageEvent.hpp"            //!< Event
 
 //! \namespace wtl - Windows template library
-namespace wtl {
-
+namespace wtl 
+{
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<ENC,WindowMessage::CREATE> - Event arguments for Win32 message 'WM_CREATE'
   //! 
@@ -109,28 +109,28 @@ namespace wtl {
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CreateWindowEvent - Defines 'CreateWindow' event (ie. WM_CREATE)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using CreateWindowEvent = MessageEvent<ENC, WindowMessage::CREATE>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CreateWindowEventArgs - Arguments for 'CreateWindow' Event (ie. WM_CREATE)
+  //! \alias CreateWindowEventArgs - Defines arguments type for the 'CreateWindow' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using CreateWindowEventArgs = EventArgs<ENC,WindowMessage::CREATE>;
-
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CreateWindowEventHandler - Handler for 'CreateWindow' event (ie. WM_CREATE)
+  //! \alias CreateWindowEvent - Defines the signature of the 'CreateWindow' event handler  [Pass by reference]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CreateWindowEventHandler = MessageEventHandler<ENC,WindowMessage::CREATE>;
+  using CreateWindowEvent = Event<LResult, CreateWindowEventArgs<ENC>& >;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias CreateWindowEventHandler - Defines the delegate type for the 'CreateWindow' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using CreateWindowEventHandler = handler_t<CreateWindowEvent<ENC>>;
   
 } // namespace wtl
 

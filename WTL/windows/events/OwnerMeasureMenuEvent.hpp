@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\event\OwnerMeasureEvent.hpp
-//! \brief Encapsulates the WM_MEASUREITEM message in the 'OwnerMeasure' event
+//! \file wtl\windows\event\OwnerMeasureMenuEvent.hpp
+//! \brief Encapsulates the WM_MEASUREITEM message (when sent by Menus) in the 'OwnerMeasure' event
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -98,28 +98,28 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerMeasureMenuEvent - Defines 'OwnerMeasure' event (ie. WM_MEASUREITEM)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using OwnerMeasureMenuEvent = MessageEvent<ENC, WindowMessage::MEASUREITEM>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerMeasureMenuEventArgs - Arguments for 'OwnerMeasure' Event (ie. WM_MEASUREITEM)
+  //! \alias OwnerMeasureMenuEventArgs - Defines arguments type for the 'OwnerMeasureMenu' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using OwnerMeasureMenuEventArgs = EventArgs<ENC,WindowMessage::MEASUREITEM>;
-
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerMeasureMenuEventHandler - Handler for 'OwnerMeasure' event (ie. WM_MEASUREITEM)
+  //! \alias OwnerMeasureMenuEvent - Defines the signature of 'OwnerMeasureMenu' event handlers [Pass by reference]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerMeasureMenuEventHandler = MessageEventHandler<ENC,WindowMessage::MEASUREITEM>;
+  using OwnerMeasureMenuEvent = Event<LResult, OwnerMeasureMenuEventArgs<ENC>& >;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerMeasureMenuEventHandler - Defines the delegate type for the 'OwnerMeasureMenu' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerMeasureMenuEventHandler = handler_t<OwnerMeasureMenuEvent<ENC>>;
   
 } // namespace wtl
 

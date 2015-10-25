@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\OwnerDrawCtrlEvent.hpp
-//! \brief Encapsulates the WM_DRAWITEM message sent for controls in the 'OwnerDrawCtrl' event
+//! \brief Encapsulates the WM_DRAWITEM message (when sent for controls) in the 'OwnerDrawCtrl' event.
+//! \remarks Notice that a separate event, 'OwnerDrawMenuEvent' handles WM_DRAWITEM messages sent for menus
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -108,15 +109,7 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawCtrlEvent - Defines 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using OwnerDrawCtrlEvent = ControlEvent<ENC, WindowMessage::DRAWITEM>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawCtrlEventArgs - Arguments for 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawCtrlEventArgs - Defines arguments type for the 'OwnerDrawCtrl' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -124,12 +117,20 @@ namespace wtl
   using OwnerDrawCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::DRAWITEM>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawCtrlEventHandler - Handler for 'OwnerDraw' event for controls (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawCtrlEvent - Defines the signature of 'OwnerDrawCtrl' event handlers  [Pass by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawCtrlEventHandler = ControlEventHandler<ENC,WindowMessage::DRAWITEM>;
+  using OwnerDrawCtrlEvent = Event<LResult, OwnerDrawCtrlEventArgs<ENC>>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerDrawCtrlEventHandler - Defines the delegate type for the 'OwnerDrawCtrl' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerDrawCtrlEventHandler = handler_t<OwnerDrawCtrlEvent<ENC>>;
   
 } // namespace wtl
 

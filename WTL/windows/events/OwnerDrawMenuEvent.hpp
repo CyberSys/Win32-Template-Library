@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\OwnerDrawMenuEvent.hpp
-//! \brief Encapsulates the WM_DRAWITEM message for menus in the 'OwnerDrawMenu' event
+//! \brief Encapsulates the WM_DRAWITEM message (when sent for menus) in the 'OwnerDrawMenu' event
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -91,15 +91,7 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawMenuEvent - Defines 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using OwnerDrawMenuEvent = MessageEvent<ENC, WindowMessage::DRAWITEM>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawMenuEventArgs - Arguments for 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawMenuEventArgs - Defines arguments type for the 'OwnerDrawMenu' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -107,12 +99,20 @@ namespace wtl
   using OwnerDrawMenuEventArgs = EventArgs<ENC,WindowMessage::DRAWITEM>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias OwnerDrawMenuEventHandler - Handler for 'OwnerDraw' event for menus (ie. WM_DRAWITEM)
+  //! \alias OwnerDrawMenuEvent - Defines the signature of 'OwnerDrawMenu' event handlers  [Pass by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawMenuEventHandler = MessageEventHandler<ENC,WindowMessage::DRAWITEM>;
+  using OwnerDrawMenuEvent = Event<LResult, OwnerDrawMenuEventArgs<ENC>>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias OwnerDrawMenuEventHandler - Defines the delegate type for the 'OwnerDrawMenu' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using OwnerDrawMenuEventHandler = handler_t<OwnerDrawMenuEvent<ENC>>;
 
   
 } // namespace wtl

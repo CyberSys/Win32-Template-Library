@@ -15,73 +15,53 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonEvent - Defines a button control event raised by WM_COMMAND
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam CODE - Notification message 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEvent = Event<LResult, ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>&&>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonEventHandler - Defines handlers for button control events raised via WM_COMMAND 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam CODE - Notification message 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEventHandler = typename ButtonEvent<ENC,CODE>::delegate_t;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonEventArgs - Defines arguments for button control events raised via WM_COMMAND 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam CODE - Notification message 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEventArgs = ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>;
-  
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonClickEvent... - Defines button 'Click' event/arguments/handler types
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonClickEvent = ButtonEvent<ENC,ButtonNotification::Click>;
-  template <Encoding ENC> using ButtonClickEventArgs = ButtonEventArgs<ENC,ButtonNotification::Click>;
-  template <Encoding ENC> using ButtonClickEventHandler = ButtonEventHandler<ENC,ButtonNotification::Click>;
+  namespace
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \alias button_event_args_t - Defines argument types for button control events
+    //! 
+    //! \tparam ENC - Window character encoding
+    //! \tparam MSG - Window message
+    //! \tparam CODE - Notification message 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding ENC, WindowMessage MSG, ButtonNotification CODE>
+    using button_event_args_t = ControlEventArgs<ENC,MSG,ButtonNotification,CODE>;
+  }
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonGainFocusEvent... - Defines button 'GainFocus' event/arguments/handler types
+  //! \alias ButtonClickEvent... - Defines arguments type, handle signature, and delegate type for Button 'Click' event 
+  //! \remarks Encapsulates the WM_COMMAND message containing a BN_CLICKED notification.  [Arguments passed by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonGainFocusEvent = ButtonEvent<ENC,ButtonNotification::SetFocus>;
-  template <Encoding ENC> using ButtonGainFocusEventArgs = ButtonEventArgs<ENC,ButtonNotification::SetFocus>;
-  template <Encoding ENC> using ButtonGainFocusEventHandler = ButtonEventHandler<ENC,ButtonNotification::SetFocus>;
+  template <Encoding ENC> using ButtonClickEventArgs    = button_event_args_t<ENC,WindowMessage::COMMAND,ButtonNotification::Click>;
+  template <Encoding ENC> using ButtonClickEvent        = Event<LResult, ButtonClickEventArgs<ENC>>;
+  template <Encoding ENC> using ButtonClickEventHandler = handler_t<ButtonClickEvent<ENC>>;
 
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonLoseFocusEvent... - Defines button 'LoseFocus' event/arguments/handler types
+  //! \alias ButtonGainFocusEvent... - Defines arguments type, handle signature, and delegate type for Button 'GainFocus' event
+  //! \remarks Encapsulates the WM_COMMAND message containing a BN_SETFOCUS notification.  [Arguments passed by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonLoseFocusEvent = ButtonEvent<ENC,ButtonNotification::KillFocus>;
-  template <Encoding ENC> using ButtonLoseFocusEventArgs = ButtonEventArgs<ENC,ButtonNotification::KillFocus>;
-  template <Encoding ENC> using ButtonLoseFocusEventHandler = ButtonEventHandler<ENC,ButtonNotification::KillFocus>;
+  template <Encoding ENC> using ButtonGainFocusEventArgs    = button_event_args_t<ENC,WindowMessage::COMMAND,ButtonNotification::SetFocus>;
+  template <Encoding ENC> using ButtonGainFocusEvent        = Event<LResult, ButtonGainFocusEventArgs<ENC>>;
+  template <Encoding ENC> using ButtonGainFocusEventHandler = handler_t<ButtonGainFocusEvent<ENC>>;
 
-
-
-
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonEventHander - Defines a handler type for a Button event (ie. WM_COMMAND -> {BN_xxxx} )
+  //! \alias ButtonLoseFocusEvent... - Defines arguments type, handle signature, and delegate type for Button 'LoseFocus' event
+  //! \remarks Encapsulates the WM_COMMAND message containing a BN_KILLFOCUS notification.  [Arguments passed by value]
   //! 
-  //! \tparam ENC - Window character encoding 
-  //! \tparam SENDER - Originator window type
-  //! \tparam CODE - Notification
+  //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  //template <Encoding ENC, typename SENDER, ButtonEvent CODE> using ButtonEventHandler = CtrlEventHandler<ENC,SENDER,ButtonEvent,CODE>;
+  template <Encoding ENC> using ButtonLoseFocusEventArgs    = button_event_args_t<ENC,WindowMessage::COMMAND,ButtonNotification::KillFocus>;
+  template <Encoding ENC> using ButtonLoseFocusEvent        = Event<LResult, ButtonLoseFocusEventArgs<ENC>>;
+  template <Encoding ENC> using ButtonLoseFocusEventHandler = handler_t<ButtonLoseFocusEvent<ENC>>;
+
+
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias Button...EventHander - Defines handler types for Button events (ie. WM_COMMAND -> {BN_xxxx} )

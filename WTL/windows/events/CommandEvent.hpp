@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\events\CommandEvent.hpp
-//! \brief Provides argument/delegate/handler types for command events
+//! \brief Encapsulates the WM_COMMAND message sent by menus, accelerators, and toolbars in the 'Command' event. 
+//! \remarks Note that WM_COMMAND messages sent from controls are handled by 'ControlEvent'
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -70,20 +71,12 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    CommandId      Ident;     //!< Command id 
+    CommandId      Ident;      //!< Command id 
     CommandSource  Source;     //!< How command was raised
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CommandEvent - Defines 'Command' event (ie. WM_COMMAND from menus/accelerators/toolbars)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using CommandEvent = MessageEvent<ENC,WindowMessage::COMMAND>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CommandEventArgs - Arguments for 'Command' Event (ie. WM_COMMAND from menus/accelerators/toolbars)
+  //! \alias CommandEventArgs - Defines arguments type for the 'Command' Event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -91,12 +84,20 @@ namespace wtl
   using CommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CommandEventHandler - Handler for 'Command' event (ie. WM_COMMAND from menus/accelerators/toolbars)
+  //! \alias CommandEvent - Defines the signature of 'Command' event handlers  [Pass by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CommandEventHandler = MessageEventHandler<ENC,WindowMessage::COMMAND>;
+  using CommandEvent = Event<LResult,CommandEventArgs<ENC>>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias CommandEventHandler - Defines the delegate type for the 'Command' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using CommandEventHandler = handler_t<CommandEvent<ENC>>;
 
   
 } // namespace wtl

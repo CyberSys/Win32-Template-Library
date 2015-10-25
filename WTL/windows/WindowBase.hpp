@@ -697,7 +697,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCreate(CreateWindowEventArgs<encoding>&& args) 
+    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // [Handled] Accept parameters
       return 0; 
@@ -707,12 +707,12 @@ namespace wtl
     // WindowBase::onCommand
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
     //! 
-    //! \param[in,out] &args - Message arguments 
+    //! \param[in] args - Message arguments 
     //! \return LResult - Message result and routing
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCommand(CommandEventArgs<encoding>&& args) 
+    virtual LResult  onCommand(CommandEventArgs<encoding> args) 
     { 
       // Execute associated command
       execute(args.Ident);
@@ -728,9 +728,9 @@ namespace wtl
     //! \param[in,out] args - Message arguments containing drawing data
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onPaint(PaintWindowEventArgs<encoding>&& args) 
+    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
     { 
-      // [Handled] Validate client area
+      // [Handled] No-op (Validates the client area)
       return 0; 
     }
   
@@ -767,7 +767,12 @@ namespace wtl
         // [EVENT] Raise event associated with message
         switch (message)
         {
-        case WindowMessage::CREATE:           ret = Create.raise(CreateWindowEventArgs<encoding>(w,l));             break;
+        // [CREATE] Create window
+        case WindowMessage::CREATE: 
+          { CreateWindowEventArgs<encoding> args(w,l); ret = Create.raise(args); }      //!< [Pass arguments by reference]
+          break;
+
+        // [CLOSE/DESTROY/SHOW/MOVE] 
         case WindowMessage::CLOSE:            ret = Close.raise();                                                  break;
         case WindowMessage::DESTROY:          ret = Destroy.raise();                                                break;
         case WindowMessage::SHOWWINDOW:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
@@ -796,24 +801,28 @@ namespace wtl
 
           // [MENU] Raise menu's OwnerDraw event
           else 
-            ret = Menu.OwnerDraw.raise(OwnerDrawMenuEventArgs<encoding>(w,l));
+            ret = Menu.OwnerDraw.raise( OwnerDrawMenuEventArgs<encoding>(w,l) ); 
           break;
         
         // [OWNER-MEASURE] Reflect to sender
         case WindowMessage::MEASUREITEM: 
           // [CONTROL] Reflect to originator
-          if (w != 0)
-            ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(),w,l).reflect();
-
-          // [MENU] Raise associated menu event
-          else 
-            ret = Menu.OwnerMeasure.raise(OwnerMeasureMenuEventArgs<encoding>(Handle,w,l));
+          if (w != 0) 
+            ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(), w, l).reflect();
+          
+          // [MENU] Raise associated menu event  
+          else {
+            OwnerMeasureMenuEventArgs<encoding> args(Handle,w,l);
+            ret = Menu.OwnerMeasure.raise(args);                          //!< [Pass arguments by reference]
+          }
           break;
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
         case WindowMessage::PAINT:          
-          if (!Paint.empty())
-            ret = Paint.raise(PaintWindowEventArgs<encoding>(Handle,w,l));       
+          if (!Paint.empty()) {
+            PaintWindowEventArgs<encoding> args(Handle,w,l);
+            ret = Paint.raise(args);                                      //!< [Pass arguments by reference]
+          }
           break;
         }
 

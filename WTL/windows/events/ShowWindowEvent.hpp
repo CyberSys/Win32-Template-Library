@@ -74,15 +74,7 @@ namespace wtl
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ShowWindowEvent - Defines 'ShowWindow' event (ie. WM_SHOWWINDOW)
-  //! 
-  //! \tparam ENC - Window character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using ShowWindowEvent = MessageEvent<ENC,WindowMessage::SHOWWINDOW>;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ShowWindowEventArgs - Arguments for 'ShowWindow' Event (ie. WM_SHOWWINDOW)
+  //! \alias ShowWindowEventArgs - Defines arguments type for the 'ShowWindow' event 
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -90,12 +82,20 @@ namespace wtl
   using ShowWindowEventArgs = EventArgs<ENC,WindowMessage::SHOWWINDOW>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ShowWindowEventHandler - Handler for 'ShowWindow' event (ie. WM_SHOWWINDOW)
+  //! \alias ShowWindowEvent - Defines the signature of 'ShowWindow' event handlers  [Pass by value]
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ShowWindowEventHandler = MessageEventHandler<ENC,WindowMessage::SHOWWINDOW>;
+  using ShowWindowEvent = Event<LResult,ShowWindowEventArgs<ENC>>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ShowWindowEventHandler - Defines the delegate type for the 'ShowWindow' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using ShowWindowEventHandler = handler_t<ShowWindowEvent<ENC>>;
   
 } // namespace wtl
 
