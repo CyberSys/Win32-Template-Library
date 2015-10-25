@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Queue.hpp
 //! \brief Provides a FIFO queue that exposes a simple interface
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -23,108 +23,138 @@ namespace wtl
   //! \tparam T - Element type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct Queue : protected std::deque<T>
+  struct Queue 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \alias base - Define base type
-    using base = std::deque<T>;
+    //! \alias type - Define own type
+    using type = Queue<T>;
   
+    //! \alias iterator - Inherit iterator type
+    using iterator = typename std::deque<T>::iterator;
+
+    //! \alias const_iterator - Inherit immutable iterator type
+    using const_iterator = typename std::deque<T>::const_iterator;
+
+    //! \alias value_type - Inherit value type
+    using value_type = typename std::deque<T>::value_type;
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    std::deque<T>  Items;      //!< Item storage
+
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::Queue
     //! Create empty queue
     /////////////////////////////////////////////////////////////////////////////////////////
-    Queue()
-    {}
+    Queue() = default;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::Queue
     //! Create queue and populate from initializer list
     //! 
-    //! \param[in] &&list - List of elements
+    //! \param[in] list - List of elements
     /////////////////////////////////////////////////////////////////////////////////////////
-    Queue(std::initializer_list<T>&& list) : Elements(std::forward(list))
+    Queue(std::initializer_list<T> list) : Items(std::forward(list))
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Queue::~Queue
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Queue()
-    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    ENABLE_COPY(Queue);        //!< Can be copied
+    ENABLE_MOVE(Queue);        //!< Can be moved
+    ENABLE_POLY(Queue);        //!< Can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Queue::begin/end const
+    //! Retrieve immutable start/end iterators
+    //!
+    //! \return const_iterator - Position of first/last elements
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const_iterator begin() const  { return Items.cbegin(); }
+    const_iterator end() const    { return Items.cend();   }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::empty const
     //! Query whether the queue is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool empty()
+    bool empty() const
     {
-      return base::empty();
+      return Items.empty();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::peek const
     //! Peek the first element in the queue
     //! 
-    //! \return const T& - Immutable reference to first element
+    //! \return const value_type& - Immutable reference to first element
     //! 
     //! \throw wtl::logic_error - Queue is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    const T&  peek() const
+    const value_type&  peek() const
     {
       // Ensure not empty
       if (empty())
-        throw logic_error(HERE, "Queue is empty");
+        throw logic_error(HERE, "Cannot peek an empty queue");
 
       // Return front
-      return base::front();
+      return Items.front();
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Queue::begin/end 
+    //! Retrieve mutable start/end iterators
+    //!
+    //! \return iterator - Position of first/last elements
+    /////////////////////////////////////////////////////////////////////////////////////////
+    iterator begin()  { return std::begin(Items); }
+    iterator end()    { return std::end(Items);   }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::clear
     //! Clear the queue
     /////////////////////////////////////////////////////////////////////////////////////////
     void clear()
     {
-      base::clear();
+      Items.clear();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::peek
     //! Peek the first element in the queue
     //! 
-    //! \return T& - Mutable reference to first element
+    //! \return value_type& - Mutable reference to first element
     //! 
     //! \throw wtl::logic_error - Queue is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    T&  peek()
+    value_type&  peek()
     {
       // Ensure not empty
       if (empty())
-        throw logic_error(HERE, "Queue is empty");
+        throw logic_error(HERE, "Cannot peek an empty queue");
 
       // Return front
-      return base::front();
+      return Items.front();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::push
-    //! Push element to the base of the queue
+    //! Construct element at the back of the queue
     //! 
-    //! \param[in] &&... args - Element c-tor arguments
+    //! \param[in] &&... args - Element constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
     void push(ARGS&&... args)
     {
-      base::emplace_front(std::forward<ARGS>(args)...)
+      // Add to back
+      Items.emplace_back(std::forward<ARGS>(args)...);
     }
     
     
@@ -132,24 +162,18 @@ namespace wtl
     // Queue::pop
     //! Pop element from the front of the queue
     //! 
-    //! \return T - First element in the queue
-    //! 
     //! \throw wtl::logic_error - Queue is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    T pop()
+    void pop()
     {
       // Ensure not empty
       if (empty())
-        throw logic_error(HERE, "Queue is empty");
+        throw logic_error(HERE, "Cannot pop empty queue");
 
-      // Copy, pop, and return
-      T tmp(base::back());
-      base::pop_back();
-      return tmp;
+      // Pop from front
+      Items.pop_front();
     }
     
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  
   };
 
 

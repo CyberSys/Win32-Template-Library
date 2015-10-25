@@ -24,7 +24,7 @@
 #include "wtl/utils/Point.hpp"                    //!< Point
 #include "wtl/utils/Size.hpp"                     //!< Size
 #include "wtl/utils/Triangle.hpp"                 //!< Triangle
-#include <deque>                                  //!< std::deque
+#include "wtl/utils/Queue.hpp"                    //!< Queue
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -39,19 +39,19 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \typedef type - Define own type
+    using type = ObjectStack<OBJ>;
+
     //! \typedef handle_t - Object handle type
     using handle_t = OBJ;
 
     //! \typedef native_t - Native handle type
     using native_t = typename handle_t::native_t;
 
-    //! \typedef stack_t - Define handle stack type
-    using stack_t = std::deque<OBJ>;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    HDeviceContext DC;     //!< Device context handle
-    stack_t        Stack;  //!< Previous handles
+    HDeviceContext    DC;      //!< Device context handle
+    Queue<OBJ>        Items;   //!< Previous handles
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -90,7 +90,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool empty() const
     {
-      return Stack.empty();
+      return Items.empty();
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -116,11 +116,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void push(const handle_t& obj)
     {
-      if (Stack.size() == 10)
-        throw logic_error(HERE, "Stack is full");
-
       // Select new object and store old one
-      Stack.emplace_front( select(obj) );
+      Items.push( select(obj) );
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -129,8 +126,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void pop()
     {
-      select(Stack.front());
-      Stack.pop_front();
+      select(Items.peek());
+      Items.pop();
     }
 
   protected:

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Stack.hpp
-//! \brief Provides a FILO stack that exposes a simple interface
-//! \date 6 March 2015
+//! \brief Provides a FILO stack with a simple interface 
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -23,99 +23,125 @@ namespace wtl
   //! \tparam T - Element type
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  struct Stack : protected std::deque<T>
+  struct Stack 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \alias base - Define base type
-    using base = std::deque<T>;
-    
+    //! \alias type - Define own type
+    using type = Stack<T>;
+  
+    //! \alias iterator - Inherit iterator type
+    using iterator = typename std::deque<T>::iterator;
+
+    //! \alias const_iterator - Inherit immutable iterator type
+    using const_iterator = typename std::deque<T>::const_iterator;
+
+    //! \alias value_type - Inherit value type
+    using value_type = typename std::deque<T>::value_type;
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    std::deque<T>  Items;      //!< Item storage
+
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::Stack
     //! Create empty stack
     /////////////////////////////////////////////////////////////////////////////////////////
-    Stack()
-    {}
+    Stack() = default;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::Stack
     //! Create stack and populate from initializer list
     //! 
-    //! \param[in] &&list - List of elements
+    //! \param[in] list - List of elements
     /////////////////////////////////////////////////////////////////////////////////////////
-    Stack(std::initializer_list<T>&& list) : base(std::forward(list))
+    Stack(std::initializer_list<T> list) : base(std::forward(list))
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Stack::~Stack
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Stack()
-    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+  public:
+    ENABLE_COPY(Stack);        //!< Can be copied
+    ENABLE_MOVE(Stack);        //!< Can be moved
+    ENABLE_POLY(Stack);        //!< Can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Stack::begin/end const
+    //! Retrieve immutable start/end iterators
+    //!
+    //! \return const_iterator - Position of first/last elements
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const_iterator begin() const  { return Items.cbegin(); }
+    const_iterator end() const    { return Items.cend();   }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::empty const
     //! Query whether the stack is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool empty()
+    bool empty() const
     {
-      return base::empty();
+      return Items.empty();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::peek const
-    //! Peek the first element in the stack
+    //! Peek the top element in the stack
     //! 
-    //! \return const T& - Immutable reference to first element
+    //! \return const value_type& - Immutable reference to the top element
     //! 
     //! \throw wtl::logic_error - Stack is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    const T&  peek() const
+    const value_type&  peek() const
     {
       // Ensure not empty
       if (empty())
-        throw logic_error(HERE, "Stack is empty");
+        throw logic_error(HERE, "Cannot peek an empty stack");
 
       // Return front
-      return base::front();
+      return Items.front();
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    using base::begin;
-    using base::end;
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Stack::begin/end 
+    //! Retrieve mutable start/end iterators
+    //!
+    //! \return iterator - Position of first/last elements
+    /////////////////////////////////////////////////////////////////////////////////////////
+    iterator begin()  { return std::begin(Items); }
+    iterator end()    { return std::end(Items);   }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::clear
     //! Clear the stack
     /////////////////////////////////////////////////////////////////////////////////////////
     void clear()
     {
-      base::clear();
+      Items.clear();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::peek
-    //! Peek the first element in the stack
+    //! Peek the top element in the stack
     //! 
-    //! \return T& - Mutable reference to first element
+    //! \return value_type& - Mutable reference to top element
     //! 
     //! \throw wtl::logic_error - Stack is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    T&  peek()
+    value_type&  peek()
     {
       // Ensure not empty
       if (empty())
-        throw logic_error(HERE, "Stack is empty");
+        throw logic_error(HERE, "Cannot peek an empty stack");
 
       // Return front
-      return base::front();
+      return Items.front();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +153,8 @@ namespace wtl
     template <typename... ARGS>
     void push(ARGS&&... args)
     {
-      base::emplace_front(std::forward<ARGS>(args)...);
+      // Construct at back
+      Items.emplace_back(std::forward<ARGS>(args)...);
     }
     
     
@@ -135,24 +162,18 @@ namespace wtl
     // Stack::pop
     //! Pop element from the stack
     //! 
-    //! \return T - Top element in the stack
-    //! 
     //! \throw wtl::logic_error - Stack is empty
     /////////////////////////////////////////////////////////////////////////////////////////
-    T pop()
+    void pop()
     {
       // Ensure not empty
       if (empty())
-        throw logic_error(HERE, "Stack is empty");
+        throw logic_error(HERE, "Cannot pop empty stack");
 
-      // Copy, pop, and return
-      T tmp(base::front());
-      base::pop_front();
-      return tmp;
+      // Remove from front
+      Items.pop_front();
     }
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  
+      
   };
 
 

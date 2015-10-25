@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/windows/Command.hpp"          //!< Command
-#include "wtl/utils/Stack.hpp"             //!< Stack
+#include "wtl/utils/Queue.hpp"              //!< Queue
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -25,25 +25,34 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
-    //! \var encoding - Define command character encoding 
-    static constexpr Encoding encoding = ENC;
-
+    //! \alias type - Define own type
+    using type = CommandQueue<ENC>;
+  
     //! \alias char_t - Define command character type
-    using char_t = encoding_char_t<encoding>;
+    using char_t = encoding_char_t<ENC>;
 
     //! \alias command_t - Define command base type
-    using command_t = Command<encoding>;
-
+    using command_t = Command<ENC>;
+    
+    //! \var encoding - Define command character encoding 
+    static constexpr Encoding encoding = ENC;
+    
   protected:
     //! \alias storage_t - Define storage type
     using storage_t = CommandPtr<encoding>;
 
-    //! \alias collection_t - Define collection type
-    using collection_t = Stack<storage_t>;
-    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    Queue<storage_t>  ExecutedCommands,      //!< 'Undo' command queue
+                      RepeatableCommands;    //!< 'Redo' command queue
+                  
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
-    DEFAULT_CTOR(CommandQueue);           //!< Can be default-constructed
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CommandQueue::CommandQueue
+    //! Create empty queue
+    /////////////////////////////////////////////////////////////////////////////////////////
+    CommandQueue() = default;
     
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
   public:
@@ -168,7 +177,8 @@ namespace wtl
       RepeatableCommands.peek()->execute();
 
       // Move from Redo -> Undo queue
-      ExecutedCommands.push(RepeatableCommands.pop());
+      ExecutedCommands.push(RepeatableCommands.peek());
+      RepeatableCommands.pop()
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -189,14 +199,10 @@ namespace wtl
       ExecutedCommands.peek()->revert();
 
       // Move from Undo -> Redo queue
-      RepeatableCommands.push(ExecutedCommands.pop());
+      RepeatableCommands.push(ExecutedCommands.peek());
+      ExecutedCommands.pop()
     }
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    collection_t  ExecutedCommands,      //!< 'Undo' command queue
-                  RepeatableCommands;    //!< 'Redo' command queue
-                  
   };
         
 } // namespace wtl

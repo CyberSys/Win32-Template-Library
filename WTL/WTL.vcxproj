@@ -102,6 +102,7 @@
     <ClInclude Include="utils\Point.hpp" />
     <ClInclude Include="utils\Rectangle.hpp" />
     <ClInclude Include="utils\Size.hpp" />
+    <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\String.hpp" />
     <ClInclude Include="utils\Clear.hpp" />
     <ClInclude Include="utils\Constant.hpp" />
@@ -126,7 +127,6 @@
     <ClInclude Include="utils\Sequence.hpp" />
     <ClInclude Include="utils\SFINAE.hpp" />
     <ClInclude Include="utils\LengthOf.hpp" />
-    <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\toString.hpp" />
     <ClInclude Include="utils\Default.hpp" />
     <ClInclude Include="utils\Triangle.hpp" />

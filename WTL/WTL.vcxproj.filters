@@ -263,9 +263,6 @@
     <ClInclude Include="utils\Queue.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Stack.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="traits\ModuleTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
@@ -553,6 +550,9 @@
     </ClInclude>
     <ClInclude Include="windows\MessageEvent.hpp">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Stack.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
