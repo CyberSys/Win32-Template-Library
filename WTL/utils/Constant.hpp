@@ -95,14 +95,8 @@ namespace wtl
     //! \alias reference_type - Define reference type
     using reference_type = const T&;
 
-//! \if CONSTEXPR_SDMI_CAP - Initialize if SDMI supported
-#ifdef CONSTEXPR_SDMI_CAP
     //! \var value - Define value
     static constexpr value_type  value = GET();
-#else
-    //! \var value - Define value
-    static const value_type  value;
-#endif
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   
@@ -145,13 +139,6 @@ namespace wtl
     
     // --------------------------------------- MUTATORS -------------------------------------
   };
-
-//! \ifnot CONSTEXPR_SDMI_CAP - Initialize at runtime
-#ifndef CONSTEXPR_SDMI_CAP
-  //! \var value - Define value
-  template <typename T, T (*GET)()> 
-  const T  static_constant<T,GET>::value = GET();
-#endif
 
 }
 

@@ -23,9 +23,7 @@
 
 //! \if __clang__ - Clang
 #ifdef __clang__
-  //! \def CONSTEXPR_SDMI_CAP - Enabled iff compiler supports constexpr static data member initialization
-  #define CONSTEXPR_SDMI_CAP
-
+ 
 //! \if _MSC_VER - Visual Studio
 #elif _MSC_VER
 
