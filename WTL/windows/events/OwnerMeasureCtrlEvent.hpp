@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\OwnerMeasureCtrlEvent.hpp
 //! \brief Encapsulates the WM_MEASUREITEM message in the 'OwnerMeasure' event
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -14,8 +14,8 @@
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
-#include "wtl/windows/EventArgs.hpp"         //!< ControlEventArgs
-#include "wtl/utils/Rectangle.hpp"           //!< Rect
+#include "wtl/windows/ControlEvent.hpp"         //!< ControlEvent, ControlEventArgs
+#include "wtl/utils/Rectangle.hpp"              //!< Rect
 #include "wtl/traits/WindowTraits.hpp"          //!< HWnd
 
 //! \namespace wtl - Windows template library

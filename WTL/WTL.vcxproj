@@ -142,7 +142,7 @@
     <ClInclude Include="windows\ControlEvent.hpp" />
     <ClInclude Include="windows\controls\Button.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
-    <ClInclude Include="windows\event.hpp" />
+    <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
     <ClInclude Include="windows\events\CommandEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
@@ -161,7 +161,7 @@
     <ClInclude Include="windows\CommandGroup.hpp" />
     <ClInclude Include="windows\CommandQueue.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
-    <ClInclude Include="windows\EventArgs.hpp" />
+    <ClInclude Include="windows\MessageEvent.hpp" />
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />
     <ClInclude Include="windows\properties\ClientRectPropertyImpl.hpp" />
     <ClInclude Include="windows\properties\EnabledProperty.hpp" />

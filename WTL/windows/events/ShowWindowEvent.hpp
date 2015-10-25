@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\ShowWindowEvent.hpp
 //! \brief Encapsulates the WM_SHOWWINDOW message in the 'ShowWindow' event
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,9 @@
 #define WTL_SHOW_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/EventArgs.hpp"            //!< Event
-#include "wtl/casts/OpaqueCast.hpp"                //!< OpaqueCast
-#include "wtl/platform/WindowFlags.hpp"            //!< ShowWindowType
+#include "wtl/windows/MessageEvent.hpp"           //!< MessageEvent
+#include "wtl/casts/OpaqueCast.hpp"               //!< OpaqueCast
+#include "wtl/platform/WindowFlags.hpp"           //!< ShowWindowType
 
 //! \namespace wtl - Windows template library
 namespace wtl

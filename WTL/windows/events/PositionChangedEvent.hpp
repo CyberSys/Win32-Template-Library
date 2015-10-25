@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\PositionChangedEvent.hpp
 //! \brief Encapsulates the WM_WINDOWPOSCHANGED message in the 'PositionChanged' event
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -10,8 +10,8 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/OpaqueCast.hpp"                //!< OpaqueCast
-#include "wtl/windows/EventArgs.hpp"            //!< Event
-#include "wtl/utils/Rectangle.hpp"              //!< Rect
+#include "wtl/windows/MessageEvent.hpp"            //!< MessageEvent
+#include "wtl/utils/Rectangle.hpp"                 //!< Rect
 #include "wtl/traits/WindowTraits.hpp"             //!< HWnd
 
 //! \namespace wtl - Windows template library

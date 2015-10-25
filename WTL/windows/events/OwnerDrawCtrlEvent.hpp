@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\event\OwnerDrawCtrlEvent.hpp
 //! \brief Encapsulates the WM_DRAWITEM message sent for controls in the 'OwnerDrawCtrl' event
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -14,9 +14,8 @@
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
-#include "wtl/windows/EventArgs.hpp"         //!< ControlEventArgs
-#include "wtl/windows/EventArgs.hpp"         //!< MessageEvent
-#include "wtl/utils/Rectangle.hpp"           //!< Rect
+#include "wtl/windows/ControlEvent.hpp"         //!< ControlEventArgs
+#include "wtl/utils/Rectangle.hpp"              //!< Rect
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 
 //! \namespace wtl - Windows template library
@@ -56,7 +55,7 @@ namespace wtl
     OwnerDrawControl  CtrlType;         //!< Control type
     DeviceContext     Graphics;         //!< Device context clipped to non-client area 
     WindowId          Ident;            //!< Control id
-    int32_t             Item;             //!< Zero-based item index
+    int32_t           Item;             //!< Zero-based item index
     RectL             Rect;             //!< Drawing/update rectangle
     HWnd              Sender;           //!< Control handle
     

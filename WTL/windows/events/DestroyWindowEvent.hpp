@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\events\DestroyWindowEvent.hpp
 //! \brief Encapsulates the WM_DESTROY message in the 'DestroyWindow' event
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,7 +9,7 @@
 #define WTL_DESTROY_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/EventArgs.hpp"            //!< Event
+#include "wtl/windows/MessageEvent.hpp"            //!< Event
 
 //! \namespace wtl - Windows template library
 namespace wtl

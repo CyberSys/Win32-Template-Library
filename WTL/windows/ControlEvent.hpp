@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\events\ControlEvent.hpp
-//! \brief Provides argument/delegate/handler types for WM_COMMAND/WM_NOTIFY messages from child controls 
-//! \date 6 March 2015
+//! \brief Provides argument, delegate, and handler types for messages from child controls (WM_COMMAND/WM_NOTIFY)
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -11,7 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/traits/WindowTraits.hpp"          //!< HWnd
-#include "wtl/windows/EventArgs.hpp"         //!< ControlEventArgs
+#include "wtl/windows/Event.hpp"                //!< Event
 #include "wtl/platform/WindowFlags.hpp"         //!< WindowId
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 

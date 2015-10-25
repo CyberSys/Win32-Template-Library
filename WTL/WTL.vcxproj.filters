@@ -299,9 +299,6 @@
     <ClInclude Include="windows\events\NotifyEventData.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
-    <ClInclude Include="windows\event.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="windows\Delegate.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -548,10 +545,13 @@
     <ClInclude Include="windows\events\CommandEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
-    <ClInclude Include="windows\EventArgs.hpp">
+    <ClInclude Include="windows\ControlEvent.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="windows\ControlEvent.hpp">
+    <ClInclude Include="windows\Event.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\MessageEvent.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>

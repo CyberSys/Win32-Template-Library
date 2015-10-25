@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\events\CommandEvent.hpp
 //! \brief Provides argument/delegate/handler types for command events
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -12,10 +12,11 @@
 #include "wtl/casts/EnumCast.hpp"             //!< EnumCast
 #include "wtl/platform/CommandId.hpp"         //!< CommandId
 #include "wtl/windows/Command.hpp"            //!< CommandSource/CommandState
-#include "wtl/windows/EventArgs.hpp"       //!< MessageEvent
+#include "wtl/windows/MessageEvent.hpp"       //!< MessageEvent
 
 //! \namespace wtl - Windows template library
-namespace wtl {
+namespace wtl
+{
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct EventArgs<WindowMessage::COMMAND> - Arguments decoder for Gui commands raised via menu or accelerator

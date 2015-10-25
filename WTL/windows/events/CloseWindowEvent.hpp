@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\events\CloseWindowEvent.hpp
 //! \brief Encapsulates the WM_CLOSE message in the 'CloseWindow' event
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,10 +9,11 @@
 #define WTL_CLOSE_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/EventArgs.hpp"            //!< Event
+#include "wtl/windows/MessageEvent.hpp"            //!< MessageEvent
 
 //! \namespace wtl - Windows template library
-namespace wtl {
+namespace wtl
+{
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CloseWindowEvent - Defines 'CloseWindow' event (ie. WM_CLOSE)

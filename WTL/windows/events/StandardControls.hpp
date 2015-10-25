@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\events\StandardControls.hpp
 //! \brief Provides argument/delegate/handler types for events from standard controls 
-//! \date 6 March 2015
+//! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,7 +9,7 @@
 #define WTL_CONTROL_EVENTS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/EventArgs.hpp"           //!< Event,ControlEvent,ControlEventArgs
+#include "wtl/windows/ControlEvent.hpp"           //!< ControlEvent,ControlEventArgs,Event
 #include "wtl/platform/ControlStyles.hpp"         //!< Styles+Notifications
 
 //! \namespace wtl - Windows template library
