@@ -29,14 +29,13 @@
 #include "wtl/windows/Command.hpp"                                //!< Command
 #include "wtl/windows/CommandGroup.hpp"                           //!< CommandGroup
 #include "wtl/windows/CommandQueue.hpp"                           //!< CommandQueue
+#include "wtl/windows/ControlEvent.hpp"                           //!< ControlEvent
 #include "wtl/windows/Property.hpp"                               //!< Property
 #include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
 #include "wtl/windows/WindowMenu.hpp"                             //!< WindowMenu
 #include "wtl/windows/events/CommandEvent.hpp"                    //!< CommandEvent
 #include "wtl/windows/events/CloseWindowEvent.hpp"                //!< CloseWindowEvent
 #include "wtl/windows/events/CreateWindowEvent.hpp"               //!< CreateWindowEven
-#include "wtl/windows/events/CtrlCommandEvent.hpp"                //!< CtrlCommandEvent
-#include "wtl/windows/events/CtrlNotifyEvent.hpp"                 //!< CtrlNotifyEvent
 #include "wtl/windows/events/DestroyWindowEvent.hpp"              //!< DestroyWindowEvent
 #include "wtl/windows/events/OwnerDrawCtrlEvent.hpp"              //!< OwnerDrawCtrlEvent
 #include "wtl/windows/events/OwnerDrawMenuEvent.hpp"              //!< OwnerDrawMenuEvent
@@ -763,7 +762,7 @@ namespace wtl
         case WindowMessage::COMMAND:  
           if (l != 0)
             // [CONTROL] Reflect to sender
-            ret = CtrlCommandEventArgs<encoding>(w,l).reflect();
+            ret = ControlEventArgs<encoding,WindowMessage::COMMAND>(w,l).reflect();
           else
             // [COMMAND] Raise event (Default executes the appropriate command object)
             ret = Command.raise(CommandEventArgs<encoding>(w,l));
@@ -771,7 +770,7 @@ namespace wtl
 
         // [NOTIFY] Reflect to sender
         case WindowMessage::NOTIFY:  
-          ret = CtrlNotifyEventArgs<encoding>(w,l).reflect();   
+          ret = ControlEventArgs<encoding,WindowMessage::NOTIFY>(w,l).reflect();   
           break;
 
         // [OWNER-DRAW] Reflect to sender

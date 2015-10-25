@@ -162,7 +162,7 @@ namespace wtl
         // [COMMAND (REFLECTED)] Raise associated event
         case WindowMessage::REFLECT_COMMAND:  
           // Extract notification
-          switch (static_cast<ButtonNotification>(CtrlCommandEventArgs<encoding>(w,l).Message))
+          switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::COMMAND>(w,l).Message))
           {
           case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
           case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;

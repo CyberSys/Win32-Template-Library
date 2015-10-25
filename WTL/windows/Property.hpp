@@ -10,7 +10,6 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EnumTraits.hpp"            //!< is_attribute
-#include "wtl/windows/Event.hpp"                //!< Event
 #include <utility>                              //!< std::forward
 #include <type_traits>                          //!< std::enable_if, std::conditional
 

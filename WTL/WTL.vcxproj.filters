@@ -356,12 +356,6 @@
     <ClInclude Include="utils\PowerOf.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="windows\events\CtrlCommandEvent.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\events\CtrlNotifyEvent.hpp">
-      <Filter>Windows\Events</Filter>
-    </ClInclude>
     <ClInclude Include="windows\Property.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -555,6 +549,9 @@
       <Filter>Windows\Events</Filter>
     </ClInclude>
     <ClInclude Include="windows\EventArgs.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\ControlEvent.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>

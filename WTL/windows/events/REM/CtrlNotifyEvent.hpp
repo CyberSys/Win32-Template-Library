@@ -67,9 +67,9 @@ namespace wtl
     //! \param[in] l - Originator window handle
     /////////////////////////////////////////////////////////////////////////////////////////
     ControlEventArgs(::WPARAM w, ::LPARAM l) : Header(*opaque_cast<::NMHDR>(l)), 
-                                            Ident(static_cast<WindowId>(Header.idFrom)), 
-                                            Sender(Header.hwndFrom, AllocType::WeakRef), 
-                                            Message(static_cast<event_t>(Header.code))
+                                               Ident(static_cast<WindowId>(Header.idFrom)), 
+                                               Sender(Header.hwndFrom, AllocType::WeakRef), 
+                                               Message(static_cast<event_t>(Header.code))
     {}
 
     
