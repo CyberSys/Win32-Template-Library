@@ -88,7 +88,22 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   using WindowIdCollection = std::map<WindowId,WindowBase<ENC>*>;
-    
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::window_id
+  //! Creates a strongly typed window id from any integral or enumeration type
+  //!
+  //! \tparam TYPE - Integral or enumeration type
+  //! 
+  //! \param[in] id - Value representing window id
+  //! \return WindowId - WindowId representation of 'id'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
+  WindowId window_id(VALUE id)
+  {
+    // Convert into underlying type then cast to enumeration
+    return enum_cast<WindowId>( static_cast<std::underlying_type_t<WindowId>>(id) );
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct WindowBase - Base for all window types

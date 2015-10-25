@@ -10,14 +10,32 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"           //!< EnumCast
-#include "wtl/utils/FormatSpec.hpp"         //!< printf_t
 #include "wtl/platform/WindowFlags.hpp"     //!< FormatMessageFlags
 #include <exception>                        //!< std::exception
 #include <utility>                          //!< std::forward
+#include <array>                            //!< std::array
+#include <cstdio>                           //!< std::snprintf
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::error_string
+  //! Builds a formatted string (of narrow character type) without performing dynamic memory allocation
+  //! 
+  //! \tparam LENGTH - Length of character array
+  //! 
+  //! \param[in] const* format - Formatting string
+  //! \param[in] &&... args - [optional] Arguments
+  //! \return std::array<char,LENGTH> - Character array containing formatted string
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <uint32_t LENGTH, typename... ARGS>
+  std::array<char,LENGTH> error_string(const char* format, ARGS&&... args)
+  {
+    std::array<char,LENGTH>  msg;
+    std::snprintf(msg.data(), LENGTH, format, args...);
+    return msg;
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct exception - Adds source information to an STL exception
@@ -45,7 +63,7 @@ namespace wtl
     exception(const char* loc)
     {
       // Copy location
-      snprintf(Location, sizeof(Location), loc);
+      std::snprintf(Location, sizeof(Location), loc);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +84,7 @@ namespace wtl
     exception(const char* location, const char* format, ARGS&&... args) 
     {
       // Format message
-      snprintf_t(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
+      std::snprintf(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -344,7 +362,7 @@ namespace wtl
     platform_error(const char* location, const char* format, ARGS&&... args) : base(location), Code(::GetLastError())
     {
       // Format message
-      int32_t n = snprintf_t(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
+      int32_t n = std::snprintf(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
 
       if (Code != 0)
       {
@@ -352,7 +370,7 @@ namespace wtl
 
         // Lookup and append system error
         ::FormatMessageA(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, Code, 0UL, strError, sizeof(strError), nullptr);
-        snprintf_t(&Message[n-1], sizeof(Message)-n, ". %s.", strError);
+        std::snprintf(&Message[n-1], sizeof(Message)-n, ". %s.", strError);
       }
     }
 

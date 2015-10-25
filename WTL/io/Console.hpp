@@ -12,11 +12,13 @@
 #include "wtl/casts/EnumCast.hpp"           //!< EnumCast
 #include "wtl/casts/NativeCast.hpp"         //!< NativeCast
 #include "wtl/traits/EnumTraits.hpp"        //!< is_attribute
+#include "wtl/utils/FormatSpec.hpp"         //!< format_spec_t
 #include "wtl/utils/Sequence.hpp"           //!< integral_sequence
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/Exception.hpp"          //!< wtl::exception
 #include <stdexcept>                        //!< std::exception
 #include <string>                           //!< std::basic_string
+#include <cstdio>                           //!< std::vsnprintf
 #include <mutex>                            //!< std::lock_guard, std::recursive_mutex
 #include <type_traits>                      //!< std::enable_if
 
@@ -439,7 +441,7 @@ namespace wtl
       
       // Populate string + write
       va_start(args, format);
-      vsnprintf(text, 1024, format, args);
+      std::vsnprintf(text, 1024, format, args);
       write(text);
     }
 

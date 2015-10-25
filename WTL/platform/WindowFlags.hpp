@@ -9,12 +9,9 @@
 #define WTL_WINDOW_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/casts/BaseCast.hpp"
-#include "wtl/traits/EnumTraits.hpp"
-#include "wtl/utils/Clear.hpp"
-#include "wtl/utils/Constant.hpp"
-#include "wtl/utils/Default.hpp"
-#include "wtl/utils/Sequence.hpp"
+#include "wtl/traits/EnumTraits.hpp"              //!< is_attribute, is_contiguous, min_value, max_value
+#include "wtl/utils/Default.hpp"                  //!< Default
+#include "wtl/utils/Sequence.hpp"                 //!< integral_sequence
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -189,20 +186,6 @@ namespace wtl
                                                                                        MoveWindowFlags::DeferErase,
                                                                                        MoveWindowFlags::AsyncWindowPos>  {};
 
-  //! \struct WindowPlacement - Window placement
-  struct WindowPlacement : ::WINDOWPLACEMENT
-  {
-    using base = ::WINDOWPLACEMENT;
-
-    WindowPlacement() 
-    {
-      clear(*base_cast(this));
-      this->length = sizeof(base);
-    }
-  };
-
-  //template <> struct default_t<WindowPlacement> : literal_constant<::WINDOWPLACEMENT> {};
-  
   // ----------------------------------- ::ShowWindow(..) Flags ----------------------------------
   
 
@@ -349,23 +332,6 @@ namespace wtl
   template <> struct max_value<WindowId>     : std::integral_constant<WindowId,WindowId::Timeout>   {};
   template <> struct min_value<WindowId>     : std::integral_constant<WindowId,WindowId::Ok>        {};
   
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::window_id
-  //! Creates a strongly typed window id from any integral or enumeration type
-  //!
-  //! \tparam TYPE - Integral or enumeration type
-  //! 
-  //! \param[in] id - Value representing window id
-  //! \return WindowId - WindowId representation of 'id'
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
-  WindowId window_id(VALUE id)
-  {
-    // Convert into underlying type then cast to enumeration
-    return enum_cast<WindowId>( static_cast<std::underlying_type_t<WindowId>>(id) );
-  }
-
   // ----------------------------------- WINDOW STYLE ----------------------------------
   
   //! \enum WindowStyle - Defines basic window styles

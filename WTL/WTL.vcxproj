@@ -372,7 +372,6 @@
       <UseShortEnums>true</UseShortEnums>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
-      <Verbose>true</Verbose>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

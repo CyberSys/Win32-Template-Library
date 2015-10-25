@@ -20,6 +20,21 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct WindowPlacement - Window placement
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct WindowPlacement : ::WINDOWPLACEMENT
+  {
+    using base = ::WINDOWPLACEMENT;
+
+    WindowPlacement() 
+    {
+      clear(*base_cast(this));
+      this->length = sizeof(base);
+    }
+  };
+  
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct VisibilityPropertyImpl - Encapsulates the visibility of a window in a read/write enumeration property.
   //! 
   //! \tparam ENC - Window encoding

@@ -12,7 +12,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/casts/BooleanCast.hpp"                              //!< BooleanCast
 #include "wtl/casts/EnumCast.hpp"                                 //!< EnumCast
-#include "wtl/windows/properties/VisibilityProperty.hpp"       //!< VisibilityProperty
+#include "wtl/windows/properties/VisibilityProperty.hpp"          //!< VisibilityProperty
 #include "wtl/windows/WindowBase.hpp"                             //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////

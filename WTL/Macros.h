@@ -28,27 +28,18 @@
 
 //! \if _MSC_VER - Visual Studio
 #elif _MSC_VER
-//! \def STRINGIFY_CAP - Enabled iff compiler supports 'stringify' preprocessor operator '#'
-  #define STRINGIFY_CAP
 
   //! \if _MSC_VER >= 1900 - Visual Studio 2015
   #if _MSC_VER >= 1900
-
   #endif
+
 #endif
 // --------------------------------------------------------------------------------------------------------
 // ------------------------------------------ GLOBAL MACROS -----------------------------------------------
 // --------------------------------------------------------------------------------------------------------
-//! \def STR - Stringifies a symbol
-#define STR2(s)  #s
-#define STR(s) STR2(s)
 
 //! \def HERE - Generates a source file error location string: '<function>() on line <line> of <file>'
-#ifdef STRINGIFY_CAP
-  #define HERE  (__FUNCTION__ "() on line " STR(__LINE__) " of " __FILE__)
-#else
-  #define HERE  (/*__FUNCTION__*/ "() in " __FILE__)
-#endif
+#define HERE  ::wtl::error_string<512>("%s() on line %u of %s", __func__, __LINE__, __FILE__).data()
 
 // --------------------------------------------------------------------------------------------------------
 // --------------------------------------- CONSTRUCTION SEMANTICS -----------------------------------------
@@ -166,22 +157,13 @@
   //! \def REQUIRED_PARAM - Throws an exception when a parameter is missing
   //! \param[in] arg - Parameter name
   //////////////////////////////////////////////////////////////////////////////////////////
-#ifdef STRINGIFY_CAP
-  #define REQUIRED_PARAM(arg)           { if ((arg) == nullptr) throw wtl::invalid_argument(HERE, "Missing argument: '" #arg "'"); }
-#else
-  #define REQUIRED_PARAM(arg)
-  //#define REQUIRED_PARAM(arg)           { if ((arg) == nullptr) throw wtl::invalid_argument(HERE, "Missing argument"); }
-#endif
-
+  #define REQUIRED_PARAM(arg)           { if ((arg) == nullptr) throw ::wtl::invalid_argument(HERE, "Missing argument: '" #arg "'"); }
+  
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def PARAM_INVARIANT - Throws an exception when a parameter is missing
   //! \param[in] exp - Expression defining a parameter invariant
   //////////////////////////////////////////////////////////////////////////////////////////
-#ifdef STRINGIFY_CAP
-  #define PARAM_INVARIANT(arg,exp)      { if ((exp) == false) throw wtl::invalid_argument(HERE, "Missing argument: '" #arg "'"); }
-#else
-  #define PARAM_INVARIANT(arg,exp)      { if ((exp) == false) throw wtl::invalid_argument(HERE, "Missing argument"); }
-#endif
+  #define PARAM_INVARIANT(arg,exp)      { if ((exp) == false) throw ::wtl::invalid_argument(HERE, "Missing argument: '" #arg "'"); }
 
 //! \ifnot CHECKED_ARGUMENTS - Deactivates argument verification
 #else
@@ -204,12 +186,6 @@
   //////////////////////////////////////////////////////////////////////////////////////////
   #define CHECKED_INDEX(idx, min, max)  { if (((idx) >= (min) && (idx) < (max)) == false) throw wtl::out_of_range(HERE, "Index %d outside of range %d to %d", idx, min, max); }
 
-//#ifdef STRINGIFY_CAP
-//  #define CHECKED_INDEX(idx, min, max)  { if (((idx) >= (min) && (idx) < (max)) == false) throw wtl::out_of_range(HERE, "Index " #idx " outside of range " #min " to " #max); }
-//#else
-//  #define CHECKED_INDEX(idx, min, max)  { if (((idx) >= (min) && (idx) < (max)) == false) throw wtl::out_of_range(HERE, "Index %d outside of range %d to %d", idx, min, max); }
-//#endif
-
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def CHECKED_LENGTH - Throws an exception when an implementation defined length is exceeded
   //! \param[in] len - Length
@@ -221,11 +197,7 @@
   //! \def LENGTH_INVARIANT - Throws an exception when an implementation defined length is exceeded
   //! \param[in] exp - Expression defining a length invariant
   //////////////////////////////////////////////////////////////////////////////////////////
-#ifdef STRINGIFY_CAP
   #define LENGTH_INVARIANT(exp)       { if ((exp) == false) throw wtl::length_error(HERE, "Length invariant violated: '" #exp "'"); }
-#else
-  #define LENGTH_INVARIANT(exp)       { if ((exp) == false) throw wtl::length_error(HERE, "Insufficient space"); }
-#endif
 
 //! \ifnot CHECKED_BOUNDARIES - Deactivates boundary verification
 #else
@@ -248,21 +220,13 @@
   //! \def DOMAIN_INVARIANT - Throws an exception upon violation of a domain invariant
   //! \param[in] exp - Expression defining a domain invariant
   //////////////////////////////////////////////////////////////////////////////////////////
-#ifdef STRINGIFY_CAP
   #define DOMAIN_INVARIANT(exp)         { if ((exp) == false) throw wtl::domain_error(HERE, "Domain invariant violated: '" #exp "'"); }
-#else
-  #define DOMAIN_INVARIANT(exp)         { if ((exp) == false) throw wtl::domain_error(HERE, "Domain invariant violated"); }
-#endif
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def LOGIC_INVARIANT - Throws an exception upon violation of a logic invariant
   //! \param[in] exp - Expression defining a logic invariant
   //////////////////////////////////////////////////////////////////////////////////////////
-#ifdef STRINGIFY_CAP
   #define LOGIC_INVARIANT(exp)          { if ((exp) == false) throw wtl::logic_error(HERE, "Logic invariant violated: '" #exp "'"); }
-#else
-  #define LOGIC_INVARIANT(exp)          { if ((exp) == false) throw wtl::logic_error(HERE, "Logic invariant violated"); }
-#endif
 
 //! \ifnot CHECKED_INVARIANTS - Deactivates invariant verification
 #else
