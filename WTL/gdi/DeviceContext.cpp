@@ -8,7 +8,7 @@
 
 #include "DeviceContext.hpp"
 #include "wtl/utils/Default.hpp"
-
+#include <functional>
 //! \namespace wtl - Windows template library
 namespace wtl
 {
@@ -28,4 +28,5 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
+
 }

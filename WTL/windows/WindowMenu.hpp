@@ -549,7 +549,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>&& args) 
     { 
       // Draw background
       args.Graphics.fill(args.Rect, StockBrush::Blue);
@@ -573,7 +573,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
+    virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>&& args) 
     { 
       // [HEADING] Lookup CommandGroup
       if (auto group = find(command_group_id(args.Ident)))

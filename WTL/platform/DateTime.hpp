@@ -93,7 +93,7 @@ namespace wtl
     void  format(CharArray<ENC,LEN>& txt, const encoding_char_t<ENC>* str, LocaleId locale = LocaleId::Neutral) const
     {
       // Format date according to user settings
-      if (!getFunc<ENC>(::GetDateFormatA,::GetDateFormatW)(locale, enum_cast(zero<DateFlags>()), base_cast(this), format, txt.buffer(), LEN))
+      if (!getFunc<ENC>(::GetDateFormatA,::GetDateFormatW)(locale, enum_cast(zero<DateFlags>()), base_cast(this), str, txt.buffer(), LEN))
         throw platform_error(HERE, "Unable to format date");
     }
     

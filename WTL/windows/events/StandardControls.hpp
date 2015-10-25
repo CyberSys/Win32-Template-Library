@@ -22,16 +22,7 @@ namespace wtl
   //! \tparam CODE - Notification message 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEvent = Event<LResult, ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>&>;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonEventArgs - Defines arguments for button control events raised via WM_COMMAND 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam CODE - Notification message 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, ButtonNotification CODE>
-  using ButtonEventArgs = ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>;
+  using ButtonEvent = Event<LResult, ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>&&>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ButtonEventHandler - Defines handlers for button control events raised via WM_COMMAND 
@@ -42,6 +33,15 @@ namespace wtl
   template <Encoding ENC, ButtonNotification CODE>
   using ButtonEventHandler = typename ButtonEvent<ENC,CODE>::delegate_t;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ButtonEventArgs - Defines arguments for button control events raised via WM_COMMAND 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam CODE - Notification message 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, ButtonNotification CODE>
+  using ButtonEventArgs = ControlEventArgs<ENC,WindowMessage::COMMAND,ButtonNotification,CODE>;
+  
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ButtonClickEvent... - Defines button 'Click' event/arguments/handler types

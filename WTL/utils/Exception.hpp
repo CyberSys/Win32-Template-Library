@@ -42,7 +42,7 @@ namespace wtl
     //!
     //! \param[in] const* loc - Location
     /////////////////////////////////////////////////////////////////////////////////////////
-    exception(const char* loc) //: base(Message)
+    exception(const char* loc)
     {
       // Copy location
       snprintf(Location, sizeof(Location), loc);
@@ -63,7 +63,7 @@ namespace wtl
     //! \throw wtl::logic_error - Incorrect number of arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    exception(const char* location, const char* format, ARGS&&... args) //: exception(location)
+    exception(const char* location, const char* format, ARGS&&... args) 
     {
       // Format message
       snprintf_t(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
@@ -98,7 +98,7 @@ namespace wtl
     //!
     //! \return const char* - Error string
     /////////////////////////////////////////////////////////////////////////////////////////
-    const char* what() const /*override*/ noexcept(true)
+    const char* what() const noexcept override
     {
       return Message;
     }

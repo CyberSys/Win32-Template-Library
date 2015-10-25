@@ -15,98 +15,99 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias delegate_traits - Defines delegate traits
-  //! 
-  //! \tparam FN - Function type
+  //! \namespace <anon> - Utility
   /////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename FN> 
-  //struct delegate_traits;   /* Undefined */
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias delegate_traits - Defines delegate traits
-  //! 
-  //! \tparam RET - Delegate return type
-  //! \tparam ...ARGS - [optional] Delegate argument types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename RET, typename ...ARGS> 
-  //struct delegate_traits<std::function<RET (ARGS...)>>
-  //{
-  //  //! \var arguments - Number of arguments
-  //  static constexpr uint32_t  arguments = sizeof...(ARGS);
-
-  //  //! \alias result_t - Define return type
-  //  using result_t = RET;
-
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  //! \struct argument - Argument type accessor
-  //  //! 
-  //  //! \tparam IDX - Zero-based argument index
-  //  /////////////////////////////////////////////////////////////////////////////////////////
-  //  template <unsigned IDX>
-  //  struct argument
-  //  {
-  //    static_assert(IDX < arguments, "Argument index out of range");
-
-  //    //! \alias type - Define argument type
-  //    using type = typename std::tuple_element<IDX, std::tuple<ARGS...>>::type;
-  //  };
-  //};
-
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Delegate - Encapsulates an instance method functor
-  //! 
-  //! \tparam NUM - Number of arguments
-  //! \tparam RET - Delegate return type
-  //! \tparam ...ARGS - [optional] Delegate argument types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <unsigned NUM, typename RET, typename ...ARGS>
-  struct Delegate;
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Delegate<0> - Zero-argument instance method functor
-  //! 
-  //! \tparam RET - Delegate return type
-  //! \tparam ...ARGS - [optional] Delegate argument types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename RET, typename ...ARGS>
-  struct Delegate<0,RET,ARGS...> : std::function<RET (ARGS...)>
+  namespace
   {
-    //! \alias type - Define own type
-    using type = Delegate<0,RET,ARGS...>;
-  
-    //! \alias base - Define base type
-    using base = std::function<RET (ARGS...)>;
-
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Delegate::Delegate
-    //! Create from instance method pointer
+    //! \struct method_binder - Binds methods of different arities to polymorphic function wrappers
     //! 
-    //! \param[in] obj - Instance
-    //! \param[in] fn - Method pointer
+    //! \tparam N - Number of arguments (Excluding the implicit object)
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename OBJ>
-    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj))
-    {}
-  };
+    template <uint32_t N>
+    struct binder;
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct method_binder<0> - Binds parameterless methods to polymorphic function wrappers
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <>
+    struct binder<0>
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // method_binder<0>::bind 
+      //! Binds a parameterless method
+      //! 
+      //! \param[in] *obj - Implied object
+      //! \param[in] *fn - Method pointer
+      //! \return std::function<RET ()> - Function wrapper
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename OBJ, typename RET>
+      static std::function<RET ()>  bind(OBJ* obj, RET (OBJ::*fn)())
+      {
+        return std::bind(fn, obj);
+      }
+    };
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct method_binder<1> - Binds single parameter methods to polymorphic function wrappers
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <>
+    struct binder<1>
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // method_binder<1>::bind 
+      //! Binds a single parameter method
+      //! 
+      //! \param[in] *obj - Implied object
+      //! \param[in] *fn - Method pointer
+      //! \return std::function<RET (ARGS...)> - Function wrapper
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename OBJ, typename RET, typename... ARGS>
+      static std::function<RET (ARGS...)>  bind(OBJ* obj, RET (OBJ::*fn)(ARGS...))
+      {
+        return std::bind(fn, obj, std::placeholders::_1);
+      }
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct method_binder<2> - Binds dual parameter methods to polymorphic function wrappers
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <>
+    struct binder<2>
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // method_binder<2>::bind 
+      //! Binds a dual parameter method
+      //! 
+      //! \param[in] *obj - Implied object
+      //! \param[in] *fn - Method pointer
+      //! \return std::function<RET (ARGS...)> - Function wrapper
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename OBJ, typename RET, typename... ARGS>
+      static std::function<RET (ARGS...)>  bind(OBJ* obj, RET (OBJ::*fn)(ARGS...))
+      {
+        return std::bind(fn, obj, std::placeholders::_1, std::placeholders::_2);
+      }
+    };
+  }
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Delegate<1> - Single-argument instance method functor
+  //! \struct Delegate - Provides delegate types for class methods with differing numbers of arguments
   //! 
   //! \tparam RET - Delegate return type
   //! \tparam ...ARGS - [optional] Delegate argument types
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename RET, typename ...ARGS>
-  struct Delegate<1,RET,ARGS...> : std::function<RET (ARGS...)>
+  template <typename RET, typename... ARGS>
+  struct Delegate : std::function<RET (ARGS...)>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = Delegate<1,RET,ARGS...>;
+    using type = Delegate<RET,ARGS...>;
   
     //! \alias base - Define base type
     using base = std::function<RET (ARGS...)>;
-    
+
     // ----------------------------------- REPRESENTATION -----------------------------------
   
     // ------------------------------------ CONSTRUCTION --------------------------------------
@@ -119,7 +120,7 @@ namespace wtl
     //! \param[in] fn - Method pointer
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename OBJ>
-    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj, std::placeholders::_1))
+    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base( binder<sizeof...(ARGS)>::bind(obj, fn) )
     {}
     
     // -------------------------------- COPYING & DESTRUCTION -------------------------------
@@ -135,8 +136,8 @@ namespace wtl
     //! \param[in,out] &&arg - Argument
     //! \return RET - Return value
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    RET operator()(T&& args) const
+    //template <typename... ARGS2>
+    RET operator()(ARGS&&... args) const
     {
       return base::operator()(std::forward<ARGS>(args)...);
     }
@@ -144,64 +145,6 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Delegate<2> - Double-argument instance method functor
-  //! 
-  //! \tparam RET - Delegate return type
-  //! \tparam ...ARGS - [optional] Delegate argument types
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename RET, typename ...ARGS>
-  struct Delegate<2,RET,ARGS...> : std::function<RET (ARGS...)>
-  {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
-    //! \alias type - Define own type
-    using type = Delegate<2,RET,ARGS...>;
-  
-    //! \alias base - Define base type
-    using base = std::function<RET (ARGS...)>;
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-	
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Delegate::Delegate
-    //! Create from instance method pointer
-    //! 
-    //! \param[in] obj - Instance
-    //! \param[in] fn - Method pointer
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename OBJ>
-    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base(std::bind(fn, obj, std::placeholders::_1, std::placeholders::_2))
-    {}
-
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
-
-    // ----------------------------------- STATIC METHODS -----------------------------------
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-  };
-
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::bind_method - Creates an instance method delegate
-  //! 
-  //! \tparam OBJ - Instance type
-  //! \tparam RET - Delegate return type
-  //! \tparam ...ARGS - [optional] Delegate argument types
-  //! 
-  //! \param[in] obj - Instance 
-  //! \param[in] fn - Method pointer
-  //! \return std::function<RET(ARGS...)>* - New instance method delegate. Caller is responsible for destruction.
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename OBJ, typename RET, typename ...ARGS>
-  std::function<RET(ARGS...)>*  bind_method(OBJ* obj, RET (OBJ::*fn)(ARGS...)) 
-  {
-    return new Delegate<sizeof...(ARGS),RET,ARGS...>(obj,fn);
-  }
 
 } // namespace wtl
 

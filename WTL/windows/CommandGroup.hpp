@@ -237,7 +237,7 @@ namespace wtl
       REQUIRED_PARAM(group);
 
       // Insert/overwrite
-      emplace(group->ident(), CommandGroupPtr<encoding>(group));
+      this->emplace(group->ident(), CommandGroupPtr<encoding>(group));
       return *this;
     }
   };

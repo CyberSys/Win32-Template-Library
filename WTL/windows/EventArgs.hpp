@@ -98,8 +98,19 @@ namespace wtl
   //! \tparam WM - Window message
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
-  using MessageEvent = Event<LResult, EventArgs<ENC,WM>&>;
+  using MessageEvent = Event<LResult, EventArgs<ENC,WM>&&>;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ControlEvent - Defines a child control event type 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam WM - Window message
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
+  //! \tparam CODE - [optional] Notification message (Default is zero)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
+  using ControlEvent = Event<LResult, ControlEventArgs<ENC,WM,EVENT,CODE>&&>;
+  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias MessageEventHandler - Defines handler for any 'Message' event 
@@ -110,17 +121,6 @@ namespace wtl
   template <Encoding ENC, WindowMessage WM>
   using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
        
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ControlEvent - Defines a child control event type 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
-  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
-  //! \tparam CODE - [optional] Notification message (Default is zero)
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
-  using ControlEvent = Event<LResult, ControlEventArgs<ENC,WM,EVENT,CODE>&>;
-  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ControlEventHandler - Handlers for event from controls 
   //! 

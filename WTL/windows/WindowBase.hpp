@@ -683,7 +683,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
+    virtual LResult  onCreate(CreateWindowEventArgs<encoding>&& args) 
     { 
       // [Handled] Accept parameters
       return 0; 
@@ -698,7 +698,7 @@ namespace wtl
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCommand(CommandEventArgs<encoding>& args) 
+    virtual LResult  onCommand(CommandEventArgs<encoding>&& args) 
     { 
       // Execute associated command
       execute(args.Ident);
@@ -714,7 +714,7 @@ namespace wtl
     //! \param[in,out] args - Message arguments containing drawing data
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
+    virtual LResult  onPaint(PaintWindowEventArgs<encoding>&& args) 
     { 
       // [Handled] Validate client area
       return 0; 

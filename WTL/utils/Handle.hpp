@@ -334,7 +334,7 @@ namespace wtl
 
       // Use custom deleter to access result
       if (exists())
-        Storage.reset(nullptr, unsafeDelete);
+        Storage.reset(static_cast<native_t*>(nullptr), unsafeDelete);
 
       // [FAILED] Throw platform_error
       if (!success)

@@ -217,7 +217,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>LLVM-vs2014_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -241,7 +241,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
-    <PlatformToolset>Clang</PlatformToolset>
+    <PlatformToolset>GCC</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|MinGW'">
@@ -285,6 +285,7 @@
     <IncludePath>$(MinGWInstallFolder)\include;f:\MinGW\include\C++;D:\My Projects\WTL</IncludePath>
     <LibraryPath>$(MinGWInstallFolder)\lib</LibraryPath>
     <StdIncludeFolder>f:\MinGW\include\C++</StdIncludeFolder>
+    <ExecutablePath>$(MinGWInstallFolder)\bin;$(LLVMInstallFolder)\bin;$(MSBuild_ExecutablePath);$(PATH);</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -367,11 +368,12 @@
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <DebugInformationFormat>None</DebugInformationFormat>
       <ExceptionHandling>Enabled</ExceptionHandling>
-      <AdditionalOptions>-Wswitch -fansi-escape-codes %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wswitch -pedantic %(AdditionalOptions)</AdditionalOptions>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <UseShortEnums>true</UseShortEnums>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <Verbose>true</Verbose>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

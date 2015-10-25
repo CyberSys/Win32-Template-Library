@@ -31,6 +31,9 @@ namespace wtl
     //! \alias base - Define base type
     using base = WindowBase<ENC>;
     
+    //! \alias wndclass_t - Inherit class type
+    using wndclass_t = typename base::wndclass_t;
+    
     //! \var encoding - Inherit character encoding
     static constexpr Encoding  encoding = base::encoding;
     
@@ -66,7 +69,8 @@ namespace wtl
       OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
       // Subclass prior to creation
-      SubClasses.push_back(SubClass(WindowType::Native, getSystemWndProc()));
+      using WindowType = typename base::WindowType;
+      this->SubClasses.push_back(typename base::SubClass(WindowType::Native, getSystemWndProc()));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -104,19 +108,19 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static wndclass_t& getClass(HINSTANCE instance) 
     {
-      static WindowClass<encoding>  std(SystemClass::Button);  //!< Standard system button class
+      static wndclass_t  std(SystemClass::Button);  //!< Standard system button class
       
-      static WindowClass<encoding>  btn(instance,
-                                        std.Name,
-                                        std.Style,
-                                        base::WndProc,   
-                                        std.Menu,
-                                        std.Cursor,
-                                        std.Background,
-                                        std.SmallIcon,
-                                        std.LargeIcon,
-                                        std.ClassStorage,
-                                        std.WindowStorage);    //!< Compile-time button subclass
+      static wndclass_t  btn(instance,
+                             std.Name,
+                             std.Style,
+                             base::WndProc,   
+                             std.Menu,
+                             std.Cursor,
+                             std.Background,
+                             std.SmallIcon,
+                             std.LargeIcon,
+                             std.ClassStorage,
+                             std.WindowStorage);    //!< Compile-time button subclass
 
       // Return custom button class
       return btn;
@@ -131,7 +135,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static ::WNDPROC getSystemWndProc() 
     {
-      static WindowClass<encoding>  std(SystemClass::Button);  //!< Standard button system window class
+      static wndclass_t  std(SystemClass::Button);  //!< Standard button system window class
       
       // Return window proc
       return std.WndProc;
@@ -194,7 +198,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
+    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>&& args) 
     { 
       HBrush background(SystemColour::BtnFace);
 
@@ -216,7 +220,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
+    virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>&& args) 
     { 
       // Measure button text
       args.Size = args.Graphics.measure(this->Text().c_str());
