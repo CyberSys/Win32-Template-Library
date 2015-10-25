@@ -61,7 +61,7 @@ namespace wtl
     //!
     //! \param[in] &&list - List of elements
     /////////////////////////////////////////////////////////////////////////////////////////
-    List(std::initializer_list<T>&& list) : base(std::forward(list))
+    List(std::initializer_list<T>&& list) : Items(std::forward(list))
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

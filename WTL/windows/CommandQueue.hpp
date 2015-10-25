@@ -178,7 +178,7 @@ namespace wtl
 
       // Move from Redo -> Undo queue
       ExecutedCommands.push(RepeatableCommands.peek());
-      RepeatableCommands.pop()
+      RepeatableCommands.pop();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ namespace wtl
 
       // Move from Undo -> Redo queue
       RepeatableCommands.push(ExecutedCommands.peek());
-      ExecutedCommands.pop()
+      ExecutedCommands.pop();
     }
 
   };
