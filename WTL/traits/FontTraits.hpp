@@ -71,12 +71,12 @@ namespace wtl
     //! \param[in] width - Width in twips
     //! \param[in] escape - Escapement
     //! \param[in] orient - Orientation
-    //! \return HAlloc<::HFONT> - Created handle
+    //! \return NativeHandle<::HFONT> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, unsigned LEN>
-    static HAlloc<::HFONT> create(const CharArray<ENC,LEN>& name, 
+    static NativeHandle<::HFONT> create(const CharArray<ENC,LEN>& name, 
                                   int32_t       height,  
                                   FontWeight    weight = FontWeight::Normal, 
                                   bool          italic = false, 
@@ -113,11 +113,11 @@ namespace wtl
     //! Accquire stock font handle
     //! 
     //! \param[in] obj - Stock object
-    //! \return HAlloc<::HFONT> - Accquired handle
+    //! \return NativeHandle<::HFONT> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HFONT> create(StockObject obj) 
+    static NativeHandle<::HFONT> create(StockObject obj) 
     { 
       switch (obj)
       {
@@ -142,11 +142,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] font - Handle
-    //! \return HAlloc<::HFONT> - Duplicate of handle
+    //! \return NativeHandle<::HFONT> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HFONT> clone(HAlloc<::HFONT> font);
+    static NativeHandle<::HFONT> clone(NativeHandle<::HFONT> font);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HFONT>::destroy noexcept
@@ -155,7 +155,7 @@ namespace wtl
     //! \param[in] font - Handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HFONT> font) noexcept
+    static bool destroy(NativeHandle<::HFONT> font) noexcept
     {
       // Delete without checking if handle is valid
       switch (font.Method)

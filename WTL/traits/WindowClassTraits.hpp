@@ -71,12 +71,12 @@ namespace wtl
     //! \param[in] bgIcon - Large icon handle
     //! \param[in] clsBytes - Size of class storage, if any
     //! \param[in] wndBytes - Size of handle storage, if any
-    //! \return HAlloc<::ATOM> - Accquired handle
+    //! \return NativeHandle<::ATOM> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<::ATOM> create(::HINSTANCE instance, 
+    static NativeHandle<::ATOM> create(::HINSTANCE instance, 
                                  ResourceId<ENC> name,
                                  ClassStyle style, 
                                  ::WNDPROC proc, 
@@ -116,9 +116,9 @@ namespace wtl
     //! Clone window class atom
     //! 
     //! \param[in] atom - Window class atom
-    //! \return HAlloc<::ATOM> - Duplicate of handle
+    //! \return NativeHandle<::ATOM> - Duplicate of handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::ATOM> clone(HAlloc<::ATOM> atom);
+    static NativeHandle<::ATOM> clone(NativeHandle<::ATOM> atom);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::ATOM>::destroy noexcept
@@ -127,7 +127,7 @@ namespace wtl
     //! \param[in] atom - Registered window class atom
     //! \return bool - True iff unregistered successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::ATOM> atom) noexcept
+    static bool destroy(NativeHandle<::ATOM> atom) noexcept
     {
       // Delete without checking if handle is valid
       return ::UnregisterClassW((const wchar_t*)atom.Handle, nullptr) != False;

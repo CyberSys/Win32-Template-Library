@@ -55,11 +55,11 @@ namespace wtl
     //! \param[in] style - Style
     //! \param[in] width - Width
     //! \param[in] colour - RGB colour
-    //! \return HAlloc<HMENU> - Accquired handle
+    //! \return NativeHandle<HMENU> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HPEN> create(PenStyle style, int32_t width, Colour colour) 
+    static NativeHandle<::HPEN> create(PenStyle style, int32_t width, Colour colour) 
     { 
       // Create solid colour brush handle
       if (::HPEN pen = ::CreatePen(enum_cast(style), width, enum_cast(colour)))
@@ -74,11 +74,11 @@ namespace wtl
     //! Accquire stock pen handle
     //! 
     //! \param[in] obj - Stock object
-    //! \return HAlloc<::HPEN> - Accquired handle
+    //! \return NativeHandle<::HPEN> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HPEN> create(StockObject obj) 
+    static NativeHandle<::HPEN> create(StockObject obj) 
     { 
       switch (obj)
       {
@@ -101,11 +101,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] pen - Handle
-    //! \return HAlloc<::HPEN> - Duplicate of handle
+    //! \return NativeHandle<::HPEN> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HPEN> clone(HAlloc<::HPEN> pen);
+    static NativeHandle<::HPEN> clone(NativeHandle<::HPEN> pen);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HPEN>::destroy noexcept
@@ -114,7 +114,7 @@ namespace wtl
     //! \param[in] pen - Handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HPEN> pen) noexcept
+    static bool destroy(NativeHandle<::HPEN> pen) noexcept
     {
       // Delete without checking if handle is valid
       switch (pen.Method)

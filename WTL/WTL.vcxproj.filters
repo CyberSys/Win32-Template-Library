@@ -302,13 +302,7 @@
     <ClInclude Include="windows\event.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="windows\MessageEvent.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="windows\Delegate.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\ControlEvent.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="resources\IconResource.hpp">
@@ -559,6 +553,9 @@
     </ClInclude>
     <ClInclude Include="windows\events\CommandEvent.hpp">
       <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\EventArgs.hpp">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

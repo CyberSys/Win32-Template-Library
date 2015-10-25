@@ -25,6 +25,25 @@ namespace wtl
 
   
   //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_t - Defines an SFINAE expression requiring an expression be true
+  //! 
+  //! \tparam VALUE - Conditional value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <bool VALUE, typename RET = void>
+  using enable_if_t = std::enable_if_t<VALUE, RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_not_t - Defines an SFINAE expression requiring an expression be false
+  //! 
+  //! \tparam VALUE - Conditional value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <bool VALUE, typename RET = void>
+  using enable_if_not_t = std::enable_if_t<!VALUE, RET>;
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_array_t - Defines an SFINAE expression requiring an object of array type 
   //! 
   //! \tparam T - Input type
@@ -250,6 +269,16 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename RET = void>
   using enable_if_standard_t = std::enable_if_t<std::is_standard_layout<T>::value, RET>;
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_pointer_t - Defines an SFINAE expression requiring an pointer type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_pointer_t = std::enable_if_t<std::is_pointer<T>::value, RET>;
 
 }
 

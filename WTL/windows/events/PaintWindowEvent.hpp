@@ -9,7 +9,7 @@
 #define WTL_PAINT_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/MessageEvent.hpp"            //!< Event
+#include "wtl/windows/EventArgs.hpp"            //!< Event
 #include "wtl/gdi/DeviceContext.hpp"               //!< DeviceContext
 #include "wtl/utils/Rectangle.hpp"              //!< Rect
 #include "wtl/traits/WindowTraits.hpp"             //!< HWnd

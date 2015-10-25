@@ -54,11 +54,11 @@ namespace wtl
     //! 
     //! \param[in] const& module - Module containing resource
     //! \param[in] const& resource - Resource handle
-    //! \return HAlloc<::HGLOBAL> - Accquired handle
+    //! \return NativeHandle<::HGLOBAL> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HGLOBAL> create(const HModule& module, const HResource& resource) 
+    static NativeHandle<::HGLOBAL> create(const HModule& module, const HResource& resource) 
     { 
       // Load resource
       if (::HGLOBAL res = ::LoadResource(module, resource))
@@ -73,11 +73,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] mem - Global memory handle
-    //! \return HAlloc<::HGLOBAL> - Duplicate of handle
+    //! \return NativeHandle<::HGLOBAL> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HGLOBAL> clone(HAlloc<::HGLOBAL> mem);
+    static NativeHandle<::HGLOBAL> clone(NativeHandle<::HGLOBAL> mem);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HGLOBAL>::destroy noexcept
@@ -86,7 +86,7 @@ namespace wtl
     //! \param[in] mem - Global memory handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HGLOBAL> mem) noexcept
+    static bool destroy(NativeHandle<::HGLOBAL> mem) noexcept
     {
       // Delete without checking if handle is valid
       switch (mem.Method)

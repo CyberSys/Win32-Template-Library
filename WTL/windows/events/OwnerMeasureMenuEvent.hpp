@@ -14,7 +14,7 @@
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
-#include "wtl/windows/MessageEvent.hpp"         //!< EventArgs
+#include "wtl/windows/EventArgs.hpp"         //!< EventArgs
 #include "wtl/platform/CommandId.hpp"           //!< CommandId
 #include "wtl/utils/Rectangle.hpp"           //!< Rect
 

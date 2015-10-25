@@ -27,15 +27,27 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct HAlloc - Associates handle and allocation method
+  //! \struct NativeHandle - Associates handle and allocation method
+  //!
+  //! \tparam T - Any handle type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename native_t>
-  struct HAlloc
+  template <typename T>
+  struct NativeHandle
   {
-    HAlloc(native_t h, AllocType at) : Handle(h), Method(at)
+    //! \typedef handle_t - Native handle type
+    using handle_t = T;
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // NativeHandle::NativeHandle
+    //! Create and store native handle
+    //! 
+    //! \param[in] h - Native handle
+    //! \param[in] at - Allocation method
+    /////////////////////////////////////////////////////////////////////////////////////////
+    NativeHandle(handle_t h, AllocType at) : Handle(h), Method(at)
     {}
 
-    native_t   Handle;      //!< Handle
+    handle_t   Handle;      //!< Handle
     AllocType  Method;      //!< Allocation method
   };
 
@@ -51,9 +63,9 @@ namespace wtl
   //
   //  handle_alloc() = delete;
   //
-  //  static HAlloc<T>  create();
-  //  static HAlloc<T>  clone(HAlloc<T>);
-  //  static void       destroy(HAlloc<T>);
+  //  static NativeHandle<T>  create();
+  //  static NativeHandle<T>  clone(NativeHandle<T>);
+  //  static void       destroy(NativeHandle<T>);
   //};
 
 
@@ -68,7 +80,86 @@ namespace wtl
     static constexpr bool cloneable = false;
   };
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \namespace <anon> - Utility namespace
+  /////////////////////////////////////////////////////////////////////////////////////////
+  namespace
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct converter - Converts between handle types
+    //! 
+    //! \tparam native_t - Handle type
+    //! \tparam <anon> - SFINAE
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename native_t, typename = void>
+    struct converter;
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct converter - Converts between integral handle types and pointers
+    //! 
+    //! \tparam native_t - Integral Handle type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename native_t>
+    struct converter<native_t, enable_if_integral_t<native_t>>
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // Handle::toHandle
+      //! Cast a pointer to a handle (of underlying integral type)
+      //!
+      //! \param[in] ptr - Handle previously cast to a pointer
+      //! \return native_t - Actual handle
+      /////////////////////////////////////////////////////////////////////////////////////////
+      static native_t toHandle(native_t* ptr)
+      {
+        return static_cast<native_t>( reinterpret_cast<std::uintptr_t>(ptr) );
+      }
+
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // Handle::toPointer
+      //! Cast a handle (of underlying integral type) to a pointer
+      //!
+      //! \param[in] h - Actual handle
+      //! \return native_t* - Handle cast to a pointer
+      /////////////////////////////////////////////////////////////////////////////////////////
+      static native_t* toPointer(native_t h)
+      {
+        return reinterpret_cast<native_t*>( static_cast<std::uintptr_t>(h) );
+      }
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct converter - Converts between pointer handle types and pointers
+    //! 
+    //! \tparam native_t - Pointer Handle type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename native_t>
+    struct converter<native_t, enable_if_pointer_t<native_t>>
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // Handle::toHandle
+      //! Cast a pointer to a handle (of underlying pointer type)
+      //!
+      //! \param[in] ptr - Handle previously cast to a pointer
+      //! \return native_t - Actual handle
+      /////////////////////////////////////////////////////////////////////////////////////////
+      static native_t toHandle(native_t* ptr)
+      {
+        return reinterpret_cast<native_t>(ptr);
+      }
+      
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // Handle::toPointer
+      //! Cast a handle (of underlying pointer type) to a pointer
+      //!
+      //! \param[in] h - Actual handle
+      //! \return native_t* - Handle cast to a pointer
+      /////////////////////////////////////////////////////////////////////////////////////////
+      static native_t* toPointer(native_t h)
+      {
+        return reinterpret_cast<native_t*>(h);
+      }
+    };
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Handle - Encapsulates any handle
@@ -78,7 +169,6 @@ namespace wtl
   template <typename T>
   struct Handle
   {
-    //static_assert(std::is_convertible<T,HANDLE>::value, "Only Win32 handles are supported");
     static_assert(sizeof(T) <= sizeof(HANDLE), "Unsupported handle size");
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
@@ -86,34 +176,35 @@ namespace wtl
     //! \typedef type - Define own type
     using type = Handle<T>;
 
-    //! \typedef alloc_t - Define handle allocator type
-    using alloc_t = handle_alloc<T>;
-
     //! \typedef native_t - Defines handle type
     using native_t = T;
-
-    //! \typedef halloc_t - Define allocation handle type
-    using halloc_t = HAlloc<T>;
-
-    //! \typedef pointer_t - Defines internal representation used to store handle
-    using pointer_t = native_t*;
-
-    //! \typedef shared_ptr_t - Define shared pointer type
-    using shared_ptr_t = std::shared_ptr<native_t>;
 
     //! \typedef traits_t - Define handle traits type
     using traits_t = handle_traits<native_t>;
 
+  protected:    
+    //! \typedef alloc_t - Define handle allocator type
+    using alloc_t = handle_alloc<T>;
+
+    //! \typedef converter_t - Define handle-pointer converter type
+    using converter_t = converter<native_t>;
+
+    //! \typedef value_t - Define allocation handle type
+    using value_t = NativeHandle<native_t>;
+
+    //! \typedef storage_t - Define smart-pointer type used to manage ownership and release
+    using storage_t = std::shared_ptr<native_t>;
+
     // ----------------------------------- REPRESENTATION ------------------------------------
   protected:
-    halloc_t      Allocation;  //!< Allocated handle & method storage
-    shared_ptr_t  Storage;     //!< Handle
+    value_t    Value;      //!< Handle value and method of allocation
+    storage_t  Storage;    //!< Shared pointer used to manage ownership
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::Handle
-    //! Create weak reference to appropriate 'Invalid Handle' sentinel value
+    //! Create an empty handle (A weak reference to the appropriate 'Invalid Handle' sentinel value)
     /////////////////////////////////////////////////////////////////////////////////////////
     Handle() : Handle(alloc_t::npos, AllocType::WeakRef)
     {}
@@ -122,16 +213,16 @@ namespace wtl
     // Handle::Handle
     //! Create shared handle using appropriate allocator
     //!
-    //! \param[in] && arg - First strongly typed variadic argument
-    //! \param[in] &&... args - [optional] Remaining strongly typed variadic arguments
+    //! \param[in] && arg - First argument to allocator 'create' function
+    //! \param[in] &&... args - [optional] Remaining arguments
     //!
     //! \throw wtl::platform_error - Unable to create handle
     //!
-    //! \remarks This constructor syntax enforces an invariant upon allocators; they cannot provide a parameterless factory method
+    //! \remarks This constructor syntax enforces an invariant upon allocators - they cannot provide a parameterless factory method
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename ARG, typename... ARGS>
-    Handle(ARG&& arg, ARGS&&... args) : Allocation( alloc_t::create(std::forward<ARG>(arg), std::forward<ARGS>(args)...) ),
-                                        Storage( toPointer(Allocation.Handle), [this](pointer_t ptr) { safeDelete(ptr); } )
+    Handle(ARG&& arg, ARGS&&... args) : Value( alloc_t::create(std::forward<ARG>(arg), std::forward<ARGS>(args)...) ),
+                                        Storage( converter_t::toPointer(Value.Handle), [this](native_t* ptr) { safeDelete(ptr); } )
     {
       // Ensure created successfully
       if (!exists())
@@ -145,8 +236,8 @@ namespace wtl
     //! \param[in] h - Native handle
     //! \param[in] t - Allocation type
     /////////////////////////////////////////////////////////////////////////////////////////
-    Handle(native_t h, AllocType t) : Allocation(h, t),
-                                      Storage(toPointer(h), [this](pointer_t ptr) { safeDelete(ptr); } )
+    Handle(native_t h, AllocType t) : Value(h, t),
+                                      Storage(converter_t::toPointer(h), [this](native_t* ptr) { safeDelete(ptr); } )
     {}
 
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -156,31 +247,7 @@ namespace wtl
     ENABLE_POLY(Handle);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::toHandle
-    //! Convert pointer to handle
-    //!
-    //! \param[in] ptr - Pointer
-    //! \return native_t - 'ptr' as handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static native_t toHandle(pointer_t ptr)
-    {
-      return reinterpret_cast<native_t>( reinterpret_cast<std::uintptr_t>(ptr) );
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Handle::toPointer
-    //! Convert handle to pointer
-    //!
-    //! \param[in] h - Handle
-    //! \return pointer_t - 'h' as pointer
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static pointer_t toPointer(native_t h)
-    {
-      return reinterpret_cast<pointer_t>( reinterpret_cast<std::uintptr_t>(h) );
-    }
-
+  
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -202,7 +269,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     native_t get() const
     {
-      return toHandle(Storage.get());
+      return converter_t::toHandle(Storage.get());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -236,8 +303,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator == (const Handle<T>& r) const
     {
-      return Allocation.Handle == r.Allocation.Handle
-          && Allocation.Method == r.Allocation.Method;
+      return Value.Handle == r.Value.Handle
+          && Value.Method == r.Value.Method;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -263,18 +330,18 @@ namespace wtl
     void release()
     {
       bool success(true);
-      auto unsafeDelete = [this,&success] (pointer_t  ptr) { success = safeDelete(ptr); };
+      auto unsafeDelete = [this,&success] (native_t*  ptr) { success = safeDelete(ptr); };
 
       // Use custom deleter to access result
       if (exists())
         Storage.reset(nullptr, unsafeDelete);
-        //Storage.reset<native_t,decltype(unsafeDelete)>(nullptr, unsafeDelete);
 
       // [FAILED] Throw platform_error
       if (!success)
         throw platform_error(HERE, "Unable to release handle");
     }
 
+   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::safeDelete
     //! Destroys a handle
@@ -282,12 +349,12 @@ namespace wtl
     //! \param[in] ptr - Handle
     //! \return bool - Return true if handle was destroyed or already invalid, false if valid but failed to destroy
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool safeDelete(pointer_t ptr)
+    bool safeDelete(native_t* ptr)
     {
       // Ensure both valid pointer and handle
-      if (ptr != nullptr && toHandle(ptr) != alloc_t::npos)
+      if (ptr != nullptr && converter_t::toHandle(ptr) != alloc_t::npos)
         // Pass handle and method to factory destructor
-        return alloc_t::destroy(Allocation);
+        return alloc_t::destroy(Value);
 
       // Succeed if invalid
       return true;

@@ -17,13 +17,16 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct HAlloc<::HDC> - Associates window handle, DC handle, and allocation method
+  //! \struct NativeHandle<::HDC> - Associates window handle, DC handle, and allocation method
   /////////////////////////////////////////////////////////////////////////////////////////
   template <>
-  struct HAlloc<::HDC>
+  struct NativeHandle<::HDC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
+    
+    //! \typedef handle_t - Native handle type
+    using handle_t = ::HDC;
+
     // ----------------------------------- REPRESENTATION -----------------------------------
   
     ::HDC      Handle;      //!< Handle
@@ -33,31 +36,31 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // HAlloc<::HDC>::HAlloc
+    // NativeHandle<::HDC>::NativeHandle
     //! Create without owner window
     //! 
     //! \param[in] dc - Device context
     //! \param[in] at - Allocation type
     /////////////////////////////////////////////////////////////////////////////////////////
-    HAlloc(::HDC dc, AllocType at) : Handle(dc), Method(at), Window(0)
+    NativeHandle(::HDC dc, AllocType at) : Handle(dc), Method(at), Window(0)
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // HAlloc<::HDC>::HAlloc
+    // NativeHandle<::HDC>::NativeHandle
     //! Store owner window
     //! 
     //! \param[in] dc - Device context
     //! \param[in] wnd - Owner window
     //! \param[in] at - Allocation type
     /////////////////////////////////////////////////////////////////////////////////////////
-    HAlloc(::HDC dc, ::HWND wnd, AllocType at) : Handle(dc), Method(at), Window(wnd)
+    NativeHandle(::HDC dc, ::HWND wnd, AllocType at) : Handle(dc), Method(at), Window(wnd)
     {}
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
-    ENABLE_COPY(HAlloc);       //!< Can be shallow copied
-    ENABLE_MOVE(HAlloc);       //!< Can be moved
-    ENABLE_POLY(HAlloc);      //!< Can be polymorphic
+    ENABLE_COPY(NativeHandle);       //!< Can be shallow copied
+    ENABLE_MOVE(NativeHandle);       //!< Can be moved
+    ENABLE_POLY(NativeHandle);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -104,11 +107,11 @@ namespace wtl
     //! Accquire client area device context 
     //! 
     //! \param[in] wnd - Window handle
-    //! \return HAlloc<::HDC> - Accquired handle
+    //! \return NativeHandle<::HDC> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HDC> create(::HWND wnd) 
+    static NativeHandle<::HDC> create(::HWND wnd) 
     { 
       // Load menu 
       if (::HDC dc = ::GetDC(wnd))
@@ -123,11 +126,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] dc - Device context handle
-    //! \return HAlloc<::HDC> - Duplicate of handle
+    //! \return NativeHandle<::HDC> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HDC> clone(HAlloc<::HDC> dc);
+    static NativeHandle<::HDC> clone(NativeHandle<::HDC> dc);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HDC>::destroy noexcept
@@ -136,7 +139,7 @@ namespace wtl
     //! \param[in] dc - Device context handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HDC> dc) noexcept
+    static bool destroy(NativeHandle<::HDC> dc) noexcept
     {
       // Delete without checking if handle is valid
       switch (dc.Method)

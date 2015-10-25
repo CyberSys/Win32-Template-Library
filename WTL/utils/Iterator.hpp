@@ -24,11 +24,11 @@ namespace wtl
   //! \param[in] r - Statically allocated array of unspecified length
   //! \return ELEMENT* - Position of first element
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ELEMENT> 
+  /*template <typename ELEMENT> 
 	ELEMENT* begin(ELEMENT (&r)[]) noexcept
 	{	
 	  return &r[0];
-	}
+	}*/
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -42,12 +42,12 @@ namespace wtl
   //! 
   //! \remarks Best-practice when using non-member
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ELEMENT> 
-	ELEMENT* end(ELEMENT (&r)[]) noexcept
-	{	
-    // Return position beyond last element
-	  return &r[sizeof(&r) / sizeof(ELEMENT)];
-	}
+ // template <typename ELEMENT> 
+	//ELEMENT* end(ELEMENT (&r)[]) noexcept
+	//{	
+ //   // Return position beyond last element
+	//  return &r[sizeof(&r) / sizeof(ELEMENT)];
+	//}
 }
 
 

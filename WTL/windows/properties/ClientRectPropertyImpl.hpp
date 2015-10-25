@@ -74,17 +74,17 @@ namespace wtl
   template <Encoding ENC>
   void  ClientRectPropertyImpl<ENC>::set(value_t rc) 
   {
-    RectL rc(val);   //!< New window rectangle
+    RectL wnd(rc);   //!< New window rectangle
 
     // Calculate window rectangle 
-    if (!::AdjustWindowRectEx(&native_cast(rc), 
+    if (!::AdjustWindowRectEx(&native_cast(wnd), 
                               enum_cast(this->Window.Style.get()), 
                               boolean_cast(!this->Window.Menu.empty()), 
                               enum_cast(this->Window.StyleEx.get())))
       throw platform_error(HERE, "Unable to calculate window rectangle from client");
 
     // Set window rectangle
-    this->Window.WindowRect = rc;
+    this->Window.WindowRect = wnd;
   }
 
       

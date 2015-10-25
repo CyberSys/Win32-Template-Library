@@ -159,9 +159,6 @@ namespace wtl
     //! \alias iteminfo_t - Define item info type
     using iteminfo_t = MenuItemInfo<ENC>;
     
-    //! \alias type - Define own type
-    using type = PopupMenu<ENC>;
-
     //! \var encoding - Define item text character encoding
     static constexpr Encoding  encoding = ENC;
 

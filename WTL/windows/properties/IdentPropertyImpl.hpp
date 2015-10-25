@@ -33,7 +33,7 @@ namespace wtl
   {
     // [EXISTS] Query window Id
     if (this->Window.exists())
-      return static_cast<WindowId>( getFunc<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_ID) );
+      return static_cast<WindowId>( getFunc<base::encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_ID) );
         
     // Return cached
     return base::get();
@@ -53,7 +53,7 @@ namespace wtl
   void  IdentPropertyImpl<ENC>::set(value_t id) 
   {
     // [EXISTS] Set window Id
-    if (this->Window.exists() && !getFunc<encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
+    if (this->Window.exists() && !getFunc<base::encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_ID, enum_cast(id)))
       throw platform_error(HERE, "Unable to set window Id");
 
     // Store value

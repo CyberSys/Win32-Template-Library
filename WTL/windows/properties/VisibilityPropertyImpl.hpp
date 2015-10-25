@@ -65,7 +65,7 @@ namespace wtl
   void  VisibilityPropertyImpl<ENC>::set(value_t visibility) 
   {
     // Set window visibility
-    if (this->Window.exists() && !::ShowWindow(Window, enum_cast(visibility)))
+    if (this->Window.exists() && !::ShowWindow(this->Window, enum_cast(visibility)))
       throw platform_error(HERE, "Unable to set window visibility");
 
     // Update value

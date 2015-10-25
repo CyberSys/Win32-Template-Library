@@ -261,10 +261,10 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     //! \var ActiveWindows - Static collection of all existing WTL windows 
-    static WindowHandleCollection<encoding>  ActiveWindows;
+    static WindowHandleCollection<ENC>  ActiveWindows;
 
     //! \var CommandGroups - Static collection of all Commands groups
-    static CommandGroupCollection<encoding>   CommandGroups;
+    static CommandGroupCollection<ENC>   CommandGroups;
 
     //! \var DefaultPosition - Default window position upon creation
     //static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};

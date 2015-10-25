@@ -196,8 +196,8 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \var Point<T>::EMPTY - 'Empty' sentinel value
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  const Point<T>  Point<T>::EMPTY;
+  /*template <typename T>
+  const Point<T>  Point<T>::EMPTY;*/
 
   //! \alias PointL - Point using long32_t fields (binary compatible with Win32 ::RECT)
   using PointL = Point<long32_t>;

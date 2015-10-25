@@ -32,7 +32,7 @@ namespace wtl
   {
     // [EXISTS] Query window text length
     if (this->Window.exists())
-      return getFunc<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);
+      return getFunc<base::encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);
         
     // Return cached
     return base::get();

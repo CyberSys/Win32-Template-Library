@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/OpaqueCast.hpp"                //!< OpaqueCast
-#include "wtl/windows/MessageEvent.hpp"            //!< Event
+#include "wtl/windows/EventArgs.hpp"            //!< Event
 #include "wtl/utils/Rectangle.hpp"              //!< Rect
 #include "wtl/traits/WindowTraits.hpp"             //!< HWnd
 

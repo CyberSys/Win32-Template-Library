@@ -426,7 +426,7 @@ namespace wtl
     void  removeFileName()
     {
       // Remove filename + update length
-      if (const_pointer fn = getFunc<char_t>(::PathFindFileNameA,::PathFindFileNameW)(tmp))
+      if (const_pointer fn = getFunc<char_t>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
       {
         fn[0] = this->null_t;
         this->Count = (fn - this->Data);

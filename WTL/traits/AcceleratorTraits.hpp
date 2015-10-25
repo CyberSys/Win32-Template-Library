@@ -52,12 +52,12 @@ namespace wtl
     //! 
     //! \param[in] instance - Instance containing cursor
     //! \param[in] ident - Accelerator identifier
-    //! \return HAlloc<HACCEL> - Accquired handle
+    //! \return NativeHandle<HACCEL> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<HACCEL> create(HINSTANCE instance, ResourceId<ENC> ident) 
+    static NativeHandle<HACCEL> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       //! \alias char_t - Character encoding type
       using char_t = encoding_char_t<ENC>;    
@@ -75,11 +75,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] table - Handle
-    //! \return HAlloc<HACCEL> - Duplicate of handle
+    //! \return NativeHandle<HACCEL> - Duplicate of handle
     //!
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<HACCEL> clone(HAlloc<HACCEL> table);
+    static NativeHandle<HACCEL> clone(NativeHandle<HACCEL> table);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<HACCEL>::destroy noexcept
@@ -88,7 +88,7 @@ namespace wtl
     //! \param[in] table - Handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<HACCEL> table) noexcept
+    static bool destroy(NativeHandle<HACCEL> table) noexcept
     {
       // no-op
       return true;

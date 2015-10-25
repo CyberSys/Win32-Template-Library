@@ -11,7 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/traits/WindowTraits.hpp"          //!< HWnd
-#include "wtl/windows/ControlEvent.hpp"         //!< ControlEventArgs
+#include "wtl/windows/EventArgs.hpp"         //!< ControlEventArgs
 #include "wtl/platform/WindowFlags.hpp"         //!< WindowId
 #include "wtl/platform/CommonApi.hpp"           //!< send_message
 
@@ -79,11 +79,11 @@ namespace wtl
     //! 
     //! \param[in] const& r - Event arguments of another type
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, typename EVENT, EVENT CODE>
-    ControlEventArgs(const ControlEventArgs<ENC,WindowMessage::NOTIFY,EVENT,CODE>& r) : Header(r.Header),
-                                                                                  Ident(r.Ident),
-                                                                                  Sender(r.Sender),
-                                                                                  Message(static_cast<event_t>(r.Message))
+    template <Encoding ALT_ENC, typename ALT_EVENT, ALT_EVENT ALT_CODE>
+    ControlEventArgs(const ControlEventArgs<ALT_ENC,WindowMessage::NOTIFY,ALT_EVENT,ALT_CODE>& r) : Header(r.Header),
+                                                                                                    Ident(r.Ident),
+                                                                                                    Sender(r.Sender),
+                                                                                                    Message(static_cast<event_t>(r.Message))
     {}
     
 	  // -------------------------------- COPYING & DESTRUCTION -------------------------------

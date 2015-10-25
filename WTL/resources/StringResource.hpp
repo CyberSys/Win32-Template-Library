@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/Resources/ResourceBlob.hpp"       //!< ResourceBlob
+#include "wtl/modules/Module.hpp"               //!< LoadedModules
 #include "wtl/utils/CharArray.hpp"              //!< CharArray
 #include "wtl/utils/String.hpp"                 //!< String
 

@@ -146,7 +146,7 @@ namespace wtl
   //! \return ENUM& - Reference to 'a' (now combined with 'b')
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_attribute_t<ENUM, ENUM&>  operator|= (ENUM& a, VALUE b) noexcept
+  auto  operator|= (ENUM& a, VALUE b) noexcept -> enable_if_attribute_t<ENUM, ENUM&>
   {
     return a = a | b;
   }
@@ -164,7 +164,7 @@ namespace wtl
   //! \return ENUM - Bitwise-or combination of both values
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_attribute_t<ENUM,ENUM>  operator& (ENUM a, VALUE b)
+  auto  operator& (ENUM a, VALUE b) -> enable_if_attribute_t<ENUM,ENUM>
   {
     static_assert(is_attribute<ENUM>::value, "Enumeration does not support bitwise AND");
 
@@ -185,14 +185,22 @@ namespace wtl
   //! \param[in] const &b - Another value
   //! \return bool - True iff one or more bits in common
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ENUM, typename VALUE> constexpr
-  enable_if_attribute_t<ENUM,bool>  operator && (ENUM a, VALUE b)
-  {
-    static_assert(is_attribute<ENUM>::value, "Enumeration does not support logical AND");
+  //template <typename ENUM, typename VALUE> constexpr
+  //auto  operator && (ENUM a, VALUE b) -> enable_if_attribute_t<ENUM,bool>
+  //{
+  //  static_assert(is_attribute<ENUM>::value, "Enumeration does not support logical AND");
 
-    // Query whether all bits are present
-    return (a & b) == static_cast<ENUM>(b);
+  //  // Query whether all bits are present
+  //  return (a & b) == static_cast<ENUM>(b);
+  //}
+
+  template <typename ENUM, typename VALUE> constexpr
+  bool test_flag(ENUM a, VALUE b) 
+  {
+    return (a & b) == b;
   }
+
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator&= constexpr
@@ -207,7 +215,7 @@ namespace wtl
   //! \return ENUM& - Reference to 'a' (now combined with 'b')
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_attribute_t<ENUM, ENUM&> operator&= (ENUM& a, VALUE b)
+  auto  operator&= (ENUM& a, VALUE b) -> enable_if_attribute_t<ENUM, ENUM&>
   {
     return a = a & b;
   }
@@ -226,7 +234,7 @@ namespace wtl
   //! \return ENUM - Sum of both values
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,ENUM>  operator + (ENUM a, VALUE b)
+  auto  operator + (ENUM a, VALUE b) -> enable_if_enum_t<ENUM,ENUM>
   {
     // Perform operation upon underlying types
     return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
@@ -246,7 +254,7 @@ namespace wtl
   //! \return ENUM& - Reference to 'a' (now summed with 'b')
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,ENUM&>  operator += (ENUM& a, VALUE b)
+  auto  operator += (ENUM& a, VALUE b) -> enable_if_enum_t<ENUM,ENUM&>
   {
     return a = a + b;
   }
@@ -264,7 +272,7 @@ namespace wtl
   //! \return ENUM - Difference between a and b
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,ENUM>  operator - (ENUM a, VALUE b)
+  auto  operator - (ENUM a, VALUE b) -> enable_if_enum_t<ENUM,ENUM>
   {
     // Perform operation upon underlying types
     return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
@@ -284,7 +292,7 @@ namespace wtl
   //! \return ENUM& - Reference to 'a'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,ENUM&>  operator -= (ENUM& a, VALUE b)
+  auto  operator -= (ENUM& a, VALUE b) -> enable_if_enum_t<ENUM,ENUM&>
   {
     return a = a - b;
   }
@@ -299,7 +307,7 @@ namespace wtl
   //! \return ENUM& - Reference to incremented 'a'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM> constexpr
-  enable_if_contiguous_t<ENUM,ENUM&> operator++ (ENUM& a)
+  auto  operator++ (ENUM& a) -> enable_if_contiguous_t<ENUM,ENUM&>
   {
     return a = a + 1;
   }
@@ -316,7 +324,7 @@ namespace wtl
   //! \return ENUM - Value upon input
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM> constexpr
-  enable_if_contiguous_t<ENUM,ENUM> operator++ (ENUM& a, int)
+  auto  operator++ (ENUM& a, int) -> enable_if_contiguous_t<ENUM,ENUM>
   {
     ENUM tmp(a);
     ++a;
@@ -337,7 +345,7 @@ namespace wtl
   //! \return bool - True iff a is less than b
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,bool>  operator < (const ENUM a, const VALUE b)
+  auto  operator < (const ENUM a, const VALUE b) -> enable_if_enum_t<ENUM,bool>
   {
     return static_cast<std::underlying_type_t<ENUM>>(a)
          < static_cast<std::underlying_type_t<ENUM>>(b);
@@ -356,7 +364,7 @@ namespace wtl
   //! \return bool - True iff a is less-than-or-equal than b
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,bool>  operator <= (const ENUM a, const VALUE b)
+  auto  operator <= (const ENUM a, const VALUE b) -> enable_if_enum_t<ENUM,bool>
   {
     return static_cast<std::underlying_type_t<ENUM>>(a)
         <= static_cast<std::underlying_type_t<ENUM>>(b);
@@ -376,7 +384,7 @@ namespace wtl
   //! \return bool - True iff a is greater-than than b
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,bool>  operator > (const ENUM a, const VALUE b)
+  auto  operator > (const ENUM a, const VALUE b) -> enable_if_enum_t<ENUM,bool>
   {
     return static_cast<std::underlying_type_t<ENUM>>(a)
          > static_cast<std::underlying_type_t<ENUM>>(b);
@@ -395,7 +403,7 @@ namespace wtl
   //! \return bool - True iff a is greater-than-or-equal than b
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,bool>  operator >= (const ENUM a, const VALUE b)
+  auto  operator >= (const ENUM a, const VALUE b) -> enable_if_enum_t<ENUM,bool>
   {
     return static_cast<std::underlying_type_t<ENUM>>(a)
         >= static_cast<std::underlying_type_t<ENUM>>(b);
@@ -415,7 +423,7 @@ namespace wtl
   //! \return bool - True iff a is greater-than-or-equal than b
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  enable_if_enum_t<ENUM,bool> operator == (const ENUM a, const VALUE b)
+  auto  operator == (const ENUM a, const VALUE b) -> enable_if_enum_t<ENUM,bool>
   {
     return static_cast<std::underlying_type_t<ENUM>>(a)
         == static_cast<std::underlying_type_t<ENUM>>(b);

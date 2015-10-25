@@ -59,12 +59,12 @@ namespace wtl
     //! \param[in] name - Resource identifier
     //! \param[in] type - Resource type
     //! \param[in] lang - Resource language
-    //! \return HAlloc<::HRSRC> - Accquired handle
+    //! \return NativeHandle<::HRSRC> - Accquired handle
     //!
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<::HRSRC> create(const HModule& module, ResourceId<ENC> name, ResourceType type, LanguageId language)
+    static NativeHandle<::HRSRC> create(const HModule& module, ResourceId<ENC> name, ResourceType type, LanguageId language)
     {
       // Load resource handle
       if (::HRSRC res = getFunc<ENC>(::FindResourceExA,::FindResourceExW)(module, ResourceId<ENC>(type), name, language))
@@ -79,11 +79,11 @@ namespace wtl
     //! Clone handle
     //!
     //! \param[in] addr - Handle
-    //! \return HAlloc<::HRSRC> - Duplicate of handle
+    //! \return NativeHandle<::HRSRC> - Duplicate of handle
     //!
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HRSRC> clone(HAlloc<::HRSRC> addr);
+    static NativeHandle<::HRSRC> clone(NativeHandle<::HRSRC> addr);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HRSRC>::destroy noexcept
@@ -92,7 +92,7 @@ namespace wtl
     //! \param[in] addr - Handle
     //! \return bool - Always true
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HRSRC> addr) noexcept
+    static bool destroy(NativeHandle<::HRSRC> addr) noexcept
     {
       // Resource handles are not released by module under Win32
       return true;

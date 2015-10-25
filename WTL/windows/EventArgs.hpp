@@ -79,6 +79,19 @@ namespace wtl
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct ControlEventArgs - Event arguments for win32 messages from controls
+  //! 
+  //! \tparam ENC - Message character encoding 
+  //! \tparam WM - Window message
+  //! \tparam EVENT - [optional] Notification type (Default is uint16_t)
+  //! \tparam CODE - [optional] Notification code (Default is zero)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
+  struct ControlEventArgs;
+  /* Undefined */
+  
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias MessageEvent - Defines an event encapsulating a window message 
   //! 
   //! \tparam ENC - Window character encoding
@@ -96,7 +109,29 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM>
   using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
-        
+       
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ControlEvent - Defines a child control event type 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam WM - Window message
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
+  //! \tparam CODE - [optional] Notification message (Default is zero)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
+  using ControlEvent = Event<LResult, ControlEventArgs<ENC,WM,EVENT,CODE>&>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ControlEventHandler - Handlers for event from controls 
+  //! 
+  //! \tparam ENC - Window character encoding
+  //! \tparam WM - Window message
+  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
+  //! \tparam CODE - [optional] Notification message (Default is zero)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()> 
+  using ControlEventHandler = typename ControlEvent<ENC,WM,EVENT,CODE>::delegate_t;
+
 } // namespace wtl
 
 #endif // WTL_EVENT_MESSAGE_HPP

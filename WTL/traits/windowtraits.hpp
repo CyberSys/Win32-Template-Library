@@ -71,12 +71,12 @@ namespace wtl
     //! \param[in] const& title - Window title
     //! \param[in] pos - Initial position
     //! \param[in] size - Initial size
-    //! \return HAlloc<::HWND> - Created handle
+    //! \return NativeHandle<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, typename OBJ>
-    static HAlloc<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
+    static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
     { 
       using char_t = encoding_char_t<ENC>;    //!< Character encoding type
 
@@ -116,12 +116,12 @@ namespace wtl
     //! \param[in] const& title - Window title
     //! \param[in] pos - Initial position
     //! \param[in] size - Initial size
-    //! \return HAlloc<::HWND> - Created handle
+    //! \return NativeHandle<::HWND> - Created handle
     //! 
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, typename OBJ>
-    static HAlloc<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND parent, WindowId id, WindowStyle style, WindowStyleEx ext, const String<ENC>& title, PointL pos, SizeL size)
+    static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND parent, WindowId id, WindowStyle style, WindowStyleEx ext, const String<ENC>& title, PointL pos, SizeL size)
     { 
       // Create child window
       return create(wndClass, object, parent, style, ext, reinterpret_cast<::HMENU>(enum_cast(id)), title, pos, size);
@@ -132,11 +132,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] wnd - Handle
-    //! \return HAlloc<::HWND> - Duplicate of handle
+    //! \return NativeHandle<::HWND> - Duplicate of handle
     //!
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HWND> clone(HAlloc<::HWND> wnd);
+    static NativeHandle<::HWND> clone(NativeHandle<::HWND> wnd);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HWND>::destroy noexcept
@@ -145,7 +145,7 @@ namespace wtl
     //! \param[in] wnd - Handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HWND> wnd) noexcept
+    static bool destroy(NativeHandle<::HWND> wnd) noexcept
     {
       // Delete without checking if handle is valid
       switch (wnd.Method)

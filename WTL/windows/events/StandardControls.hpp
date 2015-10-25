@@ -9,7 +9,7 @@
 #define WTL_CONTROL_EVENTS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/ControlEvent.hpp"           //!< Event,ControlEvent,ControlEventArgs
+#include "wtl/windows/EventArgs.hpp"           //!< Event,ControlEvent,ControlEventArgs
 #include "wtl/platform/ControlStyles.hpp"         //!< Styles+Notifications
 
 //! \namespace wtl - Windows template library

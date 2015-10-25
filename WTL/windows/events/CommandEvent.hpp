@@ -12,7 +12,7 @@
 #include "wtl/casts/EnumCast.hpp"             //!< EnumCast
 #include "wtl/platform/CommandId.hpp"         //!< CommandId
 #include "wtl/windows/Command.hpp"            //!< CommandSource/CommandState
-#include "wtl/windows/MessageEvent.hpp"       //!< MessageEvent
+#include "wtl/windows/EventArgs.hpp"       //!< MessageEvent
 
 //! \namespace wtl - Windows template library
 namespace wtl {

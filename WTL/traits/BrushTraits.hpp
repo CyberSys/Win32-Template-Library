@@ -53,11 +53,11 @@ namespace wtl
     //! Create solid brush
     //! 
     //! \param[in] colour - Brush colour
-    //! \return HAlloc<::HBRUSH> - Created handle
+    //! \return NativeHandle<::HBRUSH> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HBRUSH> create(Colour colour) 
+    static NativeHandle<::HBRUSH> create(Colour colour) 
     { 
       // Create solid colour brush handle
       if (::HBRUSH brush = ::CreateSolidBrush(enum_cast(colour)))
@@ -73,11 +73,11 @@ namespace wtl
     //! 
     //! \param[in] style - Hatch style
     //! \param[in] colour - Brush colour
-    //! \return HAlloc<::HBRUSH> - Created handle
+    //! \return NativeHandle<::HBRUSH> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HBRUSH> create(HatchStyle style, Colour colour) 
+    static NativeHandle<::HBRUSH> create(HatchStyle style, Colour colour) 
     { 
       // Create hatch brush handle
       if (::HBRUSH brush = ::CreateHatchBrush(enum_cast(style), enum_cast(colour)))
@@ -92,11 +92,11 @@ namespace wtl
     //! Create system colour brush
     //! 
     //! \param[in] col - System colour
-    //! \return HAlloc<::HBRUSH> - Accquired handle
+    //! \return NativeHandle<::HBRUSH> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HBRUSH> create(SystemColour col) 
+    static NativeHandle<::HBRUSH> create(SystemColour col) 
     { 
       // Accquire system colour brush handle
       if (::HBRUSH brush = ::GetSysColorBrush(enum_cast(col)))
@@ -112,11 +112,11 @@ namespace wtl
     //! Accquire stock brush handle
     //! 
     //! \param[in] obj - Stock object
-    //! \return HAlloc<::HBRUSH> - Accquired handle
+    //! \return NativeHandle<::HBRUSH> - Accquired handle
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HBRUSH> create(StockObject obj) 
+    static NativeHandle<::HBRUSH> create(StockObject obj) 
     { 
       switch (obj)
       {
@@ -141,11 +141,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] brush - Brush handle
-    //! \return HAlloc<::HBRUSH> - Duplicate of handle
+    //! \return NativeHandle<::HBRUSH> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HBRUSH>  clone(HAlloc<::HBRUSH> brush);
+    static NativeHandle<::HBRUSH>  clone(NativeHandle<::HBRUSH> brush);
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::HBRUSH>::destroy noexcept
@@ -154,7 +154,7 @@ namespace wtl
     //! \param[in] brush - Brush handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HBRUSH> brush) noexcept
+    static bool destroy(NativeHandle<::HBRUSH> brush) noexcept
     {
       // Delete without checking if handle is valid
       switch (brush.Method)

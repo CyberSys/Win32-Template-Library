@@ -70,7 +70,7 @@ namespace wtl
     //! \param[in] type - Resource type
     //! \param[in] name - Resource identifier
     //! \param[in] lang - Resource language
-    //! \return HAlloc<::HRSRC> - Accquired handle if found, otherwise 'npos'
+    //! \return NativeHandle<::HRSRC> - Accquired handle if found, otherwise 'npos'
     /////////////////////////////////////////////////////////////////////////////////////////
     //template <Encoding ENC>
     //Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const

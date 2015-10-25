@@ -9,7 +9,7 @@
 #define WTL_SHOW_WINDOW_EVENT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/MessageEvent.hpp"            //!< Event
+#include "wtl/windows/EventArgs.hpp"            //!< Event
 #include "wtl/casts/OpaqueCast.hpp"                //!< OpaqueCast
 #include "wtl/platform/WindowFlags.hpp"            //!< ShowWindowType
 

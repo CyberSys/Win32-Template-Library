@@ -51,12 +51,12 @@ namespace wtl
     //! Load an external module
     //! 
     //! \param[in] const& fullPath - Absolute path of module
-    //! \return HAlloc<HMENU> - Created handle
+    //! \return NativeHandle<HMENU> - Created handle
     //! 
     //! \throw wtl::platform_error - Failed to load module
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static HAlloc<::HMODULE> create(const Path<ENC>& fullPath) 
+    static NativeHandle<::HMODULE> create(const Path<ENC>& fullPath) 
     { 
       // Load external library
       if (::HMODULE module = getFunc<ENC>(::LoadLibraryA,::LoadLibraryW)(fullPath))
@@ -72,11 +72,11 @@ namespace wtl
     //! Clone handle
     //! 
     //! \param[in] module - Handle
-    //! \return HAlloc<::HMODULE> - Duplicate of handle
+    //! \return NativeHandle<::HMODULE> - Duplicate of handle
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static HAlloc<::HMODULE> clone(HAlloc<::HMODULE> module);
+    static NativeHandle<::HMODULE> clone(NativeHandle<::HMODULE> module);
 
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ namespace wtl
     //! \param[in] module - Handle
     //! \return bool - True iff closed successfully
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool destroy(HAlloc<::HMODULE> module) noexcept
+    static bool destroy(NativeHandle<::HMODULE> module) noexcept
     {
       // Delete without checking if handle is valid
       switch (module.Method)

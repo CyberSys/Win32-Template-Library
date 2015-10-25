@@ -48,10 +48,12 @@ namespace wtl
     using value_t = VALUE;
 
     //! \var read - Define whether property supports read access
-    static constexpr bool read = ACCESS && PropertyAccess::Read;
+    //static constexpr bool read = ACCESS && PropertyAccess::Read;
+    static constexpr bool read = test_flag(ACCESS, PropertyAccess::Read);
 
     //! \var write - Define whether property supports write access
-    static constexpr bool write = ACCESS && PropertyAccess::Write;
+    //static constexpr bool write = ACCESS && PropertyAccess::Write;
+    static constexpr bool write = test_flag(ACCESS, PropertyAccess::Write);
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -88,9 +90,12 @@ namespace wtl
     //! \remarks Using this method requires read access. It is not virtual by design, it may be excluded from the candidate pool by an SFINAE expression.
     //! \remarks Derived implementations should customize behaviour via custom methods (ie. template name-lookup) rather than simple sub-type polymorphism.
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<read>>
+    //template <typename = std::enable_if_t<read>>
+    template <typename = void>
     value_t  get() const
     {
+      static_assert(read, "Property does not support reading");
+
       return Value;
     }
     
@@ -105,9 +110,12 @@ namespace wtl
     //! \remarks Using this method requires write access. It is not virtual by design, it may be excluded from the candidate pool by an SFINAE expression.
     //! \remarks Derived implementations should customize behaviour via custom methods (ie. template name-lookup) rather than simple sub-type polymorphism.
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<write>>
+    //template <typename = std::enable_if_t<write>>
+    template <typename = void>
     void  set(value_t val) 
     {
+      static_assert(read, "Property does not support writing");
+
       Value = val;
     }
   };
@@ -172,9 +180,12 @@ namespace wtl
     //! 
     //! \return value_t - Current value
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<read>>
+    //template <typename = std::enable_if_t<read>>
+    template <typename = void>
     value_t  get() const
     {
+      static_assert(write, "Property does not support reading");
+
       return Impl.get();
     }
 
@@ -208,9 +219,12 @@ namespace wtl
     //! 
     //! \param[in] value - New value
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = std::enable_if_t<write>>
+    //template <typename = std::enable_if_t<write>>
+    template <typename = void>
     void  set(value_t value) 
     {
+      static_assert(write, "Property does not support writing");
+
       // Set value
       Impl.set(value);
     }

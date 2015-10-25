@@ -53,7 +53,7 @@ namespace wtl
   void  EnabledPropertyImpl<ENC>::set(value_t state) 
   {
     // Set window state
-    if (this->Window.exists() && !::EnableWindow(Window, boolean_cast(state)))
+    if (this->Window.exists() && !::EnableWindow(this->Window, boolean_cast(state)))
       throw platform_error(HERE, "Unable to set window state");
 
     // Update value

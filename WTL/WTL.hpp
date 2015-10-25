@@ -35,9 +35,9 @@
 #undef _GLIBCXX_USE_INT128
 
 // Target Platform v5.01 (WindowsXP)
-#include <WinSDKVer.h>
+//#include <WinSDKVer.h>
 #define _WIN32_WINNT    _WIN32_WINNT_WINXP
-#include <SDKDDKVer.h>
+//#include <SDKDDKVer.h>
 
 #include <windows.h>        // Main windows header
 #include <commctrl.h>       // Common controls library

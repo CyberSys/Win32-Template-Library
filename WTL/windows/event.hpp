@@ -19,6 +19,64 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
+  namespace
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct call_proxy - Encapsulates the notification call for different return types
+    //! 
+    //! \tparam RET - Return type
+    //! \tparam ARGS... - [optional] Argument types
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename RET, typename... ARGS>
+    struct call_proxy
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // call_proxy::invoke()
+      //! Raises the event, notifying each subscriber in the order in which they subscribed
+      //! 
+      //! \param[in] subscribers - Subscriber collection
+      //! \param[in] &&... args - [optional] Event arguments
+      //! \return result_t - Result of call to final subscriber. If no subscribers then a default constructed 'result_t'
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename COLLECTION>
+      static RET invoke(COLLECTION& subscribers, ARGS&&... args) 
+      {
+        RET r(defvalue<RET>());
+
+        // Forward (Copy construct) arguments to each subscriber
+        for (auto& fn : subscribers)
+          r = (*fn)(std::forward<ARGS>(args)...);
+
+        // Return result
+        return r;
+      }
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct call_proxy<void> - Encapsulates notification calls with no return
+    //! 
+    //! \tparam ARGS... - [optional] Argument types
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    struct call_proxy<void, ARGS...>
+    {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // call_proxy::invoke()
+      //! Raises the event, notifying each subscriber in the order in which they subscribed
+      //! 
+      //! \param[in] subscribers - Subscriber collection
+      //! \param[in] &&... args - [optional] Event arguments
+      /////////////////////////////////////////////////////////////////////////////////////////
+      template <typename COLLECTION>
+      static void invoke(COLLECTION& subscribers, ARGS&&... args) 
+      {
+        // Forward (Copy construct) arguments to each subscriber
+        for (auto& fn : subscribers)
+          (*fn)(std::forward<ARGS>(args)...);
+      }
+    };
+  }
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Event - Provides an observeable event pattern with multiple subscribers
   //! 
@@ -39,7 +97,8 @@ namespace wtl
     using argument_t = typename std::tuple_element<IDX, std::tuple<ARGS...>>::type;
   
     //! \alias delegate_t - Define delegate type
-    using delegate_t = Delegate<sizeof...(ARGS),RET,ARGS...>;
+    //using delegate_t = Delegate<sizeof...(ARGS),RET,ARGS...>;
+    using delegate_t = Delegate<RET,ARGS...>;
     
     //! \alias result_t - Define delegate return type
     using result_t = RET;
@@ -56,61 +115,6 @@ namespace wtl
 
     //! \alias collection_t - Define delegate collection type
     using collection_t = std::list<storage_t>;
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct call_proxy - Encapsulates the notification call for different return types
-    //! 
-    //! \tparam RET - Return type
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename RET>
-    struct call_proxy
-    {
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // call_proxy::invoke()
-      //! Raises the event, notifying each subscriber in the order in which they subscribed
-      //! 
-      //! \param[in] subscribers - Subscriber collection
-      //! \param[in] &&... args - [optional] Event arguments
-      //! \return result_t - Result of call to final subscriber. If no subscribers then a default constructed 'result_t'
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      static RET invoke(collection_t& subscribers, ARGS&&... args) 
-      {
-        RET r(defvalue<RET>());
-
-        // Forward (Copy construct) arguments to each subscriber
-        for (auto& fn : subscribers)
-          r = (*fn)(std::forward<ARGS>(args)...);
-
-        // Return result
-        return r;
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct call_proxy<void> - Encapsulates notification calls with no return
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <>
-    struct call_proxy<void>
-    {
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // call_proxy::invoke()
-      //! Raises the event, notifying each subscriber in the order in which they subscribed
-      //! 
-      //! \param[in] subscribers - Subscriber collection
-      //! \param[in] &&... args - [optional] Event arguments
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename... ARGS>
-      static void invoke(collection_t& subscribers, ARGS&&... args) 
-      {
-        // Forward (Copy construct) arguments to each subscriber
-        for (auto& fn : subscribers)
-          (*fn)(std::forward<ARGS>(args)...);
-      }
-    };
-    
-    //! \alias call_proxy_t - Define call proxy type
-    using call_proxy_t = call_proxy<result_t>;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -166,11 +170,13 @@ namespace wtl
     //! \return result_t - [Returns value] Result of call to final subscriber. If no subscribers then a default constructed 'result_t'
     //!                    [Returns void] Nothing
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    result_t raise(ARGS&&... args) 
+    template <typename... FN_ARGS>
+    result_t raise(FN_ARGS&&... args) 
     {
+      using call_proxy_t = call_proxy<result_t,FN_ARGS...>;
+
       // Forward (copy) arguments to each subscriber, and capture return value (iff function signature has a return type)
-      return call_proxy_t::invoke(Subscribers, std::forward<ARGS>(args)...);
+      return call_proxy_t::invoke(Subscribers, std::forward<FN_ARGS>(args)...);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +206,7 @@ namespace wtl
       Subscribers.remove_if( findByAddress );
     }
   };
-  
+
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias EventHandler - Defines the handler type for any event

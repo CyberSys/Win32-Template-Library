@@ -45,7 +45,8 @@ namespace wtl
   //! \struct default_t<enumeration> - Enumeration types default to zero for now
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct default_t<T,enable_if_enum_t<T>> : get<0,enum_values_t<T>> 
+  //struct default_t<T,enable_if_enum_t<T>> : get<0,enum_values_t<T>> 
+  struct default_t<T,enable_if_enum_t<T>> : min_value<T>
   {};
   
   /////////////////////////////////////////////////////////////////////////////////////////

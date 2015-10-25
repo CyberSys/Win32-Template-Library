@@ -14,7 +14,7 @@
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
-#include "wtl/windows/MessageEvent.hpp"         //!< EventArgs
+#include "wtl/windows/EventArgs.hpp"         //!< EventArgs
 #include "wtl/utils/Rectangle.hpp"           //!< Rect
 
 //! \namespace wtl - Windows template library
