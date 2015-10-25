@@ -156,7 +156,7 @@ namespace wtl
       {
         LResult ret;       //!< Message result, defaults to unhandled
 
-        // 
+        // Examine message
         switch (message)
         {
         // [COMMAND (REFLECTED)] Raise associated event
@@ -172,7 +172,8 @@ namespace wtl
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' or 'Owner Measure'
         case WindowMessage::REFLECT_DRAWITEM:     ret = OwnerDraw.raise(OwnerDrawCtrlEventArgs<encoding>(w,l));                      break;
-        case WindowMessage::REFLECT_MEASUREITEM:  ret = OwnerMeasure.raise(OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l));   break;
+        //case WindowMessage::REFLECT_MEASUREITEM:  ret = OwnerMeasure.raise(OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l));   break;
+        case WindowMessage::REFLECT_MEASUREITEM:  { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  ret = OwnerMeasure.raise(args); }  break;
         }
 
         // [UNHANDLED] Return result & routing
@@ -195,10 +196,10 @@ namespace wtl
     // Button::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message to draw the button
     //! 
-    //! \param[in,out] &args - Message arguments 
+    //! \param[in] args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>&& args) 
+    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding> args) 
     { 
       HBrush background(SystemColour::BtnFace);
 
@@ -220,7 +221,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>&& args) 
+    virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
       // Measure button text
       args.Size = args.Graphics.measure(this->Text().c_str());
