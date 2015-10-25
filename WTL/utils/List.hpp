@@ -53,8 +53,7 @@ namespace wtl
     // List::List
     //! Create empty list
     /////////////////////////////////////////////////////////////////////////////////////////
-    List()
-    {}
+    List() = default;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::List
@@ -301,12 +300,8 @@ namespace wtl
     //!
     //! \param[in] const& value - Item
     /////////////////////////////////////////////////////////////////////////////////////////
-    List& operator += (const value_type& value)
-    {
-      // Append
-      base::push_back(value);
-      return *this;
-    }
+    List& operator += (const value_type& value)  { push_back(value);               return *this; }
+    List& operator += (value_type&& value)       { push_back(std::forward(value)); return *this; }
   };
 
 
