@@ -362,13 +362,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
     <ClCompile>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
-      <DebugInformationFormat>None</DebugInformationFormat>
       <ExceptionHandling>Enabled</ExceptionHandling>
-      <AdditionalOptions>-Wswitch -pedantic %(AdditionalOptions)</AdditionalOptions>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <UseShortEnums>true</UseShortEnums>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <Pedantic>true</Pedantic>
+      <WarningReorder>Disable</WarningReorder>
+      <WarningSwitch>Disable</WarningSwitch>
+      <WarningSwitchDefault>Enable</WarningSwitchDefault>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

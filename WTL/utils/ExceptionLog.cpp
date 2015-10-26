@@ -26,7 +26,7 @@ namespace wtl
 	{	
     // Exceptionless
     return exception_log_t(sink,message);
-	};
+	}
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // std::exception_log
@@ -45,7 +45,7 @@ namespace wtl
 
     // Standard exception
     return exception_log_t(sink,e,message);
-	};
+	}
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace wtl
              << (Cons::Purple|Cons::Bold) << "EXCEPTION: " << Cons::White  << ex.Context << ": " << ex.Error << "..." << Cons::Endl
              << (Cons::Purple|Cons::Bold) << "SOURCE: "    << Cons::Yellow <<            ex.Source           << "..." << Cons::Endl
              << (Cons::Purple|Cons::Bold) << "SINK: "      << Cons::Yellow <<             ex.Sink            << "..." << Cons::Endl;
-  };
+  }
   
   
 

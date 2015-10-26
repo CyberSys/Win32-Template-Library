@@ -223,7 +223,7 @@ namespace wtl
       return c << id.toOrdinal();
     else
       return c << id.toString();
-  };
+  }
 
 
 } // WTL namespace

@@ -38,11 +38,12 @@ namespace wtl
     //! \param[in] const* sink - Catch block
     //! \param[in] const* message - [optional] Catch message
     //////////////////////////////////////////////////////////////////////////////////////////
-    exception_log_t(const char* sink, const char* message = nullptr) : Sink(sink), 
-                                                                       Source("Unspecified"), 
-                                                                       Context(message ? message : "An error has occurred"), 
-                                                                       Error("Unknown error")
+    exception_log_t(const char* sink, const char* message = nullptr) : Source("Unspecified"), 
+                                                                       Sink(sink), 
+                                                                       Error("Unknown error"), 
+                                                                       Context(message ? message : "An error has occurred")
     {}
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // exception_log_t::exception_log_t
     //! Create from STL exception 
@@ -51,10 +52,10 @@ namespace wtl
     //! \param[in] const& e - Exception
     //! \param[in] const* message - [optional] Catch message
     //////////////////////////////////////////////////////////////////////////////////////////
-    exception_log_t(const char* sink, const std::exception& e, const char* message = nullptr) : Sink(sink), 
-                                                                                                Source("Unspecified"), 
-                                                                                                Context(message ? message : "An error has occurred"), 
-                                                                                                Error(e.what())
+    exception_log_t(const char* sink, const std::exception& e, const char* message = nullptr) : Source("Unspecified"), 
+                                                                                                Sink(sink), 
+                                                                                                Error(e.what()), 
+                                                                                                Context(message ? message : "An error has occurred")
     {}
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -65,10 +66,10 @@ namespace wtl
     //! \param[in] const& e - Exception
     //! \param[in] const* message - [optional] Catch message
     //////////////////////////////////////////////////////////////////////////////////////////
-    exception_log_t(const char* sink, const exception& e, const char* message = nullptr) : Sink(sink), 
-                                                                                           Source(e.location()), 
-                                                                                           Context(message ? message : "An error has occurred"), 
-                                                                                           Error(e.what())
+    exception_log_t(const char* sink, const exception& e, const char* message = nullptr) : Source(e.location()), 
+                                                                                           Sink(sink), 
+                                                                                           Error(e.what()),
+                                                                                           Context(message ? message : "An error has occurred")
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
