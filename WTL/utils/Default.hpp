@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Default.hpp
 //! \brief Defines the default value for any type
-//! \date 6 March 2015
+//! \date 26 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,7 @@
 #define WTL_DEFAULT_HPP
 
 #include "wtl/WTL.hpp"
-//#include "wtl/traits/EnumTraits.hpp"        //!< enum_values
 #include "wtl/utils/Constant.hpp"           //!< integral_constant
-//#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
 #include "wtl/utils/SFINAE.hpp"             //!< enable_if
 
 //! \namespace wtl - Windows template library
@@ -42,13 +40,6 @@ namespace wtl
   {};
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<enumeration> - Enumeration types default to zero for now
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename T> 
-  //struct default_t<T,enable_if_enum_t<T>> : min_value<T>    // get<0,enum_values_t<T>> 
-  //{};
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<float> - Floating-point types default to zero
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
@@ -74,16 +65,23 @@ namespace wtl
   /*Undefined*/
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<T,POD> - Plain-old-data types default to an uninitialized structure
+  //! \struct default_t<T,POD> - Zero-initialize POD types  [Excluding scalar typs]
   /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename T> 
-  struct default_t<T,enable_if_pod_t<T>> 
+  template <typename T> 
+  struct default_t<T,std::enable_if_t<std::is_pod<T>::value && !std::is_scalar<T>::value>> 
   {
-    static const T  value;
+    static constexpr T  value {};
   };
 
-  template <typename T> 
-  const T default_t<T,enable_if_pod_t<T>>::value;*/
+  //! \namespace <anon> - Utility namespace
+  namespace 
+  {
+    //! \typedef enable_if_default_constructible_t - Defines SFINAE expression requiring default-constructible non-POD class type
+    template <typename T>
+    using enable_if_default_constructible_t = std::enable_if_t<std::is_class<T>::value 
+                                                           && !std::is_pod<T>::value 
+                                                           && std::is_default_constructible<T>::value>;
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<class> - Class types default to a default-constructed instance
@@ -91,32 +89,14 @@ namespace wtl
   //! \remarks Non-default constructible class types require individual specializations
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  struct default_t<T,std::enable_if_t<std::is_class<T>::value
-                                   && std::is_constructible<T>::value>> 
+  struct default_t<T,enable_if_default_constructible_t<T>> 
   {
     static const T  value;
   };
 
-  /////////////////////////////////////////////////////////////////////////////////////////
   //! \var default_t<class>::value - Default class-type storage
-  /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T> 
-  const T default_t<T,std::enable_if_t<std::is_class<T>::value
-                                    && std::is_constructible<T>::value>>::value;
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct default_t<class> - Class types default to a default-constructed instance
-  //! 
-  //! \remarks This implementation crashes MSVC 2015 RC
-  /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <typename T> 
-  struct default_t<T,enable_if_class_constructible_t<T>> 
-  {
-    static const T  value;
-  };*/
-
-  /*template <typename T> 
-  const T default_t<T,enable_if_class_constructible_t<T>>::value;*/
+  const T default_t<T,enable_if_default_constructible_t<T>>::value;
 
   
 
