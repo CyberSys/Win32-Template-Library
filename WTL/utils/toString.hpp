@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\toString.hpp
 //! \brief Converts any type to a string
-//! \date 6 March 2015
+//! \date 26 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,60 +9,36 @@
 #define WTL_TO_STRING_HPP
 
 #include "wtl/WTL.hpp"
-//#include "wtl/utils/SFINAE.hpp"             //!< 
-#include "wtl/traits/EnumTraits.hpp"        //!< wtl::enable_if_attribute_t
-#include <algorithm>                        //!< std::find
-#include <iterator>                         //!< std::begin, std::end
+#include "wtl/traits/EnumTraits.hpp"        //!< enum_names, enum_values
+#include "wtl/utils/LengthOf.hpp"           //!< lengthof
+#include "wtl/utils/SFINAE.hpp"             //!< enable_if_enum_t
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::toString 
+  // wtl::to_string 
   //! Get the string representation of an enumeration value
   //! 
-  //! \tparam ENUM - Enumeration type (for contiguous sets of values)
+  //! \tparam ENUM - Enumeration type which specializes the 'enum_names' and 'enum_values' traits
   //! 
   //! \param[in] e - Enumeration value
-  //! \return const char* - String representation
+  //! \return const char* - String representation if found, otherwise <Unrecognised>
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ENUM, typename = enable_if_attribute_t<ENUM>> 
-  const char* toString(ENUM e)
+  template <typename ENUM>
+  auto to_string(ENUM e) -> enable_if_enum_t<ENUM, const char*>
   {
-    CHECKED_INDEX(e, min_value<ENUM>::value, max_value<ENUM>::value+1);
+    // Linear search for value
+    for (int32_t i = 0; i < lengthof(enum_values<ENUM>::values); ++i)
+      if (enum_values<ENUM>::values[i] == e)
+        // [FOUND] Cross-reference with 'enum_names'
+        return enum_names<ENUM>::values[i];
 
-    // Lookup name
-    return enum_names<ENUM>::values[static_cast<std::underlying_type_t<ENUM>>(e)
-                                  - static_cast<std::underlying_type_t<ENUM>>(min_value<ENUM>::value)];
+    // [NOT-FOUND] Return sentinel
+    return "<Unrecognised>";
   }
 
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::toString 
-  //! Get the string representation of an enumeration value
-  //! 
-  //! \tparam ENUM - Enumeration type (for non-contiguous sets of values)
-  //! 
-  //! \param[in] e - Enumeration value
-  //! \return const char* - String representation
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ENUM> 
-  const char* toString(ENUM e, std::enable_if_t<!is_attribute<ENUM>::value>* = nullptr)
-  {
-    using std::begin;   
-    using std::end;     
-
-    CHECKED_INDEX(e, min_value<ENUM>::value, max_value<ENUM>::value+1);
-
-    // Lookup value
-    auto first = begin(enum_values<ENUM>::values);
-    auto last = end(enum_values<ENUM>::values);
-    auto v = std::find(first, last, e);
-     
-    // Return associated name
-    return v != last ? enum_names<ENUM>::values[v - first] : "Error";
-  }
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::parseEnum 
@@ -74,22 +50,21 @@ namespace wtl
   //! \param[in,out] &value - Output enumeration value, if parsed successfully
   //! \return bool - True iff parsed successfully
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ENUM, typename = enable_if_attribute_t<ENUM>> 
-  inline bool parseEnum(const char* str, ENUM& value)
+  template <typename ENUM> 
+  auto parseEnum(const char* str, ENUM& value) -> enable_if_enum_t<ENUM, bool>
   {
-    static_assert(std::is_enum<ENUM>::value, "Cannot parse from non-enumeration types");
-    static_assert(is_attribute<ENUM>::value, "Cannot parse from non-iteratable enumerations");
+    // Linear search for value
+    for (int32_t i = 0; i < lengthof(enum_values<ENUM>::values); ++i)
+      if (!stricmp(str, enum_names<ENUM>::values[i]))
+      {
+        // [FOUND] Cross-reference with 'enum_values'
+        value = enum_values<ENUM>::values[i];
+        return true;
+      }
 
-    REQUIRED_PARAM(str);
-    
-    // Linear search, from min to max values
-    for (ENUM it = min_value<ENUM>::value; it < max_value<ENUM>::value+1; it = it + 1)
-      if (stricmp(str, toString(it)) == 0)
-        // Set value and return true
-        return (value = it, true);
-
-    // Return false and set value to default
-    return (value = defvalue<ENUM>(), false);
+    // [NOT-FOUND] Return false
+    value = defvalue<ENUM>();
+    return false;
   }
 
 }
