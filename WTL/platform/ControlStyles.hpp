@@ -9,14 +9,16 @@
 #define WTL_CONTROL_STYLES_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
-#include <utility>
+#include "wtl/traits/EnumTraits.hpp"                  //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"                      //!< default_t
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   
-  // ----------------------------------- COMMON NOTIFICATIONS ----------------------------------
+  // --------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------- COMMON NOTIFICATIONS ------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum NotifyMessage - Windows standard notifications
   enum class NotifyMessage : int16_t
@@ -50,14 +52,11 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<NotifyMessage>  : std::true_type  {};
   template <> struct is_contiguous<NotifyMessage> : std::false_type {};
-  
-  //! Define limits traits
-  template <> struct max_value<NotifyMessage>     : std::integral_constant<NotifyMessage,NotifyMessage::First>                {};
-  template <> struct min_value<NotifyMessage>     : std::integral_constant<NotifyMessage,NotifyMessage::TvStateImageChanging> {};
+  template <> struct default_t<NotifyMessage>     : std::integral_constant<NotifyMessage,NotifyMessage::First>   {};
 
-
-  // ----------------------------------- BUTTON CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // ------------------------------------------------- BUTTON CONTROLS --------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ButtonStyle - Defines standard Button window styles
   enum class ButtonStyle : ulong32_t
@@ -95,12 +94,9 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<ButtonStyle>  : std::true_type  {};
   template <> struct is_contiguous<ButtonStyle> : std::false_type {};
+  template <> struct default_t<ButtonStyle>     : std::integral_constant<ButtonStyle,ButtonStyle::PushButton>   {};
 
-  //! Define limits traits
-  template <> struct max_value<ButtonStyle>     : std::integral_constant<ButtonStyle,ButtonStyle::Flat>        {};
-  template <> struct min_value<ButtonStyle>     : std::integral_constant<ButtonStyle,ButtonStyle::PushButton>  {};
-
-
+  // --------------------------------------------------------------------------------------------------------------
   
   //! \enum ButtonNotification - Defines standard Button notifications
   enum class ButtonNotification : ulong32_t
@@ -118,18 +114,14 @@ namespace wtl
     DblClk      = DoubleClick,  			      //!< [Explorer 3.00] 
   };
 
-  
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<ButtonNotification>  : std::false_type  {};
   template <> struct is_contiguous<ButtonNotification> : std::true_type   {};
-
-  //! Define limits traits
-  template <> struct max_value<ButtonNotification>     : std::integral_constant<ButtonNotification,ButtonNotification::KillFocus>  {};
-  template <> struct min_value<ButtonNotification>     : std::integral_constant<ButtonNotification,ButtonNotification::Click>      {};
-
+  template <> struct default_t<ButtonNotification>     : std::integral_constant<ButtonNotification,ButtonNotification::Click>   {};
   
-  // ----------------------------------- EDIT CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------- EDIT CONTROLS ---------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum EditStyle - Defines standard Edit window styles
   enum class EditStyle : ulong32_t
@@ -153,11 +145,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<EditStyle>  : std::false_type  {};
   template <> struct is_contiguous<EditStyle> : std::false_type  {};
+  template <> struct default_t<EditStyle>     : std::integral_constant<EditStyle,EditStyle::Left>   {};
 
-  //! Define limits traits
-  template <> struct max_value<EditStyle>     : std::integral_constant<EditStyle,EditStyle::Number>   {};
-  template <> struct min_value<EditStyle>     : std::integral_constant<EditStyle,EditStyle::Left>     {};
-
+  // --------------------------------------------------------------------------------------------------------------
   
   //! \enum EditNotification - Defines standard Edit notifications
   enum class EditNotification : uint16_t
@@ -177,14 +167,11 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<EditNotification>  : std::false_type  {};
   template <> struct is_contiguous<EditNotification> : std::false_type  {};
+  template <> struct default_t<EditNotification>     : std::integral_constant<EditNotification,EditNotification::SetFocus>   {};
 
-  //! Define limits traits
-  template <> struct max_value<EditNotification>     : std::integral_constant<EditNotification,EditNotification::AlignRightToLeft> {};
-  template <> struct min_value<EditNotification>     : std::integral_constant<EditNotification,EditNotification::SetFocus>         {};
-
-  
-  // ----------------------------------- COMBO-BOX CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // ------------------------------------------------ COMBO-BOX CONTROLS ------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ComboBoxNotification - Defines standard ComboBox notification
   enum class ComboBoxNotification : int16_t
@@ -205,11 +192,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ComboBoxNotification>  : std::false_type  {};
   template <> struct is_contiguous<ComboBoxNotification> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ComboBoxNotification>     : std::integral_constant<ComboBoxNotification,ComboBoxNotification::SelAndCancel> {};
-  template <> struct min_value<ComboBoxNotification>     : std::integral_constant<ComboBoxNotification,ComboBoxNotification::ErrSpace>     {}; 
+  template <> struct default_t<ComboBoxNotification>     : std::integral_constant<ComboBoxNotification,ComboBoxNotification::ErrSpace>   {};
   
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ComboBoxStyle - Defines standard ComboBox window styles
   enum class ComboBoxStyle : ulong32_t
@@ -232,14 +217,11 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ComboBoxStyle>  : std::false_type  {};
   template <> struct is_contiguous<ComboBoxStyle> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ComboBoxStyle>     : std::integral_constant<ComboBoxStyle,ComboBoxStyle::LowerCase> {};
-  template <> struct min_value<ComboBoxStyle>     : std::integral_constant<ComboBoxStyle,ComboBoxStyle::Simple>    {}; 
+  template <> struct default_t<ComboBoxStyle>     : std::integral_constant<ComboBoxStyle,ComboBoxStyle::Simple>   {};
   
-
-  // ----------------------------------- LIST-BOX CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // ------------------------------------------------ LIST-BOX CONTROLS -------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ListBoxNotification - Defines standard ListBox notifications
   enum class ListBoxNotification : int16_t
@@ -255,11 +237,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ListBoxNotification>  : std::false_type  {};
   template <> struct is_contiguous<ListBoxNotification> : std::false_type  {};
+  template <> struct default_t<ListBoxNotification>     : std::integral_constant<ListBoxNotification,ListBoxNotification::ErrSpace>   {};
 
-  //! Define limits traits
-  template <> struct max_value<ListBoxNotification>     : std::integral_constant<ListBoxNotification,ListBoxNotification::KillFocus>  {};
-  template <> struct min_value<ListBoxNotification>     : std::integral_constant<ListBoxNotification,ListBoxNotification::ErrSpace>   {}; 
-  
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ListBoxStyle - Defines standard ListBox window styles
   enum class ListBoxStyle : ulong32_t
@@ -287,14 +267,11 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ListBoxStyle>  : std::false_type  {};
   template <> struct is_contiguous<ListBoxStyle> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ListBoxStyle>     : std::integral_constant<ListBoxStyle,ListBoxStyle::ComboBox> {};
-  template <> struct min_value<ListBoxStyle>     : std::integral_constant<ListBoxStyle,ListBoxStyle::Notify>   {}; 
+  template <> struct default_t<ListBoxStyle>     : std::integral_constant<ListBoxStyle,ListBoxStyle::Notify>   {};
   
-
-  // ----------------------------------- LIST-VIEW CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------- LIST-VIEW CONTROLS -------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ListViewNotification - Defines standard ListView notifications
   enum class ListViewNotification : int16_t
@@ -351,13 +328,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ListViewNotification>  : std::false_type  {};
   template <> struct is_contiguous<ListViewNotification> : std::false_type  {};
+  template <> struct default_t<ListViewNotification>     : std::integral_constant<ListViewNotification,ListViewNotification::First>   {};
 
-  //! Define limits traits
-  template <> struct max_value<ListViewNotification>     : std::integral_constant<ListViewNotification,ListViewNotification::CustomDraw>   {};
-  template <> struct min_value<ListViewNotification>     : std::integral_constant<ListViewNotification,ListViewNotification::ItemChanging> {}; 
-  
-
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ListViewStyle - Defines standard ListView window styles
   enum class ListViewStyle : ulong32_t
@@ -392,13 +365,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ListViewStyle>  : std::false_type  {};
   template <> struct is_contiguous<ListViewStyle> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ListViewStyle>     : std::integral_constant<ListViewStyle,ListViewStyle::TypeStyleMask>  {};
-  template <> struct min_value<ListViewStyle>     : std::integral_constant<ListViewStyle,ListViewStyle::Icon>           {}; 
+  template <> struct default_t<ListViewStyle>     : std::integral_constant<ListViewStyle,ListViewStyle::Icon>   {};
   
-
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ListViewStyleEx - Defines standard ListView extended window styles
   enum class ListViewStyleEx : ulong32_t
@@ -441,14 +410,11 @@ namespace wtl
   //! Define traits: Non-contiguous attribute
   template <> struct is_attribute<ListViewStyleEx>  : std::true_type   {};
   template <> struct is_contiguous<ListViewStyleEx> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ListViewStyleEx>     : std::integral_constant<ListViewStyleEx,ListViewStyleEx::ColumnOverflow>  {};
-  template <> struct min_value<ListViewStyleEx>     : std::integral_constant<ListViewStyleEx,ListViewStyleEx::GridLines>       {}; 
+  template <> struct default_t<ListViewStyleEx>     : std::integral_constant<ListViewStyleEx,ListViewStyleEx::GridLines>   {};
   
-  
-  // ----------------------------------- STATIC CONTROLS ----------------------------------
-  
+  // --------------------------------------------------------------------------------------------------------------
+  // ------------------------------------------------ STATIC CONTROLS ---------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum StaticNotification - Defines standard Static notification
   enum class StaticNotification : int16_t
@@ -462,11 +428,9 @@ namespace wtl
   //! Define traits: Non-contiguous attribute
   template <> struct is_attribute<StaticNotification>  : std::true_type   {};
   template <> struct is_contiguous<StaticNotification> : std::false_type  {};
+  template <> struct default_t<StaticNotification>     : std::integral_constant<StaticNotification,StaticNotification::Clicked>   {};
 
-  //! Define limits traits
-  template <> struct max_value<StaticNotification>     : std::integral_constant<StaticNotification,StaticNotification::Disable> {};
-  template <> struct min_value<StaticNotification>     : std::integral_constant<StaticNotification,StaticNotification::Clicked> {}; 
-  
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum StaticStyle - Defines standard Static window styles
   enum class StaticStyle : ulong32_t
@@ -508,15 +472,11 @@ namespace wtl
   //! Define traits: Non-contiguous attribute
   template <> struct is_attribute<StaticStyle>  : std::true_type   {};
   template <> struct is_contiguous<StaticStyle> : std::false_type  {};
+  template <> struct default_t<StaticStyle>     : std::integral_constant<StaticStyle,StaticStyle::Left>   {};
 
-  //! Define limits traits
-  template <> struct max_value<StaticStyle>     : std::integral_constant<StaticStyle,StaticStyle::EllipsisMask>  {};
-  template <> struct min_value<StaticStyle>     : std::integral_constant<StaticStyle,StaticStyle::Left>          {}; 
-  
-
-  
-  // ----------------------------------- TOOLTIPS CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------- TOOLTIPS CONTROLS --------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ToolTipNotification - Defines standard ToolTip notifications
   enum class ToolTipNotification : int16_t
@@ -535,11 +495,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ToolTipNotification>  : std::false_type  {};
   template <> struct is_contiguous<ToolTipNotification> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ToolTipNotification>     : std::integral_constant<ToolTipNotification,ToolTipNotification::LinkClick>     {};
-  template <> struct min_value<ToolTipNotification>     : std::integral_constant<ToolTipNotification,ToolTipNotification::GetDispInfoA>  {}; 
+  template <> struct default_t<ToolTipNotification>     : std::integral_constant<ToolTipNotification,ToolTipNotification::First>   {};
   
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum ToolTipStyle - Defines standard ToolTip window styles
   enum class ToolTipStyle : ulong32_t
@@ -556,14 +514,11 @@ namespace wtl
   //! Define traits: Non-contiguous attribute
   template <> struct is_attribute<ToolTipStyle>  : std::true_type   {};
   template <> struct is_contiguous<ToolTipStyle> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ToolTipStyle>     : std::integral_constant<ToolTipStyle,ToolTipStyle::UseVisualStyle> {};
-  template <> struct min_value<ToolTipStyle>     : std::integral_constant<ToolTipStyle,ToolTipStyle::AlwaysTip>      {}; 
+  template <> struct default_t<ToolTipStyle>     : std::integral_constant<ToolTipStyle,ToolTipStyle::AlwaysTip>   {};
   
-
-  // ----------------------------------- TREE-VIEW CONTROLS ----------------------------------
-
+  // --------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------- TREEVIEW CONTROLS --------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum TreeViewNotification - Defines standard TreeView notifications
   enum class TreeViewNotification : int16_t
@@ -612,13 +567,10 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<TreeViewNotification>  : std::false_type  {};
   template <> struct is_contiguous<TreeViewNotification> : std::false_type  {};
+  template <> struct default_t<TreeViewNotification>     : std::integral_constant<TreeViewNotification,TreeViewNotification::First>   {};
 
-  //! Define limits traits
-  template <> struct max_value<TreeViewNotification>     : std::integral_constant<TreeViewNotification,TreeViewNotification::CustomDraw>     {};
-  template <> struct min_value<TreeViewNotification>     : std::integral_constant<TreeViewNotification,TreeViewNotification::SelChangingA>   {}; 
+  // --------------------------------------------------------------------------------------------------------------
   
-
-
   //! \enum TreeViewStyle - Defines standard TreeView window styles
   enum class TreeViewStyle : ulong32_t
   {
@@ -646,12 +598,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<TreeViewStyle>  : std::false_type  {};
   template <> struct is_contiguous<TreeViewStyle> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<TreeViewStyle>     : std::integral_constant<TreeViewStyle,TreeViewStyle::NoHScroll>  {};
-  template <> struct min_value<TreeViewStyle>     : std::integral_constant<TreeViewStyle,TreeViewStyle::HasButtons> {}; 
+  template <> struct default_t<TreeViewStyle>     : std::integral_constant<TreeViewStyle,TreeViewStyle::HasButtons>   {};
   
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum TreeViewStyleEx - Defines standard TreeView extended window styles
   enum class TreeViewStyleEx : ulong32_t
@@ -673,11 +622,7 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<TreeViewStyleEx>  : std::false_type  {};
   template <> struct is_contiguous<TreeViewStyleEx> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<TreeViewStyleEx>     : std::integral_constant<TreeViewStyleEx,TreeViewStyleEx::DrawImageAsync>    {};
-  template <> struct min_value<TreeViewStyleEx>     : std::integral_constant<TreeViewStyleEx,TreeViewStyleEx::NoSingleCollapse>  {}; 
-  
+  template <> struct default_t<TreeViewStyleEx>     : std::integral_constant<TreeViewStyleEx,TreeViewStyleEx::NoSingleCollapse>   {};
 
 
 }

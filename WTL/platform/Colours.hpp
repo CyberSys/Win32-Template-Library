@@ -9,7 +9,8 @@
 #define WTL_COLOURS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/traits/EnumTraits.hpp"      //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"          //!< default_t
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -56,14 +57,8 @@ namespace wtl
   //! Define traits: Contiguous Enumeration
   template <> struct is_attribute<Colour>  : std::false_type  {};
   template <> struct is_contiguous<Colour> : std::true_type   {};
-
-  //! Define limits traits
-  template <> struct max_value<Colour>     : std::integral_constant<Colour,Colour::Invalid>   {};
-  template <> struct min_value<Colour>     : std::integral_constant<Colour,Colour::Black>     {};
+  template <> struct default_t<Colour>     : std::integral_constant<Colour,Colour::Black>   {};
   
-  //! Define names and values
-  //template <> struct enum_names<Colour>  { static const char* names[];   };
-  template <> struct enum_values<Colour> { static const Colour values[26]; };
 
   // ----------------------------------- SYSTEM COLOURS ----------------------------------
   
@@ -110,11 +105,7 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<SystemColour>  : std::false_type  {};
   template <> struct is_contiguous<SystemColour> : std::false_type  {};
-  
-  //! Define limits traits
-  template <> struct max_value<SystemColour>     : std::integral_constant<SystemColour,SystemColour::ScrollBar>  {};
-  template <> struct min_value<SystemColour>     : std::integral_constant<SystemColour,SystemColour::MenuBar>    {};
-
+  template <> struct default_t<SystemColour>     : std::integral_constant<SystemColour,SystemColour::ScrollBar>   {};
 
 
 

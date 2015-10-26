@@ -9,7 +9,8 @@
 #define WTL_SYSTEM_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/traits/EnumTraits.hpp"                  //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"                      //!< default_t
 #include <utility>
 
 //! \namespace wtl - Windows template library
@@ -34,16 +35,13 @@ namespace wtl
     Explorer60 = 0x0582,        //!< Internet Explorer 6.00  (Windows XP)
     
     WinXp      = 0x0600,        //!< <Not packaged with OS> (Windows XP)
-    Vista   = 0x0610,        //!< <Not packaged with OS> (Windows Vista)
+    Vista      = 0x0610,        //!< <Not packaged with OS> (Windows Vista)
   };
 
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<ControlVersion>  : std::false_type  {};
   template <> struct is_contiguous<ControlVersion> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Vista>    {};
-  template <> struct min_value<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Explorer30>  {};
+  template <> struct default_t<ControlVersion>     : std::integral_constant<ControlVersion,ControlVersion::Explorer30>   {};
   
   // ----------------------------------- DATE FORMAT FLAGS ----------------------------------
 
@@ -62,6 +60,7 @@ namespace wtl
   //! Define traits: Non-Contiguous attribute
   template <> struct is_attribute<DateFlags>  : std::true_type  {};
   template <> struct is_contiguous<DateFlags> : std::false_type {};
+  template <> struct default_t<DateFlags>     : std::integral_constant<DateFlags,DateFlags::ShortDate>   {};
 
   // ----------------------------------- RESOURCE TYPES ----------------------------------
   
@@ -95,10 +94,7 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ResourceType>  : std::false_type {};
   template <> struct is_contiguous<ResourceType> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Cursor>     {};
-  template <> struct min_value<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Manifest>   {};
+  template <> struct default_t<ResourceType>     : std::integral_constant<ResourceType,ResourceType::Cursor>   {};
   
   
   // ----------------------------------- SHELL VERSION ----------------------------------
@@ -119,11 +115,7 @@ namespace wtl
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<ShellVersion>  : std::false_type  {};
   template <> struct is_contiguous<ShellVersion> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win7>  {};
-  template <> struct min_value<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win95> {};
-
+  template <> struct default_t<ShellVersion>     : std::integral_constant<ShellVersion,ShellVersion::Win95>   {};
 
   // ----------------------------------- SYSTEM CURSORS ----------------------------------
   
@@ -152,10 +144,7 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<SystemCursor>  : std::false_type  {};
   template <> struct is_contiguous<SystemCursor> : std::false_type  {};
-  
-  //! Define limits traits
-  template <> struct max_value<SystemCursor>     : std::integral_constant<SystemCursor,SystemCursor::Help>  {};
-  template <> struct min_value<SystemCursor>     : std::integral_constant<SystemCursor,SystemCursor::Arrow> {};
+  template <> struct default_t<SystemCursor>     : std::integral_constant<SystemCursor,SystemCursor::Arrow>   {};
 
 
   // ----------------------------------- SYSTEM ICONS ----------------------------------
@@ -179,13 +168,12 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<SystemIcon>  : std::false_type  {};
   template <> struct is_contiguous<SystemIcon> : std::false_type  {};
-  
-  //! Define limits traits
-  template <> struct max_value<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Shield>      {};
-  template <> struct min_value<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Application> {};
+  template <> struct default_t<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Application>   {};
+
   
   // ----------------------------------- WINDOWS OS VERSION ----------------------------------
   
+
   //! \enum WindowVersion - Defines operating system (Kernel32) versions
   enum class WindowVersion : ulong32_t
   { 
@@ -203,10 +191,7 @@ namespace wtl
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<WindowVersion>  : std::false_type  {};
   template <> struct is_contiguous<WindowVersion> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<WindowVersion>     : std::integral_constant<WindowVersion,WindowVersion::Future>  {};
-  template <> struct min_value<WindowVersion>     : std::integral_constant<WindowVersion,WindowVersion::WinNT>   {};
+  template <> struct default_t<WindowVersion>     : std::integral_constant<WindowVersion,WindowVersion::WinNT>   {};
 
 
   

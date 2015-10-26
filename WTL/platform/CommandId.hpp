@@ -109,15 +109,12 @@ namespace wtl
   //! Define traits: Non-contiguous Enumeration
   template <> struct is_attribute<CommandId>  : std::false_type  {};
   template <> struct is_contiguous<CommandId> : std::false_type  {};
+  template <> struct default_t<CommandId>     : std::integral_constant<CommandId,CommandId::File_New>   {};
 
-  //! Define limits traits
-  /*template <> struct max_value<CommandId>     : std::integral_constant<CommandId,CommandId::Invalid>   {};
-  template <> struct min_value<CommandId>     : std::integral_constant<CommandId,CommandId::Black>     {};*/
-  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::command_id
-  //! Creates a strongly typed command id from any integral or enumeration type
+  //! Convert integral/enumeration type into a CommandId
   //!
   //! \tparam TYPE - Integral or enumeration type
   //! 
@@ -149,15 +146,12 @@ namespace wtl
   //! Define traits: Contiguous Enumeration
   template <> struct is_attribute<CommandGroupId>  : std::false_type  {};
   template <> struct is_contiguous<CommandGroupId> : std::true_type   {};
-
-  //! Define limits traits
-  template <> struct max_value<CommandGroupId>     : std::integral_constant<CommandGroupId,CommandGroupId::Help>   {};
-  template <> struct min_value<CommandGroupId>     : std::integral_constant<CommandGroupId,CommandGroupId::File>   {};
+  template <> struct default_t<CommandGroupId>     : std::integral_constant<CommandGroupId,CommandGroupId::File>   {};
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::command_group_id
-  //! Creates a strongly typed command group id from any integral or enumeration type
+  //! Convert integral/enumeration type into a CommandGroupId
   //!
   //! \tparam TYPE - Integral or enumeration type
   //! 

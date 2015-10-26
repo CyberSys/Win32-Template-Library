@@ -9,9 +9,9 @@
 #define WTL_DEFAULT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"        //!< enum_values
+//#include "wtl/traits/EnumTraits.hpp"        //!< enum_values
 #include "wtl/utils/Constant.hpp"           //!< integral_constant
-#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
+//#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
 #include "wtl/utils/SFINAE.hpp"             //!< enable_if
 
 //! \namespace wtl - Windows template library
@@ -44,10 +44,9 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<enumeration> - Enumeration types default to zero for now
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> 
-  //struct default_t<T,enable_if_enum_t<T>> : get<0,enum_values_t<T>> 
-  struct default_t<T,enable_if_enum_t<T>> : min_value<T>
-  {};
+  //template <typename T> 
+  //struct default_t<T,enable_if_enum_t<T>> : min_value<T>    // get<0,enum_values_t<T>> 
+  //{};
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct default_t<float> - Floating-point types default to zero

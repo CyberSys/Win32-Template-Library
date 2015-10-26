@@ -20,6 +20,8 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
     // ------------------------------------ CONSTRUCTION ------------------------------------
   protected:
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +58,6 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
   };
   
 
@@ -65,11 +65,11 @@ namespace wtl
   // wtl::random_element
   //! Returns an element from an array at random
   //! 
-  //! \param[in] array - Reference to statically allocated array
+  //! \param[in] array - Reference to array of immutable elements
   //! \return E - Random element
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename E, unsigned L>
-  const E  random_element(array_ref_t<const E,L> array)
+  const E  random_element(const E (&array)[L])
   {
     return array[Random::number(0, L)];
   }
@@ -78,28 +78,15 @@ namespace wtl
   // wtl::random_element
   //! Returns an element from an array at random
   //! 
-  //! \param[in] array - Reference to statically allocated array
+  //! \param[in] array - Reference to array of mutable elements
   //! \return E - Random element
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename E, unsigned L>
-  E  random_element(array_ref_t<E,L> array)
+  E  random_element(E (&array)[L])
   {
     return array[Random::number(0, L)];
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::random_enum
-  //! Returns a random enumeration literal
-  //! 
-  //! \return const ENUM - Random enumeration literal
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename ENUM>
-  ENUM random_enum()
-  {
-    //return enum_values<ENUM>::values[ Random::number(0,size_of(enum_values<ENUM>::values)) ];
-    return random_element(enum_values<ENUM>::values);
-    //return min_value<ENUM>::value;
-  }
 
 }
 

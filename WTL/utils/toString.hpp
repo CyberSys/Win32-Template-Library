@@ -50,8 +50,8 @@ namespace wtl
   template <typename ENUM> 
   const char* toString(ENUM e, std::enable_if_t<!is_attribute<ENUM>::value>* = nullptr)
   {
-    using std::begin;   //!< Best practice (ADL idiom)
-    using std::end;     //!< Best practice (ADL idiom)
+    using std::begin;   
+    using std::end;     
 
     CHECKED_INDEX(e, min_value<ENUM>::value, max_value<ENUM>::value+1);
 

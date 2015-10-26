@@ -9,8 +9,8 @@
 #define WTL_ENCODING_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
-#include "wtl/traits/RangeTraits.hpp"     //!< wtl::min_value, wtl::max_value
+#include "wtl/traits/EnumTraits.hpp"      //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"          //!< default_t
 #include <type_traits>                    //!< std::enable_if_t, std::integral_constant
 
 //! \namespace wtl - Windows template library
@@ -33,16 +33,8 @@ namespace wtl
   //! Define traits: Non-Contiguous Enumeration
   template <> struct is_attribute<Encoding>  : std::false_type  {};
   template <> struct is_contiguous<Encoding> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<Encoding>     : std::integral_constant<Encoding,Encoding::UTF16>   {};
-  template <> struct min_value<Encoding>     : std::integral_constant<Encoding,Encoding::ANSI>    {};
+  template <> struct default_t<Encoding>     : std::integral_constant<Encoding,Encoding::ANSI>   {};
   
-  //! Define names and values
-  template <> struct enum_names<Encoding>  { static const char* values[];    };
-  template <> struct enum_values<Encoding> { static const Encoding values[]; };
-
-
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct encoding_traits - Defines encoding traits

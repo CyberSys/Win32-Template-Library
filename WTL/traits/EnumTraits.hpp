@@ -10,7 +10,6 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/SFINAE.hpp"             //!< Type traits
-#include "wtl/traits/RangeTraits.hpp"       //!< wtl::min_value, wtl::max_value
 #include <iterator>                         //!< std::begin, std::end
 
 //! \namespace wtl - Windows template library

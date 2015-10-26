@@ -9,10 +9,11 @@
 #define WTL_PATH_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
-#include "wtl/traits/EncodingTraits.hpp"
-#include "wtl/utils/CharArray.hpp"
-#include "wtl/io/Console.hpp"       //!< Console
+#include "wtl/traits/EnumTraits.hpp"              //!< is_attribute, is_contiguous
+#include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
+#include "wtl/utils/CharArray.hpp"                //!< CharArray
+#include "wtl/utils/Default.hpp"                  //!< default_t
+//#include "wtl/io/Console.hpp"                   //!< Console
 #include <string>
 
 //! \namespace wtl - Windows template library
@@ -42,10 +43,8 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<FileAttribute>  : std::true_type  {};
   template <> struct is_contiguous<FileAttribute> : std::false_type {};
+  template <> struct default_t<FileAttribute>     : std::integral_constant<FileAttribute,FileAttribute::ReadOnly>   {};
 
-  //! Define limits traits
-  template <> struct max_value<FileAttribute>     : std::integral_constant<FileAttribute,FileAttribute::ReadOnly>     {};
-  template <> struct min_value<FileAttribute>     : std::integral_constant<FileAttribute,FileAttribute::Invalid>      {};
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Path - Provides OS independent handling of file paths

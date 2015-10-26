@@ -9,7 +9,8 @@
 #define WTL_MENU_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
+#include "wtl/traits/EnumTraits.hpp"                  //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"                      //!< default_t
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -21,7 +22,10 @@ namespace wtl
     Popup,      //!< Popup menu
   };
   
-
+  // --------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------     MENUS      -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
+  
   //! \enum MenuItemFlag - Menu Item flags
   enum class MenuItemFlag : uint32_t
   {
@@ -40,13 +44,10 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<MenuItemFlag>  : std::true_type  {};
   template <> struct is_contiguous<MenuItemFlag> : std::false_type {};
+  template <> struct default_t<MenuItemFlag>     : std::integral_constant<MenuItemFlag,MenuItemFlag::State>   {};
 
-  //! Define limits traits
-  template <> struct max_value<MenuItemFlag>     : std::integral_constant<MenuItemFlag,MenuItemFlag::FType>   {};
-  template <> struct min_value<MenuItemFlag>     : std::integral_constant<MenuItemFlag,MenuItemFlag::State>   {};
-  
-    
-  
+  // --------------------------------------------------------------------------------------------------------------
+
   //! \enum MenuItemState - Menu item states
   enum class MenuItemState : uint32_t
   {
@@ -63,12 +64,9 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<MenuItemState>  : std::true_type  {};
   template <> struct is_contiguous<MenuItemState> : std::false_type {};
+  template <> struct default_t<MenuItemState>     : std::integral_constant<MenuItemState,MenuItemState::Grayed>   {};
 
-  //! Define limits traits
-  template <> struct max_value<MenuItemState>     : std::integral_constant<MenuItemState,MenuItemState::Default>   {};
-  template <> struct min_value<MenuItemState>     : std::integral_constant<MenuItemState,MenuItemState::Grayed>    {};
-
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum MenuItemType - Menu item types
   enum class MenuItemType : uint32_t
@@ -87,10 +85,8 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<MenuItemType>  : std::true_type  {};
   template <> struct is_contiguous<MenuItemType> : std::false_type {};
+  template <> struct default_t<MenuItemType>     : std::integral_constant<MenuItemType,MenuItemType::String>   {};
 
-  //! Define limits traits
-  template <> struct max_value<MenuItemType>     : std::integral_constant<MenuItemType,MenuItemType::RightJustify>   {};
-  template <> struct min_value<MenuItemType>     : std::integral_constant<MenuItemType,MenuItemType::String>         {};
 
 
 } // WTL namespace

@@ -9,15 +9,16 @@
 #define WTL_DRAWING_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
-#include <utility>
+#include "wtl/traits/EnumTraits.hpp"                  //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"                      //!< default_t
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
-  // ----------------------------------- ::DrawText(..) Flags ----------------------------------
-  
+  // --------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------- DEVICE CONTEXT -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
+
   //! \enum DrawTextFlags - Defines DrawText flags
   enum class DrawTextFlags : ulong32_t
   {
@@ -50,15 +51,11 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<DrawTextFlags>  : std::true_type  {};
   template <> struct is_contiguous<DrawTextFlags> : std::false_type {};
+  template <> struct default_t<DrawTextFlags>     : std::integral_constant<DrawTextFlags,DrawTextFlags::Top>   {};
 
-  //! Define limits traits
-  template <> struct max_value<DrawTextFlags>     : std::integral_constant<DrawTextFlags,DrawTextFlags::PrefixOnly>  {};
-  template <> struct min_value<DrawTextFlags>     : std::integral_constant<DrawTextFlags,DrawTextFlags::Top>         {};
-
+  // --------------------------------------------------------------------------------------------------------------
   
-  // ----------------------------------- ::GetCurrentObject(..) Flags ----------------------------------
-  
-  //! \enum DrawObjectType - Defines drawing object types
+  //! \enum DrawObjectType - Defines drawing object types 
   enum class DrawObjectType : uint32_t
   {
     Pen = 1, 			      //!< 
@@ -80,16 +77,10 @@ namespace wtl
   //! Define traits: Contiguous Enumeration
   template <> struct is_attribute<DrawObjectType>  : std::false_type  {};
   template <> struct is_contiguous<DrawObjectType> : std::true_type   {};
-
-  //! Define limits traits
-  template <> struct max_value<DrawObjectType>     : std::integral_constant<DrawObjectType,DrawObjectType::ColorSpace>  {};
-  template <> struct min_value<DrawObjectType>     : std::integral_constant<DrawObjectType,DrawObjectType::Pen>         {};
+  template <> struct default_t<DrawObjectType>     : std::integral_constant<DrawObjectType,DrawObjectType::Pen>   {};
   
-
+  // --------------------------------------------------------------------------------------------------------------
   
-  // ---------------------------- DEVICE CONTEXT DRAWING MODES --------------------------
-  
-
   //! \enum DrawingMode - Defines background drawing modes
   enum class DrawingMode : uint32_t
   {
@@ -100,11 +91,12 @@ namespace wtl
   //! Define traits: Contiguous Enumeration
   template <> struct is_attribute<DrawingMode>  : std::false_type  {};
   template <> struct is_contiguous<DrawingMode> : std::true_type   {};
+  template <> struct default_t<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Transparent>   {};
 
-  //! Define limits traits
-  template <> struct max_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Opaque>       {};
-  template <> struct min_value<DrawingMode>     : std::integral_constant<DrawingMode,DrawingMode::Transparent>  {};
-  
+  // --------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------      FONTS     -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
+
   //! \enum FontWeight - Defines font weights
   enum class FontWeight : ulong32_t
   { 
@@ -126,16 +118,12 @@ namespace wtl
     Black = Heavy, 			        //!< 
   };
   
-  // ----------------------------------- FONT PROPERTIES ----------------------------------
-
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<FontWeight>  : std::false_type  {};
   template <> struct is_contiguous<FontWeight> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<FontWeight>     : std::integral_constant<FontWeight,FontWeight::Heavy>      {};
-  template <> struct min_value<FontWeight>     : std::integral_constant<FontWeight,FontWeight::DontCare>   {};
+  template <> struct default_t<FontWeight>     : std::integral_constant<FontWeight,FontWeight::DontCare>   {};
  
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum FontCharSet - Defines font character sets
   enum class FontCharSet : ulong32_t
@@ -165,12 +153,9 @@ namespace wtl
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<FontCharSet>  : std::false_type  {};
   template <> struct is_contiguous<FontCharSet> : std::false_type  {};
+  template <> struct default_t<FontCharSet>     : std::integral_constant<FontCharSet,FontCharSet::Ansi>   {};
 
-  //! Define limits traits
-  template <> struct max_value<FontCharSet>     : std::integral_constant<FontCharSet,FontCharSet::Oem>    {};
-  template <> struct min_value<FontCharSet>     : std::integral_constant<FontCharSet,FontCharSet::Ansi>   {};
-  
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum FontQuality - Defines font quality
   enum class FontQuality : ulong32_t
@@ -187,12 +172,9 @@ namespace wtl
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<FontQuality>  : std::false_type  {};
   template <> struct is_contiguous<FontQuality> : std::true_type   {};
+  template <> struct default_t<FontQuality>     : std::integral_constant<FontQuality,FontQuality::Default>   {};
 
-  //! Define limits traits
-  template <> struct max_value<FontQuality>     : std::integral_constant<FontQuality,FontQuality::ClearTypeNatural>    {};
-  template <> struct min_value<FontQuality>     : std::integral_constant<FontQuality,FontQuality::Default>             {};
-
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum FontPrecision - Defines font output precision
   enum class FontPrecision : ulong32_t
@@ -213,12 +195,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<FontPrecision>  : std::false_type  {};
   template <> struct is_contiguous<FontPrecision> : std::false_type  {};
+  template <> struct default_t<FontPrecision>     : std::integral_constant<FontPrecision,FontPrecision::Default>   {};
 
-  //! Define limits traits
-  template <> struct max_value<FontPrecision>     : std::integral_constant<FontPrecision,FontPrecision::PS_Only>   {};
-  template <> struct min_value<FontPrecision>     : std::integral_constant<FontPrecision,FontPrecision::Default>   {};
-
-
+  // --------------------------------------------------------------------------------------------------------------
 
   //! \enum FontClipping - Defines font output precision
   enum class FontClipping : ulong32_t
@@ -236,11 +215,9 @@ namespace wtl
   //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<FontClipping>  : std::false_type  {};
   template <> struct is_contiguous<FontClipping> : std::false_type  {};
+  template <> struct default_t<FontClipping>     : std::integral_constant<FontClipping,FontClipping::Default>   {};
 
-  //! Define limits traits
-  template <> struct max_value<FontClipping>     : std::integral_constant<FontClipping,FontClipping::Embedded>    {};
-  template <> struct min_value<FontClipping>     : std::integral_constant<FontClipping,FontClipping::Default>     {};
-
+  // --------------------------------------------------------------------------------------------------------------
   
   //! \enum FontFamily - Defines font families
   enum class FontFamily : ulong32_t
@@ -260,14 +237,12 @@ namespace wtl
   //! Define traits: Non-contiguous attribute
   template <> struct is_attribute<FontFamily>  : std::false_type  {};
   template <> struct is_contiguous<FontFamily> : std::false_type  {};
+  template <> struct default_t<FontFamily>     : std::integral_constant<FontFamily,FontFamily::Default>   {};
 
-  //! Define limits traits
-  template <> struct max_value<FontFamily>     : std::integral_constant<FontFamily,FontFamily::Decorative>  {};
-  template <> struct min_value<FontFamily>     : std::integral_constant<FontFamily,FontFamily::Default>     {};
+  // --------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------   OWNER DRAW   -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
-  // ----------------------------------- OWNER DRAW ----------------------------------
-
-  
   //! \enum OwnerDrawAction - Defines owner drawing requests
   enum class OwnerDrawAction : uint32_t
   {
@@ -279,13 +254,10 @@ namespace wtl
   //! Define traits: Non-Contiguous attribute
   template <> struct is_attribute<OwnerDrawAction>  : std::true_type  {};
   template <> struct is_contiguous<OwnerDrawAction> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<OwnerDrawAction>     : std::integral_constant<OwnerDrawAction,OwnerDrawAction::Select>  {};
-  template <> struct min_value<OwnerDrawAction>     : std::integral_constant<OwnerDrawAction,OwnerDrawAction::Entire>  {};
+  template <> struct default_t<OwnerDrawAction>     : std::integral_constant<OwnerDrawAction,OwnerDrawAction::Entire>   {};
   
-
-
+  // --------------------------------------------------------------------------------------------------------------
+  
   //! \enum OwnerDrawControl - Defines controls that support owner draw
   enum class OwnerDrawControl : uint32_t
   {
@@ -301,11 +273,9 @@ namespace wtl
   //! Define traits: Non-Contiguous attribute
   template <> struct is_attribute<OwnerDrawControl>  : std::true_type  {};
   template <> struct is_contiguous<OwnerDrawControl> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<OwnerDrawControl>     : std::integral_constant<OwnerDrawControl,OwnerDrawControl::Tab>     {};
-  template <> struct min_value<OwnerDrawControl>     : std::integral_constant<OwnerDrawControl,OwnerDrawControl::Button>  {};
+  template <> struct default_t<OwnerDrawControl>     : std::integral_constant<OwnerDrawControl,OwnerDrawControl::Button>   {};
   
+  // --------------------------------------------------------------------------------------------------------------
   
   //! \enum OwnerDrawState - Defines controls that support owner draw
   enum class OwnerDrawState : uint16_t
@@ -326,15 +296,12 @@ namespace wtl
   //! Define traits: Non-Contiguous attribute
   template <> struct is_attribute<OwnerDrawState>  : std::true_type  {};
   template <> struct is_contiguous<OwnerDrawState> : std::false_type {};
+  template <> struct default_t<OwnerDrawState>     : std::integral_constant<OwnerDrawState,OwnerDrawState::Checked>   {};
+  
+  // --------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------     BRUSHES    -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
-  //! Define limits traits
-  template <> struct max_value<OwnerDrawState>     : std::integral_constant<OwnerDrawState,OwnerDrawState::Selected> {};
-  template <> struct min_value<OwnerDrawState>     : std::integral_constant<OwnerDrawState,OwnerDrawState::Checked>  {};
-  
-  
-  // ---------------------------------- BRUSH STYLES ---------------------------------
-  
-  
   //! \enum HatchStyle - Defines brush hatch styles
   enum class HatchStyle : uint32_t
   {
@@ -349,18 +316,12 @@ namespace wtl
   //! Define traits: Non-Contiguous Enumeration
   template <> struct is_attribute<HatchStyle>  : std::false_type  {};
   template <> struct is_contiguous<HatchStyle> : std::false_type  {};
+  template <> struct default_t<HatchStyle>     : std::integral_constant<HatchStyle,HatchStyle::Horizontal>   {};
 
-  //! Define limits traits
-  template <> struct max_value<HatchStyle>     : std::integral_constant<HatchStyle,HatchStyle::CrossDiagonal>   {};
-  template <> struct min_value<HatchStyle>     : std::integral_constant<HatchStyle,HatchStyle::Horizontal>      {};
-  
-  //! Define names and values
-  //template <> struct enum_names<HatchStyle>  { static const char* names[];   };
-  template <> struct enum_values<HatchStyle> { static const HatchStyle values[6]; };
-  
-  // ----------------------------------- PEN STYLES ----------------------------------
-  
-  
+  // --------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------       PENS     -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
+
   //! \enum PenStyle - Defines cosmetic and geometric pen styles
   enum class PenStyle : int32_t
   {
@@ -394,14 +355,11 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<PenStyle>  : std::true_type  {};
   template <> struct is_contiguous<PenStyle> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<PenStyle>     : std::integral_constant<PenStyle,PenStyle::TypeMask>  {};
-  template <> struct min_value<PenStyle>     : std::integral_constant<PenStyle,PenStyle::Solid>     {};
+  template <> struct default_t<PenStyle>     : std::integral_constant<PenStyle,PenStyle::Solid>   {};
   
-
-  // ----------------------------------- STOCK OBJECTS ----------------------------------
-  
+  // --------------------------------------------------------------------------------------------------------------
+  // ------------------------------------------------ STOCK OBJECTS -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
    //! \enum StockObject - Defines stock drawing objects
   enum class StockObject : int32_t
@@ -431,13 +389,7 @@ namespace wtl
   //! Define traits: Contiguous Enumeration
   template <> struct is_attribute<StockObject>  : std::false_type  {};
   template <> struct is_contiguous<StockObject> : std::true_type   {};
-
-  //! Define limits traits
-  template <> struct max_value<StockObject>     : std::integral_constant<StockObject,StockObject::DcPen>       {};
-  template <> struct min_value<StockObject>     : std::integral_constant<StockObject,StockObject::WhiteBrush>  {};
-
-  
-
+  template <> struct default_t<StockObject>     : std::integral_constant<StockObject,StockObject::WhiteBrush>   {};
 
 }
 

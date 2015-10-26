@@ -284,6 +284,12 @@ namespace wtl
     APP = 0x8000,					            		      //!< 
   };
   
+  //! Define traits: Non-contiguous Attribute
+  template <> struct is_attribute<WindowMessage>  : std::false_type {};
+  template <> struct is_contiguous<WindowMessage> : std::false_type {};
+  template <> struct default_t<WindowMessage>     : std::integral_constant<WindowMessage,WindowMessage::NONE>   {};
+
+
   //! \enum MsgRoute - Defines how a message was handled
   enum class MsgRoute
   {

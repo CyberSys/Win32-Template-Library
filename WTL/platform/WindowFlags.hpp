@@ -9,14 +9,12 @@
 #define WTL_WINDOW_FLAGS_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"              //!< is_attribute, is_contiguous, min_value, max_value
-#include "wtl/utils/Default.hpp"                  //!< Default
-#include "wtl/utils/Sequence.hpp"                 //!< integral_sequence
+#include "wtl/traits/EnumTraits.hpp"              //!< is_attribute, is_contiguous
+#include "wtl/utils/Default.hpp"                  //!< default_t
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
   
   // ----------------------------------- ::FormatMessage(..) Flags ----------------------------------
 
@@ -35,10 +33,7 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<FormatMessageFlags>  : std::true_type  {};
   template <> struct is_contiguous<FormatMessageFlags> : std::false_type {};
-  
-  //! Define limits traits
-  template <> struct max_value<FormatMessageFlags>     : std::integral_constant<FormatMessageFlags,FormatMessageFlags::MaxWidthMask>  {};
-  template <> struct min_value<FormatMessageFlags>     : std::integral_constant<FormatMessageFlags,FormatMessageFlags::ArgumentArray> {};
+  template <> struct default_t<FormatMessageFlags>     : std::integral_constant<FormatMessageFlags,FormatMessageFlags::AllocateBuffer>   {};
 
 
   // ----------------------------------- ::MultiByteToWideChar(..) Flags ----------------------------------
@@ -47,19 +42,16 @@ namespace wtl
   //! \enum MultiByteFlags - Defines narrow character conversion flags
   enum class MultiByteFlags : ulong32_t
   {
-    PreComposed = 0x00000001,         // use precomposed chars
-    Composite = 0x00000002,           // use composite chars
-    UseGlyphChars = 0x00000004,       // use glyph chars, not ctrl chars
-    ErrInvalidChars = 0x00000008,   // error for invalid chars
+    PreComposed = 0x00000001,         //!< Use precomposed chars
+    Composite = 0x00000002,           //!< Use composite chars
+    UseGlyphChars = 0x00000004,       //!< Use glyph chars, not ctrl chars
+    ErrInvalidChars = 0x00000008,     //!< Error for invalid chars
   };
   
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<MultiByteFlags>  : std::true_type  {};
   template <> struct is_contiguous<MultiByteFlags> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<MultiByteFlags>     : std::integral_constant<MultiByteFlags,MultiByteFlags::PreComposed>      {};
-  template <> struct min_value<MultiByteFlags>     : std::integral_constant<MultiByteFlags,MultiByteFlags::ErrInvalidChars>  {};
+  template <> struct default_t<MultiByteFlags>     : std::integral_constant<MultiByteFlags,MultiByteFlags::PreComposed>   {};
 
 
   // ----------------------------------- ::WideCharToMultiByte(..) Flags ----------------------------------
@@ -79,11 +71,7 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<WideCharFlags>  : std::true_type  {};
   template <> struct is_contiguous<WideCharFlags> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<WideCharFlags>     : std::integral_constant<WideCharFlags,WideCharFlags::CompositeCheck>   {};
-  template <> struct min_value<WideCharFlags>     : std::integral_constant<WideCharFlags,WideCharFlags::NoBestFitChars>   {};
-  
+  template <> struct default_t<WideCharFlags>     : std::integral_constant<WideCharFlags,WideCharFlags::CompositeCheck>   {};
 
 
   // ----------------------------------- ::MessageBox(..) Flags ----------------------------------
@@ -136,10 +124,7 @@ namespace wtl
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<MessageBoxFlags>  : std::true_type   {};
   template <> struct is_contiguous<MessageBoxFlags> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<MessageBoxFlags>     : std::integral_constant<MessageBoxFlags,MessageBoxFlags::RtlReading>   {};
-  template <> struct min_value<MessageBoxFlags>     : std::integral_constant<MessageBoxFlags,MessageBoxFlags::Ok>           {};
+  template <> struct default_t<MessageBoxFlags>     : std::integral_constant<MessageBoxFlags,MessageBoxFlags::Ok>   {};
 
   
   // ----------------------------------- ::SetWindowPos(..) Flags ----------------------------------
@@ -171,20 +156,8 @@ namespace wtl
   //! Define traits: Non-contiguous attribute
   template <> struct is_attribute<MoveWindowFlags>  : std::true_type   {};
   template <> struct is_contiguous<MoveWindowFlags> : std::false_type  {};
+  template <> struct default_t<MoveWindowFlags>     : std::integral_constant<MoveWindowFlags,MoveWindowFlags::NoSize>   {};
 
-  template <> struct enum_values<MoveWindowFlags> : integral_sequence<MoveWindowFlags, MoveWindowFlags::NoSize,
-                                                                                       MoveWindowFlags::NoMove,
-                                                                                       MoveWindowFlags::NoZOrder,
-                                                                                       MoveWindowFlags::NoRedraw,
-                                                                                       MoveWindowFlags::NoActivate,
-                                                                                       MoveWindowFlags::FrameChanged,
-                                                                                       MoveWindowFlags::ShowWindow,
-                                                                                       MoveWindowFlags::HideWindow,
-                                                                                       MoveWindowFlags::NoCopyBits,
-                                                                                       MoveWindowFlags::NoOwnerZOrder,
-                                                                                       MoveWindowFlags::NoSendChanging,
-                                                                                       MoveWindowFlags::DeferErase,
-                                                                                       MoveWindowFlags::AsyncWindowPos>  {};
 
   // ----------------------------------- ::ShowWindow(..) Flags ----------------------------------
   
@@ -194,7 +167,7 @@ namespace wtl
   enum class ShowWindowFlags : int32_t
   {
     Hide = 0,			          //!< 
-    ShowNormal = 1,			    //!< 
+    ShowNormal = 1,			    //!<  
     Normal = ShowNormal,		//!< 
     ShowMinimized = 2,			//!< 
     ShowMaximized = 3,			//!< 
@@ -216,11 +189,8 @@ namespace wtl
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<ShowWindowFlags>  : std::false_type  {};
   template <> struct is_contiguous<ShowWindowFlags> : std::true_type   {};
+  template <> struct default_t<ShowWindowFlags>     : std::integral_constant<ShowWindowFlags,ShowWindowFlags::Hide>   {};
 
-  //! Define limits traits
-  template <> struct max_value<ShowWindowFlags>     : std::integral_constant<ShowWindowFlags,ShowWindowFlags::ForceMinimize>   {};
-  template <> struct min_value<ShowWindowFlags>     : std::integral_constant<ShowWindowFlags,ShowWindowFlags::Hide>            {};
-  
   
 
   // ----------------------------------- WM_SHOWWINDOW arguments ----------------------------------
@@ -239,10 +209,7 @@ namespace wtl
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<ShowWindowType>  : std::false_type  {};
   template <> struct is_contiguous<ShowWindowType> : std::true_type   {};
-
-  //! Define limits traits
-  template <> struct max_value<ShowWindowType>     : std::integral_constant<ShowWindowType,ShowWindowType::OtherUnZoom>     {};
-  template <> struct min_value<ShowWindowType>     : std::integral_constant<ShowWindowType,ShowWindowType::ParentClosing>   {};
+  template <> struct default_t<ShowWindowType>     : std::integral_constant<ShowWindowType,ShowWindowType::ParentClosing>   {};
   
   
   
@@ -299,10 +266,7 @@ namespace wtl
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<SystemClass>  : std::false_type  {};
   template <> struct is_contiguous<SystemClass> : std::true_type   {};
-  
-  //! Define limits traits
-  template <> struct max_value<SystemClass>     : std::integral_constant<SystemClass,SystemClass::IconTitle>  {};
-  template <> struct min_value<SystemClass>     : std::integral_constant<SystemClass,SystemClass::Animate>    {};
+  template <> struct default_t<SystemClass>     : std::integral_constant<SystemClass,SystemClass::Animate>   {};
 
   // ----------------------------------- WINDOW ID ----------------------------------
   
@@ -327,10 +291,7 @@ namespace wtl
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<WindowId>  : std::false_type  {};
   template <> struct is_contiguous<WindowId> : std::false_type  {};
-
-  //! Define limits traits
-  template <> struct max_value<WindowId>     : std::integral_constant<WindowId,WindowId::Timeout>   {};
-  template <> struct min_value<WindowId>     : std::integral_constant<WindowId,WindowId::Ok>        {};
+  template <> struct default_t<WindowId>     : std::integral_constant<WindowId,WindowId::Ok>   {};
   
   // ----------------------------------- WINDOW STYLE ----------------------------------
   
@@ -372,10 +333,7 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<WindowStyle>  : std::true_type  {};
   template <> struct is_contiguous<WindowStyle> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<WindowStyle>     : std::integral_constant<WindowStyle,WindowStyle::PopupWindow>   {};
-  template <> struct min_value<WindowStyle>     : std::integral_constant<WindowStyle,WindowStyle::Overlapped>    {};
+  template <> struct default_t<WindowStyle>     : std::integral_constant<WindowStyle,WindowStyle::Overlapped>   {};
 
   // ----------------------------------- EXTENDED WINDOW STYLE ----------------------------------
 
@@ -420,10 +378,7 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<WindowStyleEx>  : std::true_type  {};
   template <> struct is_contiguous<WindowStyleEx> : std::false_type {};
-
-  //! Define limits traits
-  template <> struct max_value<WindowStyleEx>     : std::integral_constant<WindowStyleEx,WindowStyleEx::Composited> {};
-  template <> struct min_value<WindowStyleEx>     : std::integral_constant<WindowStyleEx,WindowStyleEx::None>       {};
+  template <> struct default_t<WindowStyleEx>     : std::integral_constant<WindowStyleEx,WindowStyleEx::None>   {};
 
 
   // ----------------------------------- WINDOW CLASS STYLE ----------------------------------
@@ -449,24 +404,7 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<ClassStyle>  : std::true_type  {};
   template <> struct is_contiguous<ClassStyle> : std::false_type {};
-
-  template <> struct enum_values<ClassStyle> : integral_sequence<ClassStyle, ClassStyle::VRedraw, 
-                                                                             ClassStyle::HRedraw,
-                                                                             ClassStyle::DblClks,
-                                                                             ClassStyle::OwnDC,  
-                                                                             ClassStyle::ClassDC, 
-                                                                             ClassStyle::ParentDC,
-                                                                             ClassStyle::NoClose, 
-                                                                             ClassStyle::SaveBits,
-                                                                             ClassStyle::ByteAlignClient,
-                                                                             ClassStyle::ByteAlignWindow,
-                                                                             ClassStyle::GlobalClass, 
-                                                                             ClassStyle::Ime,  
-                                                                             ClassStyle::DropShadow> {};
-
-  //! Define limits traits
-  template <> struct max_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::VRedraw>     {};
-  template <> struct min_value<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::DropShadow>  {};
+  template <> struct default_t<ClassStyle>     : std::integral_constant<ClassStyle,ClassStyle::VRedraw>   {};
 
   
 }

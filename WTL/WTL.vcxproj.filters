@@ -449,9 +449,6 @@
     <ClInclude Include="utils\DebugInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="traits\RangeTraits.hpp">
-      <Filter>Traits</Filter>
-    </ClInclude>
     <ClInclude Include="windows\properties\WindowRectProperty.hpp">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
@@ -567,12 +564,6 @@
     </ClCompile>
     <ClCompile Include="modules\Module.cpp">
       <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="traits\EncodingTraits.cpp">
-      <Filter>Traits</Filter>
-    </ClCompile>
-    <ClCompile Include="platform\DrawingFlags.cpp">
-      <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
