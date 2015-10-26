@@ -13,7 +13,7 @@
 #include "wtl/casts/NativeCast.hpp"         //!< NativeCast
 #include "wtl/traits/EnumTraits.hpp"        //!< is_attribute
 #include "wtl/utils/FormatSpec.hpp"         //!< format_spec_t
-#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
+//#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/Exception.hpp"          //!< wtl::exception
 #include <stdexcept>                        //!< std::exception
@@ -25,9 +25,7 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  // Forward declaration
-  struct ConsoleLock;
-
+  
   //! \enum IoManip - Console stream manipulators 
   enum class IoManip : uint32_t
   { 
@@ -69,39 +67,7 @@ namespace wtl
   //! Define traits: Non-contiguous Attribute
   template <> struct is_attribute<Cons>  : std::true_type  {};
   template <> struct is_contiguous<Cons> : std::false_type {};
-
-  //! Define names and values
-  //template <> struct enum_names<Cons>  { static const char* names[]; };
-  template <> struct enum_values<Cons> : integral_sequence<Cons, Cons::Bold,
-                                                                 Cons::Black,
-                                                                 Cons::Cyan,
-                                                                 Cons::Blue,
-                                                                 Cons::Green,
-                                                                 Cons::Grey,
-                                                                 Cons::Purple,
-                                                                 Cons::Red,
-                                                                 Cons::Yellow,
-                                                                 Cons::White,
-
-                                                                 Cons::BkBold,
-                                                                 Cons::BkBlack,
-                                                                 Cons::BkCyan,
-                                                                 Cons::BkBlue,
-                                                                 Cons::BkGreen,
-                                                                 Cons::BkGrey,
-                                                                 Cons::BkPurple,
-                                                                 Cons::BkRed,
-                                                                 Cons::BkYellow,
-                                                                 Cons::BkWhite,
-
-                                                                 Cons::Heading,
-                                                                 Cons::Success,
-                                                                 Cons::Failure,
-                                                                 Cons::Error,
-                                                                 Cons::Warning,
-                                                                 Cons::Reset,
-                                                                 Cons::Endl,
-                                                                 Cons::Break>  {};
+  template <> struct default_t<Cons>     : std::integral_constant<Cons,Cons::Bold>   {};
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // \struct Coord - Wrapper for Win32 COORD structure
@@ -110,6 +76,8 @@ namespace wtl
   
   
   
+  // Forward declaration
+  struct ConsoleLock;
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Console - Provides a debug console attached to std out 
@@ -272,7 +240,7 @@ namespace wtl
       try
       {
         // Allocate console
-        if (!AllocConsole())
+        if (!::AllocConsole())
           throw platform_error(HERE, "Unable to allocate console");
         
         // Get std out
@@ -282,7 +250,7 @@ namespace wtl
           throw domain_error(HERE, "Standard output unavailable");
         
         // Adjust console size
-        SetConsoleScreenBufferSize(Handle, native_cast(Coord(150,3000)));
+        ::SetConsoleScreenBufferSize(Handle, native_cast(Coord(150,3000)));
 
         // Show window
         if (HWND wnd = ::GetConsoleWindow())
@@ -321,10 +289,10 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     Cons getAttributes() const
     {
-      CONSOLE_SCREEN_BUFFER_INFO sb;
+      ::CONSOLE_SCREEN_BUFFER_INFO sb;
       
       // Query screen buffer
-      GetConsoleScreenBufferInfo(Handle, &sb);
+      ::GetConsoleScreenBufferInfo(Handle, &sb);
       return enum_cast<Cons>(sb.wAttributes); 
     }
 
@@ -336,10 +304,10 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     Coord getPosition() const
     {
-      CONSOLE_SCREEN_BUFFER_INFO sb;
+      ::CONSOLE_SCREEN_BUFFER_INFO sb;
 
       // Query screen buffer
-      GetConsoleScreenBufferInfo(Handle, &sb);
+      ::GetConsoleScreenBufferInfo(Handle, &sb);
       return native_cast(sb.dwCursorPosition);
     }
 
@@ -369,7 +337,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void setAttributes(IoManip attr) 
     {
-      SetConsoleTextAttribute(Handle, enum_cast(attr & AttributeMask)); 
+      ::SetConsoleTextAttribute(Handle, enum_cast(attr & AttributeMask)); 
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -380,7 +348,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void setPosition(const Coord& pt) 
     {
-      SetConsoleCursorPosition(Handle, native_cast(pt));
+      ::SetConsoleCursorPosition(Handle, native_cast(pt));
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -559,7 +527,7 @@ namespace wtl
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  enable_if_integer_t<T,Console&> operator << (Console& c, T val)
+  auto operator << (Console& c, T val) -> enable_if_integer_t<T,Console&>
   {
     c.writef(format_spec_t<char,T>::value, val);
     return c;
@@ -577,7 +545,7 @@ namespace wtl
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  enable_if_floating_t<T,Console&> operator << (Console& c, T val)
+  auto operator << (Console& c, T val) -> enable_if_floating_t<T,Console&>
   {
     c.writef(format_spec_t<char,T>::value, val);
     return c;
@@ -595,7 +563,7 @@ namespace wtl
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  enable_if_enum_t<T,Console&> operator << (Console& c, T val)
+  auto operator << (Console& c, T val) -> enable_if_enum_t<T,Console&>
   { 
     return c << toString(val);
   }
@@ -628,8 +596,7 @@ namespace wtl
     case Cons::Warning: return c << (Cons::Bold|Cons::Yellow) << "WARNING: " << Cons::White;
 
     // Formatting
-    default:  
-      c.setAttributes(e);  return c;
+    default:  c.setAttributes(e);  return c;
     }
   }
 
