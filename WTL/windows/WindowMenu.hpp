@@ -107,7 +107,7 @@ namespace wtl
     }
 
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
     ENABLE_COPY(MenuItemInfo);      //!< Can be shallow copied
     ENABLE_MOVE(MenuItemInfo);      //!< Can be moved

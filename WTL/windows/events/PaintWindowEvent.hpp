@@ -76,7 +76,7 @@ namespace wtl
         ::EndPaint(Window, static_cast<base*>(this));
       }
       
-	    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
       const HWnd&   Window;     //!< Handle of window being painted
     };
@@ -112,7 +112,7 @@ namespace wtl
                                                          Restore(Data.fRestore != False)
     {}
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved

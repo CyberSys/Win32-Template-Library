@@ -83,7 +83,7 @@ namespace wtl
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
     }
 
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   
     ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved

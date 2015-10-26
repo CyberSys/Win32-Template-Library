@@ -59,7 +59,7 @@ namespace wtl
                                         Status(opaque_cast<ShowWindowType>(l))
     {}
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved

@@ -64,7 +64,7 @@ namespace wtl
     EventArgs(::WPARAM w, ::LPARAM l)
     {}
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved

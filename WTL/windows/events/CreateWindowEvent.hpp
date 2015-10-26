@@ -27,8 +27,8 @@ namespace wtl
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
     
-    //! \alias CreateStruct - Define window creation data type
-    using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
+    //! \alias CreationData - Define window creation data type
+    using CreationData = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
     
     //! \alias resource_t - Define resource id type
     using resource_t = ResourceId<ENC>;
@@ -42,8 +42,21 @@ namespace wtl
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
     
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    CreationData&   Data;        //!< Window creation data  (NB: Must be initialised first)
+
+  public:
+    HMenu           Menu;        //!< [¬Child] Menu handle
+    WindowId        Ident;       //!< [Child] Child window Id
+    RectL           Rect;        //!< Window rectangle
+    WindowStyle     Style;       //!< Window style
+    WindowStyleEx   StyleEx;     //!< Extended window style
+    resource_t      Class;       //!< Window class id
+    const char_t*   Name;        //!< Window name
+
     // ------------------------------------- CONSTRUCTION -----------------------------------
-	
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // EventArgs::EventArgs
     //! Decode the arguments for win32 message 'WM_CREATE' 
@@ -51,7 +64,7 @@ namespace wtl
     //! \param[in] w - Not used
     //! \param[in] l - Pointer to ::CREATESTRUCT 
     /////////////////////////////////////////////////////////////////////////////////////////
-    EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<CreateStruct>(l)),
+    EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<CreationData>(l)),
                                         Menu(Data.hMenu, AllocType::WeakRef),
                                         Ident(static_cast<WindowId>(LOWORD(Data.hMenu))),
                                         Rect(PointL(Data.x,Data.y), SizeL(Data.cx,Data.cy)),
@@ -61,7 +74,7 @@ namespace wtl
                                         Name(Data.lpszName)
     {}
 
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved
@@ -91,19 +104,6 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    CreateStruct&   Data;        //!< Window creation data  (NB: Must be initialised first)
-
-  public:
-    HMenu           Menu;        //!< [¬Child] Menu handle
-    WindowId        Ident;       //!< [Child] Child window Id
-    RectL           Rect;        //!< Window rectangle
-    WindowStyle     Style;       //!< Window style
-    WindowStyleEx   StyleEx;     //!< Extended window style
-    resource_t      Class;       //!< Window class id
-    const char_t*   Name;        //!< Window name
   };
 
 

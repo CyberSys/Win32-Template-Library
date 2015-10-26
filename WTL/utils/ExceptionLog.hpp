@@ -71,7 +71,7 @@ namespace wtl
                                                                                            Error(e.what())
     {}
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
     
     ENABLE_COPY(exception_log_t);     //!< Can be copied  (No move optimization)
     ENABLE_POLY(exception_log_t);     //!< Can be polymorphic

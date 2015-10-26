@@ -46,7 +46,7 @@ namespace wtl
     {
     }
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
     
     DISABLE_COPY(Window);     //!< Cannot be copied
     ENABLE_MOVE(Window);      //!< Can be moved

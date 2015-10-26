@@ -123,7 +123,7 @@ namespace wtl
     Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base( binder<sizeof...(ARGS)>::bind(obj, fn) )
     {}
     
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

@@ -93,7 +93,7 @@ namespace wtl
                                                                                                      Message(static_cast<event_t>(r.Message))
     {}
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   
     ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
@@ -188,7 +188,7 @@ namespace wtl
                                                                                                     Message(static_cast<event_t>(r.Message))
     {}
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   
     ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved

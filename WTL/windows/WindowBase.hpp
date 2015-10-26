@@ -260,7 +260,7 @@ namespace wtl
       SubClass(WindowType t, WindowProc p) : WndProc(p), Type(t)
       {}
       
-      // -------------------------------- COPYING & DESTRUCTION -------------------------------
+      // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
       // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -357,7 +357,7 @@ namespace wtl
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
     DISABLE_COPY(WindowBase);     //!< Cannot be copied
     ENABLE_MOVE(WindowBase);      //!< Can be moved

@@ -173,7 +173,7 @@ namespace wtl
         Output.flush();
       }
 
-      // -------------------------------- COPYING & DESTRUCTION -------------------------------
+      // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
     
       DISABLE_COPY(ConsoleLock);     //!< Cannot be copied
       ENABLE_MOVE(ConsoleLock);      //!< Can be moved
@@ -295,7 +295,7 @@ namespace wtl
       }
     }
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
     
     DISABLE_COPY(Console);     //!< Cannot be copied
     ENABLE_MOVE(Console);      //!< Can be moved

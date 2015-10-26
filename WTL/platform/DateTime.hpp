@@ -52,7 +52,7 @@ namespace wtl
     DateTime(const ::SYSTEMTIME& tm) : base(tm)
     {}
 
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     ENABLE_COPY(DateTime);    //!< Can be copied  (No move optimization)
     ENABLE_POLY(DateTime);    //!< Can be polymorphic

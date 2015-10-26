@@ -70,7 +70,7 @@ namespace wtl
     explicit PropertyImpl(ARGS&&... args) : Value(std::forward<ARGS>(args)...)
     {}
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     ENABLE_COPY_CTOR(PropertyImpl);       //!< Can be cloned
     DISABLE_COPY_ASSIGN(PropertyImpl);    //!< Value mutator cannot be circumvented
@@ -163,7 +163,7 @@ namespace wtl
     explicit Property(ARGS&&... args) : Impl(std::forward<ARGS>(args)...)
     {}
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
     
     DISABLE_COPY_CTOR(Property);       //!< Cannot be cloned
     DISABLE_MOVE_CTOR(Property);       //!< Cannot be moved

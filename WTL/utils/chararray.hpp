@@ -229,7 +229,7 @@ namespace wtl
       CharArray::assign<N>(r.begin(), r.end());
     }
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::CharArray
@@ -900,7 +900,7 @@ namespace wtl
       formatMsg(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, ::GetLastError(), 0, *base::c_str(), base::length, nullptr);
     }
 
-    // -------------------------------- COPYING & DESTRUCTION -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 

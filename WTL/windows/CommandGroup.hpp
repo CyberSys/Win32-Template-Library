@@ -82,7 +82,7 @@ namespace wtl
         *this += c;
     }
     
-	  // -------------------------------- COPYING & DESTRUCTION -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
     ENABLE_COPY(CommandGroup);      //!< Can be shallow copied
     ENABLE_MOVE(CommandGroup);      //!< Can be moved

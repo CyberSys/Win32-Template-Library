@@ -165,7 +165,7 @@ namespace wtl
                                       WndProc(proc)
     {}
 
-    // --------------------------------- COPYING & DESTRUCTION ------------------------------
+    // --------------------------------- COPY, MOVE & DESTROY  ------------------------------
    public:
     DISABLE_COPY(WindowClass);     //!< Cannot be copied
     ENABLE_MOVE(WindowClass);      //!< Can be moved
