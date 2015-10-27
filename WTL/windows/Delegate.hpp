@@ -15,83 +15,6 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \namespace <anon> - Utility
-  /////////////////////////////////////////////////////////////////////////////////////////
-  namespace
-  {
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct method_binder - Binds methods of different arities to polymorphic function wrappers
-    //! 
-    //! \tparam N - Number of arguments (Excluding the implicit object)
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <uint32_t N>
-    struct binder;
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct method_binder<0> - Binds parameterless methods to polymorphic function wrappers
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <>
-    struct binder<0>
-    {
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // method_binder<0>::bind 
-      //! Binds a parameterless method
-      //! 
-      //! \param[in] *obj - Implied object
-      //! \param[in] *fn - Method pointer
-      //! \return std::function<RET ()> - Function wrapper
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename OBJ, typename RET>
-      static std::function<RET ()>  bind(OBJ* obj, RET (OBJ::*fn)())
-      {
-        return std::bind(fn, obj);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct method_binder<1> - Binds single parameter methods to polymorphic function wrappers
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <>
-    struct binder<1>
-    {
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // method_binder<1>::bind 
-      //! Binds a single parameter method
-      //! 
-      //! \param[in] *obj - Implied object
-      //! \param[in] *fn - Method pointer
-      //! \return std::function<RET (ARGS...)> - Function wrapper
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename OBJ, typename RET, typename... ARGS>
-      static std::function<RET (ARGS...)>  bind(OBJ* obj, RET (OBJ::*fn)(ARGS...))
-      {
-        return std::bind(fn, obj, std::placeholders::_1);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct method_binder<2> - Binds dual parameter methods to polymorphic function wrappers
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <>
-    struct binder<2>
-    {
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // method_binder<2>::bind 
-      //! Binds a dual parameter method
-      //! 
-      //! \param[in] *obj - Implied object
-      //! \param[in] *fn - Method pointer
-      //! \return std::function<RET (ARGS...)> - Function wrapper
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename OBJ, typename RET, typename... ARGS>
-      static std::function<RET (ARGS...)>  bind(OBJ* obj, RET (OBJ::*fn)(ARGS...))
-      {
-        return std::bind(fn, obj, std::placeholders::_1, std::placeholders::_2);
-      }
-    };
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Delegate - Provides delegate types for class methods with differing numbers of arguments
   //! 
   //! \tparam RET - Delegate return type
@@ -109,8 +32,8 @@ namespace wtl
     using base = std::function<RET (ARGS...)>;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
-  
-    // ------------------------------------ CONSTRUCTION --------------------------------------
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
     // Delegate::Delegate
@@ -120,13 +43,14 @@ namespace wtl
     //! \param[in] fn - Method pointer
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename OBJ>
-    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base( binder<sizeof...(ARGS)>::bind(obj, fn) )
+    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base( [=](ARGS&&... args)->RET {          
+                                                          return (obj->*fn)(args...); } )   //!< Invoke via lambda
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
-
+    
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -136,10 +60,10 @@ namespace wtl
     //! \param[in,out] &&arg - Argument
     //! \return RET - Return value
     /////////////////////////////////////////////////////////////////////////////////////////
-    //template <typename... ARGS2>
-    RET operator()(ARGS&&... args) const
+    template <typename... VARGS>
+    RET operator()(VARGS&&... args) const
     {
-      return base::operator()(std::forward<ARGS>(args)...);
+      return base::operator()(std::forward<VARGS>(args)...);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------

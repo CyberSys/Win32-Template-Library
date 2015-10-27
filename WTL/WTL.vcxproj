@@ -278,10 +278,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
     <MinGWInstallFolder>f:\MinGW</MinGWInstallFolder>
     <LLVMInstallFolder>D:\LLVM</LLVMInstallFolder>
-    <IncludePath>$(MinGWInstallFolder)\include;f:\MinGW\include\C++;D:\My Projects\WTL</IncludePath>
-    <LibraryPath>$(MinGWInstallFolder)\lib</LibraryPath>
-    <StdIncludeFolder>f:\MinGW\include\C++</StdIncludeFolder>
-    <ExecutablePath>$(MinGWInstallFolder)\bin;$(LLVMInstallFolder)\bin;$(MSBuild_ExecutablePath);$(PATH);</ExecutablePath>
+    <IncludePath>f:\MinGW\include;f:\MinGW\include\C++</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -364,8 +361,7 @@
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <UseShortEnums>true</UseShortEnums>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\My Projects\WTL</AdditionalIncludeDirectories>
       <Pedantic>true</Pedantic>
       <WarningReorder>Disable</WarningReorder>
       <WarningSwitch>Disable</WarningSwitch>

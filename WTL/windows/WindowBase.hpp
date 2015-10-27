@@ -800,8 +800,10 @@ namespace wtl
             ret = OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
 
           // [MENU] Raise menu's OwnerDraw event
-          else 
-            ret = Menu.OwnerDraw.raise( OwnerDrawMenuEventArgs<encoding>(w,l) ); 
+          else  {
+            OwnerDrawMenuEventArgs<encoding> args(w,l);
+            ret = Menu.OwnerDraw.raise(args); 
+          }
           break;
         
         // [OWNER-MEASURE] Reflect to sender

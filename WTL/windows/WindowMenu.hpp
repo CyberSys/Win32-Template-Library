@@ -549,7 +549,7 @@ namespace wtl
     //! \param[in] args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding> args) 
+    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args) 
     { 
       // Draw background
       args.Graphics.fill(args.Rect, StockBrush::Blue);
