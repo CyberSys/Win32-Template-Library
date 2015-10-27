@@ -99,8 +99,8 @@ namespace wtl
           int32_t sep = text.find(LineFeed);
 
           // Assign description and truncate name
-          Name.assign<encoding>(text.begin(), text.begin()+(sep+1));
-          Description.assign<encoding>(text.begin()+(sep+1), text.end());
+          Name.template assign<encoding>(text.begin(), text.begin()+(sep+1));
+          Description.template assign<encoding>(text.begin()+(sep+1), text.end());
         }
         // [NAME] Leave description blank
         else

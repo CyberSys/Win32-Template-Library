@@ -207,7 +207,7 @@ namespace wtl
 
       // Draw button text
       args.Graphics.setTextColour(Colour::Black);
-      args.Graphics.write<encoding>(this->Text().c_str(), this->TextLength, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      args.Graphics.template write<encoding>(this->Text().c_str(), this->TextLength, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
       return 0;
