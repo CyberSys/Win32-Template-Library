@@ -85,7 +85,7 @@ namespace wtl
 
 	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   
-    ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
+    DISABLE_COPY(ControlEventArgs);     //!< DeviceContext is move-only type
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
     ENABLE_POLY(ControlEventArgs);      //!< Can be polymorphic
 
@@ -122,7 +122,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawCtrlEvent = Event<LResult, OwnerDrawCtrlEventArgs<ENC>>;
+  using OwnerDrawCtrlEvent = Event<LResult,OwnerDrawCtrlEventArgs<ENC>&>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawCtrlEventHandler - Defines the delegate type for the 'OwnerDrawCtrl' event

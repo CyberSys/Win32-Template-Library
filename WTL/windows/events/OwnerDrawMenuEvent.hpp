@@ -104,7 +104,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawMenuEvent = Event<LResult, OwnerDrawMenuEventArgs<ENC>&>;
+  using OwnerDrawMenuEvent = Event<LResult,OwnerDrawMenuEventArgs<ENC>&>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawMenuEventHandler - Defines the delegate type for the 'OwnerDrawMenu' event

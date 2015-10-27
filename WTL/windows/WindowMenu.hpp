@@ -546,7 +546,7 @@ namespace wtl
     // WindowMenu::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message 
     //! 
-    //! \param[in] args - Message arguments 
+    //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args) 

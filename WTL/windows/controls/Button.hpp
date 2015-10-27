@@ -171,8 +171,7 @@ namespace wtl
           break;
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' or 'Owner Measure'
-        case WindowMessage::REFLECT_DRAWITEM:     ret = OwnerDraw.raise(OwnerDrawCtrlEventArgs<encoding>(w,l));                      break;
-        //case WindowMessage::REFLECT_MEASUREITEM:  ret = OwnerMeasure.raise(OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l));   break;
+        case WindowMessage::REFLECT_DRAWITEM:     { OwnerDrawCtrlEventArgs<encoding> args(w,l);  ret = OwnerDraw.raise(args);                    }  break;
         case WindowMessage::REFLECT_MEASUREITEM:  { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  ret = OwnerMeasure.raise(args); }  break;
         }
 
@@ -196,10 +195,10 @@ namespace wtl
     // Button::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message to draw the button
     //! 
-    //! \param[in] args - Message arguments 
+    //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding> args) 
+    virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       HBrush background(SystemColour::BtnFace);
 

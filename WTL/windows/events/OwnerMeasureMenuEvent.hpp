@@ -77,7 +77,7 @@ namespace wtl
 
 	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   
-    ENABLE_COPY(EventArgs);      //!< Can be shallow copied
+    DISABLE_COPY(EventArgs);     //!< 'DeviceContext' type is move-only
     ENABLE_MOVE(EventArgs);      //!< Can be moved
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerMeasureMenuEvent = Event<LResult, OwnerMeasureMenuEventArgs<ENC>& >;
+  using OwnerMeasureMenuEvent = Event<LResult,OwnerMeasureMenuEventArgs<ENC>&>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerMeasureMenuEventHandler - Defines the delegate type for the 'OwnerMeasureMenu' event
