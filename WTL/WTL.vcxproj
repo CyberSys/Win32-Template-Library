@@ -278,7 +278,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
     <MinGWInstallFolder>f:\MinGW</MinGWInstallFolder>
     <LLVMInstallFolder>D:\LLVM</LLVMInstallFolder>
-    <IncludePath>f:\MinGW\include;f:\MinGW\include\C++</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
