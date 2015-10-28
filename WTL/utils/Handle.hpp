@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Exception.hpp"            //!< Exceptions
+#include "wtl/utils/Requires.hpp"             //!< requires
 #include <utility>                            //!< std::forward
 #include <memory>                             //!< std::shared_ptr
 
@@ -162,14 +163,69 @@ namespace wtl
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
+  //! \namespace concepts - Defines concepts used by handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  namespace concepts
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct CloneableHandle - Defines a concept requiring static method: 'NativeHandle<T> clone(NativeHandle<T>)'
+    //! 
+    //! \tparam T - Native handle type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    struct CloneableHandle
+    {
+      template <typename U, NativeHandle<T> (*)(NativeHandle<T>) = &U::clone> 
+      static void* test( void* );
+    };
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct ConstructibleHandle - Defines a concept requiring static 'create' method: 'NativeHandle<T> create(...)'
+    //! 
+    //! \tparam T - Native handle type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>  
+    struct ConstructibleHandle
+    {
+      template <typename U> 
+      static void* test( /*decltype(&U::create)*/ void* );    //!< BUG: Cannot define this concept yet
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct DestroyableHandle - Defines a concept requiring static method: 'bool destroy(NativeHandle<T>)'
+    //! 
+    //! \tparam T - Native handle type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>  
+    struct DestroyableHandle
+    {
+      template <typename U, bool (*)(NativeHandle<T>) = &U::destroy> 
+      static void* test( void* );
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct StoreableHandle - Defines a concept requiring handle size lesser-or-equal in size to ::HANDLE
+    //! 
+    //! \tparam T - Native handle type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct StoreableHandle
+    {
+      template <typename U, std::enable_if_t<(sizeof(U) <= sizeof(::HANDLE))>* = nullptr> 
+      static void* test( void* );
+    };
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Handle - Encapsulates any handle
   //!
-  //! \tparam T - Any handle type that can be stored as a pointer
+  //! \tparam T - Any type modelling the StoreableHandle, CloneableHandle, and DestroyableHandle
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   struct Handle
   {
-    static_assert(sizeof(T) <= sizeof(HANDLE), "Unsupported handle size");
+    static_assert(requires<T,concepts::StoreableHandle>::value, "Handle type does not model the 'StoreableHandle' concept");
+    static_assert(requires<handle_alloc<T>,concepts::CloneableHandle<T>>::value, "Handle type does not model the 'CloneableHandle' concept");
+    static_assert(requires<handle_alloc<T>,concepts::DestroyableHandle<T>>::value, "Handle type does not model the 'DestroyableHandle' concept");
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 

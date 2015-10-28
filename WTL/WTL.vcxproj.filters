@@ -551,6 +551,9 @@
     <ClInclude Include="utils\Stack.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="utils\Requires.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

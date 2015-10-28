@@ -100,6 +100,7 @@
     <ClInclude Include="utils\Iterator.hpp" />
     <ClInclude Include="utils\Point.hpp" />
     <ClInclude Include="utils\Rectangle.hpp" />
+    <ClInclude Include="utils\Requires.hpp" />
     <ClInclude Include="utils\Size.hpp" />
     <ClInclude Include="utils\Stack.hpp" />
     <ClInclude Include="utils\String.hpp" />
