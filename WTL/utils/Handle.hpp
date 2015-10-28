@@ -59,16 +59,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   struct handle_alloc;  /* Undefined */
-  //{
-  //  static constexpr T  npos = ¬T;
-  //
-  //  handle_alloc() = delete;
-  //
-  //  static NativeHandle<T>  create();
-  //  static NativeHandle<T>  clone(NativeHandle<T>);
-  //  static void       destroy(NativeHandle<T>);
-  //};
-
+  
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct handle_traits - Defines handle traits
@@ -183,12 +174,13 @@ namespace wtl
     //! \struct ConstructibleHandle - Defines a concept requiring static 'create' method: 'NativeHandle<T> create(...)'
     //! 
     //! \tparam T - Native handle type
+    //! \tparam ARGS... - Constructor argument types 
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>  
+    template <typename T, typename... ARGS>  
     struct ConstructibleHandle
     {
-      template <typename U> 
-      static void* test( /*decltype(&U::create)*/ void* );    //!< BUG: Cannot define this concept yet
+      template <typename U, bool = std::is_same<NativeHandle<T>,decltype(U::create( std::declval<ARGS>()... ))>::value>   //!< NB: Test whether U::create(..) is callable with ARGS...
+      static void* test( void* );    
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -216,9 +208,9 @@ namespace wtl
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Handle - Encapsulates any handle
+  //! \struct Handle - Provides a shared smart-pointer type for any handle type
   //!
-  //! \tparam T - Any type modelling the StoreableHandle, CloneableHandle, and DestroyableHandle
+  //! \tparam T - Any type modelling the ConstructibleHandle, CloneableHandle, DestroyableHandle, and StoreableHandle concepts
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   struct Handle
@@ -277,7 +269,7 @@ namespace wtl
     //! \remarks This constructor syntax enforces an invariant upon allocators - they cannot provide a parameterless factory method
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename ARG, typename... ARGS>
-    Handle(ARG&& arg, ARGS&&... args) : Value( alloc_t::create(std::forward<ARG>(arg), std::forward<ARGS>(args)...) ),
+    Handle(ARG&& arg, ARGS&&... args) : Value( allocate(std::forward<ARG>(arg), std::forward<ARGS>(args)...) ),
                                         Storage( converter_t::toPointer(Value.Handle), [this](native_t* ptr) { safeDelete(ptr); } )
     {
       // Ensure created successfully
@@ -303,7 +295,24 @@ namespace wtl
     ENABLE_POLY(Handle);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
-  
+  private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Handle::allocate
+    //! Allocates the handle using appropriate allocator. Also ensures handle models 'ConstructibleHandle' concept.
+    //!
+    //! \param[in] &&... args - Arguments to allocator 'create' function
+    //! \return value_t - Newly allocated handle
+    //!
+    //! \throw wtl::platform_error - Unable to create handle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    static value_t allocate(ARGS&&... args) 
+    {
+      static_assert(requires<handle_alloc<T>,concepts::ConstructibleHandle<T,ARGS...>>::value, "Handle type does not model the 'ConstructibleHandle' concept");
+
+      return alloc_t::create(std::forward<ARGS>(args)...);
+    }
+
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
