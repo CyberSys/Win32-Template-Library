@@ -31,6 +31,9 @@ namespace wtl
     //! \alias base - Define base type
     using base = std::function<RET (ARGS...)>;
 
+    //! \alias signature_t - Define signature
+    using signature_t = RET (ARGS...);
+
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
@@ -39,20 +42,44 @@ namespace wtl
     // Delegate::Delegate
     //! Create from instance method pointer
     //! 
-    //! \param[in] obj - Instance
+    //! \tparam OBJ - Class containing method
+    //! \tparam R - Delegate return type
+    //! \tparam ...A - [optional] Delegate argument types
+    //!
+    //! \param[in] obj - Object instance
     //! \param[in] fn - Method pointer
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename OBJ>
-    Delegate(OBJ* obj, RET (OBJ::*fn)(ARGS...)) : base( [=](ARGS&&... args)->RET {          
-                                                          return (obj->*fn)(args...); } )   //!< Invoke via lambda
+    template <typename OBJ, typename R, typename... A>
+    Delegate(OBJ* obj, R (OBJ::*fn)(A...)) : base(bind(obj,fn))   
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
-    
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+  protected:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Delegate::bind() 
+    //! Binds the handler to a function object. Also ensures it possesses the correct signature.
+    //! 
+    //! \tparam OBJ - Class containing method
+    //! \tparam R - Delegate return type
+    //! \tparam ...A - [optional] Delegate argument types
+    //!
+    //! \param[in] obj - Object instance
+    //! \param[in] fn - Method pointer
+    //! \return std::function<signature_t> - Function object encapsulating the handler
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename OBJ, typename R, typename... A>
+    static std::function<signature_t>  bind(OBJ* obj, R (OBJ::*fn)(A...))
+    {
+      static_assert(std::is_same<signature_t,R(A...)>::value, "Unable to bind handler to delegate - incorrect handler signature");
 
+      //! Encapsulate invoking the delegate within a lambda  (Fix for std::bind(..) bug in TDM-GCC)
+      return [=](ARGS&&... args)->RET { return (obj->*fn)(args...); };
+    }
+                                                          
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Delegate::operator() const
     //! Execute delegate

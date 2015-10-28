@@ -97,7 +97,6 @@ namespace wtl
     using argument_t = typename std::tuple_element<IDX, std::tuple<ARGS...>>::type;
   
     //! \alias delegate_t - Define delegate type
-    //using delegate_t = Delegate<sizeof...(ARGS),RET,ARGS...>;
     using delegate_t = Delegate<RET,ARGS...>;
     
     //! \alias result_t - Define delegate return type
@@ -181,13 +180,16 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Event::operator +=
-    //! Adds a subscriber to the collection
+    //! Adds a subscriber to the collection. Also ensures it possesses the correct signature.
     //! 
     //! \param[in] *ptr - Pointer to subscriber (Transfers ownership to the event)
     //! \return LPARAM - Unique subscriber identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    LPARAM operator += (delegate_t* ptr) 
+    template <typename R, typename... A>
+    LPARAM operator += (Delegate<R,A...>* ptr) 
     {
+      static_assert(std::is_same<signature_t,R(A...)>::value, "Unable to add subscriber to event - Incorrect delegate signature");
+
       Subscribers.emplace_back(ptr);
       return opaque_cast(*ptr);
     }
