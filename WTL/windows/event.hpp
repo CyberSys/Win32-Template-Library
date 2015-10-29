@@ -191,7 +191,7 @@ namespace wtl
     template <typename R, typename... A>
     LPARAM operator += (Delegate<R,A...>* ptr) 
     {
-      static_assert(requires<R(A...),concepts::MatchingSignature<signature_t>>::value, "Subscriber does not model the 'MatchingSignature' concept");
+      REQUIRES_CONCEPT(R(A...),MatchingSignature<signature_t>);
 
       // Append to subscriber list and return address as cookie
       Subscribers.emplace_back(ptr);

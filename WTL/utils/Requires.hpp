@@ -64,13 +64,14 @@ namespace wtl
   //  static constexpr bool value = sizeof(requires::template test<T>(nullptr)) > 1;
   //};
 
+
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def REQUIRES_CONCEPT - Inserts a static assertion that checks whether a type models a concept
   //! 
-  //! \tparam TYPE - Type being tested
-  //! \tparam CONCEPT - Concept requires
+  //! \tparam TYPE - Name of the type being tested
+  //! \tparam CONCEPT - [vargs] Name of the concept required  [Must be an unqualified name of a type residing in the 'concepts' namespace]
   //////////////////////////////////////////////////////////////////////////////////////////
-  #define REQUIRES_CONCEPT(TYPE,CONCEPT)  static_assert(requires<TYPE,concepts::CONCEPT>::value, "# CONCEPT VIOLATION #  " #TYPE " does not model the '" #CONCEPT "' concept  # CONCEPT VIOLATION #")
+  #define REQUIRES_CONCEPT(TYPE,...)  static_assert(requires<TYPE,::wtl::concepts::__VA_ARGS__>::value, "*ERROR*: Template parameter " #TYPE " does not model the '" #__VA_ARGS__ "' concept...")
   
 
 }

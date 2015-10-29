@@ -215,10 +215,10 @@ namespace wtl
   template <typename T>
   struct Handle
   {
-    static_assert(requires<T,concepts::StoreableHandle>::value, "Handle type does not model the 'StoreableHandle' concept");
-    static_assert(requires<handle_alloc<T>,concepts::CloneableHandle<T>>::value, "Handle type does not model the 'CloneableHandle' concept");
-    static_assert(requires<handle_alloc<T>,concepts::DestroyableHandle<T>>::value, "Handle type does not model the 'DestroyableHandle' concept");
-
+    REQUIRES_CONCEPT(T,StoreableHandle);
+    REQUIRES_CONCEPT(handle_alloc<T>,CloneableHandle<T>);
+    REQUIRES_CONCEPT(handle_alloc<T>,DestroyableHandle<T>);
+    
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \typedef type - Define own type
@@ -308,7 +308,7 @@ namespace wtl
     template <typename... ARGS>
     static value_t allocate(ARGS&&... args) 
     {
-      static_assert(requires<handle_alloc<T>,concepts::ConstructibleHandle<T,ARGS...>>::value, "Handle type does not model the 'ConstructibleHandle' concept");
+      REQUIRES_CONCEPT(handle_alloc<T>,ConstructibleHandle<T,ARGS...>);
 
       return alloc_t::create(std::forward<ARGS>(args)...);
     }
