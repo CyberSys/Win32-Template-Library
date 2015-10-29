@@ -64,7 +64,14 @@ namespace wtl
   //  static constexpr bool value = sizeof(requires::template test<T>(nullptr)) > 1;
   //};
 
-
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \def REQUIRES_CONCEPT - Inserts a static assertion that checks whether a type models a concept
+  //! 
+  //! \tparam TYPE - Type being tested
+  //! \tparam CONCEPT - Concept requires
+  //////////////////////////////////////////////////////////////////////////////////////////
+  #define REQUIRES_CONCEPT(TYPE,CONCEPT)  static_assert(requires<TYPE,concepts::CONCEPT>::value, "# CONCEPT VIOLATION #  " #TYPE " does not model the '" #CONCEPT "' concept  # CONCEPT VIOLATION #")
+  
 
 }
 
