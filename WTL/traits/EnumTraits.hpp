@@ -10,6 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/SFINAE.hpp"             //!< Type traits
+#include "wtl/utils/Requires.hpp"           //!< requires
 #include <iterator>                         //!< std::begin, std::end
 
 //! \namespace wtl - Windows template library
@@ -52,6 +53,20 @@ namespace wtl
   template <typename E, typename RET = void>
   using enable_if_contiguous_t = std::enable_if_t<std::is_enum<E>::value && is_contiguous<E>::value, RET>;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \namespace concepts - Defines concepts used by 'Delegate'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  namespace concepts
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct AttributeEnumeration - Defines a concept requiring an enumeration of attribute type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct AttributeEnumeration
+    {
+      template <typename U, typename = enable_if_attribute_t<U>> 
+      static void* test( void* );
+    };  
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct enum_names - Defines names for enumeration literals
@@ -79,36 +94,6 @@ namespace wtl
   using enum_values_t = typename enum_values<E>::type;
 
 
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::begin
-  //! Get the start iterator of an enumeration values collection
-  //!
-  //! \tparam T - Enumeration type
-  //!
-  //! \return T* - Position of first value in collection
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  enable_if_enum_t<T,T*>  begin()
-  {
-    return std::begin(enum_values<T>::values);
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::end
-  //! Get the end iterator of an enumeration values collection
-  //!
-  //! \tparam T - Enumeration type
-  //!
-  //! \return T* - Position immediately beyond last value in collection
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  enable_if_enum_t<T,T*>  end()
-  {
-    return std::end(::wtl::enum_values<T>::values);
-  }
-
-
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | constexpr
   //! Compile-time bitwise-OR operator for combining enumeration with values without casting iff
@@ -122,10 +107,10 @@ namespace wtl
   //! \return ENUM - Bitwise-or combination of both values
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  auto operator | (ENUM a, VALUE b) noexcept -> enable_if_attribute_t<ENUM,ENUM>
+  auto operator | (ENUM a, VALUE b) noexcept -> enable_if_enum_t<ENUM,ENUM>
   {
-    static_assert(is_attribute<ENUM>::value, "Enumeration does not support bitwise OR");
-
+    static_assert(requires<ENUM,concepts::AttributeEnumeration>::value, "Enumeration does not model the 'AttributeEnumeration' concept");
+    
     // Perform operation upon underlying types
     return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
                            | static_cast<std::underlying_type_t<ENUM>>(b));
@@ -145,8 +130,10 @@ namespace wtl
   //! \return ENUM& - Reference to 'a' (now combined with 'b')
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  auto  operator|= (ENUM& a, VALUE b) noexcept -> enable_if_attribute_t<ENUM, ENUM&>
+  auto  operator|= (ENUM& a, VALUE b) noexcept -> enable_if_enum_t<ENUM, ENUM&>
   {
+    static_assert(requires<ENUM,concepts::AttributeEnumeration>::value, "Enumeration does not model the 'AttributeEnumeration' concept");
+
     return a = a | b;
   }
 
@@ -163,17 +150,18 @@ namespace wtl
   //! \return ENUM - Bitwise-or combination of both values
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  auto  operator& (ENUM a, VALUE b) -> enable_if_attribute_t<ENUM,ENUM>
+  auto  operator& (ENUM a, VALUE b) -> enable_if_enum_t<ENUM,ENUM>
   {
-    static_assert(is_attribute<ENUM>::value, "Enumeration does not support bitwise AND");
+    static_assert(requires<ENUM,concepts::AttributeEnumeration>::value, "Enumeration does not model the 'AttributeEnumeration' concept");
 
     // Perform operation upon underlying types
     return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
                            & static_cast<std::underlying_type_t<ENUM>>(b));
   }
 
+
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator & constexpr
+  // wtl::operator && constexpr
   //! Compile-time logical-AND operator for querying attributes without casting iff their type
   //! traits specify they support the operation
   //!
@@ -183,20 +171,24 @@ namespace wtl
   //! \param[in] const &a - Enumeration value
   //! \param[in] const &b - Another value
   //! \return bool - True iff one or more bits in common
+  //! 
+  //! \remarks Repurposing operators violates the principle of least surprise
+  //! \remarks This should really be implemented as a function
   //////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename ENUM, typename VALUE> constexpr
-  //auto  operator && (ENUM a, VALUE b) -> enable_if_attribute_t<ENUM,bool>
-  //{
-  //  static_assert(is_attribute<ENUM>::value, "Enumeration does not support logical AND");
+  template <typename ENUM, typename VALUE> constexpr
+  auto  operator && (ENUM a, VALUE b) -> enable_if_enum_t<ENUM,bool>
+  {
+    static_assert(requires<ENUM,concepts::AttributeEnumeration>::value, "Enumeration does not model the 'AttributeEnumeration' concept");
 
-  //  // Query whether all bits are present
-  //  return (a & b) == static_cast<ENUM>(b);
-  //}
+    // Query whether all bits are present
+    return (a & b) == static_cast<ENUM>(b);
+  }
 
   template <typename ENUM, typename VALUE> constexpr
   bool test_flag(ENUM a, VALUE b) 
   {
-    return (a & b) == b;
+    // Query whether all bits are present
+    return (a & b) == static_cast<ENUM>(b);
   }
 
   
@@ -214,8 +206,10 @@ namespace wtl
   //! \return ENUM& - Reference to 'a' (now combined with 'b')
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM, typename VALUE> constexpr
-  auto  operator&= (ENUM& a, VALUE b) -> enable_if_attribute_t<ENUM, ENUM&>
+  auto  operator&= (ENUM& a, VALUE b) -> enable_if_enum_t<ENUM, ENUM&>
   {
+    static_assert(requires<ENUM,concepts::AttributeEnumeration>::value, "Enumeration does not model the 'AttributeEnumeration' concept");
+
     return a = a & b;
   }
 
@@ -325,9 +319,11 @@ namespace wtl
   template <typename ENUM> constexpr
   auto  operator++ (ENUM& a, int) -> enable_if_contiguous_t<ENUM,ENUM>
   {
-    ENUM tmp(a);
-    ++a;
-    return tmp;
+    return (++a, a - 1);      //!< FIX: Supported by MSVC
+
+    //ENUM tmp(a);      //!< BUG: Extended constexpr not supported by MSVC
+    //++a;
+    //return tmp;
   }
 
 

@@ -25,7 +25,7 @@ namespace wtl
   };
 
   //! Define traits: Contiguous Attribute
-  template <> struct is_attribute<PropertyAccess>  : std::true_type {};
+  template <> struct is_attribute<PropertyAccess>  : std::false_type {};
   template <> struct is_contiguous<PropertyAccess> : std::true_type {};
 
 
@@ -47,12 +47,10 @@ namespace wtl
     using value_t = VALUE;
 
     //! \var read - Define whether property supports read access
-    //static constexpr bool read = ACCESS && PropertyAccess::Read;
-    static constexpr bool read = test_flag(ACCESS, PropertyAccess::Read);
+    static constexpr bool read = ACCESS && PropertyAccess::Read;
 
     //! \var write - Define whether property supports write access
-    //static constexpr bool write = ACCESS && PropertyAccess::Write;
-    static constexpr bool write = test_flag(ACCESS, PropertyAccess::Write);
+    static constexpr bool write = ACCESS && PropertyAccess::Write;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -68,7 +66,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
     explicit PropertyImpl(ARGS&&... args) : Value(std::forward<ARGS>(args)...)
-    {}
+    {
+    }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
