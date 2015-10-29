@@ -66,6 +66,15 @@ namespace wtl
       template <typename U, typename = enable_if_attribute_t<U>> 
       static void* test( void* );
     };  
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct ContiguousEnumeration - Defines a concept requiring an enumeration of contiguous type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct ContiguousEnumeration
+    {
+      template <typename U, typename = enable_if_contiguous_t<U>> 
+      static void* test( void* );
+    };  
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -184,14 +193,6 @@ namespace wtl
     return (a & b) == static_cast<ENUM>(b);
   }
 
-  template <typename ENUM, typename VALUE> constexpr
-  bool test_flag(ENUM a, VALUE b) 
-  {
-    // Query whether all bits are present
-    return (a & b) == static_cast<ENUM>(b);
-  }
-
-  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator&= constexpr
@@ -300,8 +301,10 @@ namespace wtl
   //! \return ENUM& - Reference to incremented 'a'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM> constexpr
-  auto  operator++ (ENUM& a) -> enable_if_contiguous_t<ENUM,ENUM&>
+  auto  operator++ (ENUM& a) -> enable_if_enum_t<ENUM,ENUM&>
   {
+    static_assert(requires<ENUM,concepts::ContiguousEnumeration>::value, "Enumeration does not model the 'ContiguousEnumeration' concept");
+
     return a = a + 1;
   }
 
@@ -317,13 +320,11 @@ namespace wtl
   //! \return ENUM - Value upon input
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename ENUM> constexpr
-  auto  operator++ (ENUM& a, int) -> enable_if_contiguous_t<ENUM,ENUM>
+  auto  operator++ (ENUM& a, int) -> enable_if_enum_t<ENUM,ENUM>
   {
-    return (++a, a - 1);      //!< FIX: Supported by MSVC
+    static_assert(requires<ENUM,concepts::ContiguousEnumeration>::value, "Enumeration does not model the 'ContiguousEnumeration' concept");
 
-    //ENUM tmp(a);      //!< BUG: Extended constexpr not supported by MSVC
-    //++a;
-    //return tmp;
+    return (++a, a - 1);      //!< NB: MSVC-14 does not support 'Extended constexpr' so only a single statement is alloed
   }
 
 
