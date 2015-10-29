@@ -25,7 +25,7 @@ namespace wtl
   };
 
   //! Define traits: Contiguous Attribute
-  template <> struct is_attribute<PropertyAccess>  : std::false_type {};
+  template <> struct is_attribute<PropertyAccess>  : std::true_type {};
   template <> struct is_contiguous<PropertyAccess> : std::true_type {};
 
 
