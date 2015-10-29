@@ -11,7 +11,7 @@
 #include "wtl/WTL.hpp"
 //#include "wtl/casts/EnumCast.hpp"               //!< EnumCast
 #include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
-#include "wtl/windows/Property.hpp"               //!< Property
+#include "wtl/windows/PropertyImpl.hpp"           //!< PropertyImpl
 //#include "wtl/utils/Handle.hpp"                 //!< Handle
 //#include "wtl/utils/Default.hpp"                //!< Default
 

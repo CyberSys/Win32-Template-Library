@@ -188,6 +188,7 @@
     <ClInclude Include="windows\properties\VisibilityProperty.hpp" />
     <ClInclude Include="windows\properties\VisibilityPropertyImpl.hpp" />
     <ClInclude Include="windows\Property.hpp" />
+    <ClInclude Include="windows\PropertyImpl.hpp" />
     <ClInclude Include="windows\skins\SkinFactory.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />
@@ -238,7 +239,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
-    <PlatformToolset>GCC</PlatformToolset>
+    <PlatformToolset>Clang</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|MinGW'">
