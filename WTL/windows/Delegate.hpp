@@ -14,6 +14,25 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \namespace concepts - Defines concepts used by 'Delegate'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  namespace concepts
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct MatchingSignature - Defines a concept requiring a matching function signature
+    //! 
+    //! \tparam SIG - Signature (function type) of handler function
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename SIG>
+    struct MatchingSignature
+    {
+      template <typename U, enable_if_same_t<U,SIG,void*> = nullptr> 
+      static void* test( void* );
+    };  
+  }
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Delegate - Provides delegate types for class methods with differing numbers of arguments
   //! 
@@ -63,7 +82,7 @@ namespace wtl
     //! 
     //! \tparam OBJ - Class containing method
     //! \tparam R - Delegate return type
-    //! \tparam ...A - [optional] Delegate argument types
+    //! \tparam ...A - Delegate argument types
     //!
     //! \param[in] obj - Object instance
     //! \param[in] fn - Method pointer
@@ -72,7 +91,7 @@ namespace wtl
     template <typename OBJ, typename R, typename... A>
     static std::function<signature_t>  bind(OBJ* obj, R (OBJ::*fn)(A...))
     {
-      static_assert(std::is_same<signature_t,R(A...)>::value, "Unable to bind handler to delegate - incorrect handler signature");
+      static_assert(requires<R(A...),concepts::MatchingSignature<signature_t>>::value, "Handler function does not model the 'MatchingSignature' concept");
 
       //! Encapsulate invoking the delegate within a lambda  (Fix for std::bind(..) bug in TDM-GCC)
       return [=](ARGS&&... args)->RET { return (obj->*fn)(args...); };

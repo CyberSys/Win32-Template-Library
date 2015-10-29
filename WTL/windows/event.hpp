@@ -174,7 +174,7 @@ namespace wtl
     {
       using call_proxy_t = call_proxy<result_t,FN_ARGS...>;
 
-      // Forward (copy) arguments to each subscriber, and capture return value (iff function signature has a return type)
+      // Forward arguments to each subscriber, and capture return value (iff function signature has a return type)
       return call_proxy_t::invoke(Subscribers, std::forward<FN_ARGS>(args)...);
     }
     
@@ -182,16 +182,20 @@ namespace wtl
     // Event::operator +=
     //! Adds a subscriber to the collection. Also ensures it possesses the correct signature.
     //! 
+    //! \tparam R - Delegate return type
+    //! \tparam ...A - Delegate argument types
+    //!
     //! \param[in] *ptr - Pointer to subscriber (Transfers ownership to the event)
     //! \return LPARAM - Unique subscriber identifier
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename R, typename... A>
     LPARAM operator += (Delegate<R,A...>* ptr) 
     {
-      static_assert(std::is_same<signature_t,R(A...)>::value, "Unable to add subscriber to event - Incorrect delegate signature");
+      static_assert(requires<R(A...),concepts::MatchingSignature<signature_t>>::value, "Subscriber does not model the 'MatchingSignature' concept");
 
+      // Append to subscriber list and return address as cookie
       Subscribers.emplace_back(ptr);
-      return opaque_cast(*ptr);
+      return opaque_cast(ptr);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
