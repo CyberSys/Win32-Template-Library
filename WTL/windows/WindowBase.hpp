@@ -282,11 +282,11 @@ namespace wtl
 
     //! \var DefaultPosition - Default window position upon creation
     //static constexpr PointL  DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
-    static const PointL  DefaultPosition;
+    static const PointL  DefaultPosition;     //!< FIX: MSVC-14 does not support constexpr in-class initializers (C4579)
 
     //! \var DefaultSize - Default window size upon creation
     //static constexpr SizeL  DefaultSize  {CW_USEDEFAULT, CW_USEDEFAULT};
-    static const SizeL  DefaultSize;
+    static const SizeL  DefaultSize;      //!< FIX: MSVC-14 does not support constexpr in-class initializers (C4579)
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
@@ -906,13 +906,13 @@ namespace wtl
   //! \var WindowBase::DefaultPosition - Default window position upon creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  const PointL  WindowBase<ENC>::DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};
+  const PointL  WindowBase<ENC>::DefaultPosition = {CW_USEDEFAULT, CW_USEDEFAULT};    //!< FIX: MSVC-14 does not support constexpr in-class initializers (C4579)
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \var WindowBase::DefaultSize - Default window size upon creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  const SizeL  WindowBase<ENC>::DefaultSize = {CW_USEDEFAULT, CW_USEDEFAULT};
+  const SizeL  WindowBase<ENC>::DefaultSize = {CW_USEDEFAULT, CW_USEDEFAULT};     //!< FIX: MSVC-14 does not support constexpr in-class initializers (C4579)
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \var WindowBase::CommandGroups - Collection of all Command groups 
