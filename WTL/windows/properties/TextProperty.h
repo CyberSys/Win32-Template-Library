@@ -9,9 +9,9 @@
 #define WTL_WINDOW_TEXT_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
-#include "wtl/utils/String.hpp"                           //!< String
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
+#include "wtl/utils/String.hpp"              //!< String
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -27,7 +27,7 @@ namespace wtl
   //! \remarks Provides initial window text during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct TextPropertyImpl : WindowPropertyImpl<ENC,String<ENC>,PropertyAccess::ReadWrite>
+  struct TextPropertyImpl : PropertyImpl<ENC,String<ENC>>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -35,13 +35,16 @@ namespace wtl
     using type = TextPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,String<ENC>,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,String<ENC>>;
       
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<ENC>;
     
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
+    
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -49,21 +52,21 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextPropertyImpl::TextPropertyImpl
-    //! Create with initial value
+    //! Create property and set initial window text
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial window text
     /////////////////////////////////////////////////////////////////////////////////////////
-    TextPropertyImpl(WindowBase<ENC>& wnd, value_t init = defvalue<value_t>()) : base(wnd, init)
+    TextPropertyImpl(window_t& wnd, value_t init = defvalue<value_t>()) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextPropertyImpl::get const
-    //! Get the current text if window exists, otherwise 'initial' text
+    //! Get the current text within a dynamic string
     //! 
-    //! \return value_t - Dynamic string containing current Window text (using window character encoding)
+    //! \return value_t - Current window text if window exists, otherwise initial window text
     //! 
     //! \throw wtl::platform_error - Unable to retrieve window text
     /////////////////////////////////////////////////////////////////////////////////////////

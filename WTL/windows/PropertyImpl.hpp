@@ -16,63 +16,57 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
-  //! \enum PropertyAccess - Defines property access
-  enum class PropertyAccess : int32_t 
-  { 
-    Read = 1,                   //!< Read access
-    Write = 2,                  //!< Write access
-    ReadWrite = Read|Write,     //!< Read & write access
-  };
-
-  //! Define traits: Contiguous Attribute
-  template <> struct is_attribute<PropertyAccess>  : std::true_type {};
-  template <> struct is_contiguous<PropertyAccess> : std::true_type {};
-
+  // Forward declaration
+  template <Encoding ENC>
+  struct WindowBase;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct PropertyImpl - Encapsulates property value access & mutation. Typically used as a base class.
+  //! \struct PropertyImpl - Acts as a base class for classes that provides the getter/setters for a property
   //! 
+  //! \tparam ENC - Window encoding
   //! \tparam VALUE - Value type
-  //! \tparam ACCESS - Access type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, PropertyAccess ACCESS>
+  template <Encoding ENC, typename VALUE>
   struct PropertyImpl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = PropertyImpl<VALUE,ACCESS>;
+    using type = PropertyImpl<ENC, VALUE>;
     
     //! \alias value_t - Define value type
     using value_t = VALUE;
 
-    //! \var read - Define whether property supports read access
-    static constexpr bool read = ACCESS && PropertyAccess::Read;
-
-    //! \var write - Define whether property supports write access
-    static constexpr bool write = ACCESS && PropertyAccess::Write;
+    //! \alias window_t - Define window type
+    using window_t = WindowBase<ENC>;
+    
+    //! \var encoding - Define window character encoding
+    static constexpr Encoding encoding = ENC;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    value_t   Value;      //!< Value storage
+    value_t    Value;       //!< Value storage
+    window_t&  Window;      //!< Owner window
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::PropertyImpl
-    //! Create implementation, optionally with initial value
+    //! Stores the owner window and optionally sets the initial property value
     //! 
-    //! \param[in] &&... args - [optional] Value constructor arguments
+    //! \param[in,out] &wnd - Owner window
+    //! \param[in] &&... args - [optional] Initial property value (or constructor arguments)
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit PropertyImpl(ARGS&&... args) : Value(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit 
+    PropertyImpl(window_t& wnd, ARGS&&... args) : Value(std::forward<ARGS>(args)...),
+                                                  Window(wnd)
     {
     }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
 
     ENABLE_COPY_CTOR(PropertyImpl);       //!< Can be cloned
-    DISABLE_COPY_ASSIGN(PropertyImpl);    //!< Value mutator cannot be circumvented
+    DISABLE_COPY_ASSIGN(PropertyImpl);    //!< Contains a reference type
     ENABLE_POLY(PropertyImpl);            //!< Can be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
@@ -81,19 +75,15 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::get const
-    //! Value accessor
-    //! 
+    //! Fallback accessor for the property value.
+    //!
     //! \return value_t - Current value
     //! 
-    //! \remarks Using this method requires read access. It is not virtual by design, it may be excluded from the candidate pool by an SFINAE expression.
-    //! \remarks Derived implementations should customize behaviour via custom methods (ie. template name-lookup) rather than simple sub-type polymorphism.
+    //! \remarks Since value_t may not be a copyable type, this method must be declared as a template
     /////////////////////////////////////////////////////////////////////////////////////////
-    //template <typename = std::enable_if_t<read>>
     template <typename = void>
     value_t  get() const
     {
-      static_assert(read, "Property does not support reading");
-
       return Value;
     }
     
@@ -101,19 +91,15 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // PropertyImpl::set 
-    //! Value mutator
+    //! Fallback mutator for the property value. 
     //! 
     //! \param[in] val - New value 
-    //! 
-    //! \remarks Using this method requires write access. It is not virtual by design, it may be excluded from the candidate pool by an SFINAE expression.
-    //! \remarks Derived implementations should customize behaviour via custom methods (ie. template name-lookup) rather than simple sub-type polymorphism.
+    //!
+    //! \remarks Since this operation may not be supported by value_t, this method must be declared as a template
     /////////////////////////////////////////////////////////////////////////////////////////
-    //template <typename = std::enable_if_t<write>>
     template <typename = void>
     void  set(value_t val) 
     {
-      static_assert(read, "Property does not support writing");
-
       Value = val;
     }
   };

@@ -9,9 +9,9 @@
 #define WTL_CLIENT_RECT_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Rectangle.hpp"                        //!< RectL
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/utils/Rectangle.hpp"           //!< RectL
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -27,21 +27,21 @@ namespace wtl
   //! \remarks [WINDOW NOT EXISTS] Values derived from 'Size' and 'Position' window properties
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ClientRectPropertyImpl : WindowPropertyImpl<ENC,RectL,PropertyAccess::ReadWrite>
+  struct ClientRectPropertyImpl : PropertyImpl<ENC,RectL>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = ClientRectPropertyImpl;
+    using type = ClientRectPropertyImpl<ENC>;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,RectL,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,RectL>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
     
-    //! \alias window_t - Define window type
-    using window_t = WindowBase<ENC>;
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -49,11 +49,13 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ClientRectPropertyImpl::ClientRectPropertyImpl
-    //! Create without initial value (client rectangle is initially determined from offline size/position)
+    //! Create window property
     //! 
     //! \param[in,out] &wnd - Owner window
+    //!
+    //! \remarks Initial value is determined from offline 'Size' and 'Position'
     /////////////////////////////////////////////////////////////////////////////////////////
-    ClientRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, defvalue<value_t>())
+    ClientRectPropertyImpl(window_t& wnd) : base(wnd, defvalue<value_t>())
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

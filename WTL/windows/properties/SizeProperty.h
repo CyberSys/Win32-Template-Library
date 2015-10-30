@@ -9,9 +9,9 @@
 #define WTL_WINDOW_SIZE_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Size.hpp"                             //!< SizeL
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/utils/Size.hpp"                //!< SizeL
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -23,13 +23,12 @@ namespace wtl
   //! \struct SizePropertyImpl - Provides the getters and setters for the 'Size' window property
   //! 
   //! \tparam ENC - Window encoding
-  //!
   //! 
   //! \remarks [WINDOW NOT EXIST] Provides initial size during window creation. 
   //! \remarks [WINDOW EXISTS] Value derived from 'WindowRect' window property.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct SizePropertyImpl : WindowPropertyImpl<ENC,SizeL,PropertyAccess::ReadWrite>
+  struct SizePropertyImpl : PropertyImpl<ENC,SizeL>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -37,23 +36,26 @@ namespace wtl
     using type = SizePropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,SizeL,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,SizeL>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
     
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
+
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // SizePropertyImpl::SizePropertyImpl
-    //! Create with initial value
+    //! Create property and set initial window size
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial window size
     /////////////////////////////////////////////////////////////////////////////////////////
-    SizePropertyImpl(WindowBase<ENC>& wnd, value_t size) : base(wnd, size)
+    SizePropertyImpl(window_t& wnd, value_t size) : base(wnd, size)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -62,7 +64,7 @@ namespace wtl
     // SizePropertyImpl::get const
     //! Get the window size
     //! 
-    //! \return value_t - Current size if window exists, otherwise 'initial' size
+    //! \return value_t - Current size if window exists, otherwise initial window size
     //! 
     //! \throw wtl::platform_error - [Exists] Unable to query window rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +74,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // SizePropertyImpl::set 
-    //! Set the current window size iff window exists, otherwise 'initial' size
+    //! Set the current window size iff window exists, otherwise initial window size
     //! 
     //! \param[in] size - Window size
     //! 

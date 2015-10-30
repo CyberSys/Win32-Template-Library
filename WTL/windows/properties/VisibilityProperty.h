@@ -9,9 +9,9 @@
 #define WTL_WINDOW_VISIBLE_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"                   //!< ShowWindowFlags
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/platform/WindowFlags.hpp"      //!< ShowWindowFlags
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -24,8 +24,13 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   struct WindowPlacement : ::WINDOWPLACEMENT
   {
+    //! \alias base - Define base type
     using base = ::WINDOWPLACEMENT;
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowPlacement::WindowPlacement
+    //! Initailizes the 'Length' field and zero-initializes the remainder
+    /////////////////////////////////////////////////////////////////////////////////////////
     WindowPlacement() 
     {
       clear(*base_cast(this));
@@ -42,7 +47,7 @@ namespace wtl
   //! \remarks Provides initial visibity during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct VisibilityPropertyImpl : WindowPropertyImpl<ENC,ShowWindowFlags,PropertyAccess::ReadWrite>
+  struct VisibilityPropertyImpl : PropertyImpl<ENC,ShowWindowFlags>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -50,10 +55,13 @@ namespace wtl
     using type = VisibilityPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,ShowWindowFlags,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,ShowWindowFlags>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
+    
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -61,12 +69,12 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // VisibilityPropertyImpl::VisibilityPropertyImpl
-    //! Create with initial value
+    //! Create window property and set initial window visibility
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial visibility
     /////////////////////////////////////////////////////////////////////////////////////////
-    VisibilityPropertyImpl(WindowBase<ENC>& wnd, ShowWindowFlags init) : base(wnd, init)
+    VisibilityPropertyImpl(window_t& wnd, ShowWindowFlags init) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -75,7 +83,7 @@ namespace wtl
     // VisibilityPropertyImpl::get const
     //! Get the window visibility
     //! 
-    //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
+    //! \return value_t - Current visibility if window exists, otherwise initial window visibility
     //! 
     //! \throw wtl::platform_error - Unable to query window visibility
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +93,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // VisibilityPropertyImpl::set 
-    //! Set the current window visibility iff window exists, otherwise 'initial' visibility
+    //! Set the current window visibility iff window exists, otherwise sets initial window visibility
     //! 
     //! \param[in] visibility - Window visibility
     //! 

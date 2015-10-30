@@ -67,14 +67,14 @@ namespace wtl
     //! \alias value_t - Inherit value type
     using value_t = typename IMPL::value_t;
     
+    //! \alias window_t - Inherit window type
+    using window_t = typename IMPL::window_t;
+    
     //! \var read - Inherit whether property supports read access
-    static constexpr bool read = IMPL::read;
+    static constexpr bool read = requires<IMPL,concepts::PropertyGetter<value_t>>::value; 
 
     //! \var write - Inherit whether property supports write access
-    static constexpr bool write = IMPL::write;
-    
-    //static_assert(!read || requires<IMPL,concepts::PropertyGetter<value_t>>::value, CONCEPT_ERROR(IMPL,PropertyGetter));
-    //static_assert(!write || requires<IMPL,concepts::PropertySetter<value_t>>::value, CONCEPT_ERROR(IMPL,PropertySetter));
+    static constexpr bool write = requires<IMPL,concepts::PropertySetter<value_t>>::value;
     
   protected:    
     //! \alias implementation_t - Define implementation type
@@ -90,10 +90,11 @@ namespace wtl
     // Property::Property
     //! Explicitly creates a property with an optional initial value
     //! 
+    //! \param[in,out] &wnd - Owner window
     //! \param[in] &&... args - [optional] Property implementation constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit Property(ARGS&&... args) : Impl(std::forward<ARGS>(args)...)
+    template <typename... ARGS> 
+    Property(window_t& wnd, ARGS&&... args) : Impl(wnd, std::forward<ARGS>(args)...)
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------

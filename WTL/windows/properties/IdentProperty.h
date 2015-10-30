@@ -9,9 +9,9 @@
 #define WTL_WINDOW_ID_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"                   //!< WindowId
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/platform/WindowFlags.hpp"      //!< WindowId
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -27,7 +27,7 @@ namespace wtl
   //! \remarks Provides the initial value used during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct IdentPropertyImpl : WindowPropertyImpl<ENC,WindowId,PropertyAccess::ReadWrite>
+  struct IdentPropertyImpl : PropertyImpl<ENC,WindowId>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -35,10 +35,13 @@ namespace wtl
     using type = IdentPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,WindowId,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,WindowId>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
+    
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -46,21 +49,21 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // IdentPropertyImpl::IdentPropertyImpl
-    //! Create with initial window-id
+    //! Create window property and set initial window-id
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - [optional] Initial window id  (Default is zero)
     /////////////////////////////////////////////////////////////////////////////////////////
-    IdentPropertyImpl(WindowBase<ENC>& wnd, WindowId init = zero<WindowId>()) : base(wnd, init)
+    IdentPropertyImpl(window_t& wnd, WindowId init = zero<WindowId>()) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // IdentPropertyImpl::get const
-    //! Get the window id
+    //! Get the current window id
     //! 
-    //! \return value_t - Current window-id if window exists, otherwise 'initial' window-id
+    //! \return value_t - Current window-id if window exists, otherwise initial window-id
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const; 
 
@@ -68,7 +71,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // IdentPropertyImpl::set 
-    //! Set the current window id iff window exists, otherwise 'initial' window-id
+    //! Set the current window id iff window exists, otherwise initial window-id
     //! 
     //! \param[in] id - Window id
     //! 

@@ -9,9 +9,9 @@
 #define WTL_WINDOW_RECT_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Rectangle.hpp"                        //!< RectL
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/utils/Rectangle.hpp"           //!< RectL
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -27,21 +27,21 @@ namespace wtl
   //! \remarks [WINDOW NOT EXISTS] Values derived from 'Size' and 'Position' window properties
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowRectPropertyImpl : WindowPropertyImpl<ENC,RectL,PropertyAccess::ReadWrite>
+  struct WindowRectPropertyImpl : PropertyImpl<ENC,RectL>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = WindowRectPropertyImpl;
+    using type = WindowRectPropertyImpl<ENC>;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,RectL,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,RectL>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
     
-    //! \alias window_t - Define window type
-    using window_t = WindowBase<ENC>;
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -49,11 +49,13 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowRectPropertyImpl::WindowRectPropertyImpl
-    //! Create without initial value (Window rectangle is initially determined from offline size/position)
+    //! Create window property
     //! 
     //! \param[in,out] &wnd - Owner window
+    //!
+    //! \remarks Initial value is determined from offline 'Size' and 'Position'
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, defvalue<value_t>())
+    WindowRectPropertyImpl(window_t& wnd) : base(wnd, defvalue<value_t>())
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -62,7 +64,7 @@ namespace wtl
     // WindowRectPropertyImpl::get const
     //! Get the window rectangle
     //! 
-    //! \return value_t - Current rectangle if window exists, otherwise 'initial' rectangle
+    //! \return value_t - Returns the current window rectangle if window exists, otherwise return the initial window rectangle
     //!
     //! \throw wtl::logic_error - Window is using default size or location
     //! \throw wtl::platform_error - Unable to query window rectangle
@@ -73,7 +75,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowRectPropertyImpl::set 
-    //! Set the current window rectangle iff window exists, otherwise 'initial' rectangle
+    //! Set the current window rectangle iff window exists, otherwise the initial window rectangle
     //! 
     //! \param[in] rectangle - Window rectangle
     //! 

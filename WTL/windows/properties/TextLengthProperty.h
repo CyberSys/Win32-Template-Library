@@ -9,8 +9,8 @@
 #define WTL_WINDOW_TEXT_LENGTH_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -26,7 +26,7 @@ namespace wtl
   //! \remarks When the window does not exist this is zero
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct TextLengthPropertyImpl : WindowPropertyImpl<ENC,uint32_t,PropertyAccess::Read>
+  struct TextLengthPropertyImpl : PropertyImpl<ENC,uint32_t>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -34,10 +34,13 @@ namespace wtl
     using type = TextLengthPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,uint32_t,PropertyAccess::Read>;
+    using base = PropertyImpl<ENC,uint32_t>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
+    
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -45,11 +48,11 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // TextLengthPropertyImpl::TextLengthPropertyImpl
-    //! Create with initial value of zero
+    //! Create window property
     //! 
     //! \param[in,out] &wnd - Owner window
     /////////////////////////////////////////////////////////////////////////////////////////
-    TextLengthPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, zero<value_t>())
+    TextLengthPropertyImpl(window_t& wnd) : base(wnd, zero<value_t>())
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

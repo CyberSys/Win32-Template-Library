@@ -9,9 +9,9 @@
 #define WTL_WINDOW_FONT_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/traits/FontTraits.hpp"                      //!< HFont
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/traits/FontTraits.hpp"         //!< HFont
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -28,7 +28,7 @@ namespace wtl
   //! \remarks The font is stored as a shared-handle which is not necessarily released when the window is destroyed.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct FontPropertyImpl : WindowPropertyImpl<ENC,HFont,PropertyAccess::ReadWrite>
+  struct FontPropertyImpl : PropertyImpl<ENC,HFont>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -36,10 +36,13 @@ namespace wtl
     using type = FontPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,HFont,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,HFont>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
+    
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -47,12 +50,11 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // FontPropertyImpl::FontPropertyImpl
-    //! Create with initial font used by all window-classes (System font)
+    //! Create window property 
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial font
     /////////////////////////////////////////////////////////////////////////////////////////
-    FontPropertyImpl(WindowBase<ENC>& wnd, StockObject init) : base(wnd, init)
+    FontPropertyImpl(window_t& wnd) : base(wnd, StockObject::SystemFont)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -61,7 +63,7 @@ namespace wtl
     // FontPropertyImpl::get const
     //! Get the window font
     //! 
-    //! \return value_t - Current font if window exists, otherwise 'initial' font
+    //! \return value_t - Current window font if window exists, otherwise initial window font
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
@@ -69,7 +71,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // FontPropertyImpl::set 
-    //! Set the current window font iff window exists, otherwise 'initial' font
+    //! Set the current window font iff window exists, otherwise initial window font
     //! 
     //! \param[in] font - Window font
     /////////////////////////////////////////////////////////////////////////////////////////

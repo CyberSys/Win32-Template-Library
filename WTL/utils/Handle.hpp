@@ -268,7 +268,7 @@ namespace wtl
     //!
     //! \remarks This constructor syntax enforces an invariant upon allocators - they cannot provide a parameterless factory method
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename ARG, typename... ARGS>
+    template <typename ARG, typename... ARGS> explicit 
     Handle(ARG&& arg, ARGS&&... args) : Value( allocate(std::forward<ARG>(arg), std::forward<ARGS>(args)...) ),
                                         Storage( converter_t::toPointer(Value.Handle), [this](native_t* ptr) { safeDelete(ptr); } )
     {

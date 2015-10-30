@@ -9,9 +9,9 @@
 #define WTL_WINDOW_POSITION_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Point.hpp"                            //!< PointL
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/utils/Point.hpp"               //!< PointL
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -28,7 +28,7 @@ namespace wtl
   //! \remarks [WINDOW EXISTS] Value derived from 'WindowRect' window property.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct PositionPropertyImpl : WindowPropertyImpl<ENC,PointL,PropertyAccess::ReadWrite>
+  struct PositionPropertyImpl : PropertyImpl<ENC,PointL>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -36,23 +36,26 @@ namespace wtl
     using type = PositionPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,PointL,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,PointL>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
     
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
+
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // PositionPropertyImpl::PositionPropertyImpl
-    //! Create with initial value
+    //! Create property and set initial window position
     //! 
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial window position
     /////////////////////////////////////////////////////////////////////////////////////////
-    PositionPropertyImpl(WindowBase<ENC>& wnd, value_t position) : base(wnd, position)
+    PositionPropertyImpl(window_t& wnd, value_t position) : base(wnd, position)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -61,7 +64,7 @@ namespace wtl
     // PositionPropertyImpl::get const
     //! Get the window position
     //! 
-    //! \return value_t - Current position if window exists, otherwise 'initial' position
+    //! \return value_t - Current position if window exists, otherwise initial window position
     //! 
     //! \throw wtl::platform_error - [Exists] Unable to query window rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +74,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // PositionPropertyImpl::set 
-    //! Set the current window position iff window exists, otherwise 'initial' position
+    //! Set the current window position iff window exists, otherwise initial window position
     //! 
     //! \param[in] position - Window position
     //! 

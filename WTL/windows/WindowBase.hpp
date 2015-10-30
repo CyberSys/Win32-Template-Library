@@ -335,7 +335,7 @@ namespace wtl
                                   ClientRect(*this),
                                   Children(*this),
                                   Enabled(*this, true),
-                                  Font(*this, StockObject::SystemFont),
+                                  Font(*this),
                                   Ident(*this, zero<WindowId>()),
                                   Handle(defvalue<HWnd>()),
                                   Position(*this, DefaultPosition),

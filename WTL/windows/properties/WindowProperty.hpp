@@ -38,9 +38,9 @@ namespace wtl
 
     //! \alias base - Define base type
     using base = PropertyImpl<VALUE,TYPE>;
-      
+    
     //! \var encoding - Define window character encoding
-    static constexpr Encoding encoding = ENC;
+    static constexpr Encoding  encoding = ENC;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:

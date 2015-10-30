@@ -9,8 +9,8 @@
 #define WTL_WINDOW_ENABLED_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
+#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -26,7 +26,7 @@ namespace wtl
   //! \remarks Provides initial state during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EnabledPropertyImpl : WindowPropertyImpl<ENC,bool,PropertyAccess::ReadWrite>
+  struct EnabledPropertyImpl : PropertyImpl<ENC,bool>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -34,23 +34,26 @@ namespace wtl
     using type = EnabledPropertyImpl;
 
     //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,bool,PropertyAccess::ReadWrite>;
+    using base = PropertyImpl<ENC,bool>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
-
+    
+    //! \alias window_t - Inherit window type
+    using window_t = typename base::window_t;
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // EnabledPropertyImpl::EnabledPropertyImpl
-    //! Create with initial value
+    //! Create window property and set initial window state
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial enabled state
+    //! \param[in] init - Initial window state
     /////////////////////////////////////////////////////////////////////////////////////////
-    EnabledPropertyImpl(WindowBase<ENC>& wnd, bool init) : base(wnd, init)
+    EnabledPropertyImpl(window_t& wnd, bool init) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -59,7 +62,7 @@ namespace wtl
     // EnabledPropertyImpl::get const
     //! Get the window state
     //! 
-    //! \return value_t - Current state if window exists, otherwise 'initial' state
+    //! \return value_t - Returns the current window state if window exists, otherwise returns the initial window state
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
@@ -67,7 +70,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // EnabledPropertyImpl::set 
-    //! Set the current window state iff window exists, otherwise 'initial' state
+    //! Set the current window state iff window exists, otherwise the initial window state
     //! 
     //! \param[in] state - Window state
     //! 
