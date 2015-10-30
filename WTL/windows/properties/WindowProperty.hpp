@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\properties\WindowProperty.hpp
-//! \brief Provides a common base-class for window properties
-//! \date 5 July 2015
+//! \brief Provides a common base-class for window property implementations
+//! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,11 +9,8 @@
 #define WTL_WINDOW_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
-//#include "wtl/casts/EnumCast.hpp"               //!< EnumCast
 #include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
 #include "wtl/windows/PropertyImpl.hpp"           //!< PropertyImpl
-//#include "wtl/utils/Handle.hpp"                 //!< Handle
-//#include "wtl/utils/Default.hpp"                //!< Default
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -23,12 +20,13 @@ namespace wtl
   struct WindowBase;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowPropertyImpl - Encapsulates a protected reference to an owner window. 
-  //!                              Acts as base for all window properties.
+  //! \struct WindowPropertyImpl - Common base class for all window property implementations
   //!
   //! \tparam ENC - Window encoding
   //! \tparam VALUE - Value type
   //! \tparam TYPE - Access type
+  //!
+  //! \remarks Encapsulates a reference to the window manipulated by the property
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename VALUE, PropertyAccess TYPE>
   struct WindowPropertyImpl : PropertyImpl<VALUE,TYPE>

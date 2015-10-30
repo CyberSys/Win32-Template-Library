@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\properties\StyleProperty.hpp
-//! \brief Encapsulates the basic window style in an appropriate enumeration property
-//! \date 5 July 2015
+//! \brief Separate implementation for 'Style' window property (resolves circular dependency)
+//! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,9 @@
 #define WTL_WINDOW_STYLE_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"                   //!< WindowStyle
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/casts/EnumCast.hpp"                       //!< EnumCast
+#include "wtl/windows/properties/StyleProperty.h"       //!< StyleProperty
+#include "wtl/windows/WindowBase.hpp"                   //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -19,75 +19,48 @@
 namespace wtl 
 {
   
+  // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct StylePropertyImpl - Encapsulates the basic-window-style in a read/write property.
+  // StylePropertyImpl::get const
+  //! Get the window style
   //! 
-  //! \tparam ENC - Window encoding
-  //!
-  //! \remarks When the window does not exist this provides the initial value used during window creation
+  //! \return value_t - Current style if window exists, otherwise 'initial' style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct StylePropertyImpl : WindowPropertyImpl<ENC,WindowStyle,PropertyAccess::ReadWrite>
+  typename StylePropertyImpl<ENC>::value_t  StylePropertyImpl<ENC>::get() const 
   {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    // [EXISTS] Query window Style
+    if (this->Window.exists())
+      return enum_cast<WindowStyle>( getFunc<base::encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_STYLE) );
+        
+    // Return cached
+    return base::get();
+  }
 
-    //! \alias type - Define own type
-    using type = StylePropertyImpl;
+  // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,WindowStyle,PropertyAccess::ReadWrite>;
-      
-    //! \alias value_t - Inherit value type
-    using value_t = typename base::value_t;
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-  public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // StylePropertyImpl::StylePropertyImpl
-    //! Create with initial value
-    //! 
-    //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial window style
-    /////////////////////////////////////////////////////////////////////////////////////////
-    StylePropertyImpl(WindowBase<ENC>& wnd, WindowStyle style) : base(wnd, style)
-    {}
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // StylePropertyImpl::get const
-    //! Get the window style
-    //! 
-    //! \return value_t - Current style if window exists, otherwise 'initial' style
-    /////////////////////////////////////////////////////////////////////////////////////////
-    value_t  get() const;
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // StylePropertyImpl::set 
-    //! Set the current window style iff window exists, otherwise 'initial' style
-    //! 
-    //! \param[in] style - Window style
-    //! 
-    //! \throw wtl::platform_error - Unable to set window style
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t style);
-  };
-
-  
-  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias StyleProperty - Define window style property type 
+  // StylePropertyImpl::set 
+  //! Set the current window style iff window exists, otherwise 'initial' style
   //! 
-  //! \tparam ENC - Window encoding
+  //! \param[in] style - Window style
+  //! 
+  //! \throw wtl::platform_error - Unable to set window style
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using StyleProperty = Property<StylePropertyImpl<ENC>>;
+  void  StylePropertyImpl<ENC>::set(value_t style) 
+  {
+    // [EXISTS] Set window Style
+    if (this->Window.exists() && !getFunc<base::encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_STYLE, enum_cast(style)))
+      throw platform_error(HERE, "Unable to set window style");
+
+    // Store value
+    base::set(style);
+  }
 
       
 } // namespace wtl
 
 #endif // WTL_WINDOW_STYLE_PROPERTY_HPP
+

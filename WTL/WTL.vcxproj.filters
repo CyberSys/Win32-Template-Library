@@ -449,79 +449,7 @@
     <ClInclude Include="utils\DebugInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="windows\properties\WindowRectProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\ClientRectProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\ClientRectPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\WindowRectPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\EnabledProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\EnabledPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\FontProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\FontPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\IdentProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\IdentPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\PositionProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\PositionPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\SizeProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\SizePropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
     <ClInclude Include="windows\properties\WindowProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\StyleExProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\StyleExPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\StyleProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\StylePropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\TextLengthProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\TextLengthPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\TextProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\TextPropertyImpl.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\VisibilityProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\properties\VisibilityPropertyImpl.hpp">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
     <ClInclude Include="windows\Command.hpp">
@@ -556,6 +484,78 @@
     </ClInclude>
     <ClInclude Include="windows\PropertyImpl.hpp">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\ClientRectProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\ClientRectProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\EnabledProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\EnabledProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\FontProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\FontProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\IdentProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\IdentProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\PositionProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\PositionProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\SizeProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\SizeProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\StyleExProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\StyleExProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\StyleProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\StyleProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\TextLengthProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\TextLengthProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\TextProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\TextProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\VisibilityProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\VisibilityProperty.hpp">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowRectProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\WindowRectProperty.hpp">
+      <Filter>Windows\Properties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

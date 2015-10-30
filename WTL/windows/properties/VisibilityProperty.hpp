@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\VisibilityProperty.hpp
-//! \brief Encapsulates the visibility of a window in an appropriate enumeration property
-//! \date 25 October 2015
+//! \file wtl\windows\properties\VisibilityPropertyImpl.hpp
+//! \brief Separate implementation for 'Visibility' window property (resolves circular dependency)
+//! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,10 @@
 #define WTL_WINDOW_VISIBLE_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"                   //!< ShowWindowFlags
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/casts/BooleanCast.hpp"                            //!< BooleanCast
+#include "wtl/casts/EnumCast.hpp"                               //!< EnumCast
+#include "wtl/windows/properties/VisibilityProperty.h"          //!< VisibilityProperty
+#include "wtl/windows/WindowBase.hpp"                           //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -19,91 +20,59 @@
 namespace wtl 
 {
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowPlacement - Window placement
-  /////////////////////////////////////////////////////////////////////////////////////////
-  struct WindowPlacement : ::WINDOWPLACEMENT
-  {
-    using base = ::WINDOWPLACEMENT;
+  // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
-    WindowPlacement() 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // VisibilityPropertyImpl::get const
+  //! Get the window visibility
+  //! 
+  //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
+  //! 
+  //! \throw wtl::platform_error - Unable to query window visibility
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  typename VisibilityPropertyImpl<ENC>::value_t  VisibilityPropertyImpl<ENC>::get() const 
+  {
+    // [EXISTS] Query window visibility
+    if (this->Window.exists())
     {
-      clear(*base_cast(this));
-      this->length = sizeof(base);
+      WindowPlacement info;
+
+      // Query window placement
+      if (!::GetWindowPlacement(this->Window, &info))
+        throw platform_error(HERE, "Unable to query window visibility");
+
+      // Extract visibility
+      return enum_cast<value_t>(info.flags);
     }
-  };
-  
+
+    // Return cached
+    return base::get();
+  }
+
+  // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct VisibilityPropertyImpl - Encapsulates the visibility of a window in a read/write enumeration property.
+  // VisibilityPropertyImpl::set 
+  //! Set the current window visibility iff window exists, otherwise 'initial' visibility
   //! 
-  //! \tparam ENC - Window encoding
-  //!
-  //! \remarks When the window does not exist this provides the initial value used during window creation
+  //! \param[in] visibility - Window visibility
+  //! 
+  //! \throw wtl::platform_error - Unable to set window visibility
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct VisibilityPropertyImpl : WindowPropertyImpl<ENC,ShowWindowFlags,PropertyAccess::ReadWrite>
+  void  VisibilityPropertyImpl<ENC>::set(value_t visibility) 
   {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    // Set window visibility
+    if (this->Window.exists() && !::ShowWindow(this->Window, enum_cast(visibility)))
+      throw platform_error(HERE, "Unable to set window visibility");
 
-    //! \alias type - Define own type
-    using type = VisibilityPropertyImpl;
-
-    //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,ShowWindowFlags,PropertyAccess::ReadWrite>;
-      
-    //! \alias value_t - Inherit value type
-    using value_t = typename base::value_t;
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-  public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // VisibilityPropertyImpl::VisibilityPropertyImpl
-    //! Create with initial value
-    //! 
-    //! \param[in,out] &wnd - Owner window
-    //! \param[in] init - Initial visibility
-    /////////////////////////////////////////////////////////////////////////////////////////
-    VisibilityPropertyImpl(WindowBase<ENC>& wnd, ShowWindowFlags init) : base(wnd, init)
-    {}
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // VisibilityPropertyImpl::get const
-    //! Get the window visibility
-    //! 
-    //! \return value_t - Current visibility if window exists, otherwise 'initial' visibility
-    //! 
-    //! \throw wtl::platform_error - Unable to query window visibility
-    /////////////////////////////////////////////////////////////////////////////////////////
-    value_t  get() const;
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // VisibilityPropertyImpl::set 
-    //! Set the current window visibility iff window exists, otherwise 'initial' visibility
-    //! 
-    //! \param[in] visibility - Window visibility
-    //! 
-    //! \throw wtl::platform_error - Unable to set window visibility
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void set(value_t visibility);
-  };
-
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias VisibilityProperty - Define window visibliity property type 
-  //! 
-  //! \tparam ENC - Window encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using VisibilityProperty = Property<VisibilityPropertyImpl<ENC>>;
+    // Update value
+    base::set(visibility);
+  }
 
       
 } // namespace wtl
 
 #endif // WTL_WINDOW_VISIBLE_PROPERTY_HPP
+

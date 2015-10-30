@@ -44,18 +44,18 @@
 #include "wtl/windows/events/PaintWindowEvent.hpp"                //!< PaintWindowEvent
 #include "wtl/windows/events/ShowWindowEvent.hpp"                 //!< ShowWindowEvent
 #include "wtl/windows/events/PositionChangedEvent.hpp"            //!< PositionChangedEvent
-#include "wtl/windows/properties/ClientRectProperty.hpp"          //!< ClientRectProperty
-#include "wtl/windows/properties/EnabledProperty.hpp"             //!< EnabledProperty
-#include "wtl/windows/properties/FontProperty.hpp"                //!< FontProperty
-#include "wtl/windows/properties/IdentProperty.hpp"               //!< IdentProperty
-#include "wtl/windows/properties/PositionProperty.hpp"            //!< PositionProperty
-#include "wtl/windows/properties/WindowRectProperty.hpp"          //!< WindowRectProperty
-#include "wtl/windows/properties/SizeProperty.hpp"                //!< SizeProperty
-#include "wtl/windows/properties/StyleProperty.hpp"               //!< StyleProperty
-#include "wtl/windows/properties/StyleExProperty.hpp"             //!< StyleExProperty
-#include "wtl/windows/properties/TextProperty.hpp"                //!< TextProperty
-#include "wtl/windows/properties/TextLengthProperty.hpp"          //!< TextLengthProperty
-#include "wtl/windows/properties/VisibilityProperty.hpp"          //!< VisibilityProperty
+#include "wtl/windows/properties/ClientRectProperty.h"            //!< ClientRectProperty
+#include "wtl/windows/properties/EnabledProperty.h"               //!< EnabledProperty
+#include "wtl/windows/properties/FontProperty.h"                  //!< FontProperty
+#include "wtl/windows/properties/IdentProperty.h"                 //!< IdentProperty
+#include "wtl/windows/properties/PositionProperty.h"              //!< PositionProperty
+#include "wtl/windows/properties/WindowRectProperty.h"            //!< WindowRectProperty
+#include "wtl/windows/properties/SizeProperty.h"                  //!< SizeProperty
+#include "wtl/windows/properties/StyleProperty.h"                 //!< StyleProperty
+#include "wtl/windows/properties/StyleExProperty.h"               //!< StyleExProperty
+#include "wtl/windows/properties/TextProperty.h"                  //!< TextProperty
+#include "wtl/windows/properties/TextLengthProperty.h"            //!< TextLengthProperty
+#include "wtl/windows/properties/VisibilityProperty.h"            //!< VisibilityProperty
 #include <map>                                                    //!< std::map
 
 //! \namespace wtl - Windows template library
@@ -930,17 +930,17 @@ namespace wtl
 } // namespace wtl
 
 
-#include "wtl/windows/properties/ClientRectPropertyImpl.hpp"    //!< ClientRectProperty
-#include "wtl/windows/properties/EnabledPropertyImpl.hpp"       //!< EnabledProperty
-#include "wtl/windows/properties/FontPropertyImpl.hpp"          //!< FontProperty
-#include "wtl/windows/properties/IdentPropertyImpl.hpp"         //!< IdentProperty
-#include "wtl/windows/properties/PositionPropertyImpl.hpp"      //!< PositionProperty
-#include "wtl/windows/properties/WindowRectPropertyImpl.hpp"    //!< WindowRectProperty
-#include "wtl/windows/properties/SizePropertyImpl.hpp"          //!< SizeProperty
-#include "wtl/windows/properties/StylePropertyImpl.hpp"         //!< StyleProperty
-#include "wtl/windows/properties/StyleExPropertyImpl.hpp"       //!< StyleExProperty
-#include "wtl/windows/properties/TextPropertyImpl.hpp"          //!< TextProperty
-#include "wtl/windows/properties/TextLengthPropertyImpl.hpp"    //!< TextLengthProperty
-#include "wtl/windows/properties/VisibilityPropertyImpl.hpp"    //!< VisibilityProperty
+#include "wtl/windows/properties/ClientRectProperty.hpp"        //!< ClientRectProperty
+#include "wtl/windows/properties/EnabledProperty.hpp"           //!< EnabledProperty
+#include "wtl/windows/properties/FontProperty.hpp"              //!< FontProperty
+#include "wtl/windows/properties/IdentProperty.hpp"             //!< IdentProperty
+#include "wtl/windows/properties/PositionProperty.hpp"          //!< PositionProperty
+#include "wtl/windows/properties/WindowRectProperty.hpp"        //!< WindowRectProperty
+#include "wtl/windows/properties/SizeProperty.hpp"              //!< SizeProperty
+#include "wtl/windows/properties/StyleProperty.hpp"             //!< StyleProperty
+#include "wtl/windows/properties/StyleExProperty.hpp"           //!< StyleExProperty
+#include "wtl/windows/properties/TextProperty.hpp"              //!< TextProperty
+#include "wtl/windows/properties/TextLengthProperty.hpp"        //!< TextLengthProperty
+#include "wtl/windows/properties/VisibilityProperty.hpp"        //!< VisibilityProperty
   
 #endif // WTL_WINDOW_BASE_HPP

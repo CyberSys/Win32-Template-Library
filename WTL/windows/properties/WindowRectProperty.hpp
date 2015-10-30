@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\WindowRectProperty.hpp
-//! \brief Encapsulates the basic window rectangle in a class-type property
-//! \date 5 July 2015
+//! \file wtl\windows\properties\WindowRectPropertyImpl.hpp
+//! \brief Separate implementation for 'WindowRect' window property (resolves circular dependency)
+//! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,8 @@
 #define WTL_WINDOW_RECT_PROPERTY_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Rectangle.hpp"                        //!< RectL
-#include "wtl/traits/EncodingTraits.hpp"                  //!< Encoding
-#include "wtl/windows/properties/WindowProperty.hpp"      //!< WindowPropertyImpl
+#include "wtl/windows/properties/WindowRectProperty.h"      //!< WindowRectProperty
+#include "wtl/windows/WindowBase.hpp"                       //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -19,80 +18,85 @@
 namespace wtl 
 {
   
+  // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct WindowRectPropertyImpl - Encapsulates the window-rectangle in a read/write class-type property.
+  // WindowRectPropertyImpl::get const
+  //! Get the window rectangle
   //! 
-  //! \tparam ENC - Window encoding
+  //! \return value_t - Current rectangle if window exists, otherwise 'initial' rectangle
   //!
-  //! \remarks When the window does NOT exist, this is calculated from the size & position properties
+  //! \throw wtl::logic_error - Window is using default size or location
+  //! \throw wtl::platform_error - Unable to query window rectangle
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct WindowRectPropertyImpl : WindowPropertyImpl<ENC,RectL,PropertyAccess::ReadWrite>
+  typename WindowRectPropertyImpl<ENC>::value_t  WindowRectPropertyImpl<ENC>::get() const 
   {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    // [EXISTS] Return current window rectangle
+    if (this->Window.exists())
+    {
+      value_t wnd;    //!< Window rectangle
+        
+      // Query & return window rectangle
+      if (!::GetWindowRect(this->Window, &native_cast(wnd)))
+        throw platform_error(HERE, "Unable to query window rectangle");
+      return wnd;
+    }
+    // [~EXISTS] Calculate from size & position
+    else
+    {
+      // [DEFAULT] Sentinel values are invalid by definition
+      if (this->Window.Size == window_t::DefaultSize || this->Window.Position == window_t::DefaultPosition)
+        throw logic_error(HERE, "Cannot generate a window rectangle from default co-ordinates");
 
-    //! \alias type - Define own type
-    using type = WindowRectPropertyImpl;
+      // [~DEFAULT] Generate rectangle from offline size & position
+      return { this->Window.Position(), this->Window.Size() };
+    }
+  }
 
-    //! \alias base - Define base type
-    using base = WindowPropertyImpl<ENC,RectL,PropertyAccess::ReadWrite>;
-      
-    //! \alias value_t - Inherit value type
-    using value_t = typename base::value_t;
-    
-    //! \alias window_t - Define window type
-    using window_t = WindowBase<ENC>;
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
+  // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-  public:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowRectPropertyImpl::WindowRectPropertyImpl
-    //! Create without initial value (Window rectangle is initially determined from offline size/position)
-    //! 
-    //! \param[in,out] &wnd - Owner window
-    /////////////////////////////////////////////////////////////////////////////////////////
-    WindowRectPropertyImpl(WindowBase<ENC>& wnd) : base(wnd, defvalue<value_t>())
-    {}
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowRectPropertyImpl::get const
-    //! Get the window rectangle
-    //! 
-    //! \return value_t - Current rectangle if window exists, otherwise 'initial' rectangle
-    //!
-    //! \throw wtl::logic_error - Window is using default size or location
-    //! \throw wtl::platform_error - Unable to query window rectangle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    value_t  get() const;
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowRectPropertyImpl::set 
-    //! Set the current window rectangle iff window exists, otherwise 'initial' rectangle
-    //! 
-    //! \param[in] rectangle - Window rectangle
-    //! 
-    //! \throw wtl::platform_error - Unable to set window position
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t rectangle);
-  };
-
-  
-  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias WindowRectProperty - Define window rectangle property type 
+  // WindowRectPropertyImpl::set 
+  //! Set the current window rectangle iff window exists, otherwise 'initial' rectangle
   //! 
-  //! \tparam ENC - Window encoding
+  //! \param[in] rc - Window rectangle
+  //! 
+  //! \throw wtl::platform_error - Unable to set window rectangle
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using WindowRectProperty = Property<WindowRectPropertyImpl<ENC>>;
+  void  WindowRectPropertyImpl<ENC>::set(value_t rc) 
+  {
+    bool resized = this->Value.width() == rc.width() && this->Value.height() == rc.height(),    //!< Whether resized
+           moved = this->Value.left == rc.left && this->Value.top == rc.top;                    //!< Whethe rmoved
+
+    // [EXISTS] Resize window
+    if (this->Window.exists())
+    {
+      MoveWindowFlags flags = MoveWindowFlags::NoZOrder;
+          
+      // [¬RESIZED] Add appropriate flag
+      if (!resized)
+        flags |= MoveWindowFlags::NoSize;
+
+      // [¬MOVED] Add appropriate flag
+      if (!moved)
+        flags |= MoveWindowFlags::NoMove;
+
+      // Resize/reposition window
+      if (!::SetWindowPos(this->Window, defvalue<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+        throw platform_error(HERE, "Unable to set window position");
+    }
+    // [¬EXISTS] Set size/position
+    else
+    {
+      this->Window.Size = rc.size();
+      this->Window.Position = rc.topLeft();
+    }
+  }
 
       
 } // namespace wtl
 
 #endif // WTL_WINDOW_RECT_PROPERTY_HPP
+
