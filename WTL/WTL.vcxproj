@@ -96,7 +96,6 @@
     <ClInclude Include="utils\Array.hpp" />
     <ClInclude Include="utils\Encoding.hpp" />
     <ClInclude Include="utils\DebugInfo.hpp" />
-    <ClInclude Include="utils\ExceptionLog.hpp" />
     <ClInclude Include="utils\Iterator.hpp" />
     <ClInclude Include="utils\Point.hpp" />
     <ClInclude Include="utils\Rectangle.hpp" />
@@ -201,7 +200,6 @@
     <ClCompile Include="io\Console.cpp" />
     <ClCompile Include="modules\Module.cpp" />
     <ClCompile Include="platform\Locale.cpp" />
-    <ClCompile Include="utils\ExceptionLog.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>

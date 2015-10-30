@@ -16,7 +16,7 @@
 #include "wtl/windows/MessageBox.hpp"               //!< MessageBox
 //#include "wtl/windows/WindowBase.hpp"               //!< WindowBase
 #include "wtl/io/Console.hpp"                       //!< Console
-#include "wtl/utils/ExceptionLog.hpp"               //!< exception_log
+//#include "wtl/utils/ExceptionLog.hpp"               //!< exception_log
 #include <stdexcept>                                //!< std::exception
 
 //! \namespace wtl - Windows template library
@@ -188,13 +188,13 @@ namespace wtl
       }
       catch (std::exception& e)
       {
-        cdebug << exception_log(HERE,e,"Unable to dispatch message") << endl;
-        errorBox(Window, c_arr("Program Error"), e);
+        cdebug.report("Unable to dispatch message", HERE, e);
+        errorBox<encoding>(Window, e);
         return -1;
       }
       catch (...)
       {
-        cdebug << exception_log(HERE,"Unable to dispatch message") << endl;
+        cdebug.report("Unable to dispatch message", HERE);
         errorBox(Window, c_arr("Program Error"), c_arr("An unrecognised terminal error has occurred, the program will now exit."));
         return -2;
       }

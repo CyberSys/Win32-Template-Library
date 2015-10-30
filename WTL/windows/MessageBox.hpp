@@ -66,15 +66,14 @@ namespace wtl
   //! \tparam CAPTION - Title buffer capacity
   //! 
   //! \param[in] parent - Parent window handle
-  //! \param[in] const& title - Error box title
-  //! \param[in] const& ex - STL or WTL exception
+  //! \param[in] const& ex - Exception
   //! \param[in] buttons - [optional] Error box buttons ('Ok' if unspecified)
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned CAPTION>
-  WindowId errorBox(HWND parent, const CharArray<ENC,CAPTION>& title, const std::exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  template <Encoding ENC>
+  WindowId errorBox(HWND parent, const std::exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
-    return errorBox<ENC,CAPTION,2048>(parent, title, CharArray<ENC,2048>(ex.what()), buttons|MessageBoxFlags::IconError);
+    return errorBox<ENC>(parent, CharArray<ENC,32>("Program Error"), CharArray<ENC,2048>(ex.what()), buttons|MessageBoxFlags::IconError);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////

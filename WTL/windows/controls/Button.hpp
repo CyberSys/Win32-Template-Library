@@ -180,7 +180,7 @@ namespace wtl
       }
       catch (exception& e)
       {
-        cdebug << exception_log(HERE,e,"Unable to route message") << endl;
+        cdebug.report("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
         return MsgRoute::Unhandled;

@@ -437,9 +437,6 @@
     <ClInclude Include="utils\Array.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\ExceptionLog.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="platform\DateTime.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -570,9 +567,6 @@
     </ClCompile>
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\ExceptionLog.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

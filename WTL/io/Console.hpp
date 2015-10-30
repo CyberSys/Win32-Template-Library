@@ -76,8 +76,14 @@ namespace wtl
   
   
   
-  // Forward declaration
+  // Forward declarations
+  struct Console;
   struct ConsoleLock;
+
+  // Forward declarations
+  Console& operator << (Console& c, Cons e);
+  Console& operator << (Console& c, const char* str);
+  Console& operator << (Console& c, const wchar_t* str);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Console - Provides a debug console attached to std out 
@@ -327,6 +333,36 @@ namespace wtl
     void lock()
     {
       Mutex.lock();
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Console::report
+    //! Writes an exception to the console
+    //! 
+    //! \param[in] const* task - Name of failed task 
+    //! \param[in] const& e - Exception
+    //! \param[in] const* location - Catch location
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void report(const char* task, const char* location)  
+    { 
+      *this << Cons::Endl 
+            << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  <<  task << "..." << Cons::Endl
+            << (Cons::Yellow|Cons::Bold) << "CAUGHT BY: " << Cons::Yellow << location << "..." << Cons::Endl;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Console::report
+    //! Writes an exception to the console
+    //! 
+    //! \param[in] const* task - Name of failed task 
+    //! \param[in] const& e - Exception
+    //! \param[in] const* location - Catch location
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void report(const char* task, const char* location, std::exception& e)  
+    { 
+      *this << Cons::Endl 
+            << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  << e.what() << "..." << Cons::Endl
+            << (Cons::Yellow|Cons::Bold) << "CAUGHT BY: " << Cons::Yellow << location << "..." << Cons::Endl;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -627,7 +663,7 @@ namespace wtl
     return fn(c); 
   }
 
-  
+
 } // namespace wtl
 
 #endif // WTL_CONSOLE_HPP

@@ -16,7 +16,6 @@
 #include "wtl/traits/EncodingTraits.hpp"                          //!< Encoding
 #include "wtl/traits/WindowTraits.hpp"                            //!< HWnd
 #include "wtl/utils/Exception.hpp"                                //!< exception
-#include "wtl/utils/ExceptionLog.hpp"                             //!< exception_log
 #include "wtl/utils/List.hpp"                                     //!< List
 #include "wtl/utils/Default.hpp"                                  //!< Default
 #include "wtl/utils/CharArray.hpp"                                //!< CharArray
@@ -469,7 +468,7 @@ namespace wtl
       // [ERROR] Exception thrown by handler
       catch (wtl::exception& e)
       {
-        cdebug << exception_log(HERE,e,"Unable to route message") << endl;
+        cdebug.report("Unable to route message", HERE, e);
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
@@ -858,7 +857,7 @@ namespace wtl
       }
       catch (wtl::exception& e)
       {
-        cdebug << exception_log(HERE,e,"Unable to route message") << endl;
+        cdebug.report("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
         return MsgRoute::Unhandled;
