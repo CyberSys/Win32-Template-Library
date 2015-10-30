@@ -49,24 +49,27 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Path - Provides OS independent handling of file paths
   //!
-  //! \tparam ENCODING - Encoding type
+  //! \tparam ENC - Encoding type
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENCODING = Encoding::ANSI>
-  struct Path : CharArray<ENCODING,MAX_PATH>
+  template <Encoding ENC = Encoding::ANSI>
+  struct Path : CharArray<ENC,MAX_PATH>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = Path<ENCODING>;
+    using type = Path<ENC>;
 
     //! \alias base - Define base type
-    using base = CharArray<ENCODING,MAX_PATH>;
+    using base = CharArray<ENC,MAX_PATH>;
 
-    //! \alias char_t - Character type
+    //! \alias char_t - Inherit character type
     using char_t = typename base::char_t;
 
-    //! \alias const_pointer - String type
+    //! \alias const_pointer - Define null-terminated string type
     using const_pointer = typename base::const_pointer;
+    
+    //! \var encoding - Inherit window character encoding
+    static constexpr Encoding encoding = base::encoding;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -152,7 +155,7 @@ namespace wtl
       typename base::array_t tmp;     //!< Path storage
 
       // Get absolute module path
-      if (!getFunc<char_t>(::GetModuleFileNameA,::GetModuleFileNameW)(nullptr, tmp, size_of(tmp)))
+      if (!choose<encoding>(::GetModuleFileNameA,::GetModuleFileNameW)(nullptr, tmp, size_of(tmp)))
         throw wtl::platform_error(HERE, "Unable to query module path");
 
       // Return path
@@ -172,7 +175,7 @@ namespace wtl
     FileAttribute  attributes() const
     {
       // Query attributes
-      auto attr = static_cast<FileAttribute>( getFunc<char_t>(::GetFileAttributesA,::GetFileAttributesW)(this->Data) );
+      auto attr = static_cast<FileAttribute>( choose<encoding>(::GetFileAttributesA,::GetFileAttributesW)(this->Data) );
 
       // Ensure valid
       if (attr == FileAttribute::Invalid)
@@ -189,7 +192,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     bool  exists() const
     {
-      return getFunc<char_t>(::PathFileExistsA,::PathFileExistsW)(this->Data) != False;
+      return choose<encoding>(::PathFileExistsA,::PathFileExistsW)(this->Data) != False;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +203,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     const char_t*  extension() const
     {
-      return getFunc<char_t>(::PathFindExtensionA,::PathFindExtensionW)(this->Data);
+      return choose<encoding>(::PathFindExtensionA,::PathFindExtensionW)(this->Data);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +214,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     const char_t*  fileName() const
     {
-      return getFunc<char_t>(::PathFindFileNameA,::PathFindFileNameW)(this->Data);
+      return choose<encoding>(::PathFindFileNameA,::PathFindFileNameW)(this->Data);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -225,8 +228,8 @@ namespace wtl
       Path tmp(*this);
 
       // Remove filename, add backslash
-      if (!getFunc<char_t>(::PathRemoveFileSpecA,::PathRemoveFileSpecW)(tmp)
-       || !getFunc<char_t>(::PathAddBackslashA,::PathAddBackslashW)(tmp))
+      if (!choose<encoding>(::PathRemoveFileSpecA,::PathRemoveFileSpecW)(tmp)
+       || !choose<encoding>(::PathAddBackslashA,::PathAddBackslashW)(tmp))
 
        throw platform_error(HERE, "Unable to remove path filename");
 
@@ -291,7 +294,7 @@ namespace wtl
       REQUIRED_PARAM(ext);
 
       // Compare extension, case insenstive
-      return getFunc<char_t>(::StrCmpIA,::StrCmpIW)(extension(), ext) == 0;
+      return choose<encoding>(::StrCmpIA,::StrCmpIW)(extension(), ext) == 0;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -318,7 +321,7 @@ namespace wtl
     bool operator== (const char_t* ptr) const
     {
       // Compare full path, case insenstive
-      return getFunc<char_t>(::StrCmpIA,::StrCmpIW)(this->Data, ptr) == 0;
+      return choose<encoding>(::StrCmpIA,::StrCmpIW)(this->Data, ptr) == 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -331,7 +334,7 @@ namespace wtl
     bool operator== (const Path& p) const
     {
       // Compare full path, case insenstive
-      return getFunc<char_t>(::StrCmpIA,::StrCmpIW)(this->Data, p.c_str()) == 0;
+      return choose<encoding>(::StrCmpIA,::StrCmpIW)(this->Data, p.c_str()) == 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -359,7 +362,7 @@ namespace wtl
     void append(const char_t* path)
     {
       // Append path to self
-      if (!getFunc<char_t>(::PathAppendA,::PathAppendW)(this->Data, path))
+      if (!choose<encoding>(::PathAppendA,::PathAppendW)(this->Data, path))
         throw wtl::platform_error(HERE, "Unable to append path");
 
       // Update length
@@ -375,7 +378,7 @@ namespace wtl
     void appendBackslash()
     {
       // Append backslash and update length
-      if (const_pointer chr = getFunc<char_t>(::PathAddBackslashA,::PathAddBackslashW)(this->Data))
+      if (const_pointer chr = choose<encoding>(::PathAddBackslashA,::PathAddBackslashW)(this->Data))
         this->Count += (chr[0] != this->null_t);
       else
         throw wtl::platform_error(HERE, "Insufficient buffer to append backslash to path");
@@ -392,7 +395,7 @@ namespace wtl
     void combine(const char_t* path)
     {
       // Append path to self
-      if (!getFunc<char_t>(::PathCombineA,::PathCombineW)(this->Data, path))
+      if (!choose<encoding>(::PathCombineA,::PathCombineW)(this->Data, path))
         throw wtl::platform_error(HERE, "Unable to combine path");
     }
 
@@ -403,7 +406,7 @@ namespace wtl
     void removeBackslash()
     {
       // Remove backslash and update length
-      const_pointer chr = getFunc<char_t>(::PathRemoveBackslashA,::PathRemoveBackslashW)(this->Data);
+      const_pointer chr = choose<encoding>(::PathRemoveBackslashA,::PathRemoveBackslashW)(this->Data);
       this->Count -= (chr[0] != this->null_t);
     }
 
@@ -414,7 +417,7 @@ namespace wtl
     void  removeExtension()
     {
       // Remove extension + update length
-      getFunc<char_t>(::PathRemoveExtensionA,::PathRemoveExtensionW)(this->Data);
+      choose<encoding>(::PathRemoveExtensionA,::PathRemoveExtensionW)(this->Data);
       this->Count = strlen(this->Data);
     }
 
@@ -425,7 +428,7 @@ namespace wtl
     void  removeFileName()
     {
       // Remove filename + update length
-      if (const_pointer fn = getFunc<char_t>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
+      if (const_pointer fn = choose<encoding>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
       {
         fn[0] = this->null_t;
         this->Count = (fn - this->Data);
@@ -443,7 +446,7 @@ namespace wtl
     void  renameExtension(const char_t* ext)
     {
       // Rename extension
-      if (!getFunc<char_t>(::PathRenameExtensionA,::PathRenameExtensionW)(this->Data, ext))
+      if (!choose<encoding>(::PathRenameExtensionA,::PathRenameExtensionW)(this->Data, ext))
         throw wtl::platform_error(HERE, "Unable to rename extension");
 
       // Update length
@@ -461,7 +464,7 @@ namespace wtl
     void  renameFileName(const char_t* name) const
     {
       // Find filename
-      if (const_pointer fn = getFunc<char_t>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
+      if (const_pointer fn = choose<encoding>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
       {
         // Verify new length
         int32_t remaining = (this->length-1) - (fn-this->Data);
@@ -509,15 +512,21 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct AppPath - Represents the path of a file/folder in the application folder
   //!
-  //! \tparam ENCODING - Encoding type
+  //! \tparam ENC - Encoding type
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENCODING = Encoding::ANSI>
-  struct AppPath : Path<ENCODING>
+  template <Encoding ENC = Encoding::ANSI>
+  struct AppPath : Path<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias type - Define own type
+    using type = AppPath<ENC>;
 
     //! \alias base - Define base type
-    using base = Path<ENCODING>;
+    using base = Path<ENC>;
+    
+    //! \var encoding - Inherit window character encoding
+    static constexpr Encoding encoding = base::encoding;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -562,15 +571,21 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct TempPath - Represents the path of a temporary file
   //!
-  //! \tparam ENCODING - Encoding type
+  //! \tparam ENC - Encoding type
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENCODING = Encoding::ANSI>
-  struct TempPath : Path<ENCODING>
+  template <Encoding ENC = Encoding::ANSI>
+  struct TempPath : Path<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias type - Define own type
+    using type = TempPath<ENC>;
 
     //! \alias base - Define base type
-    using base = Path<ENCODING>;
+    using base = Path<ENC>;
+    
+    //! \var encoding - Inherit window character encoding
+    static constexpr Encoding encoding = base::encoding;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -590,11 +605,11 @@ namespace wtl
       typename base::array_t tmp;     //!< Absolute path of user temp folder
 
       // Get temp folder
-      if (!getFunc<typename base::char_t>(::GetTempPathA,::GetTempPathW)(MAX_PATH, tmp))
+      if (!choose<encoding>(::GetTempPathA,::GetTempPathW)(MAX_PATH, tmp))
         throw wtl::platform_error(HERE, "Unable to get temp folder");
 
       // Combine with random filename   (TODO: See L_tmpnam constant and tmpnam() func)
-      if (!getFunc<typename base::char_t>(::GetTempFileNameA,::GetTempFileNameW)(tmp, prefix, NULL, this->Data))
+      if (!choose<encoding>(::GetTempFileNameA,::GetTempFileNameW)(tmp, prefix, NULL, this->Data))
         throw wtl::platform_error(HERE, "Unable to generate temporary filename");
 
       // Update length

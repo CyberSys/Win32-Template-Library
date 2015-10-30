@@ -103,23 +103,23 @@ namespace wtl
   template <Encoding ENC, typename SENDER> using ListViewDeleteAllItemsEventHandler = ListViewEventHandler<ENC,SENDER,ListViewEvent::DeleteAllItems>; 	
   template <Encoding ENC, typename SENDER> using ListViewBeginDragEventHandler      = ListViewEventHandler<ENC,SENDER,ListViewEvent::BeginDrag>; 			
   template <Encoding ENC, typename SENDER> using ListViewBeginRDragEventHandler     = ListViewEventHandler<ENC,SENDER,ListViewEvent::BeginRDrag>; 			
-  template <Encoding ENC, typename SENDER> using ListViewBeginLabelEditEventHandler = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::BeginLabelEditA,ListViewEvent::BeginLabelEditW)>; 
+  template <Encoding ENC, typename SENDER> using ListViewBeginLabelEditEventHandler = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::BeginLabelEditA,ListViewEvent::BeginLabelEditW)>; 
   template <Encoding ENC, typename SENDER> using ListViewBeginMarqueeEventHandler   = ListViewEventHandler<ENC,SENDER,ListViewEvent::BeginMarquee>; 				
   template <Encoding ENC, typename SENDER> using ListViewBeginScrollEventHandler    = ListViewEventHandler<ENC,SENDER,ListViewEvent::BeginScroll>; 				
-  template <Encoding ENC, typename SENDER> using ListViewEndLabelEditEventHandler   = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::EndLabelEditA,ListViewEvent::EndLabelEditW)>; 	
+  template <Encoding ENC, typename SENDER> using ListViewEndLabelEditEventHandler   = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::EndLabelEditA,ListViewEvent::EndLabelEditW)>; 	
   template <Encoding ENC, typename SENDER> using ListViewEndScrollEventHandler      = ListViewEventHandler<ENC,SENDER,ListViewEvent::EndScroll>; 				  
   template <Encoding ENC, typename SENDER> using ListViewKeyDownEventHandler        = ListViewEventHandler<ENC,SENDER,ListViewEvent::KeyDown>; 				    
   template <Encoding ENC, typename SENDER> using ListViewInsertItemEventHandler     = ListViewEventHandler<ENC,SENDER,ListViewEvent::InsertItem>; 			
   template <Encoding ENC, typename SENDER> using ListViewItemActivateEventHandler   = ListViewEventHandler<ENC,SENDER,ListViewEvent::ItemActivate>; 		
   template <Encoding ENC, typename SENDER> using ListViewItemChangingEventHandler   = ListViewEventHandler<ENC,SENDER,ListViewEvent::ItemChanging>;
   template <Encoding ENC, typename SENDER> using ListViewItemChangedEventHandler    = ListViewEventHandler<ENC,SENDER,ListViewEvent::ItemChanged>;
-  template <Encoding ENC, typename SENDER> using ListViewGetDispInfoEventHandler    = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::GetDispInfoA,ListViewEvent::GetDispInfoW)>;	
+  template <Encoding ENC, typename SENDER> using ListViewGetDispInfoEventHandler    = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::GetDispInfoA,ListViewEvent::GetDispInfoW)>;	
   template <Encoding ENC, typename SENDER> using ListViewGetEmptyMarkupEventHandler = ListViewEventHandler<ENC,SENDER,ListViewEvent::GetEmptyMarkup>; 			
-  template <Encoding ENC, typename SENDER> using ListViewGetInfoTipEventHandler     = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::GetInfoTipA,ListViewEvent::GetInfoTipW)>; 				
+  template <Encoding ENC, typename SENDER> using ListViewGetInfoTipEventHandler     = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::GetInfoTipA,ListViewEvent::GetInfoTipW)>; 				
   template <Encoding ENC, typename SENDER> using ListViewHotTrackEventHandler       = ListViewEventHandler<ENC,SENDER,ListViewEvent::HotTrack>; 				
-  template <Encoding ENC, typename SENDER> using ListViewIncrementalSearchEventHandler = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::IncrementalSearchA,ListViewEvent::IncrementalSearchW)>; 	
+  template <Encoding ENC, typename SENDER> using ListViewIncrementalSearchEventHandler = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::IncrementalSearchA,ListViewEvent::IncrementalSearchW)>; 	
   template <Encoding ENC, typename SENDER> using ListViewLinkClickEventHandler      = ListViewEventHandler<ENC,SENDER,ListViewEvent::LinkClick>; 				  
-  template <Encoding ENC, typename SENDER> using ListViewSetDispInfoEventHandler    = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::SetDispInfoA,ListViewEvent::SetDispInfoW)>; */
+  template <Encoding ENC, typename SENDER> using ListViewSetDispInfoEventHandler    = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::SetDispInfoA,ListViewEvent::SetDispInfoW)>; */
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ namespace wtl
   //! \tparam SENDER - Originator window type
   /////////////////////////////////////////////////////////////////////////////////////////
   /*template <Encoding ENC, typename SENDER> using VirtualListViewCacheHintEventHandler    = ListViewEventHandler<ENC,SENDER,ListViewEvent::OdCacheHint>; 		
-  template <Encoding ENC, typename SENDER> using VirtualListViewFindItemEventHandler     = ListViewEventHandler<ENC,SENDER,getValue<ENC>(ListViewEvent::OdFindItemA,ListViewEvent::OdFindItemW)>;
+  template <Encoding ENC, typename SENDER> using VirtualListViewFindItemEventHandler     = ListViewEventHandler<ENC,SENDER,choose<ENC>(ListViewEvent::OdFindItemA,ListViewEvent::OdFindItemW)>;
   template <Encoding ENC, typename SENDER> using VirtualListViewStateChangedEventHandler = ListViewEventHandler<ENC,SENDER,ListViewEvent::OdStateChanged>; 	*/
   
 } // namespace wtl

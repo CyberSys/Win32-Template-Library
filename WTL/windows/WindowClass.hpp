@@ -40,7 +40,7 @@ namespace wtl
     using resource_t = ResourceId<ENC>;
 
     //! \alias native_t - Type accessor for native ::WNDCLASSEX type
-    using native_t = getType<char_t,::WNDCLASSEXA,::WNDCLASSEXW>;
+    using native_t = choose_t<ENC,::WNDCLASSEXA,::WNDCLASSEXW>;
     
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;
@@ -97,7 +97,7 @@ namespace wtl
                                  WndProc(defvalue<::WNDPROC>())
     {
       //! \var getClassInfoEx - Functor for 'GetClassInfoEx' 
-      static const auto getClassInfoEx = getFunc<ENC>(::GetClassInfoExA,::GetClassInfoExW);
+      static const auto getClassInfoEx = choose<ENC>(::GetClassInfoExA,::GetClassInfoExW);
 
       native_t wndClass = {sizeof(native_t)};   //!< Window class data
 
@@ -177,7 +177,7 @@ namespace wtl
     virtual ~WindowClass() 
     {
       //! \var unregisterClass - Functor for 'UnregisterClass' 
-      static const auto unregisterClass = getFunc<ENC>(::UnregisterClassA,::UnregisterClassW);
+      static const auto unregisterClass = choose<ENC>(::UnregisterClassA,::UnregisterClassW);
 
       // Unregister window class
       if (unregisterClass(Name, Instance) == False)
@@ -201,38 +201,38 @@ namespace wtl
       switch (cls)
       {
       //! Standard controls
-      case SystemClass::Animate:			return getValue<encoding>(ANIMATE_CLASSA,ANIMATE_CLASSW);
-      case SystemClass::DateTime:			return getValue<encoding>(DATETIMEPICK_CLASSA,DATETIMEPICK_CLASSW);
-      case SystemClass::HotKey:			  return getValue<encoding>(HOTKEY_CLASSA,HOTKEY_CLASSW);
-      case SystemClass::Calendar:			return getValue<encoding>(MONTHCAL_CLASSA,MONTHCAL_CLASSW);
-      case SystemClass::ProgressBar:	return getValue<encoding>(PROGRESS_CLASSA,PROGRESS_CLASSW);
-      case SystemClass::CoolBar:			return getValue<encoding>(REBARCLASSNAMEA,REBARCLASSNAMEW);
-      case SystemClass::StatusBar:		return getValue<encoding>(STATUSCLASSNAMEA,STATUSCLASSNAMEW);
-      case SystemClass::ToolBar:			return getValue<encoding>(TOOLBARCLASSNAMEA,TOOLBARCLASSNAMEW);
-      case SystemClass::ToolTip:			return getValue<encoding>(TOOLTIPS_CLASSA,TOOLTIPS_CLASSW);
-      case SystemClass::TrackBar:			return getValue<encoding>(TRACKBAR_CLASSA,TRACKBAR_CLASSW);
-      case SystemClass::Spin:			    return getValue<encoding>(UPDOWN_CLASSA,UPDOWN_CLASSW);
+      case SystemClass::Animate:			return choose<encoding>(ANIMATE_CLASSA,ANIMATE_CLASSW);
+      case SystemClass::DateTime:			return choose<encoding>(DATETIMEPICK_CLASSA,DATETIMEPICK_CLASSW);
+      case SystemClass::HotKey:			  return choose<encoding>(HOTKEY_CLASSA,HOTKEY_CLASSW);
+      case SystemClass::Calendar:			return choose<encoding>(MONTHCAL_CLASSA,MONTHCAL_CLASSW);
+      case SystemClass::ProgressBar:	return choose<encoding>(PROGRESS_CLASSA,PROGRESS_CLASSW);
+      case SystemClass::CoolBar:			return choose<encoding>(REBARCLASSNAMEA,REBARCLASSNAMEW);
+      case SystemClass::StatusBar:		return choose<encoding>(STATUSCLASSNAMEA,STATUSCLASSNAMEW);
+      case SystemClass::ToolBar:			return choose<encoding>(TOOLBARCLASSNAMEA,TOOLBARCLASSNAMEW);
+      case SystemClass::ToolTip:			return choose<encoding>(TOOLTIPS_CLASSA,TOOLTIPS_CLASSW);
+      case SystemClass::TrackBar:			return choose<encoding>(TRACKBAR_CLASSA,TRACKBAR_CLASSW);
+      case SystemClass::Spin:			    return choose<encoding>(UPDOWN_CLASSA,UPDOWN_CLASSW);
 
       //! Common controls
-      case SystemClass::Button:			  return getValue<encoding>(WC_BUTTONA,WC_BUTTONW);
-      case SystemClass::ComboBox:			return getValue<encoding>(WC_COMBOBOXA,WC_COMBOBOXW);
-      case SystemClass::ComboBoxEx:		return getValue<encoding>(WC_COMBOBOXEXA,WC_COMBOBOXEXW);
-      case SystemClass::Edit:			    return getValue<encoding>(WC_EDITA,WC_EDITW);
-      case SystemClass::Header:			  return getValue<encoding>(WC_HEADERA,WC_HEADERW);
-      case SystemClass::ListBox:			return getValue<encoding>(WC_LISTBOXA,WC_LISTBOXW);
-      case SystemClass::IpAddress:		return getValue<encoding>(WC_IPADDRESSA,WC_IPADDRESSW);
-      case SystemClass::Link:			    return getValue<encoding>("SysLink",L"SysLink");
+      case SystemClass::Button:			  return choose<encoding>(WC_BUTTONA,WC_BUTTONW);
+      case SystemClass::ComboBox:			return choose<encoding>(WC_COMBOBOXA,WC_COMBOBOXW);
+      case SystemClass::ComboBoxEx:		return choose<encoding>(WC_COMBOBOXEXA,WC_COMBOBOXEXW);
+      case SystemClass::Edit:			    return choose<encoding>(WC_EDITA,WC_EDITW);
+      case SystemClass::Header:			  return choose<encoding>(WC_HEADERA,WC_HEADERW);
+      case SystemClass::ListBox:			return choose<encoding>(WC_LISTBOXA,WC_LISTBOXW);
+      case SystemClass::IpAddress:		return choose<encoding>(WC_IPADDRESSA,WC_IPADDRESSW);
+      case SystemClass::Link:			    return choose<encoding>("SysLink",L"SysLink");
 
-      case SystemClass::ListView:			return getValue<encoding>(WC_LISTVIEWA,WC_LISTVIEWW);
-      case SystemClass::NativeFont:		return getValue<encoding>(WC_NATIVEFONTCTLA,WC_NATIVEFONTCTLW);
-      case SystemClass::PageScroller:	return getValue<encoding>(WC_PAGESCROLLERA,WC_PAGESCROLLERW);
-      case SystemClass::ScrollBar:	  return getValue<encoding>(WC_SCROLLBARA,WC_SCROLLBARW);
-      case SystemClass::Static:			  return getValue<encoding>(WC_STATICA,WC_STATICW);
-      case SystemClass::Tab:			    return getValue<encoding>(WC_TABCONTROLA,WC_TABCONTROLW);
-      case SystemClass::TreeView:			return getValue<encoding>(WC_TREEVIEWA,WC_TREEVIEWW);
+      case SystemClass::ListView:			return choose<encoding>(WC_LISTVIEWA,WC_LISTVIEWW);
+      case SystemClass::NativeFont:		return choose<encoding>(WC_NATIVEFONTCTLA,WC_NATIVEFONTCTLW);
+      case SystemClass::PageScroller:	return choose<encoding>(WC_PAGESCROLLERA,WC_PAGESCROLLERW);
+      case SystemClass::ScrollBar:	  return choose<encoding>(WC_SCROLLBARA,WC_SCROLLBARW);
+      case SystemClass::Static:			  return choose<encoding>(WC_STATICA,WC_STATICW);
+      case SystemClass::Tab:			    return choose<encoding>(WC_TABCONTROLA,WC_TABCONTROLW);
+      case SystemClass::TreeView:			return choose<encoding>(WC_TREEVIEWA,WC_TREEVIEWW);
   
       //! Special classes
-      case SystemClass::MessageOnly:  return getValue<encoding>("Message",L"Message");
+      case SystemClass::MessageOnly:  return choose<encoding>("Message",L"Message");
       }
 
       // [ERROR] Unrecognised

@@ -34,7 +34,7 @@ namespace wtl
   //! \tparam ENC - Menu item text character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct MenuItemInfo : getType_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>
+  struct MenuItemInfo : choose_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
@@ -42,7 +42,7 @@ namespace wtl
     using type = MenuItemInfo<ENC>;
 
     //! \alias base - Define base type
-    using base = getType_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>;
+    using base = choose_t<ENC,::MENUITEMINFOA,::MENUITEMINFOW>;
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
@@ -303,7 +303,7 @@ namespace wtl
       MenuItemInfo<encoding> item(*cmd);     //!< Generate Gui Command menu item
 
       // Insert item into menu
-      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
+      if (!choose<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
 
       // Insert Command into collection 
@@ -521,7 +521,7 @@ namespace wtl
       MenuItemInfo<encoding> item(*group, popup->handle());     //!< Generate pop-up menu item 
 
       // Insert menu item 
-      if (!getFunc<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
+      if (!choose<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
     }
 

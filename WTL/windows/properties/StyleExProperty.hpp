@@ -32,7 +32,7 @@ namespace wtl
   {
     // [EXISTS] Query window StyleEx
     if (this->Window.exists())
-      return enum_cast<WindowStyleEx>( getFunc<base::encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
+      return enum_cast<WindowStyleEx>( choose<base::encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
         
     // Return cached
     return base::get();
@@ -52,7 +52,7 @@ namespace wtl
   void  StyleExPropertyImpl<ENC>::set(value_t style) 
   {
     // [EXISTS] Set window StyleEx
-    if (this->Window.exists() && !getFunc<base::encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
+    if (this->Window.exists() && !choose<base::encoding>(::SetWindowLongPtrA,::SetWindowLongPtrW)(this->Window, GWL_EXSTYLE, enum_cast(style)))
       throw platform_error(HERE, "Unable to set extended window style");
 
     // Store value

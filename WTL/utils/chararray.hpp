@@ -768,7 +768,7 @@ namespace wtl
                 *++str;
 
             // Append value
-            int len = getFunc<char_t>(::_snprintf,::_snwprintf)(this->Data + this->Count, (int32_t)this->length - this->Count, format_spec_t<char_t,T>::value, value);
+            int len = choose<encoding>(::_snprintf,::_snwprintf)(this->Data + this->Count, (int32_t)this->length - this->Count, format_spec_t<char_t,T>::value, value);
 
             // Succeeded: Advance count
             if (len >= 0 && len < this->length)
@@ -894,7 +894,7 @@ namespace wtl
     LastErrorString()
     {
       //! \var formatMsg - Format message
-      static const auto formatMsg = getFunc<encoding_char_t<ENC>>(::FormatMessageA,::FormatMessageW);
+      static const auto formatMsg = choose<ENC>(::FormatMessageA,::FormatMessageW);
 
       // Lookup system error and append to user error
       formatMsg(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, ::GetLastError(), 0, *base::c_str(), base::length, nullptr);

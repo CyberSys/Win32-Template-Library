@@ -124,16 +124,16 @@ namespace wtl
     virtual int32_t  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
     {
       //! \var dispatchMessage - Functor for 'DispatchMessage'
-      static const auto dispatchMessage = getFunc<encoding>(::DispatchMessageA,::DispatchMessageW);
+      static constexpr auto dispatchMessage = choose<encoding>(::DispatchMessageA,::DispatchMessageW);
 
       //! \var getMessage - Functor for 'GetMessage'
-      static const auto getMessage = getFunc<encoding>(::GetMessageA,::GetMessageW);
+      static constexpr auto getMessage = choose<encoding>(::GetMessageA,::GetMessageW);
 
       //! \var isDialogMessage - Functor for 'isDialogMessage'
-      static const auto isDialogMessage = getFunc<encoding>(::IsDialogMessageA,::IsDialogMessageW);
+      static constexpr auto isDialogMessage = choose<encoding>(::IsDialogMessageA,::IsDialogMessageW);
 
       //! \var translateAccelerator - Functor for 'TranslateAccelerator'
-      static const auto translateAccelerator = getFunc<encoding>(::TranslateAcceleratorA,::TranslateAcceleratorW);
+      static constexpr auto translateAccelerator = choose<encoding>(::TranslateAcceleratorA,::TranslateAcceleratorW);
 
       MSG msg;
 

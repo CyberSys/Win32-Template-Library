@@ -126,6 +126,9 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<encoding>;
     
+    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
+    using CreateStruct = choose_t<encoding,::CREATESTRUCTA,::CREATESTRUCTW>;
+
     //! \alias command_t - Define Command type
     using command_t = Command<encoding>;
     
@@ -143,9 +146,6 @@ namespace wtl
 
     //! \alias wtlproc_t - Instance window procedure signature
     using wtlproc_t = LResult (__thiscall*)(WindowMessage, ::WPARAM, ::LPARAM);  
-
-    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
-    using CreateStruct = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ChildWindowCollection - Define child window collection type
@@ -449,7 +449,7 @@ namespace wtl
 
         // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
         case WindowMessage::GETMINMAXINFO:
-          return getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
+          return choose<encoding>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
 
         // [REMAINDER] Lookup native handle from the 'Active Windows' collection
         default:
@@ -473,7 +473,7 @@ namespace wtl
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
-      ::LRESULT result = getFunc<char_t>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
+      ::LRESULT result = choose<encoding>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
       
       // [CREATE/NCCREATE] Cleanup
       switch (auto msg = static_cast<WindowMessage>(message))
@@ -505,7 +505,7 @@ namespace wtl
     template <typename DATA>
     DATA* data() const
     {
-      return reinterpret_cast<DATA*>( getFunc<char_t>(::GetWindowLongPtrA,::GetWindowLongPtrW)(Handle.get(), GWLP_USERDATA) );
+      return reinterpret_cast<DATA*>( choose<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(Handle.get(), GWLP_USERDATA) );
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -845,7 +845,7 @@ namespace wtl
           // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
           case WindowType::Native:
             // Delegate to native class window procedure and infer routing
-            ret.Result = getFunc<char_t>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
+            ret.Result = choose<encoding>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
             ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
           
             // [HANDLED] Return result & routing

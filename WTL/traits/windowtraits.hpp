@@ -78,10 +78,8 @@ namespace wtl
     template <Encoding ENC, typename OBJ>
     static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
     { 
-      using char_t = encoding_char_t<ENC>;    //!< Character encoding type
-
       // Lookup function
-      auto createWindow = getFunc<char_t>(::CreateWindowExA,::CreateWindowExW);
+      auto createWindow = choose<ENC>(::CreateWindowExA,::CreateWindowExW);
 
       // Create window
       if (::HWND hwnd = createWindow(enum_cast(exStyle),                        //!< Extended style

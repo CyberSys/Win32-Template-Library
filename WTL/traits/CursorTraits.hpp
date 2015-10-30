@@ -36,7 +36,7 @@ namespace wtl
   //  template <Encoding ENC>
   //  static HCURSOR create(HINSTANCE instance, ResourceId<ENC> ident) 
   //  { 
-  //    return getFunc<ENC>(::LoadCursorA,::LoadCursorW)(instance, ident); 
+  //    return choose<ENC>(::LoadCursorA,::LoadCursorW)(instance, ident); 
   //  }
   //  
   //  /////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ namespace wtl
   //  template <Encoding ENC = Encoding::UTF16>
   //  static HCURSOR create(SystemCursor ident) 
   //  { 
-  //    return getFunc<ENC>(::LoadCursorA,::LoadCursorW)(npos, ident); 
+  //    return choose<ENC>(::LoadCursorA,::LoadCursorW)(npos, ident); 
   //  }
   //  
   //  /////////////////////////////////////////////////////////////////////////////////////////

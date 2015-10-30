@@ -28,7 +28,7 @@ namespace wtl
     using char_t = encoding_char_t<ENC>;
     
     //! \alias CreationData - Define window creation data type
-    using CreationData = getType<char_t,::CREATESTRUCTA,::CREATESTRUCTW>;
+    using CreationData = choose_t<ENC,::CREATESTRUCTA,::CREATESTRUCTW>;
     
     //! \alias resource_t - Define resource id type
     using resource_t = ResourceId<ENC>;

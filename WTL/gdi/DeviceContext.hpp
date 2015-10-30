@@ -325,7 +325,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), &native_cast(sz)) == False)
+      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -349,7 +349,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (getFunc<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), &native_cast(sz)) == False)
+      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -523,7 +523,7 @@ namespace wtl
     int32_t write(const encoding_char_t<ENC>* txt, int32_t len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32_t height = getFunc<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
+      if (int32_t height = choose<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
         return height;
 
       // Failure

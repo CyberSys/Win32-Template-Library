@@ -38,7 +38,7 @@ namespace wtl
 
     //! \alias WndClassEx - Window class data type
     template <Encoding ENC>
-    using WndClassEx = getType<encoding_char_t<ENC>,::WNDCLASSEXA,::WNDCLASSEXW>;
+    using WndClassEx = choose_t<ENC,::WNDCLASSEXA,::WNDCLASSEXW>;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   
@@ -104,7 +104,7 @@ namespace wtl
       wndCls.hCursor = cursor;*/
 
       // Register class
-      if (::ATOM atom = getFunc<ENC>(::RegisterClassExA,::RegisterClassExW)(&wndCls))
+      if (::ATOM atom = choose<ENC>(::RegisterClassExA,::RegisterClassExW)(&wndCls))
         return { atom, AllocType::Accquire };
 
       // Error: Failed  

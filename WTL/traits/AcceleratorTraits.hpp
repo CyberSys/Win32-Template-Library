@@ -59,11 +59,8 @@ namespace wtl
     template <Encoding ENC>
     static NativeHandle<HACCEL> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
-      //! \alias char_t - Character encoding type
-      using char_t = encoding_char_t<ENC>;    
-
       // Create solid colour brush handle
-      if (HACCEL accel = getFunc<char_t>(::LoadAcceleratorsA,::LoadAcceleratorsW)(instance, ident))
+      if (HACCEL accel = choose<ENC>(::LoadAcceleratorsA,::LoadAcceleratorsW)(instance, ident))
         return { accel, AllocType::Accquire };
 
       // Error: Failed  

@@ -23,14 +23,17 @@ namespace wtl
   //! \tparam ENC - Character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct SystemVersion : protected getType<encoding_char_t<ENC>,::OSVERSIONINFOA,::OSVERSIONINFOW>
+  struct SystemVersion : protected choose_t<ENC,::OSVERSIONINFOA,::OSVERSIONINFOW>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   protected:
     //! \alias base - Define base type
-    using base = getType<encoding_char_t<ENC>,::OSVERSIONINFOA,::OSVERSIONINFOW>;
+    using base = choose_t<ENC,::OSVERSIONINFOA,::OSVERSIONINFOW>;
 
-  public:
+  public:    
+    //! \alias type - Define own type
+    using type = SystemVersion<ENC>;
+
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
 
@@ -47,7 +50,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     SystemVersion() : Ident(WindowVersion::Future)
     {
-      static const auto getVersion = getFunc<encoding_char_t<ENC>>(::GetVersionExA,::GetVersionExW);
+      static const auto getVersion = choose<ENC>(::GetVersionExA,::GetVersionExW);
 
       // Prepare
       this->dwOSVersionInfoSize = sizeof(base);

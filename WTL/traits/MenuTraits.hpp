@@ -93,7 +93,7 @@ namespace wtl
     static NativeHandle<::HMENU> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       // Load menu 
-      if (::HMENU menu = getFunc<ENC>(::LoadMenuA,::LoadMenuW)(instance, ident))
+      if (::HMENU menu = choose<ENC>(::LoadMenuA,::LoadMenuW)(instance, ident))
         return { menu, AllocType::Accquire };
 
       // Error: Failed  

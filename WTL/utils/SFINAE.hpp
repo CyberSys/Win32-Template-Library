@@ -186,7 +186,16 @@ namespace wtl
   using enable_if_integer_t = std::enable_if_t<std::is_integral<T>::value 
                                             && !std::is_same<T,bool>::value, RET>;
 
-
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_larger_t - Defines an SFINAE expression requiring type A be larger than a type B
+  //! 
+  //! \tparam A - Input type
+  //! \tparam B - Another type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename A, typename B, typename RET = void>
+  using enable_if_larger_t = std::enable_if_t<(sizeof(A) > sizeof(B)), RET>;
+  
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_integral_t - Defines an SFINAE expression requiring an integral type
   //! 
@@ -251,14 +260,24 @@ namespace wtl
   
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias enable_if_sizeof_t - Defines an SFINAE expression requiring a type of exact size
+  //! \alias enable_if_sizeof_t - Defines an SFINAE expression requiring type A equal the size of type B
   //! 
-  //! \tparam T - Input type
-  //! \tparam SZ - Type defining the required size
+  //! \tparam A - Input type
+  //! \tparam B - Another type
   //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename SZ, typename RET = void>
-  using enable_if_sizeof_t = std::enable_if_t<sizeof(T) == sizeof(SZ), RET>;
+  template <typename A, typename B, typename RET = void>
+  using enable_if_sizeof_t = std::enable_if_t<sizeof(A) == sizeof(B), RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_smaller_t - Defines an SFINAE expression requiring type A be smaller than a type B
+  //! 
+  //! \tparam A - Input type
+  //! \tparam B - Another type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename A, typename B, typename RET = void>
+  using enable_if_smaller_t = std::enable_if_t<(sizeof(A) < sizeof(B)), RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////

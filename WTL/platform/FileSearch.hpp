@@ -29,24 +29,24 @@ namespace wtl
   struct FileSearch
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
-    //! \alias type - Define own type
-    using type = FileSearch<ENC>;
-  
-    //! \alias char_t - Encoding character type
-    using char_t = encoding_char_t<ENC>;
-
-    //! \alias path_t - Path type
-    using path_t = Path<ENC>;
-
-    //! \alias result_t - Results data type
-    using result_t = getType<char_t,::WIN32_FIND_DATAA,::WIN32_FIND_DATAW>;
-
-    //! \alias handle_t - Search handle type
-    using handle_t = Handle<::HFILESEARCH>;
     
     //! \alias encoding - Encoding type
     static constexpr Encoding encoding = ENC;  
+    
+    //! \alias type - Define own type
+    using type = FileSearch<encoding>;
+  
+    //! \alias char_t - Encoding character type
+    using char_t = encoding_char_t<encoding>;
+
+    //! \alias path_t - Path type
+    using path_t = Path<encoding>;
+
+    //! \alias result_t - Results data type
+    using result_t = choose_t<encoding,::WIN32_FIND_DATAA,::WIN32_FIND_DATAW>;
+
+    //! \alias handle_t - Search handle type
+    using handle_t = Handle<::HFILESEARCH>;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -186,7 +186,7 @@ namespace wtl
       do
       {
         // Advance iff results remain, otherwise close handle
-        if (!getFunc<char_t>(::FindNextFileA,::FindNextFileW)(Handle, Result))
+        if (!choose<encoding>(::FindNextFileA,::FindNextFileW)(Handle, Result))
           Handle.release();
       } 
       // Skip relative paths, abort if complete

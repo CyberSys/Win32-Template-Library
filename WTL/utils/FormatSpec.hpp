@@ -28,23 +28,23 @@ namespace wtl
   struct format_spec; 
 
   //! \struct format_spec<...> - Define specializations for each type
-  template <typename CHR> struct format_spec<CHR,ulong64_t>        { static constexpr const CHR* value = getValue<CHR>("%llu", L"%llu");  };
-  template <typename CHR> struct format_spec<CHR,long64_t>         { static constexpr const CHR* value = getValue<CHR>("%lld", L"%lld");  };
-  template <typename CHR> struct format_spec<CHR,float64_t>        { static constexpr const CHR* value = getValue<CHR>("%llf", L"%llf");  };
-  template <typename CHR> struct format_spec<CHR,float32_t>        { static constexpr const CHR* value = getValue<CHR>("%lf", L"%lf");    };
-  template <typename CHR> struct format_spec<CHR,ulong32_t>        { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
-  template <typename CHR> struct format_spec<CHR,long32_t>         { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
-  template <typename CHR> struct format_spec<CHR,uint32_t>         { static constexpr const CHR* value = getValue<CHR>("%lu", L"%lu");    };
-  template <typename CHR> struct format_spec<CHR,int32_t>          { static constexpr const CHR* value = getValue<CHR>("%ld", L"%ld");    };
-  template <typename CHR> struct format_spec<CHR,uint16_t>         { static constexpr const CHR* value = getValue<CHR>("%hu", L"%hu");    };
-  template <typename CHR> struct format_spec<CHR,int16_t>          { static constexpr const CHR* value = getValue<CHR>("%hd", L"%hd");    };
-  template <typename CHR> struct format_spec<CHR,CHR>              { static constexpr const CHR* value = getValue<CHR>("%c", L"%c");      };
-  template <typename CHR> struct format_spec<CHR,uint8_t>          { static constexpr const CHR* value = getValue<CHR>("%cu", L"%cu");    };
-  template <typename CHR> struct format_spec<CHR,int8_t>           { static constexpr const CHR* value = getValue<CHR>("%c", L"%c");      };
-  template <typename CHR> struct format_spec<CHR,CHR*>             { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
-  template <typename CHR> struct format_spec<CHR,uint8_t*>         { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
-  template <typename CHR> struct format_spec<CHR,const CHR*>       { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
-  template <typename CHR> struct format_spec<CHR,const uint8_t*>   { static constexpr const CHR* value = getValue<CHR>("%s", L"%s");      };
+  template <typename CHR> struct format_spec<CHR,ulong64_t>        { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%llu", L"%llu");  };
+  template <typename CHR> struct format_spec<CHR,long64_t>         { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%lld", L"%lld");  };
+  template <typename CHR> struct format_spec<CHR,float64_t>        { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%llf", L"%llf");  };
+  template <typename CHR> struct format_spec<CHR,float32_t>        { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%lf", L"%lf");    };
+  template <typename CHR> struct format_spec<CHR,ulong32_t>        { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%lu", L"%lu");    };
+  template <typename CHR> struct format_spec<CHR,long32_t>         { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%ld", L"%ld");    };
+  template <typename CHR> struct format_spec<CHR,uint32_t>         { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%lu", L"%lu");    };
+  template <typename CHR> struct format_spec<CHR,int32_t>          { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%ld", L"%ld");    };
+  template <typename CHR> struct format_spec<CHR,uint16_t>         { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%hu", L"%hu");    };
+  template <typename CHR> struct format_spec<CHR,int16_t>          { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%hd", L"%hd");    };
+  template <typename CHR> struct format_spec<CHR,CHR>              { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%c", L"%c");      };
+  template <typename CHR> struct format_spec<CHR,uint8_t>          { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%cu", L"%cu");    };
+  template <typename CHR> struct format_spec<CHR,int8_t>           { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%c", L"%c");      };
+  template <typename CHR> struct format_spec<CHR,CHR*>             { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%s", L"%s");      };
+  template <typename CHR> struct format_spec<CHR,uint8_t*>         { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%s", L"%s");      };
+  template <typename CHR> struct format_spec<CHR,const CHR*>       { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%s", L"%s");      };
+  template <typename CHR> struct format_spec<CHR,const uint8_t*>   { static constexpr const CHR* value = choose<default_encoding<CHR>::value>("%s", L"%s");      };
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
