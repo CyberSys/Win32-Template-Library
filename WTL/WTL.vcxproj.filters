@@ -449,9 +449,6 @@
     <ClInclude Include="utils\DebugInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="windows\properties\WindowProperty.hpp">
-      <Filter>Windows\Properties</Filter>
-    </ClInclude>
     <ClInclude Include="windows\Command.hpp">
       <Filter>Windows</Filter>
     </ClInclude>

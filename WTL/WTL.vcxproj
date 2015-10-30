@@ -172,7 +172,6 @@
     <ClInclude Include="windows\properties\IdentProperty.hpp" />
     <ClInclude Include="windows\properties\PositionProperty.h" />
     <ClInclude Include="windows\properties\PositionProperty.hpp" />
-    <ClInclude Include="windows\properties\WindowProperty.hpp" />
     <ClInclude Include="windows\properties\WindowRectProperty.h" />
     <ClInclude Include="windows\properties\WindowRectProperty.hpp" />
     <ClInclude Include="windows\properties\SizeProperty.h" />
