@@ -102,7 +102,7 @@ namespace wtl
     {
       // [CHECK] Ensure table found
       if (!Table.exists())
-        throw platform_error(HERE, "String resource %d does not exist", Ident);
+        throw platform_error(HERE, "String resource ", Ident, " does not exist");
 
       // Find desired string
       for (int32_t i = 0, index = Ident % 16; Entry && i < index; i++)
@@ -110,7 +110,7 @@ namespace wtl
 
       // [NOT-FOUND] Return false & empty string 
       if (!Entry || !Entry->Length)
-        throw logic_error(HERE, "String resource %d does not exist", Ident);
+        throw logic_error(HERE, "String resource ", Ident, " does not exist");
     }
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -137,7 +137,7 @@ namespace wtl
     {
       // [FOUND] Ensure sufficient space is available
       if (Entry->Length > LEN)
-        throw logic_error(HERE, "String resource %d requires %d chars but only %d available", Ident, Entry->Length, LEN);
+        throw logic_error(HERE, "String resource ", Ident, " requires ", Entry->Length, " chars but only ", LEN, " available");
 
       // Copy string as UTF16 (Convert on return if necessary)
       return CharArray<Encoding::UTF16,LEN>(Entry->Text, Entry->Text+Entry->Length);

@@ -182,14 +182,14 @@
   //! \param[in] min - Inclusive lower bounds
   //! \param[in] max - Exclusive upper bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  #define CHECKED_INDEX(idx, min, max)  { if (((idx) >= (min) && (idx) < (max)) == false) throw wtl::out_of_range(HERE, "Index %d outside of range %d to %d", idx, min, max); }
+  #define CHECKED_INDEX(idx, min, max)  { if (((idx) >= (min) && (idx) < (max)) == false) throw wtl::out_of_range(HERE, "Index ", idx, " outside of range ", min, " to ", max); }
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def CHECKED_LENGTH - Throws an exception when an implementation defined length is exceeded
   //! \param[in] len - Length
   //! \param[in] max - Inclusive upper bound
   //////////////////////////////////////////////////////////////////////////////////////////
-  #define CHECKED_LENGTH(len, max)      { if (((len) <= (max)) == false) throw wtl::length_error(HERE, "Insufficient space: %d available, %s required", max, len); }
+  #define CHECKED_LENGTH(len, max)      { if (((len) <= (max)) == false) throw wtl::length_error(HERE, "Insufficient space: ", max, " available, ", len, " required"); }
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def LENGTH_INVARIANT - Throws an exception when an implementation defined length is exceeded

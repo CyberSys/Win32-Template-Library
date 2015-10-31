@@ -70,7 +70,7 @@ namespace wtl
     {
       // Verify folder exists
       if (!folder.exists())
-        throw logic_error(HERE, "Search folder '%s' does not exist", folder.c_str());
+        throw logic_error(HERE, "Search folder '", folder, "' does not exist");
 
       // Skip undesireable first result
       if (exists() && !valid())

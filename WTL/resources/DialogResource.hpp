@@ -240,7 +240,7 @@ namespace wtl
       }
 
       // Unrecognised window class ordinal
-      throw domain_error(HERE, "Unrecognised window class ordinal '%d'", enum_cast(id));
+      throw domain_error(HERE, "Unrecognised window class ordinal '", enum_cast(id), "'");
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
