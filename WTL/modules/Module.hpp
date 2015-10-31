@@ -51,7 +51,7 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Module::~Module
-    //! Can be polymorphic
+    //! Removes module from 'Loaded Modules' collection.
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~Module();
     
@@ -60,28 +60,6 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     // TODO: Execute exported function 
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Module::contains const
-    //! Query whether a resource is present
-    //! 
-    //! \tparam ENC - Resource name character encoding 
-    //!
-    //! \param[in] type - Resource type
-    //! \param[in] name - Resource identifier
-    //! \param[in] lang - Resource language
-    //! \return NativeHandle<::HRSRC> - Accquired handle if found, otherwise 'npos'
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <Encoding ENC>
-    //Resource  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
-    //{ 
-    //  // Load resource handle
-    //  if (::HRSRC res = choose<ENC>(::FindResourceExA,::FindResourceExW)(Handle, ResourceId<ENC>(type), name, language))
-    //    return Resource(Handle, HResource(res, AllocType::Accquire));
-
-    //  // [NOT FOUND] Return sentinel
-    //  return Resource::npos;
-    //}
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Module::findResource
@@ -128,27 +106,6 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Module::load
-    //! Loads a string resource from the module
-    //! 
-    //! \tparam LEN - Output buffer capacity
-    //! \tparam ENC - Output string character encoding 
-    //! 
-    //! \param[in] id - Resource id
-    //! \param[in,out] &str - Output buffer
-    //! \param[in] lang - [optional] String language
-    //! 
-    //! \throw wtl::domain_error - Missing string -or- Insufficient buffer capacity to store string
-    //! \throw wtl::platform_error - Unable to load resource
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <unsigned LEN, Encoding ENC = Encoding::UTF16>
-    //void load(ResourceId<ENC> id, CharArray<ENC,LEN>& str, LanguageId lang = LanguageId::Neutral) const
-    //{
-    //  // Load string from module
-    //  str = StringResource(Handle, id, lang);
-    //}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Module::path const
     //! Get the full path of the module
     //! 
@@ -182,20 +139,27 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias element_t - Define collection element type
+    using element_t = std::reference_wrapper<const Module>;
+  
+  protected:
     //! \alias base - Define base type
     using base = List<std::reference_wrapper<const Module>>;
 
-    //! \alias element_t - Define collection element type
-    using element_t = std::reference_wrapper<const Module>;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   
     // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ModuleCollection::ModuleCollection
+    //! Create empty collection
+    /////////////////////////////////////////////////////////////////////////////////////////
+    ModuleCollection() = default;
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ModuleCollection::findResource
     //! Find a resource from any module in the collection
