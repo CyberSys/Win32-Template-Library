@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Handle.hpp"               //!< Handle
-#include "wtl/utils/CharArray.hpp"            //!< CharArray
+#include "wtl/utils/String.hpp"               //!< String
 #include "wtl/platform/DrawingFlags.hpp"      //!< StockObject, FontStyles
 #include "wtl/casts/BooleanCast.hpp"          //!< BooleanCast
 #include "wtl/casts/EnumCast.hpp"             //!< EnumCast
@@ -57,7 +57,7 @@ namespace wtl
     //! \tparam ENC - Encoding type
     //! \tparam LEN - Name buffer capacity
     //! 
-    //! \param[in] name - Font name
+    //! \param[in] const& name - Font name
     //! \param[in] height - Height in twips
     //! \param[in] weight - Weight
     //! \param[in] italic - Italics
@@ -75,8 +75,8 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    static NativeHandle<::HFONT> create(const CharArray<ENC,LEN>& name, 
+    template <Encoding ENC>
+    static NativeHandle<::HFONT> create(const String<ENC>& name, 
                                         int32_t       height,  
                                         FontWeight    weight = FontWeight::Normal, 
                                         bool          italic = false, 
@@ -101,7 +101,7 @@ namespace wtl
                                     boolean_cast(italic), boolean_cast(underline), boolean_cast(strike), 
                                     enum_cast(charSet), 
                                     enum_cast(precision), enum_cast(clipping), enum_cast(quality), 
-                                    enum_cast(family), name))
+                                    enum_cast(family), name.c_str()))
         return { font, AllocType::Create };
 
       // Error: Failed  

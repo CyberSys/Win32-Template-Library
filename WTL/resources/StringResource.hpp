@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\resources\StringResource.hpp
 //! \brief Encapsulates reading string resources
-//! \date 6 March 2015
+//! \date 31 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -11,7 +11,6 @@
 #include "wtl/WTL.hpp"
 #include "wtl/Resources/ResourceBlob.hpp"       //!< ResourceBlob
 #include "wtl/modules/Module.hpp"               //!< LoadedModules
-#include "wtl/utils/CharArray.hpp"              //!< CharArray
 #include "wtl/utils/String.hpp"                 //!< String
 
 //! \namespace wtl - Windows template library
@@ -124,26 +123,6 @@ namespace wtl
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // StringResource::c_arr const
-    //! Populate character array from string resource
-    //! 
-    //! \tparam ENC - Character encoding type
-    //! \tparam LEN - Buffer capacity
-    //! 
-    //! \return CharArray<ENC,LENGTH> - Character array containing string resource
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <Encoding ENC, unsigned LEN>
-    //CharArray<ENC,LEN> c_arr() const
-    //{
-    //  // [FOUND] Ensure sufficient space is available
-    //  if (Entry->Length > LEN)
-    //    throw logic_error(HERE, "String resource ", Ident, " requires ", Entry->Length, " chars but only ", LEN, " available");
-
-    //  // Copy string as UTF16 (Convert on return if necessary)
-    //  return CharArray<Encoding::UTF16,LEN>(Entry->Text, Entry->Text+Entry->Length);
-    //}
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // StringResource::c_str const
     //! Populate dynamic string from string resource

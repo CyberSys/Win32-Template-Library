@@ -12,7 +12,6 @@
 #include "wtl/casts/EnumCast.hpp"                 //!< EnumCast
 #include "wtl/casts/NativeCast.hpp"               //!< NativeCast
 #include "wtl/utils/Handle.hpp"                   //!< Handle
-#include "wtl/utils/CharArray.hpp"                //!< CharArray
 #include "wtl/utils/LengthOf.hpp"                 //!< LengthOf
 #include "wtl/utils/String.hpp"                   //!< String
 #include "wtl/traits/DeviceContextTraits.hpp"     //!< HDeviceContext
@@ -213,7 +212,7 @@ namespace wtl
     // DeviceContext::getFont
     //! Creates a font scaled for this device context
     //! 
-    //! \param[in] name - Font name
+    //! \param[in] const& name - Font name
     //! \param[in] points - Size in points
     //! \param[in] weight - Emboldened weight
     //! \param[in] italic - Italicised
@@ -222,8 +221,8 @@ namespace wtl
     //! \param[in] charSet - Character set
     //! \return HFont - Handle to new font
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    HFont getFont(const CharArray<ENC,LEN>& name, int32_t points, FontWeight weight = FontWeight::Normal, bool italic = false, bool underline = false, FontQuality quality = FontQuality::AntiAliased, FontCharSet charSet = FontCharSet::Default)
+    template <Encoding ENC>
+    HFont getFont(const String<ENC>& name, int32_t points, FontWeight weight = FontWeight::Normal, bool italic = false, bool underline = false, FontQuality quality = FontQuality::AntiAliased, FontCharSet charSet = FontCharSet::Default)
     {
       return HFont(name, getFontHeight(points), weight, italic, underline, false, charSet, quality);
     }
