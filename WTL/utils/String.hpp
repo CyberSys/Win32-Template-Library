@@ -11,8 +11,10 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"        //!< Character encoding
 #include "wtl/utils/Exception.hpp"              //!< Exceptions
+#include "wtl/utils/Encoding.hpp"               //!< string_encoder
 #include "wtl/io/Console.hpp"                   //!< Console
 #include <string>                               //!< std::basic_string
+#include <vector>                               //!< std::vector
 
 //! \namespace wtl - Windows template library
 namespace wtl
