@@ -178,9 +178,9 @@ namespace wtl
         // [UNHANDLED] Return result & routing
         return base::route(message, w, l);
       }
-      catch (exception& e)
+      catch (std::exception& e)
       {
-        cdebug.report("Unable to route message", HERE, e);
+        cdebug << caught_exception("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
         return MsgRoute::Unhandled;

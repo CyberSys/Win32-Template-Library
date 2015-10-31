@@ -11,6 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"      //!< choose()
 #include "wtl/utils/CharArray.hpp"            //!< CharArray
+#include "wtl/utils/Exception.hpp"            //!< caught_exception
 #include "wtl/platform/WindowFlags.hpp"       //!< MessageBoxFlags
 #include <stdexcept>                          //!< std::Exception
 
@@ -71,9 +72,10 @@ namespace wtl
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  WindowId errorBox(HWND parent, const std::exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  WindowId errorBox(HWND parent, const caught_exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
-    return errorBox<ENC>(parent, CharArray<ENC,32>("Program Error"), CharArray<ENC,2048>(ex.what()), buttons|MessageBoxFlags::IconError);
+    cdebug << ex;
+    return errorBox<ENC>(parent, CharArray<ENC,32>("Program Error"), CharArray<ENC,2048>(ex.Problem.c_str()), buttons|MessageBoxFlags::IconError);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////

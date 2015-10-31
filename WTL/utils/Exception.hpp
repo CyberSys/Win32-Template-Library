@@ -11,114 +11,162 @@
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"           //!< EnumCast
 #include "wtl/platform/WindowFlags.hpp"     //!< FormatMessageFlags
+#include "wtl/io/StreamIterator.hpp"        //!< StreamIterator
+#include "wtl/utils/ForEach.hpp"            //!< for_each_t
 #include <exception>                        //!< std::exception
+#include <stdexcept>                        //!< std::logic_error, std::domain_error, std::length_error, std::out_of_range
 #include <utility>                          //!< std::forward
 #include <array>                            //!< std::array
+#include <string>                           //!< std::string
 #include <cstdio>                           //!< std::snprintf
+#include <sstream>                          //!< std::ostringstream
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::error_string
-  //! Builds a formatted string (of narrow character type) without performing dynamic memory allocation
+  //! Builds a formatted string of narrow character type
   //! 
-  //! \tparam LENGTH - Length of character array
+  //! \tparam ARGS - String stream arguments
   //! 
-  //! \param[in] const* format - Formatting string
-  //! \param[in] &&... args - [optional] Arguments
-  //! \return std::array<char,LENGTH> - Character array containing formatted string
+  //! \param[in] &&... args - Arguments
+  //! \return std::string - Formatted string
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <uint32_t LENGTH, typename... ARGS>
-  std::array<char,LENGTH> error_string(const char* format, ARGS&&... args)
+  template <typename... ARGS>
+  std::string  error_string(ARGS&&... args)
   {
-    std::array<char,LENGTH>  msg;
-    std::snprintf(msg.data(), LENGTH, format, args...);
-    return msg;
+    static_assert(sizeof...(ARGS) > 0, "Missing string arguments");
+
+    std::ostringstream ss;
+
+    // Assemble and return string
+    for_each_t(std::tuple<ARGS...>(args...), stream_iterator(ss));
+    return ss.str();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct exception - Adds source information to an STL exception
+  //! \struct error_site - Mix-in class providing the source of an exception
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct exception : std::exception
+  struct error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
-    //! \alias base - Define base type
-    using base = std::exception;
-
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    char  Location[1024];     //!< Source of throw
-    char  Message[16*1024];   //!< Error message
+    std::string Source;     //!< Source of throw
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // exception::exception
-    //! Creates an exception from a location only
+    // error_site::error_site
+    //! Creates from a source-file location string
     //!
-    //! \param[in] const* loc - Location
+    //! \param[in] && loc - String containing source-file location
     /////////////////////////////////////////////////////////////////////////////////////////
-    exception(const char* loc)
-    {
-      // Copy location
-      std::snprintf(Location, sizeof(Location), loc);
-    }
+    error_site(std::string&& loc) : Source(loc)
+    {}
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // exception::exception
-    //! Creates an exception from a location and error message
-    //!
-    //! \tparam ARGS - Arguments parameter pack type
-    //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
-    //! \throw wtl::length_error - Insufficent capacity to format string
-    //! \throw wtl::logic_error - Incorrect number of arguments
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    exception(const char* location, const char* format, ARGS&&... args) 
-    {
-      // Format message
-      std::snprintf(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
-    }
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // exception::~exception
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~exception()
-    {
-    }
+    ENABLE_COPY(error_site);        //!< Can be copied
+    ENABLE_MOVE(error_site);        //!< Can be moved
+    ENABLE_POLY(error_site);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // exception::location const
+    // error_site::where const noexcept
     //! Get the error location (source of throw)
     //!
     //! \return const char* - Location string
     /////////////////////////////////////////////////////////////////////////////////////////
-    const char* location() const
+    const char* where() const noexcept
     {
-      return Location;
+      return Source.c_str();
     }
 
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+  };
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct caught_exception - Helper class used to extract the source of an exception
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct caught_exception
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    const std::string Cause,        //!< Exception error message
+                      Problem;      //!< Top-level error message
+
+  protected:
+    const std::string Sink;         //!< Source of catch
+    const error_site* Source;       //!< Source of throw
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // exception::what const
-    //! Get the error message
+    // caught_exception::caught_exception
+    //! Creates from a message, exception, and source-file location string
     //!
-    //! \return const char* - Error string
+    //! \param[in] const* msg - Top-level error message
+    //! \param[in] && sink - Location of catch
+    //! \param[in] const& e - Exception
     /////////////////////////////////////////////////////////////////////////////////////////
-    const char* what() const noexcept override
+    caught_exception(const char* msg, std::string&& sink, const std::exception& e) : Cause(e.what()),
+                                                                                     Problem(msg), 
+                                                                                     Sink(sink),
+                                                                                     Source(dynamic_cast<const error_site*>(&e))
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // caught_exception::caught_exception
+    //! Creates from a message and source-file location string. Used for fall-back catch handlers (...)
+    //!
+    //! \param[in] const* msg - Top-level error message
+    //! \param[in] && sink - Location of catch
+    /////////////////////////////////////////////////////////////////////////////////////////
+    caught_exception(const char* msg, std::string&& sink) : Cause("Unspecified"),
+                                                            Problem(msg), 
+                                                            Sink(sink),
+                                                            Source(nullptr)
+    {}
+
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(caught_exception);        //!< Can be copied
+    ENABLE_MOVE(caught_exception);        //!< Can be moved
+    ENABLE_POLY(caught_exception);        //!< Can be polymorphic
+
+	  // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // caught_exception::sink const noexcept
+    //! Get the location where the exception was caught
+    //!
+    //! \return const char* - Source-file location string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const char* sink() const noexcept
     {
-      return Message;
+      return Sink.c_str();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // caught_exception::source const noexcept
+    //! Get the location where the exception was raised
+    //!
+    //! \return const char* - Source-file location string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const char* source() const noexcept
+    {
+      return Source ? Source->where() : "Unspecified";
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -127,33 +175,37 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct domain_error - Thrown when a domain invariant is violated
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct domain_error : wtl::exception
+  struct domain_error : std::domain_error, error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::domain_error;
 
-    //! \alias base - Define base type
-    using base = wtl::exception;
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // domain_error::domain_error
-    //! Creates an exception from a location and error message
+    //! Creates an exception from a location and a stream of arguments used to build an error message
     //!
-    //! \tparam ARGS - Arguments parameter pack type
+    //! \tparam ARGS - Message stream argument types
     //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
-    //! \throw wtl::length_error - Insufficent capacity to format string
-    //! \throw wtl::logic_error - Incorrect number of arguments
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    domain_error(const char* location, const char* format, ARGS&&... args) : base(location, format, std::forward<ARGS>(args)...)
-    {
-    }
+    domain_error(std::string&& location, ARGS&&... args) : error_base(error_string(std::forward<ARGS>(args)...)),
+                                                           site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(domain_error);        //!< Can be copied
+    ENABLE_MOVE(domain_error);        //!< Can be moved
+    ENABLE_POLY(domain_error);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -169,33 +221,37 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct logic_error - Thrown when a logic invariant is violated
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct logic_error : wtl::exception
+  struct logic_error : std::logic_error, error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::logic_error;
 
-    //! \alias base - Define base type
-    using base = wtl::exception;
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // logic_error::logic_error
-    //! Creates an exception from a location and error message
+    //! Creates an exception from a location and a stream of arguments used to build an error message
     //!
-    //! \tparam ARGS - Arguments parameter pack type
+    //! \tparam ARGS - Message stream argument types
     //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
-    //! \throw wtl::length_error - Insufficent capacity to format string
-    //! \throw wtl::logic_error - Incorrect number of arguments
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    logic_error(const char* location, const char* format, ARGS&&... args) : base(location, format, std::forward<ARGS>(args)...)
-    {
-    }
+    logic_error(std::string&& location, ARGS&&... args) : error_base(error_string(std::forward<ARGS>(args)...)),
+                                                          site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(logic_error);        //!< Can be copied
+    ENABLE_MOVE(logic_error);        //!< Can be moved
+    ENABLE_POLY(logic_error);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -211,33 +267,37 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct invalid_argument - Thrown when an argument is missing or invalid
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct invalid_argument : wtl::exception
+  struct invalid_argument : std::invalid_argument, error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::invalid_argument;
 
-    //! \alias base - Define base type
-    using base = wtl::exception;
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // invalid_argument::invalid_argument
-    //! Creates an exception from a location and error message
+    //! Creates an exception from a location and a stream of arguments used to build an error message
     //!
-    //! \tparam ARGS - Arguments parameter pack type
+    //! \tparam ARGS - Message stream argument types
     //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
-    //! \throw wtl::length_error - Insufficent capacity to format string
-    //! \throw wtl::invalid_argument - Incorrect number of arguments
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    invalid_argument(const char* location, const char* format, ARGS&&... args) : base(location, format, std::forward<ARGS>(args)...)
-    {
-    }
+    invalid_argument(std::string&& location, ARGS&&... args) : error_base(error_string(std::forward<ARGS>(args)...)),
+                                                               site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(invalid_argument);        //!< Can be copied
+    ENABLE_MOVE(invalid_argument);        //!< Can be moved
+    ENABLE_POLY(invalid_argument);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -252,33 +312,37 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct length_error - Thrown when a capacity is exceeded
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct length_error : wtl::exception
+  struct length_error : std::length_error, error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::length_error;
 
-    //! \typedef base - Base class type
-    typedef wtl::exception base;
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // length_error::length_error
-    //! Creates an exception from a location and error message
+    //! Creates an exception from a location and a stream of arguments used to build an error message
     //!
-    //! \tparam ARGS - Arguments parameter pack type
+    //! \tparam ARGS - Message stream argument types
     //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::length_error - [Debug only] Missing formatting string
-    //! \throw wtl::length_error - Insufficent capacity to format string
-    //! \throw wtl::length_error - Incorrect number of arguments
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    length_error(const char* location, const char* format, ARGS&&... args) : base(location, format, std::forward<ARGS>(args)...)
-    {
-    }
+    length_error(std::string&& location, ARGS&&... args) : error_base(error_string(std::forward<ARGS>(args)...)),
+                                                           site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(length_error);        //!< Can be copied
+    ENABLE_MOVE(length_error);        //!< Can be moved
+    ENABLE_POLY(length_error);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -294,33 +358,37 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct out_of_range - Thrown when a value occurs outside of a defined boundary
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct out_of_range : wtl::exception
+  struct out_of_range : std::out_of_range, error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::out_of_range;
 
-    //! \alias base - Define base type
-    using base = wtl::exception;
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // out_of_range::out_of_range
-    //! Creates an exception from a location and error message
+    //! Creates an exception from a location and a stream of arguments used to build an error message
     //!
-    //! \tparam ARGS - Arguments parameter pack type
+    //! \tparam ARGS - Message stream argument types
     //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::out_of_range - [Debug only] Missing formatting string
-    //! \throw wtl::out_of_range - Insufficent capacity to format string
-    //! \throw wtl::out_of_range - Incorrect number of arguments
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    out_of_range(const char* location, const char* format, ARGS&&... args) : base(location, format, std::forward<ARGS>(args)...)
-    {
-    }
+    out_of_range(std::string&& location, ARGS&&... args) : error_base(error_string(std::forward<ARGS>(args)...)),
+                                                           site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(out_of_range);        //!< Can be copied
+    ENABLE_MOVE(out_of_range);        //!< Can be moved
+    ENABLE_POLY(out_of_range);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -332,57 +400,73 @@ namespace wtl
 
   };
 
+  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct platform_error - Thrown when a value occurs outside of a defined boundary
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct platform_error : wtl::exception
+  struct platform_error : std::runtime_error, error_site
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::runtime_error;
 
-    //! \alias base - Define base type
-    using base = wtl::exception;
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
+    
+    // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // platform_error::platform_error
-    //! Creates an exception from a location and error message
+    //! Creates an exception from a location and a stream of arguments used to build an error message
     //!
-    //! \tparam ARGS - Arguments parameter pack type
+    //! \tparam ARGS - Message stream argument types
     //!
-    //! \param[in] const* location - Location
-    //! \param[in] const* format - Formatting string
-    //! \param[in] ...&& args - [optional] Variadic arguments
-    //!
-    //! \throw wtl::out_of_range - [Debug only] Missing formatting string
-    //! \throw wtl::out_of_range - Insufficent capacity to format string
-    //! \throw wtl::out_of_range - Incorrect number of arguments
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    platform_error(const char* location, const char* format, ARGS&&... args) : base(location), Code(::GetLastError())
-    {
-      // Format message
-      int32_t n = std::snprintf(Message, sizeof(Message), format, std::forward<ARGS>(args)...);
+    platform_error(std::string&& location, ARGS&&... args) : error_base( formatMessage(::GetLastError(), std::forward<ARGS>(args)...) ),
+                                                             site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-      if (Code != 0)
-      {
-        char  strError[1024];
-
-        // Lookup and append system error
-        ::FormatMessageA(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, Code, 0UL, strError, sizeof(strError), nullptr);
-        std::snprintf(&Message[n-1], sizeof(Message)-n, ". %s.", strError);
-      }
-    }
+    ENABLE_COPY(platform_error);        //!< Can be copied
+    ENABLE_MOVE(platform_error);        //!< Can be moved
+    ENABLE_POLY(platform_error);        //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
+  private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // platform_error::formatMessage
+    //! Creates an exception message combining the exception and system error
+    //!
+    //! \tparam ARGS - Message stream argument types
+    //!
+    //! \param[in] code - System error code
+    //! \param[in] ...&& args - Error message stream arguments
+    //! \return std::string - String containing exception and system error messages
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    std::string  formatMessage(DWORD code, ARGS&&... args)
+    {
+      char  strError[1024];
+
+      // Lookup system error
+      if (code != 0)
+        ::FormatMessageA(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, code, 0, strError, sizeof(strError), nullptr);
+
+      // Assemble exception message and append system error
+      return error_string(std::forward<ARGS>(args)..., ". ", strError);
+    }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    DWORD   Code;     //!< System error code
   };
 
 

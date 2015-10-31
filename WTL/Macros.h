@@ -37,7 +37,7 @@
 // --------------------------------------------------------------------------------------------------------
 
 //! \def HERE - Generates a source file error location string: '<function>() on line <line> of <file>'
-#define HERE  ::wtl::error_string<512>("%s() on line %u of %s", __func__, __LINE__, __FILE__).data()
+#define HERE  ::wtl::error_string(__func__, "() on line ", __LINE__, " of ", __FILE__)
 
 // --------------------------------------------------------------------------------------------------------
 // --------------------------------------- CONSTRUCTION SEMANTICS -----------------------------------------

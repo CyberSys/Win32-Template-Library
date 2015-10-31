@@ -15,8 +15,8 @@
 #include "wtl/utils/FormatSpec.hpp"         //!< format_spec_t
 //#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
 #include "wtl/utils/Point.hpp"              //!< Point
-#include "wtl/utils/Exception.hpp"          //!< wtl::exception
-#include <stdexcept>                        //!< std::exception
+#include "wtl/utils/Exception.hpp"          //!< caught_exception
+#include <exception>                        //!< std::exception
 #include <string>                           //!< std::basic_string
 #include <cstdio>                           //!< std::vsnprintf
 #include <mutex>                            //!< std::lock_guard, std::recursive_mutex
@@ -263,7 +263,7 @@ namespace wtl
           ::ShowWindow(wnd, SW_SHOW);
       }
       // [ERROR] Unable to attach console
-      catch (exception& e)
+      catch (std::exception& e)
       {
         ::MessageBoxA(defvalue<::HWND>(), e.what(), "Debug Console", enum_cast(MessageBoxFlags::Ok|MessageBoxFlags::IconError));
       }
@@ -335,36 +335,6 @@ namespace wtl
       Mutex.lock();
     }
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Console::report
-    //! Writes an exception to the console
-    //! 
-    //! \param[in] const* task - Name of failed task 
-    //! \param[in] const& e - Exception
-    //! \param[in] const* location - Catch location
-    //////////////////////////////////////////////////////////////////////////////////////////
-    void report(const char* task, const char* location)  
-    { 
-      *this << Cons::Endl 
-            << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  <<  task << "..." << Cons::Endl
-            << (Cons::Yellow|Cons::Bold) << "CAUGHT BY: " << Cons::Yellow << location << "..." << Cons::Endl;
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Console::report
-    //! Writes an exception to the console
-    //! 
-    //! \param[in] const* task - Name of failed task 
-    //! \param[in] const& e - Exception
-    //! \param[in] const* location - Catch location
-    //////////////////////////////////////////////////////////////////////////////////////////
-    void report(const char* task, const char* location, std::exception& e)  
-    { 
-      *this << Cons::Endl 
-            << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  << e.what() << "..." << Cons::Endl
-            << (Cons::Yellow|Cons::Bold) << "CAUGHT BY: " << Cons::Yellow << location << "..." << Cons::Endl;
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////////
     // Console::setAttributes 
     //! Set the current text attributes
@@ -662,6 +632,22 @@ namespace wtl
   { 
     return fn(c); 
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Console::operator << 
+  //! Writes an exception to the console
+  //! 
+  //! \param[in,out] Console& c - Console
+  //! \param[in] const& ex - Caught exception
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  inline Console& operator << (Console& c, const caught_exception& ex)  
+  { 
+    return c << Cons::Endl 
+             << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  << ex.Problem << "..." << Cons::Endl
+             << (Cons::Yellow|Cons::Bold) << "CAUGHT: "    << Cons::Yellow << ex.source() << "..." << Cons::Endl;
+  }
+
 
 
 } // namespace wtl

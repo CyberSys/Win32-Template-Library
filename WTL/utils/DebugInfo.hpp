@@ -119,7 +119,7 @@ namespace wtl
       c << std::get<0>(t);
 
       // Delimit remainder, if any
-      for_each<1>(t, [&c] (auto& e) { c << ' ' << e;  } );
+      for_each_t<1>(t, [&c] (auto& e) { c << ' ' << e;  } );
     }
 
     // Write closing tag

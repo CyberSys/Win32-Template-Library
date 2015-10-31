@@ -188,14 +188,12 @@ namespace wtl
       }
       catch (std::exception& e)
       {
-        cdebug.report("Unable to dispatch message", HERE, e);
-        errorBox<encoding>(Window, e);
+        errorBox<encoding>(Window, caught_exception("Unable to dispatch message", HERE, e));
         return -1;
       }
       catch (...)
       {
-        cdebug.report("Unable to dispatch message", HERE);
-        errorBox(Window, c_arr("Program Error"), c_arr("An unrecognised terminal error has occurred, the program will now exit."));
+        errorBox<encoding>(Window, caught_exception("An unrecognised terminal error has occurred, the program will now exit.", HERE));
         return -2;
       }
     }

@@ -466,9 +466,9 @@ namespace wtl
           return msg.Result;
       }
       // [ERROR] Exception thrown by handler
-      catch (wtl::exception& e)
+      catch (std::exception& e)
       {
-        cdebug.report("Unable to route message", HERE, e);
+        cdebug << caught_exception("Unable to route message", HERE, e);
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
@@ -855,9 +855,9 @@ namespace wtl
         // [UNHANDLED] Return result & routing
         return ret;
       }
-      catch (wtl::exception& e)
+      catch (std::exception& e)
       {
-        cdebug.report("Unable to route message", HERE, e);
+        cdebug << caught_exception("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
         return MsgRoute::Unhandled;
