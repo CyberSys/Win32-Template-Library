@@ -40,6 +40,7 @@ namespace wtl
   template <typename DATA, uint32_t LENGTH>
   struct Array<DATA,LENGTH,true>
   {
+    template <typename V, uint32_t L, bool D>
     friend struct Array;                     // Unbound friend of itself
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------

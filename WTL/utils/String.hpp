@@ -158,7 +158,8 @@ namespace wtl
   template <Encoding ENC>
   struct String : std::basic_string<encoding_char_t<ENC>>
   {
-    friend String;   // Unbound friend of itself
+    template <Encoding E2>
+    friend struct String;   // Unbound friend of itself
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
