@@ -349,7 +349,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen_t(txt), &native_cast(sz)) == False)
+      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen(txt), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;

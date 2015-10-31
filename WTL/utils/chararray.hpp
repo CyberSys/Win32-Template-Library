@@ -97,7 +97,7 @@ namespace wtl
       /////////////////////////////////////////////////////////////////////////////////////////
       ~buffer_proxy()
       {
-        Owner.Count = strlen_t(Text);
+        Owner.Count = strlen(Text);
       }
 
 	    // ----------------------------------- STATIC METHODS -----------------------------------
@@ -172,7 +172,7 @@ namespace wtl
       constexpr Encoding enc = std::is_same<char_t,CHR>::value ? encoding : default_encoding_t<CHR>::value;
 
       // Copy from input buffer, truncate if necessary, assume equal encoding
-      CharArray::assign<enc>(str, str+strlen_t(str));
+      CharArray::assign<enc>(str, str+strlen(str));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -345,7 +345,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     char_t* copy(char_t* dest) const
     {
-      return strcpy_t(dest, &this->Data[0]);
+      return strcpy(dest, &this->Data[0]);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -358,7 +358,7 @@ namespace wtl
     bool operator == (const char_t* str) const
     {
       // Check all characters are equal
-      return strcmp_t(this->Data, str) == 0;
+      return strcmp(this->Data, str) == 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -371,7 +371,7 @@ namespace wtl
     bool operator != (const char_t* str) const
     {
       // Check strings are not equal
-      return strcmp_t(this->Data, str) != 0;
+      return strcmp(this->Data, str) != 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -397,7 +397,7 @@ namespace wtl
     bool operator == (const type& r) const
     {
       // Check all characters are equal
-      return strcmp_t(this->Data, r.Data) == 0;
+      return strcmp(this->Data, r.Data) == 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -440,7 +440,7 @@ namespace wtl
     bool operator != (const type& r) const
     {
       // Check characters are unequal
-      return strcmp_t(this->Data, r.Data) != 0;
+      return strcmp(this->Data, r.Data) != 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -475,7 +475,7 @@ namespace wtl
     bool operator < (const CharArray<N,L>& r) const
     {
       // Check string sorting order
-      return strcmp_t(this->Data, r.Data) < 0;
+      return strcmp(this->Data, r.Data) < 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -492,7 +492,7 @@ namespace wtl
     bool operator > (const CharArray<N,L>& r) const
     {
       // Check string sorting order
-      return strcmp_t(this->Data, r.Data) > 0;
+      return strcmp(this->Data, r.Data) > 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -534,12 +534,12 @@ namespace wtl
       LOGIC_INVARIANT(last-first < this->Count+this->length-1);
 
       // Convert/Append input string
-      int32_t num = string_encoder_t<E,encoding>::transform(first, last, &this->Data[this->Count], &this->Data[this->length]);
+      int32_t num = string_encoder<E,encoding>::convert(first, last, &this->Data[this->Count], &this->Data[this->length]);
       this->Count += num;
 
       // Ensure succeeded
       if (last-first && !num)
-        throw platform_error(HERE, "Unable to convert character encoding");  //throw platform_error(HERE, "Cannot convert to %s encoding: '%s'", toString(E), str);
+        throw platform_error(HERE, "Unable to convert character encoding"); 
 
       // Return new length
       return this->Count;
@@ -594,13 +594,13 @@ namespace wtl
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
     //! \throw wtl::logic_error - [Debug only] String will be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding E = encoding, typename CHR = const encoding_char_t<E>*>
-    int32_t assign(CHR first, CHR last)
+    template <Encoding E = encoding, typename CHR = encoding_char_t<E>>
+    int32_t assign(const CHR* first, const CHR* last)
     {
       LOGIC_INVARIANT(last-first < this->length-1);
 
       // Convert/Assign input string
-      this->Count = string_encoder_t<E,encoding>::transform(first, last, &this->Data[0], &this->Data[this->length]);
+      this->Count = string_encoder<E,encoding>::convert(first, last, &this->Data[0], &this->Data[this->length]);
 
       // Ensure succeeded
       if (last-first && !this->Count)
@@ -671,17 +671,30 @@ namespace wtl
     //!
     //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
     //! \throw wtl::length_error - Insufficent capacity
-    //! \throw wtl::logic_error - Incorrect number of arguments
+    //! \throw wtl::runtime_error - Unspecified error
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
     uint32_t format(const char_t* str, ARGS&&... args)
     {
-      // Clear & format
-      clear();
-      format_t(str, std::forward<ARGS>(args)...);
+      REQUIRED_PARAM(format);
 
-      // Return new count
-      return this->Count;
+      // Attempt to format
+      int32_t n = std::snprintf(this->Data, this->length, format, std::forward<ARGS>(args)...);
+
+      // Failed: Unspecified
+      if (n < 0) {
+        clear();
+        throw runtime_error(HERE, "Unable to format string");
+      }
+      
+      // Failed: Insufficient length
+      if (n < this->length) {
+        clear();
+        throw length_error(HERE, "Insufficient space to format string");
+      }
+
+      // Succeeded: Set & return number of characters written
+      return this->Count = n;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -692,25 +705,31 @@ namespace wtl
     //! \param[in] args - Formatting arguments
     //! \return uint32_t - Number of characters written iff successful, otherwise zero
     //!
-    //! \throw std::invalid_argument - [Debug only] Missing formatting string
+    //! \throw wtl::invalid_argument - [Debug only] Missing formatting string
+    //! \throw wtl::length_error - Insufficent capacity
+    //! \throw wtl::runtime_error - Unspecified error
     /////////////////////////////////////////////////////////////////////////////////////////
     uint32_t formatv(const char_t* format, va_list args)
     {
       REQUIRED_PARAM(format);
 
       // Attempt to format
-      int32_t n = vsnprintf(this->Data, this->length, format, args);
+      int32_t n = std::vsnprintf(this->Data, this->length, format, args);
 
-      // Succeeded:
-      if (n >= 0 && n < this->length)
-        this->Count = n;
-
-      // Failed: Erase
-      else
+      // Failed: Unspecified
+      if (n < 0) {
         clear();
+        throw runtime_error(HERE, "Unable to format string");
+      }
+      
+      // Failed: Insufficient length
+      if (n < this->length) {
+        clear();
+        throw length_error(HERE, "Insufficient space to format string");
+      }
 
-      // Return # of chars written
-      return this->Count;
+      // Succeeded: Set & return number of characters written
+      return this->Count = n;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -719,7 +738,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void update()
     {
-      this->Count = strlen_t(this->Data);
+      this->Count = strlen(this->Data);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

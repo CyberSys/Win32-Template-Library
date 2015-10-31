@@ -11,7 +11,6 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
 #include "wtl/platform/WindowFlags.hpp"         //!< ShowWindowFlags
-#include "wtl/utils/ExceptionLog.hpp"           //!< exception_log
 #include "wtl/utils/Exception.hpp"              //!< exception
 #include "wtl/io/Console.hpp"                   //!< Console
 #include "wtl/windows/MessageBox.hpp"           //!< MessageBox
@@ -33,6 +32,9 @@ namespace wtl
   
     //! \alias base - Define base type
     //using base = std::thread;
+    
+    //! \var encoding - Define window character encoding
+    static constexpr Encoding encoding = ENC;
 
     //! \alias window_t - Define window type
     using window_t = WINDOW;
@@ -131,14 +133,12 @@ namespace wtl
       }
       catch (std::exception& e)
       {
-        cdebug.report("Unable to dispatch message", HERE, e);
-        errorBox(Window, e);
+        errorBox<encoding>(Window, caught_exception("Unable to dispatch message", HERE, e));
         return -1;
       }
       catch (...)
       {
-        cdebug.report("Unable to dispatch message", HERE);
-        errorBox(Window, c_arr("Program Error"), c_arr("An unrecognised terminal error has occurred, the program will now exit."));
+        errorBox<encoding>(Window, caught_exception("An unrecognised terminal error has occurred, the program will now exit.", HERE));
         return -2;
       }
     }

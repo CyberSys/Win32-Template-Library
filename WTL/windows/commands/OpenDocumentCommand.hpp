@@ -53,7 +53,7 @@ namespace wtl
     //! \param[in] appWnd - Main application window
     /////////////////////////////////////////////////////////////////////////////////////////
     OpenDocumentCommand(window_t& appWnd)  
-      : base(CommandId::File_Open, [&appWnd] () { errorBox(appWnd, c_arr("Error"), c_arr("Command not implemented")); })
+      : base(CommandId::File_Open, [&appWnd] () { errorBox<encoding>(appWnd, c_str("Program Error"), c_str("Command not implemented")); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------

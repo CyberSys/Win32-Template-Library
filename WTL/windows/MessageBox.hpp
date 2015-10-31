@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EncodingTraits.hpp"      //!< choose()
-#include "wtl/utils/CharArray.hpp"            //!< CharArray
+#include "wtl/utils/String.hpp"               //!< String
 #include "wtl/utils/Exception.hpp"            //!< caught_exception
 #include "wtl/platform/WindowFlags.hpp"       //!< MessageBoxFlags
 #include <stdexcept>                          //!< std::Exception
@@ -23,8 +23,6 @@ namespace wtl
   //! Displays a 'Message Box' containing custom text and title, custom icon, and custom buttons.
   //! 
   //! \tparam ENC - Character Encoding 
-  //! \tparam CAPTION - Title buffer capacity
-  //! \tparam TEXT - Text buffer capacity
   //! 
   //! \param[in] parent - Parent window handle
   //! \param[in] const& title - Message box title
@@ -32,10 +30,10 @@ namespace wtl
   //! \param[in] flags - Flags defining buttons, icon, and appearance
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned CAPTION, unsigned TEXT>
-  WindowId messageBox(HWND parent, const CharArray<ENC,CAPTION>& title, const CharArray<ENC,TEXT>& text, MessageBoxFlags flags)
+  template <Encoding ENC>
+  WindowId messageBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags flags)
   {
-    return static_cast<WindowId>( choose<ENC>(::MessageBoxA,::MessageBoxW)(parent, text, title, enum_cast(flags)) );
+    return static_cast<WindowId>( choose<ENC>(::MessageBoxA,::MessageBoxW)(parent, text.c_str(), title.c_str(), enum_cast(flags)) );
   }
 
 
@@ -44,8 +42,6 @@ namespace wtl
   //! Display an 'Error Box' 
   //! 
   //! \tparam ENC - Character Encoding 
-  //! \tparam CAPTION - Title buffer capacity
-  //! \tparam TEXT - Text buffer capacity
   //! 
   //! \param[in] parent - Parent window handle
   //! \param[in] const& title - Error box title
@@ -53,8 +49,8 @@ namespace wtl
   //! \param[in] buttons - [optional] Error box buttons ('Ok' if unspecified)
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned CAPTION, unsigned TEXT>
-  WindowId errorBox(HWND parent, const CharArray<ENC,CAPTION>& title, const CharArray<ENC,TEXT>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  template <Encoding ENC>
+  WindowId errorBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconError);
   }
@@ -64,7 +60,6 @@ namespace wtl
   //! Display an 'Error Box' displaying the contents of an exception
   //! 
   //! \tparam ENC - Character Encoding 
-  //! \tparam CAPTION - Title buffer capacity
   //! 
   //! \param[in] parent - Parent window handle
   //! \param[in] const& ex - Exception
@@ -74,8 +69,11 @@ namespace wtl
   template <Encoding ENC>
   WindowId errorBox(HWND parent, const caught_exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
+    // Write to debug console
     cdebug << ex;
-    return errorBox<ENC>(parent, CharArray<ENC,32>("Program Error"), CharArray<ENC,2048>(ex.Problem.c_str()), buttons|MessageBoxFlags::IconError);
+
+    // Display error
+    return errorBox<ENC>(parent, String<ENC>("Program Error"), String<ENC>(ex.Problem), buttons|MessageBoxFlags::IconError);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -83,8 +81,6 @@ namespace wtl
   //! Display an 'Information Box' with an 'OK' button and an 'info' icon
   //! 
   //! \tparam ENC - Character Encoding 
-  //! \tparam CAPTION - Title buffer capacity
-  //! \tparam TEXT - Text buffer capacity
   //! 
   //! \param[in] parent - Parent window handle
   //! \param[in] const& title - Information box title
@@ -92,8 +88,8 @@ namespace wtl
   //! \param[in] buttons - [optional] Information box buttons ('Ok' if unspecified)
   //! \return WindowId - WindowId::Ok
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned CAPTION, unsigned TEXT>
-  WindowId infoBox(HWND parent, const CharArray<ENC,CAPTION>& title, const CharArray<ENC,TEXT>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  template <Encoding ENC>
+  WindowId infoBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconInformation);
   }
@@ -104,8 +100,6 @@ namespace wtl
   //! Display a 'Question Box' with 'Yes'/'No' buttons and a question mark icon
   //! 
   //! \tparam ENC - Character Encoding 
-  //! \tparam CAPTION - Title buffer capacity
-  //! \tparam TEXT - Text buffer capacity
   //! 
   //! \param[in] parent - Parent window handle
   //! \param[in] const& title - Question box title
@@ -113,8 +107,8 @@ namespace wtl
   //! \param[in] buttons - [optional] Question box buttons ('Yes'/'No' if unspecified)
   //! \return WindowId - WindowId::Yes or WindowId::No
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned CAPTION, unsigned TEXT>
-  WindowId questionBox(HWND parent, const CharArray<ENC,CAPTION>& title, const CharArray<ENC,TEXT>& text, MessageBoxFlags buttons = MessageBoxFlags::YesNo)
+  template <Encoding ENC>
+  WindowId questionBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::YesNo)
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconQuestion);
   }

@@ -402,6 +402,51 @@ namespace wtl
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct runtime_error - Thrown when a runtime error occurs
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct runtime_error : std::runtime_error, error_site
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using error_base = std::runtime_error;
+
+    //! \alias site_base - Define location base type
+    using site_base = error_site;
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // runtime_error::runtime_error
+    //! Creates an exception from a location and a stream of arguments used to build an error message
+    //!
+    //! \tparam ARGS - Message stream argument types
+    //!
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    runtime_error(std::string&& location, ARGS&&... args) : error_base(error_string(std::forward<ARGS>(args)...)),
+                                                           site_base(std::move(location))
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(runtime_error);        //!< Can be copied
+    ENABLE_MOVE(runtime_error);        //!< Can be moved
+    ENABLE_POLY(runtime_error);        //!< Can be polymorphic
+
+	  // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct platform_error - Thrown when a value occurs outside of a defined boundary
   /////////////////////////////////////////////////////////////////////////////////////////
   struct platform_error : std::runtime_error, error_site
