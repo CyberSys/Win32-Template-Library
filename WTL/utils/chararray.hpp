@@ -37,7 +37,9 @@ namespace wtl
   template <Encoding ENCODING, unsigned LENGTH>
   struct CharArray : public DynamicArray<encoding_char_t<ENCODING>, LENGTH+1>
   {
-    friend CharArray;   // Unbound friend of itself
+    // Unbound friend of itself
+    template <Encoding E2, unsigned L2>
+    friend struct CharArray;   
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -146,87 +148,86 @@ namespace wtl
     //! \param[in] chr - Fill character
     //! \param[in] num - Number of characters
     //!
-    //! \throw wtl::logic_error - [Debug only] Num exceeds capacity
+    //! \throw wtl::logic_error - [Debug only] Number of characters exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     CharArray(char_t chr, uint32_t num) : CharArray()
     {
       // Fill character array with 'num' of character 'chr'
       fill(chr, num);
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // CharArray::CharArray
-    //! Create from null-terminated decay type string (of equal type encoding)
+    // CharArray::CharArray explicit 
+    //! Create from null-terminated string of equal character encoding
     //!
-    //! \param[in] str - Null terminated string
+    //! \param[in] const* str - Null terminated string
     //!
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
-    //! \throw wtl::logic_error - [Debug only] String exceeds capacity
+    //! \throw wtl::length_error - [Debug only] String exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename CHR>
-    explicit CharArray(const CHR* str) : CharArray()
+    explicit 
+    CharArray(const char_t* str) : CharArray()
     {
       REQUIRED_PARAM(str);
 
-      // Assume equal encoding for equal character type, assume default for foreign character type
-      constexpr Encoding enc = std::is_same<char_t,CHR>::value ? encoding : default_encoding_t<CHR>::value;
+      // Copy without character conversion
+      CharArray::assign<encoding,char_t>(str, str+strlen(str));
+    }
 
-      // Copy from input buffer, truncate if necessary, assume equal encoding
-      CharArray::assign<enc>(str, str+strlen(str));
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CharArray::CharArray explicit 
+    //! Create from null-terminated string of different character encoding
+    //!
+    //! \param[in] const* str - Null terminated string
+    //!
+    //! \throw wtl::invalid_argument - [Debug only] String is nullptr
+    //! \throw wtl::length_error - [Debug only] String exceeds capacity
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename CHR> explicit 
+    CharArray(const CHR* str) : CharArray()
+    {
+      REQUIRED_PARAM(str);
+
+      // Deduce encoding from character width
+      CharArray::assign<default_encoding_t<CHR>::value, CHR>(str, str+strlen(str));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::CharArray
-    //! Create from range of characters
+    //! Create from range of characters of equal character type
     //!
     //! \tparam ITERATOR - Input iterator type
     //!
     //! \param[in] first - First character in range
     //! \param[in] last - Position beyond final character in range
     //!
-    //! \throw wtl::invalid_argument - [Debug only] Either position is nullptr
-    //! \throw wtl::logic_error - String exceeds array capacity
+    //! \throw wtl::length_error - String exceeds array capacity
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename ITERATOR = const char_t*>
+    template <typename ITERATOR>
     CharArray(ITERATOR first, ITERATOR last) : CharArray()
     {
-      /*REQUIRED_PARAM(first);
-      REQUIRED_PARAM(last);*/
+      static_assert(std::is_same<std::decay_t<decltype(*first)>, char_t>::value, "Mismatched character type");
 
-      // Copy from input buffer, truncate if necessary, assume equal encoding
-      CharArray::assign<encoding>(first, last);
+      // Assume equal encoding
+      CharArray::assign<ITERATOR>(first, last);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::CharArray
     //! Copy-create from another character array of dissimilar type
     //!
-    //! \tparam N - Foreign character encoding
-    //! \tparam L - Foreign array capacity
+    //! \tparam E2 - Foreign character encoding
+    //! \tparam L2 - Foreign array capacity
     //!
     //! \param[in] const& r - Character array of dissimilar type
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding N, unsigned L>
-    CharArray(const CharArray<N,L>& r) : CharArray()
+    template <Encoding E2, unsigned L2>
+    CharArray(const CharArray<E2,L2>& r) : CharArray()
     {
-      // Copy from input buffer, truncate if necessary, convert encoding if necessary.
-      CharArray::assign<N>(r.begin(), r.end());
-    }
+      using foreign_t = typename CharArray<E2,L2>::char_t;
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // CharArray::CharArray
-    //! Move-create from another character array of dissimilar type
-    //!
-    //! \tparam N - Foreign character encoding
-    //! \tparam L - Foreign array capacity
-    //!
-    //! \param[in] && r - Character array of dissimilar type (unaffected)
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding N, unsigned L>
-    CharArray(CharArray<N,L>&& r) : CharArray()
-    {
-      // Copy from input buffer, truncate if necessary, convert encoding if necessary.
-      CharArray::assign<N>(r.begin(), r.end());
+      // Convert character encoding
+      CharArray::assign<E2,foreign_t>(&r.Data[0], &r.Data[r.Count]);
     }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -237,16 +238,7 @@ namespace wtl
     //!
     //! \param[in] const& r - Character array of equal type
     /////////////////////////////////////////////////////////////////////////////////////////
-    CharArray(const type& r) : CharArray(r.begin(), r.end())    // Copy from input buffer, truncate if necessary
-    {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // CharArray::CharArray
-    //! Move-create from a character array of equal type
-    //!
-    //! \param[in] && r - Character array of equal type (unaffected)
-    /////////////////////////////////////////////////////////////////////////////////////////
-    CharArray(type&& r) : CharArray(r.begin(), r.end())    // Copy from input buffer, truncate if necessary
+    CharArray(const type& r) : CharArray(r.begin(), r.end())    // Do not perform any character conversion
     {}
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -258,23 +250,8 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     type& operator = (const char_t* str)
     {
-      CharArray::assign(str, encoding);
-      return *this;
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //! CharArray::operator =
-    //! Overwrite contents with that of a statically allocated null-terminated string of equivalent encoding
-    //!
-    //! \tparam LEN - Capacity of foreign array
-    //!
-    //! \param[in] str - Statically allocated null-terminated string of equivalent encoding
-    //! \return CharArray& - Reference to self with updated contents
-    //////////////////////////////////////////////////////////////////////////////////////////
-    template <unsigned LEN>
-    type& operator = (array_ptr_t<const char_t,LEN> str)
-    {
-      CharArray::assign(str, encoding);
+      // Do not perform any character conversion
+      CharArray::assign(str, str+strlen(str));
       return *this;
     }
 
@@ -287,7 +264,8 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     type& operator = (const type& r)
     {
-      CharArray::assign(r, encoding);
+      // Do not perform any character conversion
+      CharArray::assign(r.begin(), r.end());
       return *this;
     }
 
@@ -295,20 +273,21 @@ namespace wtl
     //! CharArray::operator =
     //! Overwrite contents with that of another character array (of different type)
     //!
-    //! \tparam N - Foreign character encoding
-    //! \tparam L - Foreign array capacity
+    //! \tparam E2 - Foreign character encoding
+    //! \tparam L2 - Foreign array capacity
     //!
     //! \param[in] const& r - Char array of different type
     //! \return CharArray& - Reference to self with updated contents
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding N, unsigned L>
-    type& operator = (const CharArray<N,L>& r)
+    template <Encoding E2, unsigned L2>
+    type& operator = (const CharArray<E2,L2>& r)
     {
-      CharArray::assign<N>(r);
+      using foreign_t = typename CharArray<E2,L2>::char_t;
+
+      // Assume foreign character encoding
+      CharArray::assign<E2,foreign_t>(&r.Data[0], &r.Data[r.Count]);
       return *this;
     }
-
-    ENABLE_POLY(CharArray);         //!< Can be polymorphic
 
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -524,14 +503,14 @@ namespace wtl
     //!
     //! \throw wtl::platform_error - Unable to perform conversion
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
-    //! \throw wtl::logic_error - [Debug only] String will be truncated
+    //! \throw wtl::length_error - [Debug only] String will be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E = encoding, typename CHR = encoding_char_t<E>>
     int32_t append(const CHR* first, const CHR* last)
     {
       REQUIRED_PARAM(first);
       REQUIRED_PARAM(last);
-      LOGIC_INVARIANT(last-first < this->Count+this->length-1);
+      LENGTH_INVARIANT(last-first < this->Count+this->length-1);
 
       // Convert/Append input string
       int32_t num = string_encoder<E,encoding>::convert(first, last, &this->Data[this->Count], &this->Data[this->length]);
@@ -556,8 +535,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     int32_t assign(const type& r)
     {
-      // Assign from foreign array
-      return CharArray::assign<encoding>(r.begin(), r.end());
+      // Copy without conversion
+      return CharArray::assign(r.begin(), r.end());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -570,21 +549,23 @@ namespace wtl
     //! \param[in] &r - Another array
     //! \return int32_t - New length of string
     //!
-    //! \throw wtl::logic_error - [Debug only] String would be truncated
+    //! \throw wtl::length_error - [Debug only] String would be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E, unsigned L>
     int32_t assign(const CharArray<E,L>& r)
     {
-      // Assign from foreign array
-      return CharArray::assign<E>(r.begin(), r.end());
+      using foreign_t = typename CharArray<E,L>::char_t;
+
+      // Convert foreign character encoding
+      return assign<E,foreign_t>(&this->Data[0], &this->Data[this->length]);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::assign
-    //! Assign from a null-terminated string of any encoding
+    //! Assign from a range of an array of characters of any encoding
     //!
-    //! \tparam E - Foreign character encoding, if unspecified then equal encoding is assumed
-    //! \tparam CHR - Foreign character type
+    //! \tparam E2 - Foreign character encoding, if unspecified then equal encoding is assumed
+    //! \tparam CHR - [optional] Foreign character type
     //!
     //! \param[in] const* first - First character
     //! \param[in] const* last - Position immediately beyond last character
@@ -592,20 +573,44 @@ namespace wtl
     //!
     //! \throw wtl::platform_error - Unable to perform conversion
     //! \throw wtl::invalid_argument - [Debug only] String is nullptr
-    //! \throw wtl::logic_error - [Debug only] String will be truncated
+    //! \throw wtl::length_error - [Debug only] String will be truncated
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding E = encoding, typename CHR = encoding_char_t<E>>
+    template <Encoding E2 = encoding, typename CHR = encoding_char_t<E2>>
     int32_t assign(const CHR* first, const CHR* last)
     {
-      LOGIC_INVARIANT(last-first < this->length-1);
+      LENGTH_INVARIANT(last-first < this->length-1);
 
       // Convert/Assign input string
-      this->Count = string_encoder<E,encoding>::convert(first, last, &this->Data[0], &this->Data[this->length]);
+      this->Count = string_encoder<E2,encoding>::convert(first, last, &this->Data[0], &this->Data[this->length]);
 
       // Ensure succeeded
       if (last-first && !this->Count)
         throw platform_error(HERE, "Unable to convert character encoding");
 
+      // Return new length
+      return this->Count;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CharArray::assign
+    //! Assign from a range of characters of equal encoding
+    //!
+    //! \tparam ITERATOR - Input iterator type
+    //!
+    //! \param[in] first - Position of first character
+    //! \param[in] last - Position immediately beyond last character
+    //! \return int32_t - New length of string, in characters
+    //!
+    //! \throw wtl::length_error - [Debug only] String will be truncated
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename ITERATOR>
+    int32_t assign(ITERATOR first, ITERATOR last)
+    {
+      LENGTH_INVARIANT(last-first < this->length-1);
+
+      // Assign characters without conversion
+      base::template assign<ITERATOR>(first, last);
+      
       // Return new length
       return this->Count;
     }
@@ -643,11 +648,11 @@ namespace wtl
     //! \param[in] chr - Fill character
     //! \param[in] num - Number of characters
     //!
-    //! \throw wtl::logic_error - [Debug only] Num exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Num exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     void fill(char_t chr, uint32_t num)
     {
-      LOGIC_INVARIANT(num > 0 && num <= LENGTH);
+      LENGTH_INVARIANT(num > 0 && num <= LENGTH);
 
       // Prevent buffer overrun
       num = std::min(num, (uint32_t)LENGTH);
@@ -676,10 +681,10 @@ namespace wtl
     template <typename... ARGS>
     uint32_t format(const char_t* str, ARGS&&... args)
     {
-      REQUIRED_PARAM(format);
+      REQUIRED_PARAM(str);
 
       // Attempt to format
-      int32_t n = std::snprintf(this->Data, this->length, format, std::forward<ARGS>(args)...);
+      int32_t n = snprintf(this->Data, this->length, str, std::forward<ARGS>(args)...);
 
       // Failed: Unspecified
       if (n < 0) {
@@ -688,7 +693,7 @@ namespace wtl
       }
       
       // Failed: Insufficient length
-      if (n < this->length) {
+      if (n >= this->length) {
         clear();
         throw length_error(HERE, "Insufficient space to format string");
       }
@@ -723,7 +728,7 @@ namespace wtl
       }
       
       // Failed: Insufficient length
-      if (n < this->length) {
+      if (n >= this->length) {
         clear();
         throw length_error(HERE, "Insufficient space to format string");
       }

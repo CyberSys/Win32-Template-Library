@@ -110,9 +110,6 @@
     <ClInclude Include="utils\FixedArray.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\FormatSpec.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Helpers.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -550,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="windows\properties\WindowRectProperty.hpp">
       <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\FormatSpec.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -25,6 +25,7 @@ namespace wtl
   {      
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   protected:
+#pragma pack (push, 1)
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct StringTableEntry - Variable length string table entry
     //!
@@ -37,6 +38,11 @@ namespace wtl
       
       //! \var size - 
       static constexpr int32_t  size = sizeof(wchar_t) + sizeof(uint16_t);
+      
+      // ----------------------------------- REPRESENTATION -----------------------------------
+
+      uint16_t       Length;        //!< Length of current entry, in characters
+      const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
 
       // ------------------------------------ CONSTRUCTION ------------------------------------
 	
@@ -67,13 +73,8 @@ namespace wtl
       }
       
       // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      // ----------------------------------- REPRESENTATION -----------------------------------
-#pragma pack (push, 1)
-      uint16_t       Length;        //!< Length of current entry, in characters
-      const wchar_t  Text[0xFFFF];  //!< String Text in UTF16
-#pragma pack (pop)
     };
+#pragma pack (pop)
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -95,10 +96,10 @@ namespace wtl
     //! \throw wtl::logic_error - Missing string -or- Insufficient buffer capacity to store string
     //! \throw wtl::platform_error - Unable to load resource
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC>
-    explicit StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) : Table(LoadedModules.findString(id,lang)), 
-                                                                                         Entry(Table.get<StringTableEntry>()),
-                                                                                         Ident(id.toOrdinal())
+    template <Encoding ENC> explicit 
+    StringResource(ResourceId<ENC> id, LanguageId lang = LanguageId::Neutral) : Table(LoadedModules.findString(id,lang)), 
+                                                                                Entry(Table.get<StringTableEntry>()),
+                                                                                Ident(id.toOrdinal())
     {
       // [CHECK] Ensure table found
       if (!Table.exists())
@@ -132,16 +133,16 @@ namespace wtl
     //! 
     //! \return CharArray<ENC,LENGTH> - Character array containing string resource
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    CharArray<ENC,LEN> c_arr() const
-    {
-      // [FOUND] Ensure sufficient space is available
-      if (Entry->Length > LEN)
-        throw logic_error(HERE, "String resource ", Ident, " requires ", Entry->Length, " chars but only ", LEN, " available");
+    //template <Encoding ENC, unsigned LEN>
+    //CharArray<ENC,LEN> c_arr() const
+    //{
+    //  // [FOUND] Ensure sufficient space is available
+    //  if (Entry->Length > LEN)
+    //    throw logic_error(HERE, "String resource ", Ident, " requires ", Entry->Length, " chars but only ", LEN, " available");
 
-      // Copy string as UTF16 (Convert on return if necessary)
-      return CharArray<Encoding::UTF16,LEN>(Entry->Text, Entry->Text+Entry->Length);
-    }
+    //  // Copy string as UTF16 (Convert on return if necessary)
+    //  return CharArray<Encoding::UTF16,LEN>(Entry->Text, Entry->Text+Entry->Length);
+    //}
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // StringResource::c_str const

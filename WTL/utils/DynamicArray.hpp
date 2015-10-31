@@ -463,7 +463,7 @@ namespace wtl
     //!
     //! \param[in] &r - Foreign array
     //!
-    //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename V, uint32_t L, bool D>
     Array(const Array<V,L,D>& r) : Array(Unique::Signature)
@@ -1256,12 +1256,12 @@ namespace wtl
     //! \param[in] first - First element in input range
     //! \param[in] last - Position immediately beyond last element in input range
     //!
-    //! \throw wtl::logic_error - [Debug only] Size of input range exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Number of elements in input range exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT>
     void assign(INPUT first, INPUT last)
     {
-      LOGIC_INVARIANT((last-first) <= length);
+      LENGTH_INVARIANT((last-first) <= length);
       static_assert(std::is_convertible<decltype(*first),value_type>::value, "Cannot convert between element types");
 
       uint32_t i(0UL);
@@ -1270,7 +1270,7 @@ namespace wtl
       clear();
 
       // Copy-construct (up to) LENGTH elements
-      for (Count = std::min(static_cast<uint32_t>(length), last-first); i < Count; ++i)
+      for (Count = std::min<uint32_t>(length, last-first); i < Count; ++i)
         traits::alloc_t::construct(Data+i, *(first++));
     }
 
@@ -1284,7 +1284,7 @@ namespace wtl
     //!
     //! \param[in] &r - Foreign array
     //!
-    //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename V, uint32_t L, bool D>
     void assign(const Array<V,L,D>& r)

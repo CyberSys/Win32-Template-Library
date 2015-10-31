@@ -67,30 +67,30 @@ namespace wtl
   //!
   //! \throw std::logic_error - Insufficient arguments
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename char_t>
-  inline uint32_t  snprintf_t(char_t* output, uint32_t capacity, const char_t* str)
-	{
-    char *position = output,         //!< Output iterator
-         *eof = output+capacity;
+ // template <typename char_t>
+ // inline uint32_t  snprintf_t(char_t* output, uint32_t capacity, const char_t* str)
+	//{
+ //   char *position = output,         //!< Output iterator
+ //        *eof = output+capacity;
 
-    // Iterate through formatting string
-    if (str && output)
-      do
-      {
-        // [FORMAT SPEC] Invalid at this point
-		 	  if (*str == '%' && *(++str) != '%')	  // Ignore %%
-          // [ERROR] Insufficent arguments
-		      throw std::logic_error("Missing formatting argument");
+ //   // Iterate through formatting string
+ //   if (str && output)
+ //     do
+ //     {
+ //       // [FORMAT SPEC] Invalid at this point
+	//	 	  if (*str == '%' && *(++str) != '%')	  // Ignore %%
+ //         // [ERROR] Insufficent arguments
+	//	      throw std::logic_error("Missing formatting argument");
 
-        // Write char (or null-terminator)
-        *(position++) = *str;
-		  }
-      // Advance until null-terminator (or capacity reached)
-      while (*str++ && position < eof);
+ //       // Write char (or null-terminator)
+ //       *(position++) = *str;
+	//	  }
+ //     // Advance until null-terminator (or capacity reached)
+ //     while (*str++ && position < eof);
 
-    // Return # of chars written
-    return position - output;
-	}
+ //   // Return # of chars written
+ //   return position - output;
+	//}
 
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::snprintf_t
@@ -109,45 +109,45 @@ namespace wtl
   //! \throw std::length_error - Insufficent capacity to format string
   //! \throw std::logic_error - Incorrect number of formatting arguments
   /////////////////////////////////////////////////////////////////////////////////////////
-	template <typename char_t, typename T, typename... ARGS>
-  uint32_t  snprintf_t(char_t* output, uint32_t capacity, const char_t* str, T value, ARGS... args)
-	{
-    char *position = output,         //!< Output iterator
-         *eof = output+capacity;     //!< End of buffer position
+	//template <typename char_t, typename T, typename... ARGS>
+ // uint32_t  snprintf_t(char_t* output, uint32_t capacity, const char_t* str, T value, ARGS... args)
+	//{
+ //   char *position = output,         //!< Output iterator
+ //        *eof = output+capacity;     //!< End of buffer position
 
-    // Iterate through formatting string
-    if (str && output)
-      do
-      { // [FORMAT SPEC] Width/precision are ignored
-			  if (*str == '%' && *(++str) != '%')   // Ignore %%
-        {
-          // Skip Width
-          if (*str == 'l')
-            if (*++str == 'l')
-              *++str;
+ //   // Iterate through formatting string
+ //   if (str && output)
+ //     do
+ //     { // [FORMAT SPEC] Width/precision are ignored
+	//		  if (*str == '%' && *(++str) != '%')   // Ignore %%
+ //       {
+ //         // Skip Width
+ //         if (*str == 'l')
+ //           if (*++str == 'l')
+ //             *++str;
 
-          // Append value
-          int len = getFunc<char_t>(::_snprintf,::_snwprintf)(position, eof-position, format_spec_t<char_t,T>::value, value);
+ //         // Append value
+ //         int len = getFunc<char_t>(::_snprintf,::_snwprintf)(position, eof-position, format_spec_t<char_t,T>::value, value);
 
-          // Succeeded: Advance
-          if (len >= 0 && len < eof-position)
-            position += len;
-          else
-            throw std::length_error("Insufficient capacity to format string");
+ //         // Succeeded: Advance
+ //         if (len >= 0 && len < eof-position)
+ //           position += len;
+ //         else
+ //           throw std::length_error("Insufficient capacity to format string");
 
-          // Return # chars written and unpack next argument
-				  return (position-output) + snprintf_t<char_t>(position, eof-position, ++str, args...); 	  // Consume type field
-			  }
+ //         // Return # chars written and unpack next argument
+	//			  return (position-output) + snprintf_t<char_t>(position, eof-position, ++str, args...); 	  // Consume type field
+	//		  }
 
-        // Write char (or null-terminator)
-        *(position++) = *str;
-		  }
-      // Advance until null-terminator (or capacity reached)
-      while (*str++ && position < eof);
+ //       // Write char (or null-terminator)
+ //       *(position++) = *str;
+	//	  }
+ //     // Advance until null-terminator (or capacity reached)
+ //     while (*str++ && position < eof);
 
-    // [ERROR] Insufficent capcity / Excess arguments
-		throw std::logic_error(position >= eof ? "Insufficient buffer space" : "Extra arguments provided");
-	}
+ //   // [ERROR] Insufficent capcity / Excess arguments
+	//	throw std::logic_error(position >= eof ? "Insufficient buffer space" : "Extra arguments provided");
+	//}
 
 
 }

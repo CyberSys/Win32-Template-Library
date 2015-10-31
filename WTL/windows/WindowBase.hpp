@@ -602,7 +602,7 @@ namespace wtl
           throw logic_error(HERE, "Parent window does not exist");
 
         // Create as child 
-        Handle = HWnd(Class, *this, owner->handle(), Ident(), Style, StyleEx, Text, Position, Size);
+        Handle = HWnd(Class, *this, owner->handle(), Ident, Style, StyleEx, Text(), Position, Size);
 
         // Add to parent's collection of child windows
         owner->Children.insert(*this);
@@ -613,7 +613,7 @@ namespace wtl
         ::HWND parent = owner ? (::HWND)owner->handle() : defvalue<::HWND>();          //!< Use parent if any
 
         // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
-        Handle = HWnd(Class, *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text, Position, Size);
+        Handle = HWnd(Class, *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), Position, Size);
 
         // [MENU] Attach menu if populated during onCreate(..)
         if (!Menu.empty())

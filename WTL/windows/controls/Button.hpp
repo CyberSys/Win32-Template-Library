@@ -207,7 +207,7 @@ namespace wtl
 
       // Draw button text
       args.Graphics.setTextColour(Colour::Black);
-      args.Graphics.template write<encoding>(this->Text().c_str(), this->TextLength, args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      args.Graphics.template write<encoding>(this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
       return 0;
@@ -223,7 +223,7 @@ namespace wtl
     virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
       // Measure button text
-      args.Size = args.Graphics.measure(this->Text().c_str());
+      args.Size = args.Graphics.measure(this->Text());
 
       // Handled
       return 0;

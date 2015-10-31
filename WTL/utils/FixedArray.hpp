@@ -468,7 +468,7 @@ namespace wtl
     //! 
     //! \param[in] const& r - Foreign array
     //! 
-    //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename V, uint32_t L, bool D>
     Array(const Array<V,L,D>& r) : Array(Unique::Signature)
@@ -1298,12 +1298,12 @@ namespace wtl
     //! \param[in] last - Position immediately beyond last element in input range. If there are
     //!                   less than 'length' elements available, the results are undefined.
     //! 
-    //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename INPUT>
     void assign(INPUT first, INPUT last)
     {
-      LOGIC_INVARIANT((last-first) <= length);
+      LENGTH_INVARIANT((last-first) <= length);
       static_assert(std::is_convertible<decltype(*first),value_type>::value, "Cannot convert between element types");
       
       // Copy-reconstruct (exactly) LENGTH elements
@@ -1321,7 +1321,7 @@ namespace wtl
     //! 
     //! \param[in] &r - Foreign array
     //! 
-    //! \throw wtl::logic_error - [Debug only] Number of elements exceeds capacity
+    //! \throw wtl::length_error - [Debug only] Number of elements exceeds capacity
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename V, uint32_t L, bool D>
     void assign(const Array<V,L,D>& r)

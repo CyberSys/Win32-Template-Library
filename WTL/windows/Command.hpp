@@ -62,36 +62,30 @@ namespace wtl
     //! \var encoding - Define encoding type
     static constexpr Encoding  encoding = ENC;
     
-    //! \struct NameStringResource - Encapsulates decoding command name and description
-    struct NameStringResource 
+    //! \struct NameDecoder - Encapsulates decoding command name and description
+    struct NameDecoder 
     { 
       // ---------------------------------- TYPES & CONSTANTS ---------------------------------
       
-      //! \alias description_t - Define description string resource type
-      using description_t = CharArray<encoding,1024>;
-
-      //! \alias name_t - Define name string resource type
-      using name_t = CharArray<encoding,128>;
-
-      //! \var LineFeed - 
+      //! \var LineFeed - Separator character
       static constexpr char_t  LineFeed = '\n';
 
       // ----------------------------------- REPRESENTATION -----------------------------------
 
-      name_t         Name;            //!< Command Name
-      description_t  Description;     //!< Command Description
+      String<encoding>  Name,            //!< Command Name
+                        Description;     //!< Command Description
 
       // ------------------------------------ CONSTRUCTION ------------------------------------
     
       /////////////////////////////////////////////////////////////////////////////////////////
-      // NameStringResource::NameStringResource
+      // NameDecoder::NameDecoder
       //! Create decoder from string id
       //! 
       //! \param[in] id - Name/description resource id
       /////////////////////////////////////////////////////////////////////////////////////////
-      NameStringResource(resource_t id)
+      NameDecoder(resource_t id)
       {
-        auto text = StringResource(id).c_arr<encoding,1024>();
+        auto text = StringResource(id).c_str<encoding>();
       
         // [NAME/DESCRIPTION] Extract name & description
         if (text.contains(LineFeed))
@@ -99,8 +93,8 @@ namespace wtl
           int32_t sep = text.find(LineFeed);
 
           // Assign description and truncate name
-          Name.template assign<encoding>(text.begin(), text.begin()+(sep+1));
-          Description.template assign<encoding>(text.begin()+(sep+1), text.end());
+          Name.assign(text.begin(), text.begin()+(sep+1));
+          Description.assign(text.begin()+(sep+1), text.end());
         }
         // [NAME] Leave description blank
         else
@@ -115,15 +109,12 @@ namespace wtl
     //! \alias revert_t - Define undo functor type
     using revert_t = std::function<void ()>;
     
-    //! \using decoder_t - Name/description string type
-    using decoder_t = NameStringResource;
-
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     CommandId   Ident;           //!< Command Id
     icon_t      Icon;            //!< Command Icon
     bool        Permanent;       //!< Whether command is permanent
-    decoder_t   NameString;      //!< Name + Description
+    NameDecoder Decoder;         //!< Name + Description
     execute_t   ExecuteFn;       //!< Command execution functor
     revert_t    RevertFn;        //!< Command reversion functor
     
@@ -137,13 +128,12 @@ namespace wtl
     //! \param[in] exec - Callable target which implements executing command
     /////////////////////////////////////////////////////////////////////////////////////////
     Command(CommandId id, execute_t exec) : Ident(id),
-                                           Icon(resource_id(id)),
-                                           NameString(resource_id(id)),
-                                           Permanent(true),
-                                           ExecuteFn(exec)
+                                            Icon(resource_id(id)),
+                                            Decoder(resource_id(id)),
+                                            Permanent(true),
+                                            ExecuteFn(exec)
     {}
     
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // Command::Command
     //! Create a revertible command
@@ -153,11 +143,11 @@ namespace wtl
     //! \param[in] undo - Callable target which implements reverting command
     /////////////////////////////////////////////////////////////////////////////////////////
     Command(CommandId id, execute_t exec, revert_t undo) : Ident(id),
-                                                          Icon(resource_id(id)),
-                                                          NameString(resource_id(id)),
-                                                          Permanent(false),
-                                                          ExecuteFn(exec),
-                                                          RevertFn(undo)
+                                                           Icon(resource_id(id)),
+                                                           Decoder(resource_id(id)),
+                                                           Permanent(false),
+                                                           ExecuteFn(exec),
+                                                           RevertFn(undo)
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -182,11 +172,11 @@ namespace wtl
     // Command::description const
     //! Get the command description
     //! 
-    //! \return const decoder_t::description_t& - Command description
+    //! \return const String<encoding>& - Command description
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename decoder_t::description_t&  description() const 
+    virtual const String<encoding>&  description() const 
     {
-      return NameString.Description;
+      return Decoder.Description;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -215,11 +205,11 @@ namespace wtl
     // Command::name const
     //! Get the command name
     //! 
-    //! \return const decoder_t::name_t& - Command name
+    //! \return const String<encoding>& - Command name
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename decoder_t::name_t&  name() const 
+    virtual const String<encoding>&  name() const 
     {
-      return NameString.Name;
+      return Decoder.Name;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

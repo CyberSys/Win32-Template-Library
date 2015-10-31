@@ -27,7 +27,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   inline size_t strlen(const char* str)
   {
-    return std::strlen(str);
+    return ::strlen(str);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   inline size_t strlen(const wchar_t* str)
   {
-    return std::wcslen(str);
+    return ::wcslen(str);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   inline int32_t strcmp(const char* a, const char* b)
   {
-    return std::strcmp(a,b);
+    return ::strcmp(a,b);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   inline int32_t strcmp(const wchar_t* a, const wchar_t* b)
   {
-    return std::wcscmp(a,b);
+    return ::wcscmp(a,b);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -77,9 +77,9 @@ namespace wtl
   //! \return char* - Returns 'dest'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <unsigned LEN>
-  inline char* strcpy(array_ref_t<char,LEN> dest, const char* src)
+  inline char* strcpy(char (&dest)[LEN], const char* src)
   {
-    return ::strcpy_s(dest,src);
+    return ::strcpy(dest,src);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -91,157 +91,47 @@ namespace wtl
   //! \return wchar_t* - Returns 'dest'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <unsigned LEN>
-  inline wchar_t* strcpy(array_ref_t<wchar_t,LEN> dest, const wchar_t* src)
+  inline wchar_t* strcpy(wchar_t (&dest)[LEN], const wchar_t* src)
   {
-    return ::wcscpy_s(dest,src);
+    return ::wcscpy(dest,src);
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::snprintf
+  //! Formats a narrow character string
+  //!
+  //! \param[in,out] *buffer - Narrow character output buffer
+  //! \param[in] capacity - Buffer capacity
+  //! \param[in] const* format - Narrow formatting string
+  //! \param[in] ... - [optional] Formatting arguments
+  //! \return int32_t - Number of character written.
+  //!
+  //! \remarks If result is less than zero then an error occurred. If the result exceeds the capacity then there was insufficient space.
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename... ARGS>
+  inline int32_t snprintf(char* buffer, uint32_t capacity, const char* format, ARGS&&... args)
+  {
+    return std::snprintf(buffer, capacity, format, std::forward<ARGS>(args)...);
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::snprintf
+  //! Formats a wide character string
+  //!
+  //! \param[in,out] *buffer - Wide character output buffer
+  //! \param[in] capacity - Buffer capacity
+  //! \param[in] const* format - Wide formatting string
+  //! \param[in] ... - [optional] Formatting arguments
+  //! \return int32_t - Number of character written.
+  //!
+  //! \remarks If result is less than zero then an error occurred. If the result exceeds the capacity then there was insufficient space.
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename... ARGS>
+  inline int32_t snprintf(wchar_t* buffer, uint32_t capacity, const wchar_t* format, ARGS&&... args)
+  {
+    return std::swprintf(buffer, capacity, format, std::forward<ARGS>(args)...);
   }
 
-
-
-  namespace
-  {
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy - Handles conversion between character encoding types
-    //!
-    //! \tparam FROM - Input character encoding
-    //! \tparam TO - Output character encoding
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding FROM, Encoding TO, typename>
-    struct conversion_proxy;
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy<FROM,Encoding::UTF16> - Handles narrow character -> wide character conversion
-    //!
-    //! \tparam FROM - Input character encoding
-    //! \tparam TO - Output character encoding
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding FROM>
-    struct conversion_proxy<FROM,Encoding::UTF16,enable_if_not_encoding_t<FROM,Encoding::UTF16>>
-    {
-      //! \alias input_t - Input character type
-      using input_t = encoding_char_t<FROM>;
-
-      //! \alias output_t - Output character type
-      using output_t = encoding_char_t<Encoding::UTF16>;
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // conversion_proxy::convert
-      //! Copy a narrow character string into a wide character buffer
-      //!
-      //! \tparam INPUT - Input iterator type
-      //!
-      //! \param[in] const* first - First character
-      //! \param[in] const* last - Position beyond final character
-      //! \param[in,out] *output - First character in output range
-      //! \param[in] const* lastOut - Position immediately beyond final character of output range
-      //!
-      //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename INPUT = const input_t*>
-      static int32_t  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
-      {
-        REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
-        REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
-  
-        // narrow -> wide
-        return MultiByteToWideChar(enum_cast(FROM), enum_cast(MultiByteFlags::PreComposed), std::addressof(*first), last-first, output, lastOut-output);
-      }
-    };
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy<Encoding::UTF16,TO> - Handles wide character -> narrow character conversion
-    //!
-    //! \tparam FROM - Input character encoding
-    //! \tparam TO - Output character encoding
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding TO>
-    struct conversion_proxy<Encoding::UTF16,TO,enable_if_not_encoding_t<TO,Encoding::UTF16>>
-    {
-      //! \alias input_t - Input character type
-      using input_t = encoding_char_t<Encoding::UTF16>;
-  
-      //! \alias output_t - Output character type
-      using output_t = encoding_char_t<TO>;
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // conversion_proxy::convert
-      //! Copy an wide character string into a narrow character buffer
-      //!
-      //! \tparam INPUT - Input iterator type
-      //!
-      //! \param[in] const* first - First character
-      //! \param[in] const* last - Position beyond final character
-      //! \param[in,out] *output - First character in output range
-      //! \param[in] const* lastOut - Position immediately beyond final character of output range
-      //!
-      //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename INPUT = const input_t*>
-      static int32_t  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
-      {
-        REQUIRED_PARAM(first);  REQUIRED_PARAM(output);
-        REQUIRED_PARAM(last);   REQUIRED_PARAM(lastOut);
-
-        // wide -> narrow
-        int32_t  useDefault = True;
-        return WideCharToMultiByte(enum_cast(TO), enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars), std::addressof(*first), last-first, output, lastOut-output, "?", &useDefault);
-      }
-    };
-  
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct conversion_proxy<E,E> - Handles no conversion required
-    //!
-    //! \tparam E - Character encoding of both strings
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding E>
-    struct conversion_proxy<E,E,void>
-    {
-      //! \alias input_t - Input character type
-      using input_t = encoding_char_t<E>;
-
-      //! \alias output_t - Output character type
-      using output_t = input_t;
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // conversion_proxy::convert
-      //! Copy an input string of equal encoding
-      //!
-      //! \tparam INPUT - Input iterator type
-      //!
-      //! \param[in] const* first - First character
-      //! \param[in] const* last - Position beyond final character
-      //! \param[in,out] *output - First character in output range
-      //! \param[in] const* lastOut - Position immediately beyond final character of output range
-      //!
-      //! \throw wtl::invalid_argument - [Debug only] Any position is nullptr
-      /////////////////////////////////////////////////////////////////////////////////////////
-      template <typename INPUT = const input_t*>
-      static int32_t  convert(INPUT first, INPUT last, output_t* output, const output_t* lastOut)
-      {
-        /*REQUIRED_PARAM(first);*/  REQUIRED_PARAM(output);
-        /*REQUIRED_PARAM(last);*/   REQUIRED_PARAM(lastOut);
-
-        const int32_t CAPACITY = lastOut-output-1;   //!< Output buffer character capacity
-
-        // Clear output
-        output[0] = defvalue<output_t>();
-
-        // Prevent output buffer overrun
-        if (last - first > CAPACITY)
-          last = first + CAPACITY;
-
-        // Copy characters from input range
-        for (INPUT pos = first; pos != last; ++pos, ++output)
-          *output = *pos;
-
-        // null terminate
-        *output = defvalue<output_t>();
-  
-        // Return number of characters copied
-        return last-first;
-      }
-    };
-  }
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -253,7 +143,7 @@ namespace wtl
   using String = std::basic_string<encoding_char_t<ENC>>;*/
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct String - Character string with an unlimited capacity and variable runtime length
+  //! \struct String - Character string with an unlimited capacity and variable runtime length. In essence, this is a hollow type upon a std::string.
   //!
   //! \tparam ENC - Character encoding
   //! 
@@ -298,7 +188,8 @@ namespace wtl
     // String::String
     //! Constructs empty string
     /////////////////////////////////////////////////////////////////////////////////////////
-    String() = default;
+    String()
+    {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // String::String
@@ -312,22 +203,22 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // String::String
-    //! Constructs the string from a substring of a null-terminated string' 
+    //! Constructs the string from a substring of a std::string
     //! 
-    //! \param[in] s - Null terminated string
+    //! \param[in] const& s - String
     //! \param[in] pos - Position of sub-string
     //! \param[in] count - [optional] Length of sub-string. If unspecified, the remainder of the input string is used
     //! 
     //! \throw std::out_of_range - Position 'pos' exceeds length of input string 's'
     /////////////////////////////////////////////////////////////////////////////////////////
-    String(const String& other, size_type pos, size_type count = base::npos) : base(other, pos, count)
+    String(const base& other, size_type pos, size_type count = base::npos) : base(other, pos, count)
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // String::String
     //! Constructs the string from the first 'n' characters of a null-terminated string
     //! 
-    //! \param[in] s - Null terminated string
+    //! \param[in] const* s - Null terminated string
     //! \param[in] count - Number of characters to copy
     //! 
     //! \remarks If 's' does not contain 'count' characters the behaviour is undefined
@@ -339,19 +230,45 @@ namespace wtl
     // String::String
     //! Constructs the string from a null-terminated string
     //! 
-    //! \param[in] s - Null terminated string
+    //! \param[in] const* s - Null terminated string
     /////////////////////////////////////////////////////////////////////////////////////////
     String(const char_t* s) : base(s)
     {}
 	  
     /////////////////////////////////////////////////////////////////////////////////////////
     // String::String
+    //! Constructs the string from a null-terminated string of different character encoding
+    //! 
+    //! \tparam CHR - Foreign character type
+    //! 
+    //! \param[in] const* s - Null terminated string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename CHR>
+    String(const CHR* s) : String(std::basic_string<CHR>(s))
+    {}
+	  
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // String::String
+    //! Constructs the string from a std::string of different character encoding
+    //! 
+    //! \tparam CHR - Foreign character type
+    //! 
+    //! \param[in] s - Null terminated string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename CHR>
+    String(const std::basic_string<CHR>& s) : base(translate<default_encoding<CHR>::value>(s))
+    {}
+	  
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // String::String
     //! Constructs the string from a string of different character encoding
+    //! 
+    //! \tparam E2 - Foreign character encoding
     //! 
     //! \param[in] const& s - String of different character encoding
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E2>
-    String(const String<E2>& s) : base(translate(s))
+    String(const String<E2>& s) : base(translate<E2>(s))
     {}
 	    
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -365,7 +282,6 @@ namespace wtl
     String(InputIt first, InputIt last) : base(first,last)
     {}
 	  
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // String::String
     //! Constructs the string with the contents of the initializer list 
@@ -389,24 +305,45 @@ namespace wtl
     template <Encoding E2>
     type& operator=(const String<E2>& s) 
     {
-      return static_cast<this&>(base::operator=(translate(s)));
+      base::operator=(translate<E2>(s));
+      return *this;
     }
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
     // String::translate
-    //! Converts a string in a foreign character encoding into the native character encoding
+    //! Converts a String in a foreign character encoding into a std::string in native character encoding
     //! 
     //! \tparam E2 - Foreign character encoding
+    //! \tparam CHR - Foreign character type
     //! 
     //! \param[in] const& s - Foreign string to convert
-    //! \return String<encoding> - String in native encoding
+    //! \return std::basic_string<char_t> - std::string in native encoding
     //!
     //! \throw wtl::platform_error - Unable to convert string
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding E2> 
-    static String<encoding>  translate(const String<E2>& s)
+    static base  translate(const String<ENC>& s)
+    {
+      // Delegate to std::string overload
+      return translate<ENC, typename String<ENC>::char_t>(s);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // String::translate
+    //! Converts a std::string in a foreign character encoding into a std::string in native character encoding
+    //! 
+    //! \tparam E2 - Foreign character encoding
+    //! \tparam CHR - Foreign character type
+    //! 
+    //! \param[in] const& s - Foreign std::string to convert
+    //! \return std::basic_string<char_t> - std::string in native encoding
+    //!
+    //! \throw wtl::platform_error - Unable to convert string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding E2, typename CHR = encoding_char_t<E2>> 
+    static base  translate(const std::basic_string<CHR>& s)
     {
       std::vector<char_t> buf(s.length()+1, null_t);      //!< Temporary (dynamic) storage
 
@@ -416,7 +353,19 @@ namespace wtl
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-    
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // String::contains const
+    //! Query whether the string contains a character
+    //! 
+    //! \param[in] ch - Character 
+    //! \return bool - True iff string contains character
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool contains(char_t ch) const
+    {
+      return this->find(ch) != base::npos;
+    }
+
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 

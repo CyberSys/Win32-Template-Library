@@ -14,6 +14,7 @@
 #include "wtl/utils/Handle.hpp"                   //!< Handle
 #include "wtl/utils/CharArray.hpp"                //!< CharArray
 #include "wtl/utils/LengthOf.hpp"                 //!< LengthOf
+#include "wtl/utils/String.hpp"                   //!< String
 #include "wtl/traits/DeviceContextTraits.hpp"     //!< HDeviceContext
 #include "wtl/traits/BrushTraits.hpp"             //!< HBrush
 #include "wtl/traits/FontTraits.hpp"              //!< HFont
@@ -312,20 +313,19 @@ namespace wtl
     //! Measure text using the current font
     //! 
     //! \tparam ENC - Character encoding
-    //! \tparam LEN - Buffer capacity
     //!
-    //! \param[in] const &txt - Character array 
+    //! \param[in] const &txt - String
     //! \return SizeL - Size in pixels
     //!
     //! \throw wtl::platform_error - Unable to measure text
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    SizeL measure(const CharArray<ENC,LEN>& txt)
+    template <Encoding ENC>
+    SizeL measure(const String<ENC>& txt)
     {
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, txt.size(), &native_cast(sz)) == False)
+      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt.c_str(), txt.size(), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -491,6 +491,8 @@ namespace wtl
     // DeviceContext::write
     //! Writes text into a rectangle
     //! 
+    //! \tparam ENC - Character encoding
+    //!
     //! \param[in] txt - Text
     //! \param[in] rc - Drawing rectangle
     //! \param[in] flags - Drawing flags
@@ -499,11 +501,15 @@ namespace wtl
     //!
     //! \throw wtl::platform_error - Unable to draw text
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, unsigned LEN>
-    int32_t write(const CharArray<ENC,LEN>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
+    template <Encoding ENC>
+    int32_t write(const String<ENC>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      return write<ENC>(txt, txt.size(), rc, flags);
+      if (int32_t height = choose<ENC>(::DrawTextA,::DrawTextW)(Handle, txt.c_str(), txt.size(), &native_cast(rc), enum_cast(flags)))
+        return height;
+
+      // Failure
+      throw platform_error(HERE, "Unable to draw text");
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -519,15 +525,15 @@ namespace wtl
     //!
     //! \throw wtl::platform_error - Unable to draw text
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC>
-    int32_t write(const encoding_char_t<ENC>* txt, int32_t len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
+    template <typename CHR>
+    int32_t write(const CHR* txt, int32_t len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32_t height = choose<ENC>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
+      if (int32_t height = choose<default_encoding<CHR>>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
         return height;
 
       // Failure
-      throw platform_error(HERE, "Unable to draw text"); //, *CharArray<Encoding::ANSI,LEN>(txt).c_str());
+      throw platform_error(HERE, "Unable to draw text");
     }
   };
 

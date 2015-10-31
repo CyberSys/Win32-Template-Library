@@ -46,14 +46,14 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
   
   protected:
-    //! \using decoder_t - Name/description string type
-    using decoder_t = typename Command<encoding>::NameStringResource;
+    //! \using decoder_t - Name/description string decoder type
+    using decoder_t = typename Command<encoding>::NameDecoder;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    CommandGroupId  Ident;           //!< Command Id
-    decoder_t       NameString;      //!< Name + Description
-    icon_t          Icon;            //!< Command Icon
+    CommandGroupId  Ident;        //!< Command Id
+    decoder_t       Decoder;      //!< Name + Description
+    icon_t          Icon;         //!< Command Icon
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -64,8 +64,8 @@ namespace wtl
     //! \param[in] id - Group id   (Defining name, description, and icon resource)
     /////////////////////////////////////////////////////////////////////////////////////////
     CommandGroup(CommandGroupId id) : Ident(id),
-                                     NameString(resource_id(id)),
-                                     Icon(resource_id(id))
+                                      Decoder(resource_id(id)),
+                                      Icon(resource_id(id))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -96,11 +96,11 @@ namespace wtl
     // CommandGroup::description const
     //! Get the group description
     //! 
-    //! \return const description_t::string_t& - Group description
+    //! \return const String<encoding>& - Group description
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename decoder_t::description_t&  description() const 
+    virtual const String<encoding>&  description() const 
     {
-      return NameString.Description;
+      return Decoder.Description;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -146,11 +146,11 @@ namespace wtl
     // CommandGroup::name const
     //! Get the group name
     //! 
-    //! \return const decoder_t::name_t& - Group name
+    //! \return const String<encoding>& - Group name
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const typename decoder_t::name_t&  name() const 
+    virtual const String<encoding>&  name() const 
     {
-      return NameString.Name;
+      return Decoder.Name;
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
