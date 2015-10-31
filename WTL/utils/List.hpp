@@ -68,7 +68,7 @@ namespace wtl
   public:
     ENABLE_COPY(List);        //!< Can be copied
     ENABLE_MOVE(List);        //!< Can be moved
-    ENABLE_POLY(List);        //!< Can be moved
+    ENABLE_POLY(List);        //!< Can be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
