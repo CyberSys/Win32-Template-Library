@@ -53,9 +53,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     PasteClipboardCommand()  
       : base(CommandId::Edit_Paste, [this] () { if (TargetWnd = window_t::getFocus())
-                                                  TargetWnd->Text = c_str(L"TODO: Paste text from clipboard"); },
+                                                  TargetWnd->Text = "TODO: Paste text from clipboard"; },
                                     [this] () { if (TargetWnd)
-                                                  TargetWnd->Text = c_str(L"TODO: Restore previous text"); })
+                                                  TargetWnd->Text = "TODO: Restore previous text"; })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------

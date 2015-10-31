@@ -52,7 +52,7 @@ namespace wtl
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
     CopyClipboardCommand() : base(CommandId::Edit_Copy, [this] () { if (TargetWnd = window_t::getFocus())
-                                                                     TargetWnd->Text = c_str(L"TODO: Copy text to clipboard"); })
+                                                                     TargetWnd->Text = "TODO: Copy text to clipboard"; })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------

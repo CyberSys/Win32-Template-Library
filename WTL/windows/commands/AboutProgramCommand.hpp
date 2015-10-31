@@ -53,7 +53,7 @@ namespace wtl
     //! \param[in] appWnd - Main application window
     /////////////////////////////////////////////////////////////////////////////////////////
     AboutProgramCommand(window_t& appWnd)  
-      : base(CommandId::App_About, [&appWnd] () { errorBox<encoding>(appWnd, c_str("Program Error"), c_str("Command not implemented")); })
+      : base(CommandId::App_About, [&appWnd] () { errorBox<encoding>(appWnd, "Program Error", "Command not implemented"); })
     {}
     
 	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
