@@ -588,6 +588,7 @@ namespace wtl
         throw platform_error(HERE, "Unable to convert character encoding");
 
       // Return new length
+      Data[this->Count] = null_t;
       return this->Count;
     }
     
@@ -612,6 +613,7 @@ namespace wtl
       base::template assign<ITERATOR>(first, last);
       
       // Return new length
+      Data[this->Count] = null_t;
       return this->Count;
     }
 
