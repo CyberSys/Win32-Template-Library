@@ -69,7 +69,7 @@ namespace wtl
     static NativeHandle<::HICON> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       // Load icon handle
-      if (::HICON icon = choose<ENC>(::LoadIconA,::LoadIconW)(instance, ident))
+      if (::HICON icon = WinAPI<ENC>::loadIcon(instance, ident))
         return { icon, AllocType::Accquire };
 
       // Error: Failed  
@@ -91,7 +91,7 @@ namespace wtl
     static NativeHandle<::HICON> create(SystemIcon ident) 
     { 
       // Load icon handle
-      if (::HICON icon = choose<ENC>(::LoadIconA,::LoadIconW)(nullptr, resource_id<ENC>(ident)))
+      if (::HICON icon = WinAPI<ENC>::loadIcon(nullptr, resource_id<ENC>(ident)))
         return { icon, AllocType::Accquire };
 
       // Error: Failed  
@@ -155,7 +155,7 @@ namespace wtl
     static NativeHandle<::HCURSOR> create(SystemCursor ident) 
     { 
       // Load cursor handle
-      if (::HCURSOR cursor = choose<ENC>(::LoadCursorA,::LoadCursorW)(nullptr, resource_id<ENC>(ident)))
+      if (::HCURSOR cursor = WinAPI<ENC>::loadCursor(nullptr, resource_id<ENC>(ident)))
         return { cursor, AllocType::Accquire };
 
       // Error: Failed  

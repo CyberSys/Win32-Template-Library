@@ -37,7 +37,7 @@ namespace wtl
   LResult send_message(const HWnd& wnd, FIRST w, SECOND l)
   {
     // Send to target window and determine whether handled
-    ::LRESULT result = choose<ENC>(::SendMessageA,::SendMessageW)(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
+    ::LRESULT result = WinAPI<ENC>::sendMessage(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
     MsgRoute  route  = (result != unhandled_result<WM>::value ? MsgRoute::Handled : MsgRoute::Unhandled);
 
     // Return result & routing
@@ -61,7 +61,7 @@ namespace wtl
   void post_message(const HWnd& wnd, FIRST w, SECOND l)
   {
     // Post to target window 
-    choose<ENC>(::PostMessageA,::PostMessageW)(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
+    WinAPI<ENC>::postMessage(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////

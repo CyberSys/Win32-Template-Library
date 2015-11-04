@@ -50,13 +50,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     SystemVersion() : Ident(WindowVersion::Future)
     {
-      static const auto getVersion = choose<ENC>(::GetVersionExA,::GetVersionExW);
-
       // Prepare
       this->dwOSVersionInfoSize = sizeof(base);
 
       // Query windows version
-      if (getVersion(this))
+      if (WinAPI<ENC>::getVersion(this))
         Ident = identify(this->dwMajorVersion, this->dwMinorVersion);
 
       // Format long name

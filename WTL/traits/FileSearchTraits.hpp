@@ -60,7 +60,7 @@ namespace wtl
     template <Encoding ENC>
     static ::HFILESEARCH create(const encoding_char_t<ENC>* folder, choose_t<ENC,::WIN32_FIND_DATAA,::WIN32_FIND_DATAW>& results) 
     { 
-      return reinterpret_cast<::HFILESEARCH>( choose<ENC>(::FindFirstFileA,::FindFirstFileW)(folder.c_str(), &results) ); 
+      return reinterpret_cast<::HFILESEARCH>( WinAPI<ENC>::findFirstFile(folder.c_str(), &results) ); 
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

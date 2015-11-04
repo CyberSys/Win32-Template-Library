@@ -448,7 +448,7 @@ namespace wtl
 
         // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
         case WindowMessage::GETMINMAXINFO:
-          return choose<encoding>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
+          return WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
 
         // [REMAINDER] Lookup native handle from the 'Active Windows' collection
         default:
@@ -472,7 +472,7 @@ namespace wtl
       }
 
       // [UNHANDLED/ERROR] Pass back to OS
-      ::LRESULT result = choose<encoding>(::DefWindowProcA,::DefWindowProcW)(hWnd, message, wParam, lParam);
+      ::LRESULT result = WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
       
       // [CREATE/NCCREATE] Cleanup
       switch (auto msg = static_cast<WindowMessage>(message))
@@ -504,7 +504,7 @@ namespace wtl
     template <typename DATA>
     DATA* data() const
     {
-      return reinterpret_cast<DATA*>( choose<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(Handle.get(), GWLP_USERDATA) );
+      return reinterpret_cast<DATA*>( WinAPI<encoding>::getWindowLongPtr(Handle.get(), GWLP_USERDATA) );
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -844,7 +844,7 @@ namespace wtl
           // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
           case WindowType::Native:
             // Delegate to native class window procedure and infer routing
-            ret.Result = choose<encoding>(::CallWindowProcA,::CallWindowProcW)(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
+            ret.Result = WinAPI<encoding>::callWindowProc(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
             ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
           
             // [HANDLED] Return result & routing

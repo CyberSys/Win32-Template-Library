@@ -91,17 +91,14 @@ namespace wtl
                                         int32_t       escape = 0, 
                                         int32_t       orient = 0) 
     { 
-      //! \var createFont - Functor for CreateFont
-      static const auto createFont = choose<ENC>(::CreateFontA,::CreateFontW);
-
       // Create font 
-      if (::HFONT font = createFont(height, width, 
-                                    escape, orient, 
-                                    enum_cast(weight), 
-                                    boolean_cast(italic), boolean_cast(underline), boolean_cast(strike), 
-                                    enum_cast(charSet), 
-                                    enum_cast(precision), enum_cast(clipping), enum_cast(quality), 
-                                    enum_cast(family), name.c_str()))
+      if (::HFONT font = WinAPI<ENC>::createFont(height, width, 
+                                                 escape, orient, 
+                                                 enum_cast(weight), 
+                                                 boolean_cast(italic), boolean_cast(underline), boolean_cast(strike), 
+                                                 enum_cast(charSet), 
+                                                 enum_cast(precision), enum_cast(clipping), enum_cast(quality), 
+                                                 enum_cast(family), name.c_str()))
         return { font, AllocType::Create };
 
       // Error: Failed  

@@ -104,7 +104,7 @@ namespace wtl
       wndCls.hCursor = cursor;*/
 
       // Register class
-      if (::ATOM atom = choose<ENC>(::RegisterClassExA,::RegisterClassExW)(&wndCls))
+      if (::ATOM atom = WinAPI<ENC>::registerClassEx(&wndCls))
         return { atom, AllocType::Accquire };
 
       // Error: Failed  

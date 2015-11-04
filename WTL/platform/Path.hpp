@@ -155,7 +155,7 @@ namespace wtl
       typename base::array_t tmp;     //!< Path storage
 
       // Get absolute module path
-      if (!choose<encoding>(::GetModuleFileNameA,::GetModuleFileNameW)(nullptr, tmp, size_of(tmp)))
+      if (!WinAPI<encoding>::getModuleFileName(nullptr, tmp, size_of(tmp)))
         throw wtl::platform_error(HERE, "Unable to query module path");
 
       // Return path
@@ -175,7 +175,7 @@ namespace wtl
     FileAttribute  attributes() const
     {
       // Query attributes
-      auto attr = static_cast<FileAttribute>( choose<encoding>(::GetFileAttributesA,::GetFileAttributesW)(this->Data) );
+      auto attr = static_cast<FileAttribute>( WinAPI<encoding>::getFileAttributes(this->Data) );
 
       // Ensure valid
       if (attr == FileAttribute::Invalid)
@@ -192,7 +192,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     bool  exists() const
     {
-      return choose<encoding>(::PathFileExistsA,::PathFileExistsW)(this->Data) != False;
+      return WinAPI<encoding>::pathFileExists(this->Data) != False;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     const char_t*  extension() const
     {
-      return choose<encoding>(::PathFindExtensionA,::PathFindExtensionW)(this->Data);
+      return WinAPI<encoding>::pathFindExtension(this->Data);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     const char_t*  fileName() const
     {
-      return choose<encoding>(::PathFindFileNameA,::PathFindFileNameW)(this->Data);
+      return WinAPI<encoding>::pathFindFileName(this->Data);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -228,8 +228,8 @@ namespace wtl
       Path tmp(*this);
 
       // Remove filename, add backslash
-      if (!choose<encoding>(::PathRemoveFileSpecA,::PathRemoveFileSpecW)(tmp)
-       || !choose<encoding>(::PathAddBackslashA,::PathAddBackslashW)(tmp))
+      if (!WinAPI<encoding>::pathRemoveFileSpec(tmp)
+       || !WinAPI<encoding>::pathAddBackslash(tmp))
 
        throw platform_error(HERE, "Unable to remove path filename");
 
@@ -294,7 +294,7 @@ namespace wtl
       REQUIRED_PARAM(ext);
 
       // Compare extension, case insenstive
-      return choose<encoding>(::StrCmpIA,::StrCmpIW)(extension(), ext) == 0;
+      return WinAPI<encoding>::strCmpI(extension(), ext) == 0;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -321,7 +321,7 @@ namespace wtl
     bool operator== (const char_t* ptr) const
     {
       // Compare full path, case insenstive
-      return choose<encoding>(::StrCmpIA,::StrCmpIW)(this->Data, ptr) == 0;
+      return WinAPI<encoding>::strCmpI(this->Data, ptr) == 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +334,7 @@ namespace wtl
     bool operator== (const Path& p) const
     {
       // Compare full path, case insenstive
-      return choose<encoding>(::StrCmpIA,::StrCmpIW)(this->Data, p.c_str()) == 0;
+      return WinAPI<encoding>::strCmpI(this->Data, p.c_str()) == 0;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -362,7 +362,7 @@ namespace wtl
     void append(const char_t* path)
     {
       // Append path to self
-      if (!choose<encoding>(::PathAppendA,::PathAppendW)(this->Data, path))
+      if (!WinAPI<encoding>::pathAppend(this->Data, path))
         throw wtl::platform_error(HERE, "Unable to append path");
 
       // Update length
@@ -378,7 +378,7 @@ namespace wtl
     void appendBackslash()
     {
       // Append backslash and update length
-      if (const_pointer chr = choose<encoding>(::PathAddBackslashA,::PathAddBackslashW)(this->Data))
+      if (const_pointer chr = WinAPI<encoding>::pathAddBackslash(this->Data))
         this->Count += (chr[0] != this->null_t);
       else
         throw wtl::platform_error(HERE, "Insufficient buffer to append backslash to path");
@@ -395,7 +395,7 @@ namespace wtl
     void combine(const char_t* path)
     {
       // Append path to self
-      if (!choose<encoding>(::PathCombineA,::PathCombineW)(this->Data, path))
+      if (!WinAPI<encoding>::pathCombine(this->Data, path))
         throw wtl::platform_error(HERE, "Unable to combine path");
     }
 
@@ -406,7 +406,7 @@ namespace wtl
     void removeBackslash()
     {
       // Remove backslash and update length
-      const_pointer chr = choose<encoding>(::PathRemoveBackslashA,::PathRemoveBackslashW)(this->Data);
+      const_pointer chr = WinAPI<encoding>::pathRemoveBackslash(this->Data);
       this->Count -= (chr[0] != this->null_t);
     }
 
@@ -417,7 +417,7 @@ namespace wtl
     void  removeExtension()
     {
       // Remove extension + update length
-      choose<encoding>(::PathRemoveExtensionA,::PathRemoveExtensionW)(this->Data);
+      WinAPI<encoding>::pathRemoveExtension(this->Data);
       this->Count = strlen(this->Data);
     }
 
@@ -428,7 +428,7 @@ namespace wtl
     void  removeFileName()
     {
       // Remove filename + update length
-      if (const_pointer fn = choose<encoding>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
+      if (const_pointer fn = WinAPI<encoding>::pathFindFileName(this->Data))
       {
         fn[0] = this->null_t;
         this->Count = (fn - this->Data);
@@ -446,7 +446,7 @@ namespace wtl
     void  renameExtension(const char_t* ext)
     {
       // Rename extension
-      if (!choose<encoding>(::PathRenameExtensionA,::PathRenameExtensionW)(this->Data, ext))
+      if (!WinAPI<encoding>::pathRenameExtension(this->Data, ext))
         throw wtl::platform_error(HERE, "Unable to rename extension");
 
       // Update length
@@ -464,7 +464,7 @@ namespace wtl
     void  renameFileName(const char_t* name) const
     {
       // Find filename
-      if (const_pointer fn = choose<encoding>(::PathFindFileNameA,::PathFindFileNameW)(this->Data))
+      if (const_pointer fn = WinAPI<encoding>::pathFindFileName(this->Data))
       {
         // Verify new length
         int32_t remaining = (this->length-1) - (fn-this->Data);
@@ -605,11 +605,11 @@ namespace wtl
       typename base::array_t tmp;     //!< Absolute path of user temp folder
 
       // Get temp folder
-      if (!choose<encoding>(::GetTempPathA,::GetTempPathW)(MAX_PATH, tmp))
+      if (!WinAPI<encoding>::getTempPath(MAX_PATH, tmp))
         throw wtl::platform_error(HERE, "Unable to get temp folder");
 
       // Combine with random filename   (TODO: See L_tmpnam constant and tmpnam() func)
-      if (!choose<encoding>(::GetTempFileNameA,::GetTempFileNameW)(tmp, prefix, NULL, this->Data))
+      if (!WinAPI<encoding>::getTempFileName(tmp, prefix, NULL, this->Data))
         throw wtl::platform_error(HERE, "Unable to generate temporary filename");
 
       // Update length

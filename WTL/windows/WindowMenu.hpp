@@ -303,7 +303,7 @@ namespace wtl
       MenuItemInfo<encoding> item(*cmd);     //!< Generate Gui Command menu item
 
       // Insert item into menu
-      if (!choose<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
+      if (!WinAPI<encoding>::insertMenuItem(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
 
       // Insert Command into collection 
@@ -521,7 +521,7 @@ namespace wtl
       MenuItemInfo<encoding> item(*group, popup->handle());     //!< Generate pop-up menu item 
 
       // Insert menu item 
-      if (!choose<encoding>(::InsertMenuItemA,::InsertMenuItemW)(Handle, idx, True, &item))
+      if (!WinAPI<encoding>::insertMenuItem(Handle, idx, True, &item))
         throw platform_error(HERE, "Unable to insert menu item");
     }
 

@@ -76,7 +76,7 @@ namespace wtl
     ResourceBlob  findResource(ResourceType type, ResourceId<ENC> name, LanguageId language = LanguageId::Neutral) const
     { 
       // Load resource handle
-      if (::HRSRC res = choose<ENC>(::FindResourceExA,::FindResourceExW)(Handle, ResourceId<ENC>(type), name, language))
+      if (::HRSRC res = WinAPI<ENC>::findResourceEx(Handle, ResourceId<ENC>(type), name, language))
         return ResourceBlob(Handle, HResource(res, AllocType::Accquire));
 
       // [NOT FOUND] Return sentinel
@@ -121,7 +121,7 @@ namespace wtl
       Path<ENC>  p;
 
       // Query module path
-      if (!choose<ENC>(::GetModuleFileNameA,::GetModuleFileNameW)(Handle, p.buffer(), Path<ENC>::length))
+      if (!WinAPI<ENC>::getModuleFileName(Handle, p.buffer(), Path<ENC>::length))
         throw platform_error(HERE, "Unable to query module path");
       return p;
     }

@@ -324,7 +324,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt.c_str(), txt.size(), &native_cast(sz)) == False)
+      if (WinAPI<ENC>::getTextExtentPoint32(Handle, txt.c_str(), txt.size(), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -348,7 +348,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (choose<ENC>(::GetTextExtentPoint32A,::GetTextExtentPoint32W)(Handle, txt, strlen(txt), &native_cast(sz)) == False)
+      if (WinAPI<ENC>::getTextExtentPoint32(Handle, txt, strlen(txt), &native_cast(sz)) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -504,7 +504,7 @@ namespace wtl
     int32_t write(const String<ENC>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32_t height = choose<ENC>(::DrawTextA,::DrawTextW)(Handle, txt.c_str(), txt.size(), &native_cast(rc), enum_cast(flags)))
+      if (int32_t height = WinAPI<ENC>::drawText(Handle, txt.c_str(), txt.size(), &native_cast(rc), enum_cast(flags)))
         return height;
 
       // Failure

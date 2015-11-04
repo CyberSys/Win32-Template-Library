@@ -60,7 +60,7 @@ namespace wtl
     static NativeHandle<HACCEL> create(HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       // Create solid colour brush handle
-      if (HACCEL accel = choose<ENC>(::LoadAcceleratorsA,::LoadAcceleratorsW)(instance, ident))
+      if (HACCEL accel = WinAPI<ENC>::loadAccelerators(instance, ident))
         return { accel, AllocType::Accquire };
 
       // Error: Failed  

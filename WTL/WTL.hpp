@@ -58,5 +58,8 @@
 #include "Types.h"
 #include "Constants.h"
 
+// Windows API functors
+#include "WinAPI.h"
+
 #endif // WTL_HPP
 

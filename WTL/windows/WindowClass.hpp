@@ -97,7 +97,7 @@ namespace wtl
                                  WndProc(defvalue<::WNDPROC>())
     {
       //! \var getClassInfoEx - Functor for 'GetClassInfoEx' 
-      static const auto getClassInfoEx = choose<ENC>(::GetClassInfoExA,::GetClassInfoExW);
+      static const auto getClassInfoEx = WinAPI<ENC>::getClassInfoEx;
 
       native_t wndClass = {sizeof(native_t)};   //!< Window class data
 
@@ -177,7 +177,7 @@ namespace wtl
     virtual ~WindowClass() 
     {
       //! \var unregisterClass - Functor for 'UnregisterClass' 
-      static const auto unregisterClass = choose<ENC>(::UnregisterClassA,::UnregisterClassW);
+      static const auto unregisterClass = WinAPI<ENC>::unregisterClass;
 
       // Unregister window class
       if (unregisterClass(Name, Instance) == False)

@@ -33,7 +33,7 @@ namespace wtl
   template <Encoding ENC>
   WindowId messageBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags flags)
   {
-    return static_cast<WindowId>( choose<ENC>(::MessageBoxA,::MessageBoxW)(parent, text.c_str(), title.c_str(), enum_cast(flags)) );
+    return static_cast<WindowId>( WinAPI<ENC>::messageBox(parent, text.c_str(), title.c_str(), enum_cast(flags)) );
   }
 
 

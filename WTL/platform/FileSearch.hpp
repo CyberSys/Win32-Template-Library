@@ -186,7 +186,7 @@ namespace wtl
       do
       {
         // Advance iff results remain, otherwise close handle
-        if (!choose<encoding>(::FindNextFileA,::FindNextFileW)(Handle, Result))
+        if (!WinAPI<encoding>::findNextFile(Handle, Result))
           Handle.release();
       } 
       // Skip relative paths, abort if complete

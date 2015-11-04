@@ -130,6 +130,7 @@
     <ClInclude Include="utils\Default.hpp" />
     <ClInclude Include="utils\Triangle.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
+    <ClInclude Include="WinAPI.h" />
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp" />
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\CutClipboardCommand.hpp" />
@@ -236,7 +237,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
-    <PlatformToolset>Clang</PlatformToolset>
+    <PlatformToolset>GCC</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|MinGW'">

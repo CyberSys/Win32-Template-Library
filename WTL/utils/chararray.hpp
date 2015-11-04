@@ -588,7 +588,7 @@ namespace wtl
         throw platform_error(HERE, "Unable to convert character encoding");
 
       // Return new length
-      Data[this->Count] = null_t;
+      this->Data[this->Count] = null_t;
       return this->Count;
     }
     
@@ -613,7 +613,7 @@ namespace wtl
       base::template assign<ITERATOR>(first, last);
       
       // Return new length
-      Data[this->Count] = null_t;
+      this->Data[this->Count] = null_t;
       return this->Count;
     }
 
@@ -919,11 +919,14 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LastErrorString()
     {
-      //! \var formatMsg - Format message
-      static const auto formatMsg = choose<ENC>(::FormatMessageA,::FormatMessageW);
-
       // Lookup system error and append to user error
-      formatMsg(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, ::GetLastError(), 0, *base::c_str(), base::length, nullptr);
+      WinAPI<ENC>::formatMessage(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), 
+                                 nullptr, 
+                                 ::GetLastError(), 
+                                 0, 
+                                 *base::c_str(), 
+                                 base::length, 
+                                 nullptr);
     }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------

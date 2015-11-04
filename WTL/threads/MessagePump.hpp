@@ -123,19 +123,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual int32_t  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
     {
-      //! \var dispatchMessage - Functor for 'DispatchMessage'
-      static const auto dispatchMessage = choose<encoding>(::DispatchMessageA,::DispatchMessageW);
-
-      //! \var getMessage - Functor for 'GetMessage'
-      static const auto getMessage = choose<encoding>(::GetMessageA,::GetMessageW);
-
-      //! \var isDialogMessage - Functor for 'isDialogMessage'
-      static const auto isDialogMessage = choose<encoding>(::IsDialogMessageA,::IsDialogMessageW);
-
-      //! \var translateAccelerator - Functor for 'TranslateAccelerator'
-      static const auto translateAccelerator = choose<encoding>(::TranslateAcceleratorA,::TranslateAcceleratorW);
-
-      MSG msg;
+      MSG msg;      //!< Current message
 
       try
       {
@@ -150,7 +138,7 @@ namespace wtl
         State = PumpState::Running;
 
         // Retrieve next message for any window
-        while (getMessage(&msg, nullptr, 0ul, 0ul))
+        while (WinAPI<encoding>::getMessage(&msg, nullptr, 0ul, 0ul))
         {
           // [MODAL] Update state when entering/exiting modal loop
           switch (static_cast<WindowMessage>(msg.message))
@@ -163,13 +151,13 @@ namespace wtl
           //if (Window && Window->exists())
           //{
           //  // [ACCELERATOR] Pass all accelerators to main window
-          //  if (translateAccelerator(*Window, activeAccelerators, &msg))
+          //  if (WinAPI<encoding>::translateAccelerator(*Window, activeAccelerators, &msg))
           //    continue;
 
           //  // [DIALOG] Translate accelerators or dispatch to dialog
           //  if (Dialogs.contains(msg.hwnd))
-          //    if (translateAccelerator(msg.hwnd, activeAccelerators, &msg)
-          //     || isDialogMessage(msg.hwnd, &msg))
+          //    if (WinAPI<encoding>::translateAccelerator(msg.hwnd, activeAccelerators, &msg)
+          //     || WinAPI<encoding>::isDialogMessage(msg.hwnd, &msg))
           //     continue;
 
           //  // TODO: Property sheets
@@ -177,7 +165,7 @@ namespace wtl
 
           // Translate and dispatch to target
           ::TranslateMessage(&msg);
-          dispatchMessage(&msg);
+          WinAPI<encoding>::dispatchMessage(&msg);
         }
       
         // [EVENT] Raise 'onExit'

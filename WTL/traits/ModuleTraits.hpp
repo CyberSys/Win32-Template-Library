@@ -59,7 +59,7 @@ namespace wtl
     static NativeHandle<::HMODULE> create(const Path<ENC>& fullPath) 
     { 
       // Load external library
-      if (::HMODULE module = choose<ENC>(::LoadLibraryA,::LoadLibraryW)(fullPath))
+      if (::HMODULE module = WinAPI<ENC>::loadLibrary(fullPath))
         return { module, AllocType::Create };
 
       // Error: Failed  

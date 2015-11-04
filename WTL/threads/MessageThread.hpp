@@ -167,16 +167,16 @@ namespace wtl
     int32_t messagePump()
     {
       //! \var dispatchMessage - Functor for 'DispatchMessage'
-      static const auto dispatchMessage = choose<ENC>(::DispatchMessageA,::DispatchMessageW);
+      static const auto dispatchMessage = WinAPI<ENC>::DispatchMessage;
 
       //! \var getMessage - Functor for 'GetMessage'
-      static const auto getMessage = choose<ENC>(::GetMessageA,::GetMessageW);
+      static const auto getMessage = WinAPI<ENC>::GetMessage;
 
       //! \var isDialogMessage - Functor for 'isDialogMessage'
-      static const auto isDialogMessage = choose<ENC>(::IsDialogMessageA,::IsDialogMessageW);
+      static const auto isDialogMessage = WinAPI<ENC>::IsDialogMessage;
 
       //! \var translateAccelerator - Functor for 'TranslateAccelerator'
-      static const auto translateAccelerator = choose<ENC>(::TranslateAcceleratorA,::TranslateAcceleratorW);
+      static const auto translateAccelerator = WinAPI<ENC>::TranslateAccelerator;
 
       MSG msg;
 

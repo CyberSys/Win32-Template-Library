@@ -67,7 +67,7 @@ namespace wtl
     static NativeHandle<::HRSRC> create(const HModule& module, ResourceId<ENC> name, ResourceType type, LanguageId language)
     {
       // Load resource handle
-      if (::HRSRC res = choose<ENC>(::FindResourceExA,::FindResourceExW)(module, ResourceId<ENC>(type), name, language))
+      if (::HRSRC res = WinAPI<ENC>::findResourceEx(module, ResourceId<ENC>(type), name, language))
         return { res, AllocType::Accquire };
 
       // Error: Failed
