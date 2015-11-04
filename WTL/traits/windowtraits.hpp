@@ -79,15 +79,15 @@ namespace wtl
     static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
     { 
       // Create window
-      if (::HWND hwnd = WinAPI<ENC>::createWindow(enum_cast(exStyle),                        //!< Extended style
-                                                  wndClass.Name.toString(),                  //!< Class name
-                                                  title.c_str(),                             //!< Text
-                                                  enum_cast(style),                          //!< Style
-                                                  pos.x, pos.y, size.width, size.height,     //!< Size/Position
-                                                  owner,                                     //!< Owner/parent
-                                                  menu,                                      //!< Menu or ChildID
-                                                  wndClass.Instance,                         //!< Module containing class
-                                                  &object))                                  //!< Associate WTL window object
+      if (::HWND hwnd = WinAPI<ENC>::createWindowEx(enum_cast(exStyle),                        //!< Extended style
+                                                    wndClass.Name.toString(),                  //!< Class name
+                                                    title.c_str(),                             //!< Text
+                                                    enum_cast(style),                          //!< Style
+                                                    pos.x, pos.y, size.width, size.height,     //!< Size/Position
+                                                    owner,                                     //!< Owner/parent
+                                                    menu,                                      //!< Menu or ChildID
+                                                    wndClass.Instance,                         //!< Module containing class
+                                                    &object))                                  //!< Associate WTL window object
         // Success!
         return { hwnd, AllocType::Create };
       

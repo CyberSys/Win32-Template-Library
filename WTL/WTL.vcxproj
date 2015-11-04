@@ -293,6 +293,7 @@
     </Link>
     <Lib>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>shlwapi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -329,6 +330,7 @@
     </Link>
     <Lib>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>shlwapi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
