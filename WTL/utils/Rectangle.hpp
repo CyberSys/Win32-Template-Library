@@ -45,10 +45,10 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    value_t  left,        //!< Left extent
-             top,         //!< Top extent
-             right,       //!< Right extent
-             bottom;      //!< Bottom extent
+    value_t  Left,        //!< Left extent
+             Top,         //!< Top extent
+             Right,       //!< Right extent
+             Bottom;      //!< Bottom extent
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -57,10 +57,10 @@ namespace wtl
     //! Create empty rectangle with all fields initialized to zero
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Rect() : left(defvalue<T>()),
-             top(defvalue<T>()),
-             right(defvalue<T>()),
-             bottom(defvalue<T>())
+    Rect() : Left(defvalue<T>()),
+             Top(defvalue<T>()),
+             Right(defvalue<T>()),
+             Bottom(defvalue<T>())
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -70,10 +70,10 @@ namespace wtl
     //! \param[in] const& rc - Input rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Rect(const ::RECT&  rc) : left(static_cast<T>(rc.left)),
-                              top(static_cast<T>(rc.top)),
-                              right(static_cast<T>(rc.right)),
-                              bottom(static_cast<T>(rc.bottom))
+    Rect(const ::RECT&  rc) : Left(static_cast<T>(rc.left)),
+                              Top(static_cast<T>(rc.top)),
+                              Right(static_cast<T>(rc.right)),
+                              Bottom(static_cast<T>(rc.bottom))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -84,10 +84,10 @@ namespace wtl
     //! \param[in] const& rc - Input rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U> constexpr
-    Rect(const Rect<U>& rc) : left(static_cast<T>(rc.left)),
-                              top(static_cast<T>(rc.top)),
-                              right(static_cast<T>(rc.right)),
-                              bottom(static_cast<T>(rc.bottom))
+    Rect(const Rect<U>& rc) : Left(static_cast<T>(rc.Left)),
+                              Top(static_cast<T>(rc.Top)),
+                              Right(static_cast<T>(rc.Right)),
+                              Bottom(static_cast<T>(rc.Bottom))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -100,24 +100,24 @@ namespace wtl
     //! \param[in] const b - Bottom
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename A, typename B, typename C, typename D> constexpr
-    Rect(const A l, const B t, const C r, const D b) : left(static_cast<T>(l)),
-                                                       top(static_cast<T>(t)),
-                                                       right(static_cast<T>(r)),
-                                                       bottom(static_cast<T>(b))
+    Rect(const A l, const B t, const C r, const D b) : Left(static_cast<T>(l)),
+                                                       Top(static_cast<T>(t)),
+                                                       Right(static_cast<T>(r)),
+                                                       Bottom(static_cast<T>(b))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::Rect constexpr
     //! Create from point and rectangle extent
     //!
-    //! \param[in] const& topLeft - Top left co-ordinate
+    //! \param[in] const& topLeft - Top Left co-ordinate
     //! \param[in] const& size - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename A, typename B> constexpr
-    Rect(const Point<A>& topLeft, const Size<B>& size) : left(topLeft.x),
-                                                         right(topLeft.x+size.width),
-                                                         top(topLeft.y),
-                                                         bottom(topLeft.y+size.height)
+    Rect(const Point<A>& topLeft, const Size<B>& size) : Left(topLeft.x),
+                                                         Right(topLeft.x+size.width),
+                                                         Top(topLeft.y),
+                                                         Bottom(topLeft.y+size.height)
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -150,24 +150,24 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::bottomLeft const
-    //! Query bottom-left corner of rectangle
+    //! Query Bottom-Left corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
     point_t  bottomLeft() const
     {
-      return point_t(left, bottom);
+      return point_t(Left, Bottom);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::bottomRight const
-    //! Query bottom-right corner of rectangle
+    //! Query Bottom-Right corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
     point_t  bottomRight() const
     {
-      return point_t(right, bottom);
+      return point_t(Right, Bottom);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -194,8 +194,8 @@ namespace wtl
     template <typename U>
     bool  contains(const Point<U>&  pt) const
     {
-      return static_cast<value_t>(pt.x) >= left && static_cast<value_t>(pt.x) < right
-          && static_cast<value_t>(pt.y) >= top && static_cast<value_t>(pt.y) < bottom;
+      return static_cast<value_t>(pt.x) >= Left && static_cast<value_t>(pt.x) < Right
+          && static_cast<value_t>(pt.y) >= Top && static_cast<value_t>(pt.y) < Bottom;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -217,7 +217,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  height() const
     {
-      return bottom - top;
+      return Bottom - Top;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -233,24 +233,24 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::topLeft const
-    //! Query top-left corner of rectangle
+    //! Query Top-Left corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
     point_t  topLeft() const
     {
-      return point_t(left, top);
+      return point_t(Left, Top);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::topRight const
-    //! Query top-right corner of rectangle
+    //! Query Top-Right corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
     point_t  topRight() const
     {
-      return point_t(right, top);
+      return point_t(Right, Top);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  width() const
     {
-      return right - left;
+      return Right - Left;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -273,8 +273,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator == (const type& r)
     {
-      return left == r.left && right == r.right
-          && top == r.top   && bottom == r.bottom;
+      return Left == r.Left && Right == r.Right
+          && Top == r.Top   && Bottom == r.Bottom;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -286,8 +286,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator != (const type& r)
     {
-      return left != r.left || right != r.right
-          || top != r.top   || bottom != r.bottom;
+      return Left != r.Left || Right != r.Right
+          || Top != r.Top   || Bottom != r.Bottom;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -299,8 +299,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type  operator + (const point_t& pt) const
     {
-      return type(left + static_cast<value_t>(pt.x),  top + static_cast<value_t>(pt.y),
-                  right + static_cast<value_t>(pt.x), bottom + static_cast<value_t>(pt.y));
+      return type(Left + static_cast<value_t>(pt.x),  Top + static_cast<value_t>(pt.y),
+                  Right + static_cast<value_t>(pt.x), Bottom + static_cast<value_t>(pt.y));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -312,8 +312,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type  operator - (const point_t& pt) const
     {
-      return type(left - static_cast<value_t>(pt.x),  top - static_cast<value_t>(pt.y),
-                  right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
+      return type(Left - static_cast<value_t>(pt.x),  Top - static_cast<value_t>(pt.y),
+                  Right - static_cast<value_t>(pt.x), Bottom - static_cast<value_t>(pt.y));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -359,16 +359,16 @@ namespace wtl
     // Rect::set
     //! Set from point and rectangle extent
     //!
-    //! \param[in] const& topLeft - Top left co-ordinate
+    //! \param[in] const& topLeft - Top Left co-ordinate
     //! \param[in] const& size - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U>
     void set(const Point<U>& topLeft, const Size<U>& size)
     {
-      left   = topLeft.x;
-      right  = topLeft.x + size.width;
-      top    = topLeft.y;
-      bottom = topLeft.y + size.height;
+      Left   = topLeft.x;
+      Right  = topLeft.x + size.width;
+      Top    = topLeft.y;
+      Bottom = topLeft.y + size.height;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -439,10 +439,10 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Rect<T>& rc)
   {
-    return c << make_nvpair_tuple("left", rc.left,
-                                 "top", rc.top,
-                                 "right", rc.right,
-                                 "bottom", rc.bottom);
+    return c << make_nvpair_tuple("Left", rc.Left,
+                                 "Top", rc.Top,
+                                 "Right", rc.Right,
+                                 "Bottom", rc.Bottom);
   }
 
 } // WTL namespace

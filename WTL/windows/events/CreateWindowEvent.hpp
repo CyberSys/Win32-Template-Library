@@ -49,7 +49,7 @@ namespace wtl
   public:
     HMenu           Menu;        //!< [¬Child] Menu handle
     WindowId        Ident;       //!< [Child] Child window Id
-    RectL           Rect;        //!< Window rectangle
+    RectL           WndRect;     //!< Window rectangle
     WindowStyle     Style;       //!< Window style
     WindowStyleEx   StyleEx;     //!< Extended window style
     resource_t      Class;       //!< Window class id
@@ -67,7 +67,7 @@ namespace wtl
     EventArgs(::WPARAM w, ::LPARAM l) : Data(*opaque_cast<CreationData>(l)),
                                         Menu(Data.hMenu, AllocType::WeakRef),
                                         Ident(static_cast<WindowId>(LOWORD(Data.hMenu))),
-                                        Rect(PointL(Data.x,Data.y), SizeL(Data.cx,Data.cy)),
+                                        WndRect(PointL(Data.x,Data.y), SizeL(Data.cx,Data.cy)),
                                         Style(enum_cast<WindowStyle>(Data.style)),
                                         StyleEx(enum_cast<WindowStyleEx>(Data.dwExStyle)),
                                         Class(Data.lpszClass),
@@ -88,10 +88,10 @@ namespace wtl
       // Save properties
       Data.style = enum_cast(Style); 
       Data.dwExStyle = enum_cast(StyleEx);
-      Data.x = Rect.left;
-      Data.y = Rect.top;
-      Data.cx = Rect.width();
-      Data.cy = Rect.height();
+      Data.x = WndRect.Left;
+      Data.y = WndRect.Top;
+      Data.cx = WndRect.width();
+      Data.cy = WndRect.height();
       Data.lpszClass = Class.toString();
       Data.lpszName = Name;
 

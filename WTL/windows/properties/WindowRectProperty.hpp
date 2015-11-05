@@ -68,7 +68,7 @@ namespace wtl
   void  WindowRectPropertyImpl<ENC>::set(value_t rc) 
   {
     bool resized = this->Value.width() == rc.width() && this->Value.height() == rc.height(),    //!< Whether resized
-           moved = this->Value.left == rc.left && this->Value.top == rc.top;                    //!< Whethe rmoved
+           moved = this->Value.Left == rc.Left && this->Value.Top == rc.Top;                    //!< Whether moved
 
     // [EXISTS] Resize window
     if (this->Window.exists())
@@ -84,7 +84,7 @@ namespace wtl
         flags |= MoveWindowFlags::NoMove;
 
       // Resize/reposition window
-      if (!::SetWindowPos(this->Window, defvalue<::HWND>(), rc.left, rc.top, rc.width(), rc.height(), enum_cast(flags)))
+      if (!::SetWindowPos(this->Window, defvalue<::HWND>(), rc.Left, rc.Top, rc.width(), rc.height(), enum_cast(flags)))
         throw platform_error(HERE, "Unable to set window position");
     }
     // [¬EXISTS] Set size/position

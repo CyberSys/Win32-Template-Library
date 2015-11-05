@@ -269,7 +269,7 @@ namespace wtl
     void  ellipse(const Rect<T>& rc)
     {
       // Fill & outline ellipse 
-      if (::Ellipse(Handle, rc.left, rc.top, rc.right, rc.bottom) == False)
+      if (::Ellipse(Handle, rc.Left, rc.Top, rc.Right, rc.Bottom) == False)
         throw platform_error(HERE, "Unable to draw ellipse");
     }
     
@@ -390,7 +390,7 @@ namespace wtl
     void  rect(const Rect<T>& rc)
     {
       // Outline target rectangle with current pen
-      if (::Rectangle(Handle, rc.left, rc.top, rc.right, rc.bottom) == False)
+      if (::Rectangle(Handle, rc.Left, rc.Top, rc.Right, rc.Bottom) == False)
         throw platform_error(HERE, "Unable to draw rectangle");
     }
     
