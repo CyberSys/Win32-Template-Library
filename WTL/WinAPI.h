@@ -29,7 +29,7 @@ namespace wtl
 
     //! Functions 'C'
     static constexpr auto callWindowProc = choose<encoding>(::CallWindowProcA,::CallWindowProcW);
-    static constexpr auto createFont = choose<ENC>(::CreateFontA,::CreateFontW);
+    static constexpr auto createFont = choose<encoding>(::CreateFontA,::CreateFontW);
     static constexpr auto createWindowEx = choose<encoding>(::CreateWindowExA,::CreateWindowExW);
     
     //! Functions 'D'

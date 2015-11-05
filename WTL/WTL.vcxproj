@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|MinGW">
+    <ProjectConfiguration Include="Debug|Mingw32">
       <Configuration>Debug</Configuration>
-      <Platform>MinGW</Platform>
+      <Platform>Mingw32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|TDM-Mingw32">
+      <Configuration>Debug</Configuration>
+      <Platform>TDM-Mingw32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,9 +17,13 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|MinGW">
+    <ProjectConfiguration Include="Release|Mingw32">
       <Configuration>Release</Configuration>
-      <Platform>MinGW</Platform>
+      <Platform>Mingw32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|TDM-Mingw32">
+      <Configuration>Release</Configuration>
+      <Platform>TDM-Mingw32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
@@ -236,12 +244,19 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
-    <PlatformToolset>GCC</PlatformToolset>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Mingw32'">
+    <PlatformToolset>GCC_v4.8.1</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|MinGW'">
-    <PlatformToolset>Clang</PlatformToolset>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Mingw32'">
+    <PlatformToolset>GCC_v4.8.1</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|TDM-Mingw32'">
+    <PlatformToolset>GCC_v5.2</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|TDM-Mingw32'">
+    <PlatformToolset>GCC_v5.2</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -275,9 +290,13 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
-    <MinGWInstallFolder>f:\MinGW</MinGWInstallFolder>
-    <LLVMInstallFolder>D:\LLVM</LLVMInstallFolder>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|TDM-Mingw32'">
+    <MinGWInstallFolder>d:\TDM-GCC-64</MinGWInstallFolder>
+    <LLVMInstallFolder>d:\LLVM</LLVMInstallFolder>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Mingw32'">
+    <MinGWInstallFolder>d:\MinGW</MinGWInstallFolder>
+    <LLVMInstallFolder>d:\LLVM</LLVMInstallFolder>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -352,21 +371,19 @@
       <SubSystem>Windows</SubSystem>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Mingw32'">
+    <Link>
+      <ThreadSupport>false</ThreadSupport>
+    </Link>
+    <ClCompile />
     <ClCompile>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>D:\My Projects\WTL</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|MinGW'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|TDM-Mingw32'">
     <ClCompile>
-      <CppLanguageStandard>c++1y</CppLanguageStandard>
-      <ExceptionHandling>Enabled</ExceptionHandling>
-      <UseShortEnums>true</UseShortEnums>
       <AdditionalIncludeDirectories>D:\My Projects\WTL</AdditionalIncludeDirectories>
-      <Pedantic>true</Pedantic>
-      <WarningReorder>Disable</WarningReorder>
-      <WarningSwitch>Disable</WarningSwitch>
-      <WarningSwitchDefault>Enable</WarningSwitchDefault>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

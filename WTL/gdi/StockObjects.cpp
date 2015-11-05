@@ -41,7 +41,7 @@ namespace wtl
 
   //! Stock fonts
   const HFont  StockFont::System(StockObject::SystemFixedFont);
-  const HFont  StockFont::Tooltip(c_str("MS Shell Dlg 2"), DeviceContext::ScreenDC.getFontHeight(8));
+  const HFont  StockFont::Tooltip(c_str(L"MS Shell Dlg 2"), DeviceContext::ScreenDC.getFontHeight(8));
   const HFont  StockFont::Window(StockObject::DefaultGuiFont);
   
   //! Stock pens
