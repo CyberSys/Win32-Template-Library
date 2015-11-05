@@ -10,10 +10,8 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"           //!< EnumCast
-#include "wtl/casts/NativeCast.hpp"         //!< NativeCast
 #include "wtl/traits/EnumTraits.hpp"        //!< is_attribute
 #include "wtl/utils/FormatSpec.hpp"         //!< format_spec_t
-//#include "wtl/utils/Sequence.hpp"           //!< integral_sequence
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/Exception.hpp"          //!< caught_exception
 #include <exception>                        //!< std::exception
@@ -256,7 +254,7 @@ namespace wtl
           throw domain_error(HERE, "Standard output unavailable");
         
         // Adjust console size
-        ::SetConsoleScreenBufferSize(Handle, native_cast(Coord(150,3000)));
+        ::SetConsoleScreenBufferSize(Handle, Coord(150,3000));
 
         // Show window
         if (HWND wnd = ::GetConsoleWindow())
@@ -314,7 +312,7 @@ namespace wtl
 
       // Query screen buffer
       ::GetConsoleScreenBufferInfo(Handle, &sb);
-      return native_cast(sb.dwCursorPosition);
+      return { sb.dwCursorPosition };
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -354,7 +352,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     void setPosition(const Coord& pt) 
     {
-      ::SetConsoleCursorPosition(Handle, native_cast(pt));
+      ::SetConsoleCursorPosition(Handle, pt);
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////

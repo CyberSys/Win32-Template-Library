@@ -38,7 +38,7 @@ namespace wtl
       value_t wnd;    //!< Window rectangle
         
       // Query & return window rectangle
-      if (!::GetWindowRect(this->Window, &native_cast(wnd)))
+      if (!::GetWindowRect(this->Window, wnd))
         throw platform_error(HERE, "Unable to query window rectangle");
       return wnd;
     }

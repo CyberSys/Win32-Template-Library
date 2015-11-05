@@ -315,6 +315,34 @@ namespace wtl
       return type(left - static_cast<value_t>(pt.x),  top - static_cast<value_t>(pt.y),
                   right - static_cast<value_t>(pt.x), bottom - static_cast<value_t>(pt.y));
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::operator const ::RECT* const
+    //! Implicit user-conversion to native ::RECT pointer
+    //!
+    //! \return const ::RECT* - Recter to self as immutable ::RECT
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator const ::RECT* () const
+    {
+      return reinterpret_cast<const ::RECT*>(this);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::operator ::RECT const
+    //! Implicit user-conversion to native ::RECT 
+    //!
+    //! \return ::RECT - Copy of current value as ::RECT
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator  ::RECT () const
+    {
+      return {x,y};
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
@@ -366,6 +394,21 @@ namespace wtl
     {
       return *this = *this - pt;
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::operator ::RECT* 
+    //! Implicit user-conversion to native ::RECT pointer
+    //!
+    //! \return ::RECT* - Recter to self as mutable ::RECT
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator ::RECT* () 
+    {
+      return reinterpret_cast<::RECT*>(this);
+    }
+    
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -382,21 +425,7 @@ namespace wtl
   using RectF = Rect<float>;
 
 
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_conversion<32-bit>> - Defines a conversion from Rect<32-bit> to ::RECT
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  struct native_conversion<Rect<T>, enable_if_sizeof_t<T,int32_t>>
-  {
-    //! \alias input_t - Define input type
-    using input_t = Rect<T>;
-
-    //! \alias result_t - Define output type
-    using result_t = ::RECT;
-  };
-
-
+  
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
   //! Prints a Rect to the debug console

@@ -38,7 +38,7 @@ namespace wtl
     if (this->Window.exists())
     {
       // Query client rectangle
-      if (!::GetClientRect(this->Window, &native_cast(rc)))
+      if (!::GetClientRect(this->Window, rc))
         throw platform_error(HERE, "Unable to query window rectangle");
     }
     else
@@ -49,7 +49,7 @@ namespace wtl
 
       // Calculate client from window rectangle 
       rc = RectL(this->Window.Position(), this->Window.Size());
-      if (!::AdjustWindowRectEx(&native_cast(rc), 
+      if (!::AdjustWindowRectEx(rc, 
                                 enum_cast(this->Window.Style.get()), 
                                 boolean_cast(!this->Window.Menu.empty()), 
                                 enum_cast(this->Window.StyleEx.get())))
@@ -76,7 +76,7 @@ namespace wtl
     RectL wnd(rc);   //!< New window rectangle
 
     // Calculate window rectangle 
-    if (!::AdjustWindowRectEx(&native_cast(wnd), 
+    if (!::AdjustWindowRectEx(wnd, 
                               enum_cast(this->Window.Style.get()), 
                               boolean_cast(!this->Window.Menu.empty()), 
                               enum_cast(this->Window.StyleEx.get())))

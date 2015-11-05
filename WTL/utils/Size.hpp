@@ -9,8 +9,8 @@
 #define WTL_SIZE_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/casts/NativeCast.hpp"    //!< NativeCast
 #include "wtl/utils/DebugInfo.hpp"     //!< DebugInfo
+#include "wtl/utils/SFINAE.hpp"        //!< enable_if_sizeof_t
 #include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library
@@ -106,7 +106,7 @@ namespace wtl
     //! \param[in] const& r - Another size
     //! \return bool - True iff co-ordinates equal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator == (const type& r)
+    bool operator == (const type& r) const
     {
       return width  == r.width
           && height == r.height;
@@ -119,10 +119,66 @@ namespace wtl
     //! \param[in] const& r - Another size
     //! \return bool - True iff co-ordinates unequal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator != (const type& r)
+    bool operator != (const type& r) const
     {
       return width != r.width
          || height != r.height;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator const ::COORD* const
+    //! Implicit user-conversion to native ::COORD pointer
+    //!
+    //! \return const ::COORD* - Pointer to self as immutable ::COORD
+    //! 
+    //! \remarks Requires value_t be 16-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    operator const ::COORD* () const
+    {
+      return reinterpret_cast<const ::COORD*>(this);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator ::COORD const
+    //! Implicit user-conversion to native ::COORD 
+    //!
+    //! \return ::COORD - Copy of current size as ::COORD
+    //! 
+    //! \remarks Requires value_t be 16-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    operator  ::COORD () const
+    {
+      return {width,height};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator const ::SIZE* const
+    //! Implicit user-conversion to native ::SIZE pointer
+    //!
+    //! \return const ::SIZE* - Pointer to self as immutable ::SIZE
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator const ::SIZE* () const
+    {
+      return reinterpret_cast<const ::SIZE*>(this);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator ::SIZE const
+    //! Implicit user-conversion to native ::SIZE 
+    //!
+    //! \return ::SIZE - Copy of current size as ::SIZE
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator  ::SIZE () const
+    {
+      return {width,height};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -135,7 +191,34 @@ namespace wtl
     {
       *this = EMPTY;
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator ::COORD* 
+    //! Implicit user-conversion to native ::COORD pointer
+    //!
+    //! \return ::COORD* - Pointer to self as mutable ::COORD
+    //! 
+    //! \remarks Requires value_t be 16-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    operator ::COORD* () 
+    {
+      return reinterpret_cast<::COORD*>(this);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator ::SIZE* 
+    //! Implicit user-conversion to native ::SIZE pointer
+    //!
+    //! \return ::SIZE* - Pointer to self as mutable ::SIZE
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator ::SIZE* () 
+    {
+      return reinterpret_cast<::SIZE*>(this);
+    }
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -152,19 +235,6 @@ namespace wtl
   using SizeF = Size<float>;
 
 
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_conversion<32-bit>> - Defines a conversion from Size<32-bit> to ::SIZE
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  struct native_conversion<Size<T>, enable_if_sizeof_t<T,int32_t>>
-  {
-    //! \alias input_t - Define input type
-    using input_t = Size<T>;
-
-    //! \alias result_t - Define output type
-    using result_t = ::SIZE;
-  };
 
 
   //////////////////////////////////////////////////////////////////////////////////////////

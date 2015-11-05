@@ -425,9 +425,6 @@
     <ClInclude Include="io\Console.hpp">
       <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="casts\NativeCast.hpp">
-      <Filter>Casts</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Iterator.hpp">
       <Filter>Utils</Filter>
     </ClInclude>

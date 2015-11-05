@@ -11,7 +11,6 @@
 #include "wtl/WTL.hpp"
 #include "wtl/casts/BooleanCast.hpp"                              //!< BooleanCast
 #include "wtl/casts/EnumCast.hpp"                                 //!< EnumCast
-#include "wtl/casts/NativeCast.hpp"                               //!< NativeCast
 #include "wtl/casts/OpaqueCast.hpp"                               //!< OpaqueCast
 #include "wtl/traits/EncodingTraits.hpp"                          //!< Encoding
 #include "wtl/traits/WindowTraits.hpp"                            //!< HWnd

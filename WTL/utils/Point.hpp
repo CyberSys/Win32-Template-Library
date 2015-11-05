@@ -10,7 +10,6 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Default.hpp"       //!< Default
-#include "wtl/casts/NativeCast.hpp"    //!< NativeCast
 #include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library
@@ -49,6 +48,16 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr Point() : x(defvalue<T>()),
                         y(defvalue<T>())
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::Point
+    //! Create from Win32 16-bit co-ordinates
+    //!
+    //! \param[in] const& pt - Input co-ordinates
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr Point(const ::COORD&  pt) : x(static_cast<T>(pt.X)),
+                                          y(static_cast<T>(pt.Y))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +102,25 @@ namespace wtl
     ENABLE_COPY_ASSIGN(Point);       //!< Can be assigned
     ENABLE_MOVE_ASSIGN(Point);       //!< Can be move-assigned
     DISABLE_POLY(Point);             //!< Cannot be polymorphic
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator=
+    //! Assignment operator
+    //!
+    //! \tparam U - Another value type
+    //!
+    //! \param[in] const& pt - Another point of any type
+    //! \return type& - Reference to self
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    type& operator= (const Point<U>&  pt)
+    {
+      this->x = static_cast<value_t>(pt.x);
+      this->y = static_cast<value_t>(pt.y);
 
+      return *this;
+    }
+    
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -160,6 +187,62 @@ namespace wtl
     {
       return x != r.x || y != r.y;
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator const ::COORD* const
+    //! Implicit user-conversion to native ::COORD pointer
+    //!
+    //! \return const ::COORD* - Pointer to self as immutable ::COORD
+    //! 
+    //! \remarks Requires value_t be 16-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    operator const ::COORD* () const
+    {
+      return reinterpret_cast<const ::COORD*>(this);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator ::COORD const
+    //! Implicit user-conversion to native ::COORD 
+    //!
+    //! \return ::COORD - Copy of current value as ::COORD
+    //! 
+    //! \remarks Requires value_t be 16-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    operator  ::COORD () const
+    {
+      return {x,y};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator const ::POINT* const
+    //! Implicit user-conversion to native ::POINT pointer
+    //!
+    //! \return const ::POINT* - Pointer to self as immutable ::POINT
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator const ::POINT* () const
+    {
+      return reinterpret_cast<const ::POINT*>(this);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator ::POINT const
+    //! Implicit user-conversion to native ::POINT 
+    //!
+    //! \return ::POINT - Copy of current value as ::POINT
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator  ::POINT () const
+    {
+      return {x,y};
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
@@ -173,23 +256,32 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator=
-    //! Assignment operator
+    // Point::operator ::COORD* 
+    //! Implicit user-conversion to native ::COORD pointer
     //!
-    //! \tparam U - Another value type
-    //!
-    //! \param[in] const& pt - Another point of any type
-    //! \return type& - Reference to self
+    //! \return ::COORD* - Pointer to self as mutable ::COORD
+    //! 
+    //! \remarks Requires value_t be 16-bit
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U>
-    type& operator= (const Point<U>&  pt)
+    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    operator ::COORD* () 
     {
-      this->x = static_cast<value_t>(pt.x);
-      this->y = static_cast<value_t>(pt.y);
-
-      return *this;
+      return reinterpret_cast<::COORD*>(this);
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator ::POINT* 
+    //! Implicit user-conversion to native ::POINT pointer
+    //!
+    //! \return ::POINT* - Pointer to self as mutable ::POINT
+    //! 
+    //! \remarks Requires value_t be 32-bit
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    operator ::POINT* () 
+    {
+      return reinterpret_cast<::POINT*>(this);
+    }
   };
 
 
@@ -205,46 +297,6 @@ namespace wtl
   //! \alias PointF - Point using floating point fields
   using PointF = Point<float>;
 
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_conversion<Point<32-bit>> - Defines a conversion from Point<32-bit> to ::POINT
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  struct native_conversion<Point<T>, enable_if_sizeof_t<T,long32_t>>
-  {
-    //! \alias input_t - Define input type
-    using input_t = Point<T>;
-
-    //! \alias result_t - Define output type
-    using result_t = ::POINT;
-  };
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_conversion<Point<16-bit>> - Defines a conversion from Point<16-bit> to ::COORD
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  struct native_conversion<Point<T>, enable_if_sizeof_t<T,int16_t>>
-  {
-    //! \alias input_t - Define input type
-    using input_t = Point<T>;
-
-    //! \alias result_t - Define output type
-    using result_t = ::COORD;
-  };
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct native_conversion<::COORD> - Defines a conversion from ::COORD to Point<int16_t>
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename U>
-  struct native_conversion<::COORD,U>
-  {
-    //! \alias input_t - Define input type
-    using input_t = ::COORD;
-
-    //! \alias result_t - Define output type
-    using result_t = Point<int16_t>;
-  };
 }
 
 

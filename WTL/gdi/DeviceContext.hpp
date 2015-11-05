@@ -10,7 +10,6 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"                 //!< EnumCast
-#include "wtl/casts/NativeCast.hpp"               //!< NativeCast
 #include "wtl/utils/Handle.hpp"                   //!< Handle
 #include "wtl/utils/LengthOf.hpp"                 //!< LengthOf
 #include "wtl/utils/String.hpp"                   //!< String
@@ -303,7 +302,7 @@ namespace wtl
     void  fill(const Rect<T>& rc, const HBrush& brush)
     {
       // Fill target rectangle with custom brush
-      if (::FillRect(Handle, &native_cast(rc), brush) == False)
+      if (::FillRect(Handle, rc, brush) == False)
         throw platform_error(HERE, "Unable to fill custom rect");
     }
     
@@ -324,7 +323,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (WinAPI<ENC>::getTextExtentPoint32(Handle, txt.c_str(), txt.size(), &native_cast(sz)) == False)
+      if (WinAPI<ENC>::getTextExtentPoint32(Handle, txt.c_str(), txt.size(), sz) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -348,7 +347,7 @@ namespace wtl
       SizeL sz;   //!< Text size
 
       // Measure text
-      if (WinAPI<ENC>::getTextExtentPoint32(Handle, txt, strlen(txt), &native_cast(sz)) == False)
+      if (WinAPI<ENC>::getTextExtentPoint32(Handle, txt, strlen(txt), sz) == False)
         throw platform_error(HERE, "Unable to measure text");
 
       return sz;
@@ -519,7 +518,7 @@ namespace wtl
     int32_t write(const String<ENC>& txt, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32_t height = WinAPI<ENC>::drawText(Handle, txt.c_str(), txt.size(), &native_cast(rc), enum_cast(flags)))
+      if (int32_t height = WinAPI<ENC>::drawText(Handle, txt.c_str(), txt.size(), rc, enum_cast(flags)))
         return height;
 
       // Failure
@@ -543,7 +542,7 @@ namespace wtl
     int32_t write(const CHR* txt, int32_t len, RectL& rc, DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre)
     {
       // Draw text
-      if (int32_t height = choose<default_encoding<CHR>>(::DrawTextA,::DrawTextW)(Handle, txt, len, &native_cast(rc), enum_cast(flags)))
+      if (int32_t height = choose<default_encoding<CHR>>(::DrawTextA,::DrawTextW)(Handle, txt, len, rc, enum_cast(flags)))
         return height;
 
       // Failure
