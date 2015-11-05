@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\gdi\StockObjects.cpp
-//! \brief Provides extended stock drawing objects
-//! \date 6 March 2015
+//! \brief Provides storage for stock drawing objects
+//! \date 5 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -61,12 +61,10 @@ namespace wtl
   const HBrush  StockBrush::BtnText(SystemColour::BtnText);			                              //!< Text on push buttons.
   const HBrush  StockBrush::InactiveCaptionText(SystemColour::InactiveCaptionText);			      //!< Color of text in an inactive caption.
   const HBrush  StockBrush::BtnHighlight(SystemColour::BtnHighlight);			                    //!< Highlight color for three-dimensional display elements (for edges facing the light source.)
-
   const HBrush  StockBrush::BtnDkShadow(SystemColour::BtnDkShadow);			                      //!< Dark shadow for three-dimensional display elements.
   const HBrush  StockBrush::BtnLight(SystemColour::BtnLight);			                            //!< Light color for three-dimensional display elements (for edges facing the light source.)
   const HBrush  StockBrush::InfoText(SystemColour::InfoText);			                            //!< Text color for tooltip controls.
   const HBrush  StockBrush::InfoBk(SystemColour::InfoBk);			                                //!< Background color for tooltip controls.
-    
   const HBrush  StockBrush::Hotlight(SystemColour::Hotlight);			                            //!< [Windows 5.00] Color for a hyperlink or hot-tracked item.
   const HBrush  StockBrush::GradientActiveCaption(SystemColour::GradientActiveCaption);			  //!< [Windows 5.00] Right side color in the color gradient of an active window's title bar. 
   const HBrush  StockBrush::GradientInactiveCaption(SystemColour::GradientInactiveCaption);		//!< [Windows 5.00] Right side color in the color gradient of an inactive window's title bar. 
