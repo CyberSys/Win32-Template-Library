@@ -114,10 +114,10 @@ namespace wtl
     //! \param[in] const& size - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename A, typename B> constexpr
-    Rect(const Point<A>& topLeft, const Size<B>& size) : Left(topLeft.x),
-                                                         Right(topLeft.x+size.Width),
-                                                         Top(topLeft.y),
-                                                         Bottom(topLeft.y+size.Height)
+    Rect(const Point<A>& topLeft, const Size<B>& size) : Left(topLeft.X),
+                                                         Right(topLeft.X+size.Width),
+                                                         Top(topLeft.Y),
+                                                         Bottom(topLeft.Y+size.Height)
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

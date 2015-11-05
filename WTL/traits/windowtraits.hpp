@@ -83,7 +83,7 @@ namespace wtl
                                                     wndClass.Name.toString(),                  //!< Class name
                                                     title.c_str(),                             //!< Text
                                                     enum_cast(style),                          //!< Style
-                                                    pos.x, pos.y, size.Width, size.Height,     //!< Size/Position
+                                                    pos.X, pos.Y, size.Width, size.Height,     //!< Size/Position
                                                     owner,                                     //!< Owner/parent
                                                     menu,                                      //!< Menu or ChildID
                                                     wndClass.Instance,                         //!< Module containing class

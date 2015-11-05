@@ -37,8 +37,8 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    value_t  x,       //!< X co-ordinate
-             y;       //!< Y co-ordinate
+    value_t  X,       //!< X co-ordinate
+             Y;       //!< Y co-ordinate
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
@@ -46,8 +46,8 @@ namespace wtl
     // Point::Point constexpr
     //! Create empty point centred at origin
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point() : x(defvalue<T>()),
-                        y(defvalue<T>())
+    constexpr Point() : X(defvalue<T>()),
+                        Y(defvalue<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ namespace wtl
     //!
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point(const ::COORD&  pt) : x(static_cast<T>(pt.X)),
-                                          y(static_cast<T>(pt.Y))
+    constexpr Point(const ::COORD&  pt) : X(static_cast<T>(pt.X)),
+                                          Y(static_cast<T>(pt.Y))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -66,8 +66,8 @@ namespace wtl
     //!
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point(const ::POINT&  pt) : x(static_cast<T>(pt.x)),
-                                          y(static_cast<T>(pt.y))
+    constexpr Point(const ::POINT&  pt) : X(static_cast<T>(pt.x)),
+                                          Y(static_cast<T>(pt.y))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -76,8 +76,8 @@ namespace wtl
     //!
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point(const ::POINTS&  pt) : x(static_cast<T>(pt.x)),
-                                           y(static_cast<T>(pt.y))
+    constexpr Point(const ::POINTS&  pt) : X(static_cast<T>(pt.x)),
+                                           Y(static_cast<T>(pt.y))
     {}
 
 
@@ -91,8 +91,8 @@ namespace wtl
     //! \param[in] const y - Y co-ordinate
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename A, typename B> constexpr
-    Point(const A X, const B Y) : x(static_cast<T>(X)),
-                                  y(static_cast<T>(Y))
+    Point(const A X, const B Y) : X(static_cast<T>(X)),
+                                  Y(static_cast<T>(Y))
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -115,8 +115,8 @@ namespace wtl
     template <typename U>
     type& operator= (const Point<U>&  pt)
     {
-      this->x = static_cast<value_t>(pt.x);
-      this->y = static_cast<value_t>(pt.y);
+      this->X = static_cast<value_t>(pt.X);
+      this->Y = static_cast<value_t>(pt.Y);
 
       return *this;
     }
@@ -144,10 +144,10 @@ namespace wtl
     //! \return type - New point translated by adding 'pt'
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U>
-    type operator+ (const Point<U>&  pt) const
+    type operator + (const Point<U>&  pt) const
     {
-      return type(x + static_cast<T>(pt.x),
-                  y + static_cast<T>(pt.y));
+      return type(X + static_cast<T>(pt.x),
+                  Y + static_cast<T>(pt.y));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -158,10 +158,10 @@ namespace wtl
     //! \return type - New point translated by subtracting 'pt'
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U>
-    type operator- (const Point<U>&  pt) const
+    type operator - (const Point<U>&  pt) const
     {
-      return type(x - static_cast<T>(pt.x),
-                  y - static_cast<T>(pt.y));
+      return type(X - static_cast<T>(pt.x),
+                  Y - static_cast<T>(pt.y));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator == (const type& r)
     {
-      return x == r.x && y == r.y;
+      return X == r.X && Y == r.Y;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +185,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator != (const type& r)
     {
-      return x != r.x || y != r.y;
+      return X != r.X || Y != r.Y;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +213,7 @@ namespace wtl
     template <typename = enable_if_sizeof_t<value_t,int16_t>>
     operator  ::COORD () const
     {
-      return {x,y};
+      return {X,Y};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +241,7 @@ namespace wtl
     template <typename = enable_if_sizeof_t<value_t,int32_t>>
     operator  ::POINT () const
     {
-      return {x,y};
+      return {X,Y};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
