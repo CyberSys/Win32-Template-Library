@@ -487,6 +487,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::setTextColour
+    //! Changes the current text colour (Used for text foregrounds)
+    //! 
+    //! \param[in] col - System colour
+    //! \return Colour - Previous colour
+    //! 
+    //! \throw wtl::platform_error - Unable to set colour
+    /////////////////////////////////////////////////////////////////////////////////////////
+    Colour  setTextColour(SystemColour col)
+    {
+      // Convert to 'Colour' 
+      return setTextColour( static_cast<Colour>(::GetSysColor(enum_cast(col))) );
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // DeviceContext::write
     //! Writes text into a rectangle
     //! 

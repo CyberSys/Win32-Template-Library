@@ -204,7 +204,7 @@ namespace wtl
       args.Graphics.fill(args.Rect, StockBrush::BtnFace);
 
       // Draw button text
-      args.Graphics.setTextColour(Colour::Black);
+      args.Graphics.setTextColour(SystemColour::BtnText);
       args.Graphics.template write<encoding>(this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
