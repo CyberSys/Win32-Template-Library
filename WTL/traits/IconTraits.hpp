@@ -113,7 +113,7 @@ namespace wtl
     static NativeHandle<::HICON> create(byte* buffer, int32_t len, SizeL size) 
     { 
       // Create icon handle from bits
-      if (::HICON icon = CreateIconFromResourceEx(buffer, len, True, enum_cast(IconFormat::v3), size.width, size.height, LR_DEFAULTCOLOR))
+      if (::HICON icon = CreateIconFromResourceEx(buffer, len, True, enum_cast(IconFormat::v3), size.Width, size.Height, LR_DEFAULTCOLOR))
         return { icon, AllocType::Create };
 
       // Error: Failed  

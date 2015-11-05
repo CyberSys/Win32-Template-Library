@@ -103,7 +103,7 @@ namespace wtl
       ResourceBlob group(LoadedModules.findResource(ResourceType::GroupIcon,id,lang));    //!< Find icon group
 
       // Lookup icon that is most appropriate for current display
-      return ::LookupIconIdFromDirectoryEx(const_cast<byte*>(group.get<byte>()), True, size.width, size.height, LR_DEFAULTCOLOR);
+      return ::LookupIconIdFromDirectoryEx(const_cast<byte*>(group.get<byte>()), True, size.Width, size.Height, LR_DEFAULTCOLOR);
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

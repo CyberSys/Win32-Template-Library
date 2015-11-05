@@ -115,9 +115,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename A, typename B> constexpr
     Rect(const Point<A>& topLeft, const Size<B>& size) : Left(topLeft.x),
-                                                         Right(topLeft.x+size.width),
+                                                         Right(topLeft.x+size.Width),
                                                          Top(topLeft.y),
-                                                         Bottom(topLeft.y+size.height)
+                                                         Bottom(topLeft.y+size.Height)
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -140,10 +140,10 @@ namespace wtl
     template <typename A, typename B> constexpr
     static Rect FromMidPoint(const Point<A>&  middle, const Size<B>& size)
     {
-      return  Rect(static_cast<value_t>(middle.x) - (size.width() / 2),
-                   static_cast<value_t>(middle.y) - (size.height() / 2),
-                   static_cast<value_t>(middle.x) + (size.width() / 2),
-                   static_cast<value_t>(middle.y) + (size.height() / 2));
+      return  Rect(static_cast<value_t>(middle.x) - (size.Width / 2),
+                   static_cast<value_t>(middle.y) - (size.Height / 2),
+                   static_cast<value_t>(middle.x) + (size.Width / 2),
+                   static_cast<value_t>(middle.y) + (size.Height / 2));
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

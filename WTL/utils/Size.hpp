@@ -39,18 +39,18 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
-    value_t  width,        //!< Width extent
-             height;       //!< Height extent
+    value_t  Width,        //!< Width extent
+             Height;       //!< Height extent
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::Size constexpr
-    //! Create empty size of zero width and height
+    //! Create empty size of zero Width and Height
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Size() : width(defvalue<T>()),
-             height(defvalue<T>())
+    Size() : Width(defvalue<T>()),
+             Height(defvalue<T>())
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +60,8 @@ namespace wtl
     //! \param[in] const& sz - Input size
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Size(const ::SIZE& sz) : width(static_cast<T>(sz.cx)),
-                             height(static_cast<T>(sz.cy))
+    Size(const ::SIZE& sz) : Width(static_cast<T>(sz.cx)),
+                             Height(static_cast<T>(sz.cy))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -72,8 +72,8 @@ namespace wtl
     //! \param[in] const h - Height
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U> constexpr
-    Size(const U w, const U h) : width(static_cast<T>(w)),
-                                 height(static_cast<T>(h))
+    Size(const U w, const U h) : Width(static_cast<T>(w)),
+                                 Height(static_cast<T>(h))
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -108,8 +108,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator == (const type& r) const
     {
-      return width  == r.width
-          && height == r.height;
+      return Width  == r.Width
+          && Height == r.Height;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -121,8 +121,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator != (const type& r) const
     {
-      return width != r.width
-         || height != r.height;
+      return Width != r.Width
+         || Height != r.Height;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +150,7 @@ namespace wtl
     template <typename = enable_if_sizeof_t<value_t,int16_t>>
     operator  ::COORD () const
     {
-      return {width,height};
+      return {Width,Height};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ namespace wtl
     template <typename = enable_if_sizeof_t<value_t,int32_t>>
     operator  ::SIZE () const
     {
-      return {width,height};
+      return {Width,Height};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -250,8 +250,8 @@ namespace wtl
   template <typename T>
   Console& operator << (Console& c, const Size<T>& sz)
   {
-    return c << make_nvpair_tuple("width",  sz.width,
-                                  "height", sz.height);
+    return c << make_nvpair_tuple("Width",  sz.Width,
+                                  "Height", sz.Height);
   }
 
 

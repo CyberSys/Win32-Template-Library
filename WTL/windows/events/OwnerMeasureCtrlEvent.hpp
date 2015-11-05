@@ -92,8 +92,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~ControlEventArgs()
     {
-      Data.itemWidth = Size.width;
-      Data.itemHeight = Size.height;
+      Data.itemWidth = Size.Width;
+      Data.itemHeight = Size.Height;
     }
     
     // ----------------------------------- STATIC METHODS -----------------------------------
