@@ -200,10 +200,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
-      HBrush background(SystemColour::BtnFace);
-
       // Draw button background
-      args.Graphics.fill(args.Rect, background);
+      args.Graphics.fill(args.Rect, StockBrush::BtnFace);
 
       // Draw button text
       args.Graphics.setTextColour(Colour::Black);

@@ -50,6 +50,40 @@ namespace wtl
                         Snow,        //!< Snow brush
                         White,       //!< White brush
                         Null;        //!< Special: Null brush
+
+    // Define system brushes
+    static const HBrush ScrollBar,			            //!< Scroll bar gray area.
+                        Background,			            //!< Desktop.
+                        ActiveCaption,			        //!< Active window title bar. 
+                        InactiveCaption,			      //!< Inactive window caption. 
+                        Menu,			                  //!< Menu background.
+                        Window,			                //!< Window background.
+                        WindowFrame,			          //!< Window frame.
+                        MenuText,			              //!< Text in menus.
+                        WindowText,			            //!< Text in windows.
+                        CaptionText,			          //!< Text in caption, size box, and scroll bar arrow box.
+                        ActiveBorder,			          //!< Active window border.
+                        InactiveBorder,			        //!< Inactive window border.
+                        AppWorkspace,			          //!< Background color of multiple document interface (MDI) applications.
+                        Highlight,			            //!< Item(s) selected in a control.
+                        HighlightText,			        //!< Text of item(s) selected in a control.
+                        BtnFace,			              //!< Face color for three-dimensional display elements and for dialog box backgrounds.
+                        BtnShadow,			            //!< Shadow color for three-dimensional display elements (for edges facing away from the light source).
+                        GrayText,			              //!< Grayed (disabled) text.
+                        BtnText,			              //!< Text on push buttons.
+                        InactiveCaptionText,			  //!< Color of text in an inactive caption.
+                        BtnHighlight,			          //!< Highlight color for three-dimensional display elements (for edges facing the light source.)
+
+                        BtnDkShadow,			          //!< Dark shadow for three-dimensional display elements.
+                        BtnLight,			              //!< Light color for three-dimensional display elements (for edges facing the light source.)
+                        InfoText,			              //!< Text color for tooltip controls.
+                        InfoBk,			                //!< Background color for tooltip controls.
+    
+                        Hotlight,			              //!< [windows 5.00] Color for a hyperlink or hot-tracked item.
+                        GradientActiveCaption,			//!< [windows 5.00] Right side color in the color gradient of an active window's title bar. 
+                        GradientInactiveCaption,		//!< [windows 5.00] Right side color in the color gradient of an inactive window's title bar. 
+                        MenuHilight,			          //!< [windows 5.01] The color used to highlight menu items when the menu appears as a flat menu
+                        MenuBar;			              //!< [windows 5.01] The background color for the menu bar when menus appear as flat menus           
 	
     // ------------------------------------ CONSTRUCTION ------------------------------------
 	
