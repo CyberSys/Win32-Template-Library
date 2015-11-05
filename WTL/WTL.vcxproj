@@ -45,6 +45,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="gdi\StockObjects.hpp" />
     <ClInclude Include="gdi\DeviceContext.hpp" />
+    <ClInclude Include="gdi\Theme.hpp" />
     <ClInclude Include="io\BinaryReader.hpp" />
     <ClInclude Include="io\BinaryWriter.hpp" />
     <ClInclude Include="io\Console.hpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="traits\ModuleTraits.hpp" />
     <ClInclude Include="traits\PenTraits.hpp" />
     <ClInclude Include="traits\ResourceTraits.hpp" />
+    <ClInclude Include="traits\ThemeTraits.hpp" />
     <ClInclude Include="traits\WindowClassTraits.hpp" />
     <ClInclude Include="traits\WindowTraits.hpp" />
     <ClInclude Include="Types.h" />
@@ -312,7 +314,7 @@
     </Link>
     <Lib>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>shlwapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;UxTheme.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -349,7 +351,7 @@
     </Link>
     <Lib>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>shlwapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;UxTheme.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
