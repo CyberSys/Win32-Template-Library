@@ -51,7 +51,7 @@ namespace wtl
     if (this->Window.exists())
     {
       // Set window font & redraw
-      this->Window.send<WindowMessage::SETFONT>((uintptr_t)font.get(), boolean_cast(redraw)); 
+      this->Window.send<WindowMessage::SETFONT>(opaque_cast(font.get()), boolean_cast(redraw)); 
 
       // Updated ref-counted shared handle
       base::set(font);

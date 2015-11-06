@@ -130,7 +130,7 @@ namespace wtl
     static bool destroy(NativeHandle<::ATOM> atom) noexcept
     {
       // Delete without checking if handle is valid
-      return ::UnregisterClassW((const wchar_t*)atom.Handle, nullptr) != False;
+      return ::UnregisterClassW((const wchar_t*)(uintptr_t)atom.Handle, nullptr) != False;
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
