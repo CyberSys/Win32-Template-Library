@@ -569,7 +569,7 @@ namespace wtl
   template <typename T>
   auto operator << (Console& c, T val) -> enable_if_enum_t<T,Console&>
   { 
-    return c << toString(val);
+    return c << int32_t(val);
   }
   
 
