@@ -566,9 +566,6 @@
     <ClInclude Include="windows\PopupMenu.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="windows\WindowMenu.h">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="windows\WindowMenu.hpp">
       <Filter>Windows</Filter>
     </ClInclude>

@@ -30,7 +30,7 @@
 #include "wtl/windows/ControlEventArgs.hpp"                       //!< ControlEventArgs
 #include "wtl/windows/Property.hpp"                               //!< Property
 #include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
-#include "wtl/windows/WindowMenu.h"                               //!< WindowMenu
+#include "wtl/windows/WindowMenu.hpp"                             //!< WindowMenu
 #include "wtl/windows/events/CommandEvent.hpp"                    //!< CommandEvent
 #include "wtl/windows/events/CloseWindowEvent.hpp"                //!< CloseWindowEvent
 #include "wtl/windows/events/CreateWindowEvent.hpp"               //!< CreateWindowEven
@@ -965,6 +965,5 @@ namespace wtl
 #include "wtl/windows/properties/TextProperty.hpp"              //!< TextProperty
 #include "wtl/windows/properties/TextLengthProperty.hpp"        //!< TextLengthProperty
 #include "wtl/windows/properties/VisibilityProperty.hpp"        //!< VisibilityProperty
-#include "wtl/windows/WindowMenu.hpp"                           //!< WindowMenu
 
 #endif // WTL_WINDOW_BASE_HPP
