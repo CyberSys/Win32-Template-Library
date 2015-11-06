@@ -15,7 +15,6 @@
 #include "wtl/traits/MenuTraits.hpp"                        //!< HMenu
 #include "wtl/platform/CommandId.hpp"                       //!< command_id,command_group_id
 #include "wtl/platform/DrawingFlags.hpp"                    //!< DrawTextFlags
-//#include "wtl/platform/MenuFlags.hpp"                       //!< MenuItemState
 #include "wtl/gdi/StockObjects.hpp"                         //!< StockBrush
 #include "wtl/windows/PopupMenu.hpp"                        //!< PopupMenu
 #include "wtl/windows/Command.hpp"                          //!< Command
