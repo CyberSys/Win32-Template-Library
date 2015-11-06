@@ -275,9 +275,6 @@
     <ClInclude Include="windows\events\StandardControls.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
-    <ClInclude Include="windows\WindowMenu.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="platform\CommonApi.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -567,6 +564,9 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="windows\PopupMenu.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowMenu.h">
       <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>

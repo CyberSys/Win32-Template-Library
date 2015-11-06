@@ -205,7 +205,7 @@
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />
-    <ClInclude Include="windows\WindowMenu.hpp" />
+    <ClInclude Include="windows\WindowMenu.h" />
     <ClInclude Include="WTL.hpp" />
   </ItemGroup>
   <ItemGroup>
