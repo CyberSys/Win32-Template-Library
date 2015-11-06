@@ -148,7 +148,7 @@ namespace wtl
     //! \throw wtl::invalid_argument - Missing window handle
     ///////////////////////////////////////////////////////////////////////////////
     NativeWindow(::HWND wnd) : base(wnd, NativeClass),
-                               NativeClass(getClassName(wnd))
+                               NativeClass(getClassAtom(wnd))
     {}
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -170,8 +170,9 @@ namespace wtl
     static resource_t getClassAtom(::HWND wnd) 
     {
       REQUIRED_PARAM(wnd);
+
       // Query class atom
-      return { static_cast<uint16_t>(::GetClassLongPtr(hwnd, GCW_ATOM)) };
+      return { static_cast<uint16_t>(::GetClassLongPtr(wnd, GCW_ATOM)) };
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

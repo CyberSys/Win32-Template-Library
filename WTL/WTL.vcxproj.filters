@@ -569,6 +569,9 @@
     <ClInclude Include="windows\WindowMenu.h">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="windows\WindowMenu.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

@@ -5,8 +5,8 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_MENU_HPP
-#define WTL_WINDOW_MENU_HPP
+#ifndef WTL_WINDOW_MENU_H
+#define WTL_WINDOW_MENU_H
 
 #include "wtl/WTL.hpp"
 #include "wtl/utils/Handle.hpp"                             //!< Handle
@@ -242,7 +242,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args); 
+    virtual LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args); 
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowMenu::onOwnerMeasure
@@ -251,7 +251,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wtl::LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
+    virtual LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
       // [HEADING] Lookup CommandGroup
       if (auto group = find(command_group_id(args.Ident)))
@@ -284,4 +284,4 @@ namespace wtl
       
 } // namespace wtl
 
-#endif  // WTL_WINDOW_MENU_HPP
+#endif  // WTL_WINDOW_MENU_H
