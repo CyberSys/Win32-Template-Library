@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\MessageEvent.hpp
-//! \brief Encapsulates handling a window message in an observeable event
+//! \file wtl\windows\EventArgs.hpp
+//! \brief Provides a basic Win32 message decoder
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -78,26 +78,6 @@ namespace wtl
 
   };
   
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias MessageEvent - Defines an event encapsulating a window message 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM>
-  using MessageEvent = Event<LResult, EventArgs<ENC,WM>&&>;
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias MessageEventHandler - Defines handler for any 'Message' event 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM>
-  using MessageEventHandler = typename MessageEvent<ENC,WM>::delegate_t;
-      
 
 } // namespace wtl
 

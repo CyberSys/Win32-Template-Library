@@ -14,7 +14,7 @@
 #include "wtl/utils/Handle.hpp"                 //!< Handle
 #include "wtl/utils/Default.hpp"                //!< Default
 #include "wtl/gdi/DeviceContext.hpp"            //!< DeviceContext
-#include "wtl/windows/ControlEvent.hpp"         //!< ControlEvent, ControlEventArgs
+#include "wtl/windows/ControlEventArgs.hpp"     //!< ControlEventArgs
 #include "wtl/utils/Rectangle.hpp"              //!< Rect
 #include "wtl/traits/WindowTraits.hpp"          //!< HWnd
 

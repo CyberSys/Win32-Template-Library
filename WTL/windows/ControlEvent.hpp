@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\ControlEvent.hpp
-//! \brief Provides argument, delegate, and handler types for messages from child controls (WM_COMMAND/WM_NOTIFY)
+//! \file wtl\windows\ControlEventArgs.hpp
+//! \brief Provides a decoder for Win32 messages raised from controls  (WM_COMMAND and WM_NOTIFY)
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -214,30 +214,6 @@ namespace wtl
 
   };
   
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ControlEvent - Defines a child control event type 
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
-  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
-  //! \tparam CODE - [optional] Notification message (Default is zero)
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
-  using ControlEvent = Event<LResult, ControlEventArgs<ENC,WM,EVENT,CODE>&&>;
-  
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ControlEventHandler - Defines a handler type for child control events
-  //! 
-  //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
-  //! \tparam EVENT - [optional] Notification message type (Default is uint16_t)
-  //! \tparam CODE - [optional] Notification message (Default is zero)
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()> 
-  using ControlEventHandler = typename ControlEvent<ENC,WM,EVENT,CODE>::delegate_t;
-
   
 } // namespace wtl
 
