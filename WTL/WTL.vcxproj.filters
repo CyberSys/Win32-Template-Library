@@ -557,6 +557,9 @@
     <ClInclude Include="traits\ThemeTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
+    <ClInclude Include="platform\HResult.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
