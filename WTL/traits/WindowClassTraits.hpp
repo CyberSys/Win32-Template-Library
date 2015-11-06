@@ -56,7 +56,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // handle_alloc<::ATOM>::create
-    //! Create from individual properties
+    //! Register a custom window class from individual properties
     //! 
     //! \tparam ENC - String encoding
     //!
@@ -73,39 +73,27 @@ namespace wtl
     //! \param[in] wndBytes - Size of handle storage, if any
     //! \return NativeHandle<::ATOM> - Accquired handle
     //! 
-    //! \throw wtl::platform_error - Failed to allocate handle
+    //! \throw wtl::platform_error - Failed to register class
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
     static NativeHandle<::ATOM> create(::HINSTANCE instance, 
-                                 ResourceId<ENC> name,
-                                 ClassStyle style, 
-                                 ::WNDPROC proc, 
-                                 ResourceId<ENC> menu, 
-                                 ::HCURSOR cursor, 
-                                 ::HBRUSH brush, 
-                                 ::HICON smIcon, 
-                                 ::HICON bgIcon, 
-                                 int32_t clsBytes = 0, 
-                                 int32_t wndBytes = 0)
+                                       ResourceId<ENC> name,
+                                       ClassStyle style, 
+                                       ::WNDPROC proc, 
+                                       ResourceId<ENC> menu, 
+                                       ::HCURSOR cursor, 
+                                       ::HBRUSH brush, 
+                                       ::HICON smIcon, 
+                                       ::HICON bgIcon, 
+                                       int32_t clsBytes = 0, 
+                                       int32_t wndBytes = 0)
     {
       // Init window class
       WndClassEx<ENC> wndCls = {sizeof(wndCls), enum_cast(style), proc, clsBytes, wndBytes, instance, bgIcon, cursor, brush, menu, name, smIcon};
 
-      /*wndCls.style = enum_cast(style);
-      wndCls.lpfnWndProc = proc;
-      wndCls.cbClsExtra = clsBytes;
-      wndCls.cbWndExtra = wndBytes;
-      wndCls.hInstance = instance;
-      wndCls.hIcon = bgIcon;
-      wndCls.hIconSm = smIcon;
-      wndCls.lpszMenuName = menu;
-      wndCls.lpszClassName = name;
-      wndCls.hbrBackground = brush;
-      wndCls.hCursor = cursor;*/
-
       // Register class
       if (::ATOM atom = WinAPI<ENC>::registerClassEx(&wndCls))
-        return { atom, AllocType::Accquire };
+        return { atom, AllocType::Create };
 
       // Error: Failed  
       throw platform_error(HERE, "Unable to register window class");
@@ -130,7 +118,13 @@ namespace wtl
     static bool destroy(NativeHandle<::ATOM> atom) noexcept
     {
       // Delete without checking if handle is valid
-      return ::UnregisterClassW((const wchar_t*)(uintptr_t)atom.Handle, nullptr) != False;
+      switch (atom.Method)
+      {
+      case AllocType::Accquire: return true;
+      case AllocType::Create:   return ::UnregisterClassW((const wchar_t*)(uintptr_t)atom.Handle, nullptr) != False;
+      case AllocType::WeakRef:  return true;
+      }
+      return false;
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

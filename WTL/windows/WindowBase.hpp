@@ -355,6 +355,31 @@ namespace wtl
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
 
+  protected:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::WindowBase
+    //! Creates a window object for an existing window
+    //! 
+    //! \param[in] wnd - Native window handle
+    //! \param[in] &cls - Registered window class 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    WindowBase(::HWND wnd, wndclass_t& cls) : Class(cls), 
+                                              ClientRect(*this),
+                                              Children(*this),
+                                              Enabled(*this, true),
+                                              Font(*this),
+                                              Ident(*this, defvalue<WindowId>()),
+                                              Handle(wnd, AllocType::WeakRef),
+                                              Position(*this, DefaultPosition),
+                                              Size(*this, DefaultSize),
+                                              Style(*this, defvalue<WindowStyle>()),
+                                              Text(*this),
+                                              TextLength(*this),
+                                              StyleEx(*this, defvalue<WindowStyleEx>()),
+                                              Visible(*this, Visibility::ShowNormal),
+                                              WindowRect(*this)
+    {}
+
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
     DISABLE_COPY(WindowBase);     //!< Cannot be copied

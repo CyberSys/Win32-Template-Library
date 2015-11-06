@@ -77,11 +77,11 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowClass::WindowClass
-    //! Create a weak reference to an existing window class 
+    //! Create a weak reference to a registered window class 
     //! 
     //! \param[in] id - Registered window class
     //! 
-    //! \throw wtl::platform_error - Unable to register class
+    //! \throw wtl::platform_error - Unrecognised window class
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(resource_t id) : Name(id),
                                  Atom(defvalue<HAtom>()),
@@ -96,13 +96,10 @@ namespace wtl
                                  WindowStorage(defvalue(WindowStorage)),
                                  WndProc(defvalue<::WNDPROC>())
     {
-      //! \var getClassInfoEx - Functor for 'GetClassInfoEx' 
-      static const auto getClassInfoEx = WinAPI<ENC>::getClassInfoEx;
-
       native_t wndClass = {sizeof(native_t)};   //!< Window class data
 
       // Query system class info
-      if (!getClassInfoEx(nullptr, id, &wndClass))
+      if (!WinAPI<ENC>::getClassInfoEx(nullptr, id, &wndClass))
         throw platform_error(HERE, "Unrecognised window class");
 
       // Perform shallow copy all properties
@@ -152,17 +149,17 @@ namespace wtl
                 const HIcon& bgIcon, 
                 int32_t clsBytes = 0, 
                 int32_t wndBytes = 0) : Atom(instance, name, style, proc, menu, (::HCURSOR)cursor, (::HBRUSH)background, (::HICON)smIcon, (::HICON)bgIcon, clsBytes, wndBytes),
-                                      Background(background),
-                                      ClassStorage(clsBytes),
-                                      Cursor(cursor),
-                                      Instance(instance),
-                                      LargeIcon(bgIcon),              
-                                      Menu(menu),
-                                      Name(name),
-                                      SmallIcon(smIcon),
-                                      Style(style),
-                                      WindowStorage(wndBytes),
-                                      WndProc(proc)
+                                        Background(background),
+                                        ClassStorage(clsBytes),
+                                        Cursor(cursor),
+                                        Instance(instance),
+                                        LargeIcon(bgIcon),              
+                                        Menu(menu),
+                                        Name(name),
+                                        SmallIcon(smIcon),
+                                        Style(style),
+                                        WindowStorage(wndBytes),
+                                        WndProc(proc)
     {}
 
     // --------------------------------- COPY, MOVE & DESTROY  ------------------------------
@@ -176,11 +173,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~WindowClass() 
     {
-      //! \var unregisterClass - Functor for 'UnregisterClass' 
-      static const auto unregisterClass = WinAPI<ENC>::unregisterClass;
-
       // Unregister window class
-      if (unregisterClass(Name, Instance) == False)
+      if (WinAPI<ENC>::unregisterClass(Name, Instance) == False)
         cdebug << Cons::Error << "Unable to unregister window class" << Cons::Endl;
     }
     
