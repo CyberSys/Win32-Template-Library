@@ -25,7 +25,7 @@ namespace wtl
   struct Theme 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-
+     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     HTheme   Handle;     //!< Theme handle
