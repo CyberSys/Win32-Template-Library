@@ -560,6 +560,9 @@
     <ClInclude Include="platform\HResult.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="utils\Concepts.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

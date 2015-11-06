@@ -1,0 +1,51 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+//! \file wtl\utils\Concepts.hpp
+//! \brief Provides generalized concepts
+//! \date 6 November 2015
+//! \author Nick Crowley
+//! \copyright Nick Crowley. All rights reserved.
+//////////////////////////////////////////////////////////////////////////////////////////
+#ifndef WTL_CONCEPTS_HPP
+#define WTL_CONCEPTS_HPP
+
+#include "wtl/WTL.hpp"
+
+//! \namespace wtl - Windows template library
+namespace wtl
+{
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \namespace concepts - Concepts 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  namespace concepts
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct Signed16BitFields - Defines a concept requiring signed 16-bit field types
+    //! 
+    //! \tparam U - Field type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct Signed16BitFields
+    {
+      template <typename U, typename = enable_if_t<std::is_signed<U>::value && sizeof(U) == sizeof(int16_t)> > 
+      static void* test( void* );
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! \struct Signed32BitFields - Defines a concept requiring signed 32-bit field types
+    //! 
+    //! \tparam U - Field type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    struct Signed32BitFields
+    {
+      template <typename U, typename = enable_if_t<std::is_signed<U>::value && sizeof(U) == sizeof(int32_t)>> 
+      static void* test( void* );
+    };
+  }
+  
+
+}
+
+
+
+#endif // WTL_CONCEPTS_HPP
+
+

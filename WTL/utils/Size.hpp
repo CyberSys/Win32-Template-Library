@@ -16,7 +16,7 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-
+  
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Size - Encapsulates a size of any type
   //!
@@ -131,11 +131,13 @@ namespace wtl
     //!
     //! \return const ::COORD* - Pointer to self as immutable ::COORD
     //! 
-    //! \remarks Requires value_t be 16-bit
+    //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    template <typename = void>
     operator const ::COORD* () const
     {
+      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+
       return reinterpret_cast<const ::COORD*>(this);
     }
     
@@ -145,11 +147,13 @@ namespace wtl
     //!
     //! \return ::COORD - Copy of current size as ::COORD
     //! 
-    //! \remarks Requires value_t be 16-bit
+    //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    template <typename = void>
     operator  ::COORD () const
     {
+      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+
       return {Width,Height};
     }
     
@@ -159,11 +163,13 @@ namespace wtl
     //!
     //! \return const ::SIZE* - Pointer to self as immutable ::SIZE
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator const ::SIZE* () const
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return reinterpret_cast<const ::SIZE*>(this);
     }
     
@@ -173,11 +179,13 @@ namespace wtl
     //!
     //! \return ::SIZE - Copy of current size as ::SIZE
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator  ::SIZE () const
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return {Width,Height};
     }
 
@@ -198,11 +206,13 @@ namespace wtl
     //!
     //! \return ::COORD* - Pointer to self as mutable ::COORD
     //! 
-    //! \remarks Requires value_t be 16-bit
+    //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    template <typename = void>
     operator ::COORD* () 
     {
+      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+
       return reinterpret_cast<::COORD*>(this);
     }
     
@@ -212,11 +222,13 @@ namespace wtl
     //!
     //! \return ::SIZE* - Pointer to self as mutable ::SIZE
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator ::SIZE* () 
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return reinterpret_cast<::SIZE*>(this);
     }
   };

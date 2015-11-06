@@ -322,11 +322,13 @@ namespace wtl
     //!
     //! \return const ::RECT* - Recter to self as immutable ::RECT
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator const ::RECT* () const
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return reinterpret_cast<const ::RECT*>(this);
     }
     
@@ -336,12 +338,14 @@ namespace wtl
     //!
     //! \return ::RECT - Copy of current value as ::RECT
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator  ::RECT () const
     {
-      return {x,y};
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
+      return {Left,Top,Right,Bottom};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -365,10 +369,10 @@ namespace wtl
     template <typename U>
     void set(const Point<U>& topLeft, const Size<U>& size)
     {
-      Left   = topLeft.x;
-      Right  = topLeft.x + size.width;
-      Top    = topLeft.y;
-      Bottom = topLeft.y + size.height;
+      Left   = topLeft.X;
+      Right  = topLeft.X + size.width;
+      Top    = topLeft.Y;
+      Bottom = topLeft.Y + size.height;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -401,11 +405,13 @@ namespace wtl
     //!
     //! \return ::RECT* - Recter to self as mutable ::RECT
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator ::RECT* () 
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return reinterpret_cast<::RECT*>(this);
     }
     
@@ -440,9 +446,9 @@ namespace wtl
   Console& operator << (Console& c, const Rect<T>& rc)
   {
     return c << make_nvpair_tuple("Left", rc.Left,
-                                 "Top", rc.Top,
-                                 "Right", rc.Right,
-                                 "Bottom", rc.Bottom);
+                                  "Top", rc.Top,
+                                  "Right", rc.Right,
+                                  "Bottom", rc.Bottom);
   }
 
 } // WTL namespace

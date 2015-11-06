@@ -9,13 +9,15 @@
 #define WTL_POINT_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/utils/Default.hpp"       //!< Default
+#include "wtl/utils/Default.hpp"       //!< default
+#include "wtl/utils/Requires.hpp"      //!< requires
+#include "wtl/utils/Concepts.hpp"      //!< Signed16BitFields, Signed32BitFields
 #include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  /////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Point - Encapsulates a point of any type
   //!
   //! \tparam T - Dimension type
@@ -194,11 +196,13 @@ namespace wtl
     //!
     //! \return const ::COORD* - Pointer to self as immutable ::COORD
     //! 
-    //! \remarks Requires value_t be 16-bit
+    //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    template <typename = void>
     operator const ::COORD* () const
     {
+      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+
       return reinterpret_cast<const ::COORD*>(this);
     }
     
@@ -208,11 +212,13 @@ namespace wtl
     //!
     //! \return ::COORD - Copy of current value as ::COORD
     //! 
-    //! \remarks Requires value_t be 16-bit
+    //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int16_t>>
-    operator  ::COORD () const
+    template <typename = void>
+    operator ::COORD () const
     {
+      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+
       return {X,Y};
     }
     
@@ -222,11 +228,13 @@ namespace wtl
     //!
     //! \return const ::POINT* - Pointer to self as immutable ::POINT
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator const ::POINT* () const
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return reinterpret_cast<const ::POINT*>(this);
     }
     
@@ -236,11 +244,13 @@ namespace wtl
     //!
     //! \return ::POINT - Copy of current value as ::POINT
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator  ::POINT () const
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return {X,Y};
     }
 
@@ -261,11 +271,13 @@ namespace wtl
     //!
     //! \return ::COORD* - Pointer to self as mutable ::COORD
     //! 
-    //! \remarks Requires value_t be 16-bit
+    //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int16_t>>
+    template <typename = void>
     operator ::COORD* () 
     {
+      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+
       return reinterpret_cast<::COORD*>(this);
     }
     
@@ -275,11 +287,13 @@ namespace wtl
     //!
     //! \return ::POINT* - Pointer to self as mutable ::POINT
     //! 
-    //! \remarks Requires value_t be 32-bit
+    //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_sizeof_t<value_t,int32_t>>
+    template <typename = void>
     operator ::POINT* () 
     {
+      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+
       return reinterpret_cast<::POINT*>(this);
     }
   };
