@@ -17,11 +17,10 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct theme_alloc - Encapsulates theme handle allocation
+  //! \struct htheme_allocator - Encapsulates allocating ::HTHEME handles  (which are only typedefs for ::HANDLE)
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct theme_alloc
+  struct htheme_allocator
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -32,18 +31,18 @@ namespace wtl
   
     // ------------------------------------ CONSTRUCTION ------------------------------------
 	
-    DISABLE_CTOR(theme_alloc);     //!< Cannot instantiate
+    DISABLE_CTOR(htheme_allocator);     //!< Cannot instantiate
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    DISABLE_COPY(theme_alloc);     //!< Cannot instantiate
-    DISABLE_MOVE(theme_alloc);     //!< Cannot instantiate
-    DISABLE_DTOR(theme_alloc);     //!< Cannot instantiate
+    DISABLE_COPY(htheme_allocator);     //!< Cannot instantiate
+    DISABLE_MOVE(htheme_allocator);     //!< Cannot instantiate
+    DISABLE_DTOR(htheme_allocator);     //!< Cannot instantiate
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // theme_alloc::create
+    // htheme_allocator::create
     //! Create solid theme
     //! 
     //! \param[in] const& wnd - Owner window
@@ -63,7 +62,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // theme_alloc::clone
+    // htheme_allocator::clone
     //! Clone handle
     //! 
     //! \param[in] theme - Theme handle
@@ -74,7 +73,7 @@ namespace wtl
     static NativeHandle<::HTHEME>  clone(NativeHandle<::HTHEME> theme) { return theme; }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // theme_alloc::destroy noexcept
+    // htheme_allocator::destroy noexcept
     //! Release theme handle
     //! 
     //! \param[in] theme - Theme handle
@@ -103,7 +102,7 @@ namespace wtl
   //!
   //! \remarks Custom allocator is provided to disambiguate ::HTHEME, which is merely a typedef for ::HANDLE
   /////////////////////////////////////////////////////////////////////////////////////////
-  using HTheme = Handle<::HTHEME, theme_alloc>;  
+  using HTheme = Handle<::HTHEME, htheme_allocator>;  
 
 
   

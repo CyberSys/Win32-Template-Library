@@ -17,17 +17,11 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias HGlobal - Shared global memory handle
+  //! \struct hglobal_allocator - Encapsulates allocating global memory handles  (which are only typedefs for ::HANDLE)
   /////////////////////////////////////////////////////////////////////////////////////////
-  using HGlobal = Handle<::HGLOBAL>;
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct handle_alloc<::HGLOBAL> - Encapsulates allocating global memory handles
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <>
-  struct handle_alloc<::HGLOBAL>
+  struct hglobal_allocator
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -38,18 +32,18 @@ namespace wtl
   
     // ------------------------------------ CONSTRUCTION ------------------------------------
 	
-    DISABLE_CTOR(handle_alloc);     //!< Cannot instantiate
+    DISABLE_CTOR(hglobal_allocator);     //!< Cannot instantiate
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    DISABLE_COPY(handle_alloc);     //!< Cannot instantiate
-    DISABLE_MOVE(handle_alloc);     //!< Cannot instantiate
-    DISABLE_DTOR(handle_alloc);     //!< Cannot instantiate
+    DISABLE_COPY(hglobal_allocator);     //!< Cannot instantiate
+    DISABLE_MOVE(hglobal_allocator);     //!< Cannot instantiate
+    DISABLE_DTOR(hglobal_allocator);     //!< Cannot instantiate
 
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<::HGLOBAL>::create
+    // hglobal_allocator::create
     //! Create global memory handle to resource
     //! 
     //! \param[in] const& module - Module containing resource
@@ -69,7 +63,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<::HGLOBAL>::clone
+    // hglobal_allocator::clone
     //! Clone handle
     //! 
     //! \param[in] mem - Global memory handle
@@ -80,7 +74,7 @@ namespace wtl
     static NativeHandle<::HGLOBAL> clone(NativeHandle<::HGLOBAL> mem);
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // handle_alloc<::HGLOBAL>::destroy noexcept
+    // hglobal_allocator::destroy noexcept
     //! Release handle
     //! 
     //! \param[in] mem - Global memory handle
@@ -103,7 +97,11 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
-  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias HGlobal - Shared global memory handle
+  /////////////////////////////////////////////////////////////////////////////////////////
+  using HGlobal = Handle<::HGLOBAL, hglobal_allocator>;
+
 } //namespace wtl
 #endif // WTL_GLOBAL_MEM_TRAITS_HPP
 
