@@ -78,7 +78,7 @@ namespace wtl
   namespace
   {
     /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct converter - Converts between handle types
+    //! \struct converter - Handles the conversion between pointer/numeric native handle types and their stored form, [native_t*]
     //! 
     //! \tparam native_t - Handle type
     //! \tparam <anon> - SFINAE
@@ -191,7 +191,7 @@ namespace wtl
     template <typename T>  
     struct DestroyableHandle
     {
-      template <typename U, bool (*)(NativeHandle<T>) = &U::destroy> 
+      template <typename U, bool (*)(NativeHandle<T>) noexcept = &U::destroy> 
       static void* test( void* );
     };
 
@@ -210,33 +210,35 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Handle - Provides a shared smart-pointer type for any handle type
   //!
-  //! \tparam T - Any type modelling the ConstructibleHandle, CloneableHandle, DestroyableHandle, and StoreableHandle concepts
+  //! \tparam NATIVE - Native handle type which models the StoreableHandle concept
+  //! \tparam ALLOCATOR - [optional] Handle allocator type that models the ConstructibleHandle, CloneableHandle, DestroyableHandle concepts
+  //! \tparam TRAITS - [optional] Type providing handle traits
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
+  template <typename NATIVE, typename ALLOCATOR = handle_alloc<NATIVE>, typename TRAITS = handle_traits<NATIVE>>
   struct Handle
   {
-    REQUIRES_CONCEPT(T,StoreableHandle);
-    REQUIRES_CONCEPT(handle_alloc<T>,CloneableHandle<T>);
-    REQUIRES_CONCEPT(handle_alloc<T>,DestroyableHandle<T>);
+    REQUIRES_CONCEPT(NATIVE,StoreableHandle);
+    REQUIRES_CONCEPT(ALLOCATOR,CloneableHandle<NATIVE>);
+    REQUIRES_CONCEPT(ALLOCATOR,DestroyableHandle<NATIVE>);
     
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \typedef type - Define own type
-    using type = Handle<T>;
+    using type = Handle<NATIVE,ALLOCATOR,TRAITS>;
 
     //! \typedef native_t - Defines handle type
-    using native_t = T;
+    using native_t = NATIVE;
 
     //! \typedef traits_t - Define handle traits type
-    using traits_t = handle_traits<native_t>;
+    using traits_t = TRAITS;
 
   protected:    
     //! \typedef alloc_t - Define handle allocator type
-    using alloc_t = handle_alloc<T>;
+    using alloc_t = ALLOCATOR;
 
     //! \typedef converter_t - Define handle-pointer converter type
     using converter_t = converter<native_t>;
-
+    
     //! \typedef value_t - Define allocation handle type
     using value_t = NativeHandle<native_t>;
 
@@ -308,7 +310,8 @@ namespace wtl
     template <typename... ARGS>
     static value_t allocate(ARGS&&... args) 
     {
-      REQUIRES_CONCEPT(handle_alloc<T>,ConstructibleHandle<T,ARGS...>);
+      static_assert(requires<alloc_t,concepts::ConstructibleHandle<native_t,ARGS...>>::value, "Incorrect handle constructor arguments");
+      REQUIRES_CONCEPT(alloc_t,ConstructibleHandle<native_t,ARGS...>);
 
       return alloc_t::create(std::forward<ARGS>(args)...);
     }
@@ -366,7 +369,7 @@ namespace wtl
     //! \param[in] const &r - Another handle
     //! \return bool - True iff handle & method are equal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator == (const Handle<T>& r) const
+    bool operator == (const type& r) const
     {
       return Value.Handle == r.Value.Handle
           && Value.Method == r.Value.Method;
@@ -379,7 +382,7 @@ namespace wtl
     //! \param[in] const &r - Another handle
     //! \return bool - True iff handle or method are different
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator != (const Handle<T>& r) const
+    bool operator != (const type& r) const
     {
       return !operator==(r);
     }
