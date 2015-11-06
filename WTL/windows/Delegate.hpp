@@ -91,7 +91,7 @@ namespace wtl
     template <typename OBJ, typename R, typename... A>
     static std::function<signature_t>  bind(OBJ* obj, R (OBJ::*fn)(A...))
     {
-      REQUIRES_CONCEPT(R(A...),MatchingSignature<signature_t>);
+      concept_check(R(A...),MatchingSignature<signature_t>);
 
       //! Encapsulate invoking the delegate within a lambda  (Fix for std::bind(..) bug in TDM-GCC)
       return [=](ARGS&&... args)->RET { return (obj->*fn)(args...); };

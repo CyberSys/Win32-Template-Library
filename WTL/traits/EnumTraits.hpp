@@ -118,7 +118,7 @@ namespace wtl
   template <typename ENUM, typename VALUE> constexpr
   auto operator | (ENUM a, VALUE b) noexcept -> enable_if_enum_t<ENUM,ENUM>
   {
-    REQUIRES_CONCEPT(ENUM,AttributeEnumeration);
+    concept_check(ENUM,AttributeEnumeration);
     
     // Perform operation upon underlying types
     return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
@@ -141,7 +141,7 @@ namespace wtl
   template <typename ENUM, typename VALUE> constexpr
   auto  operator|= (ENUM& a, VALUE b) noexcept -> enable_if_enum_t<ENUM, ENUM&>
   {
-    REQUIRES_CONCEPT(ENUM,AttributeEnumeration);
+    concept_check(ENUM,AttributeEnumeration);
 
     return a = a | b;
   }
@@ -161,7 +161,7 @@ namespace wtl
   template <typename ENUM, typename VALUE> constexpr
   auto  operator& (ENUM a, VALUE b) -> enable_if_enum_t<ENUM,ENUM>
   {
-    REQUIRES_CONCEPT(ENUM,AttributeEnumeration);
+    concept_check(ENUM,AttributeEnumeration);
 
     // Perform operation upon underlying types
     return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
@@ -187,7 +187,7 @@ namespace wtl
   template <typename ENUM, typename VALUE> constexpr
   auto  operator && (ENUM a, VALUE b) -> enable_if_enum_t<ENUM,bool>
   {
-    REQUIRES_CONCEPT(ENUM,AttributeEnumeration);
+    concept_check(ENUM,AttributeEnumeration);
 
     // Query whether all bits are present
     return (a & b) == static_cast<ENUM>(b);
@@ -209,7 +209,7 @@ namespace wtl
   template <typename ENUM, typename VALUE> constexpr
   auto  operator&= (ENUM& a, VALUE b) -> enable_if_enum_t<ENUM, ENUM&>
   {
-    REQUIRES_CONCEPT(ENUM,AttributeEnumeration);
+    concept_check(ENUM,AttributeEnumeration);
 
     return a = a & b;
   }
@@ -303,7 +303,7 @@ namespace wtl
   template <typename ENUM> constexpr
   auto  operator++ (ENUM& a) -> enable_if_enum_t<ENUM,ENUM&>
   {
-    REQUIRES_CONCEPT(ENUM,ContiguousEnumeration);
+    concept_check(ENUM,ContiguousEnumeration);
 
     return a = a + 1;
   }
@@ -322,7 +322,7 @@ namespace wtl
   template <typename ENUM> constexpr
   auto  operator++ (ENUM& a, int) -> enable_if_enum_t<ENUM,ENUM>
   {
-    REQUIRES_CONCEPT(ENUM,ContiguousEnumeration);
+    concept_check(ENUM,ContiguousEnumeration);
 
     return (++a, a - 1);      //!< NB: MSVC-14 does not support 'Extended constexpr' so only a single statement is alloed
   }

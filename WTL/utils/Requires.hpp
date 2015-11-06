@@ -65,25 +65,25 @@ namespace wtl
   //};
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \def CONCEPT_ERROR - Generates a string literal containing a 'concept violation' error message
+  //! \def CONCEPT_ERROR_MSG - Generates a string literal containing a 'concept violation' error message
   //! 
   //! \tparam TYPE - Name of the type being tested
   //! \tparam CONCEPT - Name of the concept required  
   //! 
   //! \remarks 'CONCEPT' parameter is ellipsis only because preprocessor confuses template parameter pack expansion with multiple arguments (?!)
   //////////////////////////////////////////////////////////////////////////////////////////
-  #define CONCEPT_ERROR(TYPE,...)  "*ERROR*: Template parameter " #TYPE " does not model the '" #__VA_ARGS__ "' concept..."
+  #define CONCEPT_ERROR_MSG(TYPE,...)  "*ERROR*: Template parameter " #TYPE " does not model the '" #__VA_ARGS__ "' concept..."
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \def REQUIRES_CONCEPT - Inserts a static assertion that checks whether a type models a concept
+  //! \def concept_check - Inserts a static assertion that checks whether a type models a concept
   //! 
   //! \tparam TYPE - Name of the type being tested
   //! \tparam CONCEPT - Name of the concept required  [Must be an unqualified name of a type residing in the 'concepts' namespace]
   //! 
   //! \remarks 'CONCEPT' parameter is ellipsis only because preprocessor confuses template parameter pack expansion with multiple arguments (?!)
   //////////////////////////////////////////////////////////////////////////////////////////
-  #define REQUIRES_CONCEPT(TYPE,...)  static_assert(requires<TYPE,::wtl::concepts::__VA_ARGS__>::value, CONCEPT_ERROR(TYPE, __VA_ARGS__))
+  #define concept_check(TYPE,...)  static_assert(requires<TYPE,::wtl::concepts::__VA_ARGS__>::value, CONCEPT_ERROR_MSG(TYPE, __VA_ARGS__))
   
 
 }

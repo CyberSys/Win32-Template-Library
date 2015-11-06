@@ -136,7 +136,7 @@ namespace wtl
     template <typename = void>
     operator const ::COORD* () const
     {
-      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+      concept_check(value_t,Signed16BitFields);
 
       return reinterpret_cast<const ::COORD*>(this);
     }
@@ -152,7 +152,7 @@ namespace wtl
     template <typename = void>
     operator  ::COORD () const
     {
-      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+      concept_check(value_t,Signed16BitFields);
 
       return {Width,Height};
     }
@@ -168,7 +168,7 @@ namespace wtl
     template <typename = void>
     operator const ::SIZE* () const
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return reinterpret_cast<const ::SIZE*>(this);
     }
@@ -184,7 +184,7 @@ namespace wtl
     template <typename = void>
     operator  ::SIZE () const
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return {Width,Height};
     }
@@ -211,7 +211,7 @@ namespace wtl
     template <typename = void>
     operator ::COORD* () 
     {
-      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+      concept_check(value_t,Signed16BitFields);
 
       return reinterpret_cast<::COORD*>(this);
     }
@@ -227,7 +227,7 @@ namespace wtl
     template <typename = void>
     operator ::SIZE* () 
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return reinterpret_cast<::SIZE*>(this);
     }

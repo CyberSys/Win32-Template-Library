@@ -327,7 +327,7 @@ namespace wtl
     template <typename = void>
     operator const ::RECT* () const
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return reinterpret_cast<const ::RECT*>(this);
     }
@@ -343,7 +343,7 @@ namespace wtl
     template <typename = void>
     operator  ::RECT () const
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return {Left,Top,Right,Bottom};
     }
@@ -410,7 +410,7 @@ namespace wtl
     template <typename = void>
     operator ::RECT* () 
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return reinterpret_cast<::RECT*>(this);
     }

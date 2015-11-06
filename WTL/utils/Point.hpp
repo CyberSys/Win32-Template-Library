@@ -201,7 +201,7 @@ namespace wtl
     template <typename = void>
     operator const ::COORD* () const
     {
-      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+      concept_check(value_t,Signed16BitFields);
 
       return reinterpret_cast<const ::COORD*>(this);
     }
@@ -217,7 +217,7 @@ namespace wtl
     template <typename = void>
     operator ::COORD () const
     {
-      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+      concept_check(value_t,Signed16BitFields);
 
       return {X,Y};
     }
@@ -233,7 +233,7 @@ namespace wtl
     template <typename = void>
     operator const ::POINT* () const
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return reinterpret_cast<const ::POINT*>(this);
     }
@@ -249,7 +249,7 @@ namespace wtl
     template <typename = void>
     operator  ::POINT () const
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return {X,Y};
     }
@@ -276,7 +276,7 @@ namespace wtl
     template <typename = void>
     operator ::COORD* () 
     {
-      REQUIRES_CONCEPT(value_t,Signed16BitFields);
+      concept_check(value_t,Signed16BitFields);
 
       return reinterpret_cast<::COORD*>(this);
     }
@@ -292,7 +292,7 @@ namespace wtl
     template <typename = void>
     operator ::POINT* () 
     {
-      REQUIRES_CONCEPT(value_t,Signed32BitFields);
+      concept_check(value_t,Signed32BitFields);
 
       return reinterpret_cast<::POINT*>(this);
     }

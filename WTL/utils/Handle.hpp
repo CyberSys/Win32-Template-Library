@@ -217,9 +217,9 @@ namespace wtl
   template <typename NATIVE, typename ALLOCATOR = handle_alloc<NATIVE>, typename TRAITS = handle_traits<NATIVE>>
   struct Handle
   {
-    REQUIRES_CONCEPT(NATIVE,StoreableHandle);
-    //REQUIRES_CONCEPT(ALLOCATOR,CloneableHandle<NATIVE>);
-    //REQUIRES_CONCEPT(ALLOCATOR,DestroyableHandle<NATIVE>);
+    concept_check(NATIVE,StoreableHandle);
+    //concept_check(ALLOCATOR,CloneableHandle<NATIVE>);
+    //concept_check(ALLOCATOR,DestroyableHandle<NATIVE>);
     
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -311,7 +311,7 @@ namespace wtl
     static value_t allocate(ARGS&&... args) 
     {
       static_assert(requires<alloc_t,concepts::ConstructibleHandle<native_t,ARGS...>>::value, "Incorrect handle constructor arguments");
-      REQUIRES_CONCEPT(alloc_t,ConstructibleHandle<native_t,ARGS...>);
+      concept_check(alloc_t,ConstructibleHandle<native_t,ARGS...>);
 
       return alloc_t::create(std::forward<ARGS>(args)...);
     }

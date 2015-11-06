@@ -191,7 +191,7 @@ namespace wtl
     template <typename R, typename... A>
     LPARAM operator += (Delegate<R,A...>* ptr) 
     {
-      REQUIRES_CONCEPT(R(A...),MatchingSignature<signature_t>);
+      concept_check(R(A...),MatchingSignature<signature_t>);
 
       // Append to subscriber list and return address as cookie
       Subscribers.emplace_back(ptr);
