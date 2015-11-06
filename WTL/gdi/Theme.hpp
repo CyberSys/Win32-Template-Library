@@ -12,6 +12,7 @@
 #include "wtl/gdi/DeviceContext.hpp"               //!< HDeviceContext
 #include "wtl/traits/ThemeTraits.hpp"              //!< HTheme
 #include "wtl/platform/HResult.hpp"                //!< HResult
+#include <vsstyle.h>                               //!< Parts and States
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -23,19 +24,19 @@ namespace wtl
   //!
   //! \remarks See "Parts & States" at https://msdn.microsoft.com/en-us/library/windows/desktop/bb773210(v=vs.85).aspx
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
+  //template <Encoding ENC>
   struct Theme 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias char_t - Define character type
-    using char_t = encoding_char_t<ENC>;
+    //using char_t = encoding_char_t<ENC>;
 
     //! \alias resource_t - Define resource id type
-    using resource_t = ResourceId<ENC>;
+    //using resource_t = ResourceId<ENC>;
     
     //! \var encoding - Define character encoding
-    static constexpr Encoding encoding = ENC;
+    //static constexpr Encoding encoding = ENC;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:

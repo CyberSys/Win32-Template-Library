@@ -11,6 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/windows/WindowBase.hpp"                 //!< WindowBase
 #include "wtl/windows/events/StandardControls.hpp"    //!< ButtonClickEvent
+#include <wtl/gdi/Theme.hpp>                          //!< Theme
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -200,12 +201,23 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
+      try
+      {
+        Theme theme(args.Graphics, L"Button");
+
+        theme.drawBackground(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, args.Rect);
+        theme.drawText(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      }
+      catch (const std::exception&)
+      {
+      }
+
       // Draw button background
-      args.Graphics.fill(args.Rect, StockBrush::BtnFace);
+      //args.Graphics.fill(args.Rect, StockBrush::BtnFace);
 
       // Draw button text
-      args.Graphics.setTextColour(SystemColour::BtnText);
-      args.Graphics.template write<encoding>(this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      //args.Graphics.setTextColour(SystemColour::BtnText);
+      //args.Graphics.template write<encoding>(this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handled
       return 0;
