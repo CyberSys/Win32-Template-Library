@@ -563,6 +563,12 @@
     <ClInclude Include="windows\EventArgs.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="windows\MenuItemInfo.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\PopupMenu.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

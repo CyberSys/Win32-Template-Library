@@ -171,8 +171,10 @@
     <ClInclude Include="windows\Command.hpp" />
     <ClInclude Include="windows\CommandGroup.hpp" />
     <ClInclude Include="windows\CommandQueue.hpp" />
+    <ClInclude Include="windows\MenuItemInfo.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\EventArgs.hpp" />
+    <ClInclude Include="windows\PopupMenu.hpp" />
     <ClInclude Include="windows\properties\ClientRectProperty.h" />
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />
     <ClInclude Include="windows\properties\EnabledProperty.h" />

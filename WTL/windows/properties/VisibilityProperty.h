@@ -9,6 +9,8 @@
 #define WTL_WINDOW_VISIBLE_PROPERTY_H
 
 #include "wtl/WTL.hpp"
+#include "wtl/casts/BaseCast.hpp"            //!< BaseCast
+#include "wtl/utils/Clear.hpp"               //!< Clear
 #include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
 #include "wtl/platform/WindowFlags.hpp"      //!< ShowWindowFlags
 #include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
