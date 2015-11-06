@@ -24,7 +24,7 @@ namespace wtl
 {
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct PopupMenu - Encapsulates a popup menu (a collection of menu items)
+  //! \struct PopupMenu - Provides a pop-up menu containing items representing the Commands of a GUI Command Group
   //! 
   //! \tparam ENC - Menu text character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
