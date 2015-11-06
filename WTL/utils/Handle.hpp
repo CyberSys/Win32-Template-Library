@@ -179,7 +179,7 @@ namespace wtl
     template <typename T, typename... ARGS>  
     struct ConstructibleHandle
     {
-      template <typename U, bool = std::is_same<NativeHandle<T>,decltype(U::create( std::declval<ARGS>()... ))>::value>   //!< NB: Test whether U::create(..) is callable with ARGS...
+      template <typename U, typename = std::is_same<NativeHandle<T>,decltype(U::create( std::declval<ARGS>()... ))>>   //!< NB: Test whether U::create(..) is callable with ARGS...
       static void* test( void* );    
     };
 
@@ -202,7 +202,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     struct StoreableHandle
     {
-      template <typename U, std::enable_if_t<(sizeof(U) <= sizeof(::HANDLE))>* = nullptr> 
+      template <typename U, typename = std::enable_if_t<(sizeof(U) <= sizeof(::HANDLE))>> 
       static void* test( void* );
     };
   }
@@ -218,8 +218,8 @@ namespace wtl
   struct Handle
   {
     REQUIRES_CONCEPT(NATIVE,StoreableHandle);
-    REQUIRES_CONCEPT(ALLOCATOR,CloneableHandle<NATIVE>);
-    REQUIRES_CONCEPT(ALLOCATOR,DestroyableHandle<NATIVE>);
+    //REQUIRES_CONCEPT(ALLOCATOR,CloneableHandle<NATIVE>);
+    //REQUIRES_CONCEPT(ALLOCATOR,DestroyableHandle<NATIVE>);
     
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 

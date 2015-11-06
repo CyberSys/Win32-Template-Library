@@ -71,7 +71,7 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Failed to clone handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    static NativeHandle<::HTHEME>  clone(NativeHandle<::HTHEME> theme);
+    static NativeHandle<::HTHEME>  clone(NativeHandle<::HTHEME> theme) { return theme; }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // theme_alloc::destroy noexcept
