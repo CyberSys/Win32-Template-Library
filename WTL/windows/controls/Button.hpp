@@ -203,7 +203,7 @@ namespace wtl
     { 
       try
       {
-        Theme theme(args.Graphics, L"Button");
+        Theme theme(this->handle(), L"Button");
 
         theme.drawBackground(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, args.Rect);
         theme.drawText(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
