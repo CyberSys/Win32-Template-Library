@@ -16,6 +16,7 @@
 #include "wtl/platform/CommandId.hpp"                       //!< command_id,command_group_id
 #include "wtl/platform/DrawingFlags.hpp"                    //!< DrawTextFlags
 #include "wtl/gdi/StockObjects.hpp"                         //!< StockBrush
+#include <wtl/gdi/Theme.hpp>                                //!< Theme
 #include "wtl/windows/PopupMenu.hpp"                        //!< PopupMenu
 #include "wtl/windows/Command.hpp"                          //!< Command
 #include "wtl/windows/CommandGroup.hpp"                     //!< CommandGroup
@@ -243,16 +244,46 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual wtl::LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args) 
     { 
+      /*Theme theme(this->handle(), L"Menu");
+
+      RectL rcBar;
+      ::MENUBARINFO bar { sizeof(MENUBARINFO) };
+      
+      ::GetMenuBarInfo(Handle, OBJID_MENU, 0, &bar);
+      ::GetWindowRect(bar.hwndMenu, rcBar);
+
+      theme.drawBackground(args.Graphics, MENU_BARBACKGROUND, MB_ACTIVE, args.Rect);
+
+      theme.drawText(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);*/
+
+      
+
+      // debug
+      cdebug << object_info(__func__, "ident", args.Ident) << endl;
+
       // Draw background
-      args.Graphics.fill(args.Rect, StockBrush::Blue);
+       args.Graphics.fill(args.Rect, StockBrush::Blue);
 
       // [GROUP] Draw name
-      if (auto group = find(command_group_id(args.Ident)))
+      if (CommandGroupPtr<encoding> group = find(command_group_id(args.Ident)))
+      {
+        /*::MENUBARINFO bar { sizeof(MENUBARINFO) };
+        ::GetMenuBarInfo(Handle, OBJID_MENU, 0, &bar);
+
+        Theme theme(this->handle(), L"Menu");
+        
+        theme.drawBackground(args.Graphics, MENU_BARITEM, MB_ACTIVE, args.Rect);
+        theme.drawText(args.Graphics, MENU_BARITEM, MB_ACTIVE, group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);*/
+
         args.Graphics.write(group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      }
 
       // [COMMAND] Draw name
       else if (auto command = find(command_id(args.Ident)))
+      {
+        
         args.Graphics.write(command->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+      }
 
       // Handled
       return 0;
