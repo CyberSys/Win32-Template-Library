@@ -51,7 +51,7 @@ namespace wtl
     // CopyClipboardCommand::CopyClipboardCommand
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
-    CopyClipboardCommand() : base(CommandId::Edit_Copy, [this] () { if (TargetWnd = window_t::getFocus())
+    CopyClipboardCommand() : base(CommandId::Edit_Copy, [this] () { if ((TargetWnd = window_t::getFocus()))
                                                                      TargetWnd->Text = "TODO: Copy text to clipboard"; })
     {}
     
@@ -71,7 +71,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    type*  clone() const 
+    type*  clone() const override
     {
       return new CopyClipboardCommand(*this);
     }

@@ -51,7 +51,7 @@ namespace wtl
     // CutClipboardCommand::CutClipboardCommand
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
-    CutClipboardCommand() : base(CommandId::Edit_Cut, [this] () { if (TargetWnd = window_t::getFocus())
+    CutClipboardCommand() : base(CommandId::Edit_Cut, [this] () { if ((TargetWnd = window_t::getFocus()))
                                                                    TargetWnd->Text = "TODO: Cut text to clipboard"; },
                                                       [this] () { if (TargetWnd)
                                                                    TargetWnd->Text = "TODO: Restore previous text"; })
@@ -73,7 +73,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    type*  clone() const 
+    type*  clone() const override
     {
       return new CutClipboardCommand(*this);
     }

@@ -68,7 +68,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    type*  clone() const 
+    type*  clone() const override
     {
       return new ExitProgramCommand(AppWnd);
     }

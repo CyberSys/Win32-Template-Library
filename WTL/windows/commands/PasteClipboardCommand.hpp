@@ -52,7 +52,7 @@ namespace wtl
     //! Create command
     /////////////////////////////////////////////////////////////////////////////////////////
     PasteClipboardCommand()  
-      : base(CommandId::Edit_Paste, [this] () { if (TargetWnd = window_t::getFocus())
+      : base(CommandId::Edit_Paste, [this] () { if ((TargetWnd = window_t::getFocus()))
                                                   TargetWnd->Text = "TODO: Paste text from clipboard"; },
                                     [this] () { if (TargetWnd)
                                                   TargetWnd->Text = "TODO: Restore previous text"; })
@@ -74,7 +74,7 @@ namespace wtl
     //! 
     //! \return type* - New instance of command
     /////////////////////////////////////////////////////////////////////////////////////////
-    type*  clone() const 
+    type*  clone() const override
     {
       return new PasteClipboardCommand(*this);
     }
