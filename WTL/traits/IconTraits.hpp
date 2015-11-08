@@ -11,7 +11,8 @@
 #include "wtl/WTL.hpp"
 #include "wtl/traits/BuildTraits.hpp"             //!< enable_if_build_t
 #include "wtl/traits/EncodingTraits.hpp"          //!< EncodingTraits
-#include "wtl/utils/Size.hpp"                  //!< Size
+#include "wtl/utils/Handle.hpp"                   //!< Handle
+#include "wtl/utils/Size.hpp"                     //!< Size
 #include "wtl/platform/SystemFlags.hpp"           //!< SystemIcon
 #include "wtl/platform/ResourceId.hpp"            //!< ResourceId
 

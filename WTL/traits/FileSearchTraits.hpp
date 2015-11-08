@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\traits\Enumeration.hpp
-//! \brief Defines enumeration traits + helper global operators
+//! \file wtl\traits\FileSearchTraits.hpp
+//! \brief Defines file-search traits 
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
