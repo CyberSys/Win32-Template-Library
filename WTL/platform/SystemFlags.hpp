@@ -149,7 +149,6 @@ namespace wtl
 
   // ----------------------------------- SYSTEM ICONS ----------------------------------
   
-
   //! \enum SystemIcon - System icon Ids
   enum class SystemIcon
   {
@@ -169,8 +168,92 @@ namespace wtl
   template <> struct is_attribute<SystemIcon>  : std::false_type  {};
   template <> struct is_contiguous<SystemIcon> : std::false_type  {};
   template <> struct default_t<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Application>   {};
-
   
+  // ----------------------------------- SYSTEM METRICS ----------------------------------
+  
+  //! \enum SystemMetric - System metrics
+  enum class SystemMetric
+  {
+    Arrange = SM_ARRANGE,				                //!< The flags that specify how the system arranged minimized windows. For more information, see the Remarks section in this topic.
+    CleanBoot = SM_CLEANBOOT,				            //!< The value that specifies how the system is started: A fail-safe boot (also called SafeBoot, Safe Mode, or Clean Boot) bypasses the user startup files.
+    cMonitors = SM_CMONITORS,				            //!< The number of display monitors on a desktop. For more information, see the Remarks section in this topic. 
+    cMouseButtons = SM_CMOUSEBUTTONS,				    //!< The number of buttons on a mouse, or zero if no mouse is installed.
+    //ConvertibleSlateMode = SM_CONVERTIBLESLATEMODE,  //!<	Reflects the state of the laptop or slate mode, 0 for Slate Mode and non-zero otherwise. When this system metric changes, the system sends a broadcast message via WM_SETTINGCHANGE with "ConvertibleSlateMode" in the LPARAM. Note that this system metric doesn't apply to desktop PCs. In that case, use GetAutoRotationState.
+    cxBorder = SM_CXBORDER,		                  //!< The width of a window border, in pixels. This is equivalent to the SM_CXEDGE value for windows with the 3-D look.
+    cxCursor = SM_CXCURSOR,			                //!< The width of a cursor, in pixels. The system cannot create cursors of other sizes.
+    cxDialogFrame = SM_CXDLGFRAME,				      //!< This value is the same as SM_CXFIXEDFRAME.
+    cxDoubleClick = SM_CXDOUBLECLK,			        //!< The width of the rectangle around the location of a first click in a double-click sequence, in pixels. The second click must occur within the rectangle that is defined by SM_CXDOUBLECLK and SM_CYDOUBLECLK for the system to consider the two clicks a double-click. The two clicks must also occur within a specified time. To set the width of the double-click rectangle, call SystemParametersInfo with SPI_SETDOUBLECLKWIDTH.
+    cxDrag = SM_CXDRAG,				                  //!< The number of pixels on either side of a mouse-down point that the mouse pointer can move before a drag operation begins. This allows the user to click and release the mouse button easily without unintentionally starting a drag operation. If this value is negative, it is subtracted from the left of the mouse-down point and added to the right of it.
+    cxEdge = SM_CXEDGE,				                  //!< The width of a 3-D border, in pixels. This metric is the 3-D counterpart of SM_CXBORDER.
+    cxFixedFrame = SM_CXFIXEDFRAME,			        //!< The thickness of the frame around the perimeter of a window that has a caption but is not sizable, in pixels. SM_CXFIXEDFRAME is the height of the horizontal border, and SM_CYFIXEDFRAME is the width of the vertical border. This value is the same as SM_CXDLGFRAME.
+    cxFocusBorder = SM_CXFOCUSBORDER,		        //!< [Win XP] The width of the left and right edges of the focus rectangle that the DrawFocusRect draws. This value is in pixels. Windows 2000:  This value is not supported.
+    cxFrame = SM_CXFRAME,			                  //!< This value is the same as SM_CXSIZEFRAME.
+    cxFullScreen = SM_CXFULLSCREEN,			        //!< The width of the client area for a full-screen window on the primary display monitor, in pixels. To get the coordinates of the portion of the screen that is not obscured by the system taskbar or by application desktop toolbars, call the SystemParametersInfo function with the SPI_GETWORKAREA value.
+    cxHScroll = SM_CXHSCROLL,				            //!< The width of the arrow bitmap on a horizontal scroll bar, in pixels.
+    cxHThumb = SM_CXHTHUMB,				              //!< The width of the thumb box in a horizontal scroll bar, in pixels.
+    cxIcon = SM_CXICON,				                  //!< The default width of an icon, in pixels. The LoadIcon function can load only icons with the dimensions that SM_CXICON and SM_CYICON specifies.
+    cxIconSpacing = SM_CXICONSPACING,				    //!< The width of a grid cell for items in large icon view, in pixels. Each item fits into a rectangle of size SM_CXICONSPACING by SM_CYICONSPACING when arranged. This value is always greater than or equal to SM_CXICON.
+    cxMaximized = SM_CXMAXIMIZED,				        //!< The default width, in pixels, of a maximized top-level window on the primary display monitor.
+    cxMaxTrack = SM_CXMAXTRACK,				          //!< The default maximum width of a window that has a caption and sizing borders, in pixels. This metric refers to the entire desktop. The user cannot drag the window frame to a size larger than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
+    cxMenuCheck = SM_CXMENUCHECK,				        //!< The width of the default menu check-mark bitmap, in pixels.
+    cxMenuSize = SM_CXMENUSIZE,				          //!< The width of menu bar buttons, such as the child window close button that is used in the multiple document interface, in pixels.
+    cxMin = SM_CXMIN,				                    //!< The minimum width of a window, in pixels.
+    cxMinimized = SM_CXMINIMIZED,				        //!< The width of a minimized window, in pixels.
+    cxMinSpacing = SM_CXMINSPACING,				      //!< The width of a grid cell for a minimized window, in pixels. Each minimized window fits into a rectangle this size when arranged. This value is always greater than or equal to SM_CXMINIMIZED.
+    cxMinTrack = SM_CXMINTRACK,				          //!< The minimum tracking width of a window, in pixels. The user cannot drag the window frame to a size smaller than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
+    //cxPaddedBorder = SM_CXPADDEDBORDER,				//!< [¬XP/2000] The amount of border padding for captioned windows, in pixels. Windows XP/2000:  This value is not supported.
+    cxScreen = SM_CXSCREEN,				              //!< The width of the screen of the primary display monitor, in pixels. This is the same value obtained by calling GetDeviceCaps as follows: GetDeviceCaps( hdcPrimaryMonitor, HORZRES).
+    cxSize = SM_CXSIZE,				                  //!< The width of a button in a window caption or title bar, in pixels.
+    cxSizeFrame = SM_CXSIZEFRAME,				        //!< The thickness of the sizing border around the perimeter of a window that can be resized, in pixels. SM_CXSIZEFRAME is the width of the horizontal border, and SM_CYSIZEFRAME is the height of the vertical border. This value is the same as SM_CXFRAME.
+    cxSMIcon = SM_CXSMICON,				              //!< The recommended width of a small icon, in pixels. Small icons typically appear in window captions and in small icon view.
+    cxSMSize = SM_CXSMSIZE,				              //!< The width of small caption buttons, in pixels.
+    cxVirtualScreen = SM_CXVIRTUALSCREEN,				//!< The width of the virtual screen, in pixels. The virtual screen is the bounding rectangle of all display monitors. The SM_XVIRTUALSCREEN metric is the coordinates for the left side of the virtual screen. 
+    cxVScroll = SM_CXVSCROLL,				            //!< The width of a vertical scroll bar, in pixels.
+    cyBorder = SM_CYBORDER,				              //!< The height of a window border, in pixels. This is equivalent to the SM_CYEDGE value for windows with the 3-D look.
+    cyCaption = SM_CYCAPTION,				            //!< The height of a caption area, in pixels.
+    cyCursor = SM_CYCURSOR,				              //!< The height of a cursor, in pixels. The system cannot create cursors of other sizes.
+    cyDialogFrame = SM_CYDLGFRAME,				      //!< This value is the same as SM_CYFIXEDFRAME.
+    cyDoubleClick = SM_CYDOUBLECLK,				      //!< The height of the rectangle around the location of a first click in a double-click sequence, in pixels. The second click must occur within the rectangle defined by SM_CXDOUBLECLK and SM_CYDOUBLECLK for the system to consider the two clicks a double-click. The two clicks must also occur within a specified time. To set the height of the double-click rectangle, call SystemParametersInfo with SPI_SETDOUBLECLKHEIGHT.
+    cyDrag = SM_CYDRAG,				                  //!< The number of pixels above and below a mouse-down point that the mouse pointer can move before a drag operation begins. This allows the user to click and release the mouse button easily without unintentionally starting a drag operation. If this value is negative, it is subtracted from above the mouse-down point and added below it. 
+    cyEdge = SM_CYEDGE,				                  //!< The height of a 3-D border, in pixels. This is the 3-D counterpart of SM_CYBORDER.
+    cyFixedFrame = SM_CYFIXEDFRAME,				      //!< The thickness of the frame around the perimeter of a window that has a caption but is not sizable, in pixels. SM_CXFIXEDFRAME is the height of the horizontal border, and SM_CYFIXEDFRAME is the width of the vertical border.This value is the same as SM_CYDLGFRAME.
+    cyFocusBorder = SM_CYFOCUSBORDER,				    //!< [¬Win 2000] The height of the top and bottom edges of the focus rectangle drawn by DrawFocusRect. This value is in pixels. Windows 2000:  This value is not supported.
+    cyFrame = SM_CYFRAME,			                  //!< This value is the same as SM_CYSIZEFRAME.
+    cyFullScreen = SM_CYFULLSCREEN,				      //!< The height of the client area for a full-screen window on the primary display monitor, in pixels. To get the coordinates of the portion of the screen not obscured by the system taskbar or by application desktop toolbars, call the SystemParametersInfo function with the SPI_GETWORKAREA value.
+    cyHScroll = SM_CYHSCROLL,				            //!< The height of a horizontal scroll bar, in pixels.
+    cyIcon = SM_CYICON,				                  //!< The default height of an icon, in pixels. The LoadIcon function can load only icons with the dimensions SM_CXICON and SM_CYICON.
+    cyIconSpacing = SM_CYICONSPACING,				    //!< The height of a grid cell for items in large icon view, in pixels. Each item fits into a rectangle of size SM_CXICONSPACING by SM_CYICONSPACING when arranged. This value is always greater than or equal to SM_CYICON.
+    cyKanjiWindow = SM_CYKANJIWINDOW,				    //!< For double byte character set versions of the system, this is the height of the Kanji window at the bottom of the screen, in pixels.
+    cyMaximized = SM_CYMAXIMIZED,				        //!< The default height, in pixels, of a maximized top-level window on the primary display monitor.
+    cyMaxTrack = SM_CYMAXTRACK,				          //!< The default maximum height of a window that has a caption and sizing borders, in pixels. This metric refers to the entire desktop. The user cannot drag the window frame to a size larger than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
+    cyMenu = SM_CYMENU,				                  //!< The height of a single-line menu bar, in pixels.
+    cyMenuCheck = SM_CYMENUCHECK,				        //!< The height of the default menu check-mark bitmap, in pixels.
+    cyMenuSize = SM_CYMENUSIZE,				          //!< The height of menu bar buttons, such as the child window close button that is used in the multiple document interface, in pixels.
+    cyMin = SM_CYMIN,				                    //!< The minimum height of a window, in pixels.
+    cyMinimized = SM_CYMINIMIZED,				        //!< The height of a minimized window, in pixels.
+    cyMinSpacing = SM_CYMINSPACING,			        //!< The height of a grid cell for a minimized window, in pixels. Each minimized window fits into a rectangle this size when arranged. This value is always greater than or equal to SM_CYMINIMIZED.
+    cyMinTrack = SM_CYMINTRACK,				          //!< The minimum tracking height of a window, in pixels. The user cannot drag the window frame to a size smaller than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
+    cyScreen = SM_CYSCREEN,	                  	//!< The height of the screen of the primary display monitor, in pixels. This is the same value obtained by calling GetDeviceCaps as follows: GetDeviceCaps( hdcPrimaryMonitor, VERTRES).
+    cySize = SM_CYSIZE,				                  //!< The height of a button in a window caption or title bar, in pixels.
+    cySizeFrame = SM_CYSIZEFRAME,				        //!< The thickness of the sizing border around the perimeter of a window that can be resized, in pixels. SM_CXSIZEFRAME is the width of the horizontal border, and SM_CYSIZEFRAME is the height of the vertical border. This value is the same as SM_CYFRAME.
+    cySmCaption = SM_CYSMCAPTION,				        //!< The height of a small caption, in pixels.
+    cySmIcon = SM_CYSMICON,				              //!< The recommended height of a small icon, in pixels. Small icons typically appear in window captions and in small icon view.
+    cySmSize = SM_CYSMSIZE,				              //!< The height of small caption buttons, in pixels.
+    cyVirtualScreen = SM_CYVIRTUALSCREEN,				//!< The height of the virtual screen, in pixels. The virtual screen is the bounding rectangle of all display monitors. The SM_YVIRTUALSCREEN metric is the coordinates for the top of the virtual screen.
+    cyVScroll = SM_CYVSCROLL,				            //!< The height of the arrow bitmap on a vertical scroll bar, in pixels.
+    cyVThumb = SM_CYVTHUMB,		                  //!< The height of the thumb box in a vertical scroll bar, in pixels.
+    DbcsEnabled = SM_DBCSENABLED,	              //!< Nonzero if User32.dll supports DBCS; otherwise, 0. 
+    Debug = SM_DEBUG,				                    //!< Nonzero if the debug version of User.exe is installed; otherwise, 0.
+    //Digitizer = SM_DIGITIZER,				          //!< Nonzero if the current operating system is Windows 7 or Windows Server 2008 R2 and the Tablet PC Input service is started; otherwise, 0. The return value is a bitmask that specifies the type of digitizer input supported by the device. For more information, see Remarks. Windows Server 2008, Windows Vista, and Windows XP/2000:  This value is not supported.
+    ImeEnabled = SM_IMMENABLED,				          //!< Nonzero if Input Method Manager/Input Method Editor features are enabled; otherwise, 0. SM_IMMENABLED indicates whether the system is ready to use a Unicode-based IME on a Unicode application. To ensure that a language-dependent IME works, check SM_DBCSENABLED and the system ANSI code page. Otherwise the ANSI-to-Unicode conversion may not be performed correctly, or some components like fonts or registry settings may not be present.
+    //MAXIMUMTOUCHES = SM_MAXIMUMTOUCHES,				//!< Nonzero if there are digitizers in the system; otherwise, 0. SM_MAXIMUMTOUCHES returns the aggregate maximum of the maximum number of contacts supported by every digitizer in the system. If the system has only single-touch digitizers, the return value is 1. If the system has multi-touch digitizers, the return value is the number of simultaneous contacts the hardware can provide. Windows Server 2008, Windows Vista, and Windows XP/2000:  This value is not supported.
+  };
+  
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<SystemMetric>  : std::false_type  {};
+  template <> struct is_contiguous<SystemMetric> : std::false_type  {};
+  template <> struct default_t<SystemMetric>     : std::integral_constant<SystemMetric,SystemMetric::Arrange>   {};
+
   // ----------------------------------- WINDOWS OS VERSION ----------------------------------
   
 
@@ -187,7 +270,7 @@ namespace wtl
     Win81    = 0x0603,      //!< Windows 8.1
     Future,                 //!< Future
   };
-  
+   
   //! Define traits: Non-Contiguous enumeration
   template <> struct is_attribute<WindowVersion>  : std::false_type  {};
   template <> struct is_contiguous<WindowVersion> : std::false_type  {};
