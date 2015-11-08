@@ -238,7 +238,38 @@ namespace wtl
   template <> struct is_attribute<FontFamily>  : std::false_type  {};
   template <> struct is_contiguous<FontFamily> : std::false_type  {};
   template <> struct default_t<FontFamily>     : std::integral_constant<FontFamily,FontFamily::Default>   {};
+  
+  // --------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------   IMAGE LIST   -----------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------
 
+  //! \enum ImageListType - Defines image list creation flags
+  enum class ImageListType : uint32_t
+  {
+    Mask = ILC_MASK,				                  //!< Use a mask. The image list contains two bitmaps, one of which is a monochrome bitmap used as a mask. If this value is not included, the image list contains only one bitmap.
+    Colour = ILC_COLOR,				                //!< Use the default behavior if none of the other ILC_COLORx flags is specified. Typically, the default is ILC_COLOR4, but for older display drivers, the default is ILC_COLORDDB.
+    ColourDib = ILC_COLORDDB,                 //!< Use a device-dependent bitmap.
+    Colour4 = ILC_COLOR4,				              //!< Use a 4-bit (16-color) device-independent bitmap (DIB) section as the bitmap for the image list.
+    Colour8 = ILC_COLOR8,				              //!< Use an 8-bit DIB section. The colors used for the color table are the same colors as the halftone palette.
+    Colour16 = ILC_COLOR16,				            //!< Use a 16-bit (32/64k-color) DIB section.
+    Colour24 = ILC_COLOR24,				            //!< Use a 24-bit DIB section.
+    Colour32 = ILC_COLOR32,				            //!< Use a 32-bit DIB section.
+    Palette = ILC_PALETTE,				            //!< Not implemented.
+#if (_WIN32_WINNT >= 0x0501)
+    Mirror = ILC_MIRROR,				              //!< [Windows 5.01] Mirror the icons contained, if the process is mirrored
+    PerItemMirror = ILC_PERITEMMIRROR,				//!< [Windows 5.01] Causes the mirroring code to mirror each item when inserting a set of images, versus the whole strip.
+#endif
+#if _WIN32_WINNT >= 0x0600
+    OriginalSize = ILC_ORIGINALSIZE,				  //!< [Windows 6.00] Windows Vista and later. Imagelist should accept smaller than set images and apply original size based on image added.
+    HighQualityScale = ILC_HIGHQUALITYSCALE,	//!< [Windows 6.00] Windows Vista and later. Imagelist should enable use of the high quality scaler.
+#endif
+  };
+  
+  //! Define traits: Non-Contiguous attribute
+  template <> struct is_attribute<ImageListType>  : std::true_type  {};
+  template <> struct is_contiguous<ImageListType> : std::false_type {};
+  template <> struct default_t<ImageListType>     : std::integral_constant<ImageListType,ImageListType::Colour>   {};
+  
   // --------------------------------------------------------------------------------------------------------------
   // -----------------------------------------------   OWNER DRAW   -----------------------------------------------
   // --------------------------------------------------------------------------------------------------------------

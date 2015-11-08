@@ -1,69 +1,59 @@
 /////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\gdi\Theme.hpp
-//! \brief Supports Visual styles
-//! \date 6 March 2015
+//! \file wtl\gdi\ImageList.hpp
+//! \brief Encapsulates a Win32 ImageList
+//! \date 6 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 /////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_THEME_H
-#define WTL_THEME_H
+#ifndef WTL_IMAGE_LIST_H
+#define WTL_IMAGE_LIST_H
 
 #include "wtl/WTL.hpp"
 #include "wtl/gdi/DeviceContext.hpp"               //!< HDeviceContext
-#include "wtl/traits/ThemeTraits.hpp"              //!< HTheme
+#include "wtl/traits/ImageListTraits.hpp"          //!< HImageList
 #include "wtl/platform/HResult.hpp"                //!< HResult
-#include <vsstyle.h>                               //!< Parts and States
-#include <Vssym32.h>                               //!< Properties
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Theme - 
+  //! \struct ImageList - 
   //!
   //! \remarks See "Parts & States" at https://msdn.microsoft.com/en-us/library/windows/desktop/bb773210(v=vs.85).aspx
   /////////////////////////////////////////////////////////////////////////////////////////
-  struct Theme 
+  struct ImageList 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
      
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    HTheme   Handle;     //!< Theme handle
-
+    HImageList   Handle;     //!< ImageList handle
+    
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::Theme
+    // ImageList::ImageList
     //! Create theme from class name
     //!
-    //! \param[in] const& wnd - Owner window
-    //! \param[in] const& name - Wide-character string containing a semicolon-separated list of classes.
+    //! \param[in] const& sz - Image size
+    //! \param[in] flags - Creation flags
+    //! \param[in] count - Number of initial images
+    //! \param[in] grow - Number of extra elements to add when the capacity is reached
     //! 
     //! \throw wtl::platform_error - Failed to acquire theme handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    Theme(const HWnd& wnd, const String<Encoding::UTF16>& names) : Handle(wnd, names)
+    template <typename T>
+    ImageList(const Size<T>& sz, ImageListType flags, int32_t count, int32_t grow) : Handle(wnd, names)
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     // ----------------------------------- STATIC METHODS -----------------------------------
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::isActive
-    //! Tests if a visual style for the current application is active.
-    //!
-    //! \return bool - True iff visual style active
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static bool isActive()
-    {
-      return boolean_cast(::IsThemeActive());
-    }
-    
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::drawBackground const
+    // ImageList::drawBackground const
     //! Draws the border and fill defined by the visual style for the specified control part.
     //!
     //! \param[in] const& dc - Target device context
@@ -76,12 +66,12 @@ namespace wtl
     template <typename PART, typename STATE>
     void drawBackground(const DeviceContext& dc, PART part, STATE state, const RectL& rc) const
     {
-      if (!HResult(::DrawThemeBackground(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), nullptr)))
+      if (!HResult(::DrawImageListBackground(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), nullptr)))
         throw platform_error(HERE, "Unable to draw themed control background");
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::drawBackground const
+    // ImageList::drawBackground const
     //! Draws the border and fill defined by the visual style for the specified control part.
     //!
     //! \param[in] const& dc - Target device context
@@ -95,12 +85,12 @@ namespace wtl
     template <typename PART, typename STATE>
     void drawBackground(const DeviceContext& dc, PART part, STATE state, const RectL& rc, const RectL& clip) const
     {
-      if (!HResult(::DrawThemeBackground(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), const_cast<RectL&>(clip))))
+      if (!HResult(::DrawImageListBackground(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), const_cast<RectL&>(clip))))
         throw platform_error(HERE, "Unable to draw themed control background");
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::drawText const
+    // ImageList::drawText const
     //! Draws text using the color and font defined by the visual style.
     //!
     //! \param[in] const& dc - Target device context
@@ -115,12 +105,12 @@ namespace wtl
     template <typename PART, typename STATE>
     void drawText(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags) const
     {
-      if (!HResult(::DrawThemeText(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), 0, const_cast<RectL&>(rc))))
+      if (!HResult(::DrawImageListText(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), 0, const_cast<RectL&>(rc))))
         throw platform_error(HERE, "Unable to draw themed control text");
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::getContentRect const
+    // ImageList::getContentRect const
     //! Retrieves the size of the content area for the background defined by the visual style.
     //!
     //! \param[in] const& dc - Target device context
@@ -134,12 +124,12 @@ namespace wtl
     template <typename PART, typename STATE>
     void getContentRect(const DeviceContext& dc, PART part, STATE state, const RectL& rc, RectL& content) const
     {
-      if (!HResult(::GetThemeBackgroundContentRect(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), content)))
+      if (!HResult(::GetImageListBackgroundContentRect(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), content)))
         throw platform_error(HERE, "Unable to query themed control content rectangle");
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::getMargins const
+    // ImageList::getMargins const
     //! Retrieves the margins of a theme component
     //!
     //! \param[in] const& dc - Target device context
@@ -153,7 +143,7 @@ namespace wtl
     template <typename PART, typename STATE, typename PROPERTY>
     void getMargins(const DeviceContext& dc, PART part, STATE state, PROPERTY prop, ::MARGINS& margins) const
     {
-      if (!HResult(::GetThemeMargins(Handle, dc.handle(), part, state, prop, nullptr, &margins)))
+      if (!HResult(::GetImageListMargins(Handle, dc.handle(), part, state, prop, nullptr, &margins)))
         throw platform_error(HERE, "Unable to query themed control margins");
     }
 
@@ -197,5 +187,5 @@ namespace wtl
   }
 
 } // namespace wtl
-#endif // WTL_THEME_H
+#endif // WTL_IMAGE_LIST_H
 

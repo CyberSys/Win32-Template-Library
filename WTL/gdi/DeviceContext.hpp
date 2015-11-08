@@ -17,6 +17,7 @@
 #include "wtl/traits/BrushTraits.hpp"             //!< HBrush
 #include "wtl/traits/FontTraits.hpp"              //!< HFont
 #include "wtl/traits/PenTraits.hpp"               //!< HPen
+#include "wtl/traits/WindowTraits.hpp"            //!< HWnd
 #include "wtl/platform/Colours.hpp"               //!< Colours
 #include "wtl/platform/DrawingFlags.hpp"          //!< DrawTextFlags
 #include "wtl/utils/Rectangle.hpp"                //!< Rectangle
@@ -243,7 +244,29 @@ namespace wtl
       //throw platform_error(HERE, "Unable to query device caps"); 
       return 0;
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::handle const
+    //! Get the shared device context handle 
+    //! 
+    //! \return const HDeviceContext& - Shared DC handle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const HDeviceContext& handle() const
+    {
+      return Handle;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::window const
+    //! Get a shared handle to the window associated with this device context
+    //! 
+    //! \return HWnd - Shared window handle (Weak reference)
+    /////////////////////////////////////////////////////////////////////////////////////////
+    HWnd window() const
+    {
+      return { ::WindowFromDC(Handle), AllocType::WeakRef };
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -257,6 +280,24 @@ namespace wtl
       ObjectStack<HPen>::clear();
     }
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::draw
+    //! Draw an icon into a rectangle
+    //! 
+    //! \param[in] const& icon - Icon handle
+    //! \param[in] const& pt - Drawing position
+    //! \param[in] const& sz - Drawing size. (Set dimension(s) to 0 to use actual extent, or DI_DEFAULTSIZE to use system default)
+    //!
+    //! \throw wtl::platform_error - Unable to draw icon
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename P, typename S>
+    void draw(const HIcon& icon, const Point<P>& pt, const Size<S>& sz /*DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre*/)
+    {
+      // [ICON] Draw icon
+      if (::DrawIconEx(Handle, pt.X, pt.Y, icon, sz.Width, sz.Height, 0, nullptr, DI_IMAGE | DI_MASK) == False)
+        throw platform_error(HERE, "Unable to draw icon");
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // DeviceContext::ellipse
     //! Draws a filled ellipse with the current brush and pen
@@ -304,17 +345,6 @@ namespace wtl
       // Fill target rectangle with custom brush
       if (::FillRect(Handle, rc, brush) == False)
         throw platform_error(HERE, "Unable to fill custom rect");
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // DeviceContext::handle const
-    //! Get the shared device context handle 
-    //! 
-    //! \return const HDeviceContext& - Shared DC handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    const HDeviceContext& handle() const
-    {
-      return Handle;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
