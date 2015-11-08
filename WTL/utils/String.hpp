@@ -102,24 +102,29 @@ namespace wtl
   //! wtl::snprintf
   //! Formats a narrow character string
   //!
+  //! \tparam LENGTH - Length of output buffer in characters
+  //! \tparam ARGS - Argument types 
+  //! 
   //! \param[in,out] *buffer - Narrow character output buffer
-  //! \param[in] capacity - Buffer capacity
   //! \param[in] const* format - Narrow formatting string
   //! \param[in] ... - [optional] Formatting arguments
   //! \return int32_t - Number of character written.
   //!
   //! \remarks If result is less than zero then an error occurred. If the result exceeds the capacity then there was insufficient space.
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename... ARGS>
-  inline int32_t snprintf(char* buffer, uint32_t capacity, const char* format, ARGS&&... args)
+  template <uint32_t LENGTH, typename... ARGS>
+  inline int32_t snprintf(char (&buffer)[LENGTH], const char* format, ARGS&&... args)
   {
-    return std::snprintf(buffer, capacity, format, std::forward<ARGS>(args)...);
+    return std::snprintf(buffer, LENGTH, format, std::forward<ARGS>(args)...);
   }
-  
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::snprintf
   //! Formats a wide character string
   //!
+  //! \tparam LENGTH - Length of output buffer in characters
+  //! \tparam ARGS - Argument types 
+  //! 
   //! \param[in,out] *buffer - Wide character output buffer
   //! \param[in] capacity - Buffer capacity
   //! \param[in] const* format - Wide formatting string
@@ -128,10 +133,10 @@ namespace wtl
   //!
   //! \remarks If result is less than zero then an error occurred. If the result exceeds the capacity then there was insufficient space.
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename... ARGS>
-  inline int32_t snprintf(wchar_t* buffer, uint32_t capacity, const wchar_t* format, ARGS&&... args)
+  template <uint32_t LENGTH, typename... ARGS>
+  inline int32_t snprintf(wchar_t (&buffer)[LENGTH], const wchar_t* format, ARGS&&... args)
   {
-    return std::swprintf(buffer, capacity, format, std::forward<ARGS>(args)...);
+    return std::swprintf(buffer, LENGTH, format, std::forward<ARGS>(args)...);
   }
 
 

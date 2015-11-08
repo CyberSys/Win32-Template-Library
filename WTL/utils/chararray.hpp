@@ -686,7 +686,7 @@ namespace wtl
       REQUIRED_PARAM(str);
 
       // Attempt to format
-      int32_t n = snprintf(this->Data, this->length, str, std::forward<ARGS>(args)...);
+      int32_t n = snprintf(this->Data, str, std::forward<ARGS>(args)...);
 
       // Failed: Unspecified
       if (n < 0) {
