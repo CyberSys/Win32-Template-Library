@@ -243,48 +243,55 @@ namespace wtl
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args)
-    { 
-      /*Theme theme(this->handle(), L"Menu");
-
-      RectL rcBar;
-      ::MENUBARINFO bar { sizeof(MENUBARINFO) };
-      
-      ::GetMenuBarInfo(Handle, OBJID_MENU, 0, &bar);
-      ::GetWindowRect(bar.hwndMenu, rcBar);
-
-      theme.drawBackground(args.Graphics, MENU_BARBACKGROUND, MB_ACTIVE, args.Rect);
-
-      theme.drawText(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);*/
-
-      
-
+    {   
       // debug
-      cdebug << object_info(__func__, "ident", args.Ident) << endl;
+      cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
-      // Draw background
-        args.Graphics.fill(args.Rect, StockBrush::Blue);
-
-      // [GROUP] Draw name
+      // [GROUP] Draw menu-bar item 
       if (CommandGroupPtr<encoding> group = find(command_group_id(args.Ident)))
       {
-        // Query menu bar info
-        //::MENUBARINFO bar { sizeof(MENUBARINFO) };
-        //::GetMenuBarInfo(::WindowFromDC(args.Graphics.handle()), OBJID_MENU, 0, &bar);
-
-        //NativeWindow<encoding> wndMenu(bar.hwndMenu);
-        //Theme theme(wndMenu.handle(), L"Menu");
+        Theme  theme(args.Graphics.window(), L"Menu");
         
-        /*theme.drawBackground(args.Graphics, MENU_BARITEM, MB_ACTIVE, args.Rect);
-        theme.drawText(args.Graphics, MENU_BARITEM, MB_ACTIVE, group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);*/
+        // Determine state
+        BARITEMSTATES itemState = (args.State && OwnerDrawState::Hotlight ? MBI_HOT
+                                 : args.State && OwnerDrawState::Selected ? MBI_PUSHED : MBI_NORMAL);
+        if (args.State && OwnerDrawState::Grayed)
+          itemState += (MBI_DISABLED-1);
 
-        //args.Graphics.write(group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+        //! Draw background 
+        theme.drawBackground(args.Graphics, MENU_BARBACKGROUND, args.State && OwnerDrawState::Grayed ? MB_INACTIVE : MB_ACTIVE, args.Rect);
+        theme.drawBackground(args.Graphics, MENU_BARITEM, itemState, args.Rect);
+
+        //! Draw item
+        theme.drawText(args.Graphics, MENU_BARITEM, itemState, group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
       }
 
-      // [COMMAND] Draw name
-      else if (auto command = find(command_id(args.Ident)))
+      // [COMMAND] Draw pop-up menu item
+      else if (CommandPtr<encoding> command = find(command_id(args.Ident)))
       {
+        Theme  theme(args.Graphics.window(), L"Menu");
+
+        // Prepare
         
-        args.Graphics.write(command->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+        //! Draw background 
+        theme.drawBackground(args.Graphics, MENU_POPUPBACKGROUND, 0, args.Rect);
+        
+        // Determine drawing state
+        POPUPITEMSTATES itemState = (args.State && OwnerDrawState::Selected ? MPI_HOT : MPI_NORMAL);
+        if (args.State == OwnerDrawState::Grayed)
+          itemState += (MPI_DISABLED-1);
+
+        // Query drawing rectangle
+        RectL  rc;
+        theme.getContentRect(args.Graphics, MENU_POPUPITEM, itemState, args.Rect, rc);
+
+        //! Draw icon
+        args.Graphics.draw(command->icon(), rc.topLeft(), SizeL(16,16));
+        rc.Left += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));
+        
+        //! Draw background + command name
+        theme.drawBackground(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
+        theme.drawText(args.Graphics, MENU_POPUPITEM, itemState, command->name(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre);
       }
 
       // Handled
@@ -314,8 +321,18 @@ namespace wtl
       // [ITEM] Lookup Command
       else if (auto command = find(command_id(args.Ident)))
       {
+        Theme  theme(args.Graphics.window(), L"Menu");
+
         // Measure Command name
         args.Size = args.Graphics.measure(command->name());
+
+        // Query margins
+        ::MARGINS margins;
+        theme.getMargins(args.Graphics, MENU_POPUPITEM, 0, TMT_SIZINGMARGINS, margins);
+        args.Size += margins;
+
+        // Measure icon
+        args.Size.Width += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));
 
         // debug
         cdebug << object_info(__func__, "command", (int32_t)args.Ident, 

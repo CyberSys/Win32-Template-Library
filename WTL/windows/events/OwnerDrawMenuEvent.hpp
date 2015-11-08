@@ -53,8 +53,9 @@ namespace wtl
     OwnerDrawAction   Action;           //!< Type of drawing requested
     DeviceContext     Graphics;         //!< Device context clipped to menu area 
     CommandId         Ident;            //!< Command id
-    RectL             Rect;             //!< Drawing/update rectangle
     HMenu             Menu;             //!< Control handle
+    RectL             Rect;             //!< Drawing/update rectangle
+    OwnerDrawState    State;            //!< State of item being drawn
     
     // ------------------------------------- CONSTRUCTION -----------------------------------
 
@@ -72,7 +73,8 @@ namespace wtl
                                         Graphics(Data.hDC),
                                         Ident(static_cast<CommandId>(Data.itemID)), 
                                         Menu((::HMENU)Data.hwndItem, AllocType::WeakRef),
-                                        Rect(Data.rcItem)
+                                        Rect(Data.rcItem),
+                                        State(static_cast<OwnerDrawState>(Data.itemState))
     {
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) == OwnerDrawControl::Menu);
     }
