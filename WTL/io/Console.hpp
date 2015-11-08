@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/casts/EnumCast.hpp"           //!< EnumCast
-#include "wtl/traits/EnumTraits.hpp"        //!< is_attribute
+#include "wtl/traits/EnumTraits.hpp"        //!< is_attribute,enable_if_attribute_t,enable_if_contiguous_t
 #include "wtl/utils/FormatSpec.hpp"         //!< format_spec_t
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/Exception.hpp"          //!< caught_exception
@@ -558,7 +558,7 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Writes the string representation of any enumeration type to the debug console
+  //! Writes any attribute enumeration to the debug console in hexadecimal
   //! 
   //! \tparam T - Enumeration type
   //!
@@ -567,11 +567,29 @@ namespace wtl
   //! \return Console& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
-  auto operator << (Console& c, T val) -> enable_if_enum_t<T,Console&>
+  auto operator << (Console& c, T val) -> enable_if_attribute_t<T,Console&>
   { 
-    return c << int32_t(val);
+    char tmp[16];
+    
+    snprintf(tmp, "%#lx", static_cast<unsigned long>(val));
+    return c << tmp;
   }
   
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Writes any non-attribute enumeration to the debug console in decimal
+  //! 
+  //! \tparam T - Enumeration type
+  //!
+  //! \param[in,out] &c - Debug console
+  //! \param[in] val - Enumeration value
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T>
+  auto operator << (Console& c, T val) -> enable_if_not_attribute_t<T,Console&>
+  { 
+    return c << static_cast<int32_t>(val);
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
