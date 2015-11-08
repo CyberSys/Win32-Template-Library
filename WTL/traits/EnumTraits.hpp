@@ -52,6 +52,24 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename E, typename RET = void>
   using enable_if_contiguous_t = std::enable_if_t<std::is_enum<E>::value && is_contiguous<E>::value, RET>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_not_attribute_t - Defines an SFINAE expression requiring a non-attribute enumeration
+  //!
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_not_attribute_t = std::enable_if_t<std::is_enum<E>::value && !is_attribute<E>::value, RET>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_not_contiguous_t - Defines an SFINAE expression requiring a non-contiguous enumeration
+  //!
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_not_contiguous_t = std::enable_if_t<std::is_enum<E>::value && !is_contiguous<E>::value, RET>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \namespace concepts - Defines concepts used by 'Delegate'
