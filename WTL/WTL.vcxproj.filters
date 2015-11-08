@@ -569,6 +569,12 @@
     <ClInclude Include="windows\WindowMenu.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="gdi\ImageList.hpp">
+      <Filter>GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\ImageListTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
