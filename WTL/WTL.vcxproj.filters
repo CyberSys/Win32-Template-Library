@@ -365,9 +365,6 @@
     <ClInclude Include="utils\Zero.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="casts\ConstExprCast.hpp">
-      <Filter>Casts</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Library</Filter>
     </ClInclude>
