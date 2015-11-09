@@ -729,7 +729,7 @@ namespace wtl
     virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // Set initial font
-      Font->set();
+      Font.set();
 
       // [Handled] Accept parameters
       return 0; 

@@ -10,7 +10,6 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/traits/EnumTraits.hpp"            //!< is_attribute
-//#include "wtl/windows/PropertyImpl.hpp"         //!< PropertyImpl
 #include <utility>                              //!< std::forward
 #include <type_traits>                          //!< std::enable_if, std::conditional
 
@@ -57,12 +56,15 @@ namespace wtl
   //! \remarks Whether these are supported is determined by a separate implementation, which provides the get() and set() methods.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL>
-  struct Property 
+  struct Property : IMPL
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
     using type = Property<IMPL>;
+    
+    //! \alias base - Define base/implementation type
+    using base = IMPL;
     
     //! \alias value_t - Inherit value type
     using value_t = typename IMPL::value_t;
@@ -76,13 +78,7 @@ namespace wtl
     //! \var write - Inherit whether property supports write access
     static constexpr bool write = requires<IMPL,concepts::PropertySetter<value_t>>::value;
     
-  protected:    
-    //! \alias implementation_t - Define implementation type
-    using implementation_t = IMPL;
-
     // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    implementation_t   Impl;     //!< Implementation provider
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -94,7 +90,7 @@ namespace wtl
     //! \param[in] &&... args - [optional] Property implementation constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS> 
-    Property(window_t& wnd, ARGS&&... args) : Impl(wnd, std::forward<ARGS>(args)...)
+    Property(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -108,21 +104,6 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::get const
-    //! Value accessor
-    //! 
-    //! \return value_t - Current value
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <typename = std::enable_if_t<read>>
-    template <typename = void>
-    value_t  get() const
-    {
-      static_assert(write, "Property does not support reading");
-
-      return Impl.get();
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator value_t const
     //! (Implicit) User conversion to value
     //! 
@@ -130,7 +111,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     operator value_t() const
     {
-      return Impl.get();
+      return this->get();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -141,37 +122,10 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t operator ()() const
     {
-      return Impl.get();
+      return this->get();
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::operator-> 
-    //! Another value accessor using function operator syntax
-    //! 
-    //! \return implementation_t* - Pointer to implementation
-    /////////////////////////////////////////////////////////////////////////////////////////
-    implementation_t* operator ->() 
-    {
-      return &Impl;
-    }
-
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Property::set 
-    //! Value mutator
-    //! 
-    //! \param[in] value - New value
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //template <typename = std::enable_if_t<write>>
-    template <typename = void>
-    void  set(value_t value) 
-    {
-      static_assert(write, "Property does not support writing");
-
-      // Set value
-      Impl.set(value);
-    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator =
@@ -182,7 +136,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type&  operator = (const type& r) 
     {
-      Impl.set(r.get());
+      this->set(r.get());
       return *this;
     }
     
@@ -198,7 +152,7 @@ namespace wtl
     template <typename T>
     type&  operator = (T&& val) 
     {
-      Impl.set(std::forward<T>(val));     //!< Delegate to implementation
+      this->set(std::forward<T>(val));     //!< Delegate to implementation
       return *this;
     }
     

@@ -204,8 +204,8 @@ namespace wtl
     virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // Set initial icon
-      if (Icon->exists())
-        Icon->set();
+      if (Icon.exists())
+        Icon.set();
 
       // Pass to base
       return base::onCreate(args); 
