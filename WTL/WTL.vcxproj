@@ -41,6 +41,10 @@
     <ClInclude Include="casts\OpaqueCast.hpp" />
     <ClInclude Include="casts\StaticPtrCast.hpp" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="controls\Button.hpp" />
+    <ClInclude Include="controls\events\ButtonEvents.hpp" />
+    <ClInclude Include="controls\properties\ButtonIconProperty.h" />
+    <ClInclude Include="controls\properties\ButtonIconProperty.hpp" />
     <ClInclude Include="gdi\ImageList.hpp" />
     <ClInclude Include="gdi\StockObjects.hpp" />
     <ClInclude Include="gdi\DeviceContext.hpp" />
@@ -152,7 +156,6 @@
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\SaveDocumentCommand.hpp" />
     <ClInclude Include="windows\ControlEventArgs.hpp" />
-    <ClInclude Include="windows\controls\Button.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
@@ -182,8 +185,6 @@
     <ClInclude Include="windows\properties\EnabledProperty.hpp" />
     <ClInclude Include="windows\properties\FontProperty.h" />
     <ClInclude Include="windows\properties\FontProperty.hpp" />
-    <ClInclude Include="windows\properties\IconProperty.h" />
-    <ClInclude Include="windows\properties\IconProperty.hpp" />
     <ClInclude Include="windows\properties\IdentProperty.h" />
     <ClInclude Include="windows\properties\IdentProperty.hpp" />
     <ClInclude Include="windows\properties\PositionProperty.h" />

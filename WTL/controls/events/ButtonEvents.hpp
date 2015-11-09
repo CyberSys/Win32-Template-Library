@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\StandardControls.hpp
-//! \brief Provides argument/delegate/handler types for events from standard controls 
+//! \file wtl\controls\events\ButtonEvents.hpp
+//! \brief Provides argument/delegate/handler types for events for the standard button control
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_CONTROL_EVENTS_HPP
-#define WTL_CONTROL_EVENTS_HPP
+#ifndef WTL_BUTTON_EVENTS_HPP
+#define WTL_BUTTON_EVENTS_HPP
 
 #include "wtl/WTL.hpp"
 #include "wtl/windows/ControlEventArgs.hpp"       //!< ControlEventArgs,Event
@@ -134,4 +134,4 @@ namespace wtl
   
 } // namespace wtl
 
-#endif // WTL_CONTROL_EVENTS_HPP
+#endif // WTL_BUTTON_EVENTS_HPP

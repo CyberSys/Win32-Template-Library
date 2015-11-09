@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\IconProperty.hpp
+//! \file wtl\windows\controls\ButtonIconProperty.hpp
 //! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_ICON_PROPERTY_HPP
-#define WTL_WINDOW_ICON_PROPERTY_HPP
+#ifndef WTL_BUTTON_ICON_PROPERTY_HPP
+#define WTL_BUTTON_ICON_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/properties/IconProperty.h>     //!< IconPropertyImpl
-#include <wtl/windows/controls/Button.hpp>           //!< Button
+#include <wtl/controls/properties/ButtonIconProperty.h>    //!< ButtonIconPropertyImpl
+#include <wtl/controls/Button.hpp>                         //!< Button
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -21,13 +21,13 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // IconPropertyImpl::get const
+  // ButtonIconPropertyImpl::get const
   //! Get the button icon
   //! 
   //! \return value_t - Current icon if button exists, otherwise initial icon
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename IconPropertyImpl<ENC>::value_t  IconPropertyImpl<ENC>::get() const 
+  typename ButtonIconPropertyImpl<ENC>::value_t  ButtonIconPropertyImpl<ENC>::get() const 
   {
     // Return shared handle
     return base::get();
@@ -36,13 +36,13 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // IconPropertyImpl::set 
+  // ButtonIconPropertyImpl::set 
   //! Set the icon iff button exists, otherwise sets the initial icon
   //! 
   //! \param[in] icon - Button icon
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  IconPropertyImpl<ENC>::set(value_t icon) 
+  void  ButtonIconPropertyImpl<ENC>::set(value_t icon) 
   {
     // [EXISTS] Set icon iff button exists
     if (this->Window.exists())
@@ -55,11 +55,11 @@ namespace wtl
   }
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  // IconPropertyImpl::set 
+  // ButtonIconPropertyImpl::set 
   //! Set the previously assigned icon
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  IconPropertyImpl<ENC>::set() 
+  void  ButtonIconPropertyImpl<ENC>::set() 
   {
     // [EXISTS] Set icon iff button exists
     if (this->exists() && this->Window.exists())
@@ -68,4 +68,4 @@ namespace wtl
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_ICON_PROPERTY_HPP
+#endif // WTL_BUTTON_ICON_PROPERTY_HPP

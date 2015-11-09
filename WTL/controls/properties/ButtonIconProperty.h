@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\IconProperty.hpp
+//! \file wtl\windows\controls\ButtonIconProperty.hpp
 //! \brief Separate class declaration for the Button control 'Icon' property
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_ICON_PROPERTY_H
-#define WTL_WINDOW_ICON_PROPERTY_H
+#ifndef WTL_BUTTON_ICON_PROPERTY_H
+#define WTL_BUTTON_ICON_PROPERTY_H
 
 #include <wtl/WTL.hpp>
 #include <wtl/traits/EncodingTraits.hpp>     //!< Encoding
@@ -23,7 +23,7 @@ namespace wtl
   struct Button;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct IconPropertyImpl - Provides the getters and setters for the 'Icon' window property
+  //! \struct ButtonIconPropertyImpl - Provides the getters and setters for the 'Icon' window property
   //! 
   //! \tparam ENC - Window encoding
   //!
@@ -31,12 +31,12 @@ namespace wtl
   //! \remarks The font is stored as a shared-handle which is not necessarily released when the window is destroyed.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct IconPropertyImpl : PropertyImpl<ENC,HIcon,Button<ENC>>
+  struct ButtonIconPropertyImpl : PropertyImpl<ENC,HIcon,Button<ENC>>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = IconPropertyImpl;
+    using type = ButtonIconPropertyImpl;
 
     //! \alias base - Define base type
     using base = PropertyImpl<ENC,HIcon,Button<ENC>>;
@@ -52,18 +52,18 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // IconPropertyImpl::IconPropertyImpl
+    // ButtonIconPropertyImpl::ButtonIconPropertyImpl
     //! Create window property 
     //! 
     //! \param[in,out] &wnd - Owner window
     /////////////////////////////////////////////////////////////////////////////////////////
-    IconPropertyImpl(window_t& wnd) : base(wnd)
+    ButtonIconPropertyImpl(window_t& wnd) : base(wnd)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // IconPropertyImpl::exist const
+    // ButtonIconPropertyImpl::exist const
     //! Query whether button has an icon
     //! 
     //! \return bool - True iff icon assigned
@@ -74,7 +74,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // IconPropertyImpl::get const
+    // ButtonIconPropertyImpl::get const
     //! Get the button icon
     //! 
     //! \return value_t - Current icon if button exists, otherwise initial icon
@@ -84,7 +84,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // IconPropertyImpl::set 
+    // ButtonIconPropertyImpl::set 
     //! Set the icon iff button exists, otherwise sets the initial icon
     //! 
     //! \param[in] icon - Button icon
@@ -92,7 +92,7 @@ namespace wtl
     void  set(value_t font);
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // IconPropertyImpl::set 
+    // ButtonIconPropertyImpl::set 
     //! Set the previously assigned icon
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set();
@@ -102,14 +102,14 @@ namespace wtl
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias IconProperty - Define button icon property type 
+  //! \alias ButtonIconProperty - Define button icon property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using IconProperty = Property<IconPropertyImpl<ENC>>;
+  using ButtonIconProperty = Property<ButtonIconPropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_ICON_PROPERTY_H
+#endif // WTL_BUTTON_ICON_PROPERTY_H

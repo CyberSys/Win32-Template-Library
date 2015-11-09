@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\Button.hpp
-//! \brief Encapsulates button controls
+//! \file wtl\controls\Button.hpp
+//! \brief Encapsulates standard button controls
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -9,10 +9,10 @@
 #define WTL_BUTTON_HPP
 
 #include "wtl/WTL.hpp"
-#include "wtl/windows/WindowBase.hpp"                 //!< WindowBase
-#include "wtl/windows/events/StandardControls.hpp"    //!< ButtonClickEvent
-#include <wtl/windows/properties/IconProperty.h>      //!< IconProperty
-#include <wtl/gdi/Theme.hpp>                          //!< Theme
+#include "wtl/windows/WindowBase.hpp"                     //!< WindowBase
+#include "wtl/controls/events/ButtonEvents.hpp"           //!< ButtonClickEvent
+#include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
+#include <wtl/gdi/Theme.hpp>                              //!< Theme
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -49,7 +49,7 @@ namespace wtl
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
     // Properties
-    IconProperty<encoding>            Icon;          //!< Icon
+    ButtonIconProperty<encoding>      Icon;          //!< Icon
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -222,16 +222,23 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
+      // debug
+      cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
+
       try
       {
         Theme theme(this->handle(), L"Button");
+        
+        PUSHBUTTONSTATES btnState = (args.State && OwnerDrawState::Focus ? PBS_HOT
+                                  : args.State && OwnerDrawState::Selected ? PBS_PRESSED : PBS_NORMAL);
 
         theme.drawBackground(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, args.Rect);
 
         DrawTextFlags align = DrawTextFlags::Centre|DrawTextFlags::VCentre;
 
-        if (HIcon icon = Icon) {
-          args.Graphics.draw(icon, args.Rect.topLeft(), SizeL(32,32));
+        if (Icon.exists()) 
+        {
+          args.Graphics.draw(Icon, args.Rect.topLeft(), SizeL(32,32));
           align = DrawTextFlags::Right|DrawTextFlags::VCentre;
         }
 
@@ -299,6 +306,6 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/windows/properties/IconProperty.hpp>      //!< IconProperty
+#include <wtl/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
 
 #endif // WTL_BUTTON_HPP
