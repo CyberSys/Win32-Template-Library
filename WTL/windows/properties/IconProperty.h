@@ -1,26 +1,29 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\FontProperty.hpp
-//! \brief Separate class declaration for the 'Font' window property
+//! \file wtl\windows\properties\IconProperty.hpp
+//! \brief Separate class declaration for the Button control 'Icon' property
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_FONT_PROPERTY_H
-#define WTL_WINDOW_FONT_PROPERTY_H
+#ifndef WTL_WINDOW_ICON_PROPERTY_H
+#define WTL_WINDOW_ICON_PROPERTY_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
-#include "wtl/traits/FontTraits.hpp"         //!< HFont
-#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>     //!< Encoding
+#include <wtl/traits/IconTraits.hpp>         //!< HIcon
+#include <wtl/windows/PropertyImpl.hpp>      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
 /////////////////////////////////////////////////////////////////////////////////////////
 namespace wtl 
 {
-  
+  //! Forward declaration
+  template <Encoding ENC>
+  struct Button;
+
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct FontPropertyImpl - Provides the getters and setters for the 'Font' window property
+  //! \struct IconPropertyImpl - Provides the getters and setters for the 'Icon' window property
   //! 
   //! \tparam ENC - Window encoding
   //!
@@ -28,15 +31,15 @@ namespace wtl
   //! \remarks The font is stored as a shared-handle which is not necessarily released when the window is destroyed.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct FontPropertyImpl : PropertyImpl<ENC,HFont>
+  struct IconPropertyImpl : PropertyImpl<ENC,HIcon,Button<ENC>>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = FontPropertyImpl;
+    using type = IconPropertyImpl;
 
     //! \alias base - Define base type
-    using base = PropertyImpl<ENC,HFont>;
+    using base = PropertyImpl<ENC,HIcon,Button<ENC>>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
@@ -49,54 +52,64 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // FontPropertyImpl::FontPropertyImpl
+    // IconPropertyImpl::IconPropertyImpl
     //! Create window property 
     //! 
     //! \param[in,out] &wnd - Owner window
-    //! \param[in] &&... args - Initial font c-tor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    FontPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
+    IconPropertyImpl(window_t& wnd) : base(wnd)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // FontPropertyImpl::get const
-    //! Get the window font
+    // IconPropertyImpl::exist const
+    //! Query whether button has an icon
     //! 
-    //! \return value_t - Current window font if window exists, otherwise initial window font
+    //! \return bool - True iff icon assigned
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool exists() const
+    {
+      return this->Value.exists();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // IconPropertyImpl::get const
+    //! Get the button icon
+    //! 
+    //! \return value_t - Current icon if button exists, otherwise initial icon
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // FontPropertyImpl::set 
-    //! Set the current window font iff window exists. If the window does not exist, this has no affect.
-		//! 
-		//! \param[in] font - Window font
+    // IconPropertyImpl::set 
+    //! Set the icon iff button exists, otherwise sets the initial icon
+    //! 
+    //! \param[in] icon - Button icon
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set(value_t font);
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // FontPropertyImpl::set 
-    //! Set the previously assigned font
+    // IconPropertyImpl::set 
+    //! Set the previously assigned icon
     /////////////////////////////////////////////////////////////////////////////////////////
     void  set();
+
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias FontProperty - Define window font property type 
+  //! \alias IconProperty - Define button icon property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using FontProperty = Property<FontPropertyImpl<ENC>>;
+  using IconProperty = Property<IconPropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_WINDOW_FONT_PROPERTY_H
+#endif // WTL_WINDOW_ICON_PROPERTY_H

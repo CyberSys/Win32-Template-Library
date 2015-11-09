@@ -1,17 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\FontProperty.hpp
-//! \brief Separate implementation for 'Font' window property (resolves circular dependency)
+//! \file wtl\windows\properties\IconProperty.hpp
+//! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_WINDOW_FONT_PROPERTY_HPP
-#define WTL_WINDOW_FONT_PROPERTY_HPP
+#ifndef WTL_WINDOW_ICON_PROPERTY_HPP
+#define WTL_WINDOW_ICON_PROPERTY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/BooleanCast.hpp"                 //!< BooleanCast
-#include "wtl/windows/properties/FontProperty.h"     //!< FontPropertyImpl
-#include "wtl/windows/WindowBase.hpp"                //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/windows/properties/IconProperty.h>     //!< IconPropertyImpl
+#include <wtl/windows/controls/Button.hpp>           //!< Button
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -22,13 +21,13 @@ namespace wtl
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // FontPropertyImpl::get const
-  //! Get the window font
+  // IconPropertyImpl::get const
+  //! Get the button icon
   //! 
-  //! \return value_t - Current font if window exists, otherwise initial font
+  //! \return value_t - Current icon if button exists, otherwise initial icon
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename FontPropertyImpl<ENC>::value_t  FontPropertyImpl<ENC>::get() const 
+  typename IconPropertyImpl<ENC>::value_t  IconPropertyImpl<ENC>::get() const 
   {
     // Return shared handle
     return base::get();
@@ -37,37 +36,36 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // FontPropertyImpl::set 
-  //! Set the current window font iff window exists, otherwise the initial font
+  // IconPropertyImpl::set 
+  //! Set the icon iff button exists, otherwise sets the initial icon
   //! 
-  //! \param[in] font - Window font
+  //! \param[in] icon - Button icon
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  FontPropertyImpl<ENC>::set(value_t font) 
+  void  IconPropertyImpl<ENC>::set(value_t icon) 
   {
-    static constexpr bool redraw = true;
-
-    // [EXISTS] Set font iff window exists
+    // [EXISTS] Set icon iff button exists
     if (this->Window.exists())
-      this->Window.send<WindowMessage::SETFONT>(opaque_cast(font.get()), boolean_cast(redraw)); 
-
+      this->Window.template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(icon.get())); 
+    
     // Updated ref-counted shared handle
-    base::set(font);
-  }
+    base::set(icon);
 
+    // TODO: Clear the bitmap, if any
+  }
+  
   /////////////////////////////////////////////////////////////////////////////////////////
-  // FontPropertyImpl::set 
-  //! Set the previously assigned font
+  // IconPropertyImpl::set 
+  //! Set the previously assigned icon
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  FontPropertyImpl<ENC>::set() 
+  void  IconPropertyImpl<ENC>::set() 
   {
-    static constexpr bool redraw = true;
-
-    // [EXISTS] Set font iff window exists
-    if (this->Window.exists())
-      this->Window.send<WindowMessage::SETFONT>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
+    // [EXISTS] Set icon iff button exists
+    if (this->exists() && this->Window.exists())
+      this->Window.template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(this->Value.get())); 
   }
+      
 } // namespace wtl
 
-#endif // WTL_WINDOW_FONT_PROPERTY_HPP
+#endif // WTL_WINDOW_ICON_PROPERTY_HPP

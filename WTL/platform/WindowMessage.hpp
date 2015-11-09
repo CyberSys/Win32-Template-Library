@@ -289,6 +289,23 @@ namespace wtl
   template <> struct is_contiguous<WindowMessage> : std::false_type {};
   template <> struct default_t<WindowMessage>     : std::integral_constant<WindowMessage,WindowMessage::NONE>   {};
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::window_msg constexpr
+  //! Convert integral/enumeration type into a window message enumeration
+  //!
+  //! \tparam VALUE - Integral or enumeration type
+  //! 
+  //! \param[in] msg - Value representing a window message
+  //! \return WindowMessage - WindowMessage representation of 'msg'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename VALUE, typename = enable_if_numeric_t<VALUE>> constexpr
+  WindowMessage  window_msg(VALUE msg) 
+  {
+    // Convert into underlying type then cast to enumeration
+    return enum_cast<WindowMessage>( static_cast<std::underlying_type_t<WindowMessage>>(msg) );
+  }
+
 
   //! \enum MsgRoute - Defines how a message was handled
   enum class MsgRoute

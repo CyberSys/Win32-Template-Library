@@ -25,20 +25,21 @@ namespace wtl
   //! 
   //! \tparam ENC - Window encoding
   //! \tparam VALUE - Value type
+  //! \tparam WINDOW - [optional] Window type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename VALUE>
+  template <Encoding ENC, typename VALUE, typename WINDOW = WindowBase<ENC>>
   struct PropertyImpl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias type - Define own type
-    using type = PropertyImpl<ENC, VALUE>;
+    using type = PropertyImpl<ENC, VALUE, WINDOW>;
     
     //! \alias value_t - Define value type
     using value_t = VALUE;
 
     //! \alias window_t - Define window type
-    using window_t = WindowBase<ENC>;
+    using window_t = WINDOW;
     
     //! \var encoding - Define window character encoding
     static constexpr Encoding encoding = ENC;

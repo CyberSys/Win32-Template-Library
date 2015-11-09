@@ -67,7 +67,7 @@ namespace wtl
     //! \throw wtl::platform_error - Failed to allocate handle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    static NativeHandle<::HICON> create(HINSTANCE instance, ResourceId<ENC> ident) 
+    static NativeHandle<::HICON> create(::HINSTANCE instance, ResourceId<ENC> ident) 
     { 
       // Load icon handle
       if (::HICON icon = WinAPI<ENC>::loadIcon(instance, ident))

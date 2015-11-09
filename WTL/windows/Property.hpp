@@ -143,6 +143,17 @@ namespace wtl
     {
       return Impl.get();
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator-> 
+    //! Another value accessor using function operator syntax
+    //! 
+    //! \return implementation_t* - Pointer to implementation
+    /////////////////////////////////////////////////////////////////////////////////////////
+    implementation_t* operator ->() 
+    {
+      return &Impl;
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 

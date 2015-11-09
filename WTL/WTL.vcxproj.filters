@@ -302,9 +302,6 @@
     <ClInclude Include="traits\BuildTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
-    <ClInclude Include="windows\skins\SkinFactory.hpp">
-      <Filter>Windows\Skins</Filter>
-    </ClInclude>
     <ClInclude Include="platform\MenuFlags.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -571,6 +568,21 @@
     </ClInclude>
     <ClInclude Include="traits\ImageListTraits.hpp">
       <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowSkin.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\skins\ClassicSkin.hpp">
+      <Filter>Windows\Skins</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\skins\ThemedSkin.hpp">
+      <Filter>Windows\Skins</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\IconProperty.h">
+      <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\properties\IconProperty.hpp">
+      <Filter>Windows\Properties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

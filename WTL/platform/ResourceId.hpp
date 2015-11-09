@@ -71,10 +71,10 @@ namespace wtl
     //! 
     //! \param[in] id - 16-bit ordinal representation
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr
-    ResourceId(uint16_t id) 
+    template <typename IDENT, typename = enable_if_numeric_t<IDENT>> constexpr
+    ResourceId(IDENT id) 
     {
-      Value.Numeral = id;
+      Value.Numeral = static_cast<uint16_t>(id);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

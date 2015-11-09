@@ -120,6 +120,27 @@ namespace wtl
   template <> struct default_t<ButtonNotification>     : std::integral_constant<ButtonNotification,ButtonNotification::Click>   {};
   
   // --------------------------------------------------------------------------------------------------------------
+  
+  //! \enum ButtonMessage - Defines standard Button messages
+  enum class ButtonMessage : ulong32_t
+  {
+    GetCheck		 = 0x00F0,			//!< [Windows 3.11] 
+    SetCheck		 = 0x00F1,			//!< [Windows 3.11] 
+    GetState		 = 0x00F2,			//!< [Windows 3.11] 
+    SetState		 = 0x00F3,			//!< [Windows 3.11] 
+    SetStyle		 = 0x00F4,			//!< [Windows 3.11] 
+    Click		     = 0x00F5,			//!< [Windows 95] 
+    GetImage		 = 0x00F6,			//!< [Windows 95] 
+    SetImage		 = 0x00F7,			//!< [Windows 95] 
+    SetDontClick = 0x00F8,			//!< [Windows 6.00] 
+  };
+
+  //! Define traits: Contiguous enumeration
+  template <> struct is_attribute<ButtonMessage>  : std::false_type  {};
+  template <> struct is_contiguous<ButtonMessage> : std::true_type   {};
+  template <> struct default_t<ButtonMessage>     : std::integral_constant<ButtonMessage,ButtonMessage::GetCheck>   {};
+  
+  // --------------------------------------------------------------------------------------------------------------
   // -------------------------------------------------- EDIT CONTROLS ---------------------------------------------
   // --------------------------------------------------------------------------------------------------------------
 

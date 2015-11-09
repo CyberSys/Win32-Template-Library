@@ -263,7 +263,7 @@ namespace wtl
         theme.drawBackground(args.Graphics, MENU_BARITEM, itemState, args.Rect);
 
         //! Draw item
-        theme.drawText(args.Graphics, MENU_BARITEM, itemState, group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+        theme.write(args.Graphics, MENU_BARITEM, itemState, group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
       }
 
       // [COMMAND] Draw pop-up menu item
@@ -291,7 +291,7 @@ namespace wtl
         
         //! Draw background + command name
         theme.drawBackground(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
-        theme.drawText(args.Graphics, MENU_POPUPITEM, itemState, command->name(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre);
+        theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre);
       }
 
       // Handled

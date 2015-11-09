@@ -206,6 +206,17 @@ namespace wtl
   using enable_if_integral_t = std::enable_if_t<std::is_integral<T>::value, RET>;
 
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct enable_if_numeric_t - Defines an SFINAE expression requiring an integer or enumeration type [Discards boolean]
+  //!
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename E, typename RET = void>
+  using enable_if_numeric_t = std::enable_if_t<(std::is_enum<E>::value 
+                                            || std::is_integral<E>::value)
+                                            && !std::is_same<E,bool>::value, RET>;
+  
   
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_same_t - Defines an SFINAE expression requiring a specific type

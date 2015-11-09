@@ -100,26 +100,6 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::drawText const
-    //! Draws text using the color and font defined by the visual style.
-    //!
-    //! \param[in] const& dc - Target device context
-    //! \param[in] part - Part to draw. If this value is 0, the text is drawn in the default font, or a font selected into the device context.
-    //! \param[in] state - State of specified part
-    //! \param[in] const& txt - Text to draw
-    //! \param[in] const& rc - Drawing rectangle
-    //! \param[in] flags - Drawing flags (Note: DT_CALCRECT is not supported)
-    //! 
-    //! \throw wtl::platform_error - Unable to draw text
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename PART, typename STATE>
-    void drawText(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags) const
-    {
-      if (!HResult(::DrawThemeText(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), 0, const_cast<RectL&>(rc))))
-        throw platform_error(HERE, "Unable to draw themed control text");
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Theme::getContentRect const
     //! Retrieves the size of the content area for the background defined by the visual style.
     //!
@@ -156,7 +136,27 @@ namespace wtl
       if (!HResult(::GetThemeMargins(Handle, dc.handle(), part, state, prop, nullptr, &margins)))
         throw platform_error(HERE, "Unable to query themed control margins");
     }
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Theme::write const
+    //! Draws text using the color and font defined by the visual style.
+    //!
+    //! \param[in] const& dc - Target device context
+    //! \param[in] part - Part to draw. If this value is 0, the text is drawn in the default font, or a font selected into the device context.
+    //! \param[in] state - State of specified part
+    //! \param[in] const& txt - Text to draw
+    //! \param[in] const& rc - Drawing rectangle
+    //! \param[in] flags - Drawing flags (Note: DT_CALCRECT is not supported)
+    //! 
+    //! \throw wtl::platform_error - Unable to draw text
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename PART, typename STATE>
+    void write(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags) const
+    {
+      if (!HResult(::DrawThemeText(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), 0, const_cast<RectL&>(rc))))
+        throw platform_error(HERE, "Unable to draw themed control text");
+    }
+    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
   };

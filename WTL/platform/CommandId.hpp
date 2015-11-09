@@ -113,16 +113,16 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::command_id
+  //! wtl::command_id constexpr
   //! Convert integral/enumeration type into a CommandId
   //!
-  //! \tparam TYPE - Integral or enumeration type
+  //! \tparam VALUE - Integral or enumeration type
   //! 
   //! \param[in] id - Value representing command id
   //! \return CommandId - CommandId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
-  CommandId  command_id(VALUE id)
+  template <typename VALUE, typename = enable_if_numeric_t<VALUE>> constexpr
+  CommandId  command_id(VALUE id) 
   {
     // Convert into underlying type then cast to enumeration
     return enum_cast<CommandId>( static_cast<std::underlying_type_t<CommandId>>(id) );
@@ -150,15 +150,15 @@ namespace wtl
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! wtl::command_group_id
-  //! Convert integral/enumeration type into a CommandGroupId
+  //! wtl::command_group_id constexpr
+  //! Convert any integral/enumeration type into a CommandGroupId
   //!
-  //! \tparam TYPE - Integral or enumeration type
+  //! \tparam VALUE - Integral or enumeration type
   //! 
   //! \param[in] id - Value representing command group id
   //! \return CommandGroupId - CommandGroupId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
+  template <typename VALUE, typename = enable_if_numeric_t<VALUE>> constexpr
   CommandGroupId  command_group_id(VALUE id)
   {
     // Convert into underlying type then cast to enumeration

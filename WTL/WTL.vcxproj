@@ -182,6 +182,8 @@
     <ClInclude Include="windows\properties\EnabledProperty.hpp" />
     <ClInclude Include="windows\properties\FontProperty.h" />
     <ClInclude Include="windows\properties\FontProperty.hpp" />
+    <ClInclude Include="windows\properties\IconProperty.h" />
+    <ClInclude Include="windows\properties\IconProperty.hpp" />
     <ClInclude Include="windows\properties\IdentProperty.h" />
     <ClInclude Include="windows\properties\IdentProperty.hpp" />
     <ClInclude Include="windows\properties\PositionProperty.h" />
@@ -202,11 +204,13 @@
     <ClInclude Include="windows\properties\VisibilityProperty.hpp" />
     <ClInclude Include="windows\Property.hpp" />
     <ClInclude Include="windows\PropertyImpl.hpp" />
-    <ClInclude Include="windows\skins\SkinFactory.hpp" />
+    <ClInclude Include="windows\skins\ClassicSkin.hpp" />
+    <ClInclude Include="windows\skins\ThemedSkin.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />
     <ClInclude Include="windows\WindowMenu.hpp" />
+    <ClInclude Include="windows\WindowSkin.hpp" />
     <ClInclude Include="WTL.hpp" />
   </ItemGroup>
   <ItemGroup>

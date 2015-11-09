@@ -31,6 +31,7 @@
 #include "wtl/windows/Property.hpp"                               //!< Property
 #include "wtl/windows/WindowClass.hpp"                            //!< WindowClass
 #include "wtl/windows/WindowMenu.hpp"                             //!< WindowMenu
+#include "wtl/windows/WindowSkin.hpp"                             //!< IWindowSkin
 #include "wtl/windows/events/CommandEvent.hpp"                    //!< CommandEvent
 #include "wtl/windows/events/CloseWindowEvent.hpp"                //!< CloseWindowEvent
 #include "wtl/windows/events/CreateWindowEvent.hpp"               //!< CreateWindowEven
@@ -136,6 +137,9 @@ namespace wtl
     //! \alias wndclass_t - Window class type
     using wndclass_t = WindowClass<encoding>;
     
+    //! \alias wndskin_t - Window skin type
+    using wndskin_t = IWindowSkin<encoding>;
+
     //! \alias wndmenu_t - Window menu type
     using wndmenu_t = WindowMenu<encoding>;
 
@@ -289,37 +293,38 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
-    CommandEvent<encoding>               Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
-    CreateWindowEvent<encoding>         Create;        //!< Raised in response to WM_CREATE
-    CloseWindowEvent<encoding>          Close;         //!< Raised in response to WM_CLOSE
-    DestroyWindowEvent<encoding>        Destroy;       //!< Raised in response to WM_DESTROY
-    PaintWindowEvent<encoding>          Paint;         //!< Raised in response to WM_PAINT
-    ShowWindowEvent<encoding>           Show;          //!< Raised in response to WM_SHOWWINDOW
-    PositionChangedEvent<encoding>      Repositioned;  //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
+    CommandEvent<encoding>              Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
+    CreateWindowEvent<encoding>         Create;         //!< Raised in response to WM_CREATE
+    CloseWindowEvent<encoding>          Close;          //!< Raised in response to WM_CLOSE
+    DestroyWindowEvent<encoding>        Destroy;        //!< Raised in response to WM_DESTROY
+    PaintWindowEvent<encoding>          Paint;          //!< Raised in response to WM_PAINT
+    ShowWindowEvent<encoding>           Show;           //!< Raised in response to WM_SHOWWINDOW
+    PositionChangedEvent<encoding>      Repositioned;   //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
-    CommandQueue<encoding>               Commands;       //!< Commands queue
-    ChildWindowCollection               Children;      //!< Child window collection
-    WindowMenu<encoding>                Menu;          //!< Window menu, possibly empty
+    CommandQueue<encoding>              ActionQueue;    //!< GUI Command queue
+    ChildWindowCollection               Children;       //!< Child window collection
+    WindowMenu<encoding>                Menu;           //!< Window menu, possibly empty
 
     // Properties
-    ClientRectProperty<encoding>        ClientRect;    //!< Client rectangle property
-    EnabledProperty<encoding>           Enabled;       //!< Window enabled property
-    FontProperty<encoding>              Font;          //!< Window font property
-    IdentProperty<encoding>             Ident;         //!< Child Window Id property
-    PositionProperty<encoding>          Position;      //!< Window position property
-    SizeProperty<encoding>              Size;          //!< Window size property
-    StyleProperty<encoding>             Style;         //!< Window style property
-    StyleExProperty<encoding>           StyleEx;       //!< Extended window style property
-    TextProperty<encoding>              Text;          //!< Window text property
-    TextLengthProperty<encoding>        TextLength;    //!< Window text length property
-    VisibilityProperty<encoding>        Visible;       //!< Visibility property
-    WindowRectProperty<encoding>        WindowRect;    //!< Window rectangle property
+    ClientRectProperty<encoding>        ClientRect;     //!< Client rectangle property
+    EnabledProperty<encoding>           Enabled;        //!< Window enabled property
+    FontProperty<encoding>              Font;           //!< Window font property
+    IdentProperty<encoding>             Ident;          //!< Child Window Id property
+    PositionProperty<encoding>          Position;       //!< Window position property
+    SizeProperty<encoding>              Size;           //!< Window size property
+    StyleProperty<encoding>             Style;          //!< Window style property
+    StyleExProperty<encoding>           StyleEx;        //!< Extended window style property
+    TextProperty<encoding>              Text;           //!< Window text property
+    TextLengthProperty<encoding>        TextLength;     //!< Window text length property
+    VisibilityProperty<encoding>        Visible;        //!< Visibility property
+    WindowRectProperty<encoding>        WindowRect;     //!< Window rectangle property
 
   protected:
-    WindowClass<encoding>&              Class;         //!< Window class reference
-    HWnd                                Handle;        //!< Window handle
-    SubClassCollection                  SubClasses;    //!< Sub-classed windows collection
+    WindowClass<encoding>&              Class;          //!< Window class reference
+    IWindowSkin<encoding>*              Skin;           //!<
+    HWnd                                Handle;         //!< Window handle
+    SubClassCollection                  SubClasses;     //!< Sub-classed windows collection
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public: 
@@ -333,10 +338,11 @@ namespace wtl
                                   ClientRect(*this),
                                   Children(*this),
                                   Enabled(*this, true),
-                                  Font(*this),
+                                  Font(*this, StockFont::Window),
                                   Ident(*this, zero<WindowId>()),
                                   Handle(defvalue<HWnd>()),
                                   Position(*this, DefaultPosition),
+                                  Skin(nullptr /*::IsAppThemed() ? ThemedSkin::Instance : ClassicSkin::Instance*/),
                                   Size(*this, DefaultSize),
                                   Style(*this, WindowStyle::OverlappedWindow),
                                   Text(*this),
@@ -367,7 +373,7 @@ namespace wtl
                                               ClientRect(*this),
                                               Children(*this),
                                               Enabled(*this, true),
-                                              Font(*this),
+                                              Font(*this, StockObject::SystemFont),
                                               Ident(*this, defvalue<WindowId>()),
                                               Handle(wnd, AllocType::WeakRef),
                                               Position(*this, DefaultPosition),
@@ -440,7 +446,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::WndProc
-    //! Class window procedure 
+    //! Class window procedure which receives messages dispatched by the system
     //!
     //! \param[in] hWnd - Window handle
     //! \param[in] message - Message ident
@@ -678,7 +684,7 @@ namespace wtl
     { 
       // Lookup command and execute 
       if (auto cmd = CommandGroups.find(id))
-        Commands.execute(cmd->clone());
+        ActionQueue.execute(cmd->clone());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -722,6 +728,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
+      // Set initial font
+      Font->set();
+
       // [Handled] Accept parameters
       return 0; 
     }

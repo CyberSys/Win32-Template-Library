@@ -11,6 +11,7 @@
 #include "wtl/WTL.hpp"
 #include "wtl/windows/WindowBase.hpp"                 //!< WindowBase
 #include "wtl/windows/events/StandardControls.hpp"    //!< ButtonClickEvent
+#include <wtl/windows/properties/IconProperty.h>      //!< IconProperty
 #include <wtl/gdi/Theme.hpp>                          //!< Theme
 
 //! \namespace wtl - Windows template library
@@ -47,6 +48,9 @@ namespace wtl
     OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
+    // Properties
+    IconProperty<encoding>            Icon;          //!< Icon
+
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +61,8 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    Button(::HINSTANCE instance) : base(getClass(instance))
+    Button(::HINSTANCE instance) : base(getClass(instance)),
+                                   Icon(*this)
     {
       // Set properties
       this->Style = WindowStyle::ChildWindow | ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
@@ -91,12 +96,11 @@ namespace wtl
       this->Paint.clear();
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::~Button
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Button()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+  public:
+    DISABLE_COPY(Button);     //!< Cannot be copied
+    ENABLE_MOVE(Button);      //!< Can be moved
+    ENABLE_POLY(Button);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   
@@ -176,7 +180,7 @@ namespace wtl
         case WindowMessage::REFLECT_MEASUREITEM:  { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  ret = OwnerMeasure.raise(args); }  break;
         }
 
-        // [UNHANDLED] Return result & routing
+        // [UNHANDLED] Pass to default window procedure
         return base::route(message, w, l);
       }
       catch (std::exception& e)
@@ -189,6 +193,23 @@ namespace wtl
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onCreate
+    //! Called during window creation to modify window parameters and create child windows
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Message result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
+    { 
+      // Set initial icon
+      if (Icon->exists())
+        Icon->set();
+
+      // Pass to base
+      return base::onCreate(args); 
+    }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
@@ -206,7 +227,15 @@ namespace wtl
         Theme theme(this->handle(), L"Button");
 
         theme.drawBackground(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, args.Rect);
-        theme.drawText(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
+
+        DrawTextFlags align = DrawTextFlags::Centre|DrawTextFlags::VCentre;
+
+        if (HIcon icon = Icon) {
+          args.Graphics.draw(icon, args.Rect.topLeft(), SizeL(32,32));
+          align = DrawTextFlags::Right|DrawTextFlags::VCentre;
+        }
+
+        theme.write(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, align);
       }
       catch (const std::exception&)
       {
@@ -238,9 +267,38 @@ namespace wtl
       // Handled
       return 0;
     }
+    
+    using base::send;
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::send
+    //! Sends a message to the window
+    //! 
+    //! \tparam WM - Window Message 
+    //!
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
+    //! \return LResult - Message result & routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <ButtonMessage BM> 
+    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
+    {
+      return send_message<encoding,window_msg(BM)>(Handle, w, l);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::set
+    //! Set the button icon
+    //! 
+    //! \param[in] const& icon - Shared icon handle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    /*void set(const HIcon& icon)
+    {
+      this->template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(icon.get()));
+      Icon = icon;
+    }*/
   };
-
-
 } // namespace wtl
+
+#include <wtl/windows/properties/IconProperty.hpp>      //!< IconProperty
 
 #endif // WTL_BUTTON_HPP
