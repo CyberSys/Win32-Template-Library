@@ -59,6 +59,7 @@ namespace wtl
     int32_t           Item;             //!< Zero-based item index
     RectL             Rect;             //!< Drawing/update rectangle
     HWnd              Sender;           //!< Control handle
+    OwnerDrawState    State;            //!< State of item being drawn
     
     // ------------------------------------- CONSTRUCTION -----------------------------------
 
@@ -78,7 +79,8 @@ namespace wtl
                                                Rect(Data.rcItem),
                                                Item(Data.itemID), 
                                                Ident(static_cast<WindowId>(Data.CtlID)), 
-                                               Sender(Data.hwndItem, AllocType::WeakRef)
+                                               Sender(Data.hwndItem, AllocType::WeakRef),
+                                               State(static_cast<OwnerDrawState>(Data.itemState))
     {
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
     }
