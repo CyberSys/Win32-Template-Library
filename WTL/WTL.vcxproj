@@ -45,6 +45,8 @@
     <ClInclude Include="controls\events\ButtonEvents.hpp" />
     <ClInclude Include="controls\properties\ButtonIconProperty.h" />
     <ClInclude Include="controls\properties\ButtonIconProperty.hpp" />
+    <ClInclude Include="controls\properties\ButtonStateProperty.h" />
+    <ClInclude Include="controls\properties\ButtonStateProperty.hpp" />
     <ClInclude Include="gdi\ImageList.hpp" />
     <ClInclude Include="gdi\StockObjects.hpp" />
     <ClInclude Include="gdi\DeviceContext.hpp" />

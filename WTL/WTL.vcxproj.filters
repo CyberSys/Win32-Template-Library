@@ -596,6 +596,12 @@
     <ClInclude Include="controls\events\ButtonEvents.hpp">
       <Filter>Controls\Events</Filter>
     </ClInclude>
+    <ClInclude Include="controls\properties\ButtonStateProperty.h">
+      <Filter>Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\properties\ButtonStateProperty.hpp">
+      <Filter>Controls\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
