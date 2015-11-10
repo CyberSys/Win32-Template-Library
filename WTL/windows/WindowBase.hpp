@@ -103,6 +103,14 @@ namespace wtl
     // Convert into underlying type then cast to enumeration
     return enum_cast<WindowId>( static_cast<std::underlying_type_t<WindowId>>(id) );
   }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ColourProperty - Define property type used to represent colours
+  //! 
+  //! \tparam ENC - Window encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using ColourProperty = Property<PropertyImpl<ENC,Colour>>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct WindowBase - Base for all window types
@@ -316,6 +324,7 @@ namespace wtl
     StyleProperty<encoding>             Style;          //!< Window style property
     StyleExProperty<encoding>           StyleEx;        //!< Extended window style property
     TextProperty<encoding>              Text;           //!< Window text property
+    //ColourProperty<encoding>            TextColour;     //!< Window text colour
     TextLengthProperty<encoding>        TextLength;     //!< Window text length property
     VisibilityProperty<encoding>        Visible;        //!< Visibility property
     WindowRectProperty<encoding>        WindowRect;     //!< Window rectangle property
@@ -724,12 +733,12 @@ namespace wtl
     //! Called during window creation to modify window parameters and create child windows
     //! 
     //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
+    //! \return LResult - Returns 0 to accept window creation
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // Set initial font
-      Font.set();
+      //Font.set();
 
       // [Handled] Accept parameters
       return 0; 
@@ -800,9 +809,10 @@ namespace wtl
         switch (message)
         {
         // [CREATE] Create window
-        case WindowMessage::CREATE: 
-          { CreateWindowEventArgs<encoding> args(w,l); ret = Create.raise(args); }      //!< [Pass arguments by reference]
-          break;
+        case WindowMessage::CREATE: { 
+            CreateWindowEventArgs<encoding> args(w,l); //!< [Pass arguments by reference]
+            ret = Create.raise(args); 
+          } break;
 
         // [CLOSE/DESTROY/SHOW/MOVE] 
         case WindowMessage::CLOSE:            ret = Close.raise();                                                  break;

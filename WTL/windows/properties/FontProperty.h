@@ -9,9 +9,10 @@
 #define WTL_WINDOW_FONT_PROPERTY_H
 
 #include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
-#include "wtl/traits/FontTraits.hpp"         //!< HFont
-#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
+#include "wtl/traits/EncodingTraits.hpp"              //!< Encoding
+#include "wtl/traits/FontTraits.hpp"                  //!< HFont
+#include "wtl/windows/PropertyImpl.hpp"               //!< PropertyImpl
+#include "wtl/windows/events/CreateWindowEvent.hpp"   //!< CreateWindowEventArgs
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -57,7 +58,10 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
     FontPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
-    {}
+    {
+      // Register creation handler to set initial font
+      wnd.Create += new CreateWindowEventHandler<encoding>(this, &type::onCreate);
+    }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
@@ -80,10 +84,13 @@ namespace wtl
     void  set(value_t font);
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // FontPropertyImpl::set 
-    //! Set the previously assigned font
+    // FontPropertyImpl::onCreate
+    //! Called during window creation to set the initial font
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Returns 0 to accept window creation
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  set();
+    LResult  onCreate(CreateWindowEventArgs<encoding>& args);
   };
 
   

@@ -129,9 +129,9 @@ namespace wtl
     GetState		 = 0x00F2,			//!< [Windows 3.11] 
     SetState		 = 0x00F3,			//!< [Windows 3.11] 
     SetStyle		 = 0x00F4,			//!< [Windows 3.11] 
-    Click		     = 0x00F5,			//!< [Windows 95] 
-    GetImage		 = 0x00F6,			//!< [Windows 95] 
-    SetImage		 = 0x00F7,			//!< [Windows 95] 
+    Click		     = 0x00F5,			//!< [Windows 4.00] 
+    GetImage		 = 0x00F6,			//!< [Windows 4.00] 
+    SetImage		 = 0x00F7,			//!< [Windows 4.00] 
     SetDontClick = 0x00F8,			//!< [Windows 6.00] 
   };
 
@@ -139,6 +139,25 @@ namespace wtl
   template <> struct is_attribute<ButtonMessage>  : std::false_type  {};
   template <> struct is_contiguous<ButtonMessage> : std::true_type   {};
   template <> struct default_t<ButtonMessage>     : std::integral_constant<ButtonMessage,ButtonMessage::GetCheck>   {};
+  
+  // ----
+  
+  //! \enum ButtonState - Defines Button control states
+  enum class ButtonState : ulong32_t
+  {
+    Checked		      = BST_CHECKED,		      //!< [Windows 4.00] The button is checked.
+    Unchecked		    = BST_UNCHECKED,		    //!< [Windows 4.00] No special state. Equivalent to zero.
+    Indeterminate		= BST_INDETERMINATE,		//!< [Windows 4.00] The state of the button is indeterminate. Applies only if the button has the BS_3STATE or BS_AUTO3STATE style.
+    Pushed		      = BST_PUSHED,		        //!< [Windows 4.00] The button is being shown in the pushed state.
+    Focus		        = BST_FOCUS,		        //!< [Windows 4.00] The button has the keyboard focus.
+    Hot		          = BST_HOT,		          //!< [Windows 5.01] The button is hot; that is, the mouse is hovering over it.
+    DropDownPushed	= 0x0400,		            //!< [Windows 6.00] Windows Vista. The button is in the drop-down state. Applies only if the button has the TBSTYLE_DROPDOWN style.
+  };
+
+  //! Define traits: Non-contiguous attribute enumeration
+  template <> struct is_attribute<ButtonState>  : std::true_type  {};
+  template <> struct is_contiguous<ButtonState> : std::false_type {};
+  template <> struct default_t<ButtonState>     : std::integral_constant<ButtonState,ButtonState::Unchecked>   {};
   
   // --------------------------------------------------------------------------------------------------------------
   // -------------------------------------------------- EDIT CONTROLS ---------------------------------------------

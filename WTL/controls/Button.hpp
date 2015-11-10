@@ -12,6 +12,7 @@
 #include "wtl/windows/WindowBase.hpp"                     //!< WindowBase
 #include "wtl/controls/events/ButtonEvents.hpp"           //!< ButtonClickEvent
 #include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
+#include <wtl/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
 #include <wtl/gdi/Theme.hpp>                              //!< Theme
 
 //! \namespace wtl - Windows template library
@@ -50,19 +51,21 @@ namespace wtl
 
     // Properties
     ButtonIconProperty<encoding>      Icon;          //!< Icon
+    ButtonStateProperty<encoding>     State;         //!< State
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::Button
-    //! Creates a standard button control
+    //! Creates the window object for a standard button control (without creating the window handle)
     //! 
     //! \param[in] instance - Owning instance
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
     Button(::HINSTANCE instance) : base(getClass(instance)),
-                                   Icon(*this)
+                                   Icon(*this),
+                                   State(*this)
     {
       // Set properties
       this->Style = WindowStyle::ChildWindow | ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
@@ -81,7 +84,7 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::Button
-    //! Creates a custom button control
+    //! Creates the window object for a custom button control (without creating the window handle)
     //! 
     //! \param[in] &custom - Custom window class
     //! 
@@ -201,15 +204,11 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
-    { 
-      // Set initial icon
-      if (Icon.exists())
-        Icon.set();
-
-      // Pass to base
-      return base::onCreate(args); 
-    }
+    //virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
+    //{ 
+    //  // Pass to base
+    //  return base::onCreate(args); 
+    //}
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
@@ -227,22 +226,47 @@ namespace wtl
 
       try
       {
-        Theme theme(this->handle(), L"Button");
         
-        PUSHBUTTONSTATES btnState = (args.State && OwnerDrawState::Focus ? PBS_HOT
-                                  : args.State && OwnerDrawState::Selected ? PBS_PRESSED : PBS_NORMAL);
+        //ButtonState state = State;
+        PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
+                                 : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
+                                 : args.State && OwnerDrawState::Hotlight ? PBS_HOT
+                                                                          : PBS_NORMAL);
+        
+        //PUSHBUTTONSTATES state;
+        RectL rc = args.Rect;
 
-        theme.drawBackground(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, args.Rect);
+        // Determine state
+        /*if (!this->Enabled)
+          state = PBS_DISABLED;
+        else 
+          switch (this->State)
+          {
+          default:                                                        state = PBS_NORMAL;  break;
+          case ButtonState::Hot:                                          state = PBS_HOT;     break;
+          case ButtonState::Focus:                                        state = PBS_NORMAL;  break;
+          case ButtonState::Pushed:                                       state = PBS_PRESSED; break;
+          case ButtonState::Focus|ButtonState::Hot:                       state = PBS_HOT;     break;
+          case ButtonState::Pushed|ButtonState::Hot:                      state = PBS_PRESSED; break;
+          case ButtonState::Pushed|ButtonState::Focus|ButtonState::Hot:   state = PBS_PRESSED; break;
+          }*/
+        
+        Theme theme(this->handle(), L"Button");
 
-        DrawTextFlags align = DrawTextFlags::Centre|DrawTextFlags::VCentre;
+        // Background
+        theme.drawBackground(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
 
+        // Pressed: Offset drawing rect
+        if (state == PBS_PRESSED)
+          rc += PointL(1,1);
+
+        // Icon
         if (Icon.exists()) 
-        {
-          args.Graphics.draw(Icon, args.Rect.topLeft(), SizeL(32,32));
-          align = DrawTextFlags::Right|DrawTextFlags::VCentre;
-        }
+          args.Graphics.draw(Icon, rc.topLeft(), SizeL(32,32));
 
-        theme.write(args.Graphics, BP_PUSHBUTTON, PBS_NORMAL, this->Text(), args.Rect, align);
+        // Text
+        DrawTextFlags flags = DrawTextFlags::VCentre & (Icon.exists() ? DrawTextFlags::Right : DrawTextFlags::Centre);
+        theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rc, flags);
       }
       catch (const std::exception&)
       {
@@ -307,5 +331,6 @@ namespace wtl
 } // namespace wtl
 
 #include <wtl/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
+#include <wtl/controls/properties/ButtonStateProperty.hpp>     //!< StateProperty
 
 #endif // WTL_BUTTON_HPP

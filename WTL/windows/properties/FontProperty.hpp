@@ -56,17 +56,23 @@ namespace wtl
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // FontPropertyImpl::set 
-  //! Set the previously assigned font
+  // FontPropertyImpl::onCreate 
+  //! Called during window creation to set the initial font
+  //! 
+  //! \param[in,out] &args - Message arguments 
+  //! \return LResult - Returns 0 to accept window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  FontPropertyImpl<ENC>::set() 
+  LResult FontPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<encoding>& args)
   {
     static constexpr bool redraw = true;
 
     // [EXISTS] Set font iff window exists
     if (this->Window.exists())
       this->Window.send<WindowMessage::SETFONT>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
+
+    // [Accept window creation]
+    return 0;
   }
 } // namespace wtl
 

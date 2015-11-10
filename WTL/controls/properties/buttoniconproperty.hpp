@@ -36,6 +36,24 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
+  // ButtonIconPropertyImpl::onCreate 
+  //! Called during button creation to set the initial icon
+  //! 
+  //! \param[in,out] &args - Message arguments 
+  //! \return LResult - Returns 0 to accept button creation
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  LResult  ButtonIconPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<encoding>& args)
+  {
+    // [EXISTS] Set icon iff button exists
+    if (this->exists() && this->Window.exists())
+      this->Window.template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(this->Value.get())); 
+
+    // Accept button creation
+    return 0;
+  }
+    
+  /////////////////////////////////////////////////////////////////////////////////////////
   // ButtonIconPropertyImpl::set 
   //! Set the icon iff button exists, otherwise sets the initial icon
   //! 
@@ -54,18 +72,7 @@ namespace wtl
     // TODO: Clear the bitmap, if any
   }
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // ButtonIconPropertyImpl::set 
-  //! Set the previously assigned icon
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  void  ButtonIconPropertyImpl<ENC>::set() 
-  {
-    // [EXISTS] Set icon iff button exists
-    if (this->exists() && this->Window.exists())
-      this->Window.template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(this->Value.get())); 
-  }
-      
+    
 } // namespace wtl
 
 #endif // WTL_BUTTON_ICON_PROPERTY_HPP

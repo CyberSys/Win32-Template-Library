@@ -245,7 +245,7 @@ namespace wtl
     virtual LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args)
     {   
       // debug
-      cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
+      //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
       // [GROUP] Draw menu-bar item 
       if (CommandGroupPtr<encoding> group = find(command_group_id(args.Ident)))
@@ -314,8 +314,8 @@ namespace wtl
         args.Size = args.Graphics.measure(group->name());
         
         // debug
-        cdebug << object_info(__func__, "group", (int32_t)args.Ident, 
-                                        "size", args.Size) << endl;
+        //cdebug << object_info(__func__, "group", (int32_t)args.Ident, 
+        //                                "size", args.Size) << endl;
       }
 
       // [ITEM] Lookup Command
@@ -335,9 +335,9 @@ namespace wtl
         args.Size.Width += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));
 
         // debug
-        cdebug << object_info(__func__, "command", (int32_t)args.Ident, 
-                                        "size", args.Size, 
-                                        "name", command->name()) << endl;
+        //cdebug << object_info(__func__, "command", (int32_t)args.Ident, 
+        //                                "size", args.Size, 
+        //                                "name", command->name()) << endl;
       }
         
       // Handled

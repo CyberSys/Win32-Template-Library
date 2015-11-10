@@ -140,14 +140,25 @@ namespace wtl
     template <typename A, typename B> constexpr
     static Rect FromMidPoint(const Point<A>&  middle, const Size<B>& size)
     {
-      return  Rect(static_cast<value_t>(middle.x) - (size.Width / 2),
-                   static_cast<value_t>(middle.y) - (size.Height / 2),
-                   static_cast<value_t>(middle.x) + (size.Width / 2),
-                   static_cast<value_t>(middle.y) + (size.Height / 2));
+      return  Rect(static_cast<value_t>(middle.X) - (size.Width / 2),
+                   static_cast<value_t>(middle.Y) - (size.Height / 2),
+                   static_cast<value_t>(middle.X) + (size.Width / 2),
+                   static_cast<value_t>(middle.Y) + (size.Height / 2));
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::area const
+    //! Query size of rectangle
+    //!
+    //! \return size_t - Size of rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    size_t  area() const
+    {
+      return {width(), height()};
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::bottomLeft const
     //! Query Bottom-Left corner of rectangle
@@ -194,8 +205,8 @@ namespace wtl
     template <typename U>
     bool  contains(const Point<U>&  pt) const
     {
-      return static_cast<value_t>(pt.x) >= Left && static_cast<value_t>(pt.x) < Right
-          && static_cast<value_t>(pt.y) >= Top && static_cast<value_t>(pt.y) < Bottom;
+      return static_cast<value_t>(pt.X) >= Left && static_cast<value_t>(pt.X) < Right
+          && static_cast<value_t>(pt.Y) >= Top  && static_cast<value_t>(pt.Y) < Bottom;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -299,8 +310,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type  operator + (const point_t& pt) const
     {
-      return type(Left + static_cast<value_t>(pt.x),  Top + static_cast<value_t>(pt.y),
-                  Right + static_cast<value_t>(pt.x), Bottom + static_cast<value_t>(pt.y));
+      return type(Left + static_cast<value_t>(pt.X),  Top + static_cast<value_t>(pt.Y),
+                  Right + static_cast<value_t>(pt.X), Bottom + static_cast<value_t>(pt.Y));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -312,8 +323,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type  operator - (const point_t& pt) const
     {
-      return type(Left - static_cast<value_t>(pt.x),  Top - static_cast<value_t>(pt.y),
-                  Right - static_cast<value_t>(pt.x), Bottom - static_cast<value_t>(pt.y));
+      return type(Left - static_cast<value_t>(pt.X),  Top - static_cast<value_t>(pt.Y),
+                  Right - static_cast<value_t>(pt.X), Bottom - static_cast<value_t>(pt.Y));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +385,7 @@ namespace wtl
       Top    = topLeft.Y;
       Bottom = topLeft.Y + size.height;
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::operator +=
     //! Add a horizontal and vertical offset
@@ -384,7 +395,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type&  operator += (const point_t&  pt)
     {
-      return *this = *this + pt;
+      Left   += static_cast<value_t>(pt.X);
+      Top    += static_cast<value_t>(pt.Y);
+      Right  += static_cast<value_t>(pt.X);
+      Bottom += static_cast<value_t>(pt.Y);
+      return *this;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -396,7 +411,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     type&  operator -= (const point_t&  pt)
     {
-      return *this = *this - pt;
+      Left   -= static_cast<value_t>(pt.X);
+      Top    -= static_cast<value_t>(pt.Y);
+      Right  -= static_cast<value_t>(pt.X);
+      Bottom -= static_cast<value_t>(pt.Y);
+      return *this;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
