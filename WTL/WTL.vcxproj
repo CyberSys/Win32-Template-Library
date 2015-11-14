@@ -63,13 +63,15 @@
     <ClInclude Include="io\TextWriter.hpp" />
     <ClInclude Include="io\XmlReader.hpp" />
     <ClInclude Include="io\XmlWriter.hpp" />
+    <ClInclude Include="modules\ModuleCollection.h" />
     <ClInclude Include="platform\DateTime.hpp" />
     <ClInclude Include="platform\HResult.hpp" />
+    <ClInclude Include="platform\MouseFlags.hpp" />
     <ClInclude Include="platform\WindowMessage.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="modules\Application.hpp" />
-    <ClInclude Include="modules\Module.hpp" />
+    <ClInclude Include="modules\Module.h" />
     <ClInclude Include="platform\Colours.hpp" />
     <ClInclude Include="platform\CommandId.hpp" />
     <ClInclude Include="platform\CommonApi.hpp" />
@@ -162,6 +164,9 @@
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
     <ClInclude Include="windows\events\CommandEvent.hpp" />
+    <ClInclude Include="windows\events\GainFocusEvent.hpp" />
+    <ClInclude Include="windows\events\LoseFocusEvent.hpp" />
+    <ClInclude Include="windows\events\MouseMoveEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\OwnerDrawCtrlEvent.hpp" />
     <ClInclude Include="windows\events\OwnerMeasureCtrlEvent.hpp" />
@@ -221,6 +226,7 @@
     <ClCompile Include="gdi\StockObjects.cpp" />
     <ClCompile Include="io\Console.cpp" />
     <ClCompile Include="modules\Module.cpp" />
+    <ClCompile Include="modules\ModuleCollection.cpp" />
     <ClCompile Include="platform\Locale.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

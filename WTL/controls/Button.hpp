@@ -77,6 +77,13 @@ namespace wtl
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
       OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
+      // Focus
+      //this->GainFocus += new GainFocusEventHandler<encoding>(this, &Button::onGainFocus);
+      //this->LoseFocus += new LoseFocusEventHandler<encoding>(this, &Button::onLoseFocus);
+
+      // Mouse movement
+      //this->MouseMove += new MouseMoveEventHandler<encoding>(this, &Button::onMouseMove);
+
       // Subclass prior to creation
       using WindowType = typename base::WindowType;
       this->SubClasses.push_back(typename base::SubClass(WindowType::Native, getSystemWndProc()));
@@ -212,6 +219,46 @@ namespace wtl
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::onGainFocus
+    //! Called when gaining keyboard focus
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Zero if handled, otherwise -1
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onGainFocus(const GainFocusEventArgs<encoding>& args) 
+    {
+      cdebug << __func__ << endl;
+      return 0;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::onLoseFocus
+    //! Called when losing keyboard focus
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Zero if handled, otherwise -1
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onLoseFocus(const LoseFocusEventArgs<encoding>& args) 
+    {
+      cdebug << __func__ << endl;
+      return 0;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::onMouseMove
+    //! Called when mouse moved
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Zero if handled, otherwise -1
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onMouseMove(MouseMoveEventArgs<encoding> args) 
+    {
+      cdebug << __func__ << endl;
+      return 0;
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message to draw the button
@@ -299,7 +346,6 @@ namespace wtl
       return 0;
     }
     
-    using base::send;
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::send
     //! Sends a message to the window
@@ -308,12 +354,24 @@ namespace wtl
     //!
     //! \param[in] w- [optional] First parameter
     //! \param[in] l - [optional] Second parameter
-    //! \return LResult - Message result & routing
+    //! \return LResult - Message result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    using base::send;
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::send
+    //! Sends a button message to the window
+    //! 
+    //! \tparam BM - Button Message 
+    //!
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
+    //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
     template <ButtonMessage BM> 
     LResult send(::WPARAM w = 0, ::LPARAM l = 0)
     {
-      return send_message<encoding,window_msg(BM)>(Handle, w, l);
+      return send_message<encoding,window_msg(BM)>(this->Handle, w, l);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

@@ -40,6 +40,9 @@
 #include "wtl/windows/events/OwnerDrawMenuEvent.hpp"              //!< OwnerDrawMenuEvent
 #include "wtl/windows/events/OwnerMeasureCtrlEvent.hpp"           //!< OwnerMeasureCtrlEvent
 #include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"           //!< OwnerMeasureMenuEvent
+#include "wtl/windows/events/GainFocusEvent.hpp"                  //!< GainFocusEvent
+#include "wtl/windows/events/LoseFocusEvent.hpp"                  //!< LoseFocusEvent
+#include "wtl/windows/events/MouseMoveEvent.hpp"                  //!< MouseMoveEvent
 #include "wtl/windows/events/PaintWindowEvent.hpp"                //!< PaintWindowEvent
 #include "wtl/windows/events/ShowWindowEvent.hpp"                 //!< ShowWindowEvent
 #include "wtl/windows/events/PositionChangedEvent.hpp"            //!< PositionChangedEvent
@@ -305,9 +308,12 @@ namespace wtl
     CreateWindowEvent<encoding>         Create;         //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>          Close;          //!< Raised in response to WM_CLOSE
     DestroyWindowEvent<encoding>        Destroy;        //!< Raised in response to WM_DESTROY
+    MouseMoveEvent<encoding>            MouseMove;      //!< Raised in response to WM_MOUSEMOVE
+    LoseFocusEvent<encoding>            LoseFocus;      //!< Raised in response to WM_KILLFOCUS
+    GainFocusEvent<encoding>            GainFocus;      //!< Raised in response to WM_SETFOCUS
     PaintWindowEvent<encoding>          Paint;          //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>           Show;           //!< Raised in response to WM_SHOWWINDOW
-    PositionChangedEvent<encoding>      Repositioned;   //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
+    PositionChangedEvent<encoding>      Reposition;     //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
     CommandQueue<encoding>              ActionQueue;    //!< GUI Command queue
@@ -814,11 +820,20 @@ namespace wtl
             ret = Create.raise(args); 
           } break;
 
-        // [CLOSE/DESTROY/SHOW/MOVE] 
+        // [CLOSE/DESTROY] 
         case WindowMessage::CLOSE:            ret = Close.raise();                                                  break;
         case WindowMessage::DESTROY:          ret = Destroy.raise();                                                break;
+
+        // [FOCUS] 
+        case WindowMessage::SETFOCUS:         ret = GainFocus.raise(GainFocusEventArgs<encoding>(w,l));             break;
+        case WindowMessage::KILLFOCUS:        ret = LoseFocus.raise(LoseFocusEventArgs<encoding>(w,l));             break;
+
+        // [MOUSE] 
+        case WindowMessage::MOUSEMOVE:        ret = MouseMove.raise(MouseMoveEventArgs<encoding>(w,l));             break;
+
+        // [SHOW/MOVE] 
         case WindowMessage::SHOWWINDOW:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
-        case WindowMessage::WINDOWPOSCHANGED: ret = Repositioned.raise(PositionChangedEventArgs<encoding>(w,l));    break;
+        case WindowMessage::WINDOWPOSCHANGED: ret = Reposition.raise(PositionChangedEventArgs<encoding>(w,l));      break;
 
         // [COMMAND] Reflect control events. Raise Gui events.
         case WindowMessage::COMMAND:  

@@ -272,9 +272,6 @@
     <ClInclude Include="modules\Application.hpp">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="modules\Module.hpp">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="threads\MessagePump.hpp">
       <Filter>Threads</Filter>
     </ClInclude>
@@ -602,6 +599,24 @@
     <ClInclude Include="controls\properties\ButtonStateProperty.hpp">
       <Filter>Controls\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="windows\events\MouseMoveEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\MouseFlags.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\GainFocusEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\LoseFocusEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ModuleCollection.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\Module.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
@@ -618,6 +633,9 @@
     </ClCompile>
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\ModuleCollection.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

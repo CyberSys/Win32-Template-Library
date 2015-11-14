@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 #include "wtl/Resources/ResourceBlob.hpp"       //!< ResourceBlob
-#include "wtl/modules/Module.hpp"               //!< LoadedModules
+#include "wtl/modules/ModuleCollection.h"       //!< LoadedModules
 #include "wtl/utils/String.hpp"                 //!< String
 
 //! \namespace wtl - Windows template library

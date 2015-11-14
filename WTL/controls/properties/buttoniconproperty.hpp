@@ -43,7 +43,7 @@ namespace wtl
   //! \return LResult - Returns 0 to accept button creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  LResult  ButtonIconPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<encoding>& args)
+  LResult  ButtonIconPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
   {
     // [EXISTS] Set icon iff button exists
     if (this->exists() && this->Window.exists())

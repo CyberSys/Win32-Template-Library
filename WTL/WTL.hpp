@@ -41,7 +41,7 @@
 
 #include <windows.h>        // Main windows header
 #include <commctrl.h>       // Common controls library
-//#include <windowsx.h>
+#include <windowsx.h>       // Window helper macros
 #include <tchar.h>          // Defines narrow/wide char Win32 entry points
 //#include <strsafe.h>        // StringSafe library - Secure string handling
 #include <shlwapi.h>        // Shell light-weight API - Path handling

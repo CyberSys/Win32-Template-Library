@@ -58,7 +58,7 @@ namespace wtl
     ButtonIconPropertyImpl(window_t& wnd) : base(wnd)
     {
       // Register creation handler to set initial icon
-      wnd.Create += new CreateWindowEventHandler<encoding>(this, &type::onCreate);
+      wnd.Create += new CreateWindowEventHandler<base::encoding>(this, &type::onCreate);
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -91,7 +91,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Returns 0 to accept button creation
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCreate(CreateWindowEventArgs<encoding>& args);
+    LResult  onCreate(CreateWindowEventArgs<ENC>& args);
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // ButtonIconPropertyImpl::set 

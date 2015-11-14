@@ -49,7 +49,7 @@ namespace wtl
 
     // [EXISTS] Set font iff window exists
     if (this->Window.exists())
-      this->Window.send<WindowMessage::SETFONT>(opaque_cast(font.get()), boolean_cast(redraw)); 
+      this->Window.template send<WindowMessage::SETFONT>(opaque_cast(font.get()), boolean_cast(redraw)); 
 
     // Updated ref-counted shared handle
     base::set(font);
@@ -63,13 +63,13 @@ namespace wtl
   //! \return LResult - Returns 0 to accept window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  LResult FontPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<encoding>& args)
+  LResult FontPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
   {
     static constexpr bool redraw = true;
 
     // [EXISTS] Set font iff window exists
     if (this->Window.exists())
-      this->Window.send<WindowMessage::SETFONT>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
+      this->Window.template send<WindowMessage::SETFONT>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
 
     // [Accept window creation]
     return 0;

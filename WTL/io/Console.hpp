@@ -14,6 +14,7 @@
 #include "wtl/utils/FormatSpec.hpp"         //!< format_spec_t
 #include "wtl/utils/Point.hpp"              //!< Point
 #include "wtl/utils/Exception.hpp"          //!< caught_exception
+#include "wtl/utils/String.hpp"             //!< snprintf
 #include <exception>                        //!< std::exception
 #include <string>                           //!< std::basic_string
 #include <cstdio>                           //!< std::vsnprintf
@@ -474,6 +475,20 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   Console& operator << (Console& c, const wchar_t* str);
   
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Writes a STL string to the debug console
+  //!
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& s - String
+  //! \return Console& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  inline Console& operator << (Console& c, const std::string& s)
+  {
+    return c << s.c_str();
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
   //! Writes an STL string to the debug console

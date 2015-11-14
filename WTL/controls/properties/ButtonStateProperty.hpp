@@ -47,7 +47,7 @@ namespace wtl
   //! \return LResult - Returns 0 to accept button creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  LResult  ButtonStatePropertyImpl<ENC>::onCreate(CreateWindowEventArgs<encoding>& args)
+  LResult  ButtonStatePropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
   {
     // [EXISTS] Set state iff button exists
     if (this->Window.exists())

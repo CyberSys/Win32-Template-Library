@@ -85,7 +85,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Returns 0 to accept button creation
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCreate(CreateWindowEventArgs<encoding>& args);
+    LResult  onCreate(CreateWindowEventArgs<ENC>& args);
   };
 
   

@@ -60,7 +60,7 @@ namespace wtl
     FontPropertyImpl(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
     {
       // Register creation handler to set initial font
-      wnd.Create += new CreateWindowEventHandler<encoding>(this, &type::onCreate);
+      wnd.Create += new CreateWindowEventHandler<base::encoding>(this, &type::onCreate);
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -90,7 +90,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Returns 0 to accept window creation
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCreate(CreateWindowEventArgs<encoding>& args);
+    LResult  onCreate(CreateWindowEventArgs<ENC>& args);
   };
 
   

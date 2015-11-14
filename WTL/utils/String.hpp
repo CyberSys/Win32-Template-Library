@@ -12,7 +12,7 @@
 #include "wtl/traits/EncodingTraits.hpp"        //!< Character encoding
 #include "wtl/utils/Exception.hpp"              //!< Exceptions
 #include "wtl/utils/Encoding.hpp"               //!< string_encoder
-#include "wtl/io/Console.hpp"                   //!< Console
+//#include "wtl/io/Console.hpp"                   //!< Console
 #include <string>                               //!< std::basic_string
 #include <vector>                               //!< std::vector
 
@@ -392,20 +392,6 @@ namespace wtl
   String<encoding>  c_str(const char_t* str)
   {
     return String<encoding>(str);
-  }
-
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator <<
-  //! Writes a STL string to the debug console
-  //!
-  //! \param[in,out] &c - Debug console
-  //! \param[in] const& s - String
-  //! \return Console& - Reference to 'c'
-  //////////////////////////////////////////////////////////////////////////////////////////
-  inline Console& operator << (Console& c, const std::string& s)
-  {
-    return c << s.c_str();
   }
 
 

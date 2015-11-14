@@ -10,7 +10,7 @@
 
 #include "wtl/WTL.hpp"
 //#include "wtl/traits/ApplicationTraits.hpp"
-#include "wtl/modules/Module.hpp"                   //!< Module
+#include "wtl/modules/Module.h"                     //!< Module
 #include "wtl/threads/MessagePump.hpp"              //!< MessagePump
 #include "wtl/platform/DateTime.hpp"                //!< DateTime
 #include "wtl/platform/SystemVersion.hpp"           //!< SystemVersion
