@@ -6,7 +6,8 @@
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Module.hpp"
+#include "Module.h"
+#include "ModuleCollection.h"
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -14,9 +15,6 @@ namespace wtl
   // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
   // ----------------------------------- REPRESENTATION -----------------------------------
-  
-  //! \var LoadedModules - Loaded modules collection
-  ModuleCollection  LoadedModules;
   
   // ------------------------------------ CONSTRUCTION ------------------------------------
 	
