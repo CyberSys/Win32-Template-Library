@@ -8,14 +8,14 @@
 #ifndef WTL_MODULE_COLLECTION_HPP
 #define WTL_MODULE_COLLECTION_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/List.hpp"               //!< List
-#include "wtl/utils/Default.hpp"            //!< defvalue
-#include "wtl/traits/EncodingTraits.hpp"    //!< Encoding
-#include "wtl/resources/ResourceBlob.hpp"   //!< ResourceBlob
-#include "wtl/platform/ResourceId.hpp"      //!< ResourceId
-#include "wtl/platform/SystemFlags.hpp"     //!< ResourceType
-#include "wtl/modules/Module.h"             //!< Module
+#include <wtl/WTL.hpp>
+#include <wtl/utils/List.hpp>               //!< List
+#include <wtl/utils/Default.hpp>            //!< defvalue
+#include <wtl/traits/EncodingTraits.hpp>    //!< Encoding
+#include <wtl/resources/ResourceBlob.hpp>   //!< ResourceBlob
+#include <wtl/platform/ResourceId.hpp>      //!< ResourceId
+#include <wtl/platform/SystemFlags.hpp>     //!< ResourceType
+#include <wtl/modules/Module.h>             //!< Module
 #include <functional>                       //!< std::forward, std::reference_wrapper
 
 //! \namespace wtl - Windows template library
