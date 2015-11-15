@@ -18,12 +18,12 @@ namespace wtl
 {
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::MOUSEMOVE> - Arguments decoder mouse movement
+  //! \struct EventArgs<WindowMessage::MouseMove> - Arguments decoder mouse movement
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::MOUSEMOVE> 
+  struct EventArgs<ENC,WindowMessage::MouseMove> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -37,7 +37,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::MOUSEMOVE;
+    static constexpr WindowMessage  message = WindowMessage::MouseMove;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -45,7 +45,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::MOUSEMOVE>::EventArgs
+    // EventArgs<WindowMessage::MouseMove>::EventArgs
     //! Decode arguments for win32 message 'WM_MOUSEMOVE' 
     //! 
     //! \param[in] w - Key/Mouse-button flags
@@ -79,7 +79,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using MouseMoveEventArgs = EventArgs<ENC,WindowMessage::MOUSEMOVE>;
+  using MouseMoveEventArgs = EventArgs<ENC,WindowMessage::MouseMove>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias MouseMoveEvent - Defines the signature of 'MouseMove' event handlers  [Pass by value]

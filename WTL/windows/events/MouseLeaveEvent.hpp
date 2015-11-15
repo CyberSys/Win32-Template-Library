@@ -21,7 +21,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using MouseLeaveEventArgs = EventArgs<ENC,WindowMessage::MOUSELEAVE>;
+  using MouseLeaveEventArgs = EventArgs<ENC,WindowMessage::MouseLeave>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias MouseLeaveEvent - Defines the signature of 'MouseLeave' event handlers  [Pass by value]

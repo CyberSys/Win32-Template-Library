@@ -209,9 +209,9 @@ namespace wtl
         switch (message)
         {
         // [COMMAND (REFLECTED)] Raise associated event
-        case WindowMessage::REFLECT_COMMAND:  
+        case WindowMessage::ReflectCommand:  
           // Extract notification
-          switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::COMMAND>(w,l).Message))
+          switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
           case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
           /*case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;
@@ -220,8 +220,8 @@ namespace wtl
           break;
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' or 'Owner Measure'
-        case WindowMessage::REFLECT_DRAWITEM:     { OwnerDrawCtrlEventArgs<encoding> args(w,l);  ret = OwnerDraw.raise(args);                    }  break;
-        case WindowMessage::REFLECT_MEASUREITEM:  { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  ret = OwnerMeasure.raise(args); }  break;
+        case WindowMessage::ReflectDrawItem:     { OwnerDrawCtrlEventArgs<encoding> args(w,l);  ret = OwnerDraw.raise(args);                    }  break;
+        case WindowMessage::ReflectMeasureItem:  { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  ret = OwnerMeasure.raise(args); }  break;
         }
 
         // [UNHANDLED] Pass to default window procedure
@@ -329,47 +329,31 @@ namespace wtl
       cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
       try
-      {
-        
-        //ButtonState state = State;
-        PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
-                                 : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
-                               //: args.State && OwnerDrawState::Hotlight ? PBS_HOT
-                                 : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
-        
-        //PUSHBUTTONSTATES state;
+      {        
+        Theme theme(this->handle(), L"Button");
         RectL rc = args.Rect;
 
         // Determine state
-        /*if (!this->Enabled)
-          state = PBS_DISABLED;
-        else 
-          switch (this->State)
-          {
-          default:                                                        state = PBS_NORMAL;  break;
-          case ButtonState::Hot:                                          state = PBS_HOT;     break;
-          case ButtonState::Focus:                                        state = PBS_NORMAL;  break;
-          case ButtonState::Pushed:                                       state = PBS_PRESSED; break;
-          case ButtonState::Focus|ButtonState::Hot:                       state = PBS_HOT;     break;
-          case ButtonState::Pushed|ButtonState::Hot:                      state = PBS_PRESSED; break;
-          case ButtonState::Pushed|ButtonState::Focus|ButtonState::Hot:   state = PBS_PRESSED; break;
-          }*/
+        PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
+                                 : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
+                                 : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
         
-        Theme theme(this->handle(), L"Button");
-
-        // Background
+        // Draw background
         theme.drawBackground(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
 
         // Pressed: Offset drawing rect
         if (state == PBS_PRESSED)
           rc += PointL(1,1);
 
-        // Icon
+        // Draw icon
         if (Icon.exists()) 
+        {
           args.Graphics.draw(Icon, rc.topLeft(), SizeL(32,32));
+          rc.Left += 32;
+        }
 
-        // Text
-        DrawTextFlags flags = DrawTextFlags::VCentre & (Icon.exists() ? DrawTextFlags::Right : DrawTextFlags::Centre);
+        // Draw text
+        DrawTextFlags flags = DrawTextFlags::SingleLine|DrawTextFlags::VCentre|DrawTextFlags::Centre;
         theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rc, flags);
       }
       catch (const std::exception&)

@@ -18,12 +18,12 @@ namespace wtl
 {
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::KILLFOCUS> - Arguments decoder mouse movement
+  //! \struct EventArgs<WindowMessage::KillFocus> - Arguments decoder mouse movement
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::KILLFOCUS> 
+  struct EventArgs<ENC,WindowMessage::KillFocus> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -34,7 +34,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::KILLFOCUS;
+    static constexpr WindowMessage  message = WindowMessage::KillFocus;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -42,7 +42,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::KILLFOCUS>::EventArgs
+    // EventArgs<WindowMessage::KillFocus>::EventArgs
     //! Decode arguments for win32 message 'WM_KILLFOCUS' 
     //! 
     //! \param[in] w - Window that receives focus 
@@ -74,7 +74,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using LoseFocusEventArgs = EventArgs<ENC,WindowMessage::KILLFOCUS>;
+  using LoseFocusEventArgs = EventArgs<ENC,WindowMessage::KillFocus>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias LoseFocusEvent - Defines the signature of 'LoseFocus' event handlers  [Pass by const-reference]

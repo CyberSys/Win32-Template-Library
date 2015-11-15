@@ -17,12 +17,12 @@ namespace wtl
 {
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::MOUSEENTER> - Arguments decoder mouse movement
+  //! \struct EventArgs<WindowMessage::MouseEnter> - Arguments decoder mouse movement
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::MOUSEENTER> 
+  struct EventArgs<ENC,WindowMessage::MouseEnter> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -36,7 +36,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::MOUSEENTER;
+    static constexpr WindowMessage  message = WindowMessage::MouseEnter;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -44,12 +44,12 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::MOUSEENTER>::EventArgs
+    // EventArgs<WindowMessage::MouseEnter>::EventArgs
     //! Decode arguments for win32 message 'WM_MOUSEENTER' 
     //! 
     //! \param[in] const& args - MouseMove event arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    EventArgs(const EventArgs<ENC,WindowMessage::MOUSEMOVE>& args) : Position(args.Position), 
+    EventArgs(const EventArgs<ENC,WindowMessage::MouseMove>& args) : Position(args.Position), 
                                                                      State(args.State)
     {}
     
@@ -77,7 +77,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using MouseEnterEventArgs = EventArgs<ENC,WindowMessage::MOUSEENTER>;
+  using MouseEnterEventArgs = EventArgs<ENC,WindowMessage::MouseEnter>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias MouseEnterEvent - Defines the signature of 'MouseEnter' event handlers  [Pass by value]

@@ -22,12 +22,12 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::MEASUREITEM> - Event arguments for Win32 message 'WM_MEASUREITEM'
+  //! \struct EventArgs<WindowMessage::MeasureItem> - Event arguments for Win32 message 'WM_MEASUREITEM'
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::MEASUREITEM>
+  struct EventArgs<ENC,WindowMessage::MeasureItem>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -44,7 +44,7 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage message = WindowMessage::MEASUREITEM;
+    static constexpr WindowMessage message = WindowMessage::MeasureItem;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -103,7 +103,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerMeasureMenuEventArgs = EventArgs<ENC,WindowMessage::MEASUREITEM>;
+  using OwnerMeasureMenuEventArgs = EventArgs<ENC,WindowMessage::MeasureItem>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerMeasureMenuEvent - Defines the signature of 'OwnerMeasureMenu' event handlers [Pass by reference]

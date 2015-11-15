@@ -49,7 +49,7 @@ namespace wtl
 
     // [EXISTS] Set font iff window exists
     if (this->Window.exists())
-      this->Window.template send<WindowMessage::SETFONT>(opaque_cast(font.get()), boolean_cast(redraw)); 
+      this->Window.template send<WindowMessage::SetFont>(opaque_cast(font.get()), boolean_cast(redraw)); 
 
     // Updated ref-counted shared handle
     base::set(font);
@@ -69,7 +69,7 @@ namespace wtl
 
     // [EXISTS] Set font iff window exists
     if (this->Window.exists())
-      this->Window.template send<WindowMessage::SETFONT>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
+      this->Window.template send<WindowMessage::SetFont>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
 
     // [Accept window creation]
     return 0;

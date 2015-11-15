@@ -15,12 +15,12 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<ENC,WindowMessage::CREATE> - Event arguments for Win32 message 'WM_CREATE'
+  //! \struct EventArgs<ENC,WindowMessage::Create> - Event arguments for Win32 message 'WM_CREATE'
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::CREATE> 
+  struct EventArgs<ENC,WindowMessage::Create> 
   { 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -37,7 +37,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::CREATE;
+    static constexpr WindowMessage  message = WindowMessage::Create;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -114,7 +114,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CreateWindowEventArgs = EventArgs<ENC,WindowMessage::CREATE>;
+  using CreateWindowEventArgs = EventArgs<ENC,WindowMessage::Create>;
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CreateWindowEvent - Defines the signature of the 'CreateWindow' event handler  [Pass by reference]

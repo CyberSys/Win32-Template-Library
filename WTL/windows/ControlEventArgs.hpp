@@ -32,14 +32,14 @@ namespace wtl
   /* Undefined */
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ControlEventArgs<WindowMessage::COMMAND> - Arguments decoder for events from controls passed via 'WM_COMMAND'
+  //! \struct ControlEventArgs<WindowMessage::Command> - Arguments decoder for events from controls passed via 'WM_COMMAND'
   //! 
   //! \tparam ENC - Message character encoding 
   //! \tparam EVENT - Notification message type
   //! \tparam CODE - [optional] Notification message 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename EVENT, EVENT CODE>
-  struct ControlEventArgs<ENC,WindowMessage::COMMAND,EVENT,CODE> 
+  struct ControlEventArgs<ENC,WindowMessage::Command,EVENT,CODE> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -56,7 +56,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::COMMAND;
+    static constexpr WindowMessage  message = WindowMessage::Command;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -82,13 +82,13 @@ namespace wtl
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ControlEventArgs<WindowMessage::NOTIFY>::ControlEventArgs
+    // ControlEventArgs<WindowMessage::Notify>::ControlEventArgs
     //! Create from event arguments of another type
     //! 
     //! \param[in] const& r - Event arguments of another type
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ALT_ENC, typename ALT_EVENT, ALT_EVENT ALT_CODE>
-    ControlEventArgs(const ControlEventArgs<ALT_ENC,WindowMessage::COMMAND,ALT_EVENT,ALT_CODE>& r) : Ident(r.Ident),
+    ControlEventArgs(const ControlEventArgs<ALT_ENC,WindowMessage::Command,ALT_EVENT,ALT_CODE>& r) : Ident(r.Ident),
                                                                                                      Sender(r.Sender),
                                                                                                      Message(static_cast<event_t>(r.Message))
     {}
@@ -112,7 +112,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,WindowMessage::REFLECT_COMMAND>(Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
+      return send_message<encoding,WindowMessage::ReflectCommand>(Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -121,14 +121,14 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ControlEventArgs<WindowMessage::NOTIFY> - Arguments decoder for events from controls passed via 'WM_NOTIFY'
+  //! \struct ControlEventArgs<WindowMessage::Notify> - Arguments decoder for events from controls passed via 'WM_NOTIFY'
   //! 
   //! \tparam ENC - Message character encoding 
   //! \tparam EVENT - Notification message type
   //! \tparam CODE - Notification message
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, typename EVENT, EVENT CODE>
-  struct ControlEventArgs<ENC,WindowMessage::NOTIFY,EVENT,CODE> 
+  struct ControlEventArgs<ENC,WindowMessage::Notify,EVENT,CODE> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -145,7 +145,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::NOTIFY;
+    static constexpr WindowMessage  message = WindowMessage::Notify;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -162,7 +162,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ControlEventArgs<WindowMessage::NOTIFY>::ControlEventArgs
+    // ControlEventArgs<WindowMessage::Notify>::ControlEventArgs
     //! Decode arguments for win32 message 'WM_NOTIFY' 
     //! 
     //! \param[in] w - Originator window id in the LO word, NotificationId in the HO word
@@ -176,13 +176,13 @@ namespace wtl
 
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ControlEventArgs<WindowMessage::NOTIFY>::ControlEventArgs
+    // ControlEventArgs<WindowMessage::Notify>::ControlEventArgs
     //! Create from event arguments of another type
     //! 
     //! \param[in] const& r - Event arguments of another type
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ALT_ENC, typename ALT_EVENT, ALT_EVENT ALT_CODE>
-    ControlEventArgs(const ControlEventArgs<ALT_ENC,WindowMessage::NOTIFY,ALT_EVENT,ALT_CODE>& r) : Header(r.Header),
+    ControlEventArgs(const ControlEventArgs<ALT_ENC,WindowMessage::Notify,ALT_EVENT,ALT_CODE>& r) : Header(r.Header),
                                                                                                     Ident(r.Ident),
                                                                                                     Sender(r.Sender),
                                                                                                     Message(static_cast<event_t>(r.Message))
@@ -207,7 +207,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,WindowMessage::REFLECT_NOTIFY>(Sender, Ident, opaque_cast(Header));
+      return send_message<encoding,WindowMessage::ReflectNotify>(Sender, Ident, opaque_cast(Header));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

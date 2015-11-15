@@ -465,14 +465,14 @@ namespace wtl
     {
       switch (msg)
       {
-      case WindowMessage::CREATE:         return res == unhandled_result<WindowMessage::CREATE>::value;
-      case WindowMessage::DESTROY:        return res == unhandled_result<WindowMessage::DESTROY>::value;
-      case WindowMessage::DRAWITEM:       return res == unhandled_result<WindowMessage::DRAWITEM>::value;
-      case WindowMessage::GETMINMAXINFO:  return res == unhandled_result<WindowMessage::GETMINMAXINFO>::value;
-      case WindowMessage::KILLFOCUS:      return res == unhandled_result<WindowMessage::KILLFOCUS>::value;
-      case WindowMessage::SHOWWINDOW:     return res == unhandled_result<WindowMessage::SHOWWINDOW>::value;
-      case WindowMessage::SIZE:           return res == unhandled_result<WindowMessage::SIZE>::value;
-      case WindowMessage::SETFOCUS:       return res == unhandled_result<WindowMessage::SETFOCUS>::value;
+      case WindowMessage::Create:         return res == unhandled_result<WindowMessage::Create>::value;
+      case WindowMessage::Destroy:        return res == unhandled_result<WindowMessage::Destroy>::value;
+      case WindowMessage::DrawItem:       return res == unhandled_result<WindowMessage::DrawItem>::value;
+      case WindowMessage::GetMinMaxInfo:  return res == unhandled_result<WindowMessage::GetMinMaxInfo>::value;
+      case WindowMessage::KillFocus:      return res == unhandled_result<WindowMessage::KillFocus>::value;
+      case WindowMessage::ShowWindow:     return res == unhandled_result<WindowMessage::ShowWindow>::value;
+      case WindowMessage::Size:           return res == unhandled_result<WindowMessage::Size>::value;
+      case WindowMessage::SetFocus:       return res == unhandled_result<WindowMessage::SetFocus>::value;
       default:                            return res != 0;
       }
     }
@@ -497,8 +497,8 @@ namespace wtl
         switch (static_cast<WindowMessage>(message))
         {
         // [CREATE/NCCREATE] Extract instance pointer from ::CreateWindow(..) call parameter data
-        case WindowMessage::CREATE:
-        case WindowMessage::NCCREATE:
+        case WindowMessage::Create:
+        case WindowMessage::NonClientCreate:
           // Extract instance pointer
           wnd = reinterpret_cast<WindowBase*>( opaque_cast<CreateStruct>(lParam)->lpCreateParams );
 
@@ -510,7 +510,7 @@ namespace wtl
           break;
 
         // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
-        case WindowMessage::GETMINMAXINFO:
+        case WindowMessage::GetMinMaxInfo:
           return WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
 
         // [REMAINDER] Lookup native handle from the 'Active Windows' collection
@@ -540,8 +540,8 @@ namespace wtl
       // [CREATE/NCCREATE] Cleanup
       switch (auto msg = static_cast<WindowMessage>(message))
       {
-      case WindowMessage::CREATE:
-      case WindowMessage::NCCREATE:
+      case WindowMessage::Create:
+      case WindowMessage::NonClientCreate:
         // [FAILED] Remove from 'Active Windows' collection
         if (result == -1)
           ActiveWindows.erase(hWnd);
@@ -861,45 +861,45 @@ namespace wtl
         switch (message)
         {
         // [CREATE] Create window
-        case WindowMessage::CREATE: { 
+        case WindowMessage::Create: { 
             CreateWindowEventArgs<encoding> args(w,l); //!< [Pass arguments by reference]
             ret = Create.raise(args); 
           } break;
 
         // [CLOSE/DESTROY] 
-        case WindowMessage::CLOSE:            ret = Close.raise();                                                  break;
-        case WindowMessage::DESTROY:          ret = Destroy.raise();                                                break;
+        case WindowMessage::Close:            ret = Close.raise();                                                  break;
+        case WindowMessage::Destroy:          ret = Destroy.raise();                                                break;
 
         // [FOCUS] 
-        case WindowMessage::SETFOCUS:         ret = GainFocus.raise(GainFocusEventArgs<encoding>(w,l));             break;
-        case WindowMessage::KILLFOCUS:        ret = LoseFocus.raise(LoseFocusEventArgs<encoding>(w,l));             break;
+        case WindowMessage::SetFocus:         ret = GainFocus.raise(GainFocusEventArgs<encoding>(w,l));             break;
+        case WindowMessage::KillFocus:        ret = LoseFocus.raise(LoseFocusEventArgs<encoding>(w,l));             break;
 
         // [MOUSE] 
-        case WindowMessage::MOUSEHOVER:       ret = MouseHover.raise(MouseHoverEventArgs<encoding>(w,l));           break;
-        case WindowMessage::MOUSELEAVE:       ret = MouseLeave.raise(MouseLeaveEventArgs<encoding>(w,l));           break;
-        case WindowMessage::MOUSEMOVE:        ret = MouseMove.raise(MouseMoveEventArgs<encoding>(w,l));             break;
+        case WindowMessage::MouseHover:       ret = MouseHover.raise(MouseHoverEventArgs<encoding>(w,l));           break;
+        case WindowMessage::MouseLeave:       ret = MouseLeave.raise(MouseLeaveEventArgs<encoding>(w,l));           break;
+        case WindowMessage::MouseMove:        ret = MouseMove.raise(MouseMoveEventArgs<encoding>(w,l));             break;
 
         // [SHOW/MOVE] 
-        case WindowMessage::SHOWWINDOW:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
-        case WindowMessage::WINDOWPOSCHANGED: ret = Reposition.raise(PositionChangedEventArgs<encoding>(w,l));      break;
+        case WindowMessage::ShowWindow:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+        case WindowMessage::WindowPositionChanged: ret = Reposition.raise(PositionChangedEventArgs<encoding>(w,l));      break;
 
         // [COMMAND] Reflect control events. Raise Gui events.
-        case WindowMessage::COMMAND:  
+        case WindowMessage::Command:  
           if (l != 0)
             // [CONTROL] Reflect to sender
-            ret = ControlEventArgs<encoding,WindowMessage::COMMAND>(w,l).reflect();
+            ret = ControlEventArgs<encoding,WindowMessage::Command>(w,l).reflect();
           else
             // [COMMAND] Raise event (Default executes the appropriate command object)
             ret = Command.raise(CommandEventArgs<encoding>(w,l));
           break;
 
         // [NOTIFY] Reflect to sender
-        case WindowMessage::NOTIFY:  
-          ret = ControlEventArgs<encoding,WindowMessage::NOTIFY>(w,l).reflect();   
+        case WindowMessage::Notify:  
+          ret = ControlEventArgs<encoding,WindowMessage::Notify>(w,l).reflect();   
           break;
 
         // [OWNER-DRAW] Reflect to sender
-        case WindowMessage::DRAWITEM:       
+        case WindowMessage::DrawItem:       
           // [CONTROL] Reflect to originator control
           if (w != 0)
             ret = OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
@@ -912,7 +912,7 @@ namespace wtl
           break;
         
         // [OWNER-MEASURE] Reflect to sender
-        case WindowMessage::MEASUREITEM: 
+        case WindowMessage::MeasureItem: 
           // [CONTROL] Reflect to originator
           if (w != 0) 
             ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(), w, l).reflect();
@@ -925,7 +925,7 @@ namespace wtl
           break;
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
-        case WindowMessage::PAINT:          
+        case WindowMessage::Paint:          
           if (!Paint.empty()) {
             PaintWindowEventArgs<encoding> args(Handle,w,l);
             ret = Paint.raise(args);                                      //!< [Pass arguments by reference]

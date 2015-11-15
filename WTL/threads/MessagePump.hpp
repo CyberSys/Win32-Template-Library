@@ -143,8 +143,8 @@ namespace wtl
           // [MODAL] Update state when entering/exiting modal loop
           switch (static_cast<WindowMessage>(msg.message))
           {
-          case WindowMessage::ENTERMENULOOP: State = PumpState::ModalLoop;    break;
-          case WindowMessage::EXITMENULOOP:  State = PumpState::Running;      break;
+          case WindowMessage::EnterMenuLoop: State = PumpState::ModalLoop;    break;
+          case WindowMessage::ExitMenuLoop:  State = PumpState::Running;      break;
           }
 
           // [EXISTS] 

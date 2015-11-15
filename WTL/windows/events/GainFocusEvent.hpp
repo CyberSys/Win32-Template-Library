@@ -18,12 +18,12 @@ namespace wtl
 {
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::SETFOCUS> - Arguments decoder mouse movement
+  //! \struct EventArgs<WindowMessage::SetFocus> - Arguments decoder mouse movement
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::SETFOCUS> 
+  struct EventArgs<ENC,WindowMessage::SetFocus> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -34,7 +34,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::SETFOCUS;
+    static constexpr WindowMessage  message = WindowMessage::SetFocus;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -42,7 +42,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::SETFOCUS>::EventArgs
+    // EventArgs<WindowMessage::SetFocus>::EventArgs
     //! Decode arguments for win32 message 'WM_SETFOCUS' 
     //! 
     //! \param[in] w - Window that lost focus 
@@ -74,7 +74,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using GainFocusEventArgs = EventArgs<ENC,WindowMessage::SETFOCUS>;
+  using GainFocusEventArgs = EventArgs<ENC,WindowMessage::SetFocus>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias GainFocusEvent - Defines the signature of 'GainFocus' event handlers  [Pass by const-reference]

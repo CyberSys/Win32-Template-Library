@@ -21,12 +21,12 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised for menus
+  //! \struct EventArgs<WindowMessage::DrawItem> - Event arguments for Win32 message 'WM_DRAWITEM' raised for menus
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::DRAWITEM>
+  struct EventArgs<ENC,WindowMessage::DrawItem>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -43,7 +43,7 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage message = WindowMessage::DRAWITEM;
+    static constexpr WindowMessage message = WindowMessage::DrawItem;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -98,7 +98,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawMenuEventArgs = EventArgs<ENC,WindowMessage::DRAWITEM>;
+  using OwnerDrawMenuEventArgs = EventArgs<ENC,WindowMessage::DrawItem>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawMenuEvent - Defines the signature of 'OwnerDrawMenu' event handlers  [Pass by value]

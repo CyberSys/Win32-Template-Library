@@ -23,12 +23,12 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ControlEventArgs<WindowMessage::DRAWITEM> - Event arguments for Win32 message 'WM_DRAWITEM' raised from controls
+  //! \struct ControlEventArgs<WindowMessage::DrawItem> - Event arguments for Win32 message 'WM_DRAWITEM' raised from controls
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ControlEventArgs<ENC,WindowMessage::DRAWITEM,uint16_t,defvalue<uint16_t>()>
+  struct ControlEventArgs<ENC,WindowMessage::DrawItem,uint16_t,defvalue<uint16_t>()>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -45,7 +45,7 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage message = WindowMessage::DRAWITEM;
+    static constexpr WindowMessage message = WindowMessage::DrawItem;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -104,7 +104,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,message+WindowMessage::REFLECT>(Sender, opaque_cast(Ident), opaque_cast(Data));
+      return send_message<encoding,message+WindowMessage::Reflect>(Sender, opaque_cast(Ident), opaque_cast(Data));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -116,7 +116,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerDrawCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::DRAWITEM>;
+  using OwnerDrawCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::DrawItem>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerDrawCtrlEvent - Defines the signature of 'OwnerDrawCtrl' event handlers  [Pass by value]

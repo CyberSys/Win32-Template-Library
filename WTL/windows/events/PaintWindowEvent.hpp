@@ -18,12 +18,12 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::PAINT> - Event arguments for Win32 message 'WM_PAINT'
+  //! \struct EventArgs<WindowMessage::Paint> - Event arguments for Win32 message 'WM_PAINT'
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::PAINT>
+  struct EventArgs<ENC,WindowMessage::Paint>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -37,7 +37,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::PAINT;
+    static constexpr WindowMessage  message = WindowMessage::Paint;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -97,7 +97,7 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::PAINT>::EventArgs
+    // EventArgs<WindowMessage::Paint>::EventArgs
     //! Creates arguments for 'PaintWindow' Event (ie. WM_PAINT)
     //! 
     //! \param[in] const& wnd - Window receiving message
@@ -134,7 +134,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using PaintWindowEventArgs = EventArgs<ENC,WindowMessage::PAINT>;
+  using PaintWindowEventArgs = EventArgs<ENC,WindowMessage::Paint>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias PaintWindowEvent - Defines the signature of 'PaintWindow' event handlers  [Pass by reference]

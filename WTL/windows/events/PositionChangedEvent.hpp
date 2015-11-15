@@ -18,12 +18,12 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::WINDOWPOSCHANGED> - Event arguments for Win32 message 'WM_WINDOWPOSCHANGED'
+  //! \struct EventArgs<WindowMessage::WindowPositionChanged> - Event arguments for Win32 message 'WM_WINDOWPOSCHANGED'
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::WINDOWPOSCHANGED>
+  struct EventArgs<ENC,WindowMessage::WindowPositionChanged>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -37,7 +37,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::WINDOWPOSCHANGED;
+    static constexpr WindowMessage  message = WindowMessage::WindowPositionChanged;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -54,7 +54,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::WINDOWPOSCHANGED>::EventArgs
+    // EventArgs<WindowMessage::WindowPositionChanged>::EventArgs
     //! Creates arguments for 'PositionChanged' Event (ie. WM_WINDOWPOSCHANGED)
     //! 
     //! \param[in] w - Not used
@@ -89,7 +89,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using PositionChangedEventArgs = EventArgs<ENC,WindowMessage::WINDOWPOSCHANGED>;
+  using PositionChangedEventArgs = EventArgs<ENC,WindowMessage::WindowPositionChanged>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias PositionChangedEvent - Defines the signature of 'PositionChanged' event handlers  [Pass by value]

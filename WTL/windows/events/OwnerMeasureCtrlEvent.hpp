@@ -22,12 +22,12 @@
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ControlEventArgs<WindowMessage::MEASUREITEM> - Event arguments for Win32 message 'WM_MEASUREITEM' raised by controls
+  //! \struct ControlEventArgs<WindowMessage::MeasureItem> - Event arguments for Win32 message 'WM_MEASUREITEM' raised by controls
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ControlEventArgs<ENC,WindowMessage::MEASUREITEM,uint16_t,defvalue<uint16_t>()>
+  struct ControlEventArgs<ENC,WindowMessage::MeasureItem,uint16_t,defvalue<uint16_t>()>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -44,7 +44,7 @@ namespace wtl
     static constexpr Encoding encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage message = WindowMessage::MEASUREITEM;
+    static constexpr WindowMessage message = WindowMessage::MeasureItem;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -109,7 +109,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,message+WindowMessage::REFLECT>(Sender, opaque_cast(Data.CtlID), opaque_cast(Data));
+      return send_message<encoding,message+WindowMessage::Reflect>(Sender, opaque_cast(Data.CtlID), opaque_cast(Data));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -121,7 +121,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using OwnerMeasureCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::MEASUREITEM>;
+  using OwnerMeasureCtrlEventArgs = ControlEventArgs<ENC,WindowMessage::MeasureItem>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias OwnerMeasureCtrlEvent - Defines the signature of 'OwnerMeasureCtrl' event handlers [Pass by reference]

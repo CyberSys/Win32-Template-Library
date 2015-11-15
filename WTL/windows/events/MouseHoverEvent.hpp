@@ -18,12 +18,12 @@ namespace wtl
 {
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::MOUSEHOVER> - Arguments decoder mouse movement
+  //! \struct EventArgs<WindowMessage::MouseHover> - Arguments decoder mouse movement
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::MOUSEHOVER> 
+  struct EventArgs<ENC,WindowMessage::MouseHover> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -37,7 +37,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::MOUSEHOVER;
+    static constexpr WindowMessage  message = WindowMessage::MouseHover;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -45,7 +45,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::MOUSEHOVER>::EventArgs
+    // EventArgs<WindowMessage::MouseHover>::EventArgs
     //! Decode arguments for win32 message 'WM_MOUSEHOVER' 
     //! 
     //! \param[in] w - Key/Mouse-button flags
@@ -79,7 +79,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using MouseHoverEventArgs = EventArgs<ENC,WindowMessage::MOUSEHOVER>;
+  using MouseHoverEventArgs = EventArgs<ENC,WindowMessage::MouseHover>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias MouseHoverEvent - Defines the signature of 'MouseHover' event handlers  [Pass by value]

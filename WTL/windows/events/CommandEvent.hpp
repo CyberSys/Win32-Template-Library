@@ -20,12 +20,12 @@ namespace wtl
 {
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<WindowMessage::COMMAND> - Arguments decoder for Gui commands raised via menu or accelerator
+  //! \struct EventArgs<WindowMessage::Command> - Arguments decoder for Gui commands raised via menu or accelerator
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::COMMAND> 
+  struct EventArgs<ENC,WindowMessage::Command> 
   {  
     // ---------------------------------- TYPES & CONSTANTS ----------------------------------
     
@@ -39,7 +39,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::COMMAND;
+    static constexpr WindowMessage  message = WindowMessage::Command;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -47,7 +47,7 @@ namespace wtl
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
-    // EventArgs<WindowMessage::COMMAND>::EventArgs
+    // EventArgs<WindowMessage::Command>::EventArgs
     //! Decode arguments for win32 message 'WM_COMMAND' 
     //! 
     //! \param[in] w - Originator window id in the LO word, NotificationId in the HO word
@@ -81,7 +81,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CommandEventArgs = EventArgs<ENC,WindowMessage::COMMAND>;
+  using CommandEventArgs = EventArgs<ENC,WindowMessage::Command>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias CommandEvent - Defines the signature of 'Command' event handlers  [Pass by value]

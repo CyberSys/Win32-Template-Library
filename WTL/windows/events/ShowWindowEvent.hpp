@@ -17,12 +17,12 @@
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct EventArgs<ENC,WindowMessage::SHOWWINDOW> - Event arguments for Win32 message 'WM_SHOWWINDOW'
+  //! \struct EventArgs<ENC,WindowMessage::ShowWindow> - Event arguments for Win32 message 'WM_SHOWWINDOW'
   //! 
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct EventArgs<ENC,WindowMessage::SHOWWINDOW>
+  struct EventArgs<ENC,WindowMessage::ShowWindow>
   {  
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -36,7 +36,7 @@ namespace wtl
     static constexpr Encoding  encoding = ENC;
     
     //! \var message - Define message identifier
-    static constexpr WindowMessage  message = WindowMessage::SHOWWINDOW;
+    static constexpr WindowMessage  message = WindowMessage::ShowWindow;
     
     //! \var unhandled - Define unhandled result
     static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
@@ -79,7 +79,7 @@ namespace wtl
   //! \tparam ENC - Message character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ShowWindowEventArgs = EventArgs<ENC,WindowMessage::SHOWWINDOW>;
+  using ShowWindowEventArgs = EventArgs<ENC,WindowMessage::ShowWindow>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ShowWindowEvent - Defines the signature of 'ShowWindow' event handlers  [Pass by value]
