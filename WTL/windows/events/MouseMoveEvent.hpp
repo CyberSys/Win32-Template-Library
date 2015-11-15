@@ -8,10 +8,10 @@
 #ifndef WTL_MOUSEMOVE_EVENT_HPP
 #define WTL_MOUSEMOVE_EVENT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"             //!< EnumCast
-#include "wtl/windows/EventArgs.hpp"          //!< EventArgs
-#include "wtl/platform/MouseFlags.hpp"        //!< MouseKeyFlag
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>             //!< EnumCast
+#include <wtl/windows/EventArgs.hpp>          //!< EventArgs
+#include <wtl/platform/MouseFlags.hpp>        //!< MouseKeyFlag
 
 //! \namespace wtl - Windows template library
 namespace wtl

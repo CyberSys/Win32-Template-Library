@@ -8,12 +8,12 @@
 #ifndef WTL_ICON_RESOURCES_HPP
 #define WTL_ICON_RESOURCES_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/Resources/ResourceBlob.hpp"   //!< ResourceBlob
-#include "wtl/traits/IconTraits.hpp"        //!< HIcon
-#include "wtl/platform/Locale.hpp"          //!< LanguageId
-#include "wtl/platform/ResourceId.hpp"      //!< ResourceId
-#include "wtl/platform/SystemFlags.hpp"     //!< ResourceType
+#include <wtl/WTL.hpp>
+#include <wtl/Resources/ResourceBlob.hpp>   //!< ResourceBlob
+#include <wtl/traits/IconTraits.hpp>        //!< HIcon
+#include <wtl/platform/Locale.hpp>          //!< LanguageId
+#include <wtl/platform/ResourceId.hpp>      //!< ResourceId
+#include <wtl/platform/SystemFlags.hpp>     //!< ResourceType
 
 //! \namespace wtl - Windows template library
 namespace wtl

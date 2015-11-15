@@ -8,7 +8,7 @@
 #ifndef WTL_SKIN_FACTORY_HPP
 #define WTL_SKIN_FACTORY_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <WTL/windows/WindowSkin.hpp>             //!< IWindowSkin
 
 //! \namespace wtl - Windows template library

@@ -8,7 +8,7 @@
 #ifndef WTL_EVENT_DELEGATE_HPP
 #define WTL_EVENT_DELEGATE_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <functional>             //!< std::function, std::bind, std::placeholders
 
 //! \namespace wtl - Windows template library

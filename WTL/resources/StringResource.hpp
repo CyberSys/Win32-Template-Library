@@ -8,10 +8,10 @@
 #ifndef WTL_STRING_RESOURCES_HPP
 #define WTL_STRING_RESOURCES_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/Resources/ResourceBlob.hpp"       //!< ResourceBlob
-#include "wtl/modules/ModuleCollection.h"       //!< LoadedModules
-#include "wtl/utils/String.hpp"                 //!< String
+#include <wtl/WTL.hpp>
+#include <wtl/Resources/ResourceBlob.hpp>       //!< ResourceBlob
+#include <wtl/modules/ModuleCollection.h>       //!< LoadedModules
+#include <wtl/utils/String.hpp>                 //!< String
 
 //! \namespace wtl - Windows template library
 namespace wtl

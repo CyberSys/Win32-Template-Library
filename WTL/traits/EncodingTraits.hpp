@@ -8,10 +8,10 @@
 #ifndef WTL_ENCODING_HPP
 #define WTL_ENCODING_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"      //!< is_attribute, is_contiguous
-#include "wtl/utils/Default.hpp"          //!< default_t
-#include "wtl/utils/SFINAE.hpp"           //!< enable_if_equal_t, enable_if_greater_t
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>      //!< is_attribute, is_contiguous
+#include <wtl/utils/Default.hpp>          //!< default_t
+#include <wtl/utils/SFINAE.hpp>           //!< enable_if_equal_t, enable_if_greater_t
 #include <type_traits>                    //!< std::enable_if_t, std::integral_constant
 
 //! \namespace wtl - Windows template library

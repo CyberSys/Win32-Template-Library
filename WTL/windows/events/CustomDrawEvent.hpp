@@ -8,7 +8,7 @@
 #ifndef WTL_CUSTOM_DRAW_EVENT_HPP
 #define WTL_CUSTOM_DRAW_EVENT_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

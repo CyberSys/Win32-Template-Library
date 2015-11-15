@@ -8,12 +8,12 @@
 #ifndef WTL_WINDOW_CLASS_TRAITS_HPP
 #define WTL_WINDOW_CLASS_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"         //!< EnumCast
-#include "wtl/utils/Handle.hpp"           //!< Handle
-#include "wtl/utils/Default.hpp"          //!< Default
-#include "wtl/platform/ResourceId.hpp"    //!< ResourceId
-#include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>         //!< EnumCast
+#include <wtl/utils/Handle.hpp>           //!< Handle
+#include <wtl/utils/Default.hpp>          //!< Default
+#include <wtl/platform/ResourceId.hpp>    //!< ResourceId
+#include <wtl/traits/EncodingTraits.hpp>  //!< Encoding
 
 //! \namespace wtl - Windows template library
 namespace wtl

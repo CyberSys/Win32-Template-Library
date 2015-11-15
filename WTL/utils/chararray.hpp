@@ -8,12 +8,12 @@
 #ifndef WTL_CHAR_ARRAY_HPP
 #define WTL_CHAR_ARRAY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/DynamicArray.hpp"           //!< Array
-#include "wtl/utils/Encoding.hpp"               //!< string_encoder_t
-#include "wtl/utils/String.hpp"                 //!< String utilities
-#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
-#include "wtl/io/Console.hpp"                   //!< Console
+#include <wtl/WTL.hpp>
+#include <wtl/utils/DynamicArray.hpp>           //!< Array
+#include <wtl/utils/Encoding.hpp>               //!< string_encoder_t
+#include <wtl/utils/String.hpp>                 //!< String utilities
+#include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
+#include <wtl/io/Console.hpp>                   //!< Console
 #include <vector>                               //!< std::vector
 
 //! \namespace wtl - Windows template library

@@ -8,10 +8,10 @@
 #ifndef WTL_IMAGE_LIST_H
 #define WTL_IMAGE_LIST_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/gdi/DeviceContext.hpp"               //!< HDeviceContext
-#include "wtl/traits/ImageListTraits.hpp"          //!< HImageList
-#include "wtl/platform/HResult.hpp"                //!< HResult
+#include <wtl/WTL.hpp>
+#include <wtl/gdi/DeviceContext.hpp>               //!< HDeviceContext
+#include <wtl/traits/ImageListTraits.hpp>          //!< HImageList
+#include <wtl/platform/HResult.hpp>                //!< HResult
 
 //! \namespace wtl - Windows template library
 namespace wtl

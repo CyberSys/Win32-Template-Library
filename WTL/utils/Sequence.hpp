@@ -8,8 +8,8 @@
 #ifndef WTL_SEQUENCE_HPP
 #define WTL_SEQUENCE_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Constant.hpp"       //!< integral_constant
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Constant.hpp>       //!< integral_constant
 #include <type_traits>                  //!< 
 #include <utility>                      //!< std::tuple_element
 

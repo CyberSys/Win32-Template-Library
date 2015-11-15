@@ -8,9 +8,9 @@
 #ifndef WTL_WINDOW_TEXT_LENGTH_PROPERTY_HPP
 #define WTL_WINDOW_TEXT_LENGTH_PROPERTY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/properties/TextLengthProperty.h"        //!< TextLengthProperty
-#include "wtl/windows/WindowBase.hpp"                         //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/windows/properties/TextLengthProperty.h>        //!< TextLengthProperty
+#include <wtl/windows/WindowBase.hpp>                         //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

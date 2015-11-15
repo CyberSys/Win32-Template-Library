@@ -8,7 +8,7 @@
 #ifndef WTL_LENGTH_OF_HPP
 #define WTL_LENGTH_OF_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

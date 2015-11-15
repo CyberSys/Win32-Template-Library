@@ -8,8 +8,8 @@
 #ifndef WTL_FORMAT_SPEC_HPP
 #define WTL_FORMAT_SPEC_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>
 #include <type_traits>
 #include <exception>
 #include <cwchar>          // Wide char

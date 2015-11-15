@@ -8,11 +8,11 @@
 #ifndef WTL_WINDOW_VISIBLE_PROPERTY_HPP
 #define WTL_WINDOW_VISIBLE_PROPERTY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/BooleanCast.hpp"                            //!< BooleanCast
-#include "wtl/casts/EnumCast.hpp"                               //!< EnumCast
-#include "wtl/windows/properties/VisibilityProperty.h"          //!< VisibilityProperty
-#include "wtl/windows/WindowBase.hpp"                           //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/casts/BooleanCast.hpp>                            //!< BooleanCast
+#include <wtl/casts/EnumCast.hpp>                               //!< EnumCast
+#include <wtl/windows/properties/VisibilityProperty.h>          //!< VisibilityProperty
+#include <wtl/windows/WindowBase.hpp>                           //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

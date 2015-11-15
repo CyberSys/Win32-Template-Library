@@ -8,12 +8,12 @@
 #ifndef WTL_DEBUG_INFO_HPP
 #define WTL_DEBUG_INFO_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/ForEach.hpp"            //!< for_each
-#include "wtl/utils/Point.hpp"              //!< Point
-#include "wtl/utils/NameValuePair.hpp"      //!< NameValuePair
-#include "wtl/io/Console.hpp"               //!< wtl::Console
-#include "wtl/io/StreamIterator.hpp"        //!< wtl::StreamIterator
+#include <wtl/WTL.hpp>
+#include <wtl/utils/ForEach.hpp>            //!< for_each
+#include <wtl/utils/Point.hpp>              //!< Point
+#include <wtl/utils/NameValuePair.hpp>      //!< NameValuePair
+#include <wtl/io/Console.hpp>               //!< wtl::Console
+#include <wtl/io/StreamIterator.hpp>        //!< wtl::StreamIterator
 #include <tuple>                            //!< std::tuple
 #include <type_traits>                      //!< std::enable_if
 

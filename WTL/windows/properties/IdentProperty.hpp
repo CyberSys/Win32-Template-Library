@@ -8,10 +8,10 @@
 #ifndef WTL_WINDOW_ID_PROPERTY_HPP
 #define WTL_WINDOW_ID_PROPERTY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"                       //!< EnumCast
-#include "wtl/windows/properties/IdentProperty.h"       //!< IdentPropertyImpl
-#include "wtl/windows/WindowBase.hpp"                   //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>                       //!< EnumCast
+#include <wtl/windows/properties/IdentProperty.h>       //!< IdentPropertyImpl
+#include <wtl/windows/WindowBase.hpp>                   //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

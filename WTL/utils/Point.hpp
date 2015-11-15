@@ -8,10 +8,10 @@
 #ifndef WTL_POINT_HPP
 #define WTL_POINT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Default.hpp"       //!< default
-#include "wtl/utils/Requires.hpp"      //!< requires
-#include "wtl/utils/Concepts.hpp"      //!< Signed16BitFields, Signed32BitFields
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Default.hpp>       //!< default
+#include <wtl/utils/Requires.hpp>      //!< requires
+#include <wtl/utils/Concepts.hpp>      //!< Signed16BitFields, Signed32BitFields
 #include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library

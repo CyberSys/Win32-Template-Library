@@ -8,9 +8,9 @@
 #ifndef WTL_DEFAULT_HPP
 #define WTL_DEFAULT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Constant.hpp"           //!< integral_constant
-#include "wtl/utils/SFINAE.hpp"             //!< enable_if
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Constant.hpp>           //!< integral_constant
+#include <wtl/utils/SFINAE.hpp>             //!< enable_if
 
 //! \namespace wtl - Windows template library
 namespace wtl

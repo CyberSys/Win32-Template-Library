@@ -8,8 +8,8 @@
 #ifndef WTL_CHAR_ENCODING_HPP
 #define WTL_CHAR_ENCODING_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

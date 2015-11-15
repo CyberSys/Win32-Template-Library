@@ -8,16 +8,16 @@
 #ifndef WTL_POPUP_MENU_HPP
 #define WTL_POPUP_MENU_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"                             //!< Handle
-#include "wtl/traits/EncodingTraits.hpp"                    //!< Encoding
-#include "wtl/traits/MenuTraits.hpp"                        //!< HMenu
-#include "wtl/gdi/StockObjects.hpp"                         //!< StockBrush
-#include "wtl/windows/MenuItemInfo.hpp"                     //!< MenuItemInfo
-#include "wtl/windows/Command.hpp"                          //!< Command
-#include "wtl/windows/CommandGroup.hpp"                     //!< CommandGroup
-#include "wtl/windows/events/OwnerDrawMenuEvent.hpp"        //!< OwnerDrawEvent
-#include "wtl/windows/events/OwnerMeasureMenuEvent.hpp"     //!< OwnerMeasureEvent
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>                             //!< Handle
+#include <wtl/traits/EncodingTraits.hpp>                    //!< Encoding
+#include <wtl/traits/MenuTraits.hpp>                        //!< HMenu
+#include <wtl/gdi/StockObjects.hpp>                         //!< StockBrush
+#include <wtl/windows/MenuItemInfo.hpp>                     //!< MenuItemInfo
+#include <wtl/windows/Command.hpp>                          //!< Command
+#include <wtl/windows/CommandGroup.hpp>                     //!< CommandGroup
+#include <wtl/windows/events/OwnerDrawMenuEvent.hpp>        //!< OwnerDrawEvent
+#include <wtl/windows/events/OwnerMeasureMenuEvent.hpp>     //!< OwnerMeasureEvent
 
 //! \namespace wtl - Windows template library
 namespace wtl

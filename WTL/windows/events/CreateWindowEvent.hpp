@@ -8,8 +8,8 @@
 #ifndef WTL_CREATE_WINDOW_EVENT_HPP
 #define WTL_CREATE_WINDOW_EVENT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/EventArgs.hpp"            //!< EventArgs
+#include <wtl/WTL.hpp>
+#include <wtl/windows/EventArgs.hpp>            //!< EventArgs
 
 //! \namespace wtl - Windows template library
 namespace wtl 

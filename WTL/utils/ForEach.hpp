@@ -8,7 +8,7 @@
 #ifndef WTL_FOR_EACH_HPP
 #define WTL_FOR_EACH_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <tuple>                  //!< std::tuple
 #include <type_traits>            //!< std::enable_if_t
 

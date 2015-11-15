@@ -8,9 +8,9 @@
 #ifndef WTL_WINDOW_FLAGS_HPP
 #define WTL_WINDOW_FLAGS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"              //!< is_attribute, is_contiguous
-#include "wtl/utils/Default.hpp"                  //!< default_t
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>              //!< is_attribute, is_contiguous
+#include <wtl/utils/Default.hpp>                  //!< default_t
 
 //! \namespace wtl - Windows template library
 namespace wtl

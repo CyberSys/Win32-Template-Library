@@ -8,10 +8,10 @@
 #ifndef WTL_OPEN_DOCUMENT_HPP
 #define WTL_OPEN_DOCUMENT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/Command.hpp"             //!< Command
-#include "wtl/windows/WindowBase.hpp"         //!< WindowBase
-#include "wtl/windows/MessageBox.hpp"         //!< errorBox
+#include <wtl/WTL.hpp>
+#include <wtl/windows/Command.hpp>             //!< Command
+#include <wtl/windows/WindowBase.hpp>         //!< WindowBase
+#include <wtl/windows/MessageBox.hpp>         //!< errorBox
 
 //! \namespace wtl - Windows template library
 namespace wtl

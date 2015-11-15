@@ -6,9 +6,9 @@
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
 #include "Console.hpp"
-#include "wtl/utils/CharArray.hpp"
-#include "wtl/utils/Encoding.hpp"
-#include "wtl/utils/Iterator.hpp"
+#include <wtl/utils/CharArray.hpp>
+#include <wtl/utils/Encoding.hpp>
+#include <wtl/utils/Iterator.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

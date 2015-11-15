@@ -8,7 +8,7 @@
 #ifndef WTL_WINDOW_SKIN_HPP
 #define WTL_WINDOW_SKIN_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 
 //! \namespace wtl - Windows template library

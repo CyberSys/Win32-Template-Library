@@ -8,7 +8,7 @@
 #ifndef WTL_FILE_SEARCH_TRAITS_HPP
 #define WTL_FILE_SEARCH_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 // Create distinct file handle
 DECLARE_HANDLE(HFILESEARCH);

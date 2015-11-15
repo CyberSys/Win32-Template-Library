@@ -8,11 +8,11 @@
 #ifndef WTL_POSITION_CHANGED_EVENT
 #define WTL_POSITION_CHANGED_EVENT
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/OpaqueCast.hpp"                //!< OpaqueCast
-#include "wtl/windows/EventArgs.hpp"               //!< EventArgs
-#include "wtl/utils/Rectangle.hpp"                 //!< Rect
-#include "wtl/traits/WindowTraits.hpp"             //!< HWnd
+#include <wtl/WTL.hpp>
+#include <wtl/casts/OpaqueCast.hpp>                //!< OpaqueCast
+#include <wtl/windows/EventArgs.hpp>               //!< EventArgs
+#include <wtl/utils/Rectangle.hpp>                 //!< Rect
+#include <wtl/traits/WindowTraits.hpp>             //!< HWnd
 
 //! \namespace wtl - Windows template library
 namespace wtl 

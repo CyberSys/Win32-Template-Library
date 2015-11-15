@@ -46,6 +46,6 @@ namespace wtl
 }
 
 // Debug
-#include "wtl/windows/Window.hpp"
+#include <wtl/windows/Window.hpp>
 static wtl::MessageWindow<> wnd;      //!< Forced compilation of library
 

@@ -8,11 +8,11 @@
 #ifndef WTL_MESSAGE_BOX_HPP
 #define WTL_MESSAGE_BOX_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"      //!< choose()
-#include "wtl/utils/String.hpp"               //!< String
-#include "wtl/utils/Exception.hpp"            //!< caught_exception
-#include "wtl/platform/WindowFlags.hpp"       //!< MessageBoxFlags
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>      //!< choose()
+#include <wtl/utils/String.hpp>               //!< String
+#include <wtl/utils/Exception.hpp>            //!< caught_exception
+#include <wtl/platform/WindowFlags.hpp>       //!< MessageBoxFlags
 #include <stdexcept>                          //!< std::Exception
 
 //! \namespace wtl - Windows template library

@@ -8,12 +8,12 @@
 #ifndef WTL_FONT_TRAITS_HPP
 #define WTL_FONT_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"               //!< Handle
-#include "wtl/utils/String.hpp"               //!< String
-#include "wtl/platform/DrawingFlags.hpp"      //!< StockObject, FontStyles
-#include "wtl/casts/BooleanCast.hpp"          //!< BooleanCast
-#include "wtl/casts/EnumCast.hpp"             //!< EnumCast
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>               //!< Handle
+#include <wtl/utils/String.hpp>               //!< String
+#include <wtl/platform/DrawingFlags.hpp>      //!< StockObject, FontStyles
+#include <wtl/casts/BooleanCast.hpp>          //!< BooleanCast
+#include <wtl/casts/EnumCast.hpp>             //!< EnumCast
 
 //! \namespace wtl - Windows template library
 namespace wtl

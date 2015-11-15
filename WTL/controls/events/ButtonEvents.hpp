@@ -8,9 +8,9 @@
 #ifndef WTL_BUTTON_EVENTS_HPP
 #define WTL_BUTTON_EVENTS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/ControlEventArgs.hpp"       //!< ControlEventArgs,Event
-#include "wtl/platform/ControlStyles.hpp"         //!< Styles+Notifications
+#include <wtl/WTL.hpp>
+#include <wtl/windows/ControlEventArgs.hpp>       //!< ControlEventArgs,Event
+#include <wtl/platform/ControlStyles.hpp>         //!< Styles+Notifications
 
 //! \namespace wtl - Windows template library
 namespace wtl 

@@ -8,8 +8,8 @@
 #ifndef WTL_BASE_CAST_HPP
 #define WTL_BASE_CAST_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Exception.hpp"          //!< wtl::exception
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Exception.hpp>          //!< wtl::exception
 
 //! \namespace wtl - Windows template library
 namespace wtl

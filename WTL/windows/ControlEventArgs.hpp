@@ -8,12 +8,12 @@
 #ifndef WTL_CONTROL_EVENT_HPP
 #define WTL_CONTROL_EVENT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"                 //!< Handle
-#include "wtl/traits/WindowTraits.hpp"          //!< HWnd
-#include "wtl/windows/Event.hpp"                //!< Event
-#include "wtl/platform/WindowFlags.hpp"         //!< WindowId
-#include "wtl/platform/CommonApi.hpp"           //!< send_message
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>                 //!< Handle
+#include <wtl/traits/WindowTraits.hpp>          //!< HWnd
+#include <wtl/windows/Event.hpp>                //!< Event
+#include <wtl/platform/WindowFlags.hpp>         //!< WindowId
+#include <wtl/platform/CommonApi.hpp>           //!< send_message
 
 //! \namespace wtl - Windows template library
 namespace wtl 

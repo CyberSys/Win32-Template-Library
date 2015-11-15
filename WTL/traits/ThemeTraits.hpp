@@ -8,10 +8,10 @@
 #ifndef WTL_THEME_TRAITS_HPP
 #define WTL_THEME_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"               //!< Handle
-#include "wtl/utils/String.hpp"               //!< String
-#include "wtl/traits/WindowTraits.hpp"        //!< HWnd
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>               //!< Handle
+#include <wtl/utils/String.hpp>               //!< String
+#include <wtl/traits/WindowTraits.hpp>        //!< HWnd
 #include <Uxtheme.h>                          //!< Visual styles
 
 //! \namespace wtl - Windows template library

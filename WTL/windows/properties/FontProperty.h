@@ -8,11 +8,11 @@
 #ifndef WTL_WINDOW_FONT_PROPERTY_H
 #define WTL_WINDOW_FONT_PROPERTY_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"              //!< Encoding
-#include "wtl/traits/FontTraits.hpp"                  //!< HFont
-#include "wtl/windows/PropertyImpl.hpp"               //!< PropertyImpl
-#include "wtl/windows/events/CreateWindowEvent.hpp"   //!< CreateWindowEventArgs
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>              //!< Encoding
+#include <wtl/traits/FontTraits.hpp>                  //!< HFont
+#include <wtl/windows/PropertyImpl.hpp>               //!< PropertyImpl
+#include <wtl/windows/events/CreateWindowEvent.hpp>   //!< CreateWindowEventArgs
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

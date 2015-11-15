@@ -8,10 +8,10 @@
 #ifndef WTL_TO_STRING_HPP
 #define WTL_TO_STRING_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"        //!< enum_names, enum_values
-#include "wtl/utils/LengthOf.hpp"           //!< lengthof
-#include "wtl/utils/SFINAE.hpp"             //!< enable_if_enum_t
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>        //!< enum_names, enum_values
+#include <wtl/utils/LengthOf.hpp>           //!< lengthof
+#include <wtl/utils/SFINAE.hpp>             //!< enable_if_enum_t
 
 //! \namespace wtl - Windows template library
 namespace wtl

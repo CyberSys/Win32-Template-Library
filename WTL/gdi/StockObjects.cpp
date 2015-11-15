@@ -7,7 +7,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 #include "StockObjects.hpp"
-#include "wtl/gdi/DeviceContext.hpp"
+#include <wtl/gdi/DeviceContext.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

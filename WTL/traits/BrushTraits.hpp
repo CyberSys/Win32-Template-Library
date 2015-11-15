@@ -8,11 +8,11 @@
 #ifndef WTL_BRUSH_TRAITS_HPP
 #define WTL_BRUSH_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"               //!< Handle
-#include "wtl/platform/Colours.hpp"           //!< Colour,SystemColour
-#include "wtl/platform/DrawingFlags.hpp"      //!< StockObject,HatchStyle
-#include "wtl/casts/EnumCast.hpp"             //!< EnumCast
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>               //!< Handle
+#include <wtl/platform/Colours.hpp>           //!< Colour,SystemColour
+#include <wtl/platform/DrawingFlags.hpp>      //!< StockObject,HatchStyle
+#include <wtl/casts/EnumCast.hpp>             //!< EnumCast
 
 //! \namespace wtl - Windows template library
 namespace wtl

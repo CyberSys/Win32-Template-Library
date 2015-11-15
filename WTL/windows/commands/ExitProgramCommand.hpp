@@ -8,9 +8,9 @@
 #ifndef WTL_CLOSE_PROGRAM_HPP
 #define WTL_CLOSE_PROGRAM_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/Command.hpp"             //!< Command
-#include "wtl/windows/WindowBase.hpp"         //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/windows/Command.hpp>             //!< Command
+#include <wtl/windows/WindowBase.hpp>         //!< WindowBase
 
 //! \namespace wtl - Windows template library
 namespace wtl

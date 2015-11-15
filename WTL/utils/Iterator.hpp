@@ -8,7 +8,7 @@
 #ifndef WTL_ITERATOR_HPP
 #define WTL_ITERATOR_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <iterator>                   //!< std::iterator
 
 //! \namespace wtl - Windows template library

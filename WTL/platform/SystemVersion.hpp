@@ -8,10 +8,10 @@
 #ifndef WTL_SYSTEM_VERSION_HPP
 #define WTL_SYSTEM_VERSION_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"      //!< Encoding
-#include "wtl/utils/CharArray.hpp"            //!< CharArray
-#include "wtl/platform/SystemFlags.hpp"       //!< WindowVersion
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>      //!< Encoding
+#include <wtl/utils/CharArray.hpp>            //!< CharArray
+#include <wtl/platform/SystemFlags.hpp>       //!< WindowVersion
 #include <utility>
 
 //! \namespace wtl - Windows template library

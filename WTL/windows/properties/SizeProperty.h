@@ -8,10 +8,10 @@
 #ifndef WTL_WINDOW_SIZE_PROPERTY_H
 #define WTL_WINDOW_SIZE_PROPERTY_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Size.hpp"                //!< SizeL
-#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
-#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Size.hpp>                //!< SizeL
+#include <wtl/traits/EncodingTraits.hpp>     //!< Encoding
+#include <wtl/windows/PropertyImpl.hpp>      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

@@ -8,10 +8,10 @@
 #ifndef WTL_WINDOW_TEXT_PROPERTY_H
 #define WTL_WINDOW_TEXT_PROPERTY_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
-#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
-#include "wtl/utils/String.hpp"              //!< String
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>     //!< Encoding
+#include <wtl/windows/PropertyImpl.hpp>      //!< PropertyImpl
+#include <wtl/utils/String.hpp>              //!< String
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

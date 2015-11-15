@@ -8,13 +8,13 @@
 #ifndef WTL_COMMAND_HPP
 #define WTL_COMMAND_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
-#include "wtl/utils/CharArray.hpp"                //!< CharArray
-#include "wtl/platform/CommandId.hpp"             //!< CommandId
-#include "wtl/platform/ResourceId.hpp"            //!< ResourceId
-#include "wtl/resources/StringResource.hpp"       //!< StringResource
-#include "wtl/resources/IconResource.hpp"         //!< IconResource
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>          //!< Encoding
+#include <wtl/utils/CharArray.hpp>                //!< CharArray
+#include <wtl/platform/CommandId.hpp>             //!< CommandId
+#include <wtl/platform/ResourceId.hpp>            //!< ResourceId
+#include <wtl/resources/StringResource.hpp>       //!< StringResource
+#include <wtl/resources/IconResource.hpp>         //!< IconResource
 #include <memory>                                 //!< std::shared_ptr
 #include <functional>                             //!< std::function
 

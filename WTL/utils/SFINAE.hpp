@@ -8,7 +8,7 @@
 #ifndef WTL_SFINAE_HPP
 #define WTL_SFINAE_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <type_traits>                //!< std::enable_if, std::integral_constant
 
 //! \namespace wtl - Windows template library

@@ -8,7 +8,7 @@
 #ifndef WTL_STREAM_ITERATOR_HPP
 #define WTL_STREAM_ITERATOR_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <iterator>           //!< Iterator traits
 
 //! \namespace wtl - Windows template library

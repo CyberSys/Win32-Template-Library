@@ -8,8 +8,8 @@
 #ifndef WTL_MOUSE_FLAGS_HPP
 #define WTL_MOUSE_FLAGS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"                  //!< is_attribute, is_contiguous
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>                  //!< is_attribute, is_contiguous
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -9,10 +9,10 @@
 #ifndef WTL_FIXED_ARRAY_HPP
 #define WTL_FIXED_ARRAY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Array.hpp"              //!< Array
-#include "wtl/utils/Exception.hpp"          //!< Exceptions
-#include "wtl/io/Console.hpp"               //!< Debug console
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Array.hpp>              //!< Array
+#include <wtl/utils/Exception.hpp>          //!< Exceptions
+#include <wtl/io/Console.hpp>               //!< Debug console
 #include <iterator>                         //!< std::iterator
 #include <functional>                       //!< std::
 #include <algorithm>                        //!< std::equals,std::find_if,etc.

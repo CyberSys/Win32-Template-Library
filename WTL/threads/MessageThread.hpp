@@ -8,12 +8,12 @@
 #ifndef WTL_MESSAGE_THREAD_HPP
 #define WTL_MESSAGE_THREAD_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
-#include "wtl/platform/WindowFlags.hpp"         //!< ShowWindowFlags
-#include "wtl/utils/Exception.hpp"              //!< exception
-#include "wtl/io/Console.hpp"                   //!< Console
-#include "wtl/windows/MessageBox.hpp"           //!< MessageBox
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
+#include <wtl/platform/WindowFlags.hpp>         //!< ShowWindowFlags
+#include <wtl/utils/Exception.hpp>              //!< exception
+#include <wtl/io/Console.hpp>                   //!< Console
+#include <wtl/windows/MessageBox.hpp>           //!< MessageBox
 
 //! \namespace wtl - Windows template library
 namespace wtl

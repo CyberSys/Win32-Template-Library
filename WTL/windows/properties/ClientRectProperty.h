@@ -8,10 +8,10 @@
 #ifndef WTL_CLIENT_RECT_PROPERTY_H
 #define WTL_CLIENT_RECT_PROPERTY_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Rectangle.hpp"           //!< RectL
-#include "wtl/traits/EncodingTraits.hpp"     //!< Encoding
-#include "wtl/windows/PropertyImpl.hpp"      //!< PropertyImpl
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Rectangle.hpp>           //!< RectL
+#include <wtl/traits/EncodingTraits.hpp>     //!< Encoding
+#include <wtl/windows/PropertyImpl.hpp>      //!< PropertyImpl
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

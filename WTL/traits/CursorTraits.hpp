@@ -8,8 +8,8 @@
 #ifndef WTL_CURSOR_TRAITS_HPP
 #define WTL_CURSOR_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"               //!< Handle
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>               //!< Handle
 
 //! \namespace wtl - Windows template library
 namespace wtl

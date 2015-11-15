@@ -8,23 +8,23 @@
 #ifndef WTL_DEVICE_CONTEXT_HPP
 #define WTL_DEVICE_CONTEXT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"                 //!< EnumCast
-#include "wtl/utils/Handle.hpp"                   //!< Handle
-#include "wtl/utils/LengthOf.hpp"                 //!< LengthOf
-#include "wtl/utils/String.hpp"                   //!< String
-#include "wtl/traits/DeviceContextTraits.hpp"     //!< HDeviceContext
-#include "wtl/traits/BrushTraits.hpp"             //!< HBrush
-#include "wtl/traits/FontTraits.hpp"              //!< HFont
-#include "wtl/traits/PenTraits.hpp"               //!< HPen
-#include "wtl/traits/WindowTraits.hpp"            //!< HWnd
-#include "wtl/platform/Colours.hpp"               //!< Colours
-#include "wtl/platform/DrawingFlags.hpp"          //!< DrawTextFlags
-#include "wtl/utils/Rectangle.hpp"                //!< Rectangle
-#include "wtl/utils/Point.hpp"                    //!< Point
-#include "wtl/utils/Size.hpp"                     //!< Size
-#include "wtl/utils/Triangle.hpp"                 //!< Triangle
-#include "wtl/utils/Queue.hpp"                    //!< Queue
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>                 //!< EnumCast
+#include <wtl/utils/Handle.hpp>                   //!< Handle
+#include <wtl/utils/LengthOf.hpp>                 //!< LengthOf
+#include <wtl/utils/String.hpp>                   //!< String
+#include <wtl/traits/DeviceContextTraits.hpp>     //!< HDeviceContext
+#include <wtl/traits/BrushTraits.hpp>             //!< HBrush
+#include <wtl/traits/FontTraits.hpp>              //!< HFont
+#include <wtl/traits/PenTraits.hpp>               //!< HPen
+#include <wtl/traits/WindowTraits.hpp>            //!< HWnd
+#include <wtl/platform/Colours.hpp>               //!< Colours
+#include <wtl/platform/DrawingFlags.hpp>          //!< DrawTextFlags
+#include <wtl/utils/Rectangle.hpp>                //!< Rectangle
+#include <wtl/utils/Point.hpp>                    //!< Point
+#include <wtl/utils/Size.hpp>                     //!< Size
+#include <wtl/utils/Triangle.hpp>                 //!< Triangle
+#include <wtl/utils/Queue.hpp>                    //!< Queue
 
 //! \namespace wtl - Windows template library
 namespace wtl

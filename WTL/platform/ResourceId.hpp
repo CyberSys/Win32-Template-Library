@@ -8,10 +8,10 @@
 #ifndef WTL_RESOURCE_ID_HPP
 #define WTL_RESOURCE_ID_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"      //!< encoding_char_t
-#include "wtl/utils/DebugInfo.hpp"            //!< DebugInfo
-#include "wtl/platform/SystemFlags.hpp"       //!< ResourceType
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>      //!< encoding_char_t
+#include <wtl/utils/DebugInfo.hpp>            //!< DebugInfo
+#include <wtl/platform/SystemFlags.hpp>       //!< ResourceType
 
 //! \namespace wtl - Windows template library
 namespace wtl

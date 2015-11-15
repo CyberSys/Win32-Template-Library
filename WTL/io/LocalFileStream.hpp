@@ -8,7 +8,7 @@
 #ifndef WTL_LOCAL_FILE_STREAM_HPP
 #define WTL_LOCAL_FILE_STREAM_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

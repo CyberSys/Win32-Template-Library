@@ -8,7 +8,7 @@
 #ifndef WTL_DIALOG_RESOURCES_HPP
 #define WTL_DIALOG_RESOURCES_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

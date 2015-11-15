@@ -8,10 +8,10 @@
 #ifndef WTL_IMAGELIST_TRAITS_HPP
 #define WTL_IMAGELIST_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"                   //!< Handle
-#include "wtl/utils/Size.hpp"                     //!< Size
-#include "wtl/platform/DrawingFlags.hpp"          //!< ImageListType
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>                   //!< Handle
+#include <wtl/utils/Size.hpp>                     //!< Size
+#include <wtl/platform/DrawingFlags.hpp>          //!< ImageListType
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -8,9 +8,9 @@
 #ifndef WTL_KILLFOCUS_EVENT_HPP
 #define WTL_KILLFOCUS_EVENT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"             //!< EnumCast
-#include "wtl/windows/EventArgs.hpp"          //!< EventArgs
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>             //!< EnumCast
+#include <wtl/windows/EventArgs.hpp>          //!< EventArgs
 #include <wtl/traits/WindowTraits.hpp>        //!< HWnd
 
 //! \namespace wtl - Windows template library

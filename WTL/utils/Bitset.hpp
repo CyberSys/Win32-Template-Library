@@ -8,11 +8,11 @@
 #ifndef WTL_BITSET_HPP
 #define WTL_BITSET_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Default.hpp"            //!< Default
-#include "wtl/utils/DynamicArray.hpp"       //!< Array
-#include "wtl/utils/Range.hpp"              //!< delimited_range
-#include "wtl/utils/DebugInfo.hpp"          //!< DebugInfo
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Default.hpp>            //!< Default
+#include <wtl/utils/DynamicArray.hpp>       //!< Array
+#include <wtl/utils/Range.hpp>              //!< delimited_range
+#include <wtl/utils/DebugInfo.hpp>          //!< DebugInfo
 
 //! \namespace wtl - Windows template library
 namespace wtl

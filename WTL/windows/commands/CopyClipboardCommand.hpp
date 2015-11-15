@@ -8,9 +8,9 @@
 #ifndef WTL_COPY_CLIPBOARD_HPP
 #define WTL_COPY_CLIPBOARD_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/Command.hpp"             //!< Command
-#include "wtl/windows/WindowBase.hpp"         //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/windows/Command.hpp>             //!< Command
+#include <wtl/windows/WindowBase.hpp>         //!< WindowBase
 
 //! \namespace wtl - Windows template library
 namespace wtl

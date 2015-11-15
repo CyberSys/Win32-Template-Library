@@ -8,10 +8,10 @@
 #ifndef WTL_COMMAND_IDS_HPP
 #define WTL_COMMAND_IDS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"
-#include "wtl/casts/EnumCast.hpp"
-#include "wtl/Resource.h"
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>
+#include <wtl/casts/EnumCast.hpp>
+#include <wtl/Resource.h>
 #include <type_traits>
 
 //! \namespace wtl - Windows template library

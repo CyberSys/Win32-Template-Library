@@ -8,12 +8,12 @@
 #ifndef WTL_API_COMMON_HPP
 #define WTL_API_COMMON_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"               //!< EnumCast
-#include "wtl/utils/Handle.hpp"                 //!< Handle
-#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
-#include "wtl/traits/WindowTraits.hpp"          //!< HWnd
-#include "wtl/platform/WindowMessage.hpp"       //!< WindowMessage
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>               //!< EnumCast
+#include <wtl/utils/Handle.hpp>                 //!< Handle
+#include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
+#include <wtl/traits/WindowTraits.hpp>          //!< HWnd
+#include <wtl/platform/WindowMessage.hpp>       //!< WindowMessage
 
 //! \namespace wtl - Windows template library
 namespace wtl

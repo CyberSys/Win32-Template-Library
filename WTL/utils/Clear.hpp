@@ -8,8 +8,8 @@
 #ifndef WTL_CLEAR_HPP
 #define WTL_CLEAR_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/SFINAE.hpp"
+#include <wtl/WTL.hpp>
+#include <wtl/utils/SFINAE.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

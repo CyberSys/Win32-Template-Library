@@ -8,15 +8,15 @@
 #ifndef WTL_MESSAGE_PUMP_HPP
 #define WTL_MESSAGE_PUMP_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"            //!< Encoding
-#include "wtl/platform/WindowMessage.hpp"           //!< WindowMessage
-#include "wtl/platform/ResourceId.hpp"              //!< ResourceId
-#include "wtl/platform/WindowFlags.hpp"             //!< ShowWindowFlags
-#include "wtl/windows/MessageBox.hpp"               //!< MessageBox
-//#include "wtl/windows/WindowBase.hpp"               //!< WindowBase
-#include "wtl/io/Console.hpp"                       //!< Console
-//#include "wtl/utils/ExceptionLog.hpp"               //!< exception_log
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EncodingTraits.hpp>            //!< Encoding
+#include <wtl/platform/WindowMessage.hpp>           //!< WindowMessage
+#include <wtl/platform/ResourceId.hpp>              //!< ResourceId
+#include <wtl/platform/WindowFlags.hpp>             //!< ShowWindowFlags
+#include <wtl/windows/MessageBox.hpp>               //!< MessageBox
+//#include <wtl/windows/WindowBase.hpp>               //!< WindowBase
+#include <wtl/io/Console.hpp>                       //!< Console
+//#include <wtl/utils/ExceptionLog.hpp>               //!< exception_log
 #include <stdexcept>                                //!< std::exception
 
 //! \namespace wtl - Windows template library

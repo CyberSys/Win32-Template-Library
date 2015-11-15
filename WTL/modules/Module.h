@@ -8,16 +8,16 @@
 #ifndef WTL_MODULE_HPP
 #define WTL_MODULE_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"             //!< Handle
-#include "wtl/utils/List.hpp"               //!< List
-#include "wtl/utils/Default.hpp"            //!< Default
-#include "wtl/traits/EncodingTraits.hpp"    //!< Encoding
-#include "wtl/traits/ModuleTraits.hpp"      //!< HModule
-#include "wtl/traits/ResourceTraits.hpp"    //!< HResource
-#include "wtl/resources/ResourceBlob.hpp"   //!< ResourceBlob
-#include "wtl/platform/ResourceId.hpp"      //!< ResourceId
-#include "wtl/platform/Path.hpp"            //!< Path
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>             //!< Handle
+#include <wtl/utils/List.hpp>               //!< List
+#include <wtl/utils/Default.hpp>            //!< Default
+#include <wtl/traits/EncodingTraits.hpp>    //!< Encoding
+#include <wtl/traits/ModuleTraits.hpp>      //!< HModule
+#include <wtl/traits/ResourceTraits.hpp>    //!< HResource
+#include <wtl/resources/ResourceBlob.hpp>   //!< ResourceBlob
+#include <wtl/platform/ResourceId.hpp>      //!< ResourceId
+#include <wtl/platform/Path.hpp>            //!< Path
 #include <functional>                       //!< std::forward
 
 //! \namespace wtl - Windows template library

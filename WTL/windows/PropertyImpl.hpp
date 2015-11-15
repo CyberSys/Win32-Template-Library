@@ -8,8 +8,8 @@
 #ifndef WTL_PROPERTY_IMPL_HPP
 #define WTL_PROPERTY_IMPL_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"            //!< is_attribute
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>            //!< is_attribute
 #include <utility>                              //!< std::forward
 #include <type_traits>                          //!< std::enable_if, std::conditional
 

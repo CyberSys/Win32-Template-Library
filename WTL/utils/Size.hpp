@@ -8,9 +8,9 @@
 #ifndef WTL_SIZE_HPP
 #define WTL_SIZE_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/DebugInfo.hpp"     //!< DebugInfo
-#include "wtl/utils/SFINAE.hpp"        //!< enable_if_sizeof_t
+#include <wtl/WTL.hpp>
+#include <wtl/utils/DebugInfo.hpp>     //!< DebugInfo
+#include <wtl/utils/SFINAE.hpp>        //!< enable_if_sizeof_t
 #include <type_traits>                 //!< std::enable_if
 
 //! \namespace wtl - Windows template library

@@ -8,9 +8,9 @@
 #ifndef WTL_BUILD_TRAITS_HPP
 #define WTL_BUILD_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
-#include "wtl/platform/SystemFlags.hpp"   //!< WindowVersion
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>      //!< wtl::is_attribute, wtl::is_contiguous, wtl::enum_names,...
+#include <wtl/platform/SystemFlags.hpp>   //!< WindowVersion
 #include <type_traits>                    //!< std::enable_if
 
 //! \namespace wtl - Windows template library

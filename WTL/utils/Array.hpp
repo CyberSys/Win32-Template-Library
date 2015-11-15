@@ -8,11 +8,11 @@
 #ifndef WTL_ARRAY_HPP
 #define WTL_ARRAY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Allocator.hpp"          //!< StaticAlloc
-#include "wtl/io/Console.hpp"               //!< Debug console
-#include "wtl/utils/DebugInfo.hpp"          //!< DebugInfo
-#include "wtl/utils/NameValuePair.hpp"      //!< NameValuePair
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Allocator.hpp>          //!< StaticAlloc
+#include <wtl/io/Console.hpp>               //!< Debug console
+#include <wtl/utils/DebugInfo.hpp>          //!< DebugInfo
+#include <wtl/utils/NameValuePair.hpp>      //!< NameValuePair
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -8,17 +8,17 @@
 #ifndef WTL_MENU_ITEM_INFO_HPP
 #define WTL_MENU_ITEM_INFO_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/BaseCast.hpp"         //!< base_cast
-#include "wtl/casts/EnumCast.hpp"         //!< enum_cast
-#include "wtl/casts/OpaqueCast.hpp"       //!< opaque_cast
-#include "wtl/utils/Handle.hpp"           //!< Handle
-#include "wtl/utils/Clear.hpp"            //!< clear
-#include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
-#include "wtl/traits/MenuTraits.hpp"      //!< HMenu
-#include "wtl/platform/MenuFlags.hpp"     //!< MenuItemState,MenuItemFlag,MenuItemType
-#include "wtl/windows/Command.hpp"        //!< Command,CommandState
-#include "wtl/windows/CommandGroup.hpp"   //!< CommandGroup
+#include <wtl/WTL.hpp>
+#include <wtl/casts/BaseCast.hpp>         //!< base_cast
+#include <wtl/casts/EnumCast.hpp>         //!< enum_cast
+#include <wtl/casts/OpaqueCast.hpp>       //!< opaque_cast
+#include <wtl/utils/Handle.hpp>           //!< Handle
+#include <wtl/utils/Clear.hpp>            //!< clear
+#include <wtl/traits/EncodingTraits.hpp>  //!< Encoding
+#include <wtl/traits/MenuTraits.hpp>      //!< HMenu
+#include <wtl/platform/MenuFlags.hpp>     //!< MenuItemState,MenuItemFlag,MenuItemType
+#include <wtl/windows/Command.hpp>        //!< Command,CommandState
+#include <wtl/windows/CommandGroup.hpp>   //!< CommandGroup
 
 //! \namespace wtl - Windows template library
 namespace wtl

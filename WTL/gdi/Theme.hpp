@@ -8,10 +8,10 @@
 #ifndef WTL_THEME_H
 #define WTL_THEME_H
 
-#include "wtl/WTL.hpp"
-#include "wtl/gdi/DeviceContext.hpp"               //!< HDeviceContext
-#include "wtl/traits/ThemeTraits.hpp"              //!< HTheme
-#include "wtl/platform/HResult.hpp"                //!< HResult
+#include <wtl/WTL.hpp>
+#include <wtl/gdi/DeviceContext.hpp>               //!< HDeviceContext
+#include <wtl/traits/ThemeTraits.hpp>              //!< HTheme
+#include <wtl/platform/HResult.hpp>                //!< HResult
 #include <vsstyle.h>                               //!< Parts and States
 #include <Vssym32.h>                               //!< Properties
 

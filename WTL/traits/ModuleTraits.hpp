@@ -8,10 +8,10 @@
 #ifndef WTL_MODULE_TRAITS_HPP
 #define WTL_MODULE_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"
-#include "wtl/utils/Default.hpp"
-#include "wtl/platform/Path.hpp"
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>
+#include <wtl/utils/Default.hpp>
+#include <wtl/platform/Path.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

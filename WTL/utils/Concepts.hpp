@@ -8,7 +8,7 @@
 #ifndef WTL_CONCEPTS_HPP
 #define WTL_CONCEPTS_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

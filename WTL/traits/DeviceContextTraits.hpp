@@ -8,9 +8,9 @@
 #ifndef WTL_DEVICE_CONTEXT_TRAITS_HPP
 #define WTL_DEVICE_CONTEXT_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"
-#include "wtl/utils/Default.hpp"
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>
+#include <wtl/utils/Default.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl

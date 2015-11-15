@@ -8,10 +8,10 @@
 #ifndef WTL_SHOW_WINDOW_EVENT_HPP
 #define WTL_SHOW_WINDOW_EVENT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/EventArgs.hpp"              //!< EventArgs
-#include "wtl/casts/OpaqueCast.hpp"               //!< OpaqueCast
-#include "wtl/platform/WindowFlags.hpp"           //!< ShowWindowType
+#include <wtl/WTL.hpp>
+#include <wtl/windows/EventArgs.hpp>              //!< EventArgs
+#include <wtl/casts/OpaqueCast.hpp>               //!< OpaqueCast
+#include <wtl/platform/WindowFlags.hpp>           //!< ShowWindowType
 
 //! \namespace wtl - Windows template library
 namespace wtl

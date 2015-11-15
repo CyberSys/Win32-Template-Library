@@ -8,7 +8,7 @@
 #ifndef WTL_HRESULT_HPP
 #define WTL_HRESULT_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <wtl\platform\WindowFlags.hpp>       //!< FormatMessageFlags
 #include <wtl\utils\String.hpp>               //!< String
 #include <wtl\utils\Exception.hpp>            //!< platform_error

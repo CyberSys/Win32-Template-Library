@@ -8,7 +8,7 @@
 #ifndef WTL_LIST_HPP
 #define WTL_LIST_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <utility>                          //!< std::forward
 #include <initializer_list>                 //!< std::initializer_list
 #include <list>                             //!< std::list

@@ -8,13 +8,13 @@
 #ifndef WTL_APPLICATION_HPP
 #define WTL_APPLICATION_HPP
 
-#include "wtl/WTL.hpp"
-//#include "wtl/traits/ApplicationTraits.hpp"
-#include "wtl/modules/Module.h"                     //!< Module
-#include "wtl/threads/MessagePump.hpp"              //!< MessagePump
-#include "wtl/platform/DateTime.hpp"                //!< DateTime
-#include "wtl/platform/SystemVersion.hpp"           //!< SystemVersion
-#include "wtl/utils/String.hpp"                     //!< String
+#include <wtl/WTL.hpp>
+//#include <wtl/traits/ApplicationTraits.hpp>
+#include <wtl/modules/Module.h>                     //!< Module
+#include <wtl/threads/MessagePump.hpp>              //!< MessagePump
+#include <wtl/platform/DateTime.hpp>                //!< DateTime
+#include <wtl/platform/SystemVersion.hpp>           //!< SystemVersion
+#include <wtl/utils/String.hpp>                     //!< String
 
 //! \namespace wtl - Windows template library
 namespace wtl

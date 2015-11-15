@@ -8,10 +8,10 @@
 #ifndef WTL_WINDOW_STYLE_PROPERTY_HPP
 #define WTL_WINDOW_STYLE_PROPERTY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"                       //!< EnumCast
-#include "wtl/windows/properties/StyleProperty.h"       //!< StyleProperty
-#include "wtl/windows/WindowBase.hpp"                   //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>                       //!< EnumCast
+#include <wtl/windows/properties/StyleProperty.h>       //!< StyleProperty
+#include <wtl/windows/WindowBase.hpp>                   //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

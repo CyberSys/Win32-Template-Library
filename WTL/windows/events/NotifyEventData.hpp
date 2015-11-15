@@ -8,7 +8,7 @@
 #ifndef WTL_NOTIFY_EVENT_DATA_HPP
 #define WTL_NOTIFY_EVENT_DATA_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl 

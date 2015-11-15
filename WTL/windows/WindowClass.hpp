@@ -8,17 +8,17 @@
 #ifndef WTL_WINDOW_CLASS_HPP
 #define WTL_WINDOW_CLASS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"               //!< EnumCast
-#include "wtl/utils/Handle.hpp"                 //!< Handle
-#include "wtl/utils/Default.hpp"                //!< Default
-#include "wtl/platform/ResourceId.hpp"          //!< ResourceId
-#include "wtl/platform/WindowFlags.hpp"         //!< ClassStyle
-#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
-#include "wtl/traits/BrushTraits.hpp"           //!< HBrush
-#include "wtl/traits/CursorTraits.hpp"          //!< HCursor
-#include "wtl/traits/IconTraits.hpp"            //!< HIcon
-#include "wtl/traits/WindowClassTraits.hpp"     //!< HAtom
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>               //!< EnumCast
+#include <wtl/utils/Handle.hpp>                 //!< Handle
+#include <wtl/utils/Default.hpp>                //!< Default
+#include <wtl/platform/ResourceId.hpp>          //!< ResourceId
+#include <wtl/platform/WindowFlags.hpp>         //!< ClassStyle
+#include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
+#include <wtl/traits/BrushTraits.hpp>           //!< HBrush
+#include <wtl/traits/CursorTraits.hpp>          //!< HCursor
+#include <wtl/traits/IconTraits.hpp>            //!< HIcon
+#include <wtl/traits/WindowClassTraits.hpp>     //!< HAtom
 
 //! \namespace wtl - Windows template library
 namespace wtl 

@@ -8,7 +8,7 @@
 #ifndef WTL_ADAPTERS_HPP
 #define WTL_ADAPTERS_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 #include <functional>               //!< std::unary_function
 
 //! \namespace wtl - Windows template library

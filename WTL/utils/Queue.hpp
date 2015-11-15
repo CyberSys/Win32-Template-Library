@@ -8,8 +8,8 @@
 #ifndef WTL_QUEUE_HPP
 #define WTL_QUEUE_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Exception.hpp"          //!< Exceptions
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Exception.hpp>          //!< Exceptions
 #include <utility>                          //!< std::forward
 #include <initializer_list>                 //!< std::initializer_list
 #include <deque>                            //!< std::deque

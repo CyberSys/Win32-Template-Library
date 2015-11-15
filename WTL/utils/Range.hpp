@@ -8,9 +8,9 @@
 #ifndef WTL_RANGE_HPP
 #define WTL_RANGE_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/io/Console.hpp"           //!< Console
-#include "wtl/io/StreamIterator.hpp"    //!< StreamIterator
+#include <wtl/WTL.hpp>
+#include <wtl/io/Console.hpp>           //!< Console
+#include <wtl/io/StreamIterator.hpp>    //!< StreamIterator
 
 //! \namespace wtl - Windows template library
 namespace wtl

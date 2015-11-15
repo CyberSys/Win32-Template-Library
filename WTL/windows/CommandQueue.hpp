@@ -8,9 +8,9 @@
 #ifndef WTL_GUI_COMMAND_QUEUE_HPP
 #define WTL_GUI_COMMAND_QUEUE_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/Command.hpp"          //!< Command
-#include "wtl/utils/Queue.hpp"              //!< Queue
+#include <wtl/WTL.hpp>
+#include <wtl/windows/Command.hpp>          //!< Command
+#include <wtl/utils/Queue.hpp>              //!< Queue
 
 //! \namespace wtl - Windows template library
 namespace wtl 

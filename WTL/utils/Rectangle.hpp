@@ -8,10 +8,10 @@
 #ifndef WTL_RECT_HPP
 #define WTL_RECT_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Point.hpp"          //!< Point
-#include "wtl/utils/Size.hpp"           //!< Size
-#include "wtl/utils/DebugInfo.hpp"      //!< DebugInfo
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Point.hpp>          //!< Point
+#include <wtl/utils/Size.hpp>           //!< Size
+#include <wtl/utils/DebugInfo.hpp>      //!< DebugInfo
 
 //! \namespace wtl - Windows template library
 namespace wtl

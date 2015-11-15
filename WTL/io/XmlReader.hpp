@@ -8,7 +8,7 @@
 #ifndef WTL_XML_READER_HPP
 #define WTL_XML_READER_HPP
 
-#include "wtl/WTL.hpp"
+#include <wtl/WTL.hpp>
 
 // PUGI-XML
 #include "pugixml/pugixml.hpp"

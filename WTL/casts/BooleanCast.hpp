@@ -8,8 +8,8 @@
 #ifndef WTL_BOOLEAN_CAST_HPP
 #define WTL_BOOLEAN_CAST_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Default.hpp"
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Default.hpp>
 
 
 //! \namespace wtl - Windows template library

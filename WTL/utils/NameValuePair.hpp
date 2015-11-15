@@ -8,9 +8,9 @@
 #ifndef WTL_NAME_VALUE_PAIR_HPP
 #define WTL_NAME_VALUE_PAIR_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/io/Console.hpp"       //!< Console
-#include "wtl/utils/Point.hpp"      //!< Point
+#include <wtl/WTL.hpp>
+#include <wtl/io/Console.hpp>       //!< Console
+#include <wtl/utils/Point.hpp>      //!< Point
 
 //! \namespace wtl - Windows template library
 namespace wtl

@@ -8,9 +8,9 @@
 #ifndef WTL_BUTTON_HPP
 #define WTL_BUTTON_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/WindowBase.hpp"                     //!< WindowBase
-#include "wtl/controls/events/ButtonEvents.hpp"           //!< ButtonClickEvent
+#include <wtl/WTL.hpp>
+#include <wtl/windows/WindowBase.hpp>                     //!< WindowBase
+#include <wtl/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
 #include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
 #include <wtl/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
 #include <wtl/gdi/Theme.hpp>                              //!< Theme

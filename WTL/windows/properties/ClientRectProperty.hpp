@@ -8,9 +8,9 @@
 #ifndef WTL_CLIENT_RECT_PROPERTY_HPP
 #define WTL_CLIENT_RECT_PROPERTY_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/properties/ClientRectProperty.h"        //!< ClientRectProperty
-#include "wtl/windows/WindowBase.hpp"                         //!< WindowBase
+#include <wtl/WTL.hpp>
+#include <wtl/windows/properties/ClientRectProperty.h>        //!< ClientRectProperty
+#include <wtl/windows/WindowBase.hpp>                         //!< WindowBase
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

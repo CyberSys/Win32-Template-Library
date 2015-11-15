@@ -8,11 +8,11 @@
 #ifndef WTL_EXCEPTION_HPP
 #define WTL_EXCEPTION_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/casts/EnumCast.hpp"           //!< EnumCast
-#include "wtl/platform/WindowFlags.hpp"     //!< FormatMessageFlags
-#include "wtl/io/StreamIterator.hpp"        //!< StreamIterator
-#include "wtl/utils/ForEach.hpp"            //!< for_each_t
+#include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>           //!< EnumCast
+#include <wtl/platform/WindowFlags.hpp>     //!< FormatMessageFlags
+#include <wtl/io/StreamIterator.hpp>        //!< StreamIterator
+#include <wtl/utils/ForEach.hpp>            //!< for_each_t
 #include <exception>                        //!< std::exception
 #include <stdexcept>                        //!< std::logic_error, std::domain_error, std::length_error, std::out_of_range
 #include <utility>                          //!< std::forward

@@ -8,12 +8,12 @@
 #ifndef WTL_PATH_HPP
 #define WTL_PATH_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/traits/EnumTraits.hpp"              //!< is_attribute, is_contiguous
-#include "wtl/traits/EncodingTraits.hpp"          //!< Encoding
-#include "wtl/utils/CharArray.hpp"                //!< CharArray
-#include "wtl/utils/Default.hpp"                  //!< default_t
-//#include "wtl/io/Console.hpp"                   //!< Console
+#include <wtl/WTL.hpp>
+#include <wtl/traits/EnumTraits.hpp>              //!< is_attribute, is_contiguous
+#include <wtl/traits/EncodingTraits.hpp>          //!< Encoding
+#include <wtl/utils/CharArray.hpp>                //!< CharArray
+#include <wtl/utils/Default.hpp>                  //!< default_t
+//#include <wtl/io/Console.hpp>                   //!< Console
 #include <string>
 
 //! \namespace wtl - Windows template library

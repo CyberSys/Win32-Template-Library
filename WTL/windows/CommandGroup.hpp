@@ -8,8 +8,8 @@
 #ifndef WTL_COMMAND_GROUP_HPP
 #define WTL_COMMAND_GROUP_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/windows/Command.hpp"          //!< Command
+#include <wtl/WTL.hpp>
+#include <wtl/windows/Command.hpp>          //!< Command
 #include <map>                             //!< std::map
 #include <memory>                          //!< std::shared_ptr
 

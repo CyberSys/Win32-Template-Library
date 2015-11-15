@@ -9,7 +9,7 @@
 #define WTL_WINAPI_HPP
 
 #include "WTL.hpp"
-#include "wtl/traits/EncodingTraits.hpp"        //!< Encoding
+#include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
 
 //! \namespace wtl - Windows template library
 namespace wtl

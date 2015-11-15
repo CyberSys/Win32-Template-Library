@@ -8,17 +8,17 @@
 #ifndef WTL_WINDOW_TRAITS_HPP
 #define WTL_WINDOW_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/Handle.hpp"           //!< Handle
-#include "wtl/utils/CharArray.hpp"        //!< CharArray
-#include "wtl/utils/String.hpp"           //!< String
-#include "wtl/traits/EnumTraits.hpp"      //!< is_attribute
-#include "wtl/traits/EncodingTraits.hpp"  //!< Encoding
-#include "wtl/platform/ResourceId.hpp"    //!< ResourceId
-#include "wtl/platform/WindowFlags.hpp"   //!< WindowId, WindowStyle, WindowStyleEx
-#include "wtl/utils/Point.hpp"            //!< Point
-#include "wtl/utils/Size.hpp"             //!< Size
-#include "wtl/windows/WindowClass.hpp"    //!< WindowClass
+#include <wtl/WTL.hpp>
+#include <wtl/utils/Handle.hpp>           //!< Handle
+#include <wtl/utils/CharArray.hpp>        //!< CharArray
+#include <wtl/utils/String.hpp>           //!< String
+#include <wtl/traits/EnumTraits.hpp>      //!< is_attribute
+#include <wtl/traits/EncodingTraits.hpp>  //!< Encoding
+#include <wtl/platform/ResourceId.hpp>    //!< ResourceId
+#include <wtl/platform/WindowFlags.hpp>   //!< WindowId, WindowStyle, WindowStyleEx
+#include <wtl/utils/Point.hpp>            //!< Point
+#include <wtl/utils/Size.hpp>             //!< Size
+#include <wtl/windows/WindowClass.hpp>    //!< WindowClass
 
 //! \namespace wtl - Windows template library
 namespace wtl

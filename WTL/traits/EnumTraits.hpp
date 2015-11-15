@@ -8,9 +8,9 @@
 #ifndef WTL_ENUMERATION_TRAITS_HPP
 #define WTL_ENUMERATION_TRAITS_HPP
 
-#include "wtl/WTL.hpp"
-#include "wtl/utils/SFINAE.hpp"             //!< Type traits
-#include "wtl/utils/Requires.hpp"           //!< requires
+#include <wtl/WTL.hpp>
+#include <wtl/utils/SFINAE.hpp>             //!< Type traits
+#include <wtl/utils/Requires.hpp>           //!< requires
 #include <iterator>                         //!< std::begin, std::end
 
 //! \namespace wtl - Windows template library
