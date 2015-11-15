@@ -43,8 +43,8 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     ButtonClickEvent<encoding>        Click;         //!< Button click
-    ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
-    ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
+    //ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
+    //ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
     OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
     OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
     //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
@@ -81,8 +81,9 @@ namespace wtl
       //this->GainFocus += new GainFocusEventHandler<encoding>(this, &Button::onGainFocus);
       //this->LoseFocus += new LoseFocusEventHandler<encoding>(this, &Button::onLoseFocus);
 
-      // Mouse movement
-      //this->MouseMove += new MouseMoveEventHandler<encoding>(this, &Button::onMouseMove);
+      // Invalidate button on mouse enter/leave
+      this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &Button::onMouseEnter);
+      this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
 
       // Subclass prior to creation
       using WindowType = typename base::WindowType;
@@ -116,7 +117,7 @@ namespace wtl
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::getClass 
-    //! Get the window class
+    //! Get the window class for this button
     //! 
     //! \param[in] instance - Module handle
     //! \return wndclass_t& - Window class 
@@ -144,7 +145,7 @@ namespace wtl
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::getSystemWndProc 
-    //! Get the standard button window procedure
+    //! Get the window procedure for the standard button
     //! 
     //! \return ::WNDPROC - System window procedure
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -156,6 +157,39 @@ namespace wtl
       return std.WndProc;
     }
     
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+    
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::send
+    //! Sends a message to the window
+    //! 
+    //! \tparam WM - Window Message 
+    //!
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
+    //! \return LResult - Message result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    using base::send;
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::send
+    //! Sends a button message to the window
+    //! 
+    //! \tparam BM - Button Message 
+    //!
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
+    //! \return LResult - Message result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <ButtonMessage BM> 
+    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
+    {
+      return send_message<encoding,window_msg(BM)>(this->Handle, w, l);
+    }
+    
+  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
@@ -180,8 +214,8 @@ namespace wtl
           switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::COMMAND>(w,l).Message))
           {
           case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
-          case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;
-          case ButtonNotification::KillFocus:  ret = LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(w,l));    break;
+          /*case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;
+          case ButtonNotification::KillFocus:  ret = LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(w,l));    break;*/
           }
           break;
 
@@ -202,10 +236,9 @@ namespace wtl
       }
     }
     
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-    
+  private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onCreate
+    // Button::onCreate
     //! Called during window creation to modify window parameters and create child windows
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -217,20 +250,19 @@ namespace wtl
     //  return base::onCreate(args); 
     //}
     
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-  public:
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onGainFocus
     //! Called when gaining keyboard focus
     //! 
     //! \param[in] args - Message arguments 
-    //! \return LResult - Zero if handled, otherwise -1
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onGainFocus(const GainFocusEventArgs<encoding>& args) 
+    LResult  onGainFocus(const GainFocusEventArgs<encoding>& args) 
     {
       cdebug << __func__ << endl;
-      return 0;
+      
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -238,33 +270,58 @@ namespace wtl
     //! Called when losing keyboard focus
     //! 
     //! \param[in] args - Message arguments 
-    //! \return LResult - Zero if handled, otherwise -1
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onLoseFocus(const LoseFocusEventArgs<encoding>& args) 
+    LResult  onLoseFocus(const LoseFocusEventArgs<encoding>& args) 
     {
       cdebug << __func__ << endl;
-      return 0;
+      
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onMouseMove
-    //! Called when mouse moved
+    // Button::onMouseEnter
+    //! Invalidate the button when the cursor enters the button
     //! 
     //! \param[in] args - Message arguments 
-    //! \return LResult - Zero if handled, otherwise -1
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onMouseMove(MouseMoveEventArgs<encoding> args) 
+    LResult  onMouseEnter(MouseEnterEventArgs<encoding> args) 
     {
       cdebug << __func__ << endl;
-      return 0;
+      
+      // Redraw
+      this->invalidate();
+
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::onMouseLeave
+    //! Invalidate the button when the cursor enters the button
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    LResult  onMouseLeave(MouseLeaveEventArgs<encoding> args) 
+    {
+      cdebug << __func__ << endl;
+
+      // Redraw
+      this->invalidate();
+      
+      // Handle message
+      return {MsgRoute::Handled, 0};
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message to draw the button
     //! 
     //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
@@ -277,8 +334,8 @@ namespace wtl
         //ButtonState state = State;
         PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
                                  : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
-                                 : args.State && OwnerDrawState::Hotlight ? PBS_HOT
-                                                                          : PBS_NORMAL);
+                               //: args.State && OwnerDrawState::Hotlight ? PBS_HOT
+                                 : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
         
         //PUSHBUTTONSTATES state;
         RectL rc = args.Rect;
@@ -326,8 +383,8 @@ namespace wtl
       //args.Graphics.setTextColour(SystemColour::BtnText);
       //args.Graphics.template write<encoding>(this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
-      // Handled
-      return 0;
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -335,56 +392,16 @@ namespace wtl
     //! Called in response to a reflected 'owner measure' message to 
     //! 
     //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
       // Measure button text
       args.Size = args.Graphics.measure(this->Text());
 
-      // Handled
-      return 0;
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::send
-    //! Sends a message to the window
-    //! 
-    //! \tparam WM - Window Message 
-    //!
-    //! \param[in] w- [optional] First parameter
-    //! \param[in] l - [optional] Second parameter
-    //! \return LResult - Message result and routing
-    /////////////////////////////////////////////////////////////////////////////////////////
-    using base::send;
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::send
-    //! Sends a button message to the window
-    //! 
-    //! \tparam BM - Button Message 
-    //!
-    //! \param[in] w- [optional] First parameter
-    //! \param[in] l - [optional] Second parameter
-    //! \return LResult - Message result and routing
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <ButtonMessage BM> 
-    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
-    {
-      return send_message<encoding,window_msg(BM)>(this->Handle, w, l);
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::set
-    //! Set the button icon
-    //! 
-    //! \param[in] const& icon - Shared icon handle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*void set(const HIcon& icon)
-    {
-      this->template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(icon.get()));
-      Icon = icon;
-    }*/
   };
 } // namespace wtl
 

@@ -498,11 +498,14 @@ namespace wtl
     template <typename... ARGS>
     std::string  formatMessage(DWORD code, ARGS&&... args)
     {
-      char  strError[1024];
+      char  strError[1024] {};
 
       // Lookup system error
-      if (code != 0)
-        ::FormatMessageA(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, code, 0, strError, sizeof(strError), nullptr);
+      if (code != 0) 
+      {
+        uint32_t n = ::FormatMessageA(enum_cast(FormatMessageFlags::FromSystem|FormatMessageFlags::IgnoreInserts), nullptr, code, 0, strError, sizeof(strError), nullptr);
+        strError[n] = '\0';
+      }
 
       // Assemble exception message and append system error
       return error_string(std::forward<ARGS>(args)..., ". ", strError);

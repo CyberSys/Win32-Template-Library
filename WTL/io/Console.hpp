@@ -675,7 +675,7 @@ namespace wtl
   inline Console& operator << (Console& c, const caught_exception& ex)  
   { 
     return c << Cons::Endl 
-             << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  << ex.Problem << "..." << Cons::Endl
+             << (Cons::Red   |Cons::Bold) << "EXCEPTION: " << Cons::White  << ex.Problem  << "..." << ex.Cause << Cons::Endl
              << (Cons::Yellow|Cons::Bold) << "CAUGHT: "    << Cons::Yellow << ex.source() << "..." << Cons::Endl;
   }
 

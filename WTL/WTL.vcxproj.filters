@@ -617,6 +617,15 @@
     <ClInclude Include="modules\Module.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="windows\events\MouseEnterEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\MouseHoverEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\MouseLeaveEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

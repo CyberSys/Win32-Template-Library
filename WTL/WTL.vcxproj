@@ -166,6 +166,9 @@
     <ClInclude Include="windows\events\CommandEvent.hpp" />
     <ClInclude Include="windows\events\GainFocusEvent.hpp" />
     <ClInclude Include="windows\events\LoseFocusEvent.hpp" />
+    <ClInclude Include="windows\events\MouseEnterEvent.hpp" />
+    <ClInclude Include="windows\events\MouseHoverEvent.hpp" />
+    <ClInclude Include="windows\events\MouseLeaveEvent.hpp" />
     <ClInclude Include="windows\events\MouseMoveEvent.hpp" />
     <ClInclude Include="windows\events\NotifyEventData.hpp" />
     <ClInclude Include="windows\events\OwnerDrawCtrlEvent.hpp" />

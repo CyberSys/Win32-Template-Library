@@ -76,14 +76,14 @@ namespace wtl
       constexpr uint32_t  codepage   = enum_cast(FROM);
       constexpr ulong32_t flags      = enum_cast(MultiByteFlags::PreComposed);
   
+      // Succeed on empty string
+      if (srcBegin[0] == '\0')
+        return 0;
+
       // Narrow -> wide
       if (int32_t len = ::MultiByteToWideChar(codepage, flags, srcBegin, srcEnd-srcBegin+1, destBegin, destEnd-destBegin))
         return len;
       
-      // Succeed on empty string
-      if (!*srcBegin)
-        return 0;
-
       // [ERROR] Failed
       throw platform_error(HERE, "Unable to perform narrow to wide character conversion");
     }
@@ -142,15 +142,15 @@ namespace wtl
       /*const*/ int32_t   useDefault = True;
       constexpr uint32_t  codepage   = enum_cast(TO);
       constexpr ulong32_t flags      = enum_cast(WideCharFlags::CompositeCheck|WideCharFlags::NoBestFitChars);
+      
+      // Succeed on empty string
+      if (srcBegin[0] == '\0')
+        return 0;
 
       // Wide -> Narrow
       if (int32_t len = ::WideCharToMultiByte(codepage, flags, srcBegin, srcEnd-srcBegin+1, destBegin, destEnd-destBegin, "?", &useDefault))
         return len;
       
-      // Succeed on empty string
-      if (!*srcBegin)
-        return 0;
-
       // [ERROR] Failed
       throw platform_error(HERE, "Unable to perform wide to narrow character conversion");
     }

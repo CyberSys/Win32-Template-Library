@@ -356,7 +356,7 @@ namespace wtl
       std::vector<char_t> buf(s.length()+1, null_t);      //!< Temporary (dynamic) storage
 
       // Convert from 's' into 'buf'
-      string_encoder<E2,encoding>::convert(s.c_str(), s.c_str()+s.length(), buf.data(), buf.data()+s.length());
+      string_encoder<E2,encoding>::convert(s.c_str(), s.c_str()+s.length(), buf.data(), buf.data()+buf.size());
       return buf.data();
     }
 

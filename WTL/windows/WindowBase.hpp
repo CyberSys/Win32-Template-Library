@@ -43,6 +43,9 @@
 #include <wtl/windows/events/GainFocusEvent.hpp>                  //!< GainFocusEvent
 #include <wtl/windows/events/LoseFocusEvent.hpp>                  //!< LoseFocusEvent
 #include <wtl/windows/events/MouseMoveEvent.hpp>                  //!< MouseMoveEvent
+#include <wtl/windows/events/MouseEnterEvent.hpp>                 //!< MouseEnterEvent
+#include <wtl/windows/events/MouseLeaveEvent.hpp>                 //!< MouseLeaveEvent
+#include <wtl/windows/events/MouseHoverEvent.hpp>                 //!< MouseHoverEvent
 #include <wtl/windows/events/PaintWindowEvent.hpp>                //!< PaintWindowEvent
 #include <wtl/windows/events/ShowWindowEvent.hpp>                 //!< ShowWindowEvent
 #include <wtl/windows/events/PositionChangedEvent.hpp>            //!< PositionChangedEvent
@@ -308,9 +311,12 @@ namespace wtl
     CreateWindowEvent<encoding>         Create;         //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>          Close;          //!< Raised in response to WM_CLOSE
     DestroyWindowEvent<encoding>        Destroy;        //!< Raised in response to WM_DESTROY
-    MouseMoveEvent<encoding>            MouseMove;      //!< Raised in response to WM_MOUSEMOVE
     LoseFocusEvent<encoding>            LoseFocus;      //!< Raised in response to WM_KILLFOCUS
     GainFocusEvent<encoding>            GainFocus;      //!< Raised in response to WM_SETFOCUS
+    MouseEnterEvent<encoding>           MouseEnter;     //!< Raised in response to WM_MOUSEENTER
+    MouseHoverEvent<encoding>           MouseHover;     //!< Raised in response to WM_MOUSEHOVER
+    MouseLeaveEvent<encoding>           MouseLeave;     //!< Raised in response to WM_MOUSELEAVE
+    MouseMoveEvent<encoding>            MouseMove;      //!< Raised in response to WM_MOUSEMOVE
     PaintWindowEvent<encoding>          Paint;          //!< Raised in response to WM_PAINT
     ShowWindowEvent<encoding>           Show;           //!< Raised in response to WM_SHOWWINDOW
     PositionChangedEvent<encoding>      Reposition;     //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
@@ -341,6 +347,9 @@ namespace wtl
     HWnd                                Handle;         //!< Window handle
     SubClassCollection                  SubClasses;     //!< Sub-classed windows collection
 
+  private:
+    bool                                IsMouseOver;    //!< True iff mouse is over the window while window has keyboard focus
+
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public: 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -355,6 +364,7 @@ namespace wtl
                                   Enabled(*this, true),
                                   Font(*this, StockFont::Window),
                                   Ident(*this, zero<WindowId>()),
+                                  IsMouseOver(false),
                                   Handle(defvalue<HWnd>()),
                                   Position(*this, DefaultPosition),
                                   Skin(nullptr /*::IsAppThemed() ? ThemedSkin::Instance : ClassicSkin::Instance*/),
@@ -366,13 +376,20 @@ namespace wtl
                                   Visible(*this, Visibility::ShowNormal),
                                   WindowRect(*this)
     {
-      // Accept window creation by default
+      // [NO-OP] Accept window creation parameters
       Create += new CreateWindowEventHandler<encoding>(this, &WindowBase::onCreate);
       
       // Execute gui commands by default
       Command += new CommandEventHandler<encoding>(this, &WindowBase::onCommand);
-        
-      // Paint window background by default
+      
+      // Clears the 'mouse over' flag when losing focus
+      //LoseFocus += new LoseFocusEventHandler<encoding>(this, &WindowBase::onLoseFocus);
+
+      // Registers for hover/leave notifications
+      MouseMove += new MouseMoveEventHandler<encoding>(this, &WindowBase::onMouseMove);
+      MouseLeave += new MouseLeaveEventHandler<encoding>(this, &WindowBase::onMouseLeave);
+      
+      // [NO-OP] Validate the client area
       Paint += new PaintWindowEventHandler<encoding>(this, &WindowBase::onPaint);
     }
 
@@ -390,6 +407,7 @@ namespace wtl
                                               Enabled(*this, true),
                                               Font(*this, StockObject::SystemFont),
                                               Ident(*this, defvalue<WindowId>()),
+                                              IsMouseOver(false),
                                               Handle(wnd, AllocType::WeakRef),
                                               Position(*this, DefaultPosition),
                                               Size(*this, DefaultSize),
@@ -564,6 +582,17 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::isMouseOver const
+    //! Query whether cursor is over window
+    //! 
+    //! \return bool - True iff mouse over window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool isMouseOver() const
+    {
+      return IsMouseOver;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::handle const
     //! Get the shared window handle 
     //! 
@@ -735,52 +764,32 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onCreate
-    //! Called during window creation to modify window parameters and create child windows
+    // WindowBase::invalidate
+    //! Invalidates the entire client rectangle
     //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Returns 0 to accept window creation
+    //! \throw wtl::platform_error - Unable to invalidate window
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
-    { 
-      // Set initial font
-      //Font.set();
-
-      // [Handled] Accept parameters
-      return 0; 
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onCommand
-    //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
-    //! 
-    //! \param[in] args - Message arguments 
-    //! \return LResult - Message result and routing
-    //! 
-    //! \throw wtl::logic_error - Gui command not recognised
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCommand(CommandEventArgs<encoding> args) 
-    { 
-      // Execute associated command
-      execute(args.Ident);
-
-      // Handled
-      return 0;
+    void invalidate()
+    {
+      if (!::InvalidateRect(Handle, nullptr, True))
+        throw platform_error(HERE, "Unable to invalidate window");
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::onPaint
-    //! Called to paint the client area of the window
+    // WindowBase::invalidate
+    //! Invalidates a portion of the client rectangle
     //! 
-    //! \param[in,out] args - Message arguments containing drawing data
-    //! \return LResult - Message result and routing
+    //! \param[in] const& rc - Rectangle to invalidate
+    //! \param[in] erase - [optional] Whether to erase the background
+    //! 
+    //! \throw wtl::platform_error - Unable to invalidate window
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
-    { 
-      // [Handled] No-op (Validates the client area)
-      return 0; 
+    void invalidate(const RectL& rc, bool erase = false)
+    {
+      if (!::InvalidateRect(Handle, rc, boolean_cast(erase)))
+        throw platform_error(HERE, "Unable to invalidate window");
     }
-  
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::post
     //! Posts a message to the window
@@ -796,6 +805,43 @@ namespace wtl
       post_message<encoding,WM>(Handle, w, l);
     }
     
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::send
+    //! Sends a message to the window
+    //! 
+    //! \tparam WM - Window Message 
+    //!
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
+    //! \return LResult - Message result & routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <WindowMessage WM> 
+    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
+    {
+      return send_message<encoding,WM>(Handle, w, l);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::show
+    //! Show or hide the window
+    //! 
+    //! \param[in] mode - Display method
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void show(ShowWindowFlags mode = ShowWindowFlags::Show)
+    {
+      ::ShowWindow(Handle, enum_cast(mode));
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::update
+    //! Updates the window (Sends a WM_PAINT message if any portion of the window is invalidated)
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void update()
+    {
+      ::UpdateWindow(Handle);
+    }
+
+  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
@@ -829,6 +875,8 @@ namespace wtl
         case WindowMessage::KILLFOCUS:        ret = LoseFocus.raise(LoseFocusEventArgs<encoding>(w,l));             break;
 
         // [MOUSE] 
+        case WindowMessage::MOUSEHOVER:       ret = MouseHover.raise(MouseHoverEventArgs<encoding>(w,l));           break;
+        case WindowMessage::MOUSELEAVE:       ret = MouseLeave.raise(MouseLeaveEventArgs<encoding>(w,l));           break;
         case WindowMessage::MOUSEMOVE:        ret = MouseMove.raise(MouseMoveEventArgs<encoding>(w,l));             break;
 
         // [SHOW/MOVE] 
@@ -922,40 +970,110 @@ namespace wtl
       }
     }
     
+  private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::send
-    //! Sends a message to the window
+    // WindowBase::onCreate
+    //! Called during window creation to modify window parameters and create child windows
     //! 
-    //! \tparam WM - Window Message 
-    //!
-    //! \param[in] w- [optional] First parameter
-    //! \param[in] l - [optional] Second parameter
-    //! \return LResult - Message result & routing
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <WindowMessage WM> 
-    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
-    {
-      return send_message<encoding,WM>(Handle, w, l);
+    LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
+    { 
+      // [Handled] Accept window parameters
+      return {MsgRoute::Handled, 0};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::show
-    //! Show or hide the window
+    // WindowBase::onCommand
+    //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
     //! 
-    //! \param[in] mode - Display method
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
+    //! 
+    //! \throw wtl::logic_error - Gui command not recognised
     /////////////////////////////////////////////////////////////////////////////////////////
-    void show(ShowWindowFlags mode = ShowWindowFlags::Show)
+    LResult  onCommand(CommandEventArgs<encoding> args) 
+    { 
+      // Execute associated command
+      execute(args.Ident);
+
+      // Handled
+      return {MsgRoute::Handled, 0};
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onLoseFocus
+    //! Called when window loses keyboard focus
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //virtual LResult  onLoseFocus(const LoseFocusEventArgs<encoding>& args) 
+    //{
+    //  // Clear 'MouseOver' flag
+    //  IsMouseOver = false;
+
+    //  // Handle message
+    //  return {MsgRoute::Handled, 0};
+    //}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onMouseLeave
+    //! Called to clear 'IsMouseOver' flag when cursor leaves window
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    LResult  onMouseLeave(MouseLeaveEventArgs<encoding> args) 
     {
-      ::ShowWindow(Handle, enum_cast(mode));
+      // Clear flag
+      IsMouseOver = false;
+
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // WindowBase::update
-    //! Updates the window (Sends a WM_PAINT message if any portion of the window is invalidated)
+    // WindowBase::onMouseMove
+    //! Called to track mouse events when the mouse is moved over the window
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    void update()
+    LResult  onMouseMove(MouseMoveEventArgs<encoding> args) 
     {
-      ::UpdateWindow(Handle);
+      // Register for mouse hover/leave notifications
+      if (!IsMouseOver)
+      {
+        ::TRACKMOUSEEVENT data { sizeof(::TRACKMOUSEEVENT), TME_HOVER|TME_LEAVE, Handle, HOVER_DEFAULT };
+      
+        // Register for client-area leave and hover notifications
+        if (!::TrackMouseEvent(&data))
+          throw platform_error(HERE, "Unable to track mouse events");
+
+        // Mark as registered
+        IsMouseOver = true;
+
+        // [EVENT] Raise 'MouseEnter'
+        MouseEnter.raise(args);
+      }
+
+      // Handle message
+      return {MsgRoute::Handled, 0};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::onPaint
+    //! Called to paint the client area of the window
+    //! 
+    //! \param[in,out] args - Message arguments containing drawing data
+    //! \return LResult - Routing indicating message was handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
+    { 
+      // [Handled] No-op (Validates the client area)
+      return 0; 
     }
   };
 

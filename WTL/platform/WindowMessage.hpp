@@ -282,6 +282,7 @@ namespace wtl
     REFLECT_MEASUREITEM = REFLECT + MEASUREITEM,//!< [Custom] Reflected MEASUREITEM
 
     APP = 0x8000,					            		      //!< 
+    MOUSEENTER,                                 //!< [Custom] Mouse entering window
   };
   
   //! Define traits: Non-contiguous Attribute
