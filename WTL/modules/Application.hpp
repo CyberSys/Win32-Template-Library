@@ -14,6 +14,7 @@
 #include "wtl/threads/MessagePump.hpp"              //!< MessagePump
 #include "wtl/platform/DateTime.hpp"                //!< DateTime
 #include "wtl/platform/SystemVersion.hpp"           //!< SystemVersion
+#include "wtl/utils/String.hpp"                     //!< String
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -72,17 +73,17 @@ namespace wtl
     // Application::name const 
     //! Get the application name
     //!
-    //! \return const char_t* - Full application name
+    //! \return String<encoding> - Full application name
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const char_t* name() const = 0;
+    virtual String<encoding> name() const = 0;
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Application::version const 
     //! Get the application version
     //!
-    //! \return const char_t* - Version string
+    //! \return String<encoding> - Version string
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual const char_t* version() const = 0;
+    virtual String<encoding> version() const = 0;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
