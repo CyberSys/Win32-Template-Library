@@ -77,10 +77,6 @@ namespace wtl
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
       OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
-      // Focus
-      //this->GainFocus += new GainFocusEventHandler<encoding>(this, &Button::onGainFocus);
-      //this->LoseFocus += new LoseFocusEventHandler<encoding>(this, &Button::onLoseFocus);
-
       // Invalidate button on mouse enter/leave
       this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &Button::onMouseEnter);
       this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
@@ -214,14 +210,20 @@ namespace wtl
           switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
           case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
-          /*case ButtonNotification::SetFocus:   ret = GainFocus.raise(ButtonGainFocusEventArgs<encoding>(w,l));    break;
-          case ButtonNotification::KillFocus:  ret = LoseFocus.raise(ButtonLoseFocusEventArgs<encoding>(w,l));    break;*/
           }
           break;
 
-        // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' or 'Owner Measure'
-        case WindowMessage::ReflectDrawItem:     { OwnerDrawCtrlEventArgs<encoding> args(w,l);  ret = OwnerDraw.raise(args);                    }  break;
-        case WindowMessage::ReflectMeasureItem:  { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  ret = OwnerMeasure.raise(args); }  break;
+        // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' 
+        case WindowMessage::ReflectDrawItem: { 
+          OwnerDrawCtrlEventArgs<encoding> args(w,l);  
+          ret = OwnerDraw.raise(args); 
+        }  break;
+
+        // [OWNER-DRAW (REFLECTED)] Raise 'Owner Measure'
+        case WindowMessage::ReflectMeasureItem:  { 
+          OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  
+          ret = OwnerMeasure.raise(args); 
+        }  break;
         }
 
         // [UNHANDLED] Pass to default window procedure
@@ -238,49 +240,6 @@ namespace wtl
     
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onCreate
-    //! Called during window creation to modify window parameters and create child windows
-    //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Message result and routing
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
-    //{ 
-    //  // Pass to base
-    //  return base::onCreate(args); 
-    //}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onGainFocus
-    //! Called when gaining keyboard focus
-    //! 
-    //! \param[in] args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onGainFocus(const GainFocusEventArgs<encoding>& args) 
-    {
-      cdebug << __func__ << endl;
-      
-      // Handle message
-      return {MsgRoute::Handled, 0};
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onLoseFocus
-    //! Called when losing keyboard focus
-    //! 
-    //! \param[in] args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onLoseFocus(const LoseFocusEventArgs<encoding>& args) 
-    {
-      cdebug << __func__ << endl;
-      
-      // Handle message
-      return {MsgRoute::Handled, 0};
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Button::onMouseEnter
     //! Invalidate the button when the cursor enters the button
     //! 
@@ -289,7 +248,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onMouseEnter(MouseEnterEventArgs<encoding> args) 
     {
-      cdebug << __func__ << endl;
+      //cdebug << __func__ << endl;
       
       // Redraw
       this->invalidate();
@@ -307,7 +266,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onMouseLeave(MouseLeaveEventArgs<encoding> args) 
     {
-      cdebug << __func__ << endl;
+      //cdebug << __func__ << endl;
 
       // Redraw
       this->invalidate();
@@ -363,13 +322,6 @@ namespace wtl
       catch (const std::exception&)
       {
       }
-
-      // Draw button background
-      //args.Graphics.fill(args.Rect, StockBrush::BtnFace);
-
-      // Draw button text
-      //args.Graphics.setTextColour(SystemColour::BtnText);
-      //args.Graphics.template write<encoding>(this->Text(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
 
       // Handle message
       return {MsgRoute::Handled, 0};
