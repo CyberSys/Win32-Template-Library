@@ -63,8 +63,8 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::drawBackground const
-    //! Draws the border and fill defined by the visual style for the specified control part.
+    // Theme::fill const
+    //! Draws the border and background defined by the visual style for the specified control part.
     //!
     //! \param[in] const& dc - Target device context
     //! \param[in] part - Part to draw
@@ -74,15 +74,15 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to draw background
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PART, typename STATE>
-    void drawBackground(const DeviceContext& dc, PART part, STATE state, const RectL& rc) const
+    void fill(const DeviceContext& dc, PART part, STATE state, const RectL& rc) const
     {
       if (!HResult(::DrawThemeBackground(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), nullptr)))
         throw platform_error(HERE, "Unable to draw themed control background");
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::drawBackground const
-    //! Draws the border and fill defined by the visual style for the specified control part.
+    // Theme::fill const
+    //! Draws the border and background defined by the visual style for the specified control part.
     //!
     //! \param[in] const& dc - Target device context
     //! \param[in] part - Part to draw
@@ -93,7 +93,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to draw background
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PART, typename STATE>
-    void drawBackground(const DeviceContext& dc, PART part, STATE state, const RectL& rc, const RectL& clip) const
+    void fill(const DeviceContext& dc, PART part, STATE state, const RectL& rc, const RectL& clip) const
     {
       if (!HResult(::DrawThemeBackground(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), const_cast<RectL&>(clip))))
         throw platform_error(HERE, "Unable to draw themed control background");

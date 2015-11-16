@@ -339,7 +339,7 @@ namespace wtl
                                  : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
         
         // Draw background
-        theme.drawBackground(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
+        theme.fill(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
 
         // Pressed: Offset drawing rect
         if (state == PBS_PRESSED)
@@ -348,8 +348,12 @@ namespace wtl
         // Draw icon
         if (Icon.exists()) 
         {
-          args.Graphics.draw(Icon, rc.topLeft(), SizeL(32,32));
-          rc.Left += 32;
+          const SizeL iconSize(32,32);
+
+          RectL iconRect = rc.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
+          
+          args.Graphics.draw(Icon, iconRect.topLeft(), iconSize);
+          rc.Left += iconSize.Width;
         }
 
         // Draw text

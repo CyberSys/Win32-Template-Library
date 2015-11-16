@@ -43,6 +43,19 @@ namespace wtl
     //static constexpr Rect<T> EMPTY {0,0,0,0};
     static const Rect<T> EMPTY;
 
+    //! \enum Relation - Layout calculation constants
+    enum Relation { FromLeft, FromTop, FromRight, FromBottom, Centre };
+
+    //! \struct LayoutVector - Layout calculation vector
+    struct LayoutVector
+    {
+      LayoutVector(Relation r, int32_t n = 0) : Direction(r), Distance(n)
+      {}
+
+      Relation  Direction;
+      int32_t   Distance;
+    };
+
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     value_t  Left,        //!< Left extent
@@ -131,23 +144,54 @@ namespace wtl
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::FromMidPoint constexpr
+    // Rect::fromMidPoint constexpr
     //! Create from a mid point and rectangle dimensions
     //!
     //! \param[in] const& middle - Mid-point
     //! \param[in] const& size - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename A, typename B> constexpr
-    static Rect FromMidPoint(const Point<A>&  middle, const Size<B>& size)
+    static type fromMidPoint(const Point<A>&  middle, const Size<B>& size)
     {
-      return  Rect(static_cast<value_t>(middle.X) - (size.Width / 2),
-                   static_cast<value_t>(middle.Y) - (size.Height / 2),
-                   static_cast<value_t>(middle.X) + (size.Width / 2),
-                   static_cast<value_t>(middle.Y) + (size.Height / 2));
+      return type(static_cast<value_t>(middle.X) - (size.Width / 2),
+                  static_cast<value_t>(middle.Y) - (size.Height / 2),
+                  static_cast<value_t>(middle.X) + (size.Width / 2),
+                  static_cast<value_t>(middle.Y) + (size.Height / 2));
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::arrange const
+    //! Arranges a sub-rectangle within this rectangle
+    //!
+    //! \param[in] const& sz - Size of sub-rectangle 
+    //! \param[in] x - Horizontal layout
+    //! \param[in] y - Vertical layout
+    //!
+    //! \return type - Co-ordinates of desired sub-rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    type arrange(const Size<T>& sz, LayoutVector x, LayoutVector y) const
+    {
+      // Calculate X or Y co-ordinate of resultant top-left corner
+      auto calc = [&sz,this](LayoutVector& v, bool horz) -> value_t
+      {
+        switch (v.Direction)
+        {
+        case FromLeft:   return this->Left   + v.Distance;
+        case FromRight:  return this->Right  - v.Distance;
+        case FromTop:    return this->Top    + v.Distance;
+        case FromBottom: return this->Bottom - v.Distance;
+        default:
+        case Centre:     return horz ? (this->width() - sz.Width) / 2 : (this->height() - sz.Height) / 2;
+        }
+      };
+
+      // Generate rectangle
+      return Rect<T>(Point<T>(calc(x,true), calc(y,false)), sz);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Rect::area const
     //! Query size of rectangle

@@ -259,8 +259,8 @@ namespace wtl
           itemState += (MBI_DISABLED-1);
 
         //! Draw background 
-        theme.drawBackground(args.Graphics, MENU_BARBACKGROUND, args.State && OwnerDrawState::Grayed ? MB_INACTIVE : MB_ACTIVE, args.Rect);
-        theme.drawBackground(args.Graphics, MENU_BARITEM, itemState, args.Rect);
+        theme.fill(args.Graphics, MENU_BARBACKGROUND, args.State && OwnerDrawState::Grayed ? MB_INACTIVE : MB_ACTIVE, args.Rect);
+        theme.fill(args.Graphics, MENU_BARITEM, itemState, args.Rect);
 
         //! Draw item
         theme.write(args.Graphics, MENU_BARITEM, itemState, group->name(), args.Rect, DrawTextFlags::Centre|DrawTextFlags::VCentre);
@@ -274,7 +274,7 @@ namespace wtl
         // Prepare
         
         //! Draw background 
-        theme.drawBackground(args.Graphics, MENU_POPUPBACKGROUND, 0, args.Rect);
+        theme.fill(args.Graphics, MENU_POPUPBACKGROUND, 0, args.Rect);
         
         // Determine drawing state
         POPUPITEMSTATES itemState = (args.State && OwnerDrawState::Selected ? MPI_HOT : MPI_NORMAL);
@@ -290,7 +290,7 @@ namespace wtl
         rc.Left += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));
         
         //! Draw background + command name
-        theme.drawBackground(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
+        theme.fill(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
         theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre);
       }
 
