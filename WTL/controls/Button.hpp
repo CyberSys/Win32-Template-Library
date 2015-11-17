@@ -82,8 +82,7 @@ namespace wtl
       this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
 
       // Subclass prior to creation
-      using WindowType = typename base::WindowType;
-      this->SubClasses.push_back(typename base::SubClass(WindowType::Native, getSystemWndProc()));
+      this->SubClasses.push_back(SubClass(SubClass::WindowType::Native, getSystemWndProc()));
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
