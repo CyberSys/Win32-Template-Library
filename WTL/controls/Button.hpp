@@ -311,7 +311,7 @@ namespace wtl
 
           RectL iconRect = rc.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
           
-          args.Graphics.draw(Icon, iconRect.topLeft(), iconSize);
+          args.Graphics.draw(Icon, iconRect);
           rc.Left += iconSize.Width;
         }
 

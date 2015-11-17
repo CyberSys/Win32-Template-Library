@@ -282,7 +282,7 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // DeviceContext::draw
-    //! Draw an icon into a rectangle
+    //! Draw an icon at a position
     //! 
     //! \param[in] const& icon - Icon handle
     //! \param[in] const& pt - Drawing position
@@ -291,10 +291,27 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to draw icon
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename P, typename S>
-    void draw(const HIcon& icon, const Point<P>& pt, const Size<S>& sz /*DrawTextFlags flags = DrawTextFlags::Left|DrawTextFlags::VCentre*/)
+    void draw(const HIcon& icon, const Point<P>& pt, const Size<S>& sz)
     {
       // [ICON] Draw icon
       if (::DrawIconEx(Handle, pt.X, pt.Y, icon, sz.Width, sz.Height, 0, nullptr, DI_IMAGE | DI_MASK) == False)
+        throw platform_error(HERE, "Unable to draw icon");
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::draw
+    //! Draw an icon into a rectangle
+    //! 
+    //! \param[in] const& icon - Icon handle
+    //! \param[in] const& rc - Drawing rectangle
+    //!
+    //! \throw wtl::platform_error - Unable to draw icon
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    void draw(const HIcon& icon, const Rect<T>& rc)
+    {
+      // [ICON] Draw icon
+      if (::DrawIconEx(Handle, rc.Left, rc.Top, icon, rc.width(), rc.height(), 0, nullptr, DI_IMAGE | DI_MASK) == False)
         throw platform_error(HERE, "Unable to draw icon");
     }
 

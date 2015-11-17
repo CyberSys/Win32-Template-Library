@@ -269,29 +269,29 @@ namespace wtl
       // [COMMAND] Draw pop-up menu item
       else if (CommandPtr<encoding> command = find(command_id(args.Ident)))
       {
-        Theme  theme(args.Graphics.window(), L"Menu");
-
-        // Prepare
-        
-        //! Draw background 
-        theme.fill(args.Graphics, MENU_POPUPBACKGROUND, 0, args.Rect);
+        const SizeL iconSize = {16,16};
+        Theme       theme(args.Graphics.window(), L"Menu");
         
         // Determine drawing state
         POPUPITEMSTATES itemState = (args.State && OwnerDrawState::Selected ? MPI_HOT : MPI_NORMAL);
         if (args.State == OwnerDrawState::Grayed)
           itemState += (MPI_DISABLED-1);
 
-        // Query drawing rectangle
-        RectL  rc;
-        theme.getContentRect(args.Graphics, MENU_POPUPITEM, itemState, args.Rect, rc);
-
-        //! Draw icon
-        args.Graphics.draw(command->icon(), rc.topLeft(), SizeL(16,16));
-        rc.Left += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));
-        
-        //! Draw background + command name
+        //! Draw background 
+        theme.fill(args.Graphics, MENU_POPUPBACKGROUND, 0, args.Rect);
         theme.fill(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
-        theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre);
+        
+        // Query drawing rectangle
+        RectL itemRect;
+        theme.getContentRect(args.Graphics, MENU_POPUPITEM, itemState, args.Rect, itemRect);
+        
+        //! Draw icon
+        RectL iconRect = itemRect.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
+        args.Graphics.draw(command->icon(), iconRect);
+        
+        //! Draw text
+        itemRect.Left += iconSize.Width; 
+        theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), itemRect, DrawTextFlags::Left|DrawTextFlags::VCentre);
       }
 
       // Handled

@@ -184,7 +184,7 @@ namespace wtl
         case FromTop:    return this->Top    + v.Distance;
         case FromBottom: return this->Bottom - v.Distance;
         default:
-        case Centre:     return horz ? (this->width() - sz.Width) / 2 : (this->height() - sz.Height) / 2;
+        case Centre:     return horz ? this->Left + (this->width() - sz.Width) / 2 : this->Top + (this->height() - sz.Height) / 2;
         }
       };
 
