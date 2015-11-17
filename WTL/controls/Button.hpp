@@ -68,7 +68,7 @@ namespace wtl
                                    State(*this)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow | ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
+      this->Style = WindowStyle::ChildWindow | ButtonStyle::PushButton|ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
 
       // Clear paint handlers (Painting handled by system window class)
       this->Paint.clear();
@@ -81,8 +81,8 @@ namespace wtl
       this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &Button::onMouseEnter);
       this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
 
-      // Subclass prior to creation
-      this->SubClasses.push_back(SubClass(SubClass::WindowType::Native, getSystemWndProc()));
+      // Place standard Subclass prior to creation
+      this->SubClasses.push_back(getNativeSubClass());
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -112,44 +112,45 @@ namespace wtl
   
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::getClass 
-    //! Get the window class for this button
+    //! Get the default window-class for WTL buttons
     //! 
     //! \param[in] instance - Module handle
     //! \return wndclass_t& - Window class 
     /////////////////////////////////////////////////////////////////////////////////////////
-    static wndclass_t& getClass(HINSTANCE instance) 
+    static wndclass_t& getClass(::HINSTANCE instance) 
     {
-      static wndclass_t  std(SystemClass::Button);  //!< Standard system button class
+      static wndclass_t  std(SystemClass::Button);    //!< Lookup standard button windowclass
       
+      // Define WTL button window-class
       static wndclass_t  btn(instance,
-                             std.Name,
+                             std.Name,   
                              std.Style,
-                             base::WndProc,   
+                             base::WndProc,         //!< Replace the window procedure 'Compile-time subclass'
                              std.Menu,
                              std.Cursor,
                              std.Background,
                              std.SmallIcon,
                              std.LargeIcon,
                              std.ClassStorage,
-                             std.WindowStorage);    //!< Compile-time button subclass
+                             std.WindowStorage);    
 
-      // Return custom button class
+      // Return WTL button class
       return btn;
     }
     
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::getSystemWndProc 
+    // Button::getNativeSubClass 
     //! Get the window procedure for the standard button
     //! 
-    //! \return ::WNDPROC - System window procedure
+    //! \return SubClass - SubClass representing the window procedure of the standard button
     /////////////////////////////////////////////////////////////////////////////////////////
-    static ::WNDPROC getSystemWndProc() 
+    static SubClass getNativeSubClass() 
     {
-      static wndclass_t  std(SystemClass::Button);  //!< Standard button system window class
+      static wndclass_t  std(SystemClass::Button);    //!< Lookup standard button window-class
       
-      // Return window proc
-      return std.WndProc;
+      // Return native window proc
+      return { SubClass::WindowType::Native, std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
@@ -213,16 +214,16 @@ namespace wtl
           break;
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' 
-        case WindowMessage::ReflectDrawItem: { 
-          OwnerDrawCtrlEventArgs<encoding> args(w,l);  
-          ret = OwnerDraw.raise(args); 
-        }  break;
+        case WindowMessage::ReflectDrawItem: 
+          { OwnerDrawCtrlEventArgs<encoding> args(w,l);  
+            ret = OwnerDraw.raise(args); }
+          break;
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Measure'
-        case WindowMessage::ReflectMeasureItem:  { 
-          OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  
-          ret = OwnerMeasure.raise(args); 
-        }  break;
+        case WindowMessage::ReflectMeasureItem:  
+          { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  
+            ret = OwnerMeasure.raise(args); }
+          break;
         }
 
         // [UNHANDLED] Pass to default window procedure

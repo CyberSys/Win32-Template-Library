@@ -138,9 +138,6 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<encoding>;
     
-    //! \alias CreateStruct - Define WM_CREATE/WM_NCCREATE creation data
-    using CreateStruct = choose_t<encoding,::CREATESTRUCTA,::CREATESTRUCTW>;
-
     //! \alias command_t - Define Command type
     using command_t = Command<encoding>;
     
@@ -439,8 +436,11 @@ namespace wtl
         // [CREATE/NCCREATE] Extract instance pointer from ::CreateWindow(..) call parameter data
         case WindowMessage::Create:
         case WindowMessage::NonClientCreate:
+          //! \alias CreationData - Define WM_CREATE/WM_NCCREATE creation data
+          using CreationData = typename EventArgs<encoding,WindowMessage::Create>::CreationData;
+
           // Extract instance pointer
-          wnd = reinterpret_cast<WindowBase*>( opaque_cast<CreateStruct>(lParam)->lpCreateParams );
+          wnd = reinterpret_cast<WindowBase*>( opaque_cast<CreationData>(lParam)->lpCreateParams );
 
           // Temporarily assign a weak handle reference for the duration of creation process
           wnd->Handle = HWnd(hWnd, AllocType::WeakRef);    // Overwritten by strong reference returned from ::CreateWindow over message is processed

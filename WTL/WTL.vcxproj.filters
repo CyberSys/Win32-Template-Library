@@ -33,9 +33,6 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{e7f2565f-c4b3-4b98-9cde-ca1f7a7b3d76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Controls">
-      <UniqueIdentifier>{2c8faf7f-6cc2-42e3-bc97-397a2b7818be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{822d32d8-6b48-4e4e-b249-2cf7dba0b501}</UniqueIdentifier>
     </Filter>
@@ -628,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="windows\SubClass.hpp">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\CheckBox.hpp">
+      <Filter>Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -42,6 +42,7 @@
     <ClInclude Include="casts\StaticPtrCast.hpp" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="controls\Button.hpp" />
+    <ClInclude Include="controls\CheckBox.hpp" />
     <ClInclude Include="controls\events\ButtonEvents.hpp" />
     <ClInclude Include="controls\properties\ButtonIconProperty.h" />
     <ClInclude Include="controls\properties\ButtonIconProperty.hpp" />
