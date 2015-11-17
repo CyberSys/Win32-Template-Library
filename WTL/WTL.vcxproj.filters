@@ -626,6 +626,9 @@
     <ClInclude Include="windows\events\MouseLeaveEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
+    <ClInclude Include="windows\SubClass.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">

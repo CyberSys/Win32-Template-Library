@@ -32,6 +32,7 @@
 #include <wtl/windows/WindowClass.hpp>                            //!< WindowClass
 #include <wtl/windows/WindowMenu.hpp>                             //!< WindowMenu
 #include <wtl/windows/WindowSkin.hpp>                             //!< IWindowSkin
+#include <wtl/windows/SubClass.hpp>                               //!< SubClass
 #include <wtl/windows/events/CommandEvent.hpp>                    //!< CommandEvent
 #include <wtl/windows/events/CloseWindowEvent.hpp>                //!< CloseWindowEvent
 #include <wtl/windows/events/CreateWindowEvent.hpp>               //!< CreateWindowEven
@@ -70,67 +71,6 @@ namespace wtl
   template <Encoding ENC>
   struct WindowBase;
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct SubClass - Represents a subclassed window
-  /////////////////////////////////////////////////////////////////////////////////////////
-  struct SubClass
-  {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-      
-    //! \alias wndproc_t - Class window procedure signature
-    using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32_t, ::WPARAM, ::LPARAM);
-
-    //! \alias wtlproc_t - Instance window procedure signature
-    using wtlproc_t = LResult (__thiscall*)(WindowMessage, ::WPARAM, ::LPARAM);  
-
-    //! \union WindowProc - Window procedure
-    union WindowProc
-    {
-      WindowProc(wndproc_t n) : Native(n)  {}
-      WindowProc(wtlproc_t l) : Library(l) {}
-
-      wndproc_t  Native;     //!< Win32
-      wtlproc_t  Library;    //!< WTL
-    };
-      
-    //! \enum WindowType - Define window types
-    enum class WindowType
-    {
-      Library,   //!< Wtl window 
-      Native,    //!< Native window
-    };
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    WindowProc  WndProc;    //!< Window procedure
-    WindowType  Type;       //!< Window type
-
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // SubClass::SubClass
-    //! Create SubClass from a WTL or native window
-    //! 
-    //! \param[in] t - Window type (Whether WTL or native)
-    //! \param[in] p - Window procedure
-    /////////////////////////////////////////////////////////////////////////////////////////
-    SubClass(WindowType t, WindowProc p) : WndProc(p), Type(t)
-    {}
-      
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
-
-    // ----------------------------------- STATIC METHODS -----------------------------------
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-  };
-    
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias SubClassCollection - Define subclassed windows collection
-  /////////////////////////////////////////////////////////////////////////////////////////
-  using SubClassCollection = List<SubClass>;
-    
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias WindowCollection - Window collection type
   //! 

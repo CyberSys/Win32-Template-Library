@@ -217,6 +217,7 @@
     <ClInclude Include="windows\PropertyImpl.hpp" />
     <ClInclude Include="windows\skins\ClassicSkin.hpp" />
     <ClInclude Include="windows\skins\ThemedSkin.hpp" />
+    <ClInclude Include="windows\SubClass.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowBase.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />
