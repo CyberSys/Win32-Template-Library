@@ -149,9 +149,6 @@
     <ClInclude Include="traits\WindowTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
-    <ClInclude Include="windows\WindowBase.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="windows\WindowClass.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -628,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="controls\CheckBox.hpp">
       <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\MessageWindow.hpp">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

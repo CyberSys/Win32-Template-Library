@@ -189,6 +189,7 @@
     <ClInclude Include="windows\MenuItemInfo.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\EventArgs.hpp" />
+    <ClInclude Include="windows\MessageWindow.hpp" />
     <ClInclude Include="windows\PopupMenu.hpp" />
     <ClInclude Include="windows\properties\ClientRectProperty.h" />
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />
@@ -220,7 +221,6 @@
     <ClInclude Include="windows\skins\ThemedSkin.hpp" />
     <ClInclude Include="windows\SubClass.hpp" />
     <ClInclude Include="windows\Window.hpp" />
-    <ClInclude Include="windows\WindowBase.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />
     <ClInclude Include="windows\WindowMenu.hpp" />
     <ClInclude Include="windows\WindowSkin.hpp" />
