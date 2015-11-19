@@ -37,8 +37,8 @@ namespace wtl
     if (this->Window.exists())
       return boolean_cast(::IsWindowVisible(this->Window));
 
-    // Return cached
-    return base::get();
+    // [~EXISTS] Query visibility style
+    return this->Window.Style && WindowStyle::Visible;
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -54,12 +54,13 @@ namespace wtl
   template <Encoding ENC>
   void  VisibilityPropertyImpl<ENC>::set(value_t visibility) 
   {
-    // Set window visibility
+    // [EXISTS] Set window visibility
     if (this->Window.exists() && !::ShowWindow(this->Window, enum_cast(visibility ? ShowWindowFlags::Show : ShowWindowFlags::Hide)))
       throw platform_error(HERE, "Unable to set window visibility");
-
-    // Update value
-    base::set(visibility);
+    
+    // [~EXISTS] Set visibility style
+    else if (!this->Window.exists())
+      this->Window.Style |= WindowStyle::Visible;
   }
 
       

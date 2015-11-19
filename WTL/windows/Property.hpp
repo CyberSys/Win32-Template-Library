@@ -201,14 +201,31 @@ namespace wtl
   //! \tparam IMPL - Property implementation type
   //! \tparam T - Any type
   //! 
-  //! \param[in] &p - Property
+  //! \param[in] const &p - Property
   //! \param[in] && val - Value to combine
-  //! \return Property::value_t - Combination of 'v' and value of 'p'
+  //! \return Property::value_t - Result of 'p | val'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename T>
   typename IMPL::value_t  operator | (const Property<IMPL>& p, T&& val)
   {
     return p.get() | val;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator & 
+  //! Non-member bitwise-AND operator for Property types that support bitwise-AND
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property::value_t - Result of 'p & val'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  typename IMPL::value_t  operator & (const Property<IMPL>& p, T&& val)
+  {
+    return p.get() & val;
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -229,6 +246,23 @@ namespace wtl
   }
 
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator & 
+  //! Non-member logical-AND operator for Property types that support logical-AND
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return bool - Result of 'p && val'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  bool  operator && (const Property<IMPL>& p, T&& val)
+  {
+    return p.get() && val;
+  }
+
       
 } // namespace wtl
 
