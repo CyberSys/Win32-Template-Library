@@ -14,13 +14,12 @@
 namespace wtl
 {
   
-  //! \enum FileAccess - file access modes for the GLS file system (Formerly GLS_FILE_ACCESS)
-  //! \ingroup dox_GLSSPMGroup
+  //! \enum FileAccess - File access modes 
   enum class FileAccess : int32_t 
   {
-    Create,         //!< Create a new file. If it exists, overwrite by truncating to zero. (Equivalent to "wb" in fopen) (Formerly GLS_FILE_CREATE)
-    OpenExisting,   //!< Open existing file for append mode. If it does not exist, will be created. (Equivalent to "ab" in fopen) (Formerly GLS_FILE_OPEN_EXISTING)
-    ReadOnly,       //!< Open the file read only. If it does not exist, this will fail. (Equivalent to "rb" in fopen) (Formerly GLS_FILE_READ_ONLY)
+    Create,         //!< Create a new file. If it exists, overwrite by truncating to zero. (Equivalent to "wb" in fopen)
+    OpenExisting,   //!< Open existing file for append mode. If it does not exist, will be created. (Equivalent to "ab" in fopen)
+    ReadOnly,       //!< Open the file read only. If it does not exist, this will fail. (Equivalent to "rb" in fopen)
   };
 
 
