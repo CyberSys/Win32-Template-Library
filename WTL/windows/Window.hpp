@@ -306,7 +306,7 @@ namespace wtl
                Text(*this),
                TextLength(*this),
                StyleEx(*this, WindowStyleEx::None),
-               Visible(*this, Visibility::ShowNormal),
+               Visible(*this, false),
                WindowRect(*this)
     {
       // Create events: Accept window creation parameters

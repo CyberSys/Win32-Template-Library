@@ -49,7 +49,7 @@ namespace wtl
   //! \remarks Provides initial visibity during window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct VisibilityPropertyImpl : PropertyImpl<ENC,ShowWindowFlags>
+  struct VisibilityPropertyImpl : PropertyImpl<ENC,bool>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
@@ -57,7 +57,7 @@ namespace wtl
     using type = VisibilityPropertyImpl;
 
     //! \alias base - Define base type
-    using base = PropertyImpl<ENC,ShowWindowFlags>;
+    using base = PropertyImpl<ENC,bool>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
@@ -76,7 +76,7 @@ namespace wtl
     //! \param[in,out] &wnd - Owner window
     //! \param[in] init - Initial visibility
     /////////////////////////////////////////////////////////////////////////////////////////
-    VisibilityPropertyImpl(window_t& wnd, ShowWindowFlags init) : base(wnd, init)
+    VisibilityPropertyImpl(window_t& wnd, bool init) : base(wnd, init)
     {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------

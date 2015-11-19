@@ -9,10 +9,10 @@
 #define WTL_WINDOW_VISIBLE_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/BooleanCast.hpp>                            //!< BooleanCast
-#include <wtl/casts/EnumCast.hpp>                               //!< EnumCast
+#include <wtl/casts/BooleanCast.hpp>                            //!< boolean_cast
+#include <wtl/casts/EnumCast.hpp>                               //!< enum_cast
 #include <wtl/windows/properties/VisibilityProperty.h>          //!< VisibilityProperty
-#include <wtl/windows/Window.hpp>                           //!< Window
+#include <wtl/windows/Window.hpp>                               //!< Window
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -35,16 +35,7 @@ namespace wtl
   {
     // [EXISTS] Query window visibility
     if (this->Window.exists())
-    {
-      WindowPlacement info;
-
-      // Query window placement
-      if (!::GetWindowPlacement(this->Window, &info))
-        throw platform_error(HERE, "Unable to query window visibility");
-
-      // Extract visibility
-      return enum_cast<value_t>(info.flags);
-    }
+      return boolean_cast(::IsWindowVisible(this->Window));
 
     // Return cached
     return base::get();
@@ -64,7 +55,7 @@ namespace wtl
   void  VisibilityPropertyImpl<ENC>::set(value_t visibility) 
   {
     // Set window visibility
-    if (this->Window.exists() && !::ShowWindow(this->Window, enum_cast(visibility)))
+    if (this->Window.exists() && !::ShowWindow(this->Window, enum_cast(visibility ? ShowWindowFlags::Show : ShowWindowFlags::Hide)))
       throw platform_error(HERE, "Unable to set window visibility");
 
     // Update value

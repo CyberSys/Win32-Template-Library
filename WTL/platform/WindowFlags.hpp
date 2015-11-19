@@ -158,11 +158,8 @@ namespace wtl
   template <> struct is_contiguous<MoveWindowFlags> : std::false_type  {};
   template <> struct default_t<MoveWindowFlags>     : std::integral_constant<MoveWindowFlags,MoveWindowFlags::NoSize>   {};
 
-
   // ----------------------------------- ::ShowWindow(..) Flags ----------------------------------
   
-
-
   //! \enum ShowWindowFlags - Defines flags for the Win32 API function ::ShowWindow(..) 
   enum class ShowWindowFlags : int32_t
   {
@@ -182,20 +179,13 @@ namespace wtl
     ForceMinimize = 11,			//!< 
   };
 
-  //! \alias Visibility - Alias for ShowWindowFlags
-  using Visibility = ShowWindowFlags;
-
-
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<ShowWindowFlags>  : std::false_type  {};
   template <> struct is_contiguous<ShowWindowFlags> : std::true_type   {};
   template <> struct default_t<ShowWindowFlags>     : std::integral_constant<ShowWindowFlags,ShowWindowFlags::Hide>   {};
 
-  
-
   // ----------------------------------- WM_SHOWWINDOW arguments ----------------------------------
   
-
   //! \enum ShowWindowType - Defines flags for the Win32 message 'WM_SHOWWINDOW'
   enum class ShowWindowType : ulong32_t
   {
@@ -205,18 +195,12 @@ namespace wtl
     OtherUnZoom = 4, 			  //!< The window's owner window is being restored.
   };
 
-
   //! Define traits: Contiguous enumeration
   template <> struct is_attribute<ShowWindowType>  : std::false_type  {};
   template <> struct is_contiguous<ShowWindowType> : std::true_type   {};
   template <> struct default_t<ShowWindowType>     : std::integral_constant<ShowWindowType,ShowWindowType::ParentClosing>   {};
   
-  
-  
-
   // ----------------------------------- SYSTEM WINDOW CLASSES ----------------------------------
-  
-
   
   //! \enum SystemClass - Defines system window classes
   enum class SystemClass : uint16_t
