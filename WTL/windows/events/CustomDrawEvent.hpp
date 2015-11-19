@@ -20,7 +20,7 @@ namespace wtl
   //! \tparam CODE - Notification code
   //! \tparam SIG - [optional] Signature of handler delegate 
   /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC, typename SENDER, NotifyMessage CODE, typename SIG = LResult (WindowBase&, NotifyEventArgs<ENC,NotifyMessage,CODE>&)>
+  /*template <Encoding ENC, typename SENDER, NotifyMessage CODE, typename SIG = LResult (Window&, NotifyEventArgs<ENC,NotifyMessage,CODE>&)>
   using StandardNotifyEventHandler = NotifyEventHandler<ENC, SENDER, NotifyMessage, CODE, SIG>;*/
   
 

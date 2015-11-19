@@ -18,7 +18,7 @@ namespace wtl
 {
   // Forward declaration
   template <Encoding ENC>
-  struct WindowBase;
+  struct Window;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct PropertyImpl - Acts as a base class for classes that provides the getter/setters for a property
@@ -27,7 +27,7 @@ namespace wtl
   //! \tparam VALUE - Value type
   //! \tparam WINDOW - [optional] Window type
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, typename VALUE, typename WINDOW = WindowBase<ENC>>
+  template <Encoding ENC, typename VALUE, typename WINDOW = Window<ENC>>
   struct PropertyImpl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------

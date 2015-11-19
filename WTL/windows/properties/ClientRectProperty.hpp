@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/properties/ClientRectProperty.h>        //!< ClientRectProperty
-#include <wtl/windows/WindowBase.hpp>                         //!< WindowBase
+#include <wtl/windows/Window.hpp>                         //!< Window
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

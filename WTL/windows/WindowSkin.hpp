@@ -16,7 +16,7 @@ namespace wtl
 {
   //! Forward declaration
   template <Encoding ENC>
-  struct WindowBase;
+  struct Window;
 
   //! Forward declaration
   template <Encoding ENC>
@@ -51,8 +51,8 @@ namespace wtl
     virtual void measure(Button<ENC>& btn) const = 0;
 
     //! Fallback
-    virtual void draw(WindowBase<ENC>& wnd) const = 0;
-    virtual void measure(WindowBase<ENC>& wnd) const = 0;
+    virtual void draw(Window<ENC>& wnd) const = 0;
+    virtual void measure(Window<ENC>& wnd) const = 0;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 

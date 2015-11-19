@@ -11,7 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/casts/BooleanCast.hpp>                 //!< BooleanCast
 #include <wtl/windows/properties/FontProperty.h>     //!< FontPropertyImpl
-#include <wtl/windows/WindowBase.hpp>                //!< WindowBase
+#include <wtl/windows/Window.hpp>                //!< Window
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

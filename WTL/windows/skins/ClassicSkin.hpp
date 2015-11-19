@@ -78,7 +78,7 @@ namespace wtl
     //! \param[in,out] &dc - Output device context
     //! \param[in] const &rc - Drawing rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    void draw(WindowBase<ENC>& wnd, DeviceContext& dc, const RectL& rc) const override
+    void draw(Window<ENC>& wnd, DeviceContext& dc, const RectL& rc) const override
     {
     }
 
@@ -90,7 +90,7 @@ namespace wtl
     //! \param[in,out] &dc - Output device context
     //! \return SizeL - Required size
     /////////////////////////////////////////////////////////////////////////////////////////
-    SizeL measure(WindowBase<ENC>& wnd, DeviceContext& dc) const override
+    SizeL measure(Window<ENC>& wnd, DeviceContext& dc) const override
     {
     }
 

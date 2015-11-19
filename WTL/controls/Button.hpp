@@ -9,7 +9,7 @@
 #define WTL_BUTTON_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/WindowBase.hpp>                     //!< WindowBase
+#include <wtl/windows/Window.hpp>                     //!< Window
 #include <wtl/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
 #include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
 #include <wtl/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
@@ -24,7 +24,7 @@ namespace wtl
   //! \tparam ENC - Character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct Button : WindowBase<ENC>
+  struct Button : Window<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -32,7 +32,7 @@ namespace wtl
     using type = Button<ENC>;
   
     //! \alias base - Define base type
-    using base = WindowBase<ENC>;
+    using base = Window<ENC>;
     
     //! \alias wndclass_t - Inherit class type
     using wndclass_t = typename base::wndclass_t;

@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Command.hpp>             //!< Command
-#include <wtl/windows/WindowBase.hpp>         //!< WindowBase
+#include <wtl/windows/Window.hpp>         //!< Window
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -36,7 +36,7 @@ namespace wtl
     using char_t = encoding_char_t<ENC>;
     
     //! \alias window_t - Define window base type
-    using window_t = WindowBase<ENC>;
+    using window_t = Window<ENC>;
 
     //! \var encoding - Define encoding type
     static constexpr Encoding encoding = ENC;

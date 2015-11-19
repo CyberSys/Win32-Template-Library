@@ -9,7 +9,7 @@
 #define WTL_CHECKBOX_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/WindowBase.hpp>                     //!< WindowBase
+#include <wtl/windows/Window.hpp>                     //!< Window
 #include <wtl/controls/Button.hpp>                        //!< Button
 //#include <wtl/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
 //#include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty

@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Command.hpp>             //!< Command
-#include <wtl/windows/WindowBase.hpp>         //!< WindowBase
+#include <wtl/windows/Window.hpp>         //!< Window
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -33,7 +33,7 @@ namespace wtl
     using base = Command<ENC>;
 
     //! \alias window_t - Define window base type
-    using window_t = WindowBase<ENC>;
+    using window_t = Window<ENC>;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:

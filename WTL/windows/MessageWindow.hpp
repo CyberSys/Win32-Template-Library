@@ -9,7 +9,7 @@
 #define WTL_MESSAGE_WINDOW_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/WindowBase.hpp>
+#include <wtl/windows/Window.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -21,12 +21,12 @@ namespace wtl
   //! \tparam ENC - Window charactrer encoding (UTF16 if unspecified)
   ///////////////////////////////////////////////////////////////////////////////
   template <wtl::Encoding ENC = wtl::Encoding::UTF16>
-  struct MessageWindow : wtl::WindowBase<ENC>
+  struct MessageWindow : wtl::Window<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias base - Define base type
-    using base = wtl::WindowBase<ENC>;
+    using base = wtl::Window<ENC>;
 
     //! \alias wndclass_t - Inherit window class type
     using wndclass_t = typename base::wndclass_t;
@@ -78,12 +78,12 @@ namespace wtl
   //! \tparam ENC - Window charactrer encoding (UTF16 if unspecified)
   ///////////////////////////////////////////////////////////////////////////////
   template <wtl::Encoding ENC = wtl::Encoding::UTF16>
-  struct NativeWindow : wtl::WindowBase<ENC>
+  struct NativeWindow : wtl::Window<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
     
     //! \alias base - Define base type
-    using base = wtl::WindowBase<ENC>;
+    using base = wtl::Window<ENC>;
 
     //! \alias wndclass_t - Inherit window class type
     using wndclass_t = typename base::wndclass_t;
