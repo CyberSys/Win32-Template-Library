@@ -7,7 +7,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 #include "Module.h"
-#include "ModuleCollection.h"
+#include <WTL/modules/ModuleCollection.h>
+#include <WTL/windows/MessageWindow.hpp>
 
 //! \namespace wtl - Windows template library
 namespace wtl
