@@ -338,10 +338,10 @@ namespace wtl
     //! \param[in] wnd - Native window handle
     //! \param[in] &cls - Registered window class 
     /////////////////////////////////////////////////////////////////////////////////////////
-    WindowBase(::HWND wnd, wndclass_t& cls) : Class(cls), 
+    /*WindowBase(::HWND wnd, wndclass_t& cls) : Class(cls), 
                                               ClientRect(*this),
                                               Children(*this),
-                                              Enabled(*this, true),
+                                              Enabled(*this, boolean_cast(::IsWindowEnabled(wnd))),
                                               Font(*this, StockObject::SystemFont),
                                               Ident(*this, defvalue<WindowId>()),
                                               IsMouseOver(false),
@@ -352,9 +352,9 @@ namespace wtl
                                               Text(*this),
                                               TextLength(*this),
                                               StyleEx(*this, defvalue<WindowStyleEx>()),
-                                              Visible(*this, Visibility::ShowNormal),
+                                              Visible(*this, ::IsWindowVisible(hwnd) ? Visibility::ShowNormal : Visibility::Hide),
                                               WindowRect(*this)
-    {}
+    {}*/
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
@@ -782,6 +782,15 @@ namespace wtl
     }
 
   protected:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // WindowBase::getClass 
+    //! Get the window-class 
+    //! 
+    //! \param[in] instance - Handle to registering module
+    //! \return wndclass_t& - Reference to window class 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual wndclass_t& getClass(::HINSTANCE instance) = 0;
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // WindowBase::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')

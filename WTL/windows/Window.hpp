@@ -71,7 +71,7 @@ namespace wtl
   template <wtl::Encoding ENC = wtl::Encoding::UTF16>
   struct MessageWindow : wtl::WindowBase<ENC>
   {
-    // ------------------------ TYPES --------------------------
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias base - Define base type
     using base = wtl::WindowBase<ENC>;
@@ -82,26 +82,35 @@ namespace wtl
     //! \var encoding - Inherit window character encoding
     static constexpr wtl::Encoding  encoding = base::encoding;
 
-    // -------------------- REPRESENTATION ---------------------
-  
-    // --------------------- CONSTRUCTION ----------------------
-  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    // ------------------------------------- CONSTRUCTION -----------------------------------
+
     ///////////////////////////////////////////////////////////////////////////////
     // MessageWindow::MessageWindow
     //! Create a message-only window
+    //!
+    //! \param[in] instance - Module owning the window class
     ///////////////////////////////////////////////////////////////////////////////
-    MessageWindow() : base(getClass())
+    MessageWindow(::HINSTANCE instance) : base(getClass(instance))
     {}
   
-    // ------------------------ STATIC -------------------------
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    
+    // ----------------------------------- STATIC METHODS -----------------------------------
+  
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
+  
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   
     ///////////////////////////////////////////////////////////////////////////////
     // MessageWindow::getClass 
     //! Get the window class
-    //! 
-    //! \return wndclass_t& - Window class 
+    //!
+    //! \param[in] instance - Module owning the window class
+    //! \return wndclass_t& - Reference to window class 
     ///////////////////////////////////////////////////////////////////////////////
-    static wndclass_t& getClass() 
+    wndclass_t& getClass(::HINSTANCE instance) override
     {
       static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
 

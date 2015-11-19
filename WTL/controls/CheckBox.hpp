@@ -53,7 +53,7 @@ namespace wtl
     // CheckBox::CheckBox
     //! Creates the window object for a standard button control (without creating the window handle)
     //! 
-    //! \param[in] instance - Owning instance
+    //! \param[in] instance - Handle to registering module
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////

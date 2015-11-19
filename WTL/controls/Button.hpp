@@ -59,7 +59,7 @@ namespace wtl
     // Button::Button
     //! Creates the window object for a standard button control (without creating the window handle)
     //! 
-    //! \param[in] instance - Owning instance
+    //! \param[in] instance - Handle to registering module
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -109,35 +109,6 @@ namespace wtl
     ENABLE_POLY(Button);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
-  
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::getClass 
-    //! Get the default window-class for WTL buttons
-    //! 
-    //! \param[in] instance - Module handle
-    //! \return wndclass_t& - Window class 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static wndclass_t& getClass(::HINSTANCE instance) 
-    {
-      static wndclass_t  std(SystemClass::Button);    //!< Lookup standard button windowclass
-      
-      // Define WTL button window-class
-      static wndclass_t  btn(instance,
-                             std.Name,   
-                             std.Style,
-                             base::WndProc,         //!< Replace the window procedure 'Compile-time subclass'
-                             std.Menu,
-                             std.Cursor,
-                             std.Background,
-                             std.SmallIcon,
-                             std.LargeIcon,
-                             std.ClassStorage,
-                             std.WindowStorage);    
-
-      // Return WTL button class
-      return btn;
-    }
-    
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::getNativeSubClass 
@@ -186,6 +157,34 @@ namespace wtl
     }
     
   protected:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::getClass 
+    //! Get the default window-class for WTL buttons
+    //! 
+    //! \param[in] instance - Handle to registering module
+    //! \return wndclass_t& - Window class 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    wndclass_t& getClass(::HINSTANCE instance) override
+    {
+      static wndclass_t  std(SystemClass::Button);    //!< Lookup standard button windowclass
+      
+      // Define WTL button window-class
+      static wndclass_t  btn(instance,
+                             std.Name,   
+                             std.Style,
+                             base::WndProc,         //!< Replace the window procedure 'Compile-time subclass'
+                             std.Menu,
+                             std.Cursor,
+                             std.Background,
+                             std.SmallIcon,
+                             std.LargeIcon,
+                             std.ClassStorage,
+                             std.WindowStorage);    
+
+      // Return WTL button class
+      return btn;
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
