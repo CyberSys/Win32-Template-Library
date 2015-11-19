@@ -9,7 +9,7 @@
 #define WTL_BUTTON_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Window.hpp>                     //!< Window
+#include <wtl/windows/Control.hpp>                        //!< Control
 #include <wtl/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
 #include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
 #include <wtl/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
@@ -24,7 +24,7 @@ namespace wtl
   //! \tparam ENC - Character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct Button : Window<ENC>
+  struct Button : Control<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
@@ -32,10 +32,10 @@ namespace wtl
     using type = Button<ENC>;
   
     //! \alias base - Define base type
-    using base = Window<ENC>;
+    using base = Control<ENC>;
     
-    //! \alias wndclass_t - Inherit class type
-    using wndclass_t = typename base::wndclass_t;
+    //! \alias class_t - Inherit class type
+    using class_t = typename base::class_t;
     
     //! \var encoding - Inherit character encoding
     static constexpr Encoding  encoding = base::encoding;
@@ -57,49 +57,32 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::Button
-    //! Creates the window object for a standard button control (without creating the window handle)
+    //! Creates the window object for a button control without creating the window handle
     //! 
-    //! \param[in] instance - Handle to registering module
+    //! \param[in] id - Control identifier
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    Button(::HINSTANCE instance) : base(getClass(instance)),
-                                   Icon(*this),
-                                   State(*this)
+    Button(WindowId id) : base(id),
+                          Icon(*this),
+                          State(*this)
     {
       // Set properties
       this->Style = WindowStyle::ChildWindow | ButtonStyle::PushButton|ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
-
-      // Clear paint handlers (Painting handled by system window class)
+      
+      // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
 
-      // Owner draw handler
+      // Compile-time subclass the standard button control
+      this->SubClasses.push_back(getNativeSubClass());
+
+      // Owner draw handlers
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
       OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
 
-      // Invalidate button on mouse enter/leave
+      // Mouse handlers (Handles 'hot' notification)
       this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &Button::onMouseEnter);
       this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
-
-      // Place standard Subclass prior to creation
-      this->SubClasses.push_back(getNativeSubClass());
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::Button
-    //! Creates the window object for a custom button control (without creating the window handle)
-    //! 
-    //! \param[in] &custom - Custom window class
-    //! 
-    //! \throw wtl::platform_error - Unrecognised system window class
-    /////////////////////////////////////////////////////////////////////////////////////////
-    Button(wndclass_t& custom) : base(custom)
-    {
-      // Set properties
-      this->Style = WindowStyle::ChildWindow | ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
-
-      // Remove paint handlers
-      this->Paint.clear();
     }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -109,6 +92,37 @@ namespace wtl
     ENABLE_POLY(Button);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Button::registerClass 
+    //! Registers the window-class 
+    //! 
+    //! \param[in] instance - Handle to registering module  [Used only during initial call]
+    //! \return const class_t& - Window class 
+    //! 
+    //! \throw wtl::platform_error - Unable to register window class
+    /////////////////////////////////////////////////////////////////////////////////////////
+    static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
+    {
+      static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button windowclass
+      
+      // Define WTL button window-class
+      static WindowClass<encoding>  btn(instance,
+                                        std.Name,   
+                                        std.Style,
+                                        base::WndProc,           //!< Replace the window procedure 'Compile-time subclass'
+                                        std.Menu,
+                                        std.Cursor,
+                                        std.Background,
+                                        std.SmallIcon,
+                                        std.LargeIcon,
+                                        std.ClassStorage,
+                                        std.WindowStorage);    
+
+      // Return WTL button class
+      return btn;
+    }
+    
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::getNativeSubClass 
@@ -118,7 +132,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass getNativeSubClass() 
     {
-      static wndclass_t  std(SystemClass::Button);    //!< Lookup standard button window-class
+      static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button window-class
       
       // Return native window proc
       return { SubClass::WindowType::Native, std.WndProc };
@@ -156,35 +170,18 @@ namespace wtl
       return send_message<encoding,window_msg(BM)>(this->Handle, w, l);
     }
     
-  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::getClass 
-    //! Get the default window-class for WTL buttons
+    // Button::wndclass const
+    //! Get the window class
     //! 
-    //! \param[in] instance - Handle to registering module
-    //! \return wndclass_t& - Window class 
+    //! \return const class_t& - Shared window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    wndclass_t& getClass(::HINSTANCE instance) override
+    const WindowClass<encoding>& wndclass() const override
     {
-      static wndclass_t  std(SystemClass::Button);    //!< Lookup standard button windowclass
-      
-      // Define WTL button window-class
-      static wndclass_t  btn(instance,
-                             std.Name,   
-                             std.Style,
-                             base::WndProc,         //!< Replace the window procedure 'Compile-time subclass'
-                             std.Menu,
-                             std.Cursor,
-                             std.Background,
-                             std.SmallIcon,
-                             std.LargeIcon,
-                             std.ClassStorage,
-                             std.WindowStorage);    
-
-      // Return WTL button class
-      return btn;
+      return registerClass(nullptr);
     }
     
+  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')

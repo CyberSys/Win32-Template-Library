@@ -35,8 +35,8 @@ namespace wtl
     //! \alias base - Define base type
     using base = Button<ENC>;
     
-    //! \alias wndclass_t - Inherit class type
-    using wndclass_t = typename base::wndclass_t;
+    //! \alias class_t - Inherit class type
+    using class_t = typename base::class_t;
     
     //! \var encoding - Inherit character encoding
     static constexpr Encoding  encoding = base::encoding;
@@ -51,34 +51,16 @@ namespace wtl
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // CheckBox::CheckBox
-    //! Creates the window object for a standard button control (without creating the window handle)
+    //! Creates the window object for a WTL checkbox control without creating the window handle
     //! 
-    //! \param[in] instance - Handle to registering module
-    //! 
-    //! \throw wtl::platform_error - Unrecognised system window class
+    //! \param[in] id - Control identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    CheckBox(::HINSTANCE instance) : base(instance)
-                                   //Icon(*this),
-                                   //State(*this)
+    CheckBox(WindowId id) : base(id)
     {
       // Set properties
       this->Style |= ButtonStyle::CheckBox;
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // CheckBox::CheckBox
-    //! Creates the window object for a custom button control (without creating the window handle)
-    //! 
-    //! \param[in] &custom - Custom window class
-    //! 
-    //! \throw wtl::platform_error - Unrecognised system window class
-    /////////////////////////////////////////////////////////////////////////////////////////
-    CheckBox(wndclass_t& custom) : base(custom)
-    {
-      // Set properties
-      this->Style |= ButtonStyle::CheckBox;
-    }
-
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
     DISABLE_COPY(CheckBox);     //!< Cannot be copied

@@ -28,9 +28,6 @@ namespace wtl
     //! \alias base - Define base type
     using base = wtl::Window<ENC>;
 
-    //! \alias wndclass_t - Inherit window class type
-    using wndclass_t = typename base::wndclass_t;
-
     //! \var encoding - Inherit window character encoding
     static constexpr wtl::Encoding  encoding = base::encoding;
 
@@ -41,10 +38,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     // MessageWindow::MessageWindow
     //! Create a message-only window
-    //!
-    //! \param[in] instance - Module owning the window class
     ///////////////////////////////////////////////////////////////////////////////
-    MessageWindow(::HINSTANCE instance) : base(getClass(instance))
+    MessageWindow() 
     {}
   
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -53,22 +48,22 @@ namespace wtl
   
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-  
     ///////////////////////////////////////////////////////////////////////////////
     // MessageWindow::getClass 
     //! Get the window class
     //!
     //! \param[in] instance - Module owning the window class
-    //! \return wndclass_t& - Reference to window class 
+    //! \return class_t& - Reference to window class 
     ///////////////////////////////////////////////////////////////////////////////
-    wndclass_t& getClass(::HINSTANCE instance) override
+    const WindowClass<encoding>& wndclass() const override
     {
       static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
 
       // Return singleton
       return std;
     }
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
   
@@ -85,8 +80,8 @@ namespace wtl
     //! \alias base - Define base type
     using base = wtl::Window<ENC>;
 
-    //! \alias wndclass_t - Inherit window class type
-    using wndclass_t = typename base::wndclass_t;
+    //! \alias class_t - Inherit window class type
+    using class_t = typename base::class_t;
     
     //! \alias resource_t - Inherit identifier type
     using resource_t = typename base::resource_t;
@@ -96,7 +91,7 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   private:
-    wndclass_t   NativeClass;     //!< Provides storage for the window class
+    class_t   NativeClass;     //!< Provides storage for the window class
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -118,7 +113,22 @@ namespace wtl
 		ENABLE_MOVE(NativeWindow);			//!< Can be moved
 		
     // ----------------------------------- STATIC METHODS -----------------------------------
-    
+  private:
+    ///////////////////////////////////////////////////////////////////////////////
+    // MessageWindow::getClass 
+    //! Get the window class
+    //!
+    //! \param[in] instance - Module owning the window class
+    //! \return class_t& - Reference to window class 
+    ///////////////////////////////////////////////////////////////////////////////
+    class_t& getClass(::HINSTANCE instance) override
+    {
+      static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
+
+      // Return singleton
+      return std;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     // NativeWindow::getClassAtom
     //! Get the window class atom from a native handle
@@ -128,7 +138,7 @@ namespace wtl
     //! 
     //! \throw wtl::invalid_argument - Missing window handle
     ///////////////////////////////////////////////////////////////////////////////
-    static resource_t getClassAtom(::HWND wnd) 
+    resource_t getClassAtom(::HWND wnd) 
     {
       REQUIRED_PARAM(wnd);
 

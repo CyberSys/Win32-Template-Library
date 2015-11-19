@@ -160,6 +160,7 @@
     <ClInclude Include="windows\commands\OpenDocumentCommand.hpp" />
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\SaveDocumentCommand.hpp" />
+    <ClInclude Include="windows\Control.hpp" />
     <ClInclude Include="windows\ControlEventArgs.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\Event.hpp" />

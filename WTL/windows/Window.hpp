@@ -138,20 +138,20 @@ namespace wtl
     //! \alias char_t - Define window character type
     using char_t = encoding_char_t<encoding>;
     
+    //! \alias class_t - Window class type
+    using class_t = WindowClass<encoding>;
+    
     //! \alias command_t - Define Command type
     using command_t = Command<encoding>;
     
+    //! \alias menu_t - Window menu type
+    using menu_t = WindowMenu<encoding>;
+
     //! \alias resource_t - Resource identifier type
     using resource_t = ResourceId<encoding>;
     
-    //! \alias wndclass_t - Window class type
-    using wndclass_t = WindowClass<encoding>;
-    
-    //! \alias wndskin_t - Window skin type
-    using wndskin_t = IWindowSkin<encoding>;
-
-    //! \alias wndmenu_t - Window menu type
-    using wndmenu_t = WindowMenu<encoding>;
+    //! \alias skin_t - Window skin type
+    using skin_t = IWindowSkin<encoding>;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     //! \struct ChildWindowCollection - Define child window collection type
@@ -244,117 +244,87 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
-    CommandEvent<encoding>              Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
-    CreateWindowEvent<encoding>         Create;         //!< Raised in response to WM_CREATE
-    CloseWindowEvent<encoding>          Close;          //!< Raised in response to WM_CLOSE
-    DestroyWindowEvent<encoding>        Destroy;        //!< Raised in response to WM_DESTROY
-    LoseFocusEvent<encoding>            LoseFocus;      //!< Raised in response to WM_KILLFOCUS
-    GainFocusEvent<encoding>            GainFocus;      //!< Raised in response to WM_SETFOCUS
-    MouseEnterEvent<encoding>           MouseEnter;     //!< Raised in response to WM_MOUSEENTER
-    MouseHoverEvent<encoding>           MouseHover;     //!< Raised in response to WM_MOUSEHOVER
-    MouseLeaveEvent<encoding>           MouseLeave;     //!< Raised in response to WM_MOUSELEAVE
-    MouseMoveEvent<encoding>            MouseMove;      //!< Raised in response to WM_MOUSEMOVE
-    PaintWindowEvent<encoding>          Paint;          //!< Raised in response to WM_PAINT
-    ShowWindowEvent<encoding>           Show;           //!< Raised in response to WM_SHOWWINDOW
-    PositionChangedEvent<encoding>      Reposition;     //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
+    CommandEvent<encoding>          Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
+    CreateWindowEvent<encoding>     Create;         //!< Raised in response to WM_CREATE
+    CloseWindowEvent<encoding>      Close;          //!< Raised in response to WM_CLOSE
+    DestroyWindowEvent<encoding>    Destroy;        //!< Raised in response to WM_DESTROY
+    LoseFocusEvent<encoding>        LoseFocus;      //!< Raised in response to WM_KILLFOCUS
+    GainFocusEvent<encoding>        GainFocus;      //!< Raised in response to WM_SETFOCUS
+    MouseEnterEvent<encoding>       MouseEnter;     //!< Raised in response to WM_MOUSEENTER
+    MouseHoverEvent<encoding>       MouseHover;     //!< Raised in response to WM_MOUSEHOVER
+    MouseLeaveEvent<encoding>       MouseLeave;     //!< Raised in response to WM_MOUSELEAVE
+    MouseMoveEvent<encoding>        MouseMove;      //!< Raised in response to WM_MOUSEMOVE
+    PaintWindowEvent<encoding>      Paint;          //!< Raised in response to WM_PAINT
+    ShowWindowEvent<encoding>       Show;           //!< Raised in response to WM_SHOWWINDOW
+    PositionChangedEvent<encoding>  Reposition;     //!< Raised in response to WM_WINDOWPOSCHANGED (sent by ::SetWindowPos(..) after moving/resizing window)
     
     // Fields
-    CommandQueue<encoding>              ActionQueue;    //!< GUI Command queue
-    ChildWindowCollection               Children;       //!< Child window collection
-    WindowMenu<encoding>                Menu;           //!< Window menu, possibly empty
+    CommandQueue<encoding>          ActionQueue;    //!< GUI Command queue
+    ChildWindowCollection           Children;       //!< Child window collection
+    WindowMenu<encoding>            Menu;           //!< Window menu, possibly empty
 
     // Properties
-    ClientRectProperty<encoding>        ClientRect;     //!< Client rectangle property
-    EnabledProperty<encoding>           Enabled;        //!< Window enabled property
-    FontProperty<encoding>              Font;           //!< Window font property
-    IdentProperty<encoding>             Ident;          //!< Child Window Id property
-    PositionProperty<encoding>          Position;       //!< Window position property
-    SizeProperty<encoding>              Size;           //!< Window size property
-    StyleProperty<encoding>             Style;          //!< Window style property
-    StyleExProperty<encoding>           StyleEx;        //!< Extended window style property
-    TextProperty<encoding>              Text;           //!< Window text property
-    //ColourProperty<encoding>            TextColour;     //!< Window text colour
-    TextLengthProperty<encoding>        TextLength;     //!< Window text length property
-    VisibilityProperty<encoding>        Visible;        //!< Visibility property
-    WindowRectProperty<encoding>        WindowRect;     //!< Window rectangle property
+    ClientRectProperty<encoding>    ClientRect;     //!< Client rectangle property
+    EnabledProperty<encoding>       Enabled;        //!< Window enabled property
+    FontProperty<encoding>          Font;           //!< Window font property
+    IdentProperty<encoding>         Ident;          //!< Child Window Id property
+    PositionProperty<encoding>      Position;       //!< Window position property
+    SizeProperty<encoding>          Size;           //!< Window size property
+    StyleProperty<encoding>         Style;          //!< Window style property
+    StyleExProperty<encoding>       StyleEx;        //!< Extended window style property
+    TextProperty<encoding>          Text;           //!< Window text property
+    //ColourProperty<encoding>        TextColour;     //!< Window text colour
+    TextLengthProperty<encoding>    TextLength;     //!< Window text length property
+    VisibilityProperty<encoding>    Visible;        //!< Visibility property
+    WindowRectProperty<encoding>    WindowRect;     //!< Window rectangle property
 
   protected:
-    WindowClass<encoding>&              Class;          //!< Window class reference
-    IWindowSkin<encoding>*              Skin;           //!<
-    HWnd                                Handle;         //!< Window handle
-    SubClassCollection                  SubClasses;     //!< Sub-classed windows collection
+    HWnd                            Handle;         //!< Window handle
+    IWindowSkin<encoding>*          Skin;           //!<
+    SubClassCollection              SubClasses;     //!< Sub-classed windows collection
 
   private:
-    bool                                IsMouseOver;    //!< True iff mouse is over the window while window has keyboard focus
+    bool                            IsMouseOver;    //!< True iff mouse is over the window while window has keyboard focus
 
     // ------------------------------------- CONSTRUCTION -----------------------------------
   public: 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::Window
     //! Creates the window object (but not window handle) for an instance of a registered window class
-    //! 
-    //! \param[in] &cls - Registered window class 
     /////////////////////////////////////////////////////////////////////////////////////////
-    Window(wndclass_t& cls) : Class(cls), 
-                                  ClientRect(*this),
-                                  Children(*this),
-                                  Enabled(*this, true),
-                                  Font(*this, StockFont::Window),
-                                  Ident(*this, zero<WindowId>()),
-                                  IsMouseOver(false),
-                                  Handle(defvalue<HWnd>()),
-                                  Position(*this, DefaultPosition),
-                                  Skin(nullptr /*::IsAppThemed() ? ThemedSkin::Instance : ClassicSkin::Instance*/),
-                                  Size(*this, DefaultSize),
-                                  Style(*this, WindowStyle::OverlappedWindow),
-                                  Text(*this),
-                                  TextLength(*this),
-                                  StyleEx(*this, WindowStyleEx::None),
-                                  Visible(*this, Visibility::ShowNormal),
-                                  WindowRect(*this)
+    Window() : ClientRect(*this),
+               Children(*this),
+               Enabled(*this, true),
+               Font(*this, StockFont::Window),
+               Ident(*this, zero<WindowId>()),
+               IsMouseOver(false),
+               Handle(defvalue<HWnd>()),
+               Position(*this, DefaultPosition),
+               Skin(nullptr /*::IsAppThemed() ? ThemedSkin::Instance : ClassicSkin::Instance*/),
+               Size(*this, DefaultSize),
+               Style(*this, WindowStyle::OverlappedWindow),
+               Text(*this),
+               TextLength(*this),
+               StyleEx(*this, WindowStyleEx::None),
+               Visible(*this, Visibility::ShowNormal),
+               WindowRect(*this)
     {
-      // [NO-OP] Accept window creation parameters
+      // Create events: Accept window creation parameters
       Create += new CreateWindowEventHandler<encoding>(this, &Window::onCreate);
       
-      // Execute gui commands by default
+      // Command events: Execute gui commands by default
       Command += new CommandEventHandler<encoding>(this, &Window::onCommand);
       
-      // Clears the 'mouse over' flag when losing focus
+      // Focus events: Clears the 'mouse over' flag when losing focus
       //LoseFocus += new LoseFocusEventHandler<encoding>(this, &Window::onLoseFocus);
 
-      // Registers for hover/leave notifications
+      // Mouse events: Registers for hover/leave notifications
       MouseMove += new MouseMoveEventHandler<encoding>(this, &Window::onMouseMove);
       MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Window::onMouseLeave);
       
-      // [NO-OP] Validate the client area
+      // Paint events: Validate the client area
       Paint += new PaintWindowEventHandler<encoding>(this, &Window::onPaint);
     }
-
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::Window
-    //! Creates a window object for an existing window
-    //! 
-    //! \param[in] wnd - Native window handle
-    //! \param[in] &cls - Registered window class 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /*Window(::HWND wnd, wndclass_t& cls) : Class(cls), 
-                                              ClientRect(*this),
-                                              Children(*this),
-                                              Enabled(*this, boolean_cast(::IsWindowEnabled(wnd))),
-                                              Font(*this, StockObject::SystemFont),
-                                              Ident(*this, defvalue<WindowId>()),
-                                              IsMouseOver(false),
-                                              Handle(wnd, AllocType::WeakRef),
-                                              Position(*this, DefaultPosition),
-                                              Size(*this, DefaultSize),
-                                              Style(*this, defvalue<WindowStyle>()),
-                                              Text(*this),
-                                              TextLength(*this),
-                                              StyleEx(*this, defvalue<WindowStyleEx>()),
-                                              Visible(*this, ::IsWindowVisible(hwnd) ? Visibility::ShowNormal : Visibility::Hide),
-                                              WindowRect(*this)
-    {}*/
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
@@ -368,11 +338,11 @@ namespace wtl
     // Window::getFocus
     //! Get the window with input focus
     //!
-    //! \return Window<ENC>* - Window with input focus, or nullptr if focus belongs to another thread
+    //! \return Window<encoding>* - Window with input focus, or nullptr if focus belongs to another thread
     //!
     //! \throw wtl::domain_error - Input focus belongs to native window on current thread
     /////////////////////////////////////////////////////////////////////////////////////////
-    static Window<ENC>*  getFocus()
+    static Window<encoding>*  getFocus()
     {
       if (::HWND focus = ::GetFocus())
       {
@@ -398,7 +368,7 @@ namespace wtl
     //! \param[in] res - Message result 
     //! \return bool - True iff result indicates message was unhandled
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool  isUnhandled(WindowMessage msg, LRESULT res)
+    static bool  isUnhandled(WindowMessage msg, ::LRESULT res)
     {
       switch (msg)
       {
@@ -522,17 +492,6 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::isMouseOver const
-    //! Query whether cursor is over window
-    //! 
-    //! \return bool - True iff mouse over window
-    /////////////////////////////////////////////////////////////////////////////////////////
-    bool isMouseOver() const
-    {
-      return IsMouseOver;
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Window::handle const
     //! Get the shared window handle 
     //! 
@@ -544,14 +503,25 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Window::isMouseOver const
+    //! Query whether cursor is over window
+    //! 
+    //! \return bool - True iff mouse over window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool isMouseOver() const
+    {
+      return IsMouseOver;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Window::parent const
     //! Get the parent window
     //! 
-    //! \return Window<ENC>* - Parent window if any, otherwise nullptr
+    //! \return Window<encoding>* - Parent window if any, otherwise nullptr
     //!
     //! \throw wtl::domain_error - Parent is native window
     /////////////////////////////////////////////////////////////////////////////////////////
-    Window<ENC>* parent() const
+    Window<encoding>* parent() const
     {
       // Query parent
       if (::HWND wnd = ::GetParent(Handle))
@@ -570,6 +540,14 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Window::wndclass const
+    //! Get the window class
+    //! 
+    //! \return const class_t& - Shared window class
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual const WindowClass<encoding>& wndclass() const = 0;
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Window::operator ::HWND const
     //! Implicit user conversion to native window handle 
     //! 
@@ -579,7 +557,7 @@ namespace wtl
     {
       return handle();
     }
-    
+  
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -616,7 +594,7 @@ namespace wtl
           throw logic_error(HERE, "Parent window does not exist");
 
         // Create as child 
-        Handle = HWnd(Class, *this, owner->handle(), Ident, Style, StyleEx, Text(), Position, Size);
+        Handle = HWnd(wndclass(), *this, owner->handle(), Ident, Style, StyleEx, Text(), Position, Size);
 
         // Add to parent's collection of child windows
         owner->Children.insert(*this);
@@ -627,7 +605,7 @@ namespace wtl
         ::HWND parent = owner ? (::HWND)owner->handle() : defvalue<::HWND>();          //!< Use parent if any
 
         // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
-        Handle = HWnd(Class, *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), Position, Size);
+        Handle = HWnd(wndclass(), *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), Position, Size);
 
         // [MENU] Attach menu if populated during onCreate(..)
         if (!Menu.empty())
@@ -782,15 +760,6 @@ namespace wtl
     }
 
   protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::getClass 
-    //! Get the window-class 
-    //! 
-    //! \param[in] instance - Handle to registering module
-    //! \return wndclass_t& - Reference to window class 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual wndclass_t& getClass(::HINSTANCE instance) = 0;
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')

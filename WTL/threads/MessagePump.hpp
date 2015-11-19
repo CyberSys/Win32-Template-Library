@@ -60,7 +60,6 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    HINSTANCE         Instance;   //!< Module instance
     List<window_t*>   Dialogs;    //!< Currently active modeless dialogs
     window_t          Window;     //!< Main thread window
     PumpState         State;      //!< Current state
@@ -73,9 +72,7 @@ namespace wtl
     //! 
     //! \param[in] instance - Instance handle
     /////////////////////////////////////////////////////////////////////////////////////////
-    MessagePump(::HMODULE instance) : Instance(instance),
-                                      State(PumpState::Idle),
-                                      Window(instance)
+    MessagePump(::HMODULE instance) : State(PumpState::Idle)
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

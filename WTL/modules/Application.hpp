@@ -15,6 +15,8 @@
 #include <wtl/platform/DateTime.hpp>                //!< DateTime
 #include <wtl/platform/SystemVersion.hpp>           //!< SystemVersion
 #include <wtl/utils/String.hpp>                     //!< String
+#include <wtl/controls/Button.hpp>                  //!< Button
+#include <wtl/controls/CheckBox.hpp>                //!< CheckBox
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -54,11 +56,15 @@ namespace wtl
     // Application::Application
     //! Create application from handle supplied by WinMain(..)
     //!
-    //! \param[in] app - Application handle
+    //! \param[in] inst - Module instance
     /////////////////////////////////////////////////////////////////////////////////////////
-    Application(::HMODULE app) : module_base(app), 
-                                 msgpump_base(app)
-    {}
+    Application(::HINSTANCE inst) : module_base(inst), 
+                                    msgpump_base(inst)
+    {
+      // Register library window classes
+      Button<encoding>::registerClass(inst);
+      CheckBox<encoding>::registerClass(inst);
+    }
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:

@@ -116,9 +116,9 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to query path
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC>
-    Path<ENC>  path() const
+    Path<ENC> path() const
     {
-      Path<ENC>  p;
+      Path<ENC> p;
 
       // Query module path
       if (!WinAPI<ENC>::getModuleFileName(Handle, p.buffer(), Path<ENC>::length))

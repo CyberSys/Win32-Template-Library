@@ -629,6 +629,9 @@
     <ClInclude Include="windows\MessageWindow.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="windows\Control.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
