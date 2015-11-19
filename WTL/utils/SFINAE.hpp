@@ -230,14 +230,14 @@ namespace wtl
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias enable_if_is_not_t - Defines an SFINAE expression blocking a specific type
+  //! \alias enable_if_not_same_t - Defines an SFINAE expression blocking a specific type
   //! 
   //! \tparam T - Input type
   //! \tparam U - Required type
   //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename U, typename RET = void>
-  using enable_if_is_not_t = std::enable_if_t<!std::is_same<T,U>::value, RET>;
+  using enable_if_not_same_t = std::enable_if_t<!std::is_same<T,U>::value, RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
