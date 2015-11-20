@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/traits/ModuleTraits.hpp>      //!< HModule
-#include <wtl/platform/ResourceId.hpp>      //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>      //!< ResourceId
 #include <wtl/platform/Locale.hpp>          //!< LanguageId
 
 //! \namespace wtl - Windows template library

@@ -12,7 +12,7 @@
 #include <wtl/Resources/ResourceBlob.hpp>   //!< ResourceBlob
 #include <wtl/traits/IconTraits.hpp>        //!< HIcon
 #include <wtl/platform/Locale.hpp>          //!< LanguageId
-#include <wtl/platform/ResourceId.hpp>      //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>      //!< ResourceId
 #include <wtl/platform/SystemFlags.hpp>     //!< ResourceType
 
 //! \namespace wtl - Windows template library

@@ -12,7 +12,7 @@
 #include <wtl/casts/EnumCast.hpp>         //!< EnumCast
 #include <wtl/utils/Handle.hpp>           //!< Handle
 #include <wtl/utils/Default.hpp>          //!< Default
-#include <wtl/platform/ResourceId.hpp>    //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>    //!< ResourceId
 #include <wtl/traits/EncodingTraits.hpp>  //!< Encoding
 
 //! \namespace wtl - Windows template library

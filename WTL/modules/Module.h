@@ -16,7 +16,7 @@
 #include <wtl/traits/ModuleTraits.hpp>      //!< HModule
 #include <wtl/traits/ResourceTraits.hpp>    //!< HResource
 #include <wtl/resources/ResourceBlob.hpp>   //!< ResourceBlob
-#include <wtl/platform/ResourceId.hpp>      //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>      //!< ResourceId
 #include <wtl/platform/Path.hpp>            //!< Path
 #include <functional>                       //!< std::forward
 

@@ -14,7 +14,7 @@
 #include <wtl/utils/String.hpp>           //!< String
 #include <wtl/traits/EnumTraits.hpp>      //!< is_attribute
 #include <wtl/traits/EncodingTraits.hpp>  //!< Encoding
-#include <wtl/platform/ResourceId.hpp>    //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>   //!< ResourceId
 #include <wtl/platform/WindowFlags.hpp>   //!< WindowId, WindowStyle, WindowStyleEx
 #include <wtl/utils/Point.hpp>            //!< Point
 #include <wtl/utils/Size.hpp>             //!< Size

@@ -14,7 +14,7 @@
 #include <wtl/utils/Handle.hpp>                   //!< Handle
 #include <wtl/utils/Size.hpp>                     //!< Size
 #include <wtl/platform/SystemFlags.hpp>           //!< SystemIcon
-#include <wtl/platform/ResourceId.hpp>            //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>            //!< ResourceId
 
 //! \namespace wtl - Windows template library
 namespace wtl

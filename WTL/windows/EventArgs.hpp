@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Event.hpp>                        //!< Event
-#include <wtl/platform/ResourceId.hpp>                  //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>                  //!< ResourceId
 #include <wtl/platform/WindowMessage.hpp>               //!< WindowMessage
 #include <wtl/traits/EncodingTraits.hpp>                //!< Encoding
 
