@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\platform\Rectangle.hpp
+//! \file wtl\utils\Rectangle.hpp
 //! \brief Provides utility rectangle type
-//! \date 8 March 2015
+//! \date 20 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -21,6 +21,9 @@ namespace wtl
   //! \struct Rect - Encapsulates a rectangle of any type
   //!
   //! \tparam T - Dimension type
+  //!
+  //! \remarks In order to use the implicit conversion operators to Win32 types requires that
+  //! \remarks type T model the appropriate Signed16BitFields or Signed32BitFields concepts
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   struct Rect
@@ -40,8 +43,7 @@ namespace wtl
     using value_t = T;
 
     //! \var EMPTY - Sentinel empty rectangle
-    //static constexpr Rect<T> EMPTY {0,0,0,0};
-    static const Rect<T> EMPTY;
+    static const Rect<T> EMPTY;     // [MSVC-14 FIX] static constexpr Rect<T> EMPTY {0,0,0,0};
 
     //! \enum Relation - Layout calculation constants
     enum Relation { FromLeft, FromTop, FromRight, FromBottom, Centre };
@@ -49,11 +51,16 @@ namespace wtl
     //! \struct LayoutVector - Layout calculation vector
     struct LayoutVector
     {
+      /////////////////////////////////////////////////////////////////////////////////////////
+      // LayoutVector::LayoutVector constexpr
+      //! Create layout vector from edge identifier and distance
+      /////////////////////////////////////////////////////////////////////////////////////////
+      constexpr 
       LayoutVector(Relation r, int32_t n = 0) : Direction(r), Distance(n)
       {}
 
-      Relation  Direction;
-      int32_t   Distance;
+      Relation  Direction;    //!< Edge indicator
+      int32_t   Distance;     //!< Distance from edge
     };
 
     // ----------------------------------- REPRESENTATION -----------------------------------
@@ -162,7 +169,7 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::arrange const
+    // Rect::arrange constexpr
     //! Arranges a sub-rectangle within this rectangle
     //!
     //! \param[in] const& sz - Size of sub-rectangle 
@@ -171,7 +178,7 @@ namespace wtl
     //!
     //! \return type - Co-ordinates of desired sub-rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T>
+    template <typename T> //!< [MSVC-14 FIX] constexpr  
     type arrange(const Size<T>& sz, LayoutVector x, LayoutVector y) const
     {
       // Calculate X or Y co-ordinate of resultant top-left corner
@@ -193,44 +200,48 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::area const
+    // Rect::area constexpr
     //! Query size of rectangle
     //!
     //! \return size_t - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     size_t  area() const
     {
       return {width(), height()};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::bottomLeft const
+    // Rect::bottomLeft constexpr
     //! Query Bottom-Left corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     point_t  bottomLeft() const
     {
       return point_t(Left, Bottom);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::bottomRight const
+    // Rect::bottomRight constexpr
     //! Query Bottom-Right corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     point_t  bottomRight() const
     {
       return point_t(Right, Bottom);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::centre const
+    // Rect::centre constexpr
     //! Query rectangle mid point
     //!
     //! \return point_t - Point defining rectangle centre
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     point_t  centre() const
     {
       return point_t(width() / static_cast<value_t>(2),
@@ -238,7 +249,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::contains const
+    // Rect::contains constexpr
     //! Query whether a point is within the rectangle
     //!
     //! \tparam U - Point type
@@ -246,7 +257,7 @@ namespace wtl
     //! \param[in] const& pt - Point
     //! \return bool - True if within boundaries
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U>
+    template <typename U> constexpr
     bool  contains(const Point<U>&  pt) const
     {
       return static_cast<value_t>(pt.X) >= Left && static_cast<value_t>(pt.X) < Right
@@ -254,104 +265,113 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::empty const
+    // Rect::empty constexpr
     //! Query whether rectangle is empty
     //!
     //! \return bool - True iff all fields zero
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     bool empty() const
     {
       return *this == EMPTY;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::height const
+    // Rect::height constexpr
     //! Query rectangle height
     //!
     //! \return value_t - Rectangle height, in units
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     value_t  height() const
     {
       return Bottom - Top;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::size const
+    // Rect::size constexpr
     //! Query rectangle size
     //!
     //! \return size_t - Rectangle size
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     size_t size() const
     {
       return size_t(width(), height());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::topLeft const
+    // Rect::topLeft constexpr
     //! Query Top-Left corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     point_t  topLeft() const
     {
       return point_t(Left, Top);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::topRight const
+    // Rect::topRight constexpr
     //! Query Top-Right corner of rectangle
     //!
     //! \return point_t - Point defining rectangle corner
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     point_t  topRight() const
     {
       return point_t(Right, Top);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::width const
+    // Rect::width constexpr
     //! Query rectangle width
     //!
     //! \return value_t - Rectangle width, in units
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     value_t  width() const
     {
       return Right - Left;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator == const
+    // Rect::operator == constexpr
     //! Equality operator
     //!
     //! \param[in] const& r - Another rect
     //! \return bool - True iff co-ordinates equal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator == (const type& r)
+    constexpr
+    bool operator == (const type& r) const
     {
       return Left == r.Left && Right == r.Right
           && Top == r.Top   && Bottom == r.Bottom;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator != const
+    // Rect::operator != constexpr
     //! Inequality operator
     //!
     //! \param[in] const& r - Another rect
     //! \return bool - True iff co-ordinates unequal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator != (const type& r)
+    constexpr
+    bool operator != (const type& r) const
     {
       return Left != r.Left || Right != r.Right
           || Top != r.Top   || Bottom != r.Bottom;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator + const
+    // Rect::operator + constexpr
     //! Create new rectangle from adding a horizontal and vertical offset
     //!
     //! \param[in] const& pt - Offset
     //! \return type - New instance added by 'x' horizontal units, and 'y' vertical units
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     type  operator + (const point_t& pt) const
     {
       return type(Left + static_cast<value_t>(pt.X),  Top + static_cast<value_t>(pt.Y),
@@ -359,12 +379,13 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator - const
+    // Rect::operator - constexpr
     //! Create new rectangle from subtracting a horizontal and vertical offset
     //!
     //! \param[in] const& pt - Offset
     //! \return type - New instance subtracted by 'x' horizontal units, and 'y' vertical units
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     type  operator - (const point_t& pt) const
     {
       return type(Left - static_cast<value_t>(pt.X),  Top - static_cast<value_t>(pt.Y),
@@ -372,7 +393,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator const ::RECT* const
+    // Rect::operator const ::RECT* const noexcept
     //! Implicit user-conversion to native ::RECT pointer
     //!
     //! \return const ::RECT* - Recter to self as immutable ::RECT
@@ -380,7 +401,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator const ::RECT* () const
+    operator const ::RECT* () const noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -388,7 +409,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT const
+    // Rect::operator ::RECT const noexcept
     //! Implicit user-conversion to native ::RECT 
     //!
     //! \return ::RECT - Copy of current value as ::RECT
@@ -396,7 +417,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator  ::RECT () const
+    operator  ::RECT () const noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -406,23 +427,23 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::clear
+    // Rect::clear noexcept
     //! Reset all fields to zero
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  clear()
+    void  clear() noexcept
     {
       *this = EMPTY;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::set
+    // Rect::set noexcept
     //! Set from point and rectangle extent
     //!
     //! \param[in] const& topLeft - Top Left co-ordinate
     //! \param[in] const& size - Size of rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U>
-    void set(const Point<U>& topLeft, const Size<U>& size)
+    void set(const Point<U>& topLeft, const Size<U>& size) noexcept
     {
       Left   = topLeft.X;
       Right  = topLeft.X + size.width;
@@ -431,13 +452,13 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator +=
+    // Rect::operator += noexcept
     //! Add a horizontal and vertical offset
     //!
     //! \param[in] const& pt - Offset
     //! \return type& - Reference to self at updated position
     /////////////////////////////////////////////////////////////////////////////////////////
-    type&  operator += (const point_t&  pt)
+    type&  operator += (const point_t&  pt) noexcept
     {
       Left   += static_cast<value_t>(pt.X);
       Top    += static_cast<value_t>(pt.Y);
@@ -453,7 +474,7 @@ namespace wtl
     //! \param[in] const& pt - Offset
     //! \return type& - Reference to self at updated position
     /////////////////////////////////////////////////////////////////////////////////////////
-    type&  operator -= (const point_t&  pt)
+    type&  operator -= (const point_t&  pt) noexcept
     {
       Left   -= static_cast<value_t>(pt.X);
       Top    -= static_cast<value_t>(pt.Y);
@@ -463,7 +484,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::operator ::RECT* 
+    // Rect::operator ::RECT* noexcept
     //! Implicit user-conversion to native ::RECT pointer
     //!
     //! \return ::RECT* - Recter to self as mutable ::RECT
@@ -471,7 +492,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator ::RECT* () 
+    operator ::RECT* () noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -481,16 +502,19 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \var Rect<T>::EMPTY - 'Empty' sentinel value
+  //! \var Rect<T>::EMPTY - Definition of 'Empty' sentinel value
   /////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename T>
-  //const Rect<T>  Rect<T>::EMPTY;
+  template <typename T>
+  const Rect<T>  Rect<T>::EMPTY;
 
-
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias RectL - Rectangle using long32_t fields (binary compatible with Win32 ::RECT)
+  /////////////////////////////////////////////////////////////////////////////////////////
   using RectL = Rect<long32_t>;
 
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias RectF - Rectangle using floating point fields
+  /////////////////////////////////////////////////////////////////////////////////////////
   using RectF = Rect<float>;
 
 
