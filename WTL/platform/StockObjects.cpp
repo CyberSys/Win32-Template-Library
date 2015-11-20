@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\gdi\StockObjects.cpp
+//! \file wtl\platform\StockObjects.cpp
 //! \brief Provides storage for stock drawing objects
 //! \date 5 November 2015
 //! \author Nick Crowley

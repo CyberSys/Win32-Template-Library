@@ -200,9 +200,6 @@
     <ClInclude Include="traits\DeviceContextTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
-    <ClInclude Include="gdi\StockObjects.hpp">
-      <Filter>GDI</Filter>
-    </ClInclude>
     <ClInclude Include="traits\FontTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
@@ -632,11 +629,11 @@
     <ClInclude Include="resources\ResourceId.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="platform\StockObjects.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gdi\StockObjects.cpp">
-      <Filter>GDI</Filter>
-    </ClCompile>
     <ClCompile Include="gdi\DeviceContext.cpp">
       <Filter>GDI</Filter>
     </ClCompile>
@@ -653,6 +650,9 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="platform\Metrics.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\StockObjects.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>

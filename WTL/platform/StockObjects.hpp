@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\gdi\StockObjects.hpp
+//! \file wtl\platform\StockObjects.hpp
 //! \brief Provides extended stock drawing objects
 //! \date 5 November 2015
 //! \author Nick Crowley
