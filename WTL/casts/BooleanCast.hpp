@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\casts\BooleanCast.hpp
 //! \brief Converts any type to a Win32 BOOL, and handles conversion between C++/Win32 booleans
-//! \date 6 March 2015
+//! \date 20 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,53 +9,49 @@
 #define WTL_BOOLEAN_CAST_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/utils/Default.hpp>
-
+#include <wtl/utils/Default.hpp>          //!< defvalue
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \alias enable_if_not_BOOL_t - SFINAE expression requiring other than Win32 Boolean
-  template <typename T, typename RET = void>
-  using enable_if_not_BOOL_t = std::enable_if_t<!std::is_same<T,BOOL>::value,RET>;
-
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::boolean_cast
-  //! Converts any non-pointer type (except Win32 BOOL) to Win32 BOOL  (As TRUE (1) or FALSE (0))
+  // wtl::boolean_cast constexpr
+  //! Converts any type to BOOL (except BOOL itself) as either TRUE or FALSE
   //!
-  //! \tparam T - Value type (exception Win32 BOOL)
+  //! \tparam T - Any type except BOOL
   //!
   //! \param[in] value - Value
-  //! \return BOOL - TRUE (1) if non-zero, otherwise FALSE (0)
+  //! \return BOOL - TRUE (1) if 'value' not equal to value-initialized instance of T, otherwise FALSE (0)
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  enable_if_not_BOOL_t<T,BOOL>  boolean_cast(T value)
+  template <typename T> constexpr
+  auto  boolean_cast(T value) -> enable_if_not_same_t<T,BOOL,BOOL>
   {
     return value != defvalue<T>() ? True : False;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::boolean_cast
-  //! Converts a Win32 BOOL to boolean
+  // wtl::boolean_cast constexpr
+  //! Converts a BOOL to C++ boolean
   //!
-  //! \param[in] value - Win32 BOOL
-  //! \return bool - True iff non-zero
+  //! \param[in] value - Any BOOL value
+  //! \return bool - True iff value is non-zero
   //////////////////////////////////////////////////////////////////////////////////////////
-  inline bool boolean_cast(BOOL value)
+  constexpr
+  inline bool boolean_cast(BOOL value) 
   {
     return value != defvalue<BOOL>();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::enum_cast
-  //! Converts a pointer to BOOL as TRUE or FALSE
+  // wtl::boolean_cast constexpr
+  //! Converts any object pointer type to BOOL as TRUE or FALSE
   //!
-  //! \tparam T - Pointer type
+  //! \tparam T - Object pointer type
   //!
-  //! \param[in] value - Pointer value
-  //! \return BOOL - TRUE if not nullptr, otherwise FALSE
+  //! \param[in] value - Any object pointer value
+  //! \return BOOL - TRUE if value is non-null, FALSE otherwise
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
+  template <typename T> constexpr
   BOOL boolean_cast(T* value)
   {
     return value != nullptr ? True : False;

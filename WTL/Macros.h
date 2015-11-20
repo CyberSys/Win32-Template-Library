@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\utils\Macros.h
-//! \brief Collection of helpful macros
+//! \brief Defines preprocessor macros used by the library
 //! \date 25 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -10,28 +10,32 @@
 
 #include "WTL.hpp"
 
-// --------------------------------------------------------------
-// -------------------- CONDITIONAL BUILDS ----------------------
-// --------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
+// ------------------------------------------ CONDITIONAL BUILDS ------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 //! \def DEVELOPMENT_MODE - Activate boundary, domain/logic invariant, iterator, and function argument verification
 #define DEVELOPMENT_MODE
 
-// --------------------------------------------------------------
-// -------------------------- COMPILER --------------------------
-// --------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
+// ----------------------------------------------- COMPILER -----------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 //! \if __clang__ - Clang
 #ifdef __clang__
+
+  // Nothing anymore
  
 //! \if _MSC_VER - Visual Studio
 #elif _MSC_VER
 
   //! \if _MSC_VER >= 1900 - Visual Studio 2015
   #if _MSC_VER >= 1900
+    // Nothing anymore
   #endif
 
 #endif
+
 // --------------------------------------------------------------------------------------------------------
 // ------------------------------------------ GLOBAL MACROS -----------------------------------------------
 // --------------------------------------------------------------------------------------------------------
@@ -130,18 +134,27 @@
 //! if DEVELOPMENT_MODE - Activate debugging checks
 #ifdef DEVELOPMENT_MODE
   //! \def CHECKED_ARGUMENTS - Activate argument checks
-  #define CHECKED_ARGUMENTS
+  #define CHECKED_ARGUMENTS 1
 
   //! \def CHECKED_BOUNDARIES - Activate boundary checks
-  #define CHECKED_BOUNDARIES
+  #define CHECKED_BOUNDARIES 1
 
   //! \def CHECKED_INVARIANTS - Activate invariant checks
-  #define CHECKED_INVARIANTS
+  #define CHECKED_INVARIANTS 1
 
 //! \ifnot DEVELOPMENT_MODE - Deactivates debugging checks
 #else
   //! \def RELEASE_MODE - Enables optimizations and disables debugging checks
   #define RELEASE_MODE
+
+  //! \def CHECKED_ARGUMENTS - Deactivate argument checks
+  #define CHECKED_ARGUMENTS 0
+
+  //! \def CHECKED_BOUNDARIES - Deactivate boundary checks
+  #define CHECKED_BOUNDARIES 0
+
+  //! \def CHECKED_INVARIANTS - Deactivate invariant checks
+  #define CHECKED_INVARIANTS 0
 #endif
 
 
@@ -150,7 +163,7 @@
 // --------------------------------------------------------------------------------------------------------
 
 //! \if CHECKED_ARGUMENTS - Activates argument verification
-#ifdef CHECKED_ARGUMENTS
+#if CHECKED_ARGUMENTS
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def REQUIRED_PARAM - Throws an exception when a parameter is missing
   //! \param[in] arg - Parameter name
@@ -175,7 +188,7 @@
 // --------------------------------------------------------------------------------------------------------
 
 //! \if CHECKED_BOUNDARIES - Activates boundary verification
-#ifdef CHECKED_BOUNDARIES
+#if CHECKED_BOUNDARIES
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def CHECKED_INDEX - Throws an exception when an index is outside of an implementation defined range
   //! \param[in] idx - Index
@@ -213,7 +226,7 @@
 
 
 //! \if CHECKED_INVARIANTS - Activates invariant verification
-#ifdef CHECKED_INVARIANTS
+#if CHECKED_INVARIANTS
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def DOMAIN_INVARIANT - Throws an exception upon violation of a domain invariant
   //! \param[in] exp - Expression defining a domain invariant

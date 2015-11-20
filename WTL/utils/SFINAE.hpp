@@ -175,6 +175,16 @@ namespace wtl
   template <size_t A, size_t B, typename RET = void>
   using enable_if_less_t = std::enable_if_t<(A < B), RET>;
   
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_less_or_equal_t - Defines an SFINAE expression requiring an integer A be lesser or equal than an integer B
+  //! 
+  //! \tparam A - Value
+  //! \tparam B - Value
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <size_t A, size_t B, typename RET = void>
+  using enable_if_less_or_equal_t = std::enable_if_t<(A <= B), RET>;
+  
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_integer_t - Defines an SFINAE expression requiring an integer type
@@ -195,6 +205,16 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename A, typename B, typename RET = void>
   using enable_if_larger_t = std::enable_if_t<(sizeof(A) > sizeof(B)), RET>;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_larger_or_equal_t - Defines an SFINAE expression requiring type A be larger-or-equal in size than a type B
+  //! 
+  //! \tparam A - Input type
+  //! \tparam B - Another type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename A, typename B, typename RET = void>
+  using enable_if_larger_or_equal_t = std::enable_if_t<(sizeof(A) >= sizeof(B)), RET>;
   
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_integral_t - Defines an SFINAE expression requiring an integral type
@@ -280,6 +300,7 @@ namespace wtl
   template <typename A, typename B, typename RET = void>
   using enable_if_sizeof_t = std::enable_if_t<sizeof(A) == sizeof(B), RET>;
   
+
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_smaller_t - Defines an SFINAE expression requiring type A be smaller than a type B
   //! 
@@ -289,6 +310,17 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename A, typename B, typename RET = void>
   using enable_if_smaller_t = std::enable_if_t<(sizeof(A) < sizeof(B)), RET>;
+  
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_smaller_or_equal_t - Defines an SFINAE expression requiring type A be smaller or equal than a type B
+  //! 
+  //! \tparam A - Input type
+  //! \tparam B - Another type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename A, typename B, typename RET = void>
+  using enable_if_smaller_or_equal_t = std::enable_if_t<(sizeof(A) <= sizeof(B)), RET>;
   
 
   //////////////////////////////////////////////////////////////////////////////////////////

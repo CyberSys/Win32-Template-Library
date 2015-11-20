@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\casts\BaseCast.hpp
 //! \brief Downcasts an object to its immediate base type
-//! \date 6 March 2015
+//! \date 20 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 namespace wtl
 {
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::base_cast
+  // wtl::base_cast constexpr
   //! Downcasts a type defining its own base class
   //!
   //! \tparam T - Any type with a public 'base' member type
@@ -23,14 +23,14 @@ namespace wtl
   //! \param[in] &obj - Mutable object reference
   //! \return T::base& - Mutable reference to 'obj' base
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename BASE = typename T::base>
-  BASE& base_cast(T& obj)
+  template <typename T, typename BASE = typename T::base> constexpr
+  BASE& base_cast(T& obj) 
   {
     return static_cast<BASE&>(obj);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::base_cast const
+  // wtl::base_cast constexpr
   //! Downcasts a type defining its own base class
   //!
   //! \tparam T - Any type with a public 'base' member type
@@ -38,14 +38,14 @@ namespace wtl
   //! \param[in] const& obj - Immutable object reference
   //! \return const T::base& - Immutable reference to 'obj' base
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename BASE = typename T::base>
+  template <typename T, typename BASE = typename T::base> constexpr
   const BASE&  base_cast(const T& obj)
   {
     return static_cast<const BASE&>(obj);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::base_cast
+  // wtl::base_cast 
   //! Downcasts a type defining its own base class
   //!
   //! \tparam T - Any type with a public 'base' member type
@@ -55,8 +55,8 @@ namespace wtl
   //!
   //! \throw wtl::invalid_argument - [Debug only] Missing argument
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T, typename BASE = typename T::base>
-  BASE* base_cast(T* obj)
+  template <typename T, typename BASE = typename T::base> 
+  BASE* base_cast(T* obj) noexcept(!CHECKED_ARGUMENTS)
   {
     REQUIRED_PARAM(obj);
 
@@ -64,7 +64,7 @@ namespace wtl
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::base_cast const
+  // wtl::base_cast 
   //! Downcasts a type defining its own base class
   //!
   //! \tparam T - Any type with a public 'base' member type
@@ -75,7 +75,7 @@ namespace wtl
   //! \throw wtl::invalid_argument - [Debug only] Missing argument
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename T, typename BASE = typename T::base>
-  const BASE* base_cast(const T* obj)
+  const BASE* base_cast(const T* obj) noexcept(!CHECKED_ARGUMENTS)
   {
     REQUIRED_PARAM(obj);
 
