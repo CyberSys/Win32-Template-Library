@@ -169,6 +169,52 @@ namespace wtl
   template <> struct is_contiguous<SystemIcon> : std::false_type  {};
   template <> struct default_t<SystemIcon>     : std::integral_constant<SystemIcon,SystemIcon::Application>   {};
   
+  // ----------------------------------- SYSTEM COLOURS ----------------------------------
+  
+  //! \enum SystemColour - Defines system colours
+  enum class SystemColour
+  {
+    ScrollBar = 0,			            //!< Scroll bar gray area.
+    Background = 1,			            //!< Desktop.
+    ActiveCaption = 2,			        //!< Active window title bar. 
+    InactiveCaption = 3,			      //!< Inactive window caption. 
+    Menu = 4,			                  //!< Menu background.
+    Window = 5,			                //!< Window background.
+    WindowFrame = 6,			          //!< Window frame.
+    MenuText = 7,			              //!< Text in menus.
+    WindowText = 8,			            //!< Text in windows.
+    CaptionText = 9,			          //!< Text in caption, size box, and scroll bar arrow box.
+    ActiveBorder = 10,			        //!< Active window border.
+    InactiveBorder = 11,			      //!< Inactive window border.
+    AppWorkspace = 12,			        //!< Background color of multiple document interface (MDI) applications.
+    Highlight = 13,			            //!< Item(s) selected in a control.
+    HighlightText = 14,			        //!< Text of item(s) selected in a control.
+    BtnFace = 15,			              //!< Face color for three-dimensional display elements and for dialog box backgrounds.
+    BtnShadow = 16,			            //!< Shadow color for three-dimensional display elements (for edges facing away from the light source).
+    GrayText = 17,			            //!< Grayed (disabled) text.
+    BtnText = 18,			              //!< Text on push buttons.
+    InactiveCaptionText = 19,			  //!< Color of text in an inactive caption.
+    BtnHighlight = 20,			        //!< Highlight color for three-dimensional display elements (for edges facing the light source.)
+
+    BtnDkShadow = 21,			          //!< Dark shadow for three-dimensional display elements.
+    BtnLight = 22,			            //!< Light color for three-dimensional display elements (for edges facing the light source.)
+    InfoText = 23,			            //!< Text color for tooltip controls.
+    InfoBk = 24,			              //!< Background color for tooltip controls.
+    
+    Hotlight = 26,			            //!< [windows 5.00] Color for a hyperlink or hot-tracked item.
+    GradientActiveCaption = 27,			//!< [windows 5.00] Right side color in the color gradient of an active window's title bar. 
+    GradientInactiveCaption = 28,		//!< [windows 5.00] Right side color in the color gradient of an inactive window's title bar. 
+    MenuHilight = 29,			          //!< [windows 5.01] The color used to highlight menu items when the menu appears as a flat menu
+    MenuBar = 30,			              //!< [windows 5.01] The background color for the menu bar when menus appear as flat menus 
+    
+    Desktop = Background,			      //!< 
+  };
+
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<SystemColour>  : std::false_type  {};
+  template <> struct is_contiguous<SystemColour> : std::false_type  {};
+  template <> struct default_t<SystemColour>     : std::integral_constant<SystemColour,SystemColour::ScrollBar>   {};
+
   // ----------------------------------- SYSTEM METRICS ----------------------------------
   
   //! \enum SystemMetric - System metrics

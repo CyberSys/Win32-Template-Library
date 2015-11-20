@@ -10,8 +10,9 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/utils/Handle.hpp>               //!< Handle
-#include <wtl/platform/Colours.hpp>           //!< Colour,SystemColour
+#include <wtl/platform/Colours.hpp>           //!< Colour
 #include <wtl/platform/DrawingFlags.hpp>      //!< StockObject,HatchStyle
+#include <wtl/platform/SystemFlags.hpp>       //!< SystemColour
 #include <wtl/casts/EnumCast.hpp>             //!< EnumCast
 
 //! \namespace wtl - Windows template library
