@@ -76,34 +76,33 @@ namespace wtl
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
+    //!
+    //! \throw wtl::platform_error - Unable to draw checkbox
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) override
     { 
       // debug
       cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
-      try
-      {        
-        Theme theme(this->handle(), L"Button");
+      Theme theme(this->handle(), L"Button");
         
-        // Determine state
-        CHECKBOXSTATES state = (!this->Enabled                          ? CBS_UNCHECKEDDISABLED 
-                               : args.State && OwnerDrawState::Selected ? CBS_UNCHECKEDPRESSED 
-                               : this->isMouseOver()                    ? CBS_UNCHECKEDHOT : CBS_UNCHECKEDNORMAL);
+      // Determine state
+      CHECKBOXSTATES state = (!this->Enabled                          ? CBS_UNCHECKEDDISABLED 
+                              : args.State && OwnerDrawState::Selected ? CBS_UNCHECKEDPRESSED 
+                              : this->isMouseOver()                    ? CBS_UNCHECKEDHOT : CBS_UNCHECKEDNORMAL);
         
-        // Draw background
-        SizeL checkSize = theme.measure(args.Graphics, BP_CHECKBOX, state);
-        RectL checkRect = args.Rect.arrange(checkSize, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
-        theme.fill(args.Graphics, BP_CHECKBOX, state, checkRect);
+      // Draw background
+      args.Graphics.fill(args.Rect, StockBrush::BtnFace);
 
-        // Draw text
-        RectL rc = args.Rect;
-        rc.Left = checkRect.Right + ::GetSystemMetrics(SM_CXEDGE);
-        theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
-      }
-      catch (const std::exception&)
-      {
-      }
+      // Draw checkbox
+      SizeL checkSize = theme.measure(args.Graphics, BP_CHECKBOX, state);
+      RectL checkRect = args.Rect.arrange(checkSize, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
+      theme.fill(args.Graphics, BP_CHECKBOX, state, checkRect);
+
+      // Draw text
+      RectL rc = args.Rect;
+      rc.Left = checkRect.Right + ::GetSystemMetrics(SM_CXEDGE);
+      theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
 
       // Handle message
       return {MsgRoute::Handled, 0};
@@ -115,6 +114,8 @@ namespace wtl
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
+    //!
+    //! \throw wtl::platform_error - Unable to measure checkbox
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) override
     { 

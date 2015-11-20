@@ -277,46 +277,42 @@ namespace wtl
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
+    //!
+    //! \throw wtl::platform_error - Unable to draw button
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       // debug
       cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
-      try
-      {        
-        Theme theme(this->handle(), L"Button");
-        RectL rc = args.Rect;
+      Theme theme(this->handle(), L"Button");
+      RectL rc = args.Rect;
 
-        // Determine state
-        PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
-                                 : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
-                                 : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
+      // Determine state
+      PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
+                                : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
+                                : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
         
-        // Draw background
-        theme.fill(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
+      // Draw background
+      theme.fill(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
 
-        // Pressed: Offset drawing rect
-        if (state == PBS_PRESSED)
-          rc += PointL(1,1);
+      // Pressed: Offset drawing rect
+      if (state == PBS_PRESSED)
+        rc += PointL(1,1);
 
-        // Draw icon
-        if (Icon.exists()) 
-        {
-          const SizeL iconSize(32,32);
-
-          RectL iconRect = rc.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
-          
-          args.Graphics.draw(Icon, iconRect);
-          rc.Left += iconSize.Width;
-        }
-
-        // Draw text
-        theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rc, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
-      }
-      catch (const std::exception&)
+      // Draw icon
+      if (Icon.exists()) 
       {
+        const SizeL iconSize(32,32);
+
+        RectL iconRect = rc.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
+          
+        args.Graphics.draw(Icon, iconRect);
+        rc.Left += iconSize.Width;
       }
+
+      // Draw text
+      theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rc, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
 
       // Handle message
       return {MsgRoute::Handled, 0};
@@ -328,6 +324,8 @@ namespace wtl
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
+    //!
+    //! \throw wtl::platform_error - Unable to measure button
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
