@@ -344,9 +344,6 @@
     <ClInclude Include="utils\Default.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="platform\ResourceId.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="platform\Locale.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -433,9 +430,6 @@
     </ClInclude>
     <ClInclude Include="windows\CommandQueue.hpp">
       <Filter>Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="platform\CommandId.hpp">
-      <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="windows\events\CommandEvent.hpp">
       <Filter>Windows\Events</Filter>
@@ -631,6 +625,12 @@
     </ClInclude>
     <ClInclude Include="platform\Metrics.hpp">
       <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\CommandId.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\ResourceId.hpp">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

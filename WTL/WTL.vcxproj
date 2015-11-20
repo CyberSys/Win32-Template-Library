@@ -75,7 +75,6 @@
     <ClInclude Include="modules\Application.hpp" />
     <ClInclude Include="modules\Module.h" />
     <ClInclude Include="platform\Colours.hpp" />
-    <ClInclude Include="platform\CommandId.hpp" />
     <ClInclude Include="platform\CommonApi.hpp" />
     <ClInclude Include="platform\ControlStyles.hpp" />
     <ClInclude Include="platform\DrawingFlags.hpp" />
@@ -83,13 +82,13 @@
     <ClInclude Include="platform\Locale.hpp" />
     <ClInclude Include="platform\MenuFlags.hpp" />
     <ClInclude Include="platform\Path.hpp" />
-    <ClInclude Include="platform\ResourceId.hpp" />
     <ClInclude Include="platform\SystemFlags.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
     <ClInclude Include="resources\DialogResource.hpp" />
     <ClInclude Include="resources\IconResource.hpp" />
     <ClInclude Include="resources\ResourceBlob.hpp" />
+    <ClInclude Include="resources\ResourceId.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessagePump.hpp" />
     <ClInclude Include="threads\WorkerThread.hpp" />
@@ -152,6 +151,7 @@
     <ClInclude Include="utils\Triangle.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
     <ClInclude Include="WinAPI.h" />
+    <ClInclude Include="windows\CommandId.hpp" />
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp" />
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp" />
     <ClInclude Include="windows\commands\CutClipboardCommand.hpp" />

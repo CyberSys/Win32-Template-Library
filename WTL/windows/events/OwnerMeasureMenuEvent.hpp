@@ -15,7 +15,7 @@
 #include <wtl/utils/Default.hpp>                //!< Default
 #include <wtl/gdi/DeviceContext.hpp>            //!< DeviceContext
 #include <wtl/windows/EventArgs.hpp>            //!< EventArgs
-#include <wtl/platform/CommandId.hpp>           //!< CommandId
+#include <wtl/windows/CommandId.hpp>           //!< CommandId
 #include <wtl/utils/Rectangle.hpp>              //!< Rect
 
 //! \namespace wtl - Windows template library

@@ -11,7 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/traits/EncodingTraits.hpp>          //!< Encoding
 #include <wtl/utils/CharArray.hpp>                //!< CharArray
-#include <wtl/platform/CommandId.hpp>             //!< CommandId
+#include <wtl/windows/CommandId.hpp>             //!< CommandId
 #include <wtl/platform/ResourceId.hpp>            //!< ResourceId
 #include <wtl/resources/StringResource.hpp>       //!< StringResource
 #include <wtl/resources/IconResource.hpp>         //!< IconResource

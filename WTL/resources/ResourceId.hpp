@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\platform\ResourceId.hpp
-//! \brief Provides utility types encapsulating points, sizes, rectangles, etc.
+//! \file wtl\resources\ResourceId.hpp
+//! \brief Encapsulates resource identifiers
 //! \date 26 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.

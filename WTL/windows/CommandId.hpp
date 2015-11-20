@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\platform\CommandId.hpp
+//! \file wtl\windows\CommandId.hpp
 //! \brief Defines WTL Command Ids
 //! \date 26 October 2015
 //! \author Nick Crowley

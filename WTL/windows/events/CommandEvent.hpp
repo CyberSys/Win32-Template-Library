@@ -11,7 +11,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/casts/EnumCast.hpp>             //!< EnumCast
-#include <wtl/platform/CommandId.hpp>         //!< CommandId
+#include <wtl/windows/CommandId.hpp>         //!< CommandId
 #include <wtl/windows/Command.hpp>            //!< CommandSource/CommandState
 #include <wtl/windows/EventArgs.hpp>          //!< EventArgs
 
