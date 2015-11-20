@@ -45,16 +45,16 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::Size constexpr
+    // Size::Size constexpr 
     //! Create empty size of zero Width and Height
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
     Size() : Width(defvalue<T>()),
-             Height(defvalue<T>())
+             Height(defvalue<T>()) 
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::Size constexpr
+    // Size::Size constexpr 
     //! Create from Win32 size
     //!
     //! \param[in] const& sz - Input size
@@ -65,7 +65,7 @@ namespace wtl
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::Size constexpr
+    // Size::Size constexpr 
     //! Create from dimensions of any type
     //!
     //! \param[in] const w - Width
@@ -89,44 +89,75 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::empty const
+    // Size::empty constexpr 
     //! Query whether size is empty
     //!
     //! \return bool - True iff all fields zero
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool empty() const
+    constexpr
+    bool empty() const 
     {
       return *this == EMPTY;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator == const
+    // Size::operator == constexpr
     //! Equality operator
     //!
     //! \param[in] const& r - Another size
     //! \return bool - True iff co-ordinates equal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator == (const type& r) const
+    constexpr
+    bool operator == (const type& r) const 
     {
       return Width  == r.Width
           && Height == r.Height;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator != const
+    // Size::operator != constexpr
     //! Inequality operator
     //!
     //! \param[in] const& r - Another size
     //! \return bool - True iff co-ordinates unequal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator != (const type& r) const
+    constexpr
+    bool operator != (const type& r) const 
     {
       return Width != r.Width
          || Height != r.Height;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator const ::COORD* const
+    // Size::operator+ constexpr
+    //! Calculate the result of enlarging by a given size
+    //!
+    //! \param[in] const& sz - Another size of any type
+    //! \return type - Result of adding 'this' to 'sz'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U> constexpr
+    type operator + (const Size<U>&  sz) const 
+    {
+      return type(Width + static_cast<T>(sz.Width),
+                  Height + static_cast<T>(sz.Height));
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator- constexpr
+    //! Calculate the result of subtracting a given size
+    //!
+    //! \param[in] const& sz - Another size of any type
+    //! \return type - Result of subtracting 'sz' from 'this'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U> constexpr
+    type operator - (const Size<U>&  pt) const 
+    {
+      return type(Width - static_cast<T>(sz.Width),
+                  Height - static_cast<T>(sz.Height));
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator const ::COORD* const noexcept
     //! Implicit user-conversion to native ::COORD pointer
     //!
     //! \return const ::COORD* - Pointer to self as immutable ::COORD
@@ -134,7 +165,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator const ::COORD* () const
+    operator const ::COORD* () const noexcept
     {
       concept_check(value_t,Signed16BitFields);
 
@@ -142,7 +173,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::COORD const
+    // Size::operator ::COORD const noexcept
     //! Implicit user-conversion to native ::COORD 
     //!
     //! \return ::COORD - Copy of current size as ::COORD
@@ -150,7 +181,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator  ::COORD () const
+    operator  ::COORD () const noexcept
     {
       concept_check(value_t,Signed16BitFields);
 
@@ -158,7 +189,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator const ::SIZE* const
+    // Size::operator const ::SIZE* const noexcept
     //! Implicit user-conversion to native ::SIZE pointer
     //!
     //! \return const ::SIZE* - Pointer to self as immutable ::SIZE
@@ -166,7 +197,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator const ::SIZE* () const
+    operator const ::SIZE* () const noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -174,7 +205,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::SIZE const
+    // Size::operator ::SIZE const noexcept
     //! Implicit user-conversion to native ::SIZE 
     //!
     //! \return ::SIZE - Copy of current size as ::SIZE
@@ -182,7 +213,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator  ::SIZE () const
+    operator  ::SIZE () const noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -192,16 +223,46 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::clear
+    // Size::clear noexcept
     //! Reset all fields to zero
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  clear()
+    void  clear() noexcept
     {
       *this = EMPTY;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::COORD* 
+    // Size::operator += noexcept
+    //! Enlarge by a given size
+    //!
+    //! \param[in] const& sz - Another size of any type
+    //! \return type - Reference to self, updated by subtracting 'sz' from 'this'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    type& operator += (const Size<U>&  sz) noexcept 
+    {
+      Width += static_cast<T>(sz.Width);
+      Height += static_cast<T>(sz.Height);
+      return *this;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator -= noexcept
+    //! Subtract by a given size
+    //!
+    //! \param[in] const& sz - Another size of any type
+    //! \return type - Reference to self, updated by subtracting 'sz' from 'this'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    type& operator -= (const Size<U>&  pt) noexcept
+    {
+      Width -= static_cast<T>(sz.Width);
+      Height -= static_cast<T>(sz.Height);
+      return *this;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator ::COORD* noexcept
     //! Implicit user-conversion to native ::COORD pointer
     //!
     //! \return ::COORD* - Pointer to self as mutable ::COORD
@@ -209,7 +270,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator ::COORD* () 
+    operator ::COORD* () noexcept
     {
       concept_check(value_t,Signed16BitFields);
 
@@ -217,7 +278,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Size::operator ::SIZE* 
+    // Size::operator ::SIZE* noexcept
     //! Implicit user-conversion to native ::SIZE pointer
     //!
     //! \return ::SIZE* - Pointer to self as mutable ::SIZE
@@ -225,7 +286,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator ::SIZE* () 
+    operator ::SIZE* () noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
