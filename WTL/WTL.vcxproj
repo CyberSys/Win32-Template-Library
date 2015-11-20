@@ -92,7 +92,6 @@
     <ClInclude Include="resources\ResourceBlob.hpp" />
     <ClInclude Include="resources\StringResource.hpp" />
     <ClInclude Include="threads\MessagePump.hpp" />
-    <ClInclude Include="threads\MessageThread.hpp" />
     <ClInclude Include="threads\WorkerThread.hpp" />
     <ClInclude Include="traits\AcceleratorTraits.hpp" />
     <ClInclude Include="traits\BrushTraits.hpp" />

@@ -164,9 +164,6 @@
     <ClInclude Include="traits\WindowClassTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
-    <ClInclude Include="threads\MessageThread.hpp">
-      <Filter>Threads</Filter>
-    </ClInclude>
     <ClInclude Include="threads\WorkerThread.hpp">
       <Filter>Threads</Filter>
     </ClInclude>
