@@ -26,7 +26,15 @@ namespace wtl
   struct Theme 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-     
+  public:
+    //! \enum ThemeSize - Identifies the type of size value to retrieve for a visual style part
+    enum ThemeSize
+    {
+      MinSize = TS_MIN,
+      TrueSize = TS_TRUE,
+      DrawSize = TS_DRAW,
+    };
+
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     HTheme   Handle;     //!< Theme handle
@@ -50,17 +58,39 @@ namespace wtl
     // ----------------------------------- STATIC METHODS -----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::isActive
+    // Theme::active
     //! Tests if a visual style for the current application is active.
     //!
     //! \return bool - True iff visual style active
     /////////////////////////////////////////////////////////////////////////////////////////
-    static bool isActive()
+    static bool active()
     {
       return boolean_cast(::IsThemeActive());
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Theme::content const
+    //! Retrieves the size of the content area for the background defined by the visual style.
+    //!
+    //! \param[in] const& dc - Target device context
+    //! \param[in] part - Part to query
+    //! \param[in] state - State of specified part
+    //! \param[in] const& rc - Background rectangle
+    //! \return RectL - Desired content rectangle
+    //! 
+    //! \throw wtl::platform_error - Unable to query content rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename PART, typename STATE>
+    RectL content(const DeviceContext& dc, PART part, STATE state, const RectL& rc) const
+    {
+      RectL c;
+      // Query content rectangle
+      if (!HResult(::GetThemeBackgroundContentRect(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), c)))
+        throw platform_error(HERE, "Unable to query themed control content rectangle");
+      return c;
+    }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Theme::fill const
@@ -100,41 +130,47 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::getContentRect const
-    //! Retrieves the size of the content area for the background defined by the visual style.
-    //!
-    //! \param[in] const& dc - Target device context
-    //! \param[in] part - Part to query
-    //! \param[in] state - State of specified part
-    //! \param[in] const& rc - Background rectangle
-    //! \param[in,out] & clip - On return this contains the content rectangle
-    //! 
-    //! \throw wtl::platform_error - Unable to query content rectangle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename PART, typename STATE>
-    void getContentRect(const DeviceContext& dc, PART part, STATE state, const RectL& rc, RectL& content) const
-    {
-      if (!HResult(::GetThemeBackgroundContentRect(Handle, dc.handle(), part, state, const_cast<RectL&>(rc), content)))
-        throw platform_error(HERE, "Unable to query themed control content rectangle");
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Theme::getMargins const
+    // Theme::margins const
     //! Retrieves the margins of a theme component
     //!
     //! \param[in] const& dc - Target device context
     //! \param[in] part - Part to query
     //! \param[in] state - State of specified part
     //! \param[in] prop - Margins identifier
-    //! \param[in,out] &margins - On return this contains the margins
+    //! \return ::MARGINS - Margins of specified part
     //! 
     //! \throw wtl::platform_error - Unable to query margins
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PART, typename STATE, typename PROPERTY>
-    void getMargins(const DeviceContext& dc, PART part, STATE state, PROPERTY prop, ::MARGINS& margins) const
+    ::MARGINS margins(const DeviceContext& dc, PART part, STATE state, PROPERTY prop) const
     {
-      if (!HResult(::GetThemeMargins(Handle, dc.handle(), part, state, prop, nullptr, &margins)))
+      ::MARGINS m;
+      // Query margins
+      if (!HResult(::GetThemeMargins(Handle, dc.handle(), part, state, prop, nullptr, &m)))
         throw platform_error(HERE, "Unable to query themed control margins");
+      return m;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Theme::measure const
+    //! Retrieves the margins of a theme component
+    //!
+    //! \param[in] const& dc - Target device context
+    //! \param[in] part - Part to query
+    //! \param[in] state - State of specified part
+    //! \param[in] type - [optional] Whether to query the true, minimimum, or draw size
+    //! \return SizeL - Size of specified part
+    //! 
+    //! \throw wtl::platform_error - Unable to measure part
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename PART, typename STATE>
+    SizeL measure(const DeviceContext& dc, PART part, STATE state, ThemeSize type = ThemeSize::TrueSize) const
+    {
+      SizeL sz;
+      // Query size
+      if (!HResult(::GetThemePartSize(Handle, dc.handle(), part, state, nullptr, static_cast<THEMESIZE>(type), sz)))
+        throw platform_error(HERE, "Unable to query size of themed control part");
+      return sz;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
