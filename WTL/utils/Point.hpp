@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\platform\Point.hpp
-//! \brief Provides point type
-//! \date 8 March 2015
+//! \file wtl\utils\Point.hpp
+//! \brief Provides a point type
+//! \date 20 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -17,10 +17,13 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-    /////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Point - Encapsulates a point of any type
   //!
   //! \tparam T - Dimension type
+  //!
+  //! \remarks In order to use the implicit conversion operators to Win32 types requires that
+  //! \remarks type T model the appropriate Signed16BitFields or Signed32BitFields concepts
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename T>
   struct Point
@@ -34,8 +37,7 @@ namespace wtl
     using value_t = T;
 
     //! \var EMPTY - Empty sentinel value
-    static const type EMPTY;
-    //static constexpr Point<T> EMPTY {0,0};
+    static const type EMPTY;      // [MSVC14-FIX]: static constexpr Point<T> EMPTY {0,0};
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -48,42 +50,43 @@ namespace wtl
     // Point::Point constexpr
     //! Create empty point centred at origin
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point() : X(defvalue<T>()),
-                        Y(defvalue<T>())
+    constexpr 
+    Point() : X(defvalue<T>()),
+              Y(defvalue<T>())
     {}
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::Point
+    // Point::Point constexpr
     //! Create from Win32 16-bit co-ordinates
     //!
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point(const ::COORD&  pt) : X(static_cast<T>(pt.X)),
-                                          Y(static_cast<T>(pt.Y))
+    constexpr 
+    Point(const ::COORD&  pt) : X(static_cast<T>(pt.X)),
+                                Y(static_cast<T>(pt.Y))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::Point
+    // Point::Point constexpr
     //! Create from Win32 32-bit co-ordinates
     //!
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point(const ::POINT&  pt) : X(static_cast<T>(pt.x)),
-                                          Y(static_cast<T>(pt.y))
+    constexpr 
+    Point(const ::POINT&  pt) : X(static_cast<T>(pt.x)),
+                                Y(static_cast<T>(pt.y))
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::Point
+    // Point::Point constexpr
     //! Create from Win32 16-bit co-ordinates
     //!
     //! \param[in] const& pt - Input co-ordinates
     /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr Point(const ::POINTS&  pt) : X(static_cast<T>(pt.x)),
-                                           Y(static_cast<T>(pt.y))
+    constexpr 
+    Point(const ::POINTS&  pt) : X(static_cast<T>(pt.x)),
+                                 Y(static_cast<T>(pt.y))
     {}
-
-
-    // TODO: lParam
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Point::Point
@@ -97,6 +100,8 @@ namespace wtl
                                   Y(static_cast<T>(Y))
     {}
 
+    // TODO: Construct from an lParam?
+
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     CONSTEXPR_COPY_CTOR(Point);      //!< Can be deep copied at compile-time
@@ -106,7 +111,7 @@ namespace wtl
     DISABLE_POLY(Point);             //!< Cannot be polymorphic
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator=
+    // Point::operator= noexcept
     //! Assignment operator
     //!
     //! \tparam U - Another value type
@@ -115,7 +120,7 @@ namespace wtl
     //! \return type& - Reference to self
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U>
-    type& operator= (const Point<U>&  pt)
+    type& operator= (const Point<U>&  pt) noexcept
     {
       this->X = static_cast<value_t>(pt.X);
       this->Y = static_cast<value_t>(pt.Y);
@@ -128,24 +133,25 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::empty const
+    // Point::empty constexpr
     //! Query whether point is empty
     //!
     //! \return bool - True iff all fields zero
     /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
     bool empty() const
     {
       return *this == defvalue<type>();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator+ const
-    //! Create new point translated by addition
+    // Point::operator+ constexpr
+    //! Calculate position if translated by addition
     //!
     //! \param[in] const& pt - Another point of any type
-    //! \return type - New point translated by adding 'pt'
+    //! \return type - New point translated by adding 'pt' to 'this'
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U>
+    template <typename U> constexpr
     type operator + (const Point<U>&  pt) const
     {
       return type(X + static_cast<T>(pt.x),
@@ -153,13 +159,13 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator- const
-    //! Create new point translated by subtraction
+    // Point::operator- constexpr
+    //! Calculate position if translated by subtraction
     //!
     //! \param[in] const& pt - Another point of any type
-    //! \return type - New point translated by subtracting 'pt'
+    //! \return type - New point translated by subtracting 'pt' from 'this'
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U>
+    template <typename U> constexpr
     type operator - (const Point<U>&  pt) const
     {
       return type(X - static_cast<T>(pt.x),
@@ -167,39 +173,41 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator == const
+    // Point::operator == constexpr
     //! Equality operator
     //!
     //! \param[in] const& r - Another point
     //! \return bool - True iff co-ordinates equal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator == (const type& r)
+    constexpr
+    bool operator == (const type& r) const
     {
       return X == r.X && Y == r.Y;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator != const
+    // Point::operator != constexpr
     //! Inequality operator
     //!
     //! \param[in] const& r - Another point
     //! \return bool - True iff co-ordinates unequal
     /////////////////////////////////////////////////////////////////////////////////////////
-    bool operator != (const type& r)
+    constexpr
+    bool operator != (const type& r) const
     {
       return X != r.X || Y != r.Y;
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator const ::COORD* const
+    // Point::operator const ::COORD* const noexcept
     //! Implicit user-conversion to native ::COORD pointer
     //!
     //! \return const ::COORD* - Pointer to self as immutable ::COORD
     //! 
     //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = void>
-    operator const ::COORD* () const
+    template <typename = void> 
+    operator const ::COORD* () const noexcept
     {
       concept_check(value_t,Signed16BitFields);
 
@@ -207,7 +215,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::COORD const
+    // Point::operator ::COORD const noexcept
     //! Implicit user-conversion to native ::COORD 
     //!
     //! \return ::COORD - Copy of current value as ::COORD
@@ -215,7 +223,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator ::COORD () const
+    operator ::COORD () const noexcept
     {
       concept_check(value_t,Signed16BitFields);
 
@@ -223,7 +231,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator const ::POINT* const
+    // Point::operator const ::POINT* const noexcept
     //! Implicit user-conversion to native ::POINT pointer
     //!
     //! \return const ::POINT* - Pointer to self as immutable ::POINT
@@ -231,7 +239,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator const ::POINT* () const
+    operator const ::POINT* () const noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -239,7 +247,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::POINT const
+    // Point::operator ::POINT const noexcept
     //! Implicit user-conversion to native ::POINT 
     //!
     //! \return ::POINT - Copy of current value as ::POINT
@@ -247,7 +255,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator  ::POINT () const
+    operator  ::POINT () const noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
@@ -257,16 +265,46 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::clear
+    // Point::clear noexcept
     //! Reset all fields to zero
     /////////////////////////////////////////////////////////////////////////////////////////
-    void  clear()
+    void  clear() noexcept
     {
       *this = defvalue<type>();
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator += noexcept
+    //! Enlarge by a given point
+    //!
+    //! \param[in] const& pt - Another point of any type
+    //! \return type - Reference to self, updated by subtracting 'pt' from 'this'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    type& operator += (const Point<U>& pt) noexcept 
+    {
+      X += static_cast<T>(pt.X);
+      Y += static_cast<T>(pt.Y);
+      return *this;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::COORD* 
+    // Point::operator -= noexcept
+    //! Subtract by a given point
+    //!
+    //! \param[in] const& pt - Another point of any type
+    //! \return type - Reference to self, updated by subtracting 'pt' from 'this'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    type& operator -= (const Point<U>& pt) noexcept
+    {
+      X -= static_cast<T>(pt.X);
+      Y -= static_cast<T>(pt.Y);
+      return *this;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Point::operator ::COORD* noexcept
     //! Implicit user-conversion to native ::COORD pointer
     //!
     //! \return ::COORD* - Pointer to self as mutable ::COORD
@@ -274,7 +312,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed16BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator ::COORD* () 
+    operator ::COORD* () noexcept
     {
       concept_check(value_t,Signed16BitFields);
 
@@ -282,7 +320,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Point::operator ::POINT* 
+    // Point::operator ::POINT* noexcept
     //! Implicit user-conversion to native ::POINT pointer
     //!
     //! \return ::POINT* - Pointer to self as mutable ::POINT
@@ -290,7 +328,7 @@ namespace wtl
     //! \remarks Requires value_t model the Signed32BitFields concept
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename = void>
-    operator ::POINT* () 
+    operator ::POINT* () noexcept
     {
       concept_check(value_t,Signed32BitFields);
 
