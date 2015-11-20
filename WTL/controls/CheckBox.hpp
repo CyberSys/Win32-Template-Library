@@ -101,7 +101,7 @@ namespace wtl
 
       // Draw text
       RectL rc = args.Rect;
-      rc.Left = checkRect.Right + ::GetSystemMetrics(SM_CXEDGE);
+      rc.Left = checkRect.Right + Metrics::WindowEdge.Width;
       theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
 
       // Handle message

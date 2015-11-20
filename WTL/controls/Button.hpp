@@ -289,11 +289,11 @@ namespace wtl
       RectL rc = args.Rect;
 
       // Determine state
-      PUSHBUTTONSTATES state = (!this->Enabled                          ? PBS_DISABLED 
+      PUSHBUTTONSTATES state = (!this->Enabled                           ? PBS_DISABLED 
                                 : args.State && OwnerDrawState::Selected ? PBS_PRESSED 
                                 : this->isMouseOver()                    ? PBS_HOT : PBS_NORMAL);
         
-      // Draw background
+      // Draw background and edge
       theme.fill(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
 
       // Pressed: Offset drawing rect
@@ -303,12 +303,11 @@ namespace wtl
       // Draw icon
       if (Icon.exists()) 
       {
-        const SizeL iconSize(32,32);
-
-        RectL iconRect = rc.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
-          
+        RectL iconRect = rc.arrange(Metrics::WindowIcon, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
         args.Graphics.draw(Icon, iconRect);
-        rc.Left += iconSize.Width;
+
+        // Adjust drawing rectangle
+        rc.Left += Metrics::WindowIcon.Width + Metrics::WindowEdge.Width;
       }
 
       // Draw text
