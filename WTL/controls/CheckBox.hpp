@@ -9,12 +9,9 @@
 #define WTL_CHECKBOX_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Window.hpp>                     //!< Window
-#include <wtl/controls/Button.hpp>                        //!< Button
-//#include <wtl/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
-//#include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
-//#include <wtl/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
-//#include <wtl/gdi/Theme.hpp>                              //!< Theme
+#include <wtl/windows/Window.hpp>                //!< Window
+#include <wtl/controls/Button.hpp>               //!< Button
+#include <wtl/platform/Metrics.hpp>              //!< Metrics
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -88,23 +85,21 @@ namespace wtl
       try
       {        
         Theme theme(this->handle(), L"Button");
-        RectL rc = args.Rect;
-
+        
         // Determine state
         CHECKBOXSTATES state = (!this->Enabled                          ? CBS_UNCHECKEDDISABLED 
                                : args.State && OwnerDrawState::Selected ? CBS_UNCHECKEDPRESSED 
                                : this->isMouseOver()                    ? CBS_UNCHECKEDHOT : CBS_UNCHECKEDNORMAL);
         
         // Draw background
-        theme.fill(args.Graphics, BP_CHECKBOX, state, args.Rect);
-
-        // Pressed: Offset drawing rect
-        if (state == PBS_PRESSED)
-          rc += PointL(1,1);
+        SizeL checkSize = theme.measure(args.Graphics, BP_CHECKBOX, state);
+        RectL checkRect = args.Rect.arrange(checkSize, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
+        theme.fill(args.Graphics, BP_CHECKBOX, state, checkRect);
 
         // Draw text
-        DrawTextFlags flags = DrawTextFlags::SingleLine|DrawTextFlags::VCentre|DrawTextFlags::Centre;
-        theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rc, flags);
+        RectL rc = args.Rect;
+        rc.Left = checkRect.Right + ::GetSystemMetrics(SM_CXEDGE);
+        theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
       }
       catch (const std::exception&)
       {
@@ -123,8 +118,12 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) override
     { 
-      // Measure button text
-      args.Size = args.Graphics.measure(this->Text());
+      Theme theme(this->handle(), L"Button");
+
+      // Measure checkbox + text + edges
+      args.Size = theme.measure(args.Graphics, BP_CHECKBOX, CBS_UNCHECKEDNORMAL) 
+                + args.Graphics.measure(this->Text()) 
+                + SizeL(3*Metrics::WindowEdge.Width, 0);
 
       // Handle message
       return {MsgRoute::Handled, 0};

@@ -282,11 +282,10 @@ namespace wtl
         theme.fill(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
         
         // Query drawing rectangle
-        RectL itemRect;
-        theme.getContentRect(args.Graphics, MENU_POPUPITEM, itemState, args.Rect, itemRect);
+        RectL itemRect = theme.content(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
+        RectL iconRect = itemRect.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
         
         //! Draw icon
-        RectL iconRect = itemRect.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
         args.Graphics.draw(command->icon(), iconRect);
         
         //! Draw text
@@ -327,9 +326,8 @@ namespace wtl
         args.Size = args.Graphics.measure(command->name());
 
         // Query margins
-        ::MARGINS margins;
-        theme.getMargins(args.Graphics, MENU_POPUPITEM, 0, TMT_SIZINGMARGINS, margins);
-        args.Size += margins;
+        ::MARGINS margin = theme.margins(args.Graphics, MENU_POPUPITEM, 0, TMT_SIZINGMARGINS);
+        args.Size += margin;
 
         // Measure icon
         args.Size.Width += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));

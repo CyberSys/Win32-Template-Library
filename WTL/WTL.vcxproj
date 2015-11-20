@@ -67,6 +67,7 @@
     <ClInclude Include="modules\ModuleCollection.h" />
     <ClInclude Include="platform\DateTime.hpp" />
     <ClInclude Include="platform\HResult.hpp" />
+    <ClInclude Include="platform\Metrics.hpp" />
     <ClInclude Include="platform\MouseFlags.hpp" />
     <ClInclude Include="platform\WindowMessage.hpp" />
     <ClInclude Include="Resource.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="modules\Module.cpp" />
     <ClCompile Include="modules\ModuleCollection.cpp" />
     <ClCompile Include="platform\Locale.cpp" />
+    <ClCompile Include="platform\Metrics.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>

@@ -179,6 +179,7 @@ namespace wtl
     cMonitors = SM_CMONITORS,				            //!< The number of display monitors on a desktop. For more information, see the Remarks section in this topic. 
     cMouseButtons = SM_CMOUSEBUTTONS,				    //!< The number of buttons on a mouse, or zero if no mouse is installed.
     //ConvertibleSlateMode = SM_CONVERTIBLESLATEMODE,  //!<	Reflects the state of the laptop or slate mode, 0 for Slate Mode and non-zero otherwise. When this system metric changes, the system sends a broadcast message via WM_SETTINGCHANGE with "ConvertibleSlateMode" in the LPARAM. Note that this system metric doesn't apply to desktop PCs. In that case, use GetAutoRotationState.
+
     cxBorder = SM_CXBORDER,		                  //!< The width of a window border, in pixels. This is equivalent to the SM_CXEDGE value for windows with the 3-D look.
     cxCursor = SM_CXCURSOR,			                //!< The width of a cursor, in pixels. The system cannot create cursors of other sizes.
     cxDialogFrame = SM_CXDLGFRAME,				      //!< This value is the same as SM_CXFIXEDFRAME.
@@ -197,18 +198,19 @@ namespace wtl
     cxMaxTrack = SM_CXMAXTRACK,				          //!< The default maximum width of a window that has a caption and sizing borders, in pixels. This metric refers to the entire desktop. The user cannot drag the window frame to a size larger than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
     cxMenuCheck = SM_CXMENUCHECK,				        //!< The width of the default menu check-mark bitmap, in pixels.
     cxMenuSize = SM_CXMENUSIZE,				          //!< The width of menu bar buttons, such as the child window close button that is used in the multiple document interface, in pixels.
-    cxMin = SM_CXMIN,				                    //!< The minimum width of a window, in pixels.
+    cxMinWindow = SM_CXMIN,				              //!< The minimum width of a window, in pixels.
     cxMinimized = SM_CXMINIMIZED,				        //!< The width of a minimized window, in pixels.
     cxMinSpacing = SM_CXMINSPACING,				      //!< The width of a grid cell for a minimized window, in pixels. Each minimized window fits into a rectangle this size when arranged. This value is always greater than or equal to SM_CXMINIMIZED.
     cxMinTrack = SM_CXMINTRACK,				          //!< The minimum tracking width of a window, in pixels. The user cannot drag the window frame to a size smaller than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
     //cxPaddedBorder = SM_CXPADDEDBORDER,				//!< [¬XP/2000] The amount of border padding for captioned windows, in pixels. Windows XP/2000:  This value is not supported.
     cxScreen = SM_CXSCREEN,				              //!< The width of the screen of the primary display monitor, in pixels. This is the same value obtained by calling GetDeviceCaps as follows: GetDeviceCaps( hdcPrimaryMonitor, HORZRES).
-    cxSize = SM_CXSIZE,				                  //!< The width of a button in a window caption or title bar, in pixels.
+    cxSizeButton = SM_CXSIZE,				            //!< The width of a button in a window caption or title bar, in pixels.
     cxSizeFrame = SM_CXSIZEFRAME,				        //!< The thickness of the sizing border around the perimeter of a window that can be resized, in pixels. SM_CXSIZEFRAME is the width of the horizontal border, and SM_CYSIZEFRAME is the height of the vertical border. This value is the same as SM_CXFRAME.
-    cxSMIcon = SM_CXSMICON,				              //!< The recommended width of a small icon, in pixels. Small icons typically appear in window captions and in small icon view.
-    cxSMSize = SM_CXSMSIZE,				              //!< The width of small caption buttons, in pixels.
+    cxSmallIcon = SM_CXSMICON,				          //!< The recommended width of a small icon, in pixels. Small icons typically appear in window captions and in small icon view.
+    cxSmallButton = SM_CXSMSIZE,				        //!< The width of small caption buttons, in pixels.
     cxVirtualScreen = SM_CXVIRTUALSCREEN,				//!< The width of the virtual screen, in pixels. The virtual screen is the bounding rectangle of all display monitors. The SM_XVIRTUALSCREEN metric is the coordinates for the left side of the virtual screen. 
     cxVScroll = SM_CXVSCROLL,				            //!< The width of a vertical scroll bar, in pixels.
+
     cyBorder = SM_CYBORDER,				              //!< The height of a window border, in pixels. This is equivalent to the SM_CYEDGE value for windows with the 3-D look.
     cyCaption = SM_CYCAPTION,				            //!< The height of a caption area, in pixels.
     cyCursor = SM_CYCURSOR,				              //!< The height of a cursor, in pixels. The system cannot create cursors of other sizes.
@@ -229,19 +231,20 @@ namespace wtl
     cyMenu = SM_CYMENU,				                  //!< The height of a single-line menu bar, in pixels.
     cyMenuCheck = SM_CYMENUCHECK,				        //!< The height of the default menu check-mark bitmap, in pixels.
     cyMenuSize = SM_CYMENUSIZE,				          //!< The height of menu bar buttons, such as the child window close button that is used in the multiple document interface, in pixels.
-    cyMin = SM_CYMIN,				                    //!< The minimum height of a window, in pixels.
+    cyMinWindow = SM_CYMIN,				              //!< The minimum height of a window, in pixels.
     cyMinimized = SM_CYMINIMIZED,				        //!< The height of a minimized window, in pixels.
     cyMinSpacing = SM_CYMINSPACING,			        //!< The height of a grid cell for a minimized window, in pixels. Each minimized window fits into a rectangle this size when arranged. This value is always greater than or equal to SM_CYMINIMIZED.
     cyMinTrack = SM_CYMINTRACK,				          //!< The minimum tracking height of a window, in pixels. The user cannot drag the window frame to a size smaller than these dimensions. A window can override this value by processing the WM_GETMINMAXINFO message.
     cyScreen = SM_CYSCREEN,	                  	//!< The height of the screen of the primary display monitor, in pixels. This is the same value obtained by calling GetDeviceCaps as follows: GetDeviceCaps( hdcPrimaryMonitor, VERTRES).
-    cySize = SM_CYSIZE,				                  //!< The height of a button in a window caption or title bar, in pixels.
+    cySizeButton = SM_CYSIZE,				            //!< The height of a button in a window caption or title bar, in pixels.
     cySizeFrame = SM_CYSIZEFRAME,				        //!< The thickness of the sizing border around the perimeter of a window that can be resized, in pixels. SM_CXSIZEFRAME is the width of the horizontal border, and SM_CYSIZEFRAME is the height of the vertical border. This value is the same as SM_CYFRAME.
-    cySmCaption = SM_CYSMCAPTION,				        //!< The height of a small caption, in pixels.
-    cySmIcon = SM_CYSMICON,				              //!< The recommended height of a small icon, in pixels. Small icons typically appear in window captions and in small icon view.
-    cySmSize = SM_CYSMSIZE,				              //!< The height of small caption buttons, in pixels.
+    cySmallCaption = SM_CYSMCAPTION,				    //!< The height of a small caption, in pixels.
+    cySmallIcon = SM_CYSMICON,				          //!< The recommended height of a small icon, in pixels. Small icons typically appear in window captions and in small icon view.
+    cySmallButton = SM_CYSMSIZE,				        //!< The height of small caption buttons, in pixels.
     cyVirtualScreen = SM_CYVIRTUALSCREEN,				//!< The height of the virtual screen, in pixels. The virtual screen is the bounding rectangle of all display monitors. The SM_YVIRTUALSCREEN metric is the coordinates for the top of the virtual screen.
     cyVScroll = SM_CYVSCROLL,				            //!< The height of the arrow bitmap on a vertical scroll bar, in pixels.
     cyVThumb = SM_CYVTHUMB,		                  //!< The height of the thumb box in a vertical scroll bar, in pixels.
+
     DbcsEnabled = SM_DBCSENABLED,	              //!< Nonzero if User32.dll supports DBCS; otherwise, 0. 
     Debug = SM_DEBUG,				                    //!< Nonzero if the debug version of User.exe is installed; otherwise, 0.
     //Digitizer = SM_DIGITIZER,				          //!< Nonzero if the current operating system is Windows 7 or Windows Server 2008 R2 and the Tablet PC Input service is started; otherwise, 0. The return value is a bitmask that specifies the type of digitizer input supported by the device. For more information, see Remarks. Windows Server 2008, Windows Vista, and Windows XP/2000:  This value is not supported.

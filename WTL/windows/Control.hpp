@@ -9,7 +9,7 @@
 #define WTL_MESSAGE_WINDOW_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Window.hpp>
+#include <wtl/windows/Window.hpp>                 //!< Window
 
 //! \namespace wtl - Windows template library
 namespace wtl 

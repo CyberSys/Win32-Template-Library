@@ -632,6 +632,9 @@
     <ClInclude Include="windows\Control.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="platform\Metrics.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\StockObjects.cpp">
@@ -651,6 +654,9 @@
     </ClCompile>
     <ClCompile Include="modules\ModuleCollection.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\Metrics.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

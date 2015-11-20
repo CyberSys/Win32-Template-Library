@@ -9,9 +9,10 @@
 #define WTL_SIZE_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/utils/DebugInfo.hpp>     //!< DebugInfo
-#include <wtl/utils/SFINAE.hpp>        //!< enable_if_sizeof_t
-#include <type_traits>                 //!< std::enable_if
+#include <wtl/utils/DebugInfo.hpp>          //!< DebugInfo
+#include <wtl/utils/SFINAE.hpp>             //!< enable_if_sizeof_t
+#include <type_traits>                      //!< std::enable_if
+#include <wtl/platform/SystemFlags.hpp>     //!< SystemMetric
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -63,8 +64,7 @@ namespace wtl
     //! \param[in] const& sz - Input size
     /////////////////////////////////////////////////////////////////////////////////////////
     constexpr
-    Size(const ::SIZE& sz) : Width(static_cast<T>(sz.cx)),
-                             Height(static_cast<T>(sz.cy))
+    Size(const ::SIZE& sz) : Size(sz.cx, sz.cy)
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -74,9 +74,41 @@ namespace wtl
     //! \param[in] const w - Width
     //! \param[in] const h - Height
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename U> constexpr
-    Size(const U w, const U h) : Width(static_cast<T>(w)),
+    template <typename U, typename V> constexpr
+    Size(const U w, const V h) : Width(static_cast<T>(w)),
                                  Height(static_cast<T>(h))
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::Size constexpr 
+    //! Create from a dimension and system metric
+    //!
+    //! \param[in] const w - System metric width
+    //! \param[in] const h - Height
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U> constexpr
+    Size(const SystemMetric w, const U h) : Size(static_cast<T>(w), static_cast<T>(h))
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::Size constexpr 
+    //! Create from a dimension and system metric
+    //!
+    //! \param[in] const w - Width
+    //! \param[in] const h - System metric height
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U> constexpr
+    Size(const U w, const SystemMetric h) : Size(static_cast<T>(w), static_cast<T>(h))
+    {}
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::Size constexpr 
+    //! Create from system metric dimensions 
+    //!
+    //! \param[in] w - Metric defining width
+    //! \param[in] h - Metric defining height
+    /////////////////////////////////////////////////////////////////////////////////////////
+    Size(SystemMetric w, SystemMetric h) : Size(::GetSystemMetrics(enum_cast(w)), ::GetSystemMetrics(enum_cast(h)))
     {}
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -143,6 +175,19 @@ namespace wtl
     {
       return type(Width + static_cast<T>(sz.Width),
                   Height + static_cast<T>(sz.Height));
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator* constexpr
+    //! Calculate the result of multiplying by a scalar
+    //!
+    //! \param[in] const& m - Scalar value
+    //! \return type - Result of multiplying all fields by 'm'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U> constexpr
+    type operator * (const U& m) const 
+    {
+      return type(Width * m, Height * m);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -314,6 +359,22 @@ namespace wtl
   using SizeF = Size<float>;
 
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator* constexpr
+  //! Calculate the result of multiplying a size by a scalar
+  //!
+  //! \tparam T - Size field type
+  //! \tparam U - Scalar type
+  //!
+  //! \param[in] const& m - Scalar value
+  //! \return Size<T> - Result of multiplying all size fields by 'm'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U> constexpr
+  Size<T> operator * (const U& m, const Size<T>& sz)  
+  {
+    return sz * m;
+  }
 
 
   //////////////////////////////////////////////////////////////////////////////////////////

@@ -312,8 +312,7 @@ namespace wtl
         }
 
         // Draw text
-        DrawTextFlags flags = DrawTextFlags::SingleLine|DrawTextFlags::VCentre|DrawTextFlags::Centre;
-        theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rc, flags);
+        theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rc, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
       }
       catch (const std::exception&)
       {
