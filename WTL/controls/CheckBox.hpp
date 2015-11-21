@@ -82,7 +82,7 @@ namespace wtl
     LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) override
     { 
       // debug
-      cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
+      //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
       Theme theme(this->handle(), L"Button");
         

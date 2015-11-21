@@ -14,7 +14,7 @@
 namespace wtl
 {
 
-  SizeL  Metrics::CaptionIcon   { SystemMetric::cxSmallIcon, SystemMetric::cySmallIcon };     //!< The recommended size of a small icon for the window caption, in pixels
+  SizeL  Metrics::SmallIcon     { SystemMetric::cxSmallIcon, SystemMetric::cySmallIcon };     //!< The recommended size of a small icon for the window caption, in pixels
   SizeL  Metrics::Cursor        { SystemMetric::cxCursor, SystemMetric::cyCursor };           //!< The size of a cursor, in pixels
   SizeL  Metrics::HScrollbar    { SystemMetric::cxHScroll, SystemMetric::cyHScroll };         //!< The size of a horizontal scrollbar, in pixels
   SizeL  Metrics::VScrollbar    { SystemMetric::cxVScroll, SystemMetric::cyVScroll };         //!< The size of a vertical scrollbar, in pixels

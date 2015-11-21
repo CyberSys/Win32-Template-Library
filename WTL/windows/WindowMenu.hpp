@@ -13,10 +13,11 @@
 #include <wtl/utils/DebugInfo.hpp>                          //!< object_info
 #include <wtl/traits/EncodingTraits.hpp>                    //!< Encoding
 #include <wtl/traits/MenuTraits.hpp>                        //!< HMenu
-#include <wtl/windows/CommandId.hpp>                       //!< command_id,command_group_id
+#include <wtl/windows/CommandId.hpp>                        //!< command_id,command_group_id
 #include <wtl/platform/DrawingFlags.hpp>                    //!< DrawTextFlags
-#include <wtl/platform/StockObjects.hpp>                         //!< StockBrush
+#include <wtl/platform/StockObjects.hpp>                    //!< StockBrush
 #include <wtl/gdi/Theme.hpp>                                //!< Theme
+#include <wtl/platform/Metrics.hpp>                         //!< Metrics
 #include <wtl/windows/PopupMenu.hpp>                        //!< PopupMenu
 #include <wtl/windows/Command.hpp>                          //!< Command
 #include <wtl/windows/CommandGroup.hpp>                     //!< CommandGroup
@@ -244,14 +245,13 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawMenuEventArgs<encoding>& args)
     {   
+      Theme   theme(args.Graphics.window(), L"Menu");
       // debug
       //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
       // [GROUP] Draw menu-bar item 
       if (CommandGroupPtr<encoding> group = find(command_group_id(args.Ident)))
       {
-        Theme  theme(args.Graphics.window(), L"Menu");
-        
         // Determine state
         BARITEMSTATES itemState = (args.State && OwnerDrawState::Hotlight ? MBI_HOT
                                  : args.State && OwnerDrawState::Selected ? MBI_PUSHED : MBI_NORMAL);
@@ -269,9 +269,6 @@ namespace wtl
       // [COMMAND] Draw pop-up menu item
       else if (CommandPtr<encoding> command = find(command_id(args.Ident)))
       {
-        const SizeL iconSize = {16,16};
-        Theme       theme(args.Graphics.window(), L"Menu");
-        
         // Determine drawing state
         POPUPITEMSTATES itemState = (args.State && OwnerDrawState::Selected ? MPI_HOT : MPI_NORMAL);
         if (args.State == OwnerDrawState::Grayed)
@@ -283,14 +280,14 @@ namespace wtl
         
         // Query drawing rectangle
         RectL itemRect = theme.content(args.Graphics, MENU_POPUPITEM, itemState, args.Rect);
-        RectL iconRect = itemRect.arrange(iconSize, {RectL::FromLeft,::GetSystemMetrics(SM_CXEDGE)}, RectL::Centre);
+        RectL iconRect = args.Rect.arrange(Metrics::SmallIcon, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
         
         //! Draw icon
         args.Graphics.draw(command->icon(), iconRect);
         
         //! Draw text
-        itemRect.Left += iconSize.Width; 
-        theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), itemRect, DrawTextFlags::Left|DrawTextFlags::VCentre);
+        itemRect.Left = iconRect.Right + Metrics::WindowEdge.Width; 
+        theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), itemRect);
       }
 
       // Handled
@@ -306,12 +303,15 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerMeasure(OwnerMeasureMenuEventArgs<encoding>& args) 
     { 
+      Theme  theme(args.Graphics.window(), L"Menu");
+
       // [HEADING] Lookup CommandGroup
       if (auto group = find(command_group_id(args.Ident)))
       {
-        // Measure group name
-        args.Size = args.Graphics.measure(group->name());
-        
+        // Measure group name and ensure minimum size
+        args.Size = theme.measure(args.Graphics, MENU_BARITEM, MBI_NORMAL, group->name());
+        args.Size.combine(theme.measure(args.Graphics, MENU_BARITEM, MBI_NORMAL));
+
         // debug
         //cdebug << object_info(__func__, "group", (int32_t)args.Ident, 
         //                                "size", args.Size) << endl;
@@ -320,19 +320,14 @@ namespace wtl
       // [ITEM] Lookup Command
       else if (auto command = find(command_id(args.Ident)))
       {
-        Theme  theme(args.Graphics.window(), L"Menu");
+        // Measure text, icon, and edges
+        args.Size = theme.measure(args.Graphics, MENU_POPUPITEM, MPI_NORMAL, command->name());
+        args.Size.Width += Metrics::SmallIcon.Width + Metrics::WindowEdge.Width*3;
 
-        // Measure Command name
-        args.Size = args.Graphics.measure(command->name());
+        // Ensure minimum height/width
+        args.Size.combine(theme.measure(args.Graphics, MENU_POPUPITEM, MPI_NORMAL));
+        args.Size.combine(Metrics::SmallIcon);
 
-        // Query margins
-        ::MARGINS margin = theme.margins(args.Graphics, MENU_POPUPITEM, 0, TMT_SIZINGMARGINS);
-        args.Size += margin;
-
-        // Measure icon
-        args.Size.Width += ::GetSystemMetrics(enum_cast(SystemMetric::cxIcon));
-
-        // debug
         //cdebug << object_info(__func__, "command", (int32_t)args.Ident, 
         //                                "size", args.Size, 
         //                                "name", command->name()) << endl;

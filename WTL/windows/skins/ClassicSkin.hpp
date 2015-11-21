@@ -30,6 +30,9 @@ namespace wtl
     //! \alias base - Define base type
     using base = IWindowSkin<ENC>;
     
+    //! \var encoding - Inherit character encoding
+    static constexpr Encoding  encoding = base::encoding;
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     //! \var Instance - Temporary singleton

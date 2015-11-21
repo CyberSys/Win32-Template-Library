@@ -11,8 +11,9 @@
 #include <wtl/WTL.hpp>
 #include <wtl/utils/DebugInfo.hpp>          //!< DebugInfo
 #include <wtl/utils/SFINAE.hpp>             //!< enable_if_sizeof_t
-#include <type_traits>                      //!< std::enable_if
 #include <wtl/platform/SystemFlags.hpp>     //!< SystemMetric
+#include <type_traits>                      //!< std::enable_if
+#include <algorithm>                        //!< std::min, std::max
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -120,6 +121,34 @@ namespace wtl
     DISABLE_POLY(Size);             //!< Cannot be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::max constexpr 
+    //! Calculates the maximum extent defined by two sizes
+    //!
+    //! \param[in] const &a - Size
+    //! \param[in] const &b - Another size
+    //! \return Size<T> - Size containing greatest width and height of 'a' and 'b'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U, typename V> constexpr
+    static type max(const Size<U>& a, const Size<V>& b)  
+    {
+      return { std::max<T>(a.Width, b.Width), std::max<T>(a.Height, b.Height) };
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::min constexpr 
+    //! Calculates the minimum extent defined by two sizes
+    //!
+    //! \param[in] const &a - Size
+    //! \param[in] const &b - Another size
+    //! \return Size<T> - Size containing lowest width and height of 'a' and 'b'
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U, typename V> constexpr
+    static type min(const Size<U>& a, const Size<V>& b)  
+    {
+      return { std::min<T>(a.Width, b.Width), std::min<T>(a.Height, b.Height) };
+    }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
@@ -280,6 +309,19 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::combine noexcept
+    //! Performs a union with another size, forming the larger of the two dimensions
+    //!
+    //! \param[in] const& sz - Another size of any type
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename U>
+    void combine(const Size<U>& sz) noexcept
+    {
+      Width = std::max(Width, sz.Width);
+      Height = std::max(Height, sz.Height);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Size::operator += noexcept
     //! Enlarge by a given size
     //!
@@ -302,7 +344,7 @@ namespace wtl
     //! \return type - Reference to self, updated by subtracting 'sz' from 'this'
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U>
-    type& operator -= (const Size<U>&  pt) noexcept
+    type& operator -= (const Size<U>&  sz) noexcept
     {
       Width -= static_cast<T>(sz.Width);
       Height -= static_cast<T>(sz.Height);

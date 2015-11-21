@@ -174,6 +174,29 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Theme::measure const
+    //! Measures the size required to draw a string 
+    //!
+    //! \param[in] const& dc - Target device context
+    //! \param[in] part - Part to query
+    //! \param[in] state - State of specified part
+    //! \param[in] const& txt - Text to draw
+    //! \param[in] flags - Drawing flags 
+    //! \return SizeL - Extent of text
+    //! 
+    //! \throw wtl::platform_error - Unable to measure part
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename PART, typename STATE>
+    SizeL measure(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, DrawTextFlags flags = DrawTextFlags::VCentre|DrawTextFlags::SingleLine) const
+    {
+      RectL rc;
+      // Query text rectangle
+      if (!HResult(::GetThemeTextExtent(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), nullptr, rc)))
+        throw platform_error(HERE, "Unable to measure themed control text");
+      return rc.size();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Theme::write const
     //! Draws text using the color and font defined by the visual style.
     //!
@@ -187,7 +210,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to draw text
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename PART, typename STATE>
-    void write(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags) const
+    void write(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags = DrawTextFlags::VCentre|DrawTextFlags::SingleLine) const
     {
       if (!HResult(::DrawThemeText(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), 0, const_cast<RectL&>(rc))))
         throw platform_error(HERE, "Unable to draw themed control text");
@@ -230,6 +253,20 @@ namespace wtl
     sz.Width += (m.cxLeftWidth + m.cxRightWidth);
     sz.Height += (m.cyTopHeight + m.cyBottomHeight);
     return sz;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator + constexpr
+  //! Calculates the result of enlarging a size by a visual styles margin
+  //!
+  //! \param[in] const& sz - Size 
+  //! \param[in] const& m - Margins
+  //! \return Size<T> - Result of enlarging 'sz' by 'm'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T> constexpr
+  Size<T> operator + (const Size<T>& sz, const ::MARGINS& m)
+  {
+    return { sz.Width + m.cxLeftWidth + m.cxRightWidth, sz.Height + m.cyTopHeight + m.cyBottomHeight };
   }
 
 } // namespace wtl

@@ -24,7 +24,7 @@ namespace wtl
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   
-    static SizeL  CaptionIcon,        //!< The recommended size of a small icon for the window caption, in pixels
+    static SizeL  SmallIcon,          //!< The recommended size of a small icon for the window caption, in pixels
                   Cursor,             //!< The size of a cursor, in pixels
                   HScrollbar,         //!< The size of a horizontal scrollbar, in pixels
                   VScrollbar,         //!< The size of a vertical scrollbar, in pixels

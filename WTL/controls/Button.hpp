@@ -104,11 +104,12 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
-      static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button windowclass
+      static String<encoding> name("WTL.Button");
       
       // Define WTL button window-class
+      static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button windowclass
       static WindowClass<encoding>  btn(instance,
-                                        std.Name,   
+                                        name.c_str(),
                                         std.Style,
                                         base::WndProc,           //!< Replace the window procedure 'Compile-time subclass'
                                         std.Menu,
@@ -283,7 +284,7 @@ namespace wtl
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       // debug
-      cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
+      //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
       Theme theme(this->handle(), L"Button");
       RectL rc = args.Rect;

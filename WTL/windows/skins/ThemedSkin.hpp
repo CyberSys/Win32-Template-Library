@@ -30,6 +30,9 @@ namespace wtl
     //! \alias base - Define base type
     using base = IWindowSkin<ENC>;
     
+    //! \var encoding - Inherit character encoding
+    static constexpr Encoding  encoding = base::encoding;
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     //! \var Instance - Temporary singleton
@@ -54,7 +57,7 @@ namespace wtl
     //! \param[in,out] &dc - Output device context
     //! \param[in] const &rc - Drawing rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    void draw(Button<ENC>& btn, DeviceContext& dc, const RectL& rc) const override
+    void draw(Button<encoding>& btn, OwnerDrawCtrlEventArgs<encoding>& args) const override
     {
     }
 
@@ -66,7 +69,7 @@ namespace wtl
     //! \param[in,out] &dc - Output device context
     //! \return SizeL - Required size
     /////////////////////////////////////////////////////////////////////////////////////////
-    SizeL measure(Button<ENC>& btn, DeviceContext& dc) const override
+    SizeL measure(Button<encoding>& btn, OwnerMeasureCtrlEventArgs<encoding>& args) const override
     {
     }
 
