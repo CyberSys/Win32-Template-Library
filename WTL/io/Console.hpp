@@ -238,7 +238,7 @@ namespace wtl
     // Console::Console
     //! Creates a console attached to standard output
     //! 
-    //! \throw wtl::domain_error - [Debug only] Unable to retrieve std out
+    //! \throw wtl::platform_error - Unable to retrieve handle to standard out
     //////////////////////////////////////////////////////////////////////////////////////////
     Console() : Handle(::GetStdHandle(STD_OUTPUT_HANDLE))
     {
@@ -251,8 +251,6 @@ namespace wtl
         // Get std out
         if ((Handle = ::GetStdHandle(STD_OUTPUT_HANDLE)) == INVALID_HANDLE_VALUE)
           throw platform_error(HERE, "Unable to get handle to standard out");
-        else if (!Handle)
-          throw domain_error(HERE, "Standard output unavailable");
         
         // Adjust console size
         ::SetConsoleScreenBufferSize(Handle, Coord(150,3000));

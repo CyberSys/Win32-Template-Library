@@ -173,8 +173,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual ~WindowClass() 
     {
-      // Unregister window class
-      if (WinAPI<ENC>::unregisterClass(Name, Instance) == False)
+      // Unregister non-system window classes
+      if (Instance && WinAPI<ENC>::unregisterClass(Name, Instance) == False)
         cdebug << Cons::Error << "Unable to unregister window class" << Cons::Endl;
     }
     
