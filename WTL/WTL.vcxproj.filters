@@ -242,9 +242,6 @@
     <ClInclude Include="platform\FileSearch.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="platform\Path.hpp">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="windows\commands\PasteClipboardCommand.hpp">
       <Filter>Windows\Commands</Filter>
     </ClInclude>
@@ -634,6 +631,9 @@
     </ClInclude>
     <ClInclude Include="io\Console.hpp">
       <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Path.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

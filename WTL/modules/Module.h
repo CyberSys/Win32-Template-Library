@@ -17,7 +17,7 @@
 #include <wtl/traits/ResourceTraits.hpp>    //!< HResource
 #include <wtl/resources/ResourceBlob.hpp>   //!< ResourceBlob
 #include <wtl/resources/ResourceId.hpp>      //!< ResourceId
-#include <wtl/platform/Path.hpp>            //!< Path
+#include <wtl/utils/Path.hpp>            //!< Path
 #include <functional>                       //!< std::forward
 
 //! \namespace wtl - Windows template library

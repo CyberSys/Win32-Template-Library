@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\platform\Path.hpp
+//! \file wtl\utils\Path.hpp
 //! \brief Provides file path handling
-//! \date 6 March 2015
+//! \date 30 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -493,39 +493,6 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   };
 
-  
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator <<
-  //! Write a path to a console output stream
-  //!
-  //! \tparam CHAR - Output stream character type
-  //! \tparam TRAITS - Output stream character traits
-  //! \tparam ENC - Character encoding
-  //!
-  //! \param[in,out] &s - Output stream
-  //! \param[in] const &r - Path
-  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
-  //////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename CHAR, typename TRAITS, Encoding ENC>
-  //std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Path<ENC>& r)
-  //{
-  //  // Write text and length
-  //  return c;// << static_cast<const typename Path<ENC>::base&>(r);
-  //}
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator<<
-  //! Writes a path to the debug console in yellow, then resets the output colour
-  //!
-  //! \param[in,out] &c - Debug console
-  //! \param[in] const& path - Path
-  //! \return Console& - Reference to 'c'
-  //////////////////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC>
-  inline Console& operator<< (Console& c, const Path<ENC>& path)
-  {
-    return c << Cons::Yellow << path.c_str() << Cons::Reset;
-  }*/
 
 
   //////////////////////////////////////////////////////////////////////////////////////////

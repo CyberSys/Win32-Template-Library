@@ -84,7 +84,6 @@
     <ClInclude Include="platform\FileSearch.hpp" />
     <ClInclude Include="platform\Locale.hpp" />
     <ClInclude Include="platform\MenuFlags.hpp" />
-    <ClInclude Include="platform\Path.hpp" />
     <ClInclude Include="platform\SystemFlags.hpp" />
     <ClInclude Include="platform\SystemVersion.hpp" />
     <ClInclude Include="platform\WindowFlags.hpp" />
@@ -120,6 +119,7 @@
     <ClInclude Include="utils\Encoding.hpp" />
     <ClInclude Include="utils\DebugInfo.hpp" />
     <ClInclude Include="utils\FormatSpec.hpp" />
+    <ClInclude Include="utils\Path.hpp" />
     <ClInclude Include="utils\Point.hpp" />
     <ClInclude Include="utils\Rectangle.hpp" />
     <ClInclude Include="utils\Requires.hpp" />

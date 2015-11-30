@@ -14,7 +14,7 @@
 #include <wtl/traits/FileSearchTraits.hpp>
 #include <wtl/utils/Default.hpp>
 #include <wtl/utils/Handle.hpp>
-#include <wtl/platform/Path.hpp>
+#include <wtl/utils/Path.hpp>
   
 //! \namespace wtl - Windows template library
 namespace wtl
