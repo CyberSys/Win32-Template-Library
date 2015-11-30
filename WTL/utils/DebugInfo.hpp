@@ -98,19 +98,21 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Write a tuple to the console
+  //! Write a tuple to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam ARGS... - Tuple element types
   //! 
-  //! \param[in,out] &c - Console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const& t - Any tuple
-  //! \return Console& : Reference to 'c'
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename... ARGS>
-  Console&  operator << (Console& c, const std::tuple<ARGS...>& t)
+  template <typename CHAR, typename TRAITS, typename... ARGS>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const std::tuple<ARGS...>& t)
   {
     // Write opening tag
-    c << Cons::Grey << '{';
+    c << textcol::grey << '{';
 
     // Write elements
     if (sizeof...(ARGS) > 0)
@@ -123,40 +125,44 @@ namespace wtl
     }
 
     // Write closing tag
-    return c << Cons::Grey << '}';
+    return c << textcol::grey << '}';
   }
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Write debug-info and attributes to the console
+  //! Write debug-info and attributes to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam ARGS... - Attribute name/value pair types
   //! 
-  //! \param[in,out] &c - Console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const& info - Debug info
-  //! \return Console& : Reference to 'c'
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename... ARGS>
-  Console&  operator << (Console& c, const ObjectInfo<ARGS...>& info)
+  template <typename CHAR, typename TRAITS, typename... ARGS>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const ObjectInfo<ARGS...>& info)
   {
     // Preface attributes with name
-    return c << Cons::Cyan << info.Name << info.Attributes;
+    return c << textcol::cyan << info.Name << info.Attributes;
   }
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Prints a Point to the debug console
+  //! Prints a Point to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam T - Point field type
   //! 
-  //! \param[in,out] &c - Debugging console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const &pt - Point
-  //! \return Console& - Reference to 'c'
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  Console& operator << (Console& c, const Point<T>& pt)
+  template <typename CHAR, typename TRAITS, typename T>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Point<T>& pt)
   {
     return c << make_nvpair_tuple("x", pt.x, 
                                   "y", pt.y);

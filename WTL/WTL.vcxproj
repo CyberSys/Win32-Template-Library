@@ -238,6 +238,7 @@
     <ClCompile Include="platform\Locale.cpp" />
     <ClCompile Include="platform\Metrics.cpp" />
     <ClCompile Include="platform\StockObjects.cpp" />
+    <ClCompile Include="utils\Exception.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>
@@ -281,7 +282,7 @@
     <PlatformToolset>GCC_v4.8.1</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|TDM-Mingw32'">
-    <PlatformToolset>Clang_v3.8</PlatformToolset>
+    <PlatformToolset>GCC_v5.2</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|TDM-Mingw32'">

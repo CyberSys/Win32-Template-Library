@@ -46,17 +46,19 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes a DynamicArray (with elements of non-class type) to the debug console
+  //! Writes a DynamicArray (with elements of non-class type) to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam E - Array element type
   //! \tparam L - Array capacity
   //!
-  //! \param[in,out] &c - Console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const &r - Array
-  //! \return Console& : Reference to console
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32_t L>
-  auto operator << (Console& c, const Array<E,L,true>& r) -> enable_if_not_class_t<E,Console&>
+  template <typename CHAR, typename TRAITS, typename E, uint32_t L, typename = enable_if_not_class_t<E>>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const Array<E,L,true>& r) 
   {
     // Number of elements + comma separated values
     return c << object_info("Array", "size", r.size(), 
@@ -64,17 +66,19 @@ namespace wtl
   }
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes a DynamicArray (with elements of class type) to the debug console
+  //! Writes a DynamicArray (with elements of class type) to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam E - Array element type
   //! \tparam L - Array capacity
   //!
-  //! \param[in,out] &c - Console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const &r - Array
-  //! \return Console& : Reference to console
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32_t L>
-  auto operator << (Console& c, const Array<E,L,true>& r) -> enable_if_class_t<E,Console&>
+  template <typename CHAR, typename TRAITS, typename E, uint32_t L, typename = enable_if_class_t<E>, typename = void>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const Array<E,L,true>& r)
   {
     // Number of elements + values on separate lines
     return c << object_info("Array", "size", r.size(), 
@@ -84,17 +88,19 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes a FixedArray (with elements of non-class type) to the debug console
+  //! Writes a FixedArray (with elements of non-class type) to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam E - Array element type
   //! \tparam L - Array capacity
   //!
-  //! \param[in,out] &c - Console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const &r - Array
-  //! \return Console& : Reference to console
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32_t L>
-  auto operator << (Console& c, const Array<E,L,false>& r) -> enable_if_not_class_t<E,Console&>
+  template <typename CHAR, typename TRAITS, typename E, uint32_t L, typename = enable_if_not_class_t<E>>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const Array<E,L,false>& r) 
   {
     // Comma separated values
     return c << object_info("Array", "values", delimited_range(r, ','));
@@ -104,17 +110,19 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
-  //! Writes a FixedArray (with elements of class type) to the debug console
+  //! Writes a FixedArray (with elements of class type) to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam E - Array element type
   //! \tparam L - Array capacity
   //!
-  //! \param[in,out] &c - Console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const &r - Array
-  //! \return Console& : Reference to console
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename E, uint32_t L>
-  auto operator << (Console& c, const Array<E,L,false>& r) -> enable_if_class_t<E,Console&>
+  template <typename CHAR, typename TRAITS, typename E, uint32_t L, typename = enable_if_class_t<E>, typename = void>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const Array<E,L,false>& r) 
   {
     // Write elements on separate lines
     return c << object_info("Array", "values", delimited_range(r, '\n'));

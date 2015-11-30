@@ -13,7 +13,7 @@
 #include <wtl/utils/Default.hpp>            //!< defvalue
 #include <wtl/traits/EncodingTraits.hpp>    //!< Encoding
 #include <wtl/resources/ResourceBlob.hpp>   //!< ResourceBlob
-#include <wtl/resources/ResourceId.hpp>      //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>     //!< ResourceId
 #include <wtl/platform/SystemFlags.hpp>     //!< ResourceType
 #include <wtl/modules/Module.h>             //!< Module
 #include <functional>                       //!< std::forward, std::reference_wrapper

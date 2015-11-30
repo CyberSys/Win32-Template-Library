@@ -125,7 +125,7 @@ namespace wtl
     void invoke(ARGS&&... args) const
     {
       // Forward arguments to each subscriber
-      for (auto& fn : subscribers)
+      for (auto& fn : Subscribers)
         (*fn)(std::forward<ARGS>(args)...);
     }
 

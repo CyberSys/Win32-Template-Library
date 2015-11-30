@@ -401,9 +401,6 @@
     <ClInclude Include="platform\WindowMessage.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="io\Console.hpp">
-      <Filter>IO</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Iterator.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -641,6 +638,9 @@
     <ClInclude Include="controls\ComboBox.hpp">
       <Filter>Controls</Filter>
     </ClInclude>
+    <ClInclude Include="io\Console.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">
@@ -652,9 +652,6 @@
     <ClCompile Include="modules\Module.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="io\Console.cpp">
-      <Filter>IO</Filter>
-    </ClCompile>
     <ClCompile Include="modules\ModuleCollection.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -663,6 +660,12 @@
     </ClCompile>
     <ClCompile Include="platform\StockObjects.cpp">
       <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="io\Console.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Exception.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

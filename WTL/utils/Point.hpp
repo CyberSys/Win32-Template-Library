@@ -37,7 +37,7 @@ namespace wtl
     using value_t = T;
 
     //! \var EMPTY - Empty sentinel value
-    static const type EMPTY;      // [MSVC14-FIX]: static constexpr Point<T> EMPTY {0,0};
+    static const Point<T> EMPTY;      // [MSVC14-FIX]: static constexpr Point<T> EMPTY {0,0};
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -154,8 +154,8 @@ namespace wtl
     template <typename U> constexpr
     type operator + (const Point<U>&  pt) const
     {
-      return type(X + static_cast<T>(pt.x),
-                  Y + static_cast<T>(pt.y));
+      return type(X + static_cast<T>(pt.X),
+                  Y + static_cast<T>(pt.Y));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -168,8 +168,8 @@ namespace wtl
     template <typename U> constexpr
     type operator - (const Point<U>&  pt) const
     {
-      return type(X - static_cast<T>(pt.x),
-                  Y - static_cast<T>(pt.y));
+      return type(X - static_cast<T>(pt.X),
+                  Y - static_cast<T>(pt.Y));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

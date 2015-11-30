@@ -175,7 +175,7 @@ namespace wtl
     {
       // Unregister non-system window classes
       if (Instance && WinAPI<ENC>::unregisterClass(Name, Instance) == False)
-        cdebug << Cons::Error << "Unable to unregister window class" << Cons::Endl;
+        cdebug << format::error << "Unable to unregister window class\n";
     }
     
     // ----------------------------------- STATIC METHODS -----------------------------------

@@ -1,59 +1,73 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\Console.cpp
-//! \brief Provides debug console and logfile
-//! \date 7 March 2015
+//! \brief Provides storage for the debug console stream
+//! \date 30 November 2015
 //! \author Nick Crowley
 //! \copyright © Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#include "Console.hpp"
-#include <wtl/utils/CharArray.hpp>
-#include <wtl/utils/Encoding.hpp>
-#include <wtl/utils/Iterator.hpp>
+#include <wtl/io/Console.hpp>           //!< console_stream
 
+//////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
+//////////////////////////////////////////////////////////////////////////////////////////
 namespace wtl
 {
-  //! \var cdebug - Debug output
-  Console cdebug;
-
-
+  
   //////////////////////////////////////////////////////////////////////////////////////////
-  // Console::flush 
-  //! Flushes the log-file output to disc
+  //! \struct console_window - Allocates a process-wide console
   //////////////////////////////////////////////////////////////////////////////////////////
-  void Console::flush()
+  struct console_window 
   {
-    // Flush log-file
-    //logFile.flush();
-  }
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+    
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // console_window::console_window
+    //! Allocates a new console for the calling process 
+    //!
+    //! \throw std::runtime_error - Unable to allocate console
+    //////////////////////////////////////////////////////////////////////////////////////////
+    console_window() 
+    {
+      if (!::AllocConsole())
+        throw std::runtime_error("Unable to allocate console");
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // console_window::~console_window
+    //! Free the console 
+    //////////////////////////////////////////////////////////////////////////////////////////
+    ~console_window() 
+    {
+      ::FreeConsole();
+    }
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+    // ----------------------------------- STATIC METHODS -----------------------------------
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+    
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+  };
+
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \var cwindow - Allocates process console
+  //////////////////////////////////////////////////////////////////////////////////////////
+  console_window cwindow;
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // Console::log
-  //! Write string to log with current attributes
-  //! 
-  //! \param[in] *str - String
+  //! \var cdebug - Narrow character debug console stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  void Console::log(const char* str)
-  {
-    // Write to log-file
-    //logFile.write(str, getAttributes());
-  }
+  console cdebug;
+
   
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator <<
-  //! Prints a wide-char string to the debug console
-  //! 
-  //! \param[in,out] &c - Debugging console
-  //! \param[in] const *str - Null-terminated string
-  //! \return Console& - Reference to 'c'
-  //////////////////////////////////////////////////////////////////////////////////////////
-  Console& operator << (Console& c, const wchar_t* str)
-  { 
-    // Convert into a fixed length buffer
-    return c << CharArray<Encoding::ANSI,2048>(str).c_str();
-  }
-  
 }
 
 

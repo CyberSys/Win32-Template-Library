@@ -9,6 +9,7 @@
 #define WTL_RANDOM_HPP
 
 #include <wtl/WTL.hpp>
+#include <ctime>            //!< ::time
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -16,31 +17,23 @@ namespace wtl
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Random - Provides random numbers
   //////////////////////////////////////////////////////////////////////////////////////////
-  struct Random
+  struct Random final
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
-  protected:
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Random::Random
-    //! Create random number generator
-    //////////////////////////////////////////////////////////////////////////////////////////
-    Random() 
-    {
-      srand((int32_t)time(0));
-    }
-    
+  
+    DISABLE_CTOR(Random);     //!< Cannot instantiate
+
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-  public:
+  
     DISABLE_COPY(Random);     //!< Cannot instantiate
     DISABLE_MOVE(Random);     //!< Cannot instantiate
-    ENABLE_POLY(Random);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
-  public:
+  
     //////////////////////////////////////////////////////////////////////////////////////////
     // Random::number
     //! Returns an random number from within a half-open range
@@ -51,7 +44,26 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     static int32_t number(int32_t begin, int32_t end)
     {
-      return begin + (rand() % (end-begin));
+      seed();
+
+      return begin + (::rand() % (end-begin));
+    }
+
+  private:
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Random::seed
+    //! Ensures RNG has been seeded
+    //////////////////////////////////////////////////////////////////////////////////////////
+    static void seed()
+    {
+      static bool initialized = false;
+
+      // Seed RNG using current time unless already initialized
+      if (!initialized)
+      {
+        ::srand(static_cast<int32_t>(::time(nullptr)));
+        initialized = true;
+      }
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

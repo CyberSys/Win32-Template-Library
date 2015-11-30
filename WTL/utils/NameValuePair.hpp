@@ -86,7 +86,7 @@ namespace wtl
   template <typename VALUE>
   std::tuple<NameValuePair<VALUE>>  make_nvpair_tuple(const char* name, const VALUE& value)
   {
-    return std::make_tuple(NameValuePair<VALUE>(name, value));
+    return std::make_tuple(make_nvpair(name, value));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -109,50 +109,76 @@ namespace wtl
     return std::tuple_cat(make_nvpair_tuple(name,value), make_nvpair_tuple(args...));
   }
   
-  
-  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \namespace <anon> - Utility SFINAE
+  //////////////////////////////////////////////////////////////////////////////////////////
+  namespace
+  {  
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //! \alias enable_if_char_array_t - Defines an SFINAE expression requiring a character array
+    //! 
+    //! \tparam T - Input type
+    //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+    //////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T, typename RET = void>
+    using enable_if_char_array_t = std::enable_if_t<std::is_convertible<T,const char*>::value 
+                                                 || std::is_convertible<T,const wchar_t*>::value, RET>;
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator << 
-  //! Writes a non-string name-value pair to the debug console
-  //!
-  //! \tparam VALUE - Value type
-  //! 
-  //! \param[in,out] &c - Debug console
-  //! \param[in] const& value - Name-Value pair representing a named value
-  //! \return Console& : Reference to 'c'
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE>
-  auto  operator << (Console& c, const NameValuePair<VALUE>& value) -> std::enable_if_t<!std::is_convertible<VALUE,const char*>::value 
-                                                                                     && !std::is_convertible<VALUE,const wchar_t*>::value, Console&>
-  {
-    // Write: Name=Value
-    return c << Cons::White  << value.Name 
-             << Cons::Grey   << '='
-             << Cons::Yellow << value.Value;
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //! \alias enable_if_not_char_array_t - Defines an SFINAE expression requiring a type other than a character array
+    //! 
+    //! \tparam T - Input type
+    //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+    //////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T, typename RET = void>
+    using enable_if_not_char_array_t = std::enable_if_t<!std::is_convertible<T,const char*>::value 
+                                                     && !std::is_convertible<T,const wchar_t*>::value, RET>;
   }
   
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator << 
   //! Writes a string-based name-value pair to the debug console
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam VALUE - Value type
   //! 
   //! \param[in,out] &c - Debug console
   //! \param[in] const& value - Name-Value pair representing a named value
   //! \return Console& : Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE>
-  auto  operator << (Console& c, const NameValuePair<VALUE>& value) -> std::enable_if_t<std::is_convertible<VALUE,const char*>::value 
-                                                                                     || std::is_convertible<VALUE,const wchar_t*>::value, Console&>
+  template <typename CHAR, typename TRAITS, typename VALUE, typename = enable_if_char_array_t<VALUE>>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const NameValuePair<VALUE>& value) 
   {
     // Write: Name='Value'
-    return c << Cons::White  << value.Name 
-             << Cons::Grey   << "='"
-             << Cons::Yellow << value.Value 
-             << Cons::Grey   << "'";
+    return c << textcol::white  << value.Name 
+             << textcol::grey   << "='"
+             << textcol::yellow << value.Value 
+             << textcol::grey   << "'";
   }
-
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Writes a non-string name-value pair to the debug console
+  //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam VALUE - Value type
+  //! 
+  //! \param[in,out] &c - Debug console
+  //! \param[in] const& value - Name-Value pair representing a named value
+  //! \return Console& : Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS, typename VALUE, typename = enable_if_not_char_array_t<VALUE>, typename = void>
+  std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const NameValuePair<VALUE>& value) 
+  {
+    // Write: Name=Value
+    return c << textcol::white  << value.Name 
+             << textcol::grey   << '='
+             << textcol::yellow << value.Value;
+  }
+  
 }
 
 

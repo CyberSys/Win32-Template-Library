@@ -88,7 +88,7 @@ namespace wtl
                                       "Checked",this->Checked(), 
                                       "BM_GETSTATE", enum_cast<ButtonState>( this->template send<ButtonMessage::GetState>().Result ),
                                       "IsDlgButtonChecked", enum_cast<ButtonState>( ::IsDlgButtonChecked(*this->parent(), enum_cast(this->Ident())) ),
-                                      "State",args.State) << endl;
+                                      "State",args.State) << std::endl;
 
       Theme theme(this->handle(), L"Button");
         

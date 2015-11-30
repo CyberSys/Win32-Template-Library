@@ -14,12 +14,13 @@
 #include <list>                             //!< std::list
 #include <algorithm>                        //!< std::find_if
 #include <functional>                       //!< std::function
+#include <wtl/utils/exception.hpp>          //!< out_of_range
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct List - Bi-directional indexed Linked list
+  //! \struct List - Bi-directional linked list supporting indexed element access
   //!
   //! \tparam T - Element type
   /////////////////////////////////////////////////////////////////////////////////////////

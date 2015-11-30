@@ -15,6 +15,7 @@
 //#include <wtl/io/Console.hpp>                   //!< Console
 #include <string>                               //!< std::basic_string
 #include <vector>                               //!< std::vector
+#include <ostream>                              //!< std::basic_ostream
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -140,14 +141,6 @@ namespace wtl
   }
 
 
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct String - Character string with an unlimited capacity and variable runtime length
-  //!
-  //! \tparam ENC - Character encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  /*template <Encoding ENC>
-  using String = std::basic_string<encoding_char_t<ENC>>;*/
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct String - Character string with an unlimited capacity and variable runtime length. In essence, this is a hollow type upon a std::string.
@@ -394,7 +387,25 @@ namespace wtl
     return String<encoding>(str);
   }
 
-
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a string of dissimilar character type to a console output stream
+  //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam ENC - String character encoding
+  //!
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const& str - String
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS, Encoding ENC, typename = enable_if_not_same_t<encoding_char_t<ENC>,CHAR>>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const String<ENC>& str)
+  {
+    // Convert string to default encoding before output
+    return c << String<default_encoding<CHAR>::value>(str);
+  }
 
 } // WTL namespace
 

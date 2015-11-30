@@ -8,11 +8,11 @@
 #ifndef WTL_FORMAT_SPEC_HPP
 #define WTL_FORMAT_SPEC_HPP
 
-#include <wtl/WTL.hpp>
-#include <wtl/traits/EncodingTraits.hpp>
-#include <type_traits>
-#include <exception>
-#include <cwchar>          // Wide char
+#include <wtl/WTL.hpp>  
+#include <wtl/traits/EncodingTraits.hpp>    //!< choose, default_encoding
+#include <type_traits>                      //!< std::remove_const_t, std::is_enum, std::conditional_t
+//#include <exception>                        //!< std::logic_error, std::length_error
+//#include <cwchar>                           //!< _snwprintf
 
 //! \namespace wtl - Windows template library
 namespace wtl

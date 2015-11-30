@@ -34,7 +34,7 @@ namespace wtl
     {
       int32_t s = this->Window.template send<ButtonMessage::GetState>().Result;
       value_t val = enum_cast<value_t>(s);
-      cdebug << "Value=" << val << Cons::Endl;
+      cdebug << "Value=" << val << std::endl;
       return val;
       //return enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result ); 
     }

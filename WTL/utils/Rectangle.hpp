@@ -169,7 +169,7 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Rect::arrange constexpr
+    // Rect::arrange const
     //! Arranges a sub-rectangle within this rectangle
     //!
     //! \param[in] const& sz - Size of sub-rectangle 
@@ -178,8 +178,8 @@ namespace wtl
     //!
     //! \return type - Co-ordinates of desired sub-rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename T> //!< [MSVC-14 FIX] constexpr  
-    type arrange(const Size<T>& sz, LayoutVector x, LayoutVector y) const
+    template <typename U>   //!< [MSVC-14 FIX] Removed 'constexpr'
+    type arrange(const Size<U>& sz, LayoutVector x, LayoutVector y) const
     {
       // Calculate X or Y co-ordinate of resultant top-left corner
       auto calc = [&sz,this](LayoutVector& v, bool horz) -> value_t
@@ -197,7 +197,7 @@ namespace wtl
       };
 
       // Generate rectangle
-      return Rect<T>(Point<T>(calc(x,true), calc(y,false)), sz);
+      return { point_t(calc(x,true), calc(y,false)), sz };
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -551,16 +551,18 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Prints a Rect to the debug console
+  //! Prints a Rectangle to a console output stream
   //!
-  //! \tparam T - Rect field type
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam T - Rectangle field type
   //!
-  //! \param[in,out] &c - Debugging console
-  //! \param[in] const &rc - Rect
-  //! \return Console& - Reference to 'c'
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const &rc - Rectangle
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  Console& operator << (Console& c, const Rect<T>& rc)
+  template <typename CHAR, typename TRAITS, typename T>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Rect<T>& rc)
   {
     return c << make_nvpair_tuple("Left", rc.Left,
                                   "Top", rc.Top,

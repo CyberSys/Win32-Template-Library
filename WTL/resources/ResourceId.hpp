@@ -177,11 +177,11 @@ namespace wtl
   //! wtl::resource_id
   //! Creates a numeric resource identifier
   //!
-  //! \tparam ENC - Encoding type
-  //! \tparam ENUM - Identifier type
+  //! \tparam ENC - Identifier character encoding
+  //! \tparam ENUM - Numeric identifier type
   //! 
-  //! \param[in] id - Identifier
-  //! \return ResourceId - Resource Id of appropriate type
+  //! \param[in] id - Numeric identifier
+  //! \return ResourceId<ENC> - Numeric ResourceId of value 'id' and character encoding 'ENC'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC = wtl::Encoding::UTF16, typename ENUM>
   ResourceId<ENC> resource_id(ENUM id)
@@ -196,8 +196,8 @@ namespace wtl
   //!
   //! \tparam CHR - Character type
   //! 
-  //! \param[in] const* name - Resource name
-  //! \return ResourceId - Resource Id of appropriate type
+  //! \param[in] const* name - Null terminated resource name
+  //! \return ResourceId<ENC> - String ResourceId of character encoding 'ENC'
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename CHR>
   ResourceId<default_encoding<CHR>::value> resource_name(const CHR* name)
@@ -208,16 +208,18 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Prints a Size to the debug console
+  //! Prints a resource idetifier to a console output stream
   //!
-  //! \tparam T - Size field type
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam ENC - Identifier character encoding
   //! 
-  //! \param[in,out] &c - Debugging console
-  //! \param[in] const& sz - Size
-  //! \return Console& - Reference to 'c'
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const& id - Resource idetifier
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  Console& operator << (Console& c, const ResourceId<ENC>& id)
+  template <typename CHAR, typename TRAITS, Encoding ENC>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const ResourceId<ENC>& id)
   {
     if (id.isOrdinal())
       return c << id.toOrdinal();

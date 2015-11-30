@@ -12,6 +12,7 @@
 #include <wtl/utils/DynamicArray.hpp>           //!< Array
 #include <wtl/utils/Encoding.hpp>               //!< string_encoder_t
 #include <wtl/utils/String.hpp>                 //!< String utilities
+#include <wtl/utils/FormatSpec.hpp>             //!< format_spec_t
 #include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
 #include <wtl/io/Console.hpp>                   //!< Console
 #include <vector>                               //!< std::vector
@@ -856,39 +857,41 @@ namespace wtl
   // wtl::c_arr
   //! Creates a character array from a character array or string literal
   //!
-  //! \tparam char_t - Character type
-  //! \tparam encoding - [optional] Character encoding (if unspecified the default encoding for the character type is used)
-  //! \tparam capacity - Array capacity (excluding null terminator)
+  //! \tparam CHAR - Character type
+  //! \tparam ENC - [optional] Character encoding (if unspecified the default encoding for the character type is used)
+  //! \tparam LENGTH - Array capacity excluding null terminator
   //!
   //! \param[in] const* str - Null terminated string
   //! \param[in] len - Length of string (in characters)
-  //! \return CharArray<ENC,LEN> - Character array of capacity 'LENGTH' containing input string
+  //! \return CharArray<ENC,LENGTH> - Character array of capacity 'LENGTH' containing input string
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename char_t, Encoding encoding = default_encoding<char_t>::value, unsigned capacity>
-  CharArray<encoding,capacity>  c_arr(array_ref_t<const char_t,capacity> str)
+  template <typename CHAR, Encoding ENC = default_encoding<CHAR>::value, unsigned LENGTH>
+  CharArray<ENC,LENGTH>  c_arr(const CHAR (&str)[LENGTH])
   {
-    return CharArray<encoding,capacity>(str);
+    return CharArray<ENC,LENGTH>(str);
   }
 
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Write a character array to the console
+  //! Write a character array to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam ENC - Character encoding
   //! \tparam LENGTH - Character buffer capacity
   //!
-  //! \param[in,out] &s - Console
+  //! \param[in,out] &s - Output stream
   //! \param[in] const &r - Character array
-  //! \return Console& : Reference to console
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, unsigned LENGTH>
-  Console& operator << (Console& c, const CharArray<ENC,LENGTH>& r)
+  template <typename CHAR, typename TRAITS, Encoding ENC, unsigned LENGTH>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const CharArray<ENC,LENGTH>& r)
   {
     // Write text and length
-    return c << make_nvpair_tuple( "length", r.size(),
-                                   "text", r.c_str() );
+    return c << make_nvpair_tuple("length", r.size(),
+                                  "text", r.c_str());
   }
 
 

@@ -9,6 +9,7 @@
 #define WTL_SIZE_HPP
 
 #include <wtl/WTL.hpp>
+#include <wtl/casts/EnumCast.hpp>           //!< enum_cast
 #include <wtl/utils/DebugInfo.hpp>          //!< DebugInfo
 #include <wtl/utils/SFINAE.hpp>             //!< enable_if_sizeof_t
 #include <wtl/platform/SystemFlags.hpp>     //!< SystemMetric
@@ -227,7 +228,7 @@ namespace wtl
     //! \return type - Result of subtracting 'sz' from 'this'
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename U> constexpr
-    type operator - (const Size<U>&  pt) const 
+    type operator - (const Size<U>&  sz) const 
     {
       return type(Width - static_cast<T>(sz.Width),
                   Height - static_cast<T>(sz.Height));
@@ -432,16 +433,18 @@ namespace wtl
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Prints a Size to the debug console
+  //! Prints a Size to a console output stream
   //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
   //! \tparam T - Size field type
   //!
-  //! \param[in,out] &c - Debugging console
+  //! \param[in,out] &c - Output stream
   //! \param[in] const& sz - Size
-  //! \return Console& - Reference to 'c'
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T>
-  Console& operator << (Console& c, const Size<T>& sz)
+  template <typename CHAR, typename TRAITS, typename T>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Size<T>& sz)
   {
     return c << make_nvpair_tuple("Width",  sz.Width,
                                   "Height", sz.Height);

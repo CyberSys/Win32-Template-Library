@@ -172,6 +172,22 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator << 
+  //! Writes a caught-exception to a debug console output stream
+  //! 
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //!
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const& ex - Caught exception wrapper
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const caught_exception& ex);
+
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct domain_error - Thrown when a domain invariant is violated
   /////////////////////////////////////////////////////////////////////////////////////////
