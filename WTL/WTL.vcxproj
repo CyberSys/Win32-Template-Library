@@ -277,6 +277,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Mingw32'">
     <PlatformToolset>GCC_v4.8.1</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|TDM-Mingw32'">
     <PlatformToolset>GCC_v5.2</PlatformToolset>
@@ -437,6 +438,11 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|TDM-Mingw32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\My Projects\WTL</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Mingw32'">
     <ClCompile>
       <AdditionalIncludeDirectories>D:\My Projects\WTL</AdditionalIncludeDirectories>
     </ClCompile>
