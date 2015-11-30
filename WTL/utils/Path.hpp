@@ -13,7 +13,6 @@
 #include <wtl/traits/EncodingTraits.hpp>          //!< Encoding
 #include <wtl/utils/CharArray.hpp>                //!< CharArray
 #include <wtl/utils/Default.hpp>                  //!< default_t
-//#include <wtl/io/Console.hpp>                   //!< Console
 #include <string>
 
 //! \namespace wtl - Windows template library
@@ -47,7 +46,7 @@ namespace wtl
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Path - Provides OS independent handling of file paths
+  //! \struct Path - Provides platform independent handling of file paths
   //!
   //! \tparam ENC - Encoding type
   //////////////////////////////////////////////////////////////////////////////////////////
