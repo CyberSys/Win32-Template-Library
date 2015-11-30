@@ -39,9 +39,11 @@ namespace wtl
     static type Instance;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
-    
+  private:
+    DEFAULT_CTOR(ClassicSkin);			//!< Singleton
+
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-    
+  public:
 		DISABLE_COPY(ClassicSkin);			//!< Singleton
 		DISABLE_MOVE(ClassicSkin);			//!< Singleton
 		
@@ -60,19 +62,19 @@ namespace wtl
     void draw(Button<ENC>& btn, DeviceContext& dc, const RectL& rc) const override
     {
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::measure const
-    //! Measures a standard button control 
+    // ClassicSkin::draw const
+    //! Draws a standard checkbox control
     //! 
-    //! \param[in,out] &btn - Button to be measured
+    //! \param[in,out] &chk - CheckBox to be drawn
     //! \param[in,out] &dc - Output device context
-    //! \return SizeL - Required size
+    //! \param[in] const &rc - Drawing rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    SizeL measure(Button<ENC>& btn, DeviceContext& dc) const override
+    void draw(CheckBox<ENC>& chk, DeviceContext& dc, const RectL& rc) const override
     {
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // ClassicSkin::draw const
     //! Fallback override for drawing a window
@@ -87,6 +89,32 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ClassicSkin::measure const
+    //! Measures a standard button control 
+    //! 
+    //! \param[in,out] &btn - Button to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(Button<ENC>& btn, DeviceContext& dc) const override
+    {
+      return {0,0};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ClassicSkin::measure const
+    //! Measures a standard CheckBox control 
+    //! 
+    //! \param[in,out] &btn - CheckBox to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(CheckBox<ENC>& chk, DeviceContext& dc) const override
+    {
+      return {0,0};
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ClassicSkin::measure const
     //! Fallback override for measuring a window
     //! 
     //! \param[in,out] &btn - Window to be measured
@@ -95,12 +123,15 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     SizeL measure(Window<ENC>& wnd, DeviceContext& dc) const override
     {
+      return {0,0};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
-  //! \var ClassicSkin<ENC>::Instance - Temporary singleton
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var ClassicSkin<ENC>::Instance - Singleton instance
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   ClassicSkin<ENC>  ClassicSkin<ENC>::Instance;
 

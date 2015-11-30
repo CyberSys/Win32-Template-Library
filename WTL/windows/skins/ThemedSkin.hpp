@@ -34,18 +34,38 @@ namespace wtl
     static constexpr Encoding  encoding = base::encoding;
     
     // ----------------------------------- REPRESENTATION -----------------------------------
-    
+  private:
     //! \var Instance - Temporary singleton
     static type Instance;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
-    
+  private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::ThemedSkin
+    //! Control singleton instance and set as default window skin
+    /////////////////////////////////////////////////////////////////////////////////////////
+    ThemedSkin()
+    {
+      SkinFactory<encoding>::set(*this);
+    }
+
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-    
+  public:
 		DISABLE_COPY(ThemedSkin);			//!< Singleton
 		DISABLE_MOVE(ThemedSkin);			//!< Singleton
 		
     // ----------------------------------- STATIC METHODS -----------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::get
+    //! Get the singleton instance
+    //! 
+    //! \return type& - Reference to singleton
+    /////////////////////////////////////////////////////////////////////////////////////////
+    static type& get()
+    {
+      return Instance;
+    }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
@@ -57,22 +77,22 @@ namespace wtl
     //! \param[in,out] &dc - Output device context
     //! \param[in] const &rc - Drawing rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    void draw(Button<encoding>& btn, OwnerDrawCtrlEventArgs<encoding>& args) const override
+    void draw(Button<ENC>& btn, DeviceContext& dc, const RectL& rc) const override
     {
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ThemedSkin::measure const
-    //! Measures a standard button control 
+    // ThemedSkin::draw const
+    //! Draws a standard checkbox control
     //! 
-    //! \param[in,out] &btn - Button to be measured
+    //! \param[in,out] &chk - CheckBox to be drawn
     //! \param[in,out] &dc - Output device context
-    //! \return SizeL - Required size
+    //! \param[in] const &rc - Drawing rectangle
     /////////////////////////////////////////////////////////////////////////////////////////
-    SizeL measure(Button<encoding>& btn, OwnerMeasureCtrlEventArgs<encoding>& args) const override
+    void draw(CheckBox<ENC>& chk, DeviceContext& dc, const RectL& rc) const override
     {
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // ThemedSkin::draw const
     //! Fallback override for drawing a window
@@ -87,6 +107,32 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ThemedSkin::measure const
+    //! Measures a standard button control 
+    //! 
+    //! \param[in,out] &btn - Button to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(Button<ENC>& btn, DeviceContext& dc) const override
+    {
+      return {0,0};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::measure const
+    //! Measures a standard CheckBox control 
+    //! 
+    //! \param[in,out] &btn - CheckBox to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(CheckBox<ENC>& chk, DeviceContext& dc) const override
+    {
+      return {0,0};
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::measure const
     //! Fallback override for measuring a window
     //! 
     //! \param[in,out] &btn - Window to be measured
@@ -95,12 +141,15 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     SizeL measure(Window<ENC>& wnd, DeviceContext& dc) const override
     {
+      return {0,0};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 
-  //! \var ThemedSkin<ENC>::Instance - Temporary singleton
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \var ThemedSkin<ENC>::Instance - Singleton instance
+  /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   ThemedSkin<ENC>  ThemedSkin<ENC>::Instance;
 
