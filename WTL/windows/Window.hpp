@@ -280,7 +280,6 @@ namespace wtl
 
   protected:
     HWnd                            Handle;         //!< Window handle
-    IWindowSkin<encoding>*          Skin;           //!<
     SubClassCollection              SubClasses;     //!< Sub-classed windows collection
 
   private:
@@ -300,7 +299,6 @@ namespace wtl
                IsMouseOver(false),
                Handle(defvalue<HWnd>()),
                Position(*this, DefaultPosition),
-               Skin(nullptr /*::IsAppThemed() ? ThemedSkin::Instance : ClassicSkin::Instance*/),
                Size(*this, DefaultSize),
                Style(*this, WindowStyle::OverlappedWindow),
                Text(*this),
@@ -921,22 +919,6 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::onLoseFocus
-    //! Called when window loses keyboard focus
-    //! 
-    //! \param[in] args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //virtual LResult  onLoseFocus(const LoseFocusEventArgs<encoding>& args) 
-    //{
-    //  // Clear 'MouseOver' flag
-    //  IsMouseOver = false;
-
-    //  // Handle message
-    //  return {MsgRoute::Handled, 0};
-    //}
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
     // Window::onMouseLeave
     //! Called to clear 'IsMouseOver' flag when cursor leaves window
     //! 
@@ -957,7 +939,7 @@ namespace wtl
     //! Called to track mouse events when the mouse is moved over the window
     //! 
     //! \param[in] args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
+    //! \return LResult - Routing indicating message was not handled
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onMouseMove(MouseMoveEventArgs<encoding> args) 
     {
@@ -978,7 +960,6 @@ namespace wtl
       }
 
       // Handle message
-      //return {MsgRoute::Handled, 0};
       return {MsgRoute::Unhandled};
     }
     
@@ -991,8 +972,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
     { 
-      // [Handled] No-op (Validates the client area)
-      return 0; 
+      // Perform fallback drawing
+      SkinFactory<encoding>::get()->draw(*this, args.Graphics, args.Rect);
+
+      // Handle message
+      return {MsgRoute::Handled, 0};
     }
   };
 
