@@ -120,7 +120,6 @@
     <ClInclude Include="utils\Encoding.hpp" />
     <ClInclude Include="utils\DebugInfo.hpp" />
     <ClInclude Include="utils\FormatSpec.hpp" />
-    <ClInclude Include="utils\Iterator.hpp" />
     <ClInclude Include="utils\Point.hpp" />
     <ClInclude Include="utils\Rectangle.hpp" />
     <ClInclude Include="utils\Requires.hpp" />
@@ -142,7 +141,6 @@
     <ClInclude Include="utils\DynamicArray.hpp" />
     <ClInclude Include="utils\Exception.hpp" />
     <ClInclude Include="utils\FixedArray.hpp" />
-    <ClInclude Include="utils\Helpers.hpp" />
     <ClInclude Include="utils\Lazy.hpp" />
     <ClInclude Include="utils\Allocator.hpp" />
     <ClInclude Include="utils\Range.hpp" />
@@ -238,7 +236,6 @@
     <ClCompile Include="platform\Locale.cpp" />
     <ClCompile Include="platform\Metrics.cpp" />
     <ClCompile Include="platform\StockObjects.cpp" />
-    <ClCompile Include="utils\Exception.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99999AE7-854C-4791-9836-5156D71551C0}</ProjectGuid>

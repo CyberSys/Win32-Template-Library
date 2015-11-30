@@ -116,9 +116,6 @@
     <ClInclude Include="utils\FixedArray.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Helpers.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Lazy.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -401,9 +398,6 @@
     <ClInclude Include="platform\WindowMessage.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Iterator.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\Array.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -663,9 +657,6 @@
     </ClCompile>
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\Exception.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
