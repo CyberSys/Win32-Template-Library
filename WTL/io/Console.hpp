@@ -209,7 +209,7 @@ namespace wtl
     //////////////////////////////////////////////////////////////////////////////////////////
     uint32_t used() const
     {
-      return this->pptr() - this->pbase();
+      return static_cast<uint32_t>(this->pptr() - this->pbase());
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

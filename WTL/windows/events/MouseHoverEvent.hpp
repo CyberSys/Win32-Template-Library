@@ -9,7 +9,7 @@
 #define WTL_MOUSEHOVER_EVENT_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/EnumCast.hpp>             //!< EnumCast
+#include <wtl/casts/OpaqueCast.hpp>           //!< opaque_cast
 #include <wtl/windows/EventArgs.hpp>          //!< EventArgs
 #include <wtl/platform/MouseFlags.hpp>        //!< MouseKeyFlag
 
@@ -52,7 +52,7 @@ namespace wtl
     //! \param[in] l - Co-ordinates encoding in the LO and HO words
     /////////////////////////////////////////////////////////////////////////////////////////
     EventArgs(::WPARAM w, ::LPARAM l) : Position(GET_X_LPARAM(l), GET_Y_LPARAM(l)), 
-                                        State(enum_cast<MouseKeyFlag>(w))
+                                        State(opaque_cast<MouseKeyFlag>(w))
     {}
     
 	  // -------------------------------- COPY, HOVER & DESTROY  -------------------------------

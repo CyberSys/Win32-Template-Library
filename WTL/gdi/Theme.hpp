@@ -191,7 +191,7 @@ namespace wtl
     {
       RectL rc;
       // Query text rectangle
-      if (!HResult(::GetThemeTextExtent(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), nullptr, rc)))
+      if (!HResult(::GetThemeTextExtent(Handle, dc.handle(), part, state, str.c_str(), static_cast<int>(str.size()), enum_cast(flags), nullptr, rc)))
         throw platform_error(HERE, "Unable to measure themed control text");
       return rc.size();
     }
@@ -215,7 +215,7 @@ namespace wtl
     {
       RectL out;
       // Query text rectangle
-      if (!HResult(::GetThemeTextExtent(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), rc, out)))
+      if (!HResult(::GetThemeTextExtent(Handle, dc.handle(), part, state, str.c_str(), static_cast<int>(str.size()), enum_cast(flags), rc, out)))
         throw platform_error(HERE, "Unable to measure themed control text");
       return out;
     }
@@ -236,7 +236,7 @@ namespace wtl
     template <typename PART, typename STATE>
     void write(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags = DrawTextFlags::VCentre|DrawTextFlags::SingleLine) const
     {
-      if (!HResult(::DrawThemeText(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), 0, const_cast<RectL&>(rc))))
+      if (!HResult(::DrawThemeText(Handle, dc.handle(), part, state, str.c_str(), static_cast<int>(str.size()), enum_cast(flags), 0, const_cast<RectL&>(rc))))
         throw platform_error(HERE, "Unable to draw themed control text");
     }
     

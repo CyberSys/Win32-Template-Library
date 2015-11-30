@@ -926,7 +926,7 @@ namespace wtl
   std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const CharArray<ENC,LENGTH>& str)
   {
     // Convert character array to same encoding as stream before output
-    return c << str.translate<default_encoding<CHAR>::value>();
+    return c << str.template translate<default_encoding<CHAR>::value>();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////

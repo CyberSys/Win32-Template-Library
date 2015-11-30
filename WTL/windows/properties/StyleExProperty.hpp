@@ -9,9 +9,10 @@
 #define WTL_EX_WINDOW_STYLE_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/EnumCast.hpp>                       //!< EnumCast
-#include <wtl/windows/properties/StyleExProperty.h>     //!< StyleExPropertyImpl
-#include <wtl/windows/Window.hpp>                   //!< Window
+#include <wtl/casts/EnumCast.hpp>                     //!< EnumCast
+#include <wtl/casts/OpaqueCast.hpp>                   //!< opaque_cast
+#include <wtl/windows/properties/StyleExProperty.h>   //!< StyleExPropertyImpl
+#include <wtl/windows/Window.hpp>                     //!< Window
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -32,7 +33,7 @@ namespace wtl
   {
     // [EXISTS] Query window StyleEx
     if (this->Window.exists())
-      return enum_cast<WindowStyleEx>( choose<base::encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
+      return opaque_cast<WindowStyleEx>( choose<base::encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW)(this->Window, GWL_EXSTYLE) );
         
     // Return cached
     return base::get();
