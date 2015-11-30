@@ -58,8 +58,8 @@ namespace wtl
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::make_nvpair 
-  //! Creates a name/value pair
+  // wtl::name_value_pair 
+  //! Object generator for creating a name/value pair
   //! 
   //! \tparam VALUE - Value type
   //! 
@@ -67,14 +67,14 @@ namespace wtl
   //! \param[in] const& value - Value
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE>
-  NameValuePair<VALUE>  make_nvpair(const char* name, const VALUE& value)
+  NameValuePair<VALUE>  name_value_pair(const char* name, const VALUE& value)
   {
     return NameValuePair<VALUE>(name, value);
   }
   
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::make_nvpair_tuple
+  // wtl::name_value_pairs
   //! Base-case for creating tuples of name/value pairs
   //! 
   //! \tparam VALUE - Value type
@@ -84,13 +84,13 @@ namespace wtl
   //! \return std::tuple<NameValuePair<VALUE>> - Tuple containing a single pair
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE>
-  std::tuple<NameValuePair<VALUE>>  make_nvpair_tuple(const char* name, const VALUE& value)
+  std::tuple<NameValuePair<VALUE>>  name_value_pairs(const char* name, const VALUE& value)
   {
-    return std::make_tuple(make_nvpair(name, value));
+    return std::make_tuple(name_value_pair(name, value));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::make_nvpair_tuple
+  // wtl::name_value_pairs
   //! Creates a tuple of name/value pairs
   //! 
   //! \tparam VALUE - First pair value type
@@ -101,14 +101,15 @@ namespace wtl
   //! \return std::tuple<NameValuePair<V1>, NameValuePair<V2>, ...> - Tuple of name-value pairs
   //////////////////////////////////////////////////////////////////////////////////////////
   template <typename VALUE, typename... ARGS>
-  auto  make_nvpair_tuple(const char* name, const VALUE& value, ARGS&&... args)
+  auto  name_value_pairs(const char* name, const VALUE& value, ARGS&&... args)
   {
     static_assert(sizeof...(ARGS) % 2 == 0, "Cannot create name-value pairs from an odd number of arguments");
 
     // Prepend & return first pair to anonymous sequence generated recursively
-    return std::tuple_cat(make_nvpair_tuple(name,value), make_nvpair_tuple(args...));
+    return std::tuple_cat(name_value_pairs(name,value), name_value_pairs(args...));
   }
   
+
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \namespace <anon> - Utility SFINAE
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +178,26 @@ namespace wtl
     return c << textcol::white  << value.Name 
              << textcol::grey   << '='
              << textcol::yellow << value.Value;
+  }
+
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a Point to a console output stream
+  //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam T - Point field type
+  //! 
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const &pt - Point
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS, typename T>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Point<T>& pt)
+  {
+    return c << name_value_pairs("X", pt.X, 
+                                 "Y", pt.Y);
   }
   
 }

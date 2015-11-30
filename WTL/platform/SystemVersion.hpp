@@ -11,6 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/traits/EncodingTraits.hpp>      //!< Encoding
 #include <wtl/utils/CharArray.hpp>            //!< CharArray
+#include <wtl/utils/String.hpp>               //!< String
 #include <wtl/platform/SystemFlags.hpp>       //!< WindowVersion
 #include <utility>
 
@@ -36,11 +37,14 @@ namespace wtl
 
     //! \alias char_t - Define character type
     using char_t = encoding_char_t<ENC>;
+    
+    //! \var encoding - Character encoding
+    static constexpr Encoding encoding = ENC;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    WindowVersion       Ident;         //!< Windows version identifier
-    CharArray<ENC,64>   LongName;      //!< Long name
+    WindowVersion           Ident;         //!< Windows version identifier
+    CharArray<encoding,64>  LongName;      //!< Long name
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -54,11 +58,11 @@ namespace wtl
       this->dwOSVersionInfoSize = sizeof(base);
 
       // Query windows version
-      if (WinAPI<ENC>::getVersion(this))
+      if (WinAPI<encoding>::getVersion(this))
         Ident = identify(this->dwMajorVersion, this->dwMinorVersion);
 
       // Format long name
-      LongName.format(L"%s %s (v%d.%d)", name(), this->szCSDVersion, this->dwMajorVersion, this->dwMinorVersion);
+      LongName.format(L"%s %s (v%d.%d)", name().c_str(), this->szCSDVersion, this->dwMajorVersion, this->dwMinorVersion);
     }
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -119,9 +123,9 @@ namespace wtl
     // SystemVersion::fullname const
     //! Get the full name
     //! 
-    //! \return const char_t* - Operating system name
+    //! \return String<encoding> - Operating system name
     /////////////////////////////////////////////////////////////////////////////////////////
-    const char_t* fullname() const
+    String<encoding> fullname() const
     {
       // Return full name
       return LongName.c_str();
@@ -143,24 +147,24 @@ namespace wtl
     // SystemVersion::name const
     //! Get the short name
     //! 
-    //! \return const char_t* - Operating system name
+    //! \return String<encoding> - Operating system name
     //!
     //! \throw wtl::logic_error - Unrecognised window version
     /////////////////////////////////////////////////////////////////////////////////////////
-    const char_t* name() const
+    String<encoding> name() const
     {
       // Return full name
       switch (Ident)
       {
-      case WindowVersion::WinNT:   return L"Windows 2000";
-      case WindowVersion::Win2000: return L"Windows 2000";
-      case WindowVersion::WinXp:   return L"Windows XP";
-      case WindowVersion::Win2003: return L"Windows Server 2003";
-      case WindowVersion::Vista:   return L"Windows Vista";
-      case WindowVersion::Win7:    return L"Windows 7";
-      case WindowVersion::Win8:    return L"Windows 8";
-      case WindowVersion::Win81:   return L"Windows 8.1";
-      case WindowVersion::Future:  return L"Windows Future";
+      case WindowVersion::WinNT:   return "Windows 2000";
+      case WindowVersion::Win2000: return "Windows 2000";
+      case WindowVersion::WinXp:   return "Windows XP";
+      case WindowVersion::Win2003: return "Windows Server 2003";
+      case WindowVersion::Vista:   return "Windows Vista";
+      case WindowVersion::Win7:    return "Windows 7";
+      case WindowVersion::Win8:    return "Windows 8";
+      case WindowVersion::Win81:   return "Windows 8.1";
+      case WindowVersion::Future:  return "Windows Future";
       }
 
       // Error: 

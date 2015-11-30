@@ -327,6 +327,22 @@ namespace wtl
     {
       return strcpy(dest, &this->Data[0]);
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // CharArray::translate const
+    //! Translate character array into another encoding
+    //! 
+    //! \tparam E2 - Foreign character encoding
+    //! 
+    //! \return CharArray<E2,LENGTH> - Character array converted into encoding E2
+    //!
+    //! \throw wtl::platform_error - Unable to convert text
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding E2> 
+    CharArray<E2,LENGTH>  translate() const
+    {
+      return {*this};
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // CharArray::operator == const
@@ -872,7 +888,6 @@ namespace wtl
   }
 
 
-
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
   //! Write a character array to a console output stream
@@ -886,14 +901,33 @@ namespace wtl
   //! \param[in] const &r - Character array
   //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, typename TRAITS, Encoding ENC, unsigned LENGTH>
+  template <typename CHAR, typename TRAITS, Encoding ENC, unsigned LENGTH, typename = enable_if_same_t<encoding_char_t<ENC>,CHAR>>
   std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const CharArray<ENC,LENGTH>& r)
   {
     // Write text and length
-    return c << make_nvpair_tuple("length", r.size(),
-                                  "text", r.c_str());
+    return c << name_value_pairs("length", r.size(),
+                                 "text", r.c_str());
   }
-
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a character array (of dissimilar character type to an output stream) to an output stream
+  //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam ENC - Character encoding
+  //! \tparam LENGTH - Character buffer capacity
+  //!
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const& str - Character array
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS, Encoding ENC, unsigned LENGTH, typename = enable_if_not_same_t<encoding_char_t<ENC>,CHAR>, typename = void>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const CharArray<ENC,LENGTH>& str)
+  {
+    // Convert character array to same encoding as stream before output
+    return c << str.translate<default_encoding<CHAR>::value>();
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct LastErrorString - Encapsulates the string representation of ::GetLastError()

@@ -619,7 +619,6 @@ namespace wtl
 
 
   
-  
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator<< 
   //! Write a string to an output stream with different character traits

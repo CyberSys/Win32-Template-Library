@@ -92,7 +92,7 @@ namespace wtl
     static_assert(sizeof...(ARGS) % 2 == 0, "Cannot create debug-info from an odd number of arguments");
 
     // Interpret arguments as pairs of nvp c-tor arguments
-    return make_object_info(name, make_nvpair_tuple(std::forward<ARGS>(args)...));
+    return make_object_info(name, name_value_pairs(std::forward<ARGS>(args)...));
   }
 
   
@@ -148,25 +148,6 @@ namespace wtl
     return c << textcol::cyan << info.Name << info.Attributes;
   }
 
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator <<
-  //! Prints a Point to a console output stream
-  //!
-  //! \tparam CHAR - Output stream character type
-  //! \tparam TRAITS - Output stream character traits
-  //! \tparam T - Point field type
-  //! 
-  //! \param[in,out] &c - Output stream
-  //! \param[in] const &pt - Point
-  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
-  //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename CHAR, typename TRAITS, typename T>
-  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Point<T>& pt)
-  {
-    return c << make_nvpair_tuple("x", pt.x, 
-                                  "y", pt.y);
-  }
 } // namespace wtl
 
 #endif // WTL_DEBUG_INFO_HPP

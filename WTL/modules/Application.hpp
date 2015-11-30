@@ -108,10 +108,10 @@ namespace wtl
              << (textcol::cyan|textcol::bold) << "\t\t\t"       << this->name() << "\t" << this->version()                    << std::endl  
              << textcol::cyan                 << "--------------------------------------------------------------------------" << std::endl 
              << std::endl
-             << make_nvpair("Date/Time", LongDateString<encoding>().c_str())          << std::endl
-             << make_nvpair("Command Line", cmdLine)                                  << std::endl
-             << make_nvpair("Operating System", SystemVersion<encoding>().fullname()) << std::endl
-             << make_nvpair("Module Path", module_base::path<encoding>().c_str())     << std::endl;
+             << name_value_pair("Date/Time", LongDateString<encoding>().c_str())          << std::endl
+             << name_value_pair("Command Line", cmdLine)                                  << std::endl
+             << name_value_pair("Operating System", SystemVersion<encoding>().fullname()) << std::endl
+             << name_value_pair("Module Path", this->path<encoding>().c_str())            << std::endl;
 
       // Execute
       return msgpump_base::run(mode);

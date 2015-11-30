@@ -564,10 +564,10 @@ namespace wtl
   template <typename CHAR, typename TRAITS, typename T>
   std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Rect<T>& rc)
   {
-    return c << make_nvpair_tuple("Left", rc.Left,
-                                  "Top", rc.Top,
-                                  "Right", rc.Right,
-                                  "Bottom", rc.Bottom);
+    return c << name_value_pairs("Left", rc.Left,
+                                 "Top", rc.Top,
+                                 "Right", rc.Right,
+                                 "Bottom", rc.Bottom);
   }
 
 } // WTL namespace

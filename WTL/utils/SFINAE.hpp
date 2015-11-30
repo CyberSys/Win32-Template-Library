@@ -62,6 +62,18 @@ namespace wtl
   template <typename T, typename RET = void>
   using enable_if_boolean_t = std::enable_if_t<std::is_same<T,bool>::value, RET>;
   
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias enable_if_character_t - Defines an SFINAE expression requiring a character type
+  //! 
+  //! \tparam T - Input type
+  //! \tparam RET - [optional] Desired type if expression is valid   (Default is void)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename RET = void>
+  using enable_if_character_t = std::enable_if_t<std::is_same<T,char>::value
+                                              || std::is_same<T,wchar_t>::value
+                                              || std::is_same<T,char16_t>::value
+                                              || std::is_same<T,char32_t>::value, RET>;
+  
   
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \alias enable_if_class_t - Defines an SFINAE expression requiring an object of class/struct type 

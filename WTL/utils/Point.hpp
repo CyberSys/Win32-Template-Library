@@ -354,6 +354,22 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   using PointF = Point<float>;
 
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a Point to a console output stream
+  //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam T - Point field type
+  //! 
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const &pt - Point
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS, typename T>
+  std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Point<T>& pt);
+
 }
 
 

@@ -446,8 +446,8 @@ namespace wtl
   template <typename CHAR, typename TRAITS, typename T>
   std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Size<T>& sz)
   {
-    return c << make_nvpair_tuple("Width",  sz.Width,
-                                  "Height", sz.Height);
+    return c << name_value_pairs("Width",  sz.Width,
+                                 "Height", sz.Height);
   }
 
 

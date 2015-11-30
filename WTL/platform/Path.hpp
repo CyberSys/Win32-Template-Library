@@ -493,6 +493,25 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   };
 
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Write a path to a console output stream
+  //!
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam ENC - Character encoding
+  //!
+  //! \param[in,out] &s - Output stream
+  //! \param[in] const &r - Path
+  //! \return std::basic_ostream<CHAR,TRAITS>& : Reference to output stream
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //template <typename CHAR, typename TRAITS, Encoding ENC>
+  //std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const Path<ENC>& r)
+  //{
+  //  // Write text and length
+  //  return c;// << static_cast<const typename Path<ENC>::base&>(r);
+  //}
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator<<

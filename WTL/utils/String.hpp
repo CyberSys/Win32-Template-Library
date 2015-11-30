@@ -349,7 +349,7 @@ namespace wtl
       std::vector<char_t> buf(s.length()+1, null_t);      //!< Temporary (dynamic) storage
 
       // Convert from 's' into 'buf'
-      string_encoder<E2,encoding>::convert(s.c_str(), s.c_str()+s.length(), buf.data(), buf.data()+buf.size());
+      string_encoder<E2,encoding>::convert(s.c_str(), s.c_str()+s.length(), buf.data(), buf.data()+buf.capacity());
       return buf.data();
     }
 
@@ -365,6 +365,22 @@ namespace wtl
     bool contains(char_t ch) const
     {
       return this->find(ch) != base::npos;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // String::translate const
+    //! Translate string into another encoding
+    //! 
+    //! \tparam E2 - Foreign character encoding
+    //! 
+    //! \return String<E2> - Current text in character encoding E2
+    //!
+    //! \throw wtl::platform_error - Unable to convert text
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <Encoding E2> 
+    String<E2>  translate() const
+    {
+      return {*this};
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -390,7 +406,7 @@ namespace wtl
   
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
-  //! Prints a string of dissimilar character type to a console output stream
+  //! Prints a string (of character type dissimilar to that of an output stream) to an output stream
   //!
   //! \tparam CHAR - Output stream character type
   //! \tparam TRAITS - Output stream character traits
@@ -403,8 +419,28 @@ namespace wtl
   template <typename CHAR, typename TRAITS, Encoding ENC, typename = enable_if_not_same_t<encoding_char_t<ENC>,CHAR>>
   std::basic_ostream<CHAR,TRAITS>& operator << (std::basic_ostream<CHAR,TRAITS>& c, const String<ENC>& str)
   {
-    // Convert string to default encoding before output
-    return c << String<default_encoding<CHAR>::value>(str);
+    // Convert string to same encoding as stream before output
+    return c << '\'' << str.translate<default_encoding<CHAR>::value>() << '\'';
+  }
+
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator <<
+  //! Prints a null-terminated string (of character type dissimilar to that of an output stream) to an output stream
+  //!
+  //! \tparam OS_CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //! \tparam STR_CHAR - String character type
+  //!
+  //! \param[in,out] &c - Output stream
+  //! \param[in] const* str - Null-terminated string
+  //! \return std::basic_ostream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename OS_CHAR, typename TRAITS, typename STR_CHAR, typename = enable_if_character_t<STR_CHAR>, typename = enable_if_not_same_t<OS_CHAR,STR_CHAR>>
+  std::basic_ostream<OS_CHAR,TRAITS>& operator << (std::basic_ostream<OS_CHAR,TRAITS>& c, const STR_CHAR* str)
+  {
+    // Convert string to same encoding as stream before output
+    return c << String<default_encoding<OS_CHAR>::value>(str);
   }
 
 } // WTL namespace
