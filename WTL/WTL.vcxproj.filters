@@ -632,6 +632,15 @@
     <ClInclude Include="platform\StockObjects.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="controls\properties\CheckBoxCheckedProperty.h">
+      <Filter>Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\properties\CheckBoxCheckedProperty.hpp">
+      <Filter>Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\ComboBox.hpp">
+      <Filter>Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

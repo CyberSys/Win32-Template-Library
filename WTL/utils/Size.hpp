@@ -232,6 +232,17 @@ namespace wtl
       return type(Width - static_cast<T>(sz.Width),
                   Height - static_cast<T>(sz.Height));
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Size::operator- constexpr
+    //! Calculate the negative size
+    //!
+    //! \return type - Result of negating all fields
+    /////////////////////////////////////////////////////////////////////////////////////////
+    type operator - () const 
+    {
+      return type(-Width, -Height);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Size::operator const ::COORD* const noexcept

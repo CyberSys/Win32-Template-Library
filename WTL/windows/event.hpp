@@ -67,15 +67,13 @@ namespace wtl
     // Event::Event
     //! Create event with no subscribers
     /////////////////////////////////////////////////////////////////////////////////////////
-    Event() 
-    {}
+    Event() = default;
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Event::~Event
-    //! Can be polymorphic
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~Event() 
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+
+    ENABLE_COPY(Event);      //!< Can be deep copied
+		ENABLE_MOVE(Event);      //!< Can be moved
+    ENABLE_POLY(Event);      //!< Can be polymorphic
     
     // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -94,7 +92,7 @@ namespace wtl
 
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // call_proxy::invoke()
+    // Event::invoke()
     //! Raises the event, notifying each subscriber in the order in which they subscribed
     //! 
     //! \param[in] &&... args - [optional] Event arguments
@@ -116,7 +114,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // call_proxy::invoke() const
+    // Event::invoke() const
     //! Raises the event, notifying each subscriber in the order in which they subscribed
     //! 
     //! \param[in] &&... args - [optional] Event arguments

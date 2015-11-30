@@ -72,10 +72,10 @@ namespace wtl
     //! \alias window_t - Inherit window type
     using window_t = typename IMPL::window_t;
     
-    //! \var read - Inherit whether property supports read access
+    //! \var read - Define whether property supports read access
     static constexpr bool read = requires<IMPL,concepts::PropertyGetter<value_t>>::value; 
 
-    //! \var write - Inherit whether property supports write access
+    //! \var write - Define whether property supports write access
     static constexpr bool write = requires<IMPL,concepts::PropertySetter<value_t>>::value;
     
     // ----------------------------------- REPRESENTATION -----------------------------------

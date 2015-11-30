@@ -31,7 +31,13 @@ namespace wtl
   {
     // [EXISTS] Query state iff button exists
     if (this->Window.exists())
-      enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result ); 
+    {
+      int32_t s = this->Window.template send<ButtonMessage::GetState>().Result;
+      value_t val = enum_cast<value_t>(s);
+      cdebug << "Value=" << val << Cons::Endl;
+      return val;
+      //return enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result ); 
+    }
 
     // Return initial value
     return base::get();
@@ -39,40 +45,6 @@ namespace wtl
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // ButtonStatePropertyImpl::onCreate 
-  //! Called during button creation to set the initial state
-  //! 
-  //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Returns 0 to accept button creation
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  LResult  ButtonStatePropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
-  {
-    // [EXISTS] Set state iff button exists
-    if (this->Window.exists())
-      this->Window.template send<ButtonMessage::SetState>(); 
-
-    // Accept button creation
-    return 0;
-  }
-    
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // ButtonStatePropertyImpl::set 
-  //! Set the state iff button exists, otherwise sets the initial state
-  //! 
-  //! \param[in] state - Button state
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  void  ButtonStatePropertyImpl<ENC>::set(value_t state) 
-  {
-    // [EXISTS] Set state iff button exists
-    if (this->Window.exists())
-      this->Window.template send<ButtonMessage::SetImage>(); 
-    
-    // Save initial state
-    base::set(state);
-  }
   
       
 } // namespace wtl

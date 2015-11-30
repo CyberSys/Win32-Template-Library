@@ -43,11 +43,14 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="controls\Button.hpp" />
     <ClInclude Include="controls\CheckBox.hpp" />
+    <ClInclude Include="controls\ComboBox.hpp" />
     <ClInclude Include="controls\events\ButtonEvents.hpp" />
     <ClInclude Include="controls\properties\ButtonIconProperty.h" />
     <ClInclude Include="controls\properties\ButtonIconProperty.hpp" />
     <ClInclude Include="controls\properties\ButtonStateProperty.h" />
     <ClInclude Include="controls\properties\ButtonStateProperty.hpp" />
+    <ClInclude Include="controls\properties\CheckBoxCheckedProperty.h" />
+    <ClInclude Include="controls\properties\CheckBoxCheckedProperty.hpp" />
     <ClInclude Include="gdi\ImageList.hpp" />
     <ClInclude Include="gdi\DeviceContext.hpp" />
     <ClInclude Include="gdi\Theme.hpp" />
@@ -278,7 +281,7 @@
     <PlatformToolset>GCC_v4.8.1</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|TDM-Mingw32'">
-    <PlatformToolset>GCC_v5.2</PlatformToolset>
+    <PlatformToolset>Clang_v3.8</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|TDM-Mingw32'">

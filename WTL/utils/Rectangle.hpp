@@ -191,7 +191,8 @@ namespace wtl
         case FromTop:    return this->Top    + v.Distance;
         case FromBottom: return this->Bottom - v.Distance;
         default:
-        case Centre:     return horz ? this->Left + (this->width() - sz.Width) / 2 : this->Top + (this->height() - sz.Height) / 2;
+        case Centre:     return horz ? this->Left + (this->width() - sz.Width) / 2 
+                                     : this->Top + (this->height() - sz.Height) / 2;
         }
       };
 
@@ -286,6 +287,35 @@ namespace wtl
     value_t  height() const
     {
       return Bottom - Top;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::inflate constexpr
+    //! Calculate rectangle if inflated or shrunk
+    //! 
+    //! \param[in] sz - Amount to inflate, can be negative
+    //!
+    //! \return type - New inflated/shrunk rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
+    type inflate(const size_t& sz) const
+    {
+      return type(Left-sz.Width, Top-sz.Height, Right+sz.Width, Bottom+sz.Height);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Rect::inflate constexpr
+    //! Calculate rectangle if inflated or shrunk
+    //! 
+    //! \param[in] x - Horizontal inflation, can be negative
+    //! \param[in] y - Vertical inflation, can be negative
+    //!
+    //! \return type - New inflated/shrunk rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr
+    type inflate(value_t x, value_t y) const
+    {
+      return type(Left-x, Top-y, Right+x, Bottom+y);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

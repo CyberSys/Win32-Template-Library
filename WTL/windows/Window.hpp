@@ -529,7 +529,7 @@ namespace wtl
         // Lookup window in 'Active Windows' collection
         auto pos = ActiveWindows.find(wnd);
         if (pos != ActiveWindows.end())
-          pos->second;
+          return pos->second;
 
         // [ERROR] Parent is native window
         throw domain_error(HERE, "Parent is native window");
@@ -978,7 +978,8 @@ namespace wtl
       }
 
       // Handle message
-      return {MsgRoute::Handled, 0};
+      //return {MsgRoute::Handled, 0};
+      return {MsgRoute::Unhandled};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

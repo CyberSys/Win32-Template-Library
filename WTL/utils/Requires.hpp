@@ -44,25 +44,6 @@ namespace wtl
     static constexpr bool value = sizeof(derived::template test<T>(nullptr)) > 1;     //!< Test via overload resolution
   };
 
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Requires - Checks whether a type models a concept
-  //!
-  //! \tparam T - Type to be tested
-  //! \tparam CONCEPT - Concept to be modelled
-  //! 
-  //! \remarks Compatible with GCC-5.2 but neither Clang-3.8 nor MSVC-14
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //template <typename T, typename CONCEPT>  
-  //struct requires : public CONCEPT
-  //{
-  //  //! Import  'test' identifier
-  //  using CONCEPT::test;
-  //
-  //  template <typename U = void> static char  test(...);
-  //  
-  //  //! 
-  //  static constexpr bool value = sizeof(requires::template test<T>(nullptr)) > 1;
-  //};
   
   //////////////////////////////////////////////////////////////////////////////////////////
   //! \def CONCEPT_ERROR_MSG - Generates a string literal containing a 'concept violation' error message
@@ -72,7 +53,7 @@ namespace wtl
   //! 
   //! \remarks 'CONCEPT' parameter is ellipsis only because preprocessor confuses template parameter pack expansion with multiple arguments (?!)
   //////////////////////////////////////////////////////////////////////////////////////////
-  #define CONCEPT_ERROR_MSG(TYPE,...)  "*ERROR*: Template parameter " #TYPE " does not model the '" #__VA_ARGS__ "' concept..."
+  #define CONCEPT_ERROR_MSG(TYPE,...)  "*ERROR*: Template parameter " #TYPE " does not model the '" #__VA_ARGS__ "' concept...\n"
   
 
   //////////////////////////////////////////////////////////////////////////////////////////

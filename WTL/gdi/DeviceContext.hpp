@@ -365,6 +365,38 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::focus
+    //! Fills a focus rectangle 
+    //! 
+    //! \param[in] rc - Drawing rectangle
+    //!
+    //! \throw wtl::platform_error - Unable to draw focus rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    void  focus(const Rect<T>& rc)
+    {
+      if (::DrawFocusRect(Handle, rc) == False)
+        throw platform_error(HERE, "Unable to draw focus rect");
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // DeviceContext::frame
+    //! Fills a frame rectangle with a custom brush
+    //! 
+    //! \param[in] rc - Drawing rectangle
+    //! \param[in] brush - Custom brush 
+    //!
+    //! \throw wtl::platform_error - Unable to draw frame rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+    void  frame(const Rect<T>& rc, const HBrush& brush)
+    {
+      // Draw frame rectangle with custom brush
+      if (::FrameRect(Handle, rc, brush) == False)
+        throw platform_error(HERE, "Unable to draw frame rect");
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // DeviceContext::measure
     //! Measure text using the current font
     //! 

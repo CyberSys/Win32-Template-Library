@@ -124,15 +124,15 @@ namespace wtl
   //! \enum ButtonMessage - Defines standard Button messages
   enum class ButtonMessage : ulong32_t
   {
-    GetCheck		 = 0x00F0,			//!< [Windows 3.11] 
-    SetCheck		 = 0x00F1,			//!< [Windows 3.11] 
-    GetState		 = 0x00F2,			//!< [Windows 3.11] 
-    SetState		 = 0x00F3,			//!< [Windows 3.11] 
-    SetStyle		 = 0x00F4,			//!< [Windows 3.11] 
-    Click		     = 0x00F5,			//!< [Windows 4.00] 
-    GetImage		 = 0x00F6,			//!< [Windows 4.00] 
-    SetImage		 = 0x00F7,			//!< [Windows 4.00] 
-    SetDontClick = 0x00F8,			//!< [Windows 6.00] 
+    GetCheck		 = BM_GETCHECK,			//!< [Windows 3.11] 
+    SetCheck		 = BM_SETCHECK,			//!< [Windows 3.11] 
+    GetState		 = BM_GETSTATE,			//!< [Windows 3.11] 
+    SetState		 = BM_SETSTATE,			//!< [Windows 3.11] 
+    SetStyle		 = BM_SETSTYLE,			//!< [Windows 3.11] 
+    Click		     = BM_CLICK,			  //!< [Windows 4.00] 
+    GetImage		 = BM_GETIMAGE,			//!< [Windows 4.00] 
+    SetImage		 = BM_SETIMAGE,			//!< [Windows 4.00] 
+    SetDontClick = 0x00F8,			    //!< [Windows 6.00] 
   };
 
   //! Define traits: Contiguous enumeration

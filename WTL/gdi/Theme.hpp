@@ -197,6 +197,30 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Theme::measure const
+    //! Measures the rectangle required to draw a string 
+    //!
+    //! \param[in] const& dc - Target device context
+    //! \param[in] part - Part to query
+    //! \param[in] state - State of specified part
+    //! \param[in] const& txt - Text to draw
+    //! \param[in] const& rc - Bounding rectangle
+    //! \param[in] flags - Drawing flags 
+    //! \return RectL - Required drawing rectangle
+    //! 
+    //! \throw wtl::platform_error - Unable to measure part
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename PART, typename STATE>
+    RectL measure(const DeviceContext& dc, PART part, STATE state, const String<Encoding::UTF16>& str, const RectL& rc, DrawTextFlags flags = DrawTextFlags::VCentre|DrawTextFlags::SingleLine) const
+    {
+      RectL out;
+      // Query text rectangle
+      if (!HResult(::GetThemeTextExtent(Handle, dc.handle(), part, state, str.c_str(), str.size(), enum_cast(flags), rc, out)))
+        throw platform_error(HERE, "Unable to measure themed control text");
+      return out;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Theme::write const
     //! Draws text using the color and font defined by the visual style.
     //!

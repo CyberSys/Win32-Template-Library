@@ -46,8 +46,8 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Control(WindowId id) 
     {
-      this->Font  = HFont(c_str("MS Shell Dlg 2"), 11);
-      this->Ident = id;   //window_id(id);
+      this->Font  = StockFont::Window; 
+      this->Ident = id;  
     }
   
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------

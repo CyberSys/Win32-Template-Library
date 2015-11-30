@@ -12,6 +12,7 @@
 #include <wtl/windows/Window.hpp>                //!< Window
 #include <wtl/controls/Button.hpp>               //!< Button
 #include <wtl/platform/Metrics.hpp>              //!< Metrics
+#include <wtl/controls/properties/CheckBoxCheckedProperty.h>   //!< CheckBoxCheckedProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -41,8 +42,7 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     // Properties
-    //ButtonIconProperty<encoding>      Icon;          //!< Icon
-    //ButtonStateProperty<encoding>     State;         //!< State
+    CheckBoxCheckedProperty<encoding>     Checked;         //!< Checked
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -52,10 +52,11 @@ namespace wtl
     //! 
     //! \param[in] id - Control identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    CheckBox(WindowId id) : base(id)
+    CheckBox(WindowId id) : base(id), 
+                            Checked(*this)
     {
       // Set properties
-      this->Style |= ButtonStyle::CheckBox;
+      this->Style = WindowStyle::ChildWindow | ButtonStyle::AutoCheckBox|ButtonStyle::Left|ButtonStyle::Notify;
     }
     
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -82,27 +83,54 @@ namespace wtl
     LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) override
     { 
       // debug
-      //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
+      cdebug << object_info(__func__, "Ident", args.Ident, 
+                                      "Action",args.Action, 
+                                      "Checked",this->Checked(), 
+                                      "BM_GETSTATE", enum_cast<ButtonState>( this->template send<ButtonMessage::GetState>().Result ),
+                                      "IsDlgButtonChecked", enum_cast<ButtonState>( ::IsDlgButtonChecked(*this->parent(), enum_cast(this->Ident())) ),
+                                      "State",args.State) << endl;
 
       Theme theme(this->handle(), L"Button");
         
       // Determine state
-      CHECKBOXSTATES state = (!this->Enabled                          ? CBS_UNCHECKEDDISABLED 
-                              : args.State && OwnerDrawState::Selected ? CBS_UNCHECKEDPRESSED 
-                              : this->isMouseOver()                    ? CBS_UNCHECKEDHOT : CBS_UNCHECKEDNORMAL);
-        
+      CHECKBOXSTATES state = CBS_UNCHECKEDNORMAL;
+      if (!this->Enabled)
+        state = CBS_UNCHECKEDDISABLED;
+      else if (args.State && OwnerDrawState::Selected)
+        state = CBS_UNCHECKEDPRESSED;
+      else if (this->isMouseOver())
+        state = CBS_UNCHECKEDHOT;
+      
+      //if (this->Checked == ButtonState::Checked)  //if (args.State && OwnerDrawState::Checked)
+      //  state += (CBS_CHECKEDNORMAL-1);
+      //if (this->State && ButtonState::Checked)  
+      //  state += (CBS_CHECKEDNORMAL-1);
+      //else if (this->Checked == ButtonState::Indeterminate)
+      //  state += (CBS_MIXEDNORMAL-1);
+
+      // Query content rect
+      RectL rcContent = theme.content(args.Graphics, BP_CHECKBOX, state, args.Rect);
+
       // Draw background
       args.Graphics.fill(args.Rect, StockBrush::BtnFace);
 
+      // Calculate checkbox / text rectangles
+      SizeL szCheckBox = theme.measure(args.Graphics, BP_CHECKBOX, state);
+      RectL rcCheckBox = rcContent.arrange(szCheckBox, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
+      
       // Draw checkbox
-      SizeL checkSize = theme.measure(args.Graphics, BP_CHECKBOX, state);
-      RectL checkRect = args.Rect.arrange(checkSize, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
-      theme.fill(args.Graphics, BP_CHECKBOX, state, checkRect);
+      theme.fill(args.Graphics, BP_CHECKBOX, state, rcCheckBox);
 
       // Draw text
-      RectL rc = args.Rect;
-      rc.Left = checkRect.Right + Metrics::WindowEdge.Width;
-      theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rc, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
+      rcContent.Left = rcCheckBox.Right + Metrics::WindowEdge.Width;
+      theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rcContent, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
+      
+      // [FOCUS] Draw focus rectangle
+      if (args.State && OwnerDrawState::Focus)
+      {
+        RectL rcText = theme.measure(args.Graphics, BP_CHECKBOX, state, this->Text(), rcContent, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
+        args.Graphics.focus(rcText);
+      }
 
       // Handle message
       return {MsgRoute::Handled, 0};
@@ -132,7 +160,6 @@ namespace wtl
   };
 } // namespace wtl
 
-//#include <wtl/controls/properties/CheckBoxIconProperty.hpp>      //!< IconProperty
-//#include <wtl/controls/properties/CheckBoxStateProperty.hpp>     //!< StateProperty
+#include <wtl/controls/properties/CheckBoxCheckedProperty.hpp>   //!< CheckBoxCheckedProperty
 
 #endif // WTL_CHECKBOX_HPP
