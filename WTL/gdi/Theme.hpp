@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\gdi\Theme.hpp
 //! \brief Supports Visual styles
-//! \date 6 March 2015
+//! \date 30 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -9,17 +9,23 @@
 #define WTL_THEME_H
 
 #include <wtl/WTL.hpp>
-#include <wtl/gdi/DeviceContext.hpp>               //!< HDeviceContext
-#include <wtl/traits/ThemeTraits.hpp>              //!< HTheme
-#include <wtl/platform/HResult.hpp>                //!< HResult
-#include <vsstyle.h>                               //!< Parts and States
-#include <Vssym32.h>                               //!< Properties
+#include <wtl/casts/BooleanCast.hpp>              //!< boolean_cast
+#include <wtl/utils/String.hpp>                   //!< String
+#include <wtl/utils/Size.hpp>                     //!< Size
+#include <wtl/utils/Rectangle.hpp>                //!< Rect
+#include <wtl/gdi/DeviceContext.hpp>              //!< DeviceContext
+#include <wtl/traits/ThemeTraits.hpp>             //!< HTheme
+#include <wtl/traits/WindowTraits.hpp>            //!< HWnd
+#include <wtl/platform/HResult.hpp>               //!< HResult
+#include <wtl/platform/DrawingFlags.hpp>          //!< DrawTextFlags
+#include <vsstyle.h>                              //!< Parts and States
+#include <Vssym32.h>                              //!< Properties
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Theme - 
+  //! \struct Theme - Provides themed window drawing
   //!
   //! \remarks See "Parts & States" at https://msdn.microsoft.com/en-us/library/windows/desktop/bb773210(v=vs.85).aspx
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -30,9 +36,9 @@ namespace wtl
     //! \enum ThemeSize - Identifies the type of size value to retrieve for a visual style part
     enum ThemeSize
     {
-      MinSize = TS_MIN,
-      TrueSize = TS_TRUE,
-      DrawSize = TS_DRAW,
+      MinSize = TS_MIN,     //!< Minimum size
+      TrueSize = TS_TRUE,   //!< True size
+      DrawSize = TS_DRAW,   //!< Draw size
     };
 
     // ----------------------------------- REPRESENTATION -----------------------------------
