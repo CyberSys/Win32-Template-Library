@@ -68,9 +68,6 @@
     <ClInclude Include="io\LogFileWriter.hpp">
       <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="io\MemoryStream.hpp">
-      <Filter>IO</Filter>
-    </ClInclude>
     <ClInclude Include="io\RichTextWriter.hpp">
       <Filter>IO</Filter>
     </ClInclude>
@@ -637,6 +634,9 @@
     </ClInclude>
     <ClInclude Include="windows\properties\FocusProperty.hpp">
       <Filter>Windows\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="io\MemoryStream.hpp">
+      <Filter>IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

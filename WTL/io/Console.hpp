@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////
-//! \file Console.hpp
+//! \file wtl\io\Console.hpp
 //! \brief Contains the buffer, manipulators, traits, and stream type for a custom output stream  
 //! \brief  that supports writing formatted coloured text to stdout through the Win32 console API 
 //! \brief  using the existing stream manipulators provided by the standard library.
