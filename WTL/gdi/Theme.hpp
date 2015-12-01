@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\gdi\Theme.hpp
-//! \brief Supports Visual styles
+//! \brief Provides themed window drawing through Visual styles
 //! \date 30 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -296,7 +296,8 @@ namespace wtl
   template <typename T> constexpr
   Size<T> operator + (const Size<T>& sz, const ::MARGINS& m)
   {
-    return { sz.Width + m.cxLeftWidth + m.cxRightWidth, sz.Height + m.cyTopHeight + m.cyBottomHeight };
+    return { sz.Width + m.cxLeftWidth + m.cxRightWidth, 
+             sz.Height + m.cyTopHeight + m.cyBottomHeight };
   }
 
 } // namespace wtl

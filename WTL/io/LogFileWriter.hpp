@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\LogFileWriter.hpp
 //! \brief Rich Text log file writer
+//! \brief This file is now out of date and needs updating to support the newer stream mechanics
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.

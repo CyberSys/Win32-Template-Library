@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\RichTextWriter.hpp
-//! \brief Provides Microsoft Rich Text encoding
+//! \brief Provides an RTF stream writer
+//! \brief This file is now out of date and needs updating to support the newer stream mechanics
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.

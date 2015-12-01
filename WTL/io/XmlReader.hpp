@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\XmlReader.hpp
 //! \brief Provides a DOM XML reader
+//! \brief This file is now out of date and needs updating to support the newer stream mechanics
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -9,15 +10,14 @@
 #define WTL_XML_READER_HPP
 
 #include <wtl/WTL.hpp>
-
-// PUGI-XML
-#include "pugixml/pugixml.hpp"
+#include <wtl/utils/SFINAE.hpp>       //!< enable_if_floating_t
+#include "pugixml/pugixml.hpp"        //!< pugixml
 
 //! \namespace wtl - Windows template library
 namespace wtl
 {
   //////////////////////////////////////////////////////////////////////////////////////////
-	//! \struct XmlReader - Non-validating DOM XML reader
+	//! \struct XmlReader - Non-validating DOM XML reader. This class is now out of date and needs updating.
   //!
   //! \tparam STREAM - Stream type
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -53,8 +53,8 @@ namespace wtl
     //! 
     //! \throw wtl::domain_error - Unable to parse xml
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit XmlReader(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit
+    XmlReader(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
     {
       // Parse xml directly from input stream
       pugi::xml_parse_result res = Document.load_buffer_inplace(Stream.buffer(), Stream.remaining(), pugi::parse_default | pugi::parse_fragment);
@@ -68,9 +68,7 @@ namespace wtl
     // XmlReader::~XmlReader
     //! Can be polymorphic
     //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~XmlReader() 
-    {
-    }
+    virtual ~XmlReader() = default;
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
   
@@ -206,8 +204,8 @@ namespace wtl
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////
-    // XmlReader::getValue<float,double,long double>
-    //! Evaluates an X-Path query as a string, and parses a floating point value
+    // XmlReader::getValue
+    //! Evaluates an X-Path query as a string and parses the result as a floating point value
     //! 
     //! \param[in] const *key - Query that returns a string
     //! \param[in,out] &value - Output value
@@ -215,9 +213,8 @@ namespace wtl
     //! 
     //! \throw pugi::pugi_error - Query does not result in a string
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <typename KEY, typename T>
-    std::enable_if_t<std::is_floating_point<T>::value, bool>
-    getValue(KEY key, T& value) const
+    template <typename KEY, typename T, typename = enable_if_floating_t<T>>
+    bool getValue(KEY key, T& value) const
     {
       CharArray<32> str;
       
@@ -226,8 +223,8 @@ namespace wtl
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    // XmlReader::getValue<char,short,int,long,long long>
-    //! Evaluates an X-Path query as a string, and parses an integral value
+    // XmlReader::getValue
+    //! Evaluates an X-Path query as a string and parses the result as an integral or enumeration value
     //! 
     //! \param[in] const *key - Query that returns a string
     //! \param[in,out] &value - Output value
@@ -235,9 +232,8 @@ namespace wtl
     //! 
     //! \throw pugi::pugi_error - Query does not result in a string
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <typename KEY, typename T>
-    std::enable_if_t<std::is_integral<T>::value && !std::is_same<T,bool>::value, bool>
-    getValue(KEY key, T& value) const
+    template <typename KEY, typename T, typename = enable_if_numeric_t<T>>
+    bool getValue(KEY key, T& value) const
     {
       CharArray<32> str;
       

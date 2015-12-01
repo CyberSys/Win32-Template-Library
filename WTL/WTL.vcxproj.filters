@@ -65,9 +65,6 @@
     <ClInclude Include="io\BinaryWriter.hpp">
       <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="io\LocalFileStream.hpp">
-      <Filter>IO</Filter>
-    </ClInclude>
     <ClInclude Include="io\LogFileWriter.hpp">
       <Filter>IO</Filter>
     </ClInclude>

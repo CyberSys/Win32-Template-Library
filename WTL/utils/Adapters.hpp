@@ -16,8 +16,8 @@ namespace wtl
 {
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct accumulate_t - Function object that sums each element
-  //! \tparam ELEM - Type of the elements / Type of resultant sum
-  //!                    *TYPE MUST IMPLEMENT += OPERATOR*
+  //!
+  //! \tparam ELEM - Type of the elements and resultant sum (Must overload the += operator)
   //!
   //! \remarks Clients must pass this by reference since it maintains state
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ namespace wtl
   {
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    mutable ELEM Sum;     //!< Resultant sum
+    ELEM Sum;     //!< Resultant sum
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -55,28 +55,29 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // accumulate_t::operator()
+    // accumulate_t::operator() 
     //! Sums the value of each element
     //!
     //! \param[in,out] &d - Element
     //! \return ELEM - Sum accumulated so far
     /////////////////////////////////////////////////////////////////////////////////////////
-    ELEM operator()(const ELEM& d) const
+    ELEM operator()(const ELEM& d) 
     {
       return Sum += d;
     }
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::accumulate
-  //! Convenience function for creating accumulate function object
+  // wtl::accumulate
+  //! Object generator function for creating accumulate function object
   //!
   //! \tparam ELEM - Type of elements / Type of resultant sum
+  //!
   //! \param[in] &seed - Accumulator seed value
   //! \return accumulate_t<ELEM> - Desired adapter
   //////////////////////////////////////////////////////////////////////////////////////////
   template <class ELEM>
-  inline accumulate_t<ELEM> accumulate(const ELEM& seed)
+  accumulate_t<ELEM> accumulate(const ELEM& seed)
   {
     return accumulate_t<ELEM>(seed);
   }
@@ -85,7 +86,7 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct compose_f_gx_t - Composes one function object within another
+  //! \struct compose_f_gx_t - Composes one function object, gx() within another, fx(), generating y = fx(gx())
   //!
   //! \tparam FIRST - First operation applied
   //! \tparam SECOND - Second operation applied
@@ -95,6 +96,12 @@ namespace wtl
                                                      typename SECOND::result_type>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+
+    //! \alias argument_type - Inherit argument type
+    using argument_type = typename FIRST::argument_type;
+
+    //! \alias result_type - Inherit argument type
+    using result_type = typename SECOND::result_type;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
@@ -145,9 +152,9 @@ namespace wtl
     //! Execute composition adapter
     //!
     //! \param[in] &x - Input to first function
-    //! \return SECOND::result_type - Result of second operation f(g(x))
+    //! \return result_type - Result of second operation f(g(x))
     /////////////////////////////////////////////////////////////////////////////////////////
-    typename SECOND::result_type operator() (const typename FIRST::argument_type& x) const
+    result_type operator() (const argument_type& x) const
     {
       return f( g(x) );
     }
@@ -157,17 +164,18 @@ namespace wtl
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::compose_f_gx
-  //! Convenience function for creating compose_f_gx adapter
+  // wtl::compose_f_gx
+  //! Object generator function for creating compose_f_gx adapter
   //!
   //! \tparam FIRST - Type of function g(x)
   //! \tparam SECOND - Type of function f(x)
+  //! 
   //! \param[in] &g - Function g(x)
   //! \param[in] &f - Function f(x)
   //! \return compose_f_gx_t<FIRST,SECOND> - Desired adapter
   //////////////////////////////////////////////////////////////////////////////////////////
   template <class FIRST, class SECOND>
-  inline compose_f_gx_t<FIRST,SECOND> compose_f_gx(const FIRST& g, const SECOND& f)
+  compose_f_gx_t<FIRST,SECOND> compose_f_gx(const FIRST& g, const SECOND& f)
   {
     return compose_f_gx_t<FIRST,SECOND>(g,f);
   }
@@ -264,12 +272,13 @@ namespace wtl
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::compose_f_gx_hx
-  //! Convenience function for creating compose_f_gx_hx adapter
+  // wtl::compose_f_gx_hx
+  //! Object generator function for creating compose_f_gx_hx adapter
   //!
   //! \tparam OPERATION - Binary function
   //! \tparam LEFT - Unary function, used as input for left-hand-side
   //! \tparam RIGHT - Unary function, used as input for right-hand-side
+  //! 
   //! \param[in] &g - Unary g(x)
   //! \param[in] &f - Binary f(x,y)
   //! \param[in] &h - Unary h(x)
@@ -338,12 +347,13 @@ namespace wtl
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::execute_method
-  //! Creates a function object adapter that invokes a method of an element
+  // wtl::execute_method
+  //! Object generator function for creating a function object adapter that invokes a method of an element
   //!
   //! \tparam RESULT - Method result type
   //! \tparam TYPE - Object type
   //! \tparam PARAM - Parameter type
+  //! 
   //! \param[in] *m - Method pointer
   //! \param[in] &p - Parameter used as input to method
   //! \return execute_method_t<RESULT,TYPE,PARAM> - Adapter that invokes a method of an element
@@ -418,12 +428,13 @@ namespace wtl
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::execute_upon
-  //! Convenience function for creating execute_upon adapter
+  // wtl::execute_upon
+  //! Object generator function for creating execute_upon adapter
   //!
   //! \tparam RESULT - Method result type
   //! \tparam TYPE - Object type
   //! \tparam PARAM - Argument type
+  //! 
   //! \param[in,out] &obj - Object instance
   //! \param[in] m - Pointer to class method
   //! \return execute_upon_t<RESULT,TYPE,PARAM> - Desired adapter
@@ -438,8 +449,7 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct if_then_t - Unary operation that executes a function upon operands
-  //!                     that satisfy a predicate.
+  //! \struct if_then_t - Unary operation that executes a function upon operands that satisfy a predicate.
   //!
   //! \tparam PRED - Unary predicate
   //! \tparam FUNC - Unary function
@@ -515,11 +525,12 @@ namespace wtl
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::if_then
-  //! Convenience function for creating if_then adapter
+  // wtl::if_then
+  //! Object generator function for creating if_then adapter
   //!
   //! \tparam PRED - Type of predicate p(x)
   //! \tparam FUNC - Type of function f(x)
+  //! 
   //! \param[in] &p - Predicate p(x)
   //! \param[in] &f - Function f(x)
   //! \return if_then_t<PRED,FUNC> - Desired adapter
@@ -557,8 +568,7 @@ namespace wtl
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct select_field_t
-  //! Unary function object adapater that returns the value of an accessible field of its input
+  //! \struct select_field_t - Unary function object adapater that returns the value of an accessible field of its input
   //!
   //! \tparam STRUCT - Class/structure type
   //! \tparam FIELD - Field type
@@ -612,11 +622,12 @@ namespace wtl
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // ::select_field
-  //! Convenience function for creating select_field adapter
+  // wtl::select_field
+  //! Object generator function for creating select_field adapter
   //!
   //! \tparam STRUCT - Class/structure type
   //! \tparam FIELD - Field type
+  //! 
   //! \param[in] &field - Field pointer
   //! \return select_field_t<STRUCT,FIELD> - Desired adapter
   //////////////////////////////////////////////////////////////////////////////////////////

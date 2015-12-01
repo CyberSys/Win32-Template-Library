@@ -57,7 +57,6 @@
     <ClInclude Include="io\BinaryReader.hpp" />
     <ClInclude Include="io\BinaryWriter.hpp" />
     <ClInclude Include="io\Console.hpp" />
-    <ClInclude Include="io\LocalFileStream.hpp" />
     <ClInclude Include="io\LogFileWriter.hpp" />
     <ClInclude Include="io\MemoryStream.hpp" />
     <ClInclude Include="io\RichTextWriter.hpp" />

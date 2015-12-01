@@ -148,7 +148,7 @@ namespace wtl
   
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct DeviceContext - Encapsulates a device context
+  //! \struct DeviceContext - Encapsulates a device context and provides automatic object management
   /////////////////////////////////////////////////////////////////////////////////////////
   struct DeviceContext : ObjectStack<HBrush>, 
                          ObjectStack<HPen>,
