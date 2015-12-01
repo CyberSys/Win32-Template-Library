@@ -286,7 +286,7 @@ namespace wtl
         args.Graphics.draw(command->icon(), iconRect);
         
         //! Draw text
-        itemRect.Left = iconRect.Right + Metrics::WindowEdge.Width; 
+        itemRect.Left = iconRect.Right + 2*Metrics::WindowEdge.Width; 
         theme.write(args.Graphics, MENU_POPUPITEM, itemState, command->name(), itemRect);
       }
 

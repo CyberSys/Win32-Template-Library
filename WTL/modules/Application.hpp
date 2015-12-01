@@ -50,6 +50,8 @@ namespace wtl
     //! \alias resource_t - Define resource id type
     using resource_t = ResourceId<encoding>;
     
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
     // ------------------------------------ CONSTRUCTION ------------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -117,8 +119,6 @@ namespace wtl
       return msgpump_base::run(mode);
     }
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
   };
 }
 

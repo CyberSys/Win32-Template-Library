@@ -32,11 +32,11 @@ namespace wtl
     // [EXISTS] Query state iff button exists
     if (this->Window.exists())
     {
-      int32_t s = this->Window.template send<ButtonMessage::GetState>().Result;
-      value_t val = enum_cast<value_t>(s);
-      cdebug << "Value=" << val << std::endl;
-      return val;
-      //return enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result ); 
+      // Debug
+      value_t val = enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result );
+      cdebug << object_info(__func__, "ButtonMessage::GetState", val) << std::endl;
+
+      return enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result ); 
     }
 
     // Return initial value

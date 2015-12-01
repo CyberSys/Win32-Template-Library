@@ -40,37 +40,37 @@ namespace wtl
   const HBrush  StockBrush::Null(StockObject::NullBrush);     //!< Special: Null brush
 
   //! Stock system colour brushes
-  const HBrush  StockBrush::ScrollBar(SystemColour::ScrollBar);			                          //!< Scroll bar gray area.
-  const HBrush  StockBrush::Background(SystemColour::Background);			                        //!< Desktop.
-  const HBrush  StockBrush::ActiveCaption(SystemColour::ActiveCaption);			                  //!< Active window title bar. 
-  const HBrush  StockBrush::InactiveCaption(SystemColour::InactiveCaption);			              //!< Inactive window caption. 
-  const HBrush  StockBrush::Menu(SystemColour::Menu);			                                    //!< Menu background.
-  const HBrush  StockBrush::Window(SystemColour::Window);			                                //!< Window background.
-  const HBrush  StockBrush::WindowFrame(SystemColour::WindowFrame);			                      //!< Window frame.
-  const HBrush  StockBrush::MenuText(SystemColour::MenuText);			                            //!< Text in menus.
-  const HBrush  StockBrush::WindowText(SystemColour::WindowText);			                        //!< Text in windows.
-  const HBrush  StockBrush::CaptionText(SystemColour::CaptionText);			                      //!< Text in caption, size box, and scroll bar arrow box.
-  const HBrush  StockBrush::ActiveBorder(SystemColour::ActiveBorder);			                    //!< Active window border.
-  const HBrush  StockBrush::InactiveBorder(SystemColour::InactiveBorder);			                //!< Inactive window border.
-  const HBrush  StockBrush::AppWorkspace(SystemColour::AppWorkspace);			                    //!< Background color of multiple document interface (MDI) applications.
-  const HBrush  StockBrush::Highlight(SystemColour::Highlight);			                          //!< Item(s) selected in a control.
-  const HBrush  StockBrush::HighlightText(SystemColour::HighlightText);			                  //!< Text of item(s) selected in a control.
-  const HBrush  StockBrush::BtnFace(SystemColour::BtnFace);			                              //!< Face color for three-dimensional display elements and for dialog box backgrounds.
-  const HBrush  StockBrush::BtnShadow(SystemColour::BtnShadow);			                          //!< Shadow color for three-dimensional display elements (for edges facing away from the light source).
-  const HBrush  StockBrush::GrayText(SystemColour::GrayText);			                            //!< Grayed (disabled) text.
-  const HBrush  StockBrush::BtnText(SystemColour::BtnText);			                              //!< Text on push buttons.
-  const HBrush  StockBrush::InactiveCaptionText(SystemColour::InactiveCaptionText);			      //!< Color of text in an inactive caption.
-  const HBrush  StockBrush::BtnHighlight(SystemColour::BtnHighlight);			                    //!< Highlight color for three-dimensional display elements (for edges facing the light source.)
-  const HBrush  StockBrush::BtnDkShadow(SystemColour::BtnDkShadow);			                      //!< Dark shadow for three-dimensional display elements.
-  const HBrush  StockBrush::BtnLight(SystemColour::BtnLight);			                            //!< Light color for three-dimensional display elements (for edges facing the light source.)
-  const HBrush  StockBrush::InfoText(SystemColour::InfoText);			                            //!< Text color for tooltip controls.
-  const HBrush  StockBrush::InfoBk(SystemColour::InfoBk);			                                //!< Background color for tooltip controls.
-  const HBrush  StockBrush::Hotlight(SystemColour::Hotlight);			                            //!< [Windows 5.00] Color for a hyperlink or hot-tracked item.
+  const HBrush  StockBrush::ActiveBorder(SystemColour::ActiveBorder);			                    //!< [Windows 4.00] Active window border.
+  const HBrush  StockBrush::ActiveCaption(SystemColour::ActiveCaption);			                  //!< [Windows 4.00] Active window title bar. 
+  const HBrush  StockBrush::AppWorkspace(SystemColour::AppWorkspace);			                    //!< [Windows 4.00] Background color of multiple document interface (MDI) applications.
+  const HBrush  StockBrush::Background(SystemColour::Background);			                        //!< [Windows 4.00] Desktop.
+  const HBrush  StockBrush::ButtonDkShadow(SystemColour::BtnDkShadow);			                  //!< [Windows 4.00] Dark shadow for three-dimensional display elements.
+  const HBrush  StockBrush::ButtonFace(SystemColour::BtnFace);			                          //!< [Windows 4.00] Face color for three-dimensional display elements and for dialog box backgrounds.
+  const HBrush  StockBrush::ButtonHighlight(SystemColour::BtnHighlight);			                //!< [Windows 4.00] Highlight color for three-dimensional display elements (for edges facing the light source.)
+  const HBrush  StockBrush::ButtonLight(SystemColour::BtnLight);			                        //!< [Windows 4.00] Light color for three-dimensional display elements (for edges facing the light source.)
+  const HBrush  StockBrush::ButtonShadow(SystemColour::BtnShadow);			                      //!< [Windows 4.00] Shadow color for three-dimensional display elements (for edges facing away from the light source).
+  const HBrush  StockBrush::ButtonText(SystemColour::BtnText);			                          //!< [Windows 4.00] Text on push buttons.
+  const HBrush  StockBrush::CaptionText(SystemColour::CaptionText);			                      //!< [Windows 4.00] Text in caption, size box, and scroll bar arrow box.
   const HBrush  StockBrush::GradientActiveCaption(SystemColour::GradientActiveCaption);			  //!< [Windows 5.00] Right side color in the color gradient of an active window's title bar. 
   const HBrush  StockBrush::GradientInactiveCaption(SystemColour::GradientInactiveCaption);		//!< [Windows 5.00] Right side color in the color gradient of an inactive window's title bar. 
-  const HBrush  StockBrush::MenuHilight(SystemColour::MenuHilight);			                      //!< [Windows 5.01] The color used to highlight menu items when the menu appears as a flat menu
+  const HBrush  StockBrush::GrayText(SystemColour::GrayText);			                            //!< [Windows 4.00] Grayed (disabled) text.
+  const HBrush  StockBrush::Highlight(SystemColour::Highlight);			                          //!< [Windows 4.00] Item(s) selected in a control.
+  const HBrush  StockBrush::HighlightText(SystemColour::HighlightText);			                  //!< [Windows 4.00] Text of item(s) selected in a control.
+  const HBrush  StockBrush::Hotlight(SystemColour::Hotlight);			                            //!< [Windows 5.00] Color for a hyperlink or hot-tracked item.
+  const HBrush  StockBrush::InactiveBorder(SystemColour::InactiveBorder);			                //!< [Windows 4.00] Inactive window border.
+  const HBrush  StockBrush::InactiveCaption(SystemColour::InactiveCaption);			              //!< [Windows 4.00] Inactive window caption. 
+  const HBrush  StockBrush::InactiveCaptionText(SystemColour::InactiveCaptionText);			      //!< [Windows 4.00] Color of text in an inactive caption.
+  const HBrush  StockBrush::InfoBk(SystemColour::InfoBk);			                                //!< [Windows 4.00] Background color for tooltip controls.
+  const HBrush  StockBrush::InfoText(SystemColour::InfoText);			                            //!< [Windows 4.00] Text color for tooltip controls.
+  const HBrush  StockBrush::Menu(SystemColour::Menu);			                                    //!< [Windows 4.00] Menu background.
+  const HBrush  StockBrush::MenuText(SystemColour::MenuText);			                            //!< [Windows 4.00] Text in menus.
   const HBrush  StockBrush::MenuBar(SystemColour::MenuBar);			                              //!< [Windows 5.01] The background color for the menu bar when menus appear as flat menus           
-
+  const HBrush  StockBrush::MenuHilight(SystemColour::MenuHilight);			                      //!< [Windows 5.01] The color used to highlight menu items when the menu appears as a flat menu
+  const HBrush  StockBrush::ScrollBar(SystemColour::ScrollBar);			                          //!< [Windows 4.00] Scroll bar gray area.
+  const HBrush  StockBrush::Window(SystemColour::Window);			                                //!< [Windows 4.00] Window background.
+  const HBrush  StockBrush::WindowFrame(SystemColour::WindowFrame);			                      //!< [Windows 4.00] Window frame.
+  const HBrush  StockBrush::WindowText(SystemColour::WindowText);			                        //!< [Windows 4.00] Text in windows.
+  
   //! Stock fonts
   const HFont  StockFont::System(StockObject::SystemFixedFont);
   const HFont  StockFont::Tooltip(c_str(L"MS Shell Dlg 2"), DeviceContext::ScreenDC.getFontHeight(8));

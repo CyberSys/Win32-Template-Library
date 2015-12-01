@@ -89,7 +89,7 @@ namespace wtl
     //! \param[in,out] &wnd - Owner window
     //! \param[in] &&... args - [optional] Property implementation constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS> 
+    template <typename... ARGS> explicit
     Property(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
     {}
 
@@ -126,7 +126,18 @@ namespace wtl
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Property::operator value_t const
+    //! (Implicit) User conversion to value
+    //! 
+    //! \return value_t - Current value
+    /////////////////////////////////////////////////////////////////////////////////////////
+    operator value_t() 
+    {
+      return this->get();
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Property::operator =
     //! Assignment operator

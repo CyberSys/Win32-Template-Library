@@ -196,6 +196,8 @@
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />
     <ClInclude Include="windows\properties\EnabledProperty.h" />
     <ClInclude Include="windows\properties\EnabledProperty.hpp" />
+    <ClInclude Include="windows\properties\FocusProperty.h" />
+    <ClInclude Include="windows\properties\FocusProperty.hpp" />
     <ClInclude Include="windows\properties\FontProperty.h" />
     <ClInclude Include="windows\properties\FontProperty.hpp" />
     <ClInclude Include="windows\properties\IdentProperty.h" />

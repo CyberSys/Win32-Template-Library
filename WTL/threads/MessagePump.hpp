@@ -56,7 +56,7 @@ namespace wtl
     };
     
     // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
+  private:
     List<window_t*>   Dialogs;    //!< Currently active modeless dialogs
     window_t          Window;     //!< Main thread window
     PumpState         State;      //!< Current state
@@ -115,7 +115,38 @@ namespace wtl
     //! \param[in] mode - Initial display mode
     //! \return int32_t - Return code
     /////////////////////////////////////////////////////////////////////////////////////////
-    virtual int32_t  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
+    int32_t  run(ShowWindowFlags mode = ShowWindowFlags::ShowNormal)
+    {
+      return onRun(mode);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // MessagePump::window
+    //! Access the main window
+    //! 
+    //! \return window_t& - Reference to thread window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    window_t& window()
+    {
+      return Window;
+    }
+
+  private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // MessagePump::onExit
+    //! Called once after message pump finishes
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual void onExit()
+    {}
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // MessagePump::onRun
+    //! Executes the message pump
+    //! 
+    //! \param[in] mode - Initial display mode
+    //! \return int32_t - Return code
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual int32_t  onRun(ShowWindowFlags mode)
     {
       MSG msg;      //!< Current message
 
@@ -180,7 +211,6 @@ namespace wtl
       }
     }
 
-  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // MessagePump::onStart
     //! Called once before message pump starts
@@ -189,14 +219,6 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual void onStart(ShowWindowFlags mode)
     {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // MessagePump::onExit
-    //! Called once after message pump finishes
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual void onExit()
-    {}
-        
   };
 
 }

@@ -31,7 +31,7 @@
 #include <wtl/windows/Property.hpp>                               //!< Property
 #include <wtl/windows/WindowClass.hpp>                            //!< WindowClass
 #include <wtl/windows/WindowMenu.hpp>                             //!< WindowMenu
-#include <wtl/windows/WindowSkin.hpp>                             //!< IWindowSkin
+#include <wtl/windows/WindowSkin.hpp>                             //!< IWindowSkin, SkinFactory
 #include <wtl/windows/SubClass.hpp>                               //!< SubClass
 #include <wtl/windows/events/CommandEvent.hpp>                    //!< CommandEvent
 #include <wtl/windows/events/CloseWindowEvent.hpp>                //!< CloseWindowEvent
@@ -53,6 +53,7 @@
 #include <wtl/windows/properties/ClientRectProperty.h>            //!< ClientRectProperty
 #include <wtl/windows/properties/EnabledProperty.h>               //!< EnabledProperty
 #include <wtl/windows/properties/FontProperty.h>                  //!< FontProperty
+#include <wtl/windows/properties/FocusProperty.h>                 //!< FocusProperty
 #include <wtl/windows/properties/IdentProperty.h>                 //!< IdentProperty
 #include <wtl/windows/properties/PositionProperty.h>              //!< PositionProperty
 #include <wtl/windows/properties/WindowRectProperty.h>            //!< WindowRectProperty
@@ -267,6 +268,7 @@ namespace wtl
     ClientRectProperty<encoding>    ClientRect;     //!< Client rectangle property
     EnabledProperty<encoding>       Enabled;        //!< Window enabled property
     FontProperty<encoding>          Font;           //!< Window font property
+    FocusProperty<encoding>         Focus;          //!< Keyboard focus property
     IdentProperty<encoding>         Ident;          //!< Child Window Id property
     PositionProperty<encoding>      Position;       //!< Window position property
     SizeProperty<encoding>          Size;           //!< Window size property
@@ -295,6 +297,7 @@ namespace wtl
                Children(*this),
                Enabled(*this, true),
                Font(*this, StockFont::Window),
+               Focus(*this),
                Ident(*this, zero<WindowId>()),
                IsMouseOver(false),
                Handle(defvalue<HWnd>()),
@@ -680,6 +683,15 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Window::focus
+    //! Sets keyboard focus to this window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void focus()
+    {
+      ::SetFocus(Handle);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Window::invalidate
     //! Invalidates the entire client rectangle
     //! 
@@ -1011,6 +1023,7 @@ namespace wtl
 #include <wtl/windows/properties/ClientRectProperty.hpp>        //!< ClientRectProperty
 #include <wtl/windows/properties/EnabledProperty.hpp>           //!< EnabledProperty
 #include <wtl/windows/properties/FontProperty.hpp>              //!< FontProperty
+#include <wtl/windows/properties/FocusProperty.hpp>             //!< FocusProperty
 #include <wtl/windows/properties/IdentProperty.hpp>             //!< IdentProperty
 #include <wtl/windows/properties/PositionProperty.hpp>          //!< PositionProperty
 #include <wtl/windows/properties/WindowRectProperty.hpp>        //!< WindowRectProperty

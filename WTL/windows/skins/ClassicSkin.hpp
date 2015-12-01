@@ -35,8 +35,8 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    //! \var Instance - Temporary singleton
-    static type Instance;
+    //! \var Instance - Singleton instance
+    static ClassicSkin<ENC> Instance;
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   private:
@@ -61,32 +61,9 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void draw(Button<ENC>& btn, DeviceContext& dc, const RectL& rc) const override
     {
+      //! TODO
     }
     
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::draw const
-    //! Draws a standard checkbox control
-    //! 
-    //! \param[in,out] &chk - CheckBox to be drawn
-    //! \param[in,out] &dc - Output device context
-    //! \param[in] const &rc - Drawing rectangle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void draw(CheckBox<ENC>& chk, DeviceContext& dc, const RectL& rc) const override
-    {
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::draw const
-    //! Fallback override for drawing a window
-    //! 
-    //! \param[in,out] &wnd - Window to be drawn
-    //! \param[in,out] &dc - Output device context
-    //! \param[in] const &rc - Drawing rectangle
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void draw(Window<ENC>& wnd, DeviceContext& dc, const RectL& rc) const override
-    {
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // ClassicSkin::measure const
     //! Measures a standard button control 
@@ -101,6 +78,19 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // ClassicSkin::draw const
+    //! Draws a standard checkbox control
+    //! 
+    //! \param[in,out] &chk - CheckBox to be drawn
+    //! \param[in,out] &dc - Output device context
+    //! \param[in] const &rc - Drawing rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void draw(CheckBox<ENC>& chk, DeviceContext& dc, const RectL& rc) const override
+    {
+      //! TODO
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // ClassicSkin::measure const
     //! Measures a standard CheckBox control 
     //! 
@@ -111,6 +101,19 @@ namespace wtl
     SizeL measure(CheckBox<ENC>& chk, DeviceContext& dc) const override
     {
       return {0,0};
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ClassicSkin::draw const
+    //! Fallback override for drawing a window
+    //! 
+    //! \param[in,out] &wnd - Window to be drawn
+    //! \param[in,out] &dc - Output device context
+    //! \param[in] const &rc - Drawing rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void draw(Window<ENC>& wnd, DeviceContext& dc, const RectL& rc) const override
+    {
+      //! TODO
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

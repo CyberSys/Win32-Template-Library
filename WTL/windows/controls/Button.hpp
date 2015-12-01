@@ -9,11 +9,11 @@
 #define WTL_BUTTON_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Control.hpp>                        //!< Control
+#include <wtl/windows/Control.hpp>                                //!< Control
 #include <wtl/windows/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
 #include <wtl/windows/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
 #include <wtl/windows/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
-#include <wtl/gdi/Theme.hpp>                              //!< Theme
+#include <wtl/gdi/Theme.hpp>                                      //!< Theme
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -42,12 +42,11 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
+    // Events
     ButtonClickEvent<encoding>        Click;         //!< Button click
-    //ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
-    //ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
+    //CustomDrawEvent<encoding>       CustomDraw;    //!< Custom draw
     OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
     OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
-    //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
 
     // Properties
     ButtonIconProperty<encoding>      Icon;          //!< Icon
@@ -269,8 +268,7 @@ namespace wtl
       this->invalidate();
       
       // Handle message
-      //return {MsgRoute::Unhandled, 0};
-      return {MsgRoute::Unhandled};
+      return {MsgRoute::Handled, 0};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -285,50 +283,12 @@ namespace wtl
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
       // debug
-      //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
+      //cdebug << object_info(__func__, "Ident", args.Ident, 
+      //                                "Action",args.Action, 
+      //                                "State",args.State) << std::endl;
 
-      Theme theme(this->handle(), L"Button");
-
-      // Determine state
-      PUSHBUTTONSTATES state = PBS_NORMAL;
-      if (!this->Enabled)
-        state = PBS_DISABLED;
-      else if (args.State && OwnerDrawState::Selected)
-        state = PBS_PRESSED;
-      else if (this->isMouseOver())
-        state = PBS_HOT;
-      
-      // Draw background 
-      theme.fill(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
-
-      // Query content rect
-      RectL rcContent = theme.content(args.Graphics, BP_CHECKBOX, state, args.Rect);
-
-      // Pressed: Offset drawing rect
-      if (state == PBS_PRESSED)
-        rcContent += PointL(1,1);
-
-      // Draw icon
-      if (Icon.exists()) 
-      {
-        RectL rcIcon = rcContent.arrange(Metrics::WindowIcon, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
-        args.Graphics.draw(Icon, rcIcon);
-      }
-      
-      // Calculate text rectangle
-      RectL rcText = rcContent;
-      if (Icon.exists()) 
-        rcText.Left += Metrics::WindowIcon.Width + Metrics::WindowEdge.Width;
-
-      // Draw text
-      theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rcText, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
-      
-      // [FOCUS] Draw focus rectangle
-      if (args.State && OwnerDrawState::Focus)
-      {
-        RectL rcFocus = rcContent.inflate(-Metrics::WindowEdge);
-        args.Graphics.focus(rcFocus);
-      }
+      // Draw control using current window skin
+      SkinFactory<encoding>::get()->draw(*this, args.Graphics, args.Rect);
 
       // Handle message
       return {MsgRoute::Handled, 0};
@@ -345,8 +305,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
-      // Measure button text
-      args.Size = args.Graphics.measure(this->Text());
+      // Measure control using current window skin
+      args.Size = SkinFactory<encoding>::get()->measure(*this, args.Graphics);
 
       // Handle message
       return {MsgRoute::Handled, 0};

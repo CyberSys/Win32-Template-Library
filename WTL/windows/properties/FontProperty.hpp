@@ -11,7 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/casts/BooleanCast.hpp>                 //!< BooleanCast
 #include <wtl/windows/properties/FontProperty.h>     //!< FontPropertyImpl
-#include <wtl/windows/Window.hpp>                //!< Window
+#include <wtl/windows/Window.hpp>                    //!< Window
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
@@ -60,19 +60,18 @@ namespace wtl
   //! Called during window creation to set the initial font
   //! 
   //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Returns 0 to accept window creation
+  //! \return LResult - Routing indicating message was handled 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   LResult FontPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
   {
     static constexpr bool redraw = true;
 
-    // [EXISTS] Set font iff window exists
-    if (this->Window.exists())
-      this->Window.template send<WindowMessage::SetFont>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
+    // Set new window font 
+    this->Window.template send<WindowMessage::SetFont>(opaque_cast(this->Value.get()), boolean_cast(redraw)); 
 
     // [Accept window creation]
-    return 0;
+    return {wtl::MsgRoute::Handled, 0};
   }
 } // namespace wtl
 

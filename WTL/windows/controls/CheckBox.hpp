@@ -83,54 +83,15 @@ namespace wtl
     LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) override
     { 
       // debug
-      cdebug << object_info(__func__, "Ident", args.Ident, 
-                                      "Action",args.Action, 
-                                      "Checked",this->Checked(), 
-                                      "BM_GETSTATE", enum_cast<ButtonState>( this->template send<ButtonMessage::GetState>().Result ),
-                                      "IsDlgButtonChecked", enum_cast<ButtonState>( ::IsDlgButtonChecked(*this->parent(), enum_cast(this->Ident())) ),
-                                      "State",args.State) << std::endl;
-
-      Theme theme(this->handle(), L"Button");
-        
-      // Determine state
-      CHECKBOXSTATES state = CBS_UNCHECKEDNORMAL;
-      if (!this->Enabled)
-        state = CBS_UNCHECKEDDISABLED;
-      else if (args.State && OwnerDrawState::Selected)
-        state = CBS_UNCHECKEDPRESSED;
-      else if (this->isMouseOver())
-        state = CBS_UNCHECKEDHOT;
+      //cdebug << object_info(__func__, "Ident", args.Ident, 
+      //                                "Action",args.Action, 
+      //                                "Checked",this->Checked(), 
+      //                                "BM_GETSTATE", enum_cast<ButtonState>( this->template send<ButtonMessage::GetState>().Result ),
+      //                                "IsDlgButtonChecked", enum_cast<ButtonState>( ::IsDlgButtonChecked(*this->parent(), enum_cast(this->Ident())) ),
+      //                                "State",args.State) << std::endl;
       
-      //if (this->Checked == ButtonState::Checked)  //if (args.State && OwnerDrawState::Checked)
-      //  state += (CBS_CHECKEDNORMAL-1);
-      //if (this->State && ButtonState::Checked)  
-      //  state += (CBS_CHECKEDNORMAL-1);
-      //else if (this->Checked == ButtonState::Indeterminate)
-      //  state += (CBS_MIXEDNORMAL-1);
-
-      // Query content rect
-      RectL rcContent = theme.content(args.Graphics, BP_CHECKBOX, state, args.Rect);
-
-      // Draw background
-      args.Graphics.fill(args.Rect, StockBrush::BtnFace);
-
-      // Calculate checkbox / text rectangles
-      SizeL szCheckBox = theme.measure(args.Graphics, BP_CHECKBOX, state);
-      RectL rcCheckBox = rcContent.arrange(szCheckBox, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
-      
-      // Draw checkbox
-      theme.fill(args.Graphics, BP_CHECKBOX, state, rcCheckBox);
-
-      // Draw text
-      rcContent.Left = rcCheckBox.Right + Metrics::WindowEdge.Width;
-      theme.write(args.Graphics, BP_CHECKBOX, state, this->Text(), rcContent, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
-      
-      // [FOCUS] Draw focus rectangle
-      if (args.State && OwnerDrawState::Focus)
-      {
-        RectL rcText = theme.measure(args.Graphics, BP_CHECKBOX, state, this->Text(), rcContent, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
-        args.Graphics.focus(rcText);
-      }
+      // Draw control using current window skin
+      SkinFactory<encoding>::get()->draw(*this, args.Graphics, args.Rect);
 
       // Handle message
       return {MsgRoute::Handled, 0};
@@ -147,12 +108,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) override
     { 
-      Theme theme(this->handle(), L"Button");
-
-      // Measure checkbox + text + edges
-      args.Size = theme.measure(args.Graphics, BP_CHECKBOX, CBS_UNCHECKEDNORMAL) 
-                + args.Graphics.measure(this->Text()) 
-                + SizeL(3*Metrics::WindowEdge.Width, 0);
+      // Measure control using current window skin
+      args.Size = SkinFactory<encoding>::get()->measure(*this, args.Graphics);
 
       // Handle message
       return {MsgRoute::Handled, 0};
