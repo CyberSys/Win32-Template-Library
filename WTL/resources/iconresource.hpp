@@ -113,6 +113,27 @@ namespace wtl
   };
 
   
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::icon_resource
+  //! Object generator function for creating icon resources
+  //! 
+  //! \tparam ENC - Character encoding type
+  //! \tparam IDENT - Resource identifier type
+  //! 
+  //! \param[in] id - Numeric or string icon identifier
+  //! \param[in] lang - [optional] Resource language (If unspecified, neutral is used)
+  //! \return IconResource - Icon loaded from resource table
+  //! 
+  //! \throw wtl::logic_error - Missing icon
+  //! \throw wtl::platform_error - Unable to load resource
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC, typename IDENT> 
+  IconResource icon_resource(IDENT id, LanguageId lang = LanguageId::Neutral) 
+  {
+    return IconResource(ResourceId<ENC>(id), lang);
+  }
+    
+  
 } //namespace wtl
 #endif // WTL_ICON_RESOURCES_HPP
 
