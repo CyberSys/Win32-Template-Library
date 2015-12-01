@@ -18,14 +18,14 @@ namespace wtl
   namespace
   {
     /////////////////////////////////////////////////////////////////////////////////////////
-    //! \alias button_event_args_t - Defines argument types for button control events
+    //! \alias control_event_args_t - Defines argument types for button control events
     //! 
     //! \tparam ENC - Window character encoding
     //! \tparam MSG - Window message
     //! \tparam CODE - Notification message 
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <Encoding ENC, WindowMessage MSG, ButtonNotification CODE>
-    using button_event_args_t = ControlEventArgs<ENC,MSG,ButtonNotification,CODE>;
+    //template <Encoding ENC, WindowMessage MSG, ButtonNotification CODE>
+    //using control_event_args_t = ControlEventArgs<ENC,MSG,ButtonNotification,CODE>;
   }
 
   
@@ -35,7 +35,7 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonClickEventArgs    = button_event_args_t<ENC,WindowMessage::Command,ButtonNotification::Click>;
+  template <Encoding ENC> using ButtonClickEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::Click>;
   template <Encoding ENC> using ButtonClickEvent        = Event<LResult, ButtonClickEventArgs<ENC>>;
   template <Encoding ENC> using ButtonClickEventHandler = handler_t<ButtonClickEvent<ENC>>;
 
@@ -46,7 +46,7 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonGainFocusEventArgs    = button_event_args_t<ENC,WindowMessage::Command,ButtonNotification::SetFocus>;
+  template <Encoding ENC> using ButtonGainFocusEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::SetFocus>;
   template <Encoding ENC> using ButtonGainFocusEvent        = Event<LResult, ButtonGainFocusEventArgs<ENC>>;
   template <Encoding ENC> using ButtonGainFocusEventHandler = handler_t<ButtonGainFocusEvent<ENC>>;
 
@@ -57,7 +57,7 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonLoseFocusEventArgs    = button_event_args_t<ENC,WindowMessage::Command,ButtonNotification::KillFocus>;
+  template <Encoding ENC> using ButtonLoseFocusEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::KillFocus>;
   template <Encoding ENC> using ButtonLoseFocusEvent        = Event<LResult, ButtonLoseFocusEventArgs<ENC>>;
   template <Encoding ENC> using ButtonLoseFocusEventHandler = handler_t<ButtonLoseFocusEvent<ENC>>;
 

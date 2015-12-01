@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\threads\WorkerThread.hpp
-//! \brief Background thread
+//! \brief Background thread. Eventually this will be expanded to the background worker idiom
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
