@@ -101,7 +101,7 @@ namespace wtl
       this->hSubMenu   = popup;
     }
 
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     ENABLE_COPY(MenuItemInfo);      //!< Can be shallow copied
     ENABLE_MOVE(MenuItemInfo);      //!< Can be moved

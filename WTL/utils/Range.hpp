@@ -85,7 +85,7 @@ namespace wtl
         Delimiter(delimeter)
     {}*/
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     ENABLE_COPY(delimited_range_t);     //!< Can be copied
     ENABLE_MOVE(delimited_range_t);     //!< Can be moved

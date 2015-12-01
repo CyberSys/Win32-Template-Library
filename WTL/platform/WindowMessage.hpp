@@ -269,117 +269,14 @@ namespace wtl
   //! \param[in] msg - Value representing a window message
   //! \return WindowMessage - WindowMessage representation of 'msg'
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, typename = enable_if_numeric_t<VALUE>> constexpr
-  WindowMessage  window_msg(VALUE msg) 
-  {
-    // Convert into underlying type then cast to enumeration
-    return enum_cast<WindowMessage>( static_cast<std::underlying_type_t<WindowMessage>>(msg) );
-  }
+  //template <typename VALUE, typename = enable_if_numeric_t<VALUE>> constexpr
+  //WindowMessage  window_msg(VALUE msg) 
+  //{
+  //  // Convert into underlying type then cast to enumeration
+  //  return enum_cast<WindowMessage>( static_cast<std::underlying_type_t<WindowMessage>>(msg) );
+  //}
 
 
-  //! \enum MsgRoute - Defines how a message was handled
-  enum class MsgRoute
-  {
-    Handled,      //!< Window handled message
-    Reflected,    //!< Window reflected command/notification to child window
-    Unhandled,    //!< Window ignored message
-  };
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct unhandled_result - Defines the 'Unhandled' result value for any window message
-  //! 
-  //! \tparam WM - Window message identifier
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <WindowMessage WM> 
-  struct unhandled_result //: std::integral_constant<LRESULT,static_cast<LRESULT>(-1)> 
-  {
-    static constexpr ::LRESULT value = -1; 
-  };
-
-  /*template <WindowMessage WM> 
-  struct unhandled_result<WM>::value = -1;*/
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct MsgResult - Encapsulates the result of any windows message 
-  //! 
-  //! \tparam RESULT - Message result type
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename RESULT>
-  struct MsgResult
-  {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
-    //! \alias type - Define own type
-    using type = MsgResult<RESULT>;
-  
-    // ----------------------------------- REPRESENTATION -----------------------------------
-  
-    MsgRoute  Route;        //!< Message routing
-    RESULT    Result;       //!< Message result
-
-    // ------------------------------------ CONSTRUCTION ------------------------------------
-	
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! MsgResult::MsgResult
-    //! Create unhandled result
-    /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr 
-    MsgResult() noexcept : Route(MsgRoute::Unhandled), Result(-1)
-    {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! MsgResult::MsgResult
-    //! Create handled result
-    /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr 
-    MsgResult(RESULT res) noexcept : Route(MsgRoute::Handled), Result(res)
-    {}
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! MsgResult::MsgResult
-    //! Create reflected result
-    /////////////////////////////////////////////////////////////////////////////////////////
-    constexpr 
-    MsgResult(MsgRoute route, RESULT res = -1) noexcept : Route(route), Result(res)
-    {}
-    
-    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-  public:
-    CONSTEXPR_COPY_CTOR(MsgResult);      //!< Can be deep copied at compile-time
-    CONSTEXPR_MOVE_CTOR(MsgResult);      //!< Can be moved at compile-time
-    ENABLE_COPY_ASSIGN(MsgResult);       //!< Can be assigned
-    ENABLE_MOVE_ASSIGN(MsgResult);       //!< Can be move-assigned
-    DISABLE_POLY(MsgResult);             //!< Cannot be polymorphic
-
-    // ----------------------------------- STATIC METHODS -----------------------------------
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-    
-  };
-
-  //! \alias LResult - Default window message return type
-  using LResult = MsgResult<LRESULT>;
-  
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct unhandled - Encapsulates unhandled message results
-  //! 
-  //! \tparam WM - Window message
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <WindowMessage WM> 
-  struct unhandled
-  {
-    //! \var value - 'Unhandled' window message sentinel result 
-    static const LResult value;  
-  };
-
-  
-  //! \var unhandled<WM>::value - 'Unhandled' window message sentinel result 
-  template <WindowMessage WM> 
-  const LResult  unhandled<WM>::value = LResult(MsgRoute::Unhandled, unhandled_result<WM>::value);
-  
 } //namespace wtl
 #endif // WTL_WINDOW_MESSAGE_HPP
 

@@ -38,9 +38,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::ShowWindow;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     bool            Showing;      //!< Whether window is being shown or hidden
@@ -59,7 +56,7 @@ namespace wtl
                                         Status(opaque_cast<ShowWindowType>(l))
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved

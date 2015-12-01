@@ -64,7 +64,7 @@ namespace wtl
     {
     }
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     ENABLE_COPY_CTOR(PropertyImpl);       //!< Can be cloned
     DISABLE_COPY_ASSIGN(PropertyImpl);    //!< Contains a reference type

@@ -11,7 +11,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/casts/EnumCast.hpp>             //!< EnumCast
-#include <wtl/windows/CommandId.hpp>         //!< CommandId
+#include <wtl/windows/CommandId.hpp>          //!< CommandId
 #include <wtl/windows/Command.hpp>            //!< CommandSource/CommandState
 #include <wtl/windows/EventArgs.hpp>          //!< EventArgs
 
@@ -41,9 +41,11 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::Command;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    CommandId      Ident;      //!< Command id 
+    CommandSource  Source;     //!< How command was raised
+
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +59,7 @@ namespace wtl
                                         Source(enum_cast<CommandSource>(HIWORD(w)))
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved
@@ -68,11 +70,6 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    CommandId      Ident;      //!< Command id 
-    CommandSource  Source;     //!< How command was raised
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////

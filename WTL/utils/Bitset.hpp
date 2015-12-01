@@ -102,7 +102,7 @@ namespace wtl
     explicit constexpr Bitset(mask_t m) : Mask(m)
     {}
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     CONSTEXPR_COPY_CTOR(Bitset);      //!< Can be deep copied at compile-time
     CONSTEXPR_MOVE_CTOR(Bitset);      //!< Can be moved at compile-time

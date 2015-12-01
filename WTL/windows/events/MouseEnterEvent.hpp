@@ -38,9 +38,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::MouseEnter;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-    
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////

@@ -84,7 +84,7 @@ namespace wtl
       this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
     }
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(Button);     //!< Cannot be copied
     ENABLE_MOVE(Button);      //!< Can be moved
@@ -231,7 +231,7 @@ namespace wtl
         cdebug << caught_exception("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
-        return MsgRoute::Unhandled;
+        return {MsgRoute::Unhandled, -1};
       }
     }
     

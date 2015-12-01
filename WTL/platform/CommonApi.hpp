@@ -13,7 +13,9 @@
 #include <wtl/utils/Handle.hpp>                 //!< Handle
 #include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
 #include <wtl/traits/WindowTraits.hpp>          //!< HWnd
+#include <wtl/traits/MessageTraits.hpp>         //!< message_traits
 #include <wtl/platform/WindowMessage.hpp>       //!< WindowMessage
+#include <wtl/platform/MsgResult.hpp>           //!< MsgResult, MsgRoute
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -21,27 +23,27 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::send_message
-  //! Send a message to a window
+  //! Send a message of any type to a window
   //! 
   //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
+  //! \tparam MESSAGE - Window message type
   //! \tparam FIRST - [optional] First parameter type
   //! \tparam SECOND - [optional] Second parameter type
   //!
+  //! \param[in] msg - Window message
   //! \param[in] const& wnd - Destination window
   //! \param[in] w - [optional] First parameter
   //! \param[in] l - [optional] Second parameter
   //! \return LResult - Message result and routing
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
-  LResult send_message(const HWnd& wnd, FIRST w = 0, SECOND l = 0)
+  template <Encoding ENC, typename MESSAGE, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
+  LResult send_message(MESSAGE msg, const HWnd& wnd, FIRST w = 0, SECOND l = 0)
   {
-    // Send to target window and determine whether handled
-    ::LRESULT result = WinAPI<ENC>::sendMessage(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
-    MsgRoute  route  = (result != unhandled_result<WM>::value ? MsgRoute::Handled : MsgRoute::Unhandled);
+    // Send message
+    ::LRESULT result = WinAPI<ENC>::sendMessage(wnd, enum_cast(msg), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
 
-    // Return result & routing
-    return { route , result };
+    // Deduce and return routing from result
+    return { message_traits<MESSAGE>::routing(msg, result), result };
   }
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -49,19 +51,20 @@ namespace wtl
   //! Post a message to a window
   //! 
   //! \tparam ENC - Window character encoding
-  //! \tparam WM - Window message
+  //! \tparam MESSAGE - Window message type
   //! \tparam FIRST - [optional] First parameter type
   //! \tparam SECOND - [optional] Second parameter type
   //!
+  //! \param[in] msg - Window message
   //! \param[in] const& wnd - Destination window
   //! \param[in] w - [optional] First parameter
   //! \param[in] l - [optional] Second parameter
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
-  void post_message(const HWnd& wnd, FIRST w = 0, SECOND l = 0)
+  template <Encoding ENC, typename MESSAGE, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
+  void post_message(MESSAGE msg, const HWnd& wnd, FIRST w = 0, SECOND l = 0)
   {
     // Post to target window 
-    WinAPI<ENC>::postMessage(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
+    WinAPI<ENC>::postMessage(wnd, enum_cast(msg), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////

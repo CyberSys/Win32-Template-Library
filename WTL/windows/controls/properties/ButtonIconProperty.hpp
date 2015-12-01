@@ -47,7 +47,7 @@ namespace wtl
   {
     // [EXISTS] Set icon iff button exists
     if (this->exists() && this->Window.exists())
-      this->Window.template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(this->Value.get())); 
+      this->Window.send(ButtonMessage::SetImage, IMAGE_ICON, opaque_cast(this->Value.get())); 
 
     // Accept button creation
     return 0;
@@ -64,7 +64,7 @@ namespace wtl
   {
     // [EXISTS] Set icon iff button exists
     if (this->Window.exists())
-      this->Window.template send<ButtonMessage::SetImage>(IMAGE_ICON, opaque_cast(icon.get())); 
+      this->Window.send(ButtonMessage::SetImage, IMAGE_ICON, opaque_cast(icon.get())); 
     
     // Updated ref-counted shared handle
     base::set(icon);

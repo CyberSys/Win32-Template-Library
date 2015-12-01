@@ -36,9 +36,10 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::SetFocus;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    HWnd    Window;       //!< Weak-reference to window that lost focus [may be empty]
+
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +52,7 @@ namespace wtl
     EventArgs(::WPARAM w, ::LPARAM l) : Window(reinterpret_cast<::HWND>(w), AllocType::WeakRef)
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved
@@ -63,9 +64,6 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    HWnd    Window;       //!< Weak-reference to window that lost focus [may be empty]
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////

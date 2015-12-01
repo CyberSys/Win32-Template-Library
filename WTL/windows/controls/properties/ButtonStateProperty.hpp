@@ -33,10 +33,10 @@ namespace wtl
     if (this->Window.exists())
     {
       // Debug
-      value_t val = enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result );
+      value_t val = enum_cast<value_t>( this->Window.send(ButtonMessage::GetState).Result );
       cdebug << object_info(__func__, "ButtonMessage::GetState", val) << std::endl;
 
-      return enum_cast<value_t>( this->Window.template send<ButtonMessage::GetState>().Result ); 
+      return enum_cast<value_t>( this->Window.send(ButtonMessage::GetState).Result ); 
     }
 
     // Return initial value

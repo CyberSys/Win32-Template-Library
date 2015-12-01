@@ -54,7 +54,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     CommandQueue() = default;
     
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(CommandQueue);          //!< Cannot be copied
     ENABLE_MOVE_CTOR(CommandQueue);      //!< Can be moved 

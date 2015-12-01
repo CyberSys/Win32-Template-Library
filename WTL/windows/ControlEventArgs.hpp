@@ -58,9 +58,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::Command;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-
     // ----------------------------------- REPRESENTATION -----------------------------------
 
     WindowId  Ident;     //!< Originator window id
@@ -93,7 +90,7 @@ namespace wtl
                                                                                                      Message(static_cast<event_t>(r.Message))
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   
     ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
@@ -112,7 +109,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,WindowMessage::ReflectCommand>(Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
+      return send_message<encoding>(WindowMessage::ReflectCommand, Sender, opaque_cast(Ident,Message), opaque_cast(Sender.get()));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -147,9 +144,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::Notify;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     ::NMHDR&  Header;    //!< Message header (NB: Must be initialized before public members)
@@ -188,7 +182,7 @@ namespace wtl
                                                                                                     Message(static_cast<event_t>(r.Message))
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   
     ENABLE_COPY(ControlEventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
@@ -207,7 +201,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,WindowMessage::ReflectNotify>(Sender, Ident, opaque_cast(Header));
+      return send_message<encoding>(WindowMessage::ReflectNotify, Sender, Ident, opaque_cast(Header));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

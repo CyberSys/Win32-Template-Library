@@ -39,9 +39,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::Paint;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-
     //! \struct PaintCycle - Encapsulates the paint cycle for a window's client area
     struct PaintCycle : PAINTSTRUCT
     {
@@ -76,7 +73,7 @@ namespace wtl
         ::EndPaint(Window, static_cast<base*>(this));
       }
       
-	    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
       const HWnd&   Window;     //!< Handle of window being painted
     };
@@ -112,7 +109,7 @@ namespace wtl
                                                          Restore(Data.fRestore != False)
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved

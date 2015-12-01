@@ -39,9 +39,11 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::MouseHover;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-    
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    PointL        Position;       //!< Cursor position [in client co-ordinates]
+    MouseKeyFlag  State;          //!< State of keys and mouse buttons
+
     // ------------------------------------- CONSTRUCTION -----------------------------------
 	
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -67,10 +69,6 @@ namespace wtl
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
-    // ----------------------------------- REPRESENTATION -----------------------------------
-
-    PointL        Position;       //!< Cursor position [in client co-ordinates]
-    MouseKeyFlag  State;          //!< State of keys and mouse buttons
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////

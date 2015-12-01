@@ -68,7 +68,7 @@ namespace wtl
       OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &ComboBox::onOwnerMeasure);
     }
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(ComboBox);     //!< Cannot be copied
     ENABLE_MOVE(ComboBox);      //!< Can be moved

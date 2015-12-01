@@ -58,7 +58,7 @@ namespace wtl
     Edit(WindowId id) : base(id)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop | EditStyle::Left;
+      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop|WindowStyle::VScroll|WindowStyle::Border | EditStyle::Left;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
@@ -67,7 +67,7 @@ namespace wtl
       this->SubClasses.push_back(getNativeSubClass());
     }
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(Edit);     //!< Cannot be copied
     ENABLE_MOVE(Edit);      //!< Can be moved
@@ -204,7 +204,7 @@ namespace wtl
         cdebug << caught_exception("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
-        return MsgRoute::Unhandled;
+        return {MsgRoute::Unhandled, -1};
       }
     }
     

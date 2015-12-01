@@ -33,12 +33,12 @@ namespace wtl
     if (this->Window.exists())
     {
       // Debug
-      cdebug << object_info(__func__, "ButtonMessage::GetCheck", enum_cast<value_t>(this->Window.template send<ButtonMessage::GetCheck>().Result),
-                                      "ButtonMessage::GetState", enum_cast<value_t>(this->Window.template send<ButtonMessage::GetState>().Result),
+      cdebug << object_info(__func__, "ButtonMessage::GetCheck", enum_cast<value_t>(this->Window.send(ButtonMessage::GetCheck).Result),
+                                      "ButtonMessage::GetState", enum_cast<value_t>(this->Window.send(ButtonMessage::GetState).Result),
                                       "IsDlgButtonChecked()", ::IsDlgButtonChecked(*this->Window.parent(), enum_cast(this->Window.Ident())) ) 
              << std::endl;
 
-      return enum_cast<value_t>( this->Window.template send<ButtonMessage::GetCheck>().Result ); 
+      return enum_cast<value_t>( this->Window.send(ButtonMessage::GetCheck).Result ); 
     }
 
     // Return initial value
@@ -59,7 +59,7 @@ namespace wtl
   {
     // [EXISTS] Set check iff button exists
     if (this->Window.exists())
-      this->Window.template send<ButtonMessage::SetCheck>(enum_cast(base::get())); 
+      this->Window.send(ButtonMessage::SetCheck, enum_cast(base::get())); 
 
     // Accept button creation
     return {MsgRoute::Handled, 0};
@@ -76,7 +76,7 @@ namespace wtl
   {
     // [EXISTS] Set state iff button exists
     if (this->Window.exists())
-      this->Window.template send<ButtonMessage::SetCheck>(enum_cast(state)); 
+      this->Window.send(ButtonMessage::SetCheck, enum_cast(state)); 
     
     // Save initial state
     base::set(state);

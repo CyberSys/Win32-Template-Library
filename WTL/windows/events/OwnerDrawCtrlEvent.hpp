@@ -85,7 +85,7 @@ namespace wtl
       PARAM_INVARIANT(Data,enum_cast<OwnerDrawControl>(Data.CtlType) != OwnerDrawControl::Menu);
     }
 
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   
     DISABLE_COPY(ControlEventArgs);     //!< DeviceContext is move-only type
     ENABLE_MOVE(ControlEventArgs);      //!< Can be moved
@@ -104,7 +104,7 @@ namespace wtl
     LResult reflect() const
     {
       // Reflect message
-      return send_message<encoding,message+WindowMessage::Reflect>(Sender, opaque_cast(Ident), opaque_cast(Data));
+      return send_message<encoding>(WindowMessage::ReflectDrawItem, Sender, opaque_cast(Ident), opaque_cast(Data));
     }
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

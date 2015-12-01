@@ -327,7 +327,7 @@ namespace wtl
       Paint += new PaintWindowEventHandler<encoding>(this, &Window::onPaint);
     }
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(Window);     //!< Cannot be copied
     ENABLE_MOVE(Window);      //!< Can be moved
@@ -361,30 +361,6 @@ namespace wtl
     }
 
   protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::isUnhandled
-    //! Query whether a result is the 'Unhandled' return code
-    //!
-    //! \param[in] message - Window message identifier
-    //! \param[in] res - Message result 
-    //! \return bool - True iff result indicates message was unhandled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static bool  isUnhandled(WindowMessage msg, ::LRESULT res)
-    {
-      switch (msg)
-      {
-      case WindowMessage::Create:         return res == unhandled_result<WindowMessage::Create>::value;
-      case WindowMessage::Destroy:        return res == unhandled_result<WindowMessage::Destroy>::value;
-      case WindowMessage::DrawItem:       return res == unhandled_result<WindowMessage::DrawItem>::value;
-      case WindowMessage::GetMinMaxInfo:  return res == unhandled_result<WindowMessage::GetMinMaxInfo>::value;
-      case WindowMessage::KillFocus:      return res == unhandled_result<WindowMessage::KillFocus>::value;
-      case WindowMessage::ShowWindow:     return res == unhandled_result<WindowMessage::ShowWindow>::value;
-      case WindowMessage::Size:           return res == unhandled_result<WindowMessage::Size>::value;
-      case WindowMessage::SetFocus:       return res == unhandled_result<WindowMessage::SetFocus>::value;
-      default:                            return res != 0;
-      }
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::WndProc
     //! Class window procedure which receives messages dispatched by the system
@@ -722,31 +698,33 @@ namespace wtl
     // Window::post
     //! Posts a message to the window
     //! 
-    //! \tparam WM - Window Message 
+    //! \tparam MESSAGE - Message type
     //!
+    //! \param[in] msg - Message
     //! \param[in] w - [optional] First parameter
     //! \param[in] l - [optional] Second parameter
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <WindowMessage WM> 
-    void post(::WPARAM w = 0, ::LPARAM l = 0)
+    template <typename MESSAGE> 
+    void post(MESSAGE msg, ::WPARAM w = 0, ::LPARAM l = 0)
     {
-      post_message<encoding,WM>(Handle, w, l);
+      post_message<encoding>(msg, Handle, w, l);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::send
     //! Sends a message to the window
     //! 
-    //! \tparam WM - Window Message 
+    //! \tparam MESSAGE - Message type
     //!
-    //! \param[in] w- [optional] First parameter
+    //! \param[in] msg - Message
+    //! \param[in] w - [optional] First parameter
     //! \param[in] l - [optional] Second parameter
     //! \return LResult - Message result & routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <WindowMessage WM> 
-    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
+    template <typename MESSAGE> 
+    LResult send(MESSAGE msg, ::WPARAM w = 0, ::LPARAM l = 0)
     {
-      return send_message<encoding,WM>(Handle, w, l);
+      return send_message<encoding>(msg, Handle, w, l);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -879,7 +857,7 @@ namespace wtl
           case SubClass::WindowType::Native:
             // Delegate to native class window procedure and infer routing
             ret.Result = WinAPI<encoding>::callWindowProc(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
-            ret.Route = (isUnhandled(message, ret.Result) ? MsgRoute::Unhandled : MsgRoute::Handled);
+            ret.Route = message_traits<WindowMessage>::routing(message, ret.Result); 
           
             // [HANDLED] Return result & routing
             if (ret.Route == MsgRoute::Handled)
@@ -894,7 +872,7 @@ namespace wtl
         cdebug << caught_exception("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
-        return MsgRoute::Unhandled;
+        return { MsgRoute::Unhandled, -1 };
       }
     }
     
@@ -972,7 +950,7 @@ namespace wtl
       }
 
       // Handle message
-      return {MsgRoute::Unhandled};
+      return {MsgRoute::Unhandled, -1};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

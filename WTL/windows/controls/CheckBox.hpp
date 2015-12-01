@@ -66,7 +66,7 @@ namespace wtl
       this->Click += new ButtonClickEventHandler<encoding>(this, &CheckBox::onClick);
     }
     
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(CheckBox);     //!< Cannot be copied
     ENABLE_MOVE(CheckBox);      //!< Can be moved
@@ -109,7 +109,7 @@ namespace wtl
       //cdebug << object_info(__func__, "Ident", args.Ident, 
       //                                "Action",args.Action, 
       //                                "Check",this->Check(), 
-      //                                "BM_GETSTATE", enum_cast<ButtonState>( this->template send<ButtonMessage::GetState>().Result ),
+      //                                "BM_GETSTATE", enum_cast<ButtonState>( this->send(ButtonMessage::GetState).Result ),
       //                                "IsDlgButtonChecked", enum_cast<ButtonState>( ::IsDlgButtonChecked(*this->parent(), enum_cast(this->Ident())) ),
       //                                "State",args.State) << std::endl;
       

@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Event.hpp>                        //!< Event
-#include <wtl/resources/ResourceId.hpp>                  //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>                 //!< ResourceId
 #include <wtl/platform/WindowMessage.hpp>               //!< WindowMessage
 #include <wtl/traits/EncodingTraits.hpp>                //!< Encoding
 
@@ -40,9 +40,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WM;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<WM>::value;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     // ------------------------------------- CONSTRUCTION -----------------------------------
@@ -64,7 +61,7 @@ namespace wtl
     EventArgs(::WPARAM w, ::LPARAM l)
     {}
     
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved

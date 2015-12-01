@@ -152,6 +152,28 @@ namespace wtl
   template <> struct is_contiguous<ButtonMessage> : std::false_type  {};
   template <> struct default_t<ButtonMessage>     : std::integral_constant<ButtonMessage,ButtonMessage::GetCheck>   {};
   
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct message_traits<WindowMessages> - Provides traits for window messages
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <>
+  struct message_traits<ButtonMessage>
+  {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // wtl::routing constexpr
+    //! Determine whether a message was handled from its result
+    //!
+    //! \param[in] message - Window message 
+    //! \param[in] res - Message result 
+    //! \return bool - True iff result indicates message was unhandled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename RESULT> constexpr
+    static MsgRoute routing(ButtonMessage msg, RESULT res) 
+    {
+      return MsgRoute::Handled;
+    }
+  };
+
   // --------------------------------------------------------------------------------------------------------------
   
   //! \enum ButtonState - Defines Button control states

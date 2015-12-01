@@ -58,6 +58,7 @@
     <ClInclude Include="modules\ModuleCollection.h" />
     <ClInclude Include="platform\DateTime.hpp" />
     <ClInclude Include="platform\HResult.hpp" />
+    <ClInclude Include="platform\MsgResult.hpp" />
     <ClInclude Include="platform\Metrics.hpp" />
     <ClInclude Include="platform\MouseFlags.hpp" />
     <ClInclude Include="platform\StockObjects.hpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="traits\IconTraits.hpp" />
     <ClInclude Include="traits\ImageListTraits.hpp" />
     <ClInclude Include="traits\MenuTraits.hpp" />
+    <ClInclude Include="traits\MessageTraits.hpp" />
     <ClInclude Include="traits\ModuleTraits.hpp" />
     <ClInclude Include="traits\PenTraits.hpp" />
     <ClInclude Include="traits\ResourceTraits.hpp" />
@@ -180,9 +182,7 @@
     <ClInclude Include="windows\events\OwnerMeasureCtrlEvent.hpp" />
     <ClInclude Include="windows\events\OwnerMeasureMenuEvent.hpp" />
     <ClInclude Include="windows\events\PositionChangedEvent.hpp" />
-    <ClInclude Include="windows\events\StandardControls.hpp" />
     <ClInclude Include="windows\events\CreateWindowEvent.hpp" />
-    <ClInclude Include="windows\events\CustomDrawEvent.hpp" />
     <ClInclude Include="windows\events\DestroyWindowEvent.hpp" />
     <ClInclude Include="windows\events\OwnerDrawMenuEvent.hpp" />
     <ClInclude Include="windows\events\PaintWindowEvent.hpp" />

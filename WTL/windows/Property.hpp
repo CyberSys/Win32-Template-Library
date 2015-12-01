@@ -94,7 +94,7 @@ namespace wtl
     Property(window_t& wnd, ARGS&&... args) : base(wnd, std::forward<ARGS>(args)...)
     {}
 
-    // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
     DISABLE_COPY_CTOR(Property);       //!< Cannot be cloned
     DISABLE_MOVE_CTOR(Property);       //!< Cannot be moved

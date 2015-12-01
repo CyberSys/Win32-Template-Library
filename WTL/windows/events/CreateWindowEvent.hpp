@@ -39,9 +39,6 @@ namespace wtl
     //! \var message - Define message identifier
     static constexpr WindowMessage  message = WindowMessage::Create;
     
-    //! \var unhandled - Define unhandled result
-    static constexpr ::LRESULT  unhandled = unhandled_result<message>::value;
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
     CreationData&   Data;        //!< Window creation data  (NB: Must be initialised first)
@@ -74,7 +71,7 @@ namespace wtl
                                         Name(Data.lpszName)
     {}
 
-	  // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
+	  // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
     ENABLE_COPY(EventArgs);      //!< Can be shallow copied
     ENABLE_MOVE(EventArgs);      //!< Can be moved
