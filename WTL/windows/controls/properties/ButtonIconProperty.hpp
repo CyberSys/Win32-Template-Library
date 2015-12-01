@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\ButtonIconProperty.hpp
+//! \file wtl\windows\controls\properties\ButtonIconProperty.hpp
 //! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley
@@ -9,8 +9,8 @@
 #define WTL_BUTTON_ICON_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/controls/properties/ButtonIconProperty.h>    //!< ButtonIconPropertyImpl
-#include <wtl/controls/Button.hpp>                         //!< Button
+#include <wtl/windows/controls/properties/ButtonIconProperty.h>    //!< ButtonIconPropertyImpl
+#include <wtl/windows/controls/Button.hpp>                         //!< Button
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

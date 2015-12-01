@@ -48,14 +48,14 @@
     <Filter Include="Windows\Commands">
       <UniqueIdentifier>{c81d367b-8529-4646-b6fd-9e27f97b2c60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Controls">
-      <UniqueIdentifier>{452243e0-724f-42a1-80c7-f35834f62f33}</UniqueIdentifier>
+    <Filter Include="Windows\Controls">
+      <UniqueIdentifier>{91107341-b953-44d9-bad6-992eb6673761}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Controls\Properties">
-      <UniqueIdentifier>{32ef528b-3556-4944-9681-6bb4a09946a2}</UniqueIdentifier>
+    <Filter Include="Windows\Controls\Events">
+      <UniqueIdentifier>{a41a9ffa-eda2-42b6-939f-3563aba9dedd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Controls\Events">
-      <UniqueIdentifier>{1699cbe4-061b-4965-8b6e-ea6e04a55a42}</UniqueIdentifier>
+    <Filter Include="Windows\Controls\Properties">
+      <UniqueIdentifier>{6ee4692e-0766-432d-b5c5-2321da693da6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -548,24 +548,6 @@
     <ClInclude Include="windows\skins\ThemedSkin.hpp">
       <Filter>Windows\Skins</Filter>
     </ClInclude>
-    <ClInclude Include="controls\Button.hpp">
-      <Filter>Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\properties\ButtonIconProperty.h">
-      <Filter>Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\properties\ButtonIconProperty.hpp">
-      <Filter>Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\events\ButtonEvents.hpp">
-      <Filter>Controls\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\properties\ButtonStateProperty.h">
-      <Filter>Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\properties\ButtonStateProperty.hpp">
-      <Filter>Controls\Properties</Filter>
-    </ClInclude>
     <ClInclude Include="windows\events\MouseMoveEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
@@ -596,9 +578,6 @@
     <ClInclude Include="windows\SubClass.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="controls\CheckBox.hpp">
-      <Filter>Controls</Filter>
-    </ClInclude>
     <ClInclude Include="windows\MessageWindow.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
@@ -617,20 +596,41 @@
     <ClInclude Include="platform\StockObjects.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="controls\properties\CheckBoxCheckedProperty.h">
-      <Filter>Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\properties\CheckBoxCheckedProperty.hpp">
-      <Filter>Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="controls\ComboBox.hpp">
-      <Filter>Controls</Filter>
-    </ClInclude>
     <ClInclude Include="io\Console.hpp">
       <Filter>IO</Filter>
     </ClInclude>
     <ClInclude Include="utils\Path.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\Button.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\CheckBox.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\ComboBox.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\events\ButtonEvents.hpp">
+      <Filter>Windows\Controls\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\ButtonIconProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\ButtonIconProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\ButtonStateProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\ButtonStateProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\CheckBoxCheckedProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\CheckBoxCheckedProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

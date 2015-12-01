@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\ButtonIconProperty.hpp
-//! \brief Separate class declaration for the Button control 'Icon' property
+//! \file wtl\windows\controls\properties\ButtonStateProperty.hpp
+//! \brief Separate class declaration for the Button control 'State' property
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_BUTTON_ICON_PROPERTY_H
-#define WTL_BUTTON_ICON_PROPERTY_H
+#ifndef WTL_BUTTON_STATE_PROPERTY_H
+#define WTL_BUTTON_STATE_PROPERTY_H
 
 #include <wtl/WTL.hpp>
 #include <wtl/traits/EncodingTraits.hpp>              //!< Encoding
-#include <wtl/traits/IconTraits.hpp>                  //!< HIcon
+#include <wtl/platform/ControlStyles.hpp>             //!< ButtonState
 #include <wtl/windows/PropertyImpl.hpp>               //!< PropertyImpl
 #include <wtl/windows/events/CreateWindowEvent.hpp>   //!< CreateWindowEventArgs
 
@@ -24,20 +24,20 @@ namespace wtl
   struct Button;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct ButtonIconPropertyImpl - Provides the getters and setters for the 'Icon' window property
+  //! \struct ButtonStatePropertyImpl - Provides the getters for the button control 'State' property
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ButtonIconPropertyImpl : PropertyImpl<ENC,HIcon,Button<ENC>>
+  struct ButtonStatePropertyImpl : PropertyImpl<ENC,ButtonState,Button<ENC>>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = ButtonIconPropertyImpl;
+    using type = ButtonStatePropertyImpl;
 
     //! \alias base - Define base type
-    using base = PropertyImpl<ENC,HIcon,Button<ENC>>;
+    using base = PropertyImpl<ENC,ButtonState,Button<ENC>>;
       
     //! \alias value_t - Inherit value type
     using value_t = typename base::value_t;
@@ -50,70 +50,38 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ButtonIconPropertyImpl::ButtonIconPropertyImpl
-    //! Create window property 
+    // ButtonStatePropertyImpl::ButtonStatePropertyImpl
+    //! Create button state property 
     //! 
     //! \param[in,out] &wnd - Owner window
     /////////////////////////////////////////////////////////////////////////////////////////
-    ButtonIconPropertyImpl(window_t& wnd) : base(wnd)
-    {
-      // Register creation handler to set initial icon
-      wnd.Create += new CreateWindowEventHandler<base::encoding>(this, &type::onCreate);
-    }
+    ButtonStatePropertyImpl(window_t& wnd) : base(wnd, ButtonState::Unchecked)
+    {}
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ButtonIconPropertyImpl::exist const
-    //! Query whether button has an icon
+    // ButtonStatePropertyImpl::get const
+    //! Get the button state
     //! 
-    //! \return bool - True iff icon assigned
-    /////////////////////////////////////////////////////////////////////////////////////////
-    bool exists() const
-    {
-      return this->Value.exists();
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ButtonIconPropertyImpl::get const
-    //! Get the button icon
-    //! 
-    //! \return value_t - Current icon if button exists, otherwise initial icon
+    //! \return value_t - Current state if button exists, otherwise initial state
     /////////////////////////////////////////////////////////////////////////////////////////
     value_t  get() const;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ButtonIconPropertyImpl::set 
-    //! Set the icon iff button exists, otherwise sets the initial icon
-    //! 
-    //! \param[in] icon - Button icon
-    /////////////////////////////////////////////////////////////////////////////////////////
-    void  set(value_t icon);
-  
-  private:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ButtonIconPropertyImpl::onCreate 
-    //! Called during button creation to set the initial icon
-    //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Returns 0 to accept button creation
-    /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCreate(CreateWindowEventArgs<ENC>& args);
   };
 
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ButtonIconProperty - Define button icon property type 
+  //! \alias ButtonStateProperty - Define button state property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using ButtonIconProperty = Property<ButtonIconPropertyImpl<ENC>>;
+  using ButtonStateProperty = Property<ButtonStatePropertyImpl<ENC>>;
 
       
 } // namespace wtl
 
-#endif // WTL_BUTTON_ICON_PROPERTY_H
+#endif // WTL_BUTTON_STATE_PROPERTY_H

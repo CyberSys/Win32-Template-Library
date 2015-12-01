@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\controls\events\ButtonEvents.hpp
+//! \file wtl\windows\controls\events\ButtonEvents.hpp
 //! \brief Provides argument/delegate/handler types for events for the standard button control
 //! \date 25 October 2015
 //! \author Nick Crowley

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\controls\CheckBox.hpp
+//! \file wtl\windows\controls\CheckBox.hpp
 //! \brief Encapsulates the standard checkbox control
 //! \date 17 November 2015
 //! \author Nick Crowley
@@ -10,9 +10,9 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Window.hpp>                //!< Window
-#include <wtl/controls/Button.hpp>               //!< Button
+#include <wtl/windows/controls/Button.hpp>               //!< Button
 #include <wtl/platform/Metrics.hpp>              //!< Metrics
-#include <wtl/controls/properties/CheckBoxCheckedProperty.h>   //!< CheckBoxCheckedProperty
+#include <wtl/windows/controls/properties/CheckBoxCheckedProperty.h>   //!< CheckBoxCheckedProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -160,6 +160,6 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/controls/properties/CheckBoxCheckedProperty.hpp>   //!< CheckBoxCheckedProperty
+#include <wtl/windows/controls/properties/CheckBoxCheckedProperty.hpp>   //!< CheckBoxCheckedProperty
 
 #endif // WTL_CHECKBOX_HPP

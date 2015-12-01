@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\controls\Button.hpp
-//! \brief Encapsulates standard button controls
-//! \date 6 March 2015
+//! \file wtl\windows\controls\ComboBox.hpp
+//! \brief Encapsulates standard combobox control
+//! \date 23 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -10,26 +10,26 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                        //!< Control
-#include <wtl/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
-#include <wtl/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
-#include <wtl/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
+#include <wtl/windows/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
+#include <wtl/windows/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
+#include <wtl/windows/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
 #include <wtl/gdi/Theme.hpp>                              //!< Theme
 
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Button - Encapsulates a button control
+  //! \struct ComboBox - Encapsulates a standard ComboBox control
   //! 
   //! \tparam ENC - Character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct Button : Control<ENC>
+  struct ComboBox : Control<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = Button<ENC>;
+    using type = ComboBox<ENC>;
   
     //! \alias base - Define base type
     using base = Control<ENC>;
@@ -42,13 +42,9 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    ButtonClickEvent<encoding>        Click;         //!< Button click
-    //ButtonGainFocusEvent<encoding>    GainFocus;     //!< Button gained input focus
-    //ButtonLoseFocusEvent<encoding>    LoseFocus;     //!< Button lost input focus
     OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
     OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
-    //CustomDrawEvent<encoding>         CustomDraw;    //!< Custom draw
-
+    
     // Properties
     ButtonIconProperty<encoding>      Icon;          //!< Icon
     ButtonStateProperty<encoding>     State;         //!< State
@@ -56,14 +52,14 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::Button
+    // ComboBox::ComboBox
     //! Creates the window object for a button control without creating the window handle
     //! 
     //! \param[in] id - Control identifier
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    Button(WindowId id) : base(id),
+    ComboBox(WindowId id) : base(id),
                           Icon(*this),
                           State(*this)
     {
@@ -77,24 +73,24 @@ namespace wtl
       this->SubClasses.push_back(getNativeSubClass());
 
       // Owner draw handlers
-      OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
-      OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &Button::onOwnerMeasure);
+      OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &ComboBox::onOwnerDraw);
+      OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &ComboBox::onOwnerMeasure);
 
       // Mouse handlers (Handles 'hot' notification)
-      this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &Button::onMouseEnter);
-      this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &Button::onMouseLeave);
+      this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &ComboBox::onMouseEnter);
+      this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &ComboBox::onMouseLeave);
     }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
   public:
-    DISABLE_COPY(Button);     //!< Cannot be copied
-    ENABLE_MOVE(Button);      //!< Can be moved
-    ENABLE_POLY(Button);      //!< Can be polymorphic
+    DISABLE_COPY(ComboBox);     //!< Cannot be copied
+    ENABLE_MOVE(ComboBox);      //!< Can be moved
+    ENABLE_POLY(ComboBox);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::registerClass 
+    // ComboBox::registerClass 
     //! Registers the window-class 
     //! 
     //! \param[in] instance - Handle to registering module  [Used only during initial call]
@@ -104,10 +100,10 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
-      static String<encoding> name("WTL.Button");
+      static String<encoding> name("WTL.ComboBox");
       
       // Define WTL button window-class
-      static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button windowclass
+      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard button windowclass
       static WindowClass<encoding>  btn(instance,
                                         name.c_str(),
                                         std.Style,
@@ -126,14 +122,14 @@ namespace wtl
     
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::getNativeSubClass 
+    // ComboBox::getNativeSubClass 
     //! Get the window procedure for the standard button
     //! 
     //! \return SubClass - SubClass representing the window procedure of the standard button
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass getNativeSubClass() 
     {
-      static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button window-class
+      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard button window-class
       
       // Return native window proc
       return { SubClass::WindowType::Native, std.WndProc };
@@ -144,7 +140,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::send
+    // ComboBox::send
     //! Sends a message to the window
     //! 
     //! \tparam WM - Window Message 
@@ -156,10 +152,10 @@ namespace wtl
     using base::send;
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::send
+    // ComboBox::send
     //! Sends a button message to the window
     //! 
-    //! \tparam BM - Button Message 
+    //! \tparam BM - ComboBox Message 
     //!
     //! \param[in] w- [optional] First parameter
     //! \param[in] l - [optional] Second parameter
@@ -172,7 +168,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::wndclass const
+    // ComboBox::wndclass const
     //! Get the window class
     //! 
     //! \return const class_t& - Shared window class
@@ -184,7 +180,7 @@ namespace wtl
     
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::route
+    // ComboBox::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
     //!
     //! \param[in] message - Window message identifier
@@ -237,7 +233,7 @@ namespace wtl
     
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onMouseEnter
+    // ComboBox::onMouseEnter
     //! Invalidate the button when the cursor enters the button
     //! 
     //! \param[in] args - Message arguments 
@@ -255,7 +251,7 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onMouseLeave
+    // ComboBox::onMouseLeave
     //! Invalidate the button when the cursor enters the button
     //! 
     //! \param[in] args - Message arguments 
@@ -274,7 +270,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onOwnerDraw
+    // ComboBox::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message to draw the button
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -287,7 +283,7 @@ namespace wtl
       // debug
       //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
 
-      Theme theme(this->handle(), L"Button");
+      Theme theme(this->handle(), L"ComboBox");
 
       // Determine state
       PUSHBUTTONSTATES state = PBS_NORMAL;
@@ -335,7 +331,7 @@ namespace wtl
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::onOwnerMeasure
+    // ComboBox::onOwnerMeasure
     //! Called in response to a reflected 'owner measure' message to 
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -354,7 +350,7 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
-#include <wtl/controls/properties/ButtonStateProperty.hpp>     //!< StateProperty
+#include <wtl/windows/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
+#include <wtl/windows/controls/properties/ButtonStateProperty.hpp>     //!< StateProperty
 
 #endif // WTL_BUTTON_HPP

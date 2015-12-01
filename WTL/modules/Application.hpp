@@ -15,8 +15,8 @@
 #include <wtl/platform/DateTime.hpp>                //!< DateTime
 #include <wtl/platform/SystemVersion.hpp>           //!< SystemVersion
 #include <wtl/utils/String.hpp>                     //!< String
-#include <wtl/controls/Button.hpp>                  //!< Button
-#include <wtl/controls/CheckBox.hpp>                //!< CheckBox
+#include <wtl/windows/controls/Button.hpp>                  //!< Button
+#include <wtl/windows/controls/CheckBox.hpp>                //!< CheckBox
 
 //! \namespace wtl - Windows template library
 namespace wtl
