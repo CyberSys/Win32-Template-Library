@@ -623,12 +623,6 @@
     <ClInclude Include="windows\controls\properties\ButtonStateProperty.hpp">
       <Filter>Windows\Controls\Properties</Filter>
     </ClInclude>
-    <ClInclude Include="windows\controls\properties\CheckBoxCheckedProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\CheckBoxCheckedProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
     <ClInclude Include="windows\properties\FocusProperty.h">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
@@ -637,6 +631,12 @@
     </ClInclude>
     <ClInclude Include="io\MemoryStream.hpp">
       <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

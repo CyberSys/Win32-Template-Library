@@ -160,8 +160,8 @@
     <ClInclude Include="windows\controls\properties\ButtonIconProperty.hpp" />
     <ClInclude Include="windows\controls\properties\ButtonStateProperty.h" />
     <ClInclude Include="windows\controls\properties\ButtonStateProperty.hpp" />
-    <ClInclude Include="windows\controls\properties\CheckBoxCheckedProperty.h" />
-    <ClInclude Include="windows\controls\properties\CheckBoxCheckedProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.h" />
+    <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
