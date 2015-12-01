@@ -34,27 +34,18 @@
 //! \def _GLIBCXX_USE_INT128 - Remove int128 from clang
 #undef _GLIBCXX_USE_INT128
 
-// Target Platform v5.01 (WindowsXP)
+//! \def _WIN32_WINNT - Set default target platform (WinXP)
 #ifndef _WIN32_WINNT
-  //#include <WinSDKVer.h>
-
-  //! \def _WIN32_WINNT - Define build-target for windows headers
   #define _WIN32_WINNT    _WIN32_WINNT_WINXP
-
-  //#include <SDKDDKVer.h>
-#elif __clang__ || __GNUG__
-  #warning Possible build-target version mismatch (_WIN32_WINNT has already been defined)
-#else
-  #pragma message ("Warning: Possible build-target version mismatch (_WIN32_WINNT has already been defined)")
 #endif
 
 #include <windows.h>        // Main windows header
 #include <commctrl.h>       // Common controls library
 #include <windowsx.h>       // Window helper macros
 #include <tchar.h>          // Defines narrow/wide char Win32 entry points
-//#include <strsafe.h>        // StringSafe library - Secure string handling
+//#include <strsafe.h>      // StringSafe library - Secure string handling
 #include <shlwapi.h>        // Shell light-weight API - Path handling
-//#include <Shellapi.h>     // Shell API - FileSystem-Shell COM interop  (Disabled)
+//#include <Shellapi.h>     // Shell API - FileSystem-Shell COM interop  
 
 // --------------------------------------------------------------------------------------------------------
 // ----------------------------------------------- LIBRARY ------------------------------------------------

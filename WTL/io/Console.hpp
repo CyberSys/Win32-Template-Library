@@ -14,7 +14,6 @@
 #include <vector>                     //!< std::vector
 #include <sstream>                    //!< std::basic_stringstream
 #include <ios>                        //!< std::ios_base
-#include <windows.h>                  //!< Win32 console API
 #include <WTL/utils/Point.hpp>        //!< Point
 #include <WTL/utils/exception.hpp>    //!< caught-exception
 
