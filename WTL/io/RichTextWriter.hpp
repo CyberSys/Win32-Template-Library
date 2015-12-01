@@ -72,26 +72,22 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit RichTextWriter(ARGS&&... args) : base(std::forward<ARGS>(args)...),
-                                              ForeColour(COLOUR_NONE), 
-                                              BackColour(COLOUR_NONE), 
-                                              Closed(true),
-                                              Bold(false), 
-                                              Italic(false), 
-                                              Underline(false),
-                                              Buffered(0)
+    template <typename... ARGS> explicit
+    RichTextWriter(ARGS&&... args) : base(std::forward<ARGS>(args)...),
+                                          ForeColour(COLOUR_NONE), 
+                                          BackColour(COLOUR_NONE), 
+                                          Closed(true),
+                                          Bold(false), 
+                                          Italic(false), 
+                                          Underline(false),
+                                          Buffered(0)
     {}
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // RichTextWriter::~RichTextWriter
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~RichTextWriter()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    ENABLE_COPY(RichTextWriter);     //!< Copy semantics determined by stream type
-    ENABLE_MOVE(RichTextWriter);     //!< Move semantics determined by stream type
+    ENABLE_COPY(RichTextWriter);        //!< Copy semantics determined by stream type
+    ENABLE_MOVE(RichTextWriter);        //!< Move semantics determined by stream type
+    ENABLE_POLY(RichTextWriter);        //!< Can be polymorphic
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 

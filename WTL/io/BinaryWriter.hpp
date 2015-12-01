@@ -50,19 +50,15 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit BinaryWriter(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit
+    BinaryWriter(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
     {}
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // BinaryWriter::~BinaryWriter
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~BinaryWriter()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    
-    ENABLE_COPY(BinaryWriter);   //!< Copy semantics determined by stream type
+    ENABLE_COPY(BinaryWriter);        //!< Copy semantics determined by stream type
+    ENABLE_MOVE(BinaryWriter);        //!< Move semantics determined by stream type
+    ENABLE_POLY(BinaryWriter);        //!< Can be polymorphic
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -188,10 +184,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  std::enable_if_t<std::is_integral<U>::value 
-                || std::is_floating_point<U>::value, BinaryWriter<STREAM>&>
-  /*BinaryWriter<STREAM>&*/ operator << (BinaryWriter<STREAM>& w, U val)
+  template <typename STREAM, typename U, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+  BinaryWriter<STREAM>& operator << (BinaryWriter<STREAM>& w, U val)
   {
     CHECKED_LENGTH(size_of<U>::value, w.remaining());
 
@@ -213,8 +207,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  enable_if_enum_t<U,BinaryWriter<STREAM>&> operator << (BinaryWriter<STREAM>& w, U val)
+  template <typename STREAM, typename U, typename = enable_if_enum_t<U>>
+  BinaryWriter<STREAM>& operator << (BinaryWriter<STREAM>& w, U val)
   {
     // Write as underlying type
     w.write(static_cast<std::underlying_type_t<U>>(val));

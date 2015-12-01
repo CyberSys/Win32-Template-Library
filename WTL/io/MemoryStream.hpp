@@ -13,8 +13,9 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  
+  //////////////////////////////////////////////////////////////////////////////////////////
   //! \enum FileAccess - File access modes 
+  //////////////////////////////////////////////////////////////////////////////////////////
   enum class FileAccess : int32_t 
   {
     Create,         //!< Create a new file. If it exists, overwrite by truncating to zero. (Equivalent to "wb" in fopen)
@@ -22,8 +23,9 @@ namespace wtl
     ReadOnly,       //!< Open the file read only. If it does not exist, this will fail. (Equivalent to "rb" in fopen)
   };
 
-
+  //////////////////////////////////////////////////////////////////////////////////////////
   //! \enum FileSeek - File seek type
+  //////////////////////////////////////////////////////////////////////////////////////////
   enum class FileSeek : int32_t
   {
     Begin,       //!< Seek from beginning of stream
@@ -100,25 +102,19 @@ namespace wtl
     //!
     //! \param[in] (&)[LENGTH] buf - Statically allocated input buffer
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <unsigned LENGTH>
-    explicit MemoryStream(element_t (&buf)[LENGTH]) : Position(static_cast<element_t*>(buf)), 
-                                                      Start(Position),
-                                                      End(Start+LENGTH)
+    template <unsigned LENGTH> explicit
+    MemoryStream(element_t (&buf)[LENGTH]) : Position(static_cast<element_t*>(buf)), 
+                                             Start(Position),
+                                             End(Start+LENGTH)
     {
       static_assert(LENGTH > 0, "Invalid input buffer length");
     }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // MemoryStream::~MemoryStream
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~MemoryStream()
-    {
-    }
+      
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    // Shallow copy semantics
-    ENABLE_COPY(MemoryStream);
-    
+    ENABLE_COPY(MemoryStream);        //!< Shallow copy semantics
+    ENABLE_POLY(MemoryStream);        //!< Can be polymorphic
+	
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     //////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\TextReader.hpp
 //! \brief Provides text decoding for input streams
+//! \brief This file is now out of date and needs updating to support the newer stream mechanics
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -49,19 +50,15 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit TextReader(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit
+    TextReader(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
     {}
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // TextReader::~TextReader
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~TextReader()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    // Copy semantics determined by stream type
-    ENABLE_COPY(TextReader);
+    ENABLE_COPY(TextReader);        //!< Copy semantics determined by stream type
+    ENABLE_MOVE(TextReader);        //!< Move semantics determined by stream type
+    ENABLE_POLY(TextReader);        //!< Can be polymorphic
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 

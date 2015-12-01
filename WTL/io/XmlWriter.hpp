@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\XmlWriter.hpp
 //! \brief Provides xml encoding for output streams
+//! \brief This file is now out of date and needs updating to support the newer stream mechanics
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -153,20 +154,20 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     //////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit XmlWriter(ARGS&&... args) : base(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit 
+    XmlWriter(ARGS&&... args) : base(std::forward<ARGS>(args)...)
     {}
     
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(XmlWriter);    //!< Copy semantics determined by stream type
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlWriter::~XmlWriter
     //! Can be polymorphic
     //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~XmlWriter()
-    {}
+    virtual ~XmlWriter() = default;
 
-    
-    ENABLE_COPY(XmlWriter);    //!< Copy semantics determined by stream type
-	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -176,9 +177,6 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
   };
-
-  
-
 
 
   
@@ -346,10 +344,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  std::enable_if_t<std::is_integral<U>::value 
-                || std::is_floating_point<U>::value, XmlWriter<STREAM>&>
-  /*XmlWriter<STREAM>&*/ operator << (XmlWriter<STREAM>& w, U val)
+  template <typename STREAM, typename U, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+  XmlWriter<STREAM>& operator << (XmlWriter<STREAM>& w, U val)
   {
     w.writef(format_spec_t<U>::value, val);
     return w;
@@ -369,8 +365,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  enable_if_enum_t<U,XmlWriter<STREAM>&> operator << (XmlWriter<STREAM>& w, U val)
+  template <typename STREAM, typename U, enable_if_enum_t<U>>
+  XmlWriter<STREAM>&  operator << (XmlWriter<STREAM>& w, U val)
   {
     // Write as a numeral accoring to underlying type
     return w << static_cast<std::underlying_type_t<U>>(val);
@@ -479,9 +475,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, ElementType TYPE, typename... ARGS>
-  std::enable_if_t<XmlElement<TYPE,ARGS...>::HasAttributes, XmlWriter<STREAM>&>
-  /*XmlWriter<STREAM>&*/ operator << (XmlWriter<STREAM>& w, const XmlElement<TYPE,ARGS...>& element)
+  template <typename STREAM, ElementType TYPE, typename... ARGS, typename = std::enable_if_t<XmlElement<TYPE,ARGS...>::HasAttributes>>
+  XmlWriter<STREAM>& operator << (XmlWriter<STREAM>& w, const XmlElement<TYPE,ARGS...>& element)
   {
     static_assert(sizeof...(ARGS) != 0, "Invalid parameter pack size");
 
@@ -513,9 +508,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, ElementType TYPE, typename... ARGS>
-  std::enable_if_t<!XmlElement<TYPE,ARGS...>::HasAttributes, XmlWriter<STREAM>&>
-  /*XmlWriter<STREAM>&*/ operator << (XmlWriter<STREAM>& w, const XmlElement<TYPE,ARGS...>& element)
+  template <typename STREAM, ElementType TYPE, typename... ARGS, typename = std::enable_if_t<!XmlElement<TYPE,ARGS...>::HasAttributes>>
+  XmlWriter<STREAM>& operator << (XmlWriter<STREAM>& w, const XmlElement<TYPE,ARGS...>& element)
   {
     static_assert(sizeof...(ARGS) == 0, "Invalid parameter pack size");
 

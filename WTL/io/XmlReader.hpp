@@ -64,6 +64,8 @@ namespace wtl
         throw wtl::domain_error(HERE, "Unable to parse xml: %s", res.description());
     }
     
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // XmlReader::~XmlReader
     //! Can be polymorphic

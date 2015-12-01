@@ -50,19 +50,15 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit BinaryReader(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit
+    BinaryReader(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
     {}
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // BinaryReader::~BinaryReader
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~BinaryReader()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    // Copy semantics determined by stream type
-    ENABLE_COPY(BinaryReader);
+    ENABLE_COPY(BinaryReader);        //!< Copy semantics determined by stream type
+    ENABLE_MOVE(BinaryReader);        //!< Move semantics determined by stream type
+    ENABLE_POLY(BinaryReader);        //!< Can be polymorphic
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -177,9 +173,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value, BinaryReader<STREAM>&>
-  /*BinaryReader<STREAM>&*/ operator >> (BinaryReader<STREAM>& r, U& val)
+  template <typename STREAM, typename U, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+  BinaryReader<STREAM>& operator >> (BinaryReader<STREAM>& r, U& val)
   {
     r.read(val);
     return r;
@@ -200,8 +195,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  enable_if_enum_t<U,BinaryReader<STREAM>&> operator >> (BinaryReader<STREAM>& r, U& val)
+  template <typename STREAM, typename U, typename = enable_if_enum_t<U>>
+  BinaryReader<STREAM>& operator >> (BinaryReader<STREAM>& r, U& val)
   {
     r.read( reinterpret_cast<std::underlying_type_t<U>&>(val) );  // sizeof(underlying(U)) <= sizeof(U) 
     return r;

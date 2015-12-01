@@ -62,8 +62,8 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit LogFileWriter(ARGS&&... args) : base(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit
+    LogFileWriter(ARGS&&... args) : base(std::forward<ARGS>(args)...)
     {
       // Define unique colours
       static constexpr std::list<COLORREF> colours
@@ -88,18 +88,12 @@ namespace wtl
       // Set properties
       base::setAlignment(Alignment::Left);
     }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // LogFileWriter::~LogFileWriter
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~LogFileWriter()
-    {}
+      
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    // Copy semantics determined by stream type
-    ENABLE_COPY(LogFileWriter);
-    ENABLE_MOVE(LogFileWriter);
-    ENABLE_COPY_ASSIGN(LogFileWriter);
+    ENABLE_COPY(LogFileWriter);        //!< Copy semantics determined by stream type
+    ENABLE_MOVE(LogFileWriter);        //!< Move semantics determined by stream type
+    ENABLE_POLY(LogFileWriter);        //!< Can be polymorphic
 	
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
 

@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\io\TextWriter.hpp
 //! \brief Provides text encoding for output streams
+//! \brief This file is now out of date and needs updating to support the newer stream mechanics
 //! \date 6 March 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -53,20 +54,15 @@ namespace wtl
     //! 
     //! \param[in,out] &&... args - Stream constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    explicit TextWriter(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
+    template <typename... ARGS> explicit
+    TextWriter(ARGS&&... args) : Stream(std::forward<ARGS>(args)...)
     {}
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // TextWriter::~TextWriter
-    //! Can be polymorphic
-    //////////////////////////////////////////////////////////////////////////////////////////
-    virtual ~TextWriter()
-    {}
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
 
-    // Copy semantics determined by stream type
-    ENABLE_COPY(TextWriter);
-    ENABLE_MOVE(TextWriter);
+    ENABLE_COPY(TextWriter);        //!< Copy semantics determined by stream type
+    ENABLE_MOVE(TextWriter);        //!< Move semantics determined by stream type
+    ENABLE_POLY(TextWriter);        //!< Can be polymorphic
 	
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
@@ -497,10 +493,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  std::enable_if_t<std::is_integral<U>::value 
-                || std::is_floating_point<U>::value, TextWriter<STREAM>&>
-  /*TextWriter<STREAM>&*/ operator << (TextWriter<STREAM>& w, U val)
+  template <typename STREAM, typename U, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+  TextWriter<STREAM>& operator << (TextWriter<STREAM>& w, U val)
   {
     w.writef(format_spec_t<U>::value, val);
     return w;
@@ -520,8 +514,8 @@ namespace wtl
   //! \throw wtl::length_error - [Debug only] Insufficient stream buffer space
   //! \throw wtl::out_of_range - [Debug only] Stream position out of bounds
   //////////////////////////////////////////////////////////////////////////////////////////
-  template <typename STREAM, typename U>
-  enable_if_enum_t<U,TextWriter<STREAM>&> operator << (TextWriter<STREAM>& w, U val)
+  template <typename STREAM, typename U, typename = enable_if_enum_t<U>>
+  TextWriter<STREAM>& operator << (TextWriter<STREAM>& w, U val)
   {
     // Write as a numeral accoring to underlying type
     return w << static_cast<std::underlying_type_t<U>>(val);
