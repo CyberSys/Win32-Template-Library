@@ -9,14 +9,14 @@
 #define WTL_APPLICATION_HPP
 
 #include <wtl/WTL.hpp>
-//#include <wtl/traits/ApplicationTraits.hpp>
 #include <wtl/modules/Module.h>                     //!< Module
 #include <wtl/threads/MessagePump.hpp>              //!< MessagePump
 #include <wtl/platform/DateTime.hpp>                //!< DateTime
 #include <wtl/platform/SystemVersion.hpp>           //!< SystemVersion
 #include <wtl/utils/String.hpp>                     //!< String
-#include <wtl/windows/controls/Button.hpp>                  //!< Button
-#include <wtl/windows/controls/CheckBox.hpp>                //!< CheckBox
+#include <wtl/windows/controls/Button.hpp>          //!< Button
+#include <wtl/windows/controls/CheckBox.hpp>        //!< CheckBox
+#include <wtl/windows/controls/Edit.hpp>            //!< Edit
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -62,11 +62,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Application(::HINSTANCE inst) : module_base(inst), 
                                     msgpump_base(inst)
-    {
-      // Register library window classes
-      Button<encoding>::registerClass(inst);
-      CheckBox<encoding>::registerClass(inst);
-    }
+    {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
@@ -74,9 +70,25 @@ namespace wtl
     ENABLE_MOVE(Application);        //!< Can be moved
     
     // ----------------------------------- STATIC METHODS -----------------------------------
+  private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Application::registerCommonCtrls const 
+    //! Registers the window-classes of the various common controls
+    //!
+    //! \throw wtl::platform_error - Unable to register common controls
+    /////////////////////////////////////////////////////////////////////////////////////////
+    static void registerCommonCtrls()
+    {
+      ::INITCOMMONCONTROLSEX cmnCtrls { sizeof(::INITCOMMONCONTROLSEX), ICC_STANDARD_CLASSES | ICC_WIN95_CLASSES | ICC_USEREX_CLASSES | ICC_LINK_CLASS | ICC_PROGRESS_CLASS };
+      
+      // Register controls
+      ::InitCommonControlsEx(&cmnCtrls);
+      //if (!::InitCommonControlsEx(&cmnCtrls))
+      //  throw platform_error(HERE, "Unable to register common controls");
+    }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-    
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Application::name const 
     //! Get the application name
@@ -114,6 +126,14 @@ namespace wtl
              << name_value_pair("Command Line", cmdLine)                                  << std::endl
              << name_value_pair("Operating System", SystemVersion<encoding>().fullname()) << std::endl
              << name_value_pair("Module Path", this->path<encoding>().c_str())            << std::endl;
+
+      // Register common-controls window classes
+      registerCommonCtrls();
+
+      // Register library window classes
+      Button<encoding>::registerClass(this->handle());
+      CheckBox<encoding>::registerClass(this->handle());
+      Edit<encoding>::registerClass(this->handle());
 
       // Execute
       return msgpump_base::run(mode);

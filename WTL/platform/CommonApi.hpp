@@ -25,16 +25,16 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   //! \tparam WM - Window message
-  //! \tparam FIRST - First parameter type
-  //! \tparam SECOND - Second parameter type
+  //! \tparam FIRST - [optional] First parameter type
+  //! \tparam SECOND - [optional] Second parameter type
   //!
   //! \param[in] const& wnd - Destination window
-  //! \param[in] w - First parameter
-  //! \param[in] l - Second parameter
+  //! \param[in] w - [optional] First parameter
+  //! \param[in] l - [optional] Second parameter
   //! \return LResult - Message result and routing
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
-  LResult send_message(const HWnd& wnd, FIRST w, SECOND l)
+  LResult send_message(const HWnd& wnd, FIRST w = 0, SECOND l = 0)
   {
     // Send to target window and determine whether handled
     ::LRESULT result = WinAPI<ENC>::sendMessage(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));
@@ -50,15 +50,15 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   //! \tparam WM - Window message
-  //! \tparam FIRST - First parameter type
-  //! \tparam SECOND - Second parameter type
+  //! \tparam FIRST - [optional] First parameter type
+  //! \tparam SECOND - [optional] Second parameter type
   //!
   //! \param[in] const& wnd - Destination window
-  //! \param[in] w - First parameter
-  //! \param[in] l - Second parameter
+  //! \param[in] w - [optional] First parameter
+  //! \param[in] l - [optional] Second parameter
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC, WindowMessage WM, typename FIRST = ::WPARAM, typename SECOND = ::LPARAM>
-  void post_message(const HWnd& wnd, FIRST w, SECOND l)
+  void post_message(const HWnd& wnd, FIRST w = 0, SECOND l = 0)
   {
     // Post to target window 
     WinAPI<ENC>::postMessage(wnd, enum_cast(WM), static_cast<::WPARAM>(w), static_cast<::LPARAM>(l));

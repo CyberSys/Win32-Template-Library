@@ -35,9 +35,9 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonClickEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::Click>;
+  /*template <Encoding ENC> using ButtonClickEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::Click>;
   template <Encoding ENC> using ButtonClickEvent        = Event<LResult, ButtonClickEventArgs<ENC>>;
-  template <Encoding ENC> using ButtonClickEventHandler = handler_t<ButtonClickEvent<ENC>>;
+  template <Encoding ENC> using ButtonClickEventHandler = handler_t<ButtonClickEvent<ENC>>;*/
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -46,9 +46,9 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonGainFocusEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::SetFocus>;
+  /*template <Encoding ENC> using ButtonGainFocusEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::SetFocus>;
   template <Encoding ENC> using ButtonGainFocusEvent        = Event<LResult, ButtonGainFocusEventArgs<ENC>>;
-  template <Encoding ENC> using ButtonGainFocusEventHandler = handler_t<ButtonGainFocusEvent<ENC>>;
+  template <Encoding ENC> using ButtonGainFocusEventHandler = handler_t<ButtonGainFocusEvent<ENC>>;*/
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -57,9 +57,21 @@ namespace wtl
   //! 
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC> using ButtonLoseFocusEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::KillFocus>;
+  /*template <Encoding ENC> using ButtonLoseFocusEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::KillFocus>;
   template <Encoding ENC> using ButtonLoseFocusEvent        = Event<LResult, ButtonLoseFocusEventArgs<ENC>>;
-  template <Encoding ENC> using ButtonLoseFocusEventHandler = handler_t<ButtonLoseFocusEvent<ENC>>;
+  template <Encoding ENC> using ButtonLoseFocusEventHandler = handler_t<ButtonLoseFocusEvent<ENC>>;*/
+
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias ButtonLoseFocusEvent... - Defines arguments type, handle signature, and delegate type for Button 'LoseFocus' event
+  //! \remarks Encapsulates the WM_COMMAND message containing a BN_KILLFOCUS notification.  [Arguments passed by value]
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  /*template <Encoding ENC> using CheckChangedEventArgs    = ControlEventArgs<ENC,WindowMessage::Command,ButtonNotification,ButtonNotification::Click>;
+  template <Encoding ENC> using CheckChangedEvent        = Event<LResult, CheckChangedEventArgs<ENC>>;
+  template <Encoding ENC> using CheckChangedEventHandler = handler_t<CheckChangedEvent<ENC>>;*/
 
 
 

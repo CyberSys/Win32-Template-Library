@@ -58,7 +58,7 @@ namespace wtl
     Edit(WindowId id) : base(id)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow | EditStyle::Left;
+      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop | EditStyle::Left;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();

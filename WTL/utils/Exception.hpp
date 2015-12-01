@@ -146,7 +146,18 @@ namespace wtl
 	  // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // caught_exception::sink const noexcept
+    //! Get the location where the exception was caught
+    //!
+    //! \return const char* - Source-file location string
+    /////////////////////////////////////////////////////////////////////////////////////////
+    std::string message() const noexcept
+    {
+      return Problem + '\n' + Cause;
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     // caught_exception::sink const noexcept
     //! Get the location where the exception was caught

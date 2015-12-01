@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\controls\CheckBox.hpp
 //! \brief Encapsulates the standard checkbox control
-//! \date 17 November 2015
+//! \date 1 December 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,10 +9,11 @@
 #define WTL_CHECKBOX_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Window.hpp>                //!< Window
-#include <wtl/windows/controls/Button.hpp>               //!< Button
-#include <wtl/platform/Metrics.hpp>              //!< Metrics
-#include <wtl/windows/controls/properties/CheckBoxCheckProperty.h>   //!< CheckBoxCheckProperty
+#include <wtl/windows/Window.hpp>                                     //!< Window
+#include <wtl/windows/controls/Button.hpp>                            //!< Button
+#include <wtl/platform/Metrics.hpp>                                   //!< Metrics
+#include <wtl/windows/controls/events/CheckBoxCheckedEvent.hpp>       //!< CheckBoxCheckedEvent
+#include <wtl/windows/controls/properties/CheckBoxCheckProperty.h>    //!< CheckBoxCheckProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -42,7 +43,10 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     // Properties
-    CheckBoxCheckProperty<encoding>     Check;         //!< Check state
+    CheckBoxCheckProperty<encoding>   Check;        //!< Check state
+
+    // Events
+    CheckBoxCheckedEvent<encoding>    Checked;      //!< Check state changed
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -56,7 +60,10 @@ namespace wtl
                             Check(*this)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow | ButtonStyle::AutoCheckBox|ButtonStyle::Left|ButtonStyle::Notify;
+      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop | ButtonStyle::AutoTriState|ButtonStyle::Left|ButtonStyle::Notify;
+
+      // Listen for clicks
+      this->Click += new ButtonClickEventHandler<encoding>(this, &CheckBox::onClick);
     }
     
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -71,6 +78,22 @@ namespace wtl
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   private:
+    ///////////////////////////////////////////////////////////////////////////////
+    // CheckBox::onClick
+    //! Raises the 'CheckChanged' event in response to clicks
+    //! 
+    //! \param[in] args - Message arguments
+    //! \return wtl::LResult - Routing indicating message was handled
+    ///////////////////////////////////////////////////////////////////////////////
+    LResult  onClick(ButtonClickEventArgs<encoding> args) 
+    { 
+      // Raise 'Check Changed' event
+      Checked.raise(CheckBoxCheckedEventArgs<encoding>(args));
+    
+      // Handled
+      return {wtl::MsgRoute::Handled, 0};
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // CheckBox::onOwnerDraw
     //! Called in response to a reflected 'owner draw' message to draw the button

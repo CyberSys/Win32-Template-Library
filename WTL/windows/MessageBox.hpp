@@ -70,10 +70,10 @@ namespace wtl
   WindowId errorBox(HWND parent, const caught_exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
     // Write to debug console
-    cdebug << ex;
+    cdebug << ex << std::flush;
 
     // Display error
-    return errorBox<ENC>(parent, String<ENC>("Program Error"), String<ENC>(ex.Problem), buttons|MessageBoxFlags::IconError);
+    return errorBox<ENC>(parent, String<ENC>("Program Error"), String<ENC>(ex.message()), buttons|MessageBoxFlags::IconError);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////

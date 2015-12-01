@@ -31,8 +31,8 @@ namespace wtl
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     // ----------------------------------- REPRESENTATION -----------------------------------
-  protected:
-    HModule   Handle;       //!< Module handle
+  private:
+    HModule   Handle;           //!< Module handle
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -103,6 +103,17 @@ namespace wtl
 
       // Load string table handle
       return findResource(ResourceType::String, (id.Value.Numeral/16)+1, language);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Module::handle const
+    //! Get the module handle
+    //! 
+    //! \return const HModule& - Reference to module handle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const HModule& handle() const
+    {
+      return Handle;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

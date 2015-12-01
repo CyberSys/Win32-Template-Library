@@ -5,15 +5,11 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_BUTTON_HPP
-#define WTL_BUTTON_HPP
+#ifndef WTL_COMBOBOX_HPP
+#define WTL_COMBOBOX_HPP
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                        //!< Control
-#include <wtl/windows/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
-#include <wtl/windows/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
-#include <wtl/windows/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
-#include <wtl/gdi/Theme.hpp>                              //!< Theme
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -42,43 +38,34 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< Owner draw button
-    OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< Measure button for owner draw
+    // Events
+    OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< OwnerDraw 
+    OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< OwnerMeasure 
     
-    // Properties
-    ButtonIconProperty<encoding>      Icon;          //!< Icon
-    ButtonStateProperty<encoding>     State;         //!< State
-
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // ComboBox::ComboBox
-    //! Creates the window object for a button control without creating the window handle
+    //! Creates the window object for a combobox control without creating the window handle
     //! 
     //! \param[in] id - Control identifier
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    ComboBox(WindowId id) : base(id),
-                          Icon(*this),
-                          State(*this)
+    ComboBox(WindowId id) : base(id)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow | ButtonStyle::PushButton|ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
+      this->Style = WindowStyle::ChildWindow /*TODO*/;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
 
-      // Compile-time subclass the standard button control
+      // Compile-time subclass the standard combobox control
       this->SubClasses.push_back(getNativeSubClass());
 
       // Owner draw handlers
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &ComboBox::onOwnerDraw);
       OwnerMeasure += new OwnerMeasureCtrlEventHandler<encoding>(this, &ComboBox::onOwnerMeasure);
-
-      // Mouse handlers (Handles 'hot' notification)
-      this->MouseEnter += new MouseEnterEventHandler<encoding>(this, &ComboBox::onMouseEnter);
-      this->MouseLeave += new MouseLeaveEventHandler<encoding>(this, &ComboBox::onMouseLeave);
     }
 
     // -------------------------------- COPY, MOVE & DESTROY  -------------------------------
@@ -102,12 +89,12 @@ namespace wtl
     {
       static String<encoding> name("WTL.ComboBox");
       
-      // Define WTL button window-class
-      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard button windowclass
+      // Define WTL combobox window-class
+      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox windowclass
       static WindowClass<encoding>  btn(instance,
                                         name.c_str(),
                                         std.Style,
-                                        base::WndProc,           //!< Replace the window procedure 'Compile-time subclass'
+                                        base::WndProc,            //!< Replace the window procedure 'Compile-time subclass'
                                         std.Menu,
                                         std.Cursor,
                                         std.Background,
@@ -116,20 +103,20 @@ namespace wtl
                                         std.ClassStorage,
                                         std.WindowStorage);    
 
-      // Return WTL button class
+      // Return WTL combobox class
       return btn;
     }
     
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // ComboBox::getNativeSubClass 
-    //! Get the window procedure for the standard button
+    //! Get the window procedure for the standard combobox
     //! 
-    //! \return SubClass - SubClass representing the window procedure of the standard button
+    //! \return SubClass - SubClass representing the window procedure of the standard combobox
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass getNativeSubClass() 
     {
-      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard button window-class
+      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
       
       // Return native window proc
       return { SubClass::WindowType::Native, std.WndProc };
@@ -153,7 +140,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // ComboBox::send
-    //! Sends a button message to the window
+    //! Sends a combobox message to the window
     //! 
     //! \tparam BM - ComboBox Message 
     //!
@@ -202,7 +189,7 @@ namespace wtl
           // Extract notification
           switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
-          case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
+          //case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
           }
           break;
 
@@ -233,99 +220,17 @@ namespace wtl
     
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ComboBox::onMouseEnter
-    //! Invalidate the button when the cursor enters the button
-    //! 
-    //! \param[in] args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onMouseEnter(MouseEnterEventArgs<encoding> args) 
-    {
-      //cdebug << __func__ << endl;
-      
-      // Redraw
-      this->invalidate();
-
-      // Handle message
-      return {MsgRoute::Handled, 0};
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ComboBox::onMouseLeave
-    //! Invalidate the button when the cursor enters the button
-    //! 
-    //! \param[in] args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onMouseLeave(MouseLeaveEventArgs<encoding> args) 
-    {
-      //cdebug << __func__ << endl;
-
-      // Redraw
-      this->invalidate();
-      
-      // Handle message
-      //return {MsgRoute::Unhandled, 0};
-      return {MsgRoute::Unhandled};
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
     // ComboBox::onOwnerDraw
-    //! Called in response to a reflected 'owner draw' message to draw the button
+    //! Called in response to a reflected 'owner draw' message to draw the combobox
     //! 
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
     //!
-    //! \throw wtl::platform_error - Unable to draw button
+    //! \throw wtl::platform_error - Unable to draw combobox
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerDraw(OwnerDrawCtrlEventArgs<encoding>& args) 
     { 
-      // debug
-      //cdebug << object_info(__func__, "Ident", args.Ident, "Action",args.Action, "State",args.State) << endl;
-
-      Theme theme(this->handle(), L"ComboBox");
-
-      // Determine state
-      PUSHBUTTONSTATES state = PBS_NORMAL;
-      if (!this->Enabled)
-        state = PBS_DISABLED;
-      else if (args.State && OwnerDrawState::Selected)
-        state = PBS_PRESSED;
-      else if (this->isMouseOver())
-        state = PBS_HOT;
       
-      // Draw background 
-      theme.fill(args.Graphics, BP_PUSHBUTTON, state, args.Rect);
-
-      // Query content rect
-      RectL rcContent = theme.content(args.Graphics, BP_CHECKBOX, state, args.Rect);
-
-      // Pressed: Offset drawing rect
-      if (state == PBS_PRESSED)
-        rcContent += PointL(1,1);
-
-      // Draw icon
-      if (Icon.exists()) 
-      {
-        RectL rcIcon = rcContent.arrange(Metrics::WindowIcon, {RectL::FromLeft,Metrics::WindowEdge.Width}, RectL::Centre);
-        args.Graphics.draw(Icon, rcIcon);
-      }
-      
-      // Calculate text rectangle
-      RectL rcText = rcContent;
-      if (Icon.exists()) 
-        rcText.Left += Metrics::WindowIcon.Width + Metrics::WindowEdge.Width;
-
-      // Draw text
-      theme.write(args.Graphics, BP_PUSHBUTTON, state, this->Text(), rcText, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
-      
-      // [FOCUS] Draw focus rectangle
-      if (args.State && OwnerDrawState::Focus)
-      {
-        RectL rcFocus = rcContent.inflate(-Metrics::WindowEdge);
-        args.Graphics.focus(rcFocus);
-      }
-
       // Handle message
       return {MsgRoute::Handled, 0};
     }
@@ -337,13 +242,11 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
     //!
-    //! \throw wtl::platform_error - Unable to measure button
+    //! \throw wtl::platform_error - Unable to measure combobox
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual LResult  onOwnerMeasure(OwnerMeasureCtrlEventArgs<encoding>& args) 
     { 
-      // Measure button text
-      args.Size = args.Graphics.measure(this->Text());
-
+      
       // Handle message
       return {MsgRoute::Handled, 0};
     }
@@ -353,4 +256,4 @@ namespace wtl
 #include <wtl/windows/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
 #include <wtl/windows/controls/properties/ButtonStateProperty.hpp>     //!< StateProperty
 
-#endif // WTL_BUTTON_HPP
+#endif // WTL_COMBOBOX_HPP

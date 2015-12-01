@@ -52,8 +52,9 @@ namespace wtl
   //! 
   //! \tparam IMPL - Type providing the implementation 
   //! 
-  //! \remarks Provides the boilerplate operator overloads, such as equality, bitwise, and logical operations.
-  //! \remarks Whether these are supported is determined by a separate implementation, which provides the get() and set() methods.
+  //! \remarks Provides various operator overloads such as equality, bitwise, and logical operations which are forwarded
+  //! \remarks  to the implementation provider, which may or may not support them. This removes the need to write
+  //! \remarks  boilerplate operator overloads for each property type.
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL>
   struct Property : IMPL
@@ -166,20 +167,19 @@ namespace wtl
       this->set(std::forward<T>(val));     //!< Delegate to implementation
       return *this;
     }
-    
   };
 
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator ==
-  //! Non-member equality operator for Property types
+  //! Non-member property equality operator 
   //! 
   //! \tparam IMPL - Property implementation type
   //! \tparam T - Any type
   //! 
   //! \param[in] const& p - Property
   //! \param[in] && val - Value to compare against
-  //! \return bool - True iff equal
+  //! \return bool - Result of applying equality operator to 'val' and current property value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename T>
   bool  operator == (Property<IMPL>& p, T&& val)
@@ -189,14 +189,14 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator !=
-  //! Non-member inequality operator for Property types
+  //! Non-member property inequality operator
   //! 
   //! \tparam IMPL - Property implementation type
   //! \tparam T - Any type
   //! 
   //! \param[in] const& p - Property
   //! \param[in] && val - Value to compare against
-  //! \return bool - True iff unequal
+  //! \return bool - Result of applying inequality operator to 'val' and current property value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename T>
   bool  operator != (Property<IMPL>& p, T&& val)
@@ -207,14 +207,14 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | 
-  //! Non-member bitwise-OR operator for Property types that support bitwise-OR
+  //! Non-member property bitwise-OR operator 
   //! 
   //! \tparam IMPL - Property implementation type
   //! \tparam T - Any type
   //! 
   //! \param[in] const &p - Property
   //! \param[in] && val - Value to combine
-  //! \return Property::value_t - Result of 'p | val'
+  //! \return Property::value_t - Result of applying bitwise-OR operator to 'val' and current property value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename T>
   typename IMPL::value_t  operator | (const Property<IMPL>& p, T&& val)
@@ -223,32 +223,15 @@ namespace wtl
   }
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  // wtl::operator & 
-  //! Non-member bitwise-AND operator for Property types that support bitwise-AND
-  //! 
-  //! \tparam IMPL - Property implementation type
-  //! \tparam T - Any type
-  //! 
-  //! \param[in] const &p - Property
-  //! \param[in] && val - Value to combine
-  //! \return Property::value_t - Result of 'p & val'
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename IMPL, typename T>
-  typename IMPL::value_t  operator & (const Property<IMPL>& p, T&& val)
-  {
-    return p.get() & val;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
   //! wtl::operator |=
-  //! Non-member bitwise-OR assignment operator for Property types that support bitwise-OR assignment
+  //! Non-member property bitwise-OR assignment operator 
   //! 
   //! \tparam IMPL - Property implementation type
   //! \tparam T - Any type
   //! 
   //! \param[in,out] &p - Property
   //! \param[in] && val - Value to combine
-  //! \return Property& - Reference 'p' whose value is now combined with 'val'
+  //! \return Property& - Reference 'p' with updated value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename T>
   Property<IMPL>&  operator |= (Property<IMPL>& p, T&& val)
@@ -259,21 +242,107 @@ namespace wtl
   
   /////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator & 
-  //! Non-member logical-AND operator for Property types that support logical-AND
+  //! Non-member property bitwise-AND operator 
   //! 
   //! \tparam IMPL - Property implementation type
   //! \tparam T - Any type
   //! 
   //! \param[in] const &p - Property
   //! \param[in] && val - Value to combine
-  //! \return bool - Result of 'p && val'
+  //! \return Property::value_t - Result of applying bitwise-AND operator to 'val' and current property value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  typename IMPL::value_t  operator & (const Property<IMPL>& p, T&& val)
+  {
+    return p.get() & val;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::operator &=
+  //! Non-member property bitwise-AND assignment operator 
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in,out] &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property& - Reference 'p' with updated value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  Property<IMPL>&  operator &= (Property<IMPL>& p, T&& val)
+  {
+    return p = p.get() & val;
+  }
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator &&
+  //! Non-member property logical-AND operator 
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return bool - Result of applying logical-AND operator to 'val' and current property value
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename IMPL, typename T>
   bool  operator && (const Property<IMPL>& p, T&& val)
   {
     return p.get() && val;
   }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator ||
+  //! Non-member logical-OR operator for properties that support logical-OR
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return bool - Result of applying logical-OR operator to 'val' and current property value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  bool  operator || (const Property<IMPL>& p, T&& val)
+  {
+    return p.get() || val;
+  }
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator + 
+  //! Non-member property addition operator 
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property::value_t - Result of applying addition operator to 'val' and current property value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  typename IMPL::value_t  operator + (const Property<IMPL>& p, T&& val)
+  {
+    return p.get() + val;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::operator +=
+  //! Non-member property addition-assignment operator 
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in,out] &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property& - Reference 'p' with updated value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  Property<IMPL>&  operator += (Property<IMPL>& p, T&& val)
+  {
+    return p = p.get() + val;
+  }
       
 } // namespace wtl
 

@@ -61,34 +61,35 @@ namespace wtl
   //! \enum ButtonStyle - Defines standard Button window styles
   enum class ButtonStyle : ulong32_t
   {
-    PushButton    = 0x00000000L, 			  //!< 
-    DefPushButton = 0x00000001L, 		    //!< 
-    CheckBox      = 0x00000002L, 			  //!< 
-    AutoCheckBox  = 0x00000003L, 		 	  //!< 
-    RadioButton   = 0x00000004L, 			  //!< 
-    TriState      = 0x00000005L, 			  //!< 
-    AutoTriState  = 0x00000006L, 			  //!< 
-    GroupBox      = 0x00000007L, 			  //!< 
-    UserButton    = 0x00000008L, 			  //!< 
-    AutoRadioButton = 0x00000009L, 		  //!< 
-    PushBox       = 0x0000000AL, 			  //!< 
-    OwnerDraw     = 0x0000000BL, 			  //!< 
-    TypeMask      = 0x0000000FL, 			  //!< 
-    LeftText      = 0x00000020L, 			  //!< 
-    RightButton   = LeftText,           //!< 
-    Text          = 0x00000000L, 			  //!< 
-    Icon          = 0x00000040L, 			  //!< 
-    Bitmap        = 0x00000080L, 			  //!< 
-    Left          = 0x00000100L, 			  //!< 
-    Right         = 0x00000200L, 			  //!< 
-    Centre        = 0x00000300L, 			  //!< 
-    Top           = 0x00000400L, 			  //!<  
-    Bottom        = 0x00000800L, 			  //!< 
-    VCenter       = 0x00000c00L, 			  //!< 
-    PushLike      = 0x00001000L, 			  //!< 
-    MultiLine     = 0x00002000L, 			  //!< 
-    Notify        = 0x00004000L, 			  //!< 
-    Flat          = 0x00008000L, 			  //!< 
+    PushButton      = 0x00000000L, 			  //!< 
+    DefPushButton   = 0x00000001L, 		    //!< 
+    CheckBox        = 0x00000002L, 			  //!< 
+    AutoCheckBox    = 0x00000003L, 		 	  //!< 
+    RadioButton     = 0x00000004L, 			  //!< 
+    TriState        = 0x00000005L, 			  //!< 
+    AutoTriState    = 0x00000006L, 			  //!< 
+    GroupBox        = 0x00000007L, 			  //!< 
+    UserButton      = 0x00000008L, 			  //!< 
+    AutoRadioButton = 0x00000009L, 		    //!< 
+    PushBox         = 0x0000000AL, 			  //!< 
+    OwnerDraw       = 0x0000000BL, 			  //!< 
+    TypeMask        = 0x0000000FL, 			  //!< 
+
+    LeftText        = 0x00000020L, 			  //!< 
+    RightButton     = LeftText,           //!< 
+    Text            = 0x00000000L, 			  //!< 
+    Icon            = 0x00000040L, 			  //!< 
+    Bitmap          = 0x00000080L, 			  //!< 
+    Left            = 0x00000100L, 			  //!< 
+    Right           = 0x00000200L, 			  //!< 
+    Centre          = 0x00000300L, 			  //!< 
+    Top             = 0x00000400L, 			  //!<  
+    Bottom          = 0x00000800L, 			  //!< 
+    VCenter         = Top|Bottom, 			  //!< 
+    PushLike        = 0x00001000L, 			  //!< 
+    MultiLine       = 0x00002000L, 			  //!< 
+    Notify          = 0x00004000L, 			  //!< 
+    Flat            = 0x00008000L, 			  //!< 
   };
   
   //! Define traits: Non-contiguous Attribute
@@ -101,17 +102,23 @@ namespace wtl
   //! \enum ButtonNotification - Defines standard Button notifications
   enum class ButtonNotification : ulong32_t
   {
-    Click       = 0x00000000L,			        //!< [Windows 3.11] 
-    Paint       = 0x00000001L,			        //!< [Windows 3.11] 
-    Pushed      = 0x00000002L,			        //!< [Windows 3.11] 
-    Unpushed    = 0x00000003L,			        //!< [Windows 3.11] 
-    Disabled    = 0x00000004L,			        //!< [Windows 3.11] 
-    DoubleClick = 0x00000005L,			        //!< [Windows 3.11] 
-    SetFocus    = 0x00000006L,			        //!< [Explorer 3.00] 
-    KillFocus   = 0x00000007L,			        //!< [Explorer 3.00] 
-    Highlight   = Pushed,			              //!< [Explorer 3.00] 
-    UnHighlight = Unpushed,			            //!< [Explorer 3.00] 
-    DblClk      = DoubleClick,  			      //!< [Explorer 3.00] 
+    Click         = BN_CLICKED,			          //!< [Windows 3.11] 
+    Paint         = BN_PAINT,			            //!< [Windows 3.11] 
+    Pushed        = BN_PUSHED,			          //!< [Windows 3.11] 
+    Unpushed      = BN_UNPUSHED,			        //!< [Windows 3.11] 
+    Disabled      = BN_DISABLE,			          //!< [Windows 3.11] 
+    DoubleClick   = BN_DOUBLECLICKED,			    //!< [Windows 3.11] 
+    SetFocus      = BN_SETFOCUS,			        //!< [Explorer 3.00] 
+    KillFocus     = BN_KILLFOCUS,			        //!< [Explorer 3.00] 
+    Highlight     = Pushed,			              //!< [Explorer 3.00] 
+    UnHighlight   = Unpushed,			            //!< [Explorer 3.00] 
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WINXP
+    HotItemChange = BCN_HOTITEMCHANGE,        //!< [Windows 5.01]
+#endif
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
+    DropDown      = BCN_DROPDOWN,             //!< [Windows 6.00]
+#endif
   };
 
   //! Define traits: Contiguous enumeration
@@ -124,15 +131,20 @@ namespace wtl
   //! \enum ButtonMessage - Defines standard Button messages
   enum class ButtonMessage : ulong32_t
   {
-    GetCheck		 = BM_GETCHECK,			//!< [Windows 3.11] 
-    SetCheck		 = BM_SETCHECK,			//!< [Windows 3.11] 
-    GetState		 = BM_GETSTATE,			//!< [Windows 3.11] 
-    SetState		 = BM_SETSTATE,			//!< [Windows 3.11] 
-    SetStyle		 = BM_SETSTYLE,			//!< [Windows 3.11] 
-    Click		     = BM_CLICK,			  //!< [Windows 4.00] 
-    GetImage		 = BM_GETIMAGE,			//!< [Windows 4.00] 
-    SetImage		 = BM_SETIMAGE,			//!< [Windows 4.00] 
-    SetDontClick = 0x00F8,			    //!< [Windows 6.00] 
+    GetCheck		 = BM_GETCHECK,			    //!< [Windows 3.11] 
+    SetCheck		 = BM_SETCHECK,			    //!< [Windows 3.11] 
+    GetState		 = BM_GETSTATE,			    //!< [Windows 3.11] 
+    SetState		 = BM_SETSTATE,			    //!< [Windows 3.11] 
+    SetStyle		 = BM_SETSTYLE,			    //!< [Windows 3.11] 
+
+#if _WIN32_WINNT >= _WIN32_WINNT_NT4
+    Click		     = BM_CLICK,			      //!< [Windows 4.00] 
+    GetImage		 = BM_GETIMAGE,			    //!< [Windows 4.00] 
+    SetImage		 = BM_SETIMAGE,			    //!< [Windows 4.00] 
+#endif
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
+    SetDontClick = BM_SETDONTCLICK,			//!< [Windows 6.00] 
+#endif
   };
 
   //! Define traits: Non-contiguous enumeration
@@ -150,8 +162,13 @@ namespace wtl
     Indeterminate		= BST_INDETERMINATE,		//!< [Windows 4.00] The state of the button is indeterminate. Applies only if the button has the BS_3STATE or BS_AUTO3STATE style.
     Pushed		      = BST_PUSHED,		        //!< [Windows 4.00] The button is being shown in the pushed state.
     Focus		        = BST_FOCUS,		        //!< [Windows 4.00] The button has the keyboard focus.
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WINXP
     Hot		          = BST_HOT,		          //!< [Windows 5.01] The button is hot; that is, the mouse is hovering over it.
-    DropDownPushed	= 0x0400,		            //!< [Windows 6.00] Windows Vista. The button is in the drop-down state. Applies only if the button has the TBSTYLE_DROPDOWN style.
+#endif
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
+    DropDownPushed	= BST_DROPDOWNPUSHED,		//!< [Windows 6.00] Windows Vista. The button is in the drop-down state. Applies only if the button has the TBSTYLE_DROPDOWN style.
+#endif
   };
 
   //! Define traits: Non-contiguous attribute enumeration
@@ -200,8 +217,11 @@ namespace wtl
     MaxText = 0x0501,			          //!< [Explorer 3.00]
     HScroll = 0x0601,			          //!< [Explorer 3.00]
     VScroll = 0x0602,			          //!< [Explorer 3.00]
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WINXP
     AlignLeftToRight = 0x0700,			//!< [Explorer 5.01] 
     AlignRightToLeft = 0x0701,			//!< [Explorer 5.01] 
+#endif
   };
 
   //! Define traits: Non-contiguous enumeration

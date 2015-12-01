@@ -641,6 +641,12 @@
     <ClInclude Include="windows\controls\Edit.hpp">
       <Filter>Windows\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\events\ButtonClickEvent.hpp">
+      <Filter>Windows\Controls\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\events\CheckBoxCheckedEvent.hpp">
+      <Filter>Windows\Controls\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

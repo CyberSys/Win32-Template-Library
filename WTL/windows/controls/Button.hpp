@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\controls\Button.hpp
-//! \brief Encapsulates standard button controls
-//! \date 6 March 2015
+//! \brief Encapsulates the standard button control
+//! \date 1 December 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                //!< Control
-#include <wtl/windows/controls/events/ButtonEvents.hpp>           //!< ButtonClickEvent
+#include <wtl/windows/controls/events/ButtonClickEvent.hpp>       //!< ButtonClickEvent
 #include <wtl/windows/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
 #include <wtl/windows/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
 #include <wtl/gdi/Theme.hpp>                                      //!< Theme
@@ -67,7 +67,7 @@ namespace wtl
                           State(*this)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow | ButtonStyle::PushButton|ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
+      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop | ButtonStyle::PushButton|ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
