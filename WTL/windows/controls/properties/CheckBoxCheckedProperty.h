@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\CheckBoxCheckedProperty.hpp
-//! \brief Separate class declaration for the CheckBox control 'Checked' property
+//! \file wtl\windows\controls\properties\CheckBoxCheckProperty.hpp
+//! \brief Separate class declaration for the CheckBox control 'Check' property
 //! \date 22 November 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/traits/EncodingTraits.hpp>              //!< Encoding
-#include <wtl/platform/ControlStyles.hpp>             //!< CheckBoxChecked
+#include <wtl/platform/ControlStyles.hpp>             //!< CheckBoxCheck
 #include <wtl/windows/PropertyImpl.hpp>               //!< PropertyImpl
 #include <wtl/windows/events/CreateWindowEvent.hpp>   //!< CreateWindowEventArgs
 
@@ -24,17 +24,17 @@ namespace wtl
   struct CheckBox;
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct CheckBoxCheckedPropertyImpl - Provides the getters and setters for the button control 'Checked' property
+  //! \struct CheckBoxCheckPropertyImpl - Provides the getters and setters for the button control 'Check' property
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct CheckBoxCheckedPropertyImpl : PropertyImpl<ENC,ButtonState,CheckBox<ENC>>
+  struct CheckBoxCheckPropertyImpl : PropertyImpl<ENC,ButtonState,CheckBox<ENC>>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
 
     //! \alias type - Define own type
-    using type = CheckBoxCheckedPropertyImpl;
+    using type = CheckBoxCheckPropertyImpl;
 
     //! \alias base - Define base type
     using base = PropertyImpl<ENC,ButtonState,CheckBox<ENC>>;
@@ -50,12 +50,12 @@ namespace wtl
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // CheckBoxCheckedPropertyImpl::CheckBoxCheckedPropertyImpl
+    // CheckBoxCheckPropertyImpl::CheckBoxCheckPropertyImpl
     //! Create window property 
     //! 
     //! \param[in,out] &wnd - Owner window
     /////////////////////////////////////////////////////////////////////////////////////////
-    CheckBoxCheckedPropertyImpl(window_t& wnd) : base(wnd, ButtonState::Unchecked)
+    CheckBoxCheckPropertyImpl(window_t& wnd) : base(wnd, ButtonState::Unchecked)
     {
       wnd.Create += new CreateWindowEventHandler<base::encoding>(this, &type::onCreate);
     }
@@ -63,7 +63,7 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // CheckBoxCheckedPropertyImpl::get const
+    // CheckBoxCheckPropertyImpl::get const
     //! Get the button state
     //! 
     //! \return value_t - Current state if button exists, otherwise initial state
@@ -73,7 +73,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    // CheckBoxCheckedPropertyImpl::set 
+    // CheckBoxCheckPropertyImpl::set 
     //! Set the state iff button exists, otherwise sets the initial state
     //! 
     //! \param[in] state - CheckBox state
@@ -82,7 +82,7 @@ namespace wtl
 
   private:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // CheckBoxCheckedPropertyImpl::onCreate 
+    // CheckBoxCheckPropertyImpl::onCreate 
     //! Called during button creation to set the initial state
     //! 
     //! \param[in,out] &args - Message arguments 
@@ -94,12 +94,12 @@ namespace wtl
   
   
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias CheckBoxCheckedProperty - Define button state property type 
+  //! \alias CheckBoxCheckProperty - Define button state property type 
   //! 
   //! \tparam ENC - Window encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  using CheckBoxCheckedProperty = Property<CheckBoxCheckedPropertyImpl<ENC>>;
+  using CheckBoxCheckProperty = Property<CheckBoxCheckPropertyImpl<ENC>>;
 
       
 } // namespace wtl

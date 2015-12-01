@@ -12,7 +12,7 @@
 #include <wtl/windows/Window.hpp>                //!< Window
 #include <wtl/windows/controls/Button.hpp>               //!< Button
 #include <wtl/platform/Metrics.hpp>              //!< Metrics
-#include <wtl/windows/controls/properties/CheckBoxCheckedProperty.h>   //!< CheckBoxCheckedProperty
+#include <wtl/windows/controls/properties/CheckBoxCheckProperty.h>   //!< CheckBoxCheckProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -42,7 +42,7 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
     
     // Properties
-    CheckBoxCheckedProperty<encoding>     Checked;         //!< Checked
+    CheckBoxCheckProperty<encoding>     Check;         //!< Check state
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -53,7 +53,7 @@ namespace wtl
     //! \param[in] id - Control identifier
     /////////////////////////////////////////////////////////////////////////////////////////
     CheckBox(WindowId id) : base(id), 
-                            Checked(*this)
+                            Check(*this)
     {
       // Set properties
       this->Style = WindowStyle::ChildWindow | ButtonStyle::AutoCheckBox|ButtonStyle::Left|ButtonStyle::Notify;
@@ -85,7 +85,7 @@ namespace wtl
       // debug
       //cdebug << object_info(__func__, "Ident", args.Ident, 
       //                                "Action",args.Action, 
-      //                                "Checked",this->Checked(), 
+      //                                "Check",this->Check(), 
       //                                "BM_GETSTATE", enum_cast<ButtonState>( this->template send<ButtonMessage::GetState>().Result ),
       //                                "IsDlgButtonChecked", enum_cast<ButtonState>( ::IsDlgButtonChecked(*this->parent(), enum_cast(this->Ident())) ),
       //                                "State",args.State) << std::endl;
@@ -117,6 +117,6 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/CheckBoxCheckedProperty.hpp>   //!< CheckBoxCheckedProperty
+#include <wtl/windows/controls/properties/CheckBoxCheckProperty.hpp>   //!< CheckBoxCheckProperty
 
 #endif // WTL_CHECKBOX_HPP

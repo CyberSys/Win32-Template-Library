@@ -164,7 +164,7 @@ namespace wtl
       CHECKBOXSTATES state = CBS_UNCHECKEDNORMAL;
       if (!chk.Enabled)
         state = CBS_UNCHECKEDDISABLED;
-      else if (chk.Checked == ButtonState::Checked)    //else if (args.State && OwnerDrawState::Selected)
+      else if (chk.Check == ButtonState::Checked)    //else if (args.State && OwnerDrawState::Selected)
         state = CBS_UNCHECKEDPRESSED;
       else if (chk.isMouseOver())
         state = CBS_UNCHECKEDHOT;
