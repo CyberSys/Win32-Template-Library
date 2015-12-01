@@ -135,12 +135,12 @@ namespace wtl
     SetDontClick = 0x00F8,			    //!< [Windows 6.00] 
   };
 
-  //! Define traits: Contiguous enumeration
+  //! Define traits: Non-contiguous enumeration
   template <> struct is_attribute<ButtonMessage>  : std::false_type  {};
-  template <> struct is_contiguous<ButtonMessage> : std::true_type   {};
+  template <> struct is_contiguous<ButtonMessage> : std::false_type  {};
   template <> struct default_t<ButtonMessage>     : std::integral_constant<ButtonMessage,ButtonMessage::GetCheck>   {};
   
-  // ----
+  // --------------------------------------------------------------------------------------------------------------
   
   //! \enum ButtonState - Defines Button control states
   enum class ButtonState : ulong32_t
@@ -208,7 +208,75 @@ namespace wtl
   template <> struct is_attribute<EditNotification>  : std::false_type  {};
   template <> struct is_contiguous<EditNotification> : std::false_type  {};
   template <> struct default_t<EditNotification>     : std::integral_constant<EditNotification,EditNotification::SetFocus>   {};
+  
+  // --------------------------------------------------------------------------------------------------------------
+  
+  //! \enum EditMessage - Defines standard Edit messages
+  enum class EditMessage : uint16_t
+  {
+		CanUndo		          = EM_CANUNDO,			          //!< [Windows 3.11] 
+		EmptyUndoBuffer		  = EM_EMPTYUNDOBUFFER,	      //!< [Windows 3.11] 
+		FormatLines         = EM_FMTLINES,			        //!< [Windows 3.11] 
+		GetFirstVisibleLine	= EM_GETFIRSTVISIBLELINE,		//!< [Windows 3.11] 
+		GetHandle		        = EM_GETHANDLE,			        //!< [Windows 3.11] 
+		GetLine		          = EM_GETLINE,			          //!< [Windows 3.11] 
+		GetLineCount		    = EM_GETLINECOUNT,		      //!< [Windows 3.11] 
+		GetModify		        = EM_GETMODIFY,			        //!< [Windows 3.11] 
+		GetPasswordChar		  = EM_GETPASSWORDCHAR,	      //!< [Windows 3.11] 
+		GetRect		          = EM_GETRECT,			          //!< [Windows 3.11] 
+		GetSel		          = EM_GETSEL,			          //!< [Windows 3.11] 
+		GetThumb		        = EM_GETTHUMB,			        //!< [Windows 3.11] 
+		GetWordBreakProc	  = EM_GETWORDBREAKPROC,      //!< [Windows 3.11] 
+		LimitText		        = EM_LIMITTEXT,			        //!< [Windows 3.11] 
+		LineFromChar		    = EM_LINEFROMCHAR,		      //!< [Windows 3.11] 
+		LineIndex		        = EM_LINEINDEX,			        //!< [Windows 3.11] 
+		LineLength		      = EM_LINELENGTH,			      //!< [Windows 3.11] 
+		LineScroll		      = EM_LINESCROLL,			      //!< [Windows 3.11] 
+		ReplaceSel		      = EM_REPLACESEL,			      //!< [Windows 3.11] 
+		Scroll		          = EM_SCROLL,			          //!< [Windows 3.11] 
+		ScrollCaret		      = EM_SCROLLCARET,			      //!< [Windows 3.11] 
+		SetHandle		        = EM_SETHANDLE,			        //!< [Windows 3.11] 
+		SetModify		        = EM_SETMODIFY,			        //!< [Windows 3.11] 
+		SetPasswordChar		  = EM_SETPASSWORDCHAR,	      //!< [Windows 3.11] 
+		SetReadOnly		      = EM_SETREADONLY,			      //!< [Windows 3.11] 
+		SetRect		          = EM_SETRECT,			          //!< [Windows 3.11] 
+		SetRectNp		        = EM_SETRECTNP,			        //!< [Windows 3.11] 
+		SetSel		          = EM_SETSEL,			          //!< [Windows 3.11] 
+		SetTabStops		      = EM_SETTABSTOPS,			      //!< [Windows 3.11] 
+		SetWordBreakProc	  = EM_SETWORDBREAKPROC,      //!< [Windows 3.11] 
+		Undo		            = EM_UNDO,			            //!< [Windows 3.11] 
 
+#if _WIN32_WINNT >= _WIN32_WINNT_NT4
+    CharFromPos		      = EM_CHARFROMPOS,			      //!< [Windows 4.00] 
+		GetLimitText		    = EM_GETLIMITTEXT,		      //!< [Windows 4.00] 
+		GetMargins		      = EM_GETMARGINS,			      //!< [Windows 4.00] 
+		PosFromChar		      = EM_POSFROMCHAR,			      //!< [Windows 4.00] 
+		SetLimitText		    = EM_SETLIMITTEXT,		      //!< [Windows 4.00] 
+		SetMargins		      = EM_SETMARGINS,			      //!< [Windows 4.00] 
+#endif
+#if _WIN32_WINNT >= _WIN32_WINNT_WIN2K
+    GetImeStatus		    = EM_GETIMESTATUS,		      //!< [Windows 5.00] 
+    SetImeStatus		    = EM_SETIMESTATUS,		      //!< [Windows 5.00] 
+#endif
+#if _WIN32_WINNT >= _WIN32_WINNT_WINXP
+    GetCueBanner		    = EM_GETCUEBANNER,		      //!< [Windows 5.01] 
+    HideBalloonTip		  = EM_HIDEBALLOONTIP,	      //!< [Windows 5.01] 
+    SetCueBanner		    = EM_SETCUEBANNER,		      //!< [Windows 5.01] 
+    ShowBalloonTip		  = EM_SHOWBALLOONTIP,        //!< [Windows 5.01] 
+#endif
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
+    TakeFocus		        = EM_TAKEFOCUS,			        //!< [Windows 6.00] 
+    NoSetFocus		      = EM_NOSETFOCUS,		        //!< [Windows 6.00] 
+    GetHighlight		    = EM_GETHILITE,			        //!< [Windows 6.00] 
+		SetHighlight        = EM_SETHILITE,			        //!< [Windows 6.00] 
+#endif
+  };
+
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<EditMessage>  : std::false_type  {};
+  template <> struct is_contiguous<EditMessage> : std::false_type  {};
+  template <> struct default_t<EditMessage>     : std::integral_constant<EditMessage,EditMessage::CanUndo>   {};
+  
   // --------------------------------------------------------------------------------------------------------------
   // ------------------------------------------------ COMBO-BOX CONTROLS ------------------------------------------
   // --------------------------------------------------------------------------------------------------------------

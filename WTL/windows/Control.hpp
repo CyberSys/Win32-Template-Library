@@ -10,6 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Window.hpp>                 //!< Window
+#include <wtl/platform/ControlStyles.hpp>         //!< various enumerations
 
 //! \namespace wtl - Windows template library
 namespace wtl 

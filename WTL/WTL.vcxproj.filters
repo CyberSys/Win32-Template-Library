@@ -638,6 +638,9 @@
     <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.hpp">
       <Filter>Windows\Controls\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\Edit.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">
