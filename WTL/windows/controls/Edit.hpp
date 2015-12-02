@@ -59,6 +59,7 @@ namespace wtl
     {
       // Set properties
       this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop|WindowStyle::VScroll|WindowStyle::Border | EditStyle::Left;
+      this->StyleEx = WindowStyleEx::ClientEdge;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();

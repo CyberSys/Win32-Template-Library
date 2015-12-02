@@ -61,6 +61,7 @@ namespace wtl
     {
       // Set properties
       this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop | ButtonStyle::AutoTriState|ButtonStyle::Left|ButtonStyle::Notify;
+      this->StyleEx = WindowStyleEx::Transparent;
 
       // Listen for clicks
       this->Click += new ButtonClickEventHandler<encoding>(this, &CheckBox::onClick);
