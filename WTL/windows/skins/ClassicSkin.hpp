@@ -116,19 +116,6 @@ namespace wtl
       //! TODO
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::measure const
-    //! Fallback override for measuring a window
-    //! 
-    //! \param[in,out] &btn - Window to be measured
-    //! \param[in,out] &dc - Output device context
-    //! \return SizeL - Required size
-    /////////////////////////////////////////////////////////////////////////////////////////
-    SizeL measure(Window<ENC>& wnd, DeviceContext& dc) const override
-    {
-      return {0,0};
-    }
-
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 

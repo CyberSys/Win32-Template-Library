@@ -230,23 +230,23 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void draw(Window<ENC>& wnd, DeviceContext& dc, const RectL& rc) const override
     {
-      // Draw background
-      dc.fill(rc, wtl::StockBrush::ButtonFace);
+      Theme theme(wnd.handle(), L"Window");
+
+      // Draw window background
+      dc.fill(rc, theme.brush(ThemeColour::Window));   
+
+      // Query window menu
+      if (!wnd.Menu.empty())
+      {
+        ::MENUBARINFO bar { sizeof(::MENUBARINFO) };
+        Theme menu(wnd.handle(), L"Menu");
+
+        // Draw window menu bar
+        ::GetMenuBarInfo(wnd.handle(), OBJID_MENU , 0, &bar);
+        menu.fill(dc, MENU_BARBACKGROUND, MB_INACTIVE, wnd.toClient(bar.rcBar));
+      }
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ThemedSkin::measure const
-    //! Fallback override for measuring a window
-    //! 
-    //! \param[in,out] &btn - Window to be measured
-    //! \param[in,out] &dc - Output device context
-    //! \return SizeL - Required size
-    /////////////////////////////////////////////////////////////////////////////////////////
-    SizeL measure(Window<ENC>& wnd, DeviceContext& dc) const override
-    {
-      return {0,0};
-    }
-    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
 

@@ -99,6 +99,24 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Theme::content const
+    //! Retrieves a themed system colour brush
+    //!
+    //! \param[in] col - Themed system colour
+    //! \return HBrush - Shared handle to themed system coloured brush
+    //! 
+    //! \throw wtl::platform_error - Unable to query themed system colour brush
+    /////////////////////////////////////////////////////////////////////////////////////////
+    HBrush brush(ThemeColour col) const
+    {
+      // Query theme for brush
+      if ( ::HBRUSH br = ::GetThemeSysColorBrush(Handle, enum_cast(col)) )
+        return HBrush(br, AllocType::Create);
+
+      throw platform_error(HERE, "Unable to query themed system colour brush");
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Theme::fill const
     //! Draws the border and background defined by the visual style for the specified control part.
     //!

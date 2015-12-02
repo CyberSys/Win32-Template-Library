@@ -12,6 +12,8 @@
 #include <wtl/traits/EnumTraits.hpp>                  //!< is_attribute, is_contiguous
 #include <wtl/utils/Default.hpp>                      //!< default_t
 #include <utility>
+#include <vsstyle.h>                                  //!< Parts and States
+#include <Vssym32.h>                                  //!< Properties
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -303,9 +305,50 @@ namespace wtl
   template <> struct is_contiguous<SystemMetric> : std::false_type  {};
   template <> struct default_t<SystemMetric>     : std::integral_constant<SystemMetric,SystemMetric::Arrange>   {};
 
+  // --------------------------------------- THEME COLOUR ------------------------------------
+
+  //! \enum ThemeColour - Defines themed system colours 
+  enum class ThemeColour : int32_t
+  { 
+    ActiveBorder            = TMT_ACTIVEBORDER,			//!< 	The color of the border around an active window.
+    ActiveCaption           = TMT_ACTIVECAPTION,			//!< 	The color of the caption area on an active window.
+    AppWorkspace            = TMT_APPWORKSPACE,			//!< 	The color of the application workspace.
+    Background              = TMT_BACKGROUND,			//!< 	The color of the background.
+    ButtonFace              = TMT_BTNFACE,			//!< 	The color of a button face.
+    ButtonHighlight         = TMT_BTNHIGHLIGHT,			//!< 	The color of the highlight around a button.
+    ButtonShadow            = TMT_BTNSHADOW,			//!< 	The color of the shadow underneath a button.
+    ButtonText              = TMT_BTNTEXT,			//!< 	The color of text contained within a button.
+    ButtonAlternateFace     = TMT_BUTTONALTERNATEFACE,			//!< 	The color of the alternate face of a button.
+    CaptionText             = TMT_CAPTIONTEXT,			//!< 	The color of text drawn in the caption area of an active window.
+    DarkShadow3D            = TMT_DKSHADOW3D,			//!< 	The color of three-dimensional dark shadows.
+    GradientActiveCaption   = TMT_GRADIENTACTIVECAPTION,			//!< 	The gradient color applied to the caption area of an active window.
+    GradientInActiveCaption = TMT_GRADIENTINACTIVECAPTION,			//!< 	The gradient color applied to the caption area of an inactive window.
+    GrayText                = TMT_GRAYTEXT,			//!< 	The color of dimmed text.
+    Highlight               = TMT_HIGHLIGHT,			//!< 	The color of a highlight.
+    HighlightText           = TMT_HIGHLIGHTTEXT,			//!< 	The color of highlighted text.
+    HotTracking             = TMT_HOTTRACKING,			//!< 	The color of highlight applied when a user moves the mouse over a control.
+    InactiveBorder          = TMT_INACTIVEBORDER,			//!< 	The color of the border around an inactive window.
+    InactiveCaption         = TMT_INACTIVECAPTION,			//!< 	The color of the caption area on an inactive window.
+    InactiveCaptionText     = TMT_INACTIVECAPTIONTEXT,			//!< 	The color of the text in the caption area of an inactive window.
+    InfoText                = TMT_INFOTEXT,			//!< 	The color of informational text.
+    InfoBackground          = TMT_INFOBK,			//!< 	The color of the background behind informational text.
+    Light3D                 = TMT_LIGHT3D,			//!< 	The color of three-dimensional light areas.
+    MenuBar                 = TMT_MENUBAR,			//!< 	The color of the menu bar.
+    MenuHighlight           = TMT_MENUHILIGHT,			//!< 	The color of highlight drawn on a menu item when the user moves the mouse over it.
+    MenuText                = TMT_MENUTEXT,			//!< 	The color of text drawn on a menu.
+    ScrollBar               = TMT_SCROLLBAR,			//!< 	The color of scroll bars.
+    Window                  = TMT_WINDOW,			//!< 	The color of a window.
+    WindowFrame             = TMT_WINDOWFRAME,			//!< 	The color of the frame around a window.
+    WindowText              = TMT_WINDOWTEXT,			//!< 	The color of text drawn in a window.
+  };
+  
+  //! Define traits: Non-contiguous enumeration
+  template <> struct is_attribute<ThemeColour>  : std::false_type  {};
+  template <> struct is_contiguous<ThemeColour> : std::false_type  {};
+  template <> struct default_t<ThemeColour>     : std::integral_constant<ThemeColour,ThemeColour::ActiveBorder>   {};
+
   // ----------------------------------- WINDOWS OS VERSION ----------------------------------
   
-
   //! \enum WindowVersion - Defines operating system (Kernel32) versions
   enum class WindowVersion : ulong32_t
   { 

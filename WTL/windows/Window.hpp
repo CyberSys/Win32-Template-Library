@@ -517,6 +517,44 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Window::toClient const
+    //! Converts screen co-ordinates to client co-ordinates
+    //! 
+    //! \param[in] const& rc - Rectangle in screen co-ordinates 
+    //! 
+    //! \throw wtl::platform_error - Unable to convert rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    RectL toClient(const RectL& rc) const
+    {
+      PointL pt = rc.topLeft();
+
+      // Convert screen-to-client
+      if (!::ScreenToClient(handle(), pt))
+        throw platform_error(HERE, "Unable to convert co-ordinates");
+
+      return { pt, rc.size() };
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Window::toScreen const
+    //! Converts client co-ordinates to screen co-ordinates
+    //! 
+    //! \param[in] const& rc - Rectangle in client co-ordinates 
+    //! 
+    //! \throw wtl::platform_error - Unable to convert rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    RectL toScreen(const RectL& rc) const
+    {
+      PointL pt = rc.topLeft();
+
+      // Convert client-to-client
+      if (!::ClientToScreen(handle(), pt))
+        throw platform_error(HERE, "Unable to convert co-ordinates");
+
+      return { pt, rc.size() };
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Window::wndclass const
     //! Get the window class
     //! 
@@ -949,7 +987,7 @@ namespace wtl
         MouseEnter.raise(args);
       }
 
-      // Handle message
+      // Pass-through message
       return {MsgRoute::Unhandled, -1};
     }
     

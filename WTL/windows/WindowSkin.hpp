@@ -59,7 +59,6 @@ namespace wtl
     //! Measuring
     virtual SizeL measure(Button<encoding>& btn, DeviceContext& dc) const = 0;
     virtual SizeL measure(CheckBox<encoding>& chk, DeviceContext& dc) const = 0;
-    virtual SizeL measure(Window<encoding>& wnd, DeviceContext& dc) const = 0;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 
