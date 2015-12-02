@@ -67,7 +67,7 @@ namespace wtl
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
     DISABLE_COPY(Application);       //!< Cannot be copied
-    ENABLE_MOVE(Application);        //!< Can be moved
+    ENABLE_MOVE(Application);        //!< Move-only type
     
     // ----------------------------------- STATIC METHODS -----------------------------------
   private:

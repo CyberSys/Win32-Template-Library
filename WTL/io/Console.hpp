@@ -692,7 +692,7 @@ namespace wtl
   std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const caught_exception& ex)  
   { 
     return c << '\n' << (textcol::red   |textcol::bold) << "EXCEPTION: " << textcol::white  << ex.Problem  << "..." << ex.Cause 
-             << '\n' << (textcol::yellow|textcol::bold) << "CAUGHT: "    << textcol::yellow << ex.source() << "..." << '\n';
+             << '\n' << (textcol::yellow|textcol::bold) << "CAUGHT: "    << textcol::yellow << ex.source() << "..." << std::endl;
   }
 
 

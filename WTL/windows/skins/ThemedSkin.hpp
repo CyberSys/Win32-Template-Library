@@ -18,6 +18,8 @@
 #include <WTL/windows/WindowSkin.hpp>             //!< IWindowSkin
 #include <WTL/windows/controls/Button.hpp>        //!< Button
 #include <WTL/windows/controls/CheckBox.hpp>      //!< CheckBox
+#include <WTL/windows/controls/ComboBox.hpp>      //!< ComboBox
+#include <WTL/windows/controls/Edit.hpp>          //!< Edit
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -124,14 +126,11 @@ namespace wtl
       theme.write(dc, BP_PUSHBUTTON, state, btn.Text(), rcText, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
       
       // [FOCUS] Draw focus rectangle
-      if (btn.Focus)    //if (args.State && OwnerDrawState::Focus)
+      if (btn.Focus)   
       {
         RectL rcFocus = rcContent.inflate(-Metrics::WindowEdge);
         dc.focus(rcFocus);
       }
-
-      // Handle message
-      //return {MsgRoute::Handled, 0};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -199,14 +198,13 @@ namespace wtl
         RectL rcText = theme.measure(dc, BP_CHECKBOX, state, chk.Text(), rcContent, DrawTextFlags::Left|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
         dc.focus(rcText);
       }
-
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // ThemedSkin::measure const
     //! Measures a standard CheckBox control 
     //! 
-    //! \param[in,out] &btn - CheckBox to be measured
+    //! \param[in,out] &chk - CheckBox to be measured
     //! \param[in,out] &dc - Output device context
     //! \return SizeL - Required size
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -218,6 +216,60 @@ namespace wtl
       return theme.measure(dc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL) 
            + dc.measure(chk.Text()) 
            + SizeL(3*Metrics::WindowEdge.Width, 0);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::draw const
+    //! Draws a standard ComboBox control
+    //! 
+    //! \param[in,out] &cmb - ComboBox to be drawn
+    //! \param[in,out] &dc - Output device context
+    //! \param[in] const &rc - Drawing rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void draw(ComboBox<ENC>& cmb, DeviceContext& dc, const RectL& rc) const override
+    {
+      //! TODO: Drawing code not yet implemented
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::measure const
+    //! Measures a standard ComboBox control 
+    //! 
+    //! \param[in,out] &cmb - ComboBox to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(ComboBox<ENC>& cmb, DeviceContext& dc) const override
+    {
+      //! TODO: Measuring code not yet implemented
+      return {};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::draw const
+    //! Draws a standard Edit control
+    //! 
+    //! \param[in,out] &edt - Edit to be drawn
+    //! \param[in,out] &dc - Output device context
+    //! \param[in] const &rc - Drawing rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void draw(Edit<ENC>& edt, DeviceContext& dc, const RectL& rc) const override
+    {
+      //! TODO: Drawing code not yet implemented
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::measure const
+    //! Measures a standard Edit control 
+    //! 
+    //! \param[in,out] &edt - Edit to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(Edit<ENC>& edt, DeviceContext& dc) const override
+    {
+      //! TODO: Measuring code not yet implemented
+      return {};
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +293,7 @@ namespace wtl
         ::MENUBARINFO bar { sizeof(::MENUBARINFO) };
         Theme menu(wnd.handle(), L"Menu");
 
-        // Draw window menu bar
+        // Draw window menu bar     // [BUG] Attempting to draw into the non-client area
         ::GetMenuBarInfo(wnd.handle(), OBJID_MENU , 0, &bar);
         menu.fill(dc, MENU_BARBACKGROUND, MB_INACTIVE, wnd.toClient(bar.rcBar));
       }

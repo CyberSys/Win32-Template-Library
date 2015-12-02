@@ -159,7 +159,6 @@
     <ClInclude Include="windows\controls\ComboBox.hpp" />
     <ClInclude Include="windows\controls\Edit.hpp" />
     <ClInclude Include="windows\controls\events\ButtonClickEvent.hpp" />
-    <ClInclude Include="windows\controls\events\ButtonEvents.hpp" />
     <ClInclude Include="windows\controls\events\CheckBoxCheckedEvent.hpp" />
     <ClInclude Include="windows\controls\properties\ButtonIconProperty.h" />
     <ClInclude Include="windows\controls\properties\ButtonIconProperty.hpp" />

@@ -922,7 +922,7 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
+    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
     { 
       // [Handled] Accept window parameters
       return {MsgRoute::Handled, 0};
@@ -998,7 +998,7 @@ namespace wtl
     //! \param[in,out] args - Message arguments containing drawing data
     //! \return LResult - Routing indicating message was handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
+    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
     { 
       // Perform fallback drawing
       SkinFactory<encoding>::get()->draw(*this, args.Graphics, args.Rect);

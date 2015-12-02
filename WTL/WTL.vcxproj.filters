@@ -602,9 +602,6 @@
     <ClInclude Include="windows\controls\ComboBox.hpp">
       <Filter>Windows\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="windows\controls\events\ButtonEvents.hpp">
-      <Filter>Windows\Controls\Events</Filter>
-    </ClInclude>
     <ClInclude Include="windows\controls\properties\ButtonIconProperty.h">
       <Filter>Windows\Controls\Properties</Filter>
     </ClInclude>

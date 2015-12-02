@@ -22,6 +22,8 @@ namespace wtl
   template <Encoding ENC> struct Window;
   template <Encoding ENC> struct Button;
   template <Encoding ENC> struct CheckBox;
+  template <Encoding ENC> struct ComboBox;
+  template <Encoding ENC> struct Edit;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct IWindowSkin - Interface for all window rendering visitors
@@ -54,11 +56,15 @@ namespace wtl
     //! Drawing
     virtual void  draw(Button<encoding>& btn, DeviceContext& dc, const RectL& rc) const = 0;
     virtual void  draw(CheckBox<encoding>& chk, DeviceContext& dc, const RectL& rc) const = 0;
+    virtual void  draw(ComboBox<encoding>& chk, DeviceContext& dc, const RectL& rc) const = 0;
+    virtual void  draw(Edit<encoding>& chk, DeviceContext& dc, const RectL& rc) const = 0;
     virtual void  draw(Window<encoding>& wnd, DeviceContext& dc, const RectL& rc) const = 0;
 
     //! Measuring
     virtual SizeL measure(Button<encoding>& btn, DeviceContext& dc) const = 0;
     virtual SizeL measure(CheckBox<encoding>& chk, DeviceContext& dc) const = 0;
+    virtual SizeL measure(ComboBox<encoding>& chk, DeviceContext& dc) const = 0;
+    virtual SizeL measure(Edit<encoding>& chk, DeviceContext& dc) const = 0;
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
 

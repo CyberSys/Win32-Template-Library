@@ -9,7 +9,16 @@
 #define WTL_SKIN_FACTORY_HPP
 
 #include <wtl/WTL.hpp>
+#include <wtl/utils/Rectangle.hpp>                //!< Rect
+#include <wtl/utils/Size.hpp>                     //!< Size
+#include <WTL/platform/Metrics.hpp>               //!< Metrics
+#include <wtl/gdi/DeviceContext.hpp>              //!< DeviceContext
+#include <WTL/windows/Window.hpp>                 //!< Window
 #include <WTL/windows/WindowSkin.hpp>             //!< IWindowSkin
+#include <WTL/windows/controls/Button.hpp>        //!< Button
+#include <WTL/windows/controls/CheckBox.hpp>      //!< CheckBox
+#include <WTL/windows/controls/ComboBox.hpp>      //!< ComboBox
+#include <WTL/windows/controls/Edit.hpp>          //!< Edit
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -52,7 +61,7 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::draw const
+    // ThemedSkin::draw const
     //! Draws a standard button control
     //! 
     //! \param[in,out] &btn - Button to be drawn
@@ -61,11 +70,11 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void draw(Button<ENC>& btn, DeviceContext& dc, const RectL& rc) const override
     {
-      //! TODO
+      //! TODO: Non-themed drawing code not yet implemented
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::measure const
+    // ThemedSkin::measure const
     //! Measures a standard button control 
     //! 
     //! \param[in,out] &btn - Button to be measured
@@ -74,11 +83,12 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     SizeL measure(Button<ENC>& btn, DeviceContext& dc) const override
     {
-      return {0,0};
+      // Measure button text
+      return dc.measure(btn.Text());
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::draw const
+    // ThemedSkin::draw const
     //! Draws a standard checkbox control
     //! 
     //! \param[in,out] &chk - CheckBox to be drawn
@@ -87,24 +97,80 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void draw(CheckBox<ENC>& chk, DeviceContext& dc, const RectL& rc) const override
     {
-      //! TODO
+      //! TODO: Non-themed drawing code not yet implemented
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::measure const
+    // ThemedSkin::measure const
     //! Measures a standard CheckBox control 
     //! 
-    //! \param[in,out] &btn - CheckBox to be measured
+    //! \param[in,out] &chk - CheckBox to be measured
     //! \param[in,out] &dc - Output device context
     //! \return SizeL - Required size
     /////////////////////////////////////////////////////////////////////////////////////////
     SizeL measure(CheckBox<ENC>& chk, DeviceContext& dc) const override
     {
-      return {0,0};
+      // Measure text + edges
+      return dc.measure(chk.Text()) 
+           + SizeL(3*Metrics::WindowEdge.Width, 0);
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ClassicSkin::draw const
+    // ThemedSkin::draw const
+    //! Draws a standard ComboBox control
+    //! 
+    //! \param[in,out] &cmb - ComboBox to be drawn
+    //! \param[in,out] &dc - Output device context
+    //! \param[in] const &rc - Drawing rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void draw(ComboBox<ENC>& cmb, DeviceContext& dc, const RectL& rc) const override
+    {
+      //! TODO: Non-themed drawing code not yet implemented
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::measure const
+    //! Measures a standard ComboBox control 
+    //! 
+    //! \param[in,out] &cmb - ComboBox to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(ComboBox<ENC>& cmb, DeviceContext& dc) const override
+    {
+      //! TODO: Non-themed measuring code not yet implemented
+      return {};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::draw const
+    //! Draws a standard Edit control
+    //! 
+    //! \param[in,out] &edt - Edit to be drawn
+    //! \param[in,out] &dc - Output device context
+    //! \param[in] const &rc - Drawing rectangle
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void draw(Edit<ENC>& edt, DeviceContext& dc, const RectL& rc) const override
+    {
+      //! TODO: Non-themed drawing code not yet implemented
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::measure const
+    //! Measures a standard Edit control 
+    //! 
+    //! \param[in,out] &edt - Edit to be measured
+    //! \param[in,out] &dc - Output device context
+    //! \return SizeL - Required size
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SizeL measure(Edit<ENC>& edt, DeviceContext& dc) const override
+    {
+      //! TODO: Non-themed measuring code not yet implemented
+      return {};
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ThemedSkin::draw const
     //! Fallback override for drawing a window
     //! 
     //! \param[in,out] &wnd - Window to be drawn
@@ -113,7 +179,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     void draw(Window<ENC>& wnd, DeviceContext& dc, const RectL& rc) const override
     {
-      //! TODO
+      //! Fill background
+      dc.fill(rc, StockBrush::Window);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------

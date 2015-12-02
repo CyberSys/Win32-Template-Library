@@ -33,10 +33,10 @@ namespace wtl
     if (this->Window.exists())
     {
       // Debug
-      cdebug << object_info(__func__, "ButtonMessage::GetCheck", enum_cast<value_t>(this->Window.send(ButtonMessage::GetCheck).Result),
-                                      "ButtonMessage::GetState", enum_cast<value_t>(this->Window.send(ButtonMessage::GetState).Result),
-                                      "IsDlgButtonChecked()", ::IsDlgButtonChecked(*this->Window.parent(), enum_cast(this->Window.Ident())) ) 
-             << std::endl;
+      //cdebug << object_info(__func__, "ButtonMessage::GetCheck", enum_cast<value_t>(this->Window.send(ButtonMessage::GetCheck).Result),
+      //                                "ButtonMessage::GetState", enum_cast<value_t>(this->Window.send(ButtonMessage::GetState).Result),
+      //                                "IsDlgButtonChecked()", ::IsDlgButtonChecked(*this->Window.parent(), enum_cast(this->Window.Ident())) ) 
+      //       << std::endl;
 
       return enum_cast<value_t>( this->Window.send(ButtonMessage::GetCheck).Result ); 
     }
