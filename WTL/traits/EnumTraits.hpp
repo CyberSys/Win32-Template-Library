@@ -120,6 +120,25 @@ namespace wtl
   template <typename E>
   using enum_values_t = typename enum_values<E>::type;
 
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator ~ constexpr
+  //! Compile-time bitwise-NOT operator for attribute enumerations (without casting) iff
+  //! their type traits specify they support the operation
+  //!
+  //! \tparam ENUM - Enumeration type
+  //!
+  //! \param[in] e - Enumeration
+  //! \return ENUM - Bitwise-not of value
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename ENUM> constexpr
+  auto operator ~ (ENUM e) noexcept -> enable_if_enum_t<ENUM,ENUM>
+  {
+    concept_check(ENUM,AttributeEnumeration);
+    
+    // Perform operation upon underlying type
+    return static_cast<ENUM>( ~static_cast<std::underlying_type_t<ENUM>>(e) );
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator | constexpr

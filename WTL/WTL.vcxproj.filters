@@ -689,6 +689,24 @@
     <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.hpp">
       <Filter>Windows\Controls\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\properties\RichEditBackColourProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RichEditBackColourProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\RadioButton.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RadioButtonCheckProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RadioButtonCheckProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\Static.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

@@ -11,6 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                        //!< Control
 #include <wtl/gdi/Theme.hpp>                                              //!< Theme
+#include <wtl/windows/controls/properties/RichEditBackColourProperty.h>   //!< RichEditBackColourProperty
 #include <wtl/windows/controls/properties/RichEditCharFormatProperty.h>   //!< RichEditCharFormatProperty
 #include <wtl/windows/controls/properties/RichEditSelectedTextProperty.h> //!< RichEditSelectedTextProperty
 #include <wtl/windows/controls/properties/EditSelectionProperty.h>        //!< EditSelectionProperty
@@ -96,6 +97,7 @@ namespace wtl
     // Events (TODO)
     
     // Properties (TODO)
+    RichEditBackColourProperty<encoding>    BackgroundColour;   //!< Backgrounf colour
     RichEditCharFormatProperty<encoding>    CharacterFormat;    //!< Character formatting
     RichEditSelectedTextProperty<encoding>  SelectedText;       //!< Current text selection range
     EditSelectionProperty<encoding>         SelectionRange;     //!< Current text selection range
@@ -111,6 +113,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
     RichEdit(WindowId id) : base(id), 
+                            BackgroundColour(*this),
                             CharacterFormat(*this),
                             SelectionRange(*this),
                             SelectedText(*this)
@@ -287,6 +290,7 @@ namespace wtl
   };
 } // namespace wtl
 
+#include <wtl/windows/controls/properties/RichEditBackColourProperty.hpp>     //!< RichEditBackColourProperty
 #include <wtl/windows/controls/properties/RichEditCharFormatProperty.hpp>     //!< RichEditCharFormatProperty
 #include <wtl/windows/controls/properties/RichEditSelectedTextProperty.hpp>   //!< RichEditSelectedTextProperty
 #include <wtl/windows/controls/properties/EditSelectionProperty.hpp>          //!< EditSelectionProperty

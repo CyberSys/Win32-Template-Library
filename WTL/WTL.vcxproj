@@ -173,11 +173,17 @@
     <ClInclude Include="windows\controls\properties\EditSelectionProperty.hpp" />
     <ClInclude Include="windows\controls\properties\EditTextProperty.h" />
     <ClInclude Include="windows\controls\properties\EditTextProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\RadioButtonCheckProperty.h" />
+    <ClInclude Include="windows\controls\properties\RadioButtonCheckProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\RichEditBackColourProperty.h" />
+    <ClInclude Include="windows\controls\properties\RichEditBackColourProperty.hpp" />
     <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.h" />
     <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.hpp" />
     <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.h" />
     <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.hpp" />
+    <ClInclude Include="windows\controls\RadioButton.hpp" />
     <ClInclude Include="windows\controls\RichEdit.hpp" />
+    <ClInclude Include="windows\controls\Static.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />

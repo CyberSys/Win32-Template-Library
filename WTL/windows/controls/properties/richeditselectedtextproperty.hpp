@@ -11,7 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/casts/OpaqueCast.hpp>                                          //!< opaque_cast
 #include <wtl/windows/controls/properties/RichEditSelectedTextProperty.h>    //!< RichEditSelectedTextProperty
-#include <wtl/windows/controls/RichEdit.hpp>                                     //!< RichEdit
+#include <wtl/windows/controls/RichEdit.hpp>                                 //!< RichEdit
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

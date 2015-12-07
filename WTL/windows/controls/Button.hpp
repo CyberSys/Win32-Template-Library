@@ -206,7 +206,8 @@ namespace wtl
           switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
           case ButtonNotification::Click:       ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));   break;
-          case ButtonNotification::DoubleClick:     /* TODO: Raise notification */                        break;
+          case ButtonNotification::DoubleClick:       /* TODO: Raise notification */                      break;
+          case ButtonNotification::HotItemChange:     /* TODO: Raise notification */                      break;
           }
           break;
 
