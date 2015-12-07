@@ -663,7 +663,7 @@ namespace wtl
     {
       switch (m)
       {
-      case heading: return s << backcol::black << (textcol::green|textcol::bold);
+      case heading: return s << backcol::black << (textcol::cyan|textcol::bold);
       case success: return s << backcol::black << (textcol::green|textcol::bold) << "Success: " << textcol::white;
       case failure: return s << backcol::black <<  (textcol::red|textcol::bold)  << "Failure: " << textcol::white;
       case error:   return s << backcol::black <<  (textcol::red|textcol::bold)  << "ERROR: "   << textcol::white;
@@ -764,6 +764,23 @@ namespace wtl
              << '\n' << (textcol::red   |textcol::bold) << "EXCEPTION: " << textcol::white  << ex.Problem  << "..." << ex.Cause 
              << '\n' << (textcol::yellow|textcol::bold) << "CAUGHT: "    << textcol::yellow << ex.source() << "..." << std::endl
              << format::pop;
+  }
+
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::endl
+  //! Writes a new-line character to a debug console output stream, flushes the stream, and resets the character formatting
+  //! 
+  //! \tparam CHAR - Output stream character type
+  //! \tparam TRAITS - Output stream character traits
+  //!
+  //! \param[in,out] &c - Output stream
+  //! \return console_stream<CHAR,TRAITS>& - Reference to 'c'
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename CHAR, typename TRAITS>
+  std::basic_ostream<CHAR,TRAITS>&  endl(std::basic_ostream<CHAR,TRAITS>& c) 
+  { 
+    return c << '\n' << std::flush << format::reset;
   }
 
 

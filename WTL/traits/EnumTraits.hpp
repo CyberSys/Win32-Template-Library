@@ -182,6 +182,49 @@ namespace wtl
 
     return a = a | b;
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator | constexpr
+  //! Compile-time bitwise-XOR operator for combining enumeration with values without casting iff
+  //! their type traits specify they support the operation
+  //!
+  //! \tparam ENUM - Enumeration type
+  //! \tparam VALUE - Value type
+  //!
+  //! \param[in] a - Enumeration
+  //! \param[in] b - Value
+  //! \return ENUM - Bitwise-XOR combination of both values
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename ENUM, typename VALUE> constexpr
+  auto operator ^ (ENUM a, VALUE b) noexcept -> enable_if_enum_t<ENUM,ENUM>
+  {
+    concept_check(ENUM,AttributeEnumeration);
+    
+    // Perform operation upon underlying types
+    return static_cast<ENUM>(static_cast<std::underlying_type_t<ENUM>>(a)
+                           ^ static_cast<std::underlying_type_t<ENUM>>(b));
+  }
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator ^= constexpr
+  //! Compile-time bitwise-XOR assignment operator for combining enumerations without casting iff
+  //! their type traits specify they support the operation
+  //!
+  //! \tparam ENUM - Enumeration type
+  //! \tparam VALUE - Value type
+  //!
+  //! \param[in,out] &a - Value to modify
+  //! \param[in] const &b - Value to be combined with 'a'
+  //! \return ENUM& - Reference to 'a' (now combined with 'b')
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <typename ENUM, typename VALUE> constexpr
+  auto  operator ^= (ENUM& a, VALUE b) noexcept -> enable_if_enum_t<ENUM, ENUM&>
+  {
+    concept_check(ENUM,AttributeEnumeration);
+
+    return a = a ^ b;
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator & constexpr

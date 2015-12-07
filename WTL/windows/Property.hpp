@@ -238,6 +238,40 @@ namespace wtl
   {
     return p = p.get() | val;
   }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator ^
+  //! Non-member property bitwise-XOR operator 
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in] const &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property::value_t - Result of applying bitwise-XOR operator to 'val' and current property value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  typename IMPL::value_t  operator ^ (const Property<IMPL>& p, T&& val)
+  {
+    return p.get() ^ val;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! wtl::operator ^=
+  //! Non-member property bitwise-XOR assignment operator 
+  //! 
+  //! \tparam IMPL - Property implementation type
+  //! \tparam T - Any type
+  //! 
+  //! \param[in,out] &p - Property
+  //! \param[in] && val - Value to combine
+  //! \return Property& - Reference 'p' with updated value
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename IMPL, typename T>
+  Property<IMPL>&  operator ^= (Property<IMPL>& p, T&& val)
+  {
+    return p = p.get() ^ val;
+  }
 
   
   /////////////////////////////////////////////////////////////////////////////////////////

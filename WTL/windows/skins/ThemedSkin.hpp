@@ -123,7 +123,13 @@ namespace wtl
         rcText.Left += Metrics::WindowIcon.Width + Metrics::WindowEdge.Width;
 
       // Draw text
-      theme.write(dc, BP_PUSHBUTTON, state, btn.Text(), rcText, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
+      if (state != PBS_DISABLED)
+        theme.write(dc, BP_PUSHBUTTON, state, btn.Text(), rcText, DrawTextFlags::Centre|DrawTextFlags::VCentre|DrawTextFlags::SingleLine);
+      else
+      {
+        const auto grayString = choose<ENC>(::GrayStringA,::GrayStringW);
+        grayString(dc.handle(), StockBrush::AppWorkspace, nullptr, (LPARAM)btn.Text().c_str(), btn.Text().size(), rcText.Left, rcText.Top, rcText.width(), rcText.height());
+      }
       
       // [FOCUS] Draw focus rectangle
       if (btn.Focus)   

@@ -40,7 +40,7 @@ namespace wtl
       //       << std::endl;
 
       //return this->Window.send(ButtonMessage::GetCheck).Result != 0; 
-      return ::IsDlgButtonChecked(*this->Window.parent(), enum_cast(this->Window.Ident())) != BST_UNCHECKED;
+      //return ::IsDlgButtonChecked(*this->Window.parent(), enum_cast(this->Window.Ident())) != BST_UNCHECKED;
     }
 
     // Return initial value
@@ -79,7 +79,7 @@ namespace wtl
   void  RadioButtonCheckPropertyImpl<ENC>::set(value_t state) 
   {
     // [EXISTS] Set state iff button exists
-    if (this->Window.exists())
+    if (this->Window.exists() && state)
       ::CheckRadioButton(*this->Window.parent(), enum_cast(First), enum_cast(Last), enum_cast(this->Window.Ident()));   //this->Window.send(ButtonMessage::SetCheck, state ? BST_CHECKED : 0); 
     
     // Save initial state

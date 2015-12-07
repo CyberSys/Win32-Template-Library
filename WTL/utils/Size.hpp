@@ -12,6 +12,7 @@
 #include <wtl/casts/EnumCast.hpp>           //!< enum_cast
 #include <wtl/utils/DebugInfo.hpp>          //!< DebugInfo
 #include <wtl/utils/SFINAE.hpp>             //!< enable_if_sizeof_t
+#include <wtl/utils/Point.hpp>              //!< Point
 #include <wtl/platform/SystemFlags.hpp>     //!< SystemMetric
 #include <type_traits>                      //!< std::enable_if
 #include <algorithm>                        //!< std::min, std::max
@@ -430,7 +431,22 @@ namespace wtl
     return sz * m;
   }
 
-
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // Size::operator+ constexpr
+  //! Calculate the result of translating a pointer by a given size
+  //!
+  //! \param[in] const& pt - Point of any type
+  //! \param[in] const& sz - Size of any type
+  //! \return Point<T> - Result of adding 'sz' to 'pt'
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename T, typename U> constexpr
+  Point<T> operator + (const Point<T>& pt, const Size<U>& sz)  
+  {
+    return Point<T>(pt.X + static_cast<T>(sz.Width),
+                    pt.Y + static_cast<T>(sz.Height));
+  }
+    
   //////////////////////////////////////////////////////////////////////////////////////////
   // wtl::operator <<
   //! Prints a Size to a console output stream

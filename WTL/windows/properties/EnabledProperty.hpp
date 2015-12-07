@@ -34,8 +34,8 @@ namespace wtl
     if (this->Window.exists())
       return boolean_cast(::IsWindowVisible(this->Window));
 
-    // Return cached
-    return base::get();
+    // [~EXISTS] Query disabled style
+    return !(this->Window.Style && WindowStyle::Disabled);
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -45,18 +45,22 @@ namespace wtl
   //! Set the current window state iff window exists, otherwise 'initial' state
   //! 
   //! \param[in] state - Window state
-  //! 
-  //! \throw wtl::platform_error - Unable to set window state
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   void  EnabledPropertyImpl<ENC>::set(value_t state) 
   {
     // Set window state
-    if (this->Window.exists() && !::EnableWindow(this->Window, boolean_cast(state)))
-      throw platform_error(HERE, "Unable to set window state");
+    if (this->Window.exists())
+      ::EnableWindow(this->Window, boolean_cast(state));
 
-    // Update value
-    base::set(state);
+    // [~EXISTS] Set/clear disabled style
+    else if (!this->Window.exists())
+    {
+      if (!state)
+        this->Window.Style |= WindowStyle::Disabled;
+      else
+        this->Window.Style &= ~WindowStyle::Disabled;
+    }
   }
 
       

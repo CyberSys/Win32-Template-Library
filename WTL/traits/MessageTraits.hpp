@@ -45,6 +45,8 @@ namespace wtl
       switch (msg)
       {
       case WindowMessage::DrawItem:       return res == True ? MsgRoute::Handled : MsgRoute::Unhandled;
+      case WindowMessage::GetText:        
+      case WindowMessage::GetTextLength:  return MsgRoute::Handled;
       default:                            return res == 0    ? MsgRoute::Handled : MsgRoute::Unhandled;
       }
     }
