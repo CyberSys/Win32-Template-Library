@@ -12,6 +12,7 @@
 
 #include <string>                     //!< std::char_traits
 #include <vector>                     //!< std::vector
+#include <deque>                      //!< std::deque
 #include <sstream>                    //!< std::basic_stringstream
 #include <ios>                        //!< std::ios_base
 #include <WTL/utils/Point.hpp>        //!< Point
@@ -161,6 +162,7 @@ namespace wtl
   private:
     std::vector<char_type>  Buffer;       //!< Buffer 'put area'  
     ::HANDLE                Handle;       //!< console_stream handle
+    std::deque<uint16_t>    Stack;        //!< Formatting stack
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -213,6 +215,40 @@ namespace wtl
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // console_streambuf::push
+    //! Saves the current formatting to the stack. (Also flushes the output)
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void push()
+    {
+      ::CONSOLE_SCREEN_BUFFER_INFO sb;
+    
+      //! Flush 'put area' to output stream
+      sync();
+
+      //! Save the current attributes
+      ::GetConsoleScreenBufferInfo(Handle, &sb);
+      Stack.push_back(sb.wAttributes);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // console_streambuf::pop
+    //! Restores formatting previously saved to the stack. (Also flushes the output)
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void pop()
+    {
+      // Do nothing if empty
+      if (!Stack.empty())
+      {
+        //! Flush 'put area' to output stream
+        sync();
+      
+        //! Replace current formatting with that saved on the stack
+        ::SetConsoleTextAttribute(Handle, Stack.front()); 
+        Stack.pop_front();
+      }
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // console_streambuf::setback
     //! Modifies the background colour
@@ -436,6 +472,24 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
     //////////////////////////////////////////////////////////////////////////////////////////
+    // console_stream::push
+    //! Saves the current formatting to the stack
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void push()
+    {
+      Buffer.push();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // console_stream::pop
+    //! Restores formatting previously saved to the stack
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void pop()
+    {
+      Buffer.pop();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
     // console_stream::setback
     //! Modifies the background colour
     //! 
@@ -591,6 +645,9 @@ namespace wtl
       failure,      //!< Prints 'Failure' in red
       error,        //!< Prints 'ERROR' in red
       warning,      //!< Prints 'WARNING' in blue
+      reset,        //!< Resets formatting
+      push,         //!< Pushes current formatting to the stack
+      pop,          //!< Pops previously saved formatting from the stack
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -607,9 +664,21 @@ namespace wtl
       switch (m)
       {
       case heading: return s << backcol::black << (textcol::green|textcol::bold);
-      case success: return s << backcol::black << (textcol::green|textcol::bold) << "Success: ";
-      case failure: return s << backcol::black <<  (textcol::red|textcol::bold)  << "Failure: ";
-      case error:   return s << backcol::black <<  (textcol::red|textcol::bold)  << "ERROR: ";
+      case success: return s << backcol::black << (textcol::green|textcol::bold) << "Success: " << textcol::white;
+      case failure: return s << backcol::black <<  (textcol::red|textcol::bold)  << "Failure: " << textcol::white;
+      case error:   return s << backcol::black <<  (textcol::red|textcol::bold)  << "ERROR: "   << textcol::white;
+      case reset:   return s << backcol::black << textcol::white;
+      case push:    
+        // Ensure stream is a debug-console then preserve formatting
+        if (s.iword(console_stream<CHAR,TRAITS>::Ident))
+          static_cast<console_stream<CHAR,TRAITS>&>(s).push();
+        break;
+
+      case pop:   
+        // Ensure stream is a debug-console then restore formatting
+        if (s.iword(console_stream<CHAR,TRAITS>::Ident))
+          static_cast<console_stream<CHAR,TRAITS>&>(s).pop();
+        break;
       }
     
       return s;
@@ -691,8 +760,10 @@ namespace wtl
   template <typename CHAR, typename TRAITS>
   std::basic_ostream<CHAR,TRAITS>&  operator << (std::basic_ostream<CHAR,TRAITS>& c, const caught_exception& ex)  
   { 
-    return c << '\n' << (textcol::red   |textcol::bold) << "EXCEPTION: " << textcol::white  << ex.Problem  << "..." << ex.Cause 
-             << '\n' << (textcol::yellow|textcol::bold) << "CAUGHT: "    << textcol::yellow << ex.source() << "..." << std::endl;
+    return c << format::push
+             << '\n' << (textcol::red   |textcol::bold) << "EXCEPTION: " << textcol::white  << ex.Problem  << "..." << ex.Cause 
+             << '\n' << (textcol::yellow|textcol::bold) << "CAUGHT: "    << textcol::yellow << ex.source() << "..." << std::endl
+             << format::pop;
   }
 
 

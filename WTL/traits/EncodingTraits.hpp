@@ -18,7 +18,7 @@
 namespace wtl
 {
   //! \enum Encoding - Defines supported encoding types
-  enum class Encoding : long32_t
+  enum class Encoding : int32_t
   {
     ANSI = CP_ACP,                //!< Windows ANSI
     ASCII = 20127,                //!< ASCII

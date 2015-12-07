@@ -1,33 +1,86 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\Edit.hpp
-//! \brief Encapsulates standard edit controls
-//! \date 1 December 2015
+//! \file wtl\windows\controls\RichEdit.hpp
+//! \brief Encapsulates standard rich-edit controls
+//! \date 6 December 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_EDIT_HPP
-#define WTL_EDIT_HPP
+#ifndef WTL_RICH_EDIT_HPP
+#define WTL_RICH_EDIT_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Control.hpp>                                    //!< Control
-#include <wtl/gdi/Theme.hpp>                                          //!< Theme
-#include <wtl/windows/controls/properties/EditSelectionProperty.h>    //!< EditSelectionProperty
+#include <wtl/windows/Control.hpp>                                        //!< Control
+#include <wtl/gdi/Theme.hpp>                                              //!< Theme
+#include <wtl/windows/controls/properties/RichEditCharFormatProperty.h>   //!< RichEditCharFormatProperty
+#include <wtl/windows/controls/properties/RichEditSelectedTextProperty.h> //!< RichEditSelectedTextProperty
+#include <wtl/windows/controls/properties/EditSelectionProperty.h>        //!< EditSelectionProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct RichEditLibrary - Initializes the richedit library upon program startup
+  //////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  struct RichEditLibrary
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+   
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // RichEditLibrary::RichEditLibrary
+    //! Initializes the RichEditVersion library
+    //! 
+    //! \param[in] ver - Desired version
+    //!
+    //! \throw wtl::platform_error - Failed to initialize library
+    //////////////////////////////////////////////////////////////////////////////////////////
+    RichEditLibrary(RichEditVersion ver = RichEditVersion::v4_0)
+    {
+      String<ENC> name;
+
+      // Determine library name
+      switch (ver)
+      {
+      case RichEditVersion::v1_0: name = "richedit32.dll";  break;
+      default:                    name = "richedit20.dll";  break;
+      case RichEditVersion::v4_0: name = "msftedit.dll";    break;
+      }
+
+      // Initialize the library
+      if (!WinAPI<ENC>::loadLibrary(name.c_str())) 
+        throw platform_error(HERE, "Unable to initialize RichEdit library");
+    }
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+    
+		DISABLE_COPY(RichEditLibrary);			//!< Singleton type
+		DISABLE_MOVE(RichEditLibrary);			//!< Singleton type
+		
+    // ----------------------------------- STATIC METHODS -----------------------------------
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+    
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+  };
+
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct Edit - Encapsulates the standard edit control
+  //! \struct RichEdit - Encapsulates the standard rich-edit control
   //! 
   //! \tparam ENC - Character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct Edit : Control<ENC>
+  struct RichEdit : Control<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \alias type - Define own type
-    using type = Edit<ENC>;
+    using type = RichEdit<ENC>;
   
     //! \alias base - Define base type
     using base = Control<ENC>;
@@ -42,44 +95,47 @@ namespace wtl
     
     // Events (TODO)
     
-
     // Properties (TODO)
-    EditSelectionProperty<encoding>  SelectionRange;    //!< Current text selection range
-
+    RichEditCharFormatProperty<encoding>    CharacterFormat;    //!< Character formatting
+    RichEditSelectedTextProperty<encoding>  SelectedText;       //!< Current text selection range
+    EditSelectionProperty<encoding>         SelectionRange;     //!< Current text selection range
+    
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::Edit
-    //! Creates the window object for a edit control without creating the window handle
+    // RichEdit::RichEdit
+    //! Creates the window object for a rich-edit control without creating the window handle
     //! 
     //! \param[in] id - Control identifier
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    Edit(WindowId id) : base(id), 
-                        SelectionRange(*this)
+    RichEdit(WindowId id) : base(id), 
+                            CharacterFormat(*this),
+                            SelectionRange(*this),
+                            SelectedText(*this)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop|WindowStyle::VScroll|WindowStyle::Border | EditStyle::Left;
+      this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop|WindowStyle::VScroll|WindowStyle::Border | RichEditStyle::Left;
       this->StyleEx = WindowStyleEx::ClientEdge;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
 
-      // Compile-time subclass the standard edit control
+      // Compile-time subclass the standard rich-edit control
       this->SubClasses.push_back(getNativeSubClass());
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
   public:
-    DISABLE_COPY(Edit);     //!< Cannot be copied
-    ENABLE_MOVE(Edit);      //!< Can be moved
-    ENABLE_POLY(Edit);      //!< Can be polymorphic
+    DISABLE_COPY(RichEdit);     //!< Cannot be copied
+    ENABLE_MOVE(RichEdit);      //!< Can be moved
+    ENABLE_POLY(RichEdit);      //!< Can be polymorphic
 
     // ----------------------------------- STATIC METHODS -----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::registerClass 
+    // RichEdit::registerClass 
     //! Registers the window-class 
     //! 
     //! \param[in] instance - Handle to registering module  [Used only during initial call]
@@ -89,10 +145,10 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
-      static String<encoding> name("WTL.Edit");
+      static String<encoding> name("WTL.RichEdit");
       
-      // Define WTL edit window-class
-      static WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
+      // Define WTL rich-edit window-class
+      static WindowClass<encoding>  std(SystemClass::RichEdit);    //!< Lookup standard rich-edit window-class
       static WindowClass<encoding>  ctrl(instance,
                                          name.c_str(),
                                          std.Style,
@@ -105,20 +161,20 @@ namespace wtl
                                          std.ClassStorage,
                                          std.WindowStorage);    
 
-      // Return WTL edit class
+      // Return WTL rich-edit class
       return ctrl;
     }
     
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::getNativeSubClass 
-    //! Get the window procedure for the standard edit
+    // RichEdit::getNativeSubClass 
+    //! Get the window procedure for the standard rich-edit
     //! 
-    //! \return SubClass - SubClass representing the window procedure of the standard edit
+    //! \return SubClass - SubClass representing the window procedure of the standard rich-edit
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass getNativeSubClass() 
     {
-      static WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
+      static WindowClass<encoding>  std(SystemClass::RichEdit);    //!< Lookup standard rich-edit window-class
       
       // Return native window proc
       return { SubClass::WindowType::Native, std.WndProc };
@@ -129,7 +185,7 @@ namespace wtl
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::send
+    // RichEdit::send
     //! Sends a message to the window
     //! 
     //! \tparam WM - Window Message 
@@ -139,10 +195,10 @@ namespace wtl
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
     using base::send;
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::send
-    //! Sends a edit message to the window
+    // RichEdit::send
+    //! Sends an edit message to the window
     //! 
     //! \tparam EM - Edit Message 
     //!
@@ -155,9 +211,25 @@ namespace wtl
     {
       return send_message<encoding>(EM, this->Handle, w, l);
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // RichEdit::send
+    //! Sends a rich-edit message to the window
+    //! 
+    //! \tparam EM - RichEdit Message 
+    //!
+    //! \param[in] w- [optional] First parameter
+    //! \param[in] l - [optional] Second parameter
+    //! \return LResult - Message result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <RichEditMessage EM> 
+    LResult send(::WPARAM w = 0, ::LPARAM l = 0)
+    {
+      return send_message<encoding>(EM, this->Handle, w, l);
+    }
     
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::wndclass const
+    // RichEdit::wndclass const
     //! Get the window class
     //! 
     //! \return const class_t& - Shared window class
@@ -169,7 +241,7 @@ namespace wtl
     
   protected:
     /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::route
+    // RichEdit::route
     //! Routes messages to an instance's handlers (This is the 'Instance window procedure')
     //!
     //! \param[in] message - Window message identifier
@@ -189,12 +261,12 @@ namespace wtl
         // [COMMAND (REFLECTED)] Raise associated event
         case WindowMessage::ReflectCommand:  
           // Extract notification
-          switch (static_cast<EditNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
+          switch (static_cast<RichEditNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
-          case EditNotification::Change:      /* TODO: Raise notification */            break;
-          case EditNotification::Update:      /* TODO: Raise notification */            break;
-          case EditNotification::HScroll:     /* TODO: Raise notification */            break;
-          case EditNotification::VScroll:     /* TODO: Raise notification */            break;
+          case RichEditNotification::Change:      /* TODO: Raise notification */            break;
+          case RichEditNotification::Update:      /* TODO: Raise notification */            break;
+          case RichEditNotification::HScroll:     /* TODO: Raise notification */            break;
+          case RichEditNotification::VScroll:     /* TODO: Raise notification */            break;
           }
           break;
         }
@@ -215,6 +287,8 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/EditSelectionProperty.hpp>    //!< EditSelectionProperty
+#include <wtl/windows/controls/properties/RichEditCharFormatProperty.hpp>     //!< RichEditCharFormatProperty
+#include <wtl/windows/controls/properties/RichEditSelectedTextProperty.hpp>   //!< RichEditSelectedTextProperty
+#include <wtl/windows/controls/properties/EditSelectionProperty.hpp>          //!< EditSelectionProperty
 
-#endif // WTL_EDIT_HPP
+#endif // WTL_RICH_EDIT_HPP

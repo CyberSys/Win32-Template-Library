@@ -20,6 +20,7 @@
 #include <string>                           //!< std::string
 #include <cstdio>                           //!< std::snprintf
 #include <sstream>                          //!< std::ostringstream
+#include <winsock2.h>                       //!< WSAGetLastError
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -474,7 +475,7 @@ namespace wtl
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct platform_error - Thrown when a value occurs outside of a defined boundary
+  //! \struct platform_error - Thrown when a WinAPI function call fails
   /////////////////////////////////////////////////////////////////////////////////////////
   struct platform_error : std::runtime_error, error_site
   {
@@ -500,12 +501,26 @@ namespace wtl
     //! \param[in] ...&& args - Error message stream arguments
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename... ARGS>
-    platform_error(std::string&& location, ARGS&&... args) : error_base( formatMessage(::GetLastError(), std::forward<ARGS>(args)...) ),
-                                                             site_base(std::move(location))
+    platform_error(std::string&& location, ARGS&&... args) : platform_error(::GetLastError(), std::move(location), std::forward<ARGS>(args)...)
+    {}
+
+  protected:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // platform_error::platform_error
+    //! Creates an exception from a location and a stream of arguments used to build an error message
+    //!
+    //! \tparam ARGS - Message stream argument types
+    //!
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    platform_error(DWORD code, std::string&& location, ARGS&&... args) : error_base(formatMessage(code, std::forward<ARGS>(args)...)),
+                                                                         site_base(std::move(location))
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-
+  public:
     ENABLE_COPY(platform_error);        //!< Can be copied
     ENABLE_MOVE(platform_error);        //!< Can be moved
     ENABLE_POLY(platform_error);        //!< Can be polymorphic
@@ -544,6 +559,47 @@ namespace wtl
 
   };
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct socket_error - Thrown when a call to a winsock API function fails
+  /////////////////////////////////////////////////////////////////////////////////////////
+  struct socket_error : platform_error
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+    
+    //! \alias error_base - Define exception base type
+    using base = platform_error;
+
+    // ----------------------------------- REPRESENTATION -----------------------------------
+
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // socket_error::socket_error
+    //! Creates an exception from a location and a stream of arguments used to build an error message
+    //!
+    //! \tparam ARGS - Message stream argument types
+    //!
+    //! \param[in] && location - Location string
+    //! \param[in] ...&& args - Error message stream arguments
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    socket_error(std::string&& location, ARGS&&... args) : base(::WSAGetLastError(), std::move(location), std::forward<ARGS>(args)...)
+    {}
+    
+    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
+
+    ENABLE_COPY(socket_error);        //!< Can be copied
+    ENABLE_MOVE(socket_error);        //!< Can be moved
+    ENABLE_POLY(socket_error);        //!< Can be polymorphic
+
+	  // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+  };
 
 
 } // WTL namespace

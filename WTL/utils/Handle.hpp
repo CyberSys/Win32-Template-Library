@@ -370,7 +370,7 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::operator == const
-    //! Equality operator
+    //! Shared handle equality operator
     //!
     //! \param[in] const &r - Another handle
     //! \return bool - True iff handle & method are equal
@@ -380,17 +380,42 @@ namespace wtl
       return Value.Handle == r.Value.Handle
           && Value.Method == r.Value.Method;
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Handle::operator == const
+    //! Native handle equality operator
+    //!
+    //! \param[in] h - Native handle
+    //! \return bool - True iff handles are equal
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator == (const native_t h) const
+    {
+      return Value.Handle == h;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Handle::operator != const
-    //! Inequality operator
+    //! Shared handle inequality operator
     //!
     //! \param[in] const &r - Another handle
     //! \return bool - True iff handle or method are different
     /////////////////////////////////////////////////////////////////////////////////////////
     bool operator != (const type& r) const
     {
-      return !operator==(r);
+      return Value.Handle != r.Value.Handle
+          || Value.Method != r.Value.Method;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Handle::operator != const
+    //! Native handle inequality operator
+    //!
+    //! \param[in] h - Native handle
+    //! \return bool - True iff handles are different
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator != (const native_t h) const
+    {
+      return Value.Handle != h;
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -435,6 +460,42 @@ namespace wtl
     }
   };
 
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator == 
+  //! Non-member native handle equality operator
+  //!
+  //! \tparam NATIVE - Native handle type which models the StoreableHandle concept
+  //! \tparam ALLOCATOR - [optional] Handle allocator type that models the ConstructibleHandle, CloneableHandle, DestroyableHandle concepts
+  //! \tparam TRAITS - [optional] Type providing handle traits
+  //!
+  //! \param[in] nh - Native handle
+  //! \param[in] const& sh - Shared handle
+  //! \return bool - True iff handles are equal
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename NATIVE, typename ALLOCATOR, typename TRAITS>
+  bool operator == (NATIVE nh, const Handle<NATIVE,ALLOCATOR,TRAITS>& sh) 
+  {
+    return sh == nh;    // Delegate to member operator
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // wtl::operator != 
+  //! Non-member native handle inequality operator
+  //!
+  //! \tparam NATIVE - Native handle type which models the StoreableHandle concept
+  //! \tparam ALLOCATOR - [optional] Handle allocator type that models the ConstructibleHandle, CloneableHandle, DestroyableHandle concepts
+  //! \tparam TRAITS - [optional] Type providing handle traits
+  //!
+  //! \param[in] nh - Native handle
+  //! \param[in] const& sh - Shared handle
+  //! \return bool - True iff handles are unequal
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <typename NATIVE, typename ALLOCATOR, typename TRAITS>
+  bool operator != (NATIVE nh, const Handle<NATIVE,ALLOCATOR,TRAITS>& sh) 
+  {
+    return sh != nh;    // Delegate to member operator
+  }
 
 
 } // WTL namespace

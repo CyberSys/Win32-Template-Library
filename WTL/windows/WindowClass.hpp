@@ -12,13 +12,14 @@
 #include <wtl/casts/EnumCast.hpp>               //!< EnumCast
 #include <wtl/utils/Handle.hpp>                 //!< Handle
 #include <wtl/utils/Default.hpp>                //!< Default
-#include <wtl/resources/ResourceId.hpp>          //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>         //!< ResourceId
 #include <wtl/platform/WindowFlags.hpp>         //!< ClassStyle
 #include <wtl/traits/EncodingTraits.hpp>        //!< Encoding
 #include <wtl/traits/BrushTraits.hpp>           //!< HBrush
 #include <wtl/traits/CursorTraits.hpp>          //!< HCursor
 #include <wtl/traits/IconTraits.hpp>            //!< HIcon
 #include <wtl/traits/WindowClassTraits.hpp>     //!< HAtom
+#include <Richedit.h>                           //!< MSFTEDIT
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -216,9 +217,9 @@ namespace wtl
       case SystemClass::ListBox:			return choose<encoding>(WC_LISTBOXA,WC_LISTBOXW);
       case SystemClass::IpAddress:		return choose<encoding>(WC_IPADDRESSA,WC_IPADDRESSW);
       case SystemClass::Link:			    return choose<encoding>("SysLink",L"SysLink");
-
       case SystemClass::ListView:			return choose<encoding>(WC_LISTVIEWA,WC_LISTVIEWW);
       case SystemClass::NativeFont:		return choose<encoding>(WC_NATIVEFONTCTLA,WC_NATIVEFONTCTLW);
+      case SystemClass::RichEdit:		  return choose<encoding>(RICHEDIT_CLASSA,MSFTEDIT_CLASS);
       case SystemClass::PageScroller:	return choose<encoding>(WC_PAGESCROLLERA,WC_PAGESCROLLERW);
       case SystemClass::ScrollBar:	  return choose<encoding>(WC_SCROLLBARA,WC_SCROLLBARW);
       case SystemClass::Static:			  return choose<encoding>(WC_STATICA,WC_STATICW);

@@ -252,6 +252,7 @@ namespace wtl
 
     App = 0x8000,					            		      //!< 
     MouseEnter,                                 //!< [Custom] Mouse entering window
+    Socket,                                     //!< [Custom] Socket event
   };
   
   //! Define traits: Non-contiguous Attribute

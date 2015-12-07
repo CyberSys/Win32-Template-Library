@@ -123,7 +123,7 @@ namespace wtl
       return btn;
     }
     
-  protected:
+  private:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Button::getNativeSubClass 
     //! Get the window procedure for the standard button

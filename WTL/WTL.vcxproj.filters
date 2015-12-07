@@ -644,6 +644,51 @@
     <ClInclude Include="traits\MessageTraits.hpp">
       <Filter>Traits</Filter>
     </ClInclude>
+    <ClInclude Include="io\Socket.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="traits\SocketTraits.hpp">
+      <Filter>Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\SocketFlags.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\NativeWindow.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\events\AsyncSocketEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="io\Winsock.hpp">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\RichEdit.hpp">
+      <Filter>Windows\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\EditTextProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\EditTextProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\EditSelectionProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\EditSelectionProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.h">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.hpp">
+      <Filter>Windows\Controls\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

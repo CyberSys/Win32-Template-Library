@@ -9,7 +9,7 @@
 #define WTL_MESSAGE_WINDOW_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Window.hpp>
+#include <wtl/windows/Window.hpp>               //!< Window
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -40,118 +40,103 @@ namespace wtl
     //! Create a message-only window
     ///////////////////////////////////////////////////////////////////////////////
     MessageWindow() 
-    {}
+    {
+      // Compile-time subclass the window
+      this->SubClasses.push_back(getNativeSubClass());
+    }
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
     // ----------------------------------- STATIC METHODS -----------------------------------
-  
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
-  
-    ///////////////////////////////////////////////////////////////////////////////
-    // MessageWindow::getClass 
-    //! Get the window class
-    //!
-    //! \param[in] instance - Module owning the window class
-    //! \return class_t& - Reference to window class 
-    ///////////////////////////////////////////////////////////////////////////////
-    const WindowClass<encoding>& wndclass() const override
-    {
-      static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
-
-      // Return singleton
-      return std;
-    }
-
-    // ----------------------------------- MUTATOR METHODS ----------------------------------
-  };
-
-  
-  ///////////////////////////////////////////////////////////////////////////////
-  //! \struct NativeWindow - Provides a (non-owning) wrapper for a native window handle
-  //! 
-  //! \tparam ENC - Window charactrer encoding (UTF16 if unspecified)
-  ///////////////////////////////////////////////////////////////////////////////
-  template <wtl::Encoding ENC = wtl::Encoding::UTF16>
-  struct NativeWindow : wtl::Window<ENC>
-  {
-    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-    
-    //! \alias base - Define base type
-    using base = wtl::Window<ENC>;
-
-    //! \alias class_t - Inherit window class type
-    using class_t = typename base::class_t;
-    
-    //! \alias resource_t - Inherit identifier type
-    using resource_t = typename base::resource_t;
-    
-    //! \var encoding - Inherit window character encoding
-    static constexpr wtl::Encoding  encoding = base::encoding;
-    
-    // ----------------------------------- REPRESENTATION -----------------------------------
   private:
-    class_t   NativeClass;     //!< Provides storage for the window class
-
-    // ------------------------------------ CONSTRUCTION ------------------------------------
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // MessageWindow::getNativeSubClass 
+    //! Get the window procedure for the standard Message-only window
+    //! 
+    //! \return SubClass - SubClass representing the window procedure of a standard Message-only window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    static SubClass getNativeSubClass() 
+    {
+      static WindowClass<encoding>  std(SystemClass::MessageOnly);    //!< Lookup message-only button window-class
+      
+      // Return native window proc
+      return { SubClass::WindowType::Native, std.WndProc };
+    }
+    
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   public:
     ///////////////////////////////////////////////////////////////////////////////
-    // NativeWindow::NativeWindow
-    //! Create a native window wrapper
+    // MessageWindow::registerClass 
+    //! Registers the window-class 
     //! 
-    //! \param[in] wnd - Native window handle
-    //!
-    //! \throw wtl::invalid_argument - Missing window handle
-    ///////////////////////////////////////////////////////////////////////////////
-    NativeWindow(::HWND wnd) : base(wnd, NativeClass),
-                               NativeClass(getClassAtom(wnd))
-    {}
-  
-    // -------------------------------- COPY, MOVE & DESTROY --------------------------------
-    
-		DISABLE_COPY(NativeWindow);			//!< Move-only type
-		ENABLE_MOVE(NativeWindow);			//!< Can be moved
-		
-    // ----------------------------------- STATIC METHODS -----------------------------------
-  private:
-    ///////////////////////////////////////////////////////////////////////////////
-    // MessageWindow::getClass 
-    //! Get the window class
-    //!
-    //! \param[in] instance - Module owning the window class
-    //! \return class_t& - Reference to window class 
-    ///////////////////////////////////////////////////////////////////////////////
-    class_t& getClass(::HINSTANCE instance) override
+    //! \param[in] instance - Handle to registering module  [Used only during initial call]
+    //! \return const class_t& - Window class 
+    //! 
+    //! \throw wtl::platform_error - Unable to register window class
+    /////////////////////////////////////////////////////////////////////////////////////////
+    static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
+      static String<encoding> name("WTL.MessageOnly");
+      
+      // Define WTL message-only window-class
       static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
-
+      static WindowClass<encoding>  msg(instance,
+                                        name.c_str(),
+                                        std.Style,
+                                        base::WndProc,              //!< Replace the window procedure 'Compile-time subclass'
+                                        std.Menu,
+                                        std.Cursor,
+                                        std.Background,
+                                        std.SmallIcon,
+                                        std.LargeIcon,
+                                        std.ClassStorage,
+                                        std.WindowStorage);    
       // Return singleton
-      return std;
+      return msg;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // NativeWindow::getClassAtom
-    //! Get the window class atom from a native handle
-    //! 
-    //! \param[in] wnd - Native window handle
-    //! \return resource_t - Resource identifier
-    //! 
-    //! \throw wtl::invalid_argument - Missing window handle
-    ///////////////////////////////////////////////////////////////////////////////
-    resource_t getClassAtom(::HWND wnd) 
-    {
-      REQUIRED_PARAM(wnd);
-
-      // Query class atom
-      return { static_cast<uint16_t>(::GetClassLongPtr(wnd, GCW_ATOM)) };
-    }
-
-    // ---------------------------------- ACCESSOR METHODS ----------------------------------
-    
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-  
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // MessageWindow::create
+    //! Creates the window 
+    //!
+    //! \param[in,out] *owner - [optional] Parent/owner window   (Must be a message-only window)
+    //! 
+    //! \throw wtl::logic_error - Window already exists
+    //! \throw wtl::platform_error - Unable to create window
+    //! 
+    //! \remarks The window handle is first accessible during WM_CREATE (although not during WM_GETMINMAXINFO)
+    //! \remarks This is a weak-ref handle assigned by the class window procedure, a strong-ref is returned 
+    //! \remarks and saved here if the creation is successful.
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void create(type* owner = nullptr) override
+    {
+      // Ensure window does not exist
+      if (Handle.exists())
+        throw logic_error(HERE, "Window already exists");
+
+      // Provide message-only sentinel unless owner window
+      ::HWND parent = owner ? (::HWND)owner->handle() : HWND_MESSAGE;          //!< Use parent if any
+
+      // Create as message only window
+      Handle = HWnd(wndclass(), *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), PointL{}, SizeL{});
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // MessageWindow::wndclass const
+    //! Get the window class
+    //! 
+    //! \return const class_t& - Shared window class
+    /////////////////////////////////////////////////////////////////////////////////////////
+    const WindowClass<encoding>& wndclass() const override
+    {
+      return registerClass(nullptr);
+    }
+    
   };
 
+  
 } // namespace wtl
 
 

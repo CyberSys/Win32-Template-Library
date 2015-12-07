@@ -121,7 +121,7 @@ namespace wtl
     //! 
     //! \remarks This overload is selected if the event handler has no return type
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_same_t<RET,void>>
+    template <typename = enable_if_same_t<RET,void>, typename = void>
     void invoke(ARGS&&... args) const
     {
       // Forward arguments to each subscriber
@@ -151,8 +151,6 @@ namespace wtl
     template <typename... FN_ARGS>
     result_t raise(FN_ARGS&&... args) 
     {
-      //using call_proxy_t = call_proxy<result_t,FN_ARGS...>;
-
       // Forward arguments to each subscriber, and capture return value (iff function signature has a return type)
       return invoke(std::forward<FN_ARGS>(args)...);
     }

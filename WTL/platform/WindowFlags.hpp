@@ -234,6 +234,9 @@ namespace wtl
     PageScroller,			      //!< Creates pager controls. These controls are used to contain and scroll another window.
     TreeView,			          //!< Creates tree-view controls. These controls display a hierarchical list of items. Each item consists of a label and an optional bitmap.
     Tab,			              //!< Creates tab controls. These controls define multiple pages for the same area of a window or dialog box. Each page consists of a set of information or a group of controls that an application displays when the user selects the corresponding tab.
+
+    // Library controls
+    RichEdit,			          //!< Creates rich edit control
     
     // Undocumented
     DDEMLEvent,             //!< Dynamic Data Exchange Management Library (DDEML) events.

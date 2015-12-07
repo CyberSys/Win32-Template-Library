@@ -28,7 +28,7 @@ namespace wtl
     template <typename SIG>
     struct MatchingSignature
     {
-      template <typename U, enable_if_same_t<U,SIG,void*> = nullptr> 
+      template <typename U, typename = enable_if_same_t<U,SIG>> 
       static void* test( void* );
     };  
   }

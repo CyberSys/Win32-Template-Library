@@ -50,6 +50,7 @@
     <ClInclude Include="io\LogFileWriter.hpp" />
     <ClInclude Include="io\MemoryStream.hpp" />
     <ClInclude Include="io\RichTextWriter.hpp" />
+    <ClInclude Include="io\Socket.hpp" />
     <ClInclude Include="io\StreamIterator.hpp" />
     <ClInclude Include="io\TextReader.hpp" />
     <ClInclude Include="io\TextWriter.hpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="platform\MsgResult.hpp" />
     <ClInclude Include="platform\Metrics.hpp" />
     <ClInclude Include="platform\MouseFlags.hpp" />
+    <ClInclude Include="platform\SocketFlags.hpp" />
     <ClInclude Include="platform\StockObjects.hpp" />
     <ClInclude Include="platform\WindowMessage.hpp" />
     <ClInclude Include="Resource.h" />
@@ -101,6 +103,7 @@
     <ClInclude Include="traits\ModuleTraits.hpp" />
     <ClInclude Include="traits\PenTraits.hpp" />
     <ClInclude Include="traits\ResourceTraits.hpp" />
+    <ClInclude Include="traits\SocketTraits.hpp" />
     <ClInclude Include="traits\ThemeTraits.hpp" />
     <ClInclude Include="traits\WindowClassTraits.hpp" />
     <ClInclude Include="traits\WindowTraits.hpp" />
@@ -166,6 +169,15 @@
     <ClInclude Include="windows\controls\properties\ButtonStateProperty.hpp" />
     <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.h" />
     <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\EditSelectionProperty.h" />
+    <ClInclude Include="windows\controls\properties\EditSelectionProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\EditTextProperty.h" />
+    <ClInclude Include="windows\controls\properties\EditTextProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.h" />
+    <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.hpp" />
+    <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.h" />
+    <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.hpp" />
+    <ClInclude Include="windows\controls\RichEdit.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
@@ -189,10 +201,12 @@
     <ClInclude Include="windows\Command.hpp" />
     <ClInclude Include="windows\CommandGroup.hpp" />
     <ClInclude Include="windows\CommandQueue.hpp" />
+    <ClInclude Include="windows\events\AsyncSocketEvent.hpp" />
     <ClInclude Include="windows\MenuItemInfo.hpp" />
     <ClInclude Include="windows\MessageBox.hpp" />
     <ClInclude Include="windows\EventArgs.hpp" />
     <ClInclude Include="windows\MessageWindow.hpp" />
+    <ClInclude Include="windows\NativeWindow.hpp" />
     <ClInclude Include="windows\PopupMenu.hpp" />
     <ClInclude Include="windows\properties\ClientRectProperty.h" />
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />
@@ -234,6 +248,9 @@
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp" />
     <ClCompile Include="io\Console.cpp" />
+    <ClInclude Include="io\Winsock.hpp">
+      <FileType>CppHeader</FileType>
+    </ClInclude>
     <ClCompile Include="modules\Module.cpp" />
     <ClCompile Include="modules\ModuleCollection.cpp" />
     <ClCompile Include="platform\Locale.cpp" />
@@ -366,7 +383,7 @@
     </Link>
     <Lib>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>shlwapi.lib;UxTheme.lib;Comctl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;UxTheme.lib;Comctl32.lib;ws2_32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -403,7 +420,7 @@
     </Link>
     <Lib>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>shlwapi.lib;UxTheme.lib;Comctl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;UxTheme.lib;Comctl32.lib;ws2_32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

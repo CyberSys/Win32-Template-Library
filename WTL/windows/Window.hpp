@@ -33,6 +33,7 @@
 #include <wtl/windows/WindowMenu.hpp>                             //!< WindowMenu
 #include <wtl/windows/WindowSkin.hpp>                             //!< IWindowSkin, SkinFactory
 #include <wtl/windows/SubClass.hpp>                               //!< SubClass
+#include <wtl/windows/events/AsyncSocketEvent.hpp>                //!< AsyncSocketEvent
 #include <wtl/windows/events/CommandEvent.hpp>                    //!< CommandEvent
 #include <wtl/windows/events/CloseWindowEvent.hpp>                //!< CloseWindowEvent
 #include <wtl/windows/events/CreateWindowEvent.hpp>               //!< CreateWindowEven
@@ -245,6 +246,7 @@ namespace wtl
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     // Events
+    AsyncSocketEvent<encoding>      AsyncSocket;    //!< Raised in response to custom message from sockets
     CommandEvent<encoding>          Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
     CreateWindowEvent<encoding>     Create;         //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>      Close;          //!< Raised in response to WM_CLOSE
@@ -585,13 +587,13 @@ namespace wtl
     //! \throw wtl::logic_error - Window already exists
     //! \throw wtl::platform_error - Unable to create window
     //! 
-    //! \remarks The window handle is first accessible during WM_CREATE (not before during WM_GETMINMAXINFO)
+    //! \remarks The window handle is first accessible during WM_CREATE (although not during WM_GETMINMAXINFO)
     //! \remarks This is a weak-ref handle assigned by the class window procedure, a strong-ref is returned 
     //! \remarks and saved here if the creation is successful.
     //!
     //! \remarks Child windows are automatically added to the ChildWindowCollection of the parent
     /////////////////////////////////////////////////////////////////////////////////////////
-    void create(type* owner = nullptr)
+    virtual void create(type* owner = nullptr)
     {
       // Ensure window does not exist
       if (Handle.exists())
@@ -825,7 +827,10 @@ namespace wtl
 
         // [SHOW/MOVE] 
         case WindowMessage::ShowWindow:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
-        case WindowMessage::WindowPositionChanged: ret = Reposition.raise(PositionChangedEventArgs<encoding>(w,l));      break;
+        case WindowMessage::WindowPositionChanged: ret = Reposition.raise(PositionChangedEventArgs<encoding>(w,l)); break;
+
+        // [SOCKET]
+        case WindowMessage::Socket:           ret = AsyncSocket.raise(AsyncSocketEventArgs<encoding>(w,l));         break;
 
         // [COMMAND] Reflect control events. Raise Gui events.
         case WindowMessage::Command:  

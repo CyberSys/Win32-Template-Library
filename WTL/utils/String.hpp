@@ -382,8 +382,61 @@ namespace wtl
     {
       return {*this};
     }
+    
+	  type operator + (const type& r) const
+		{	
+      type s2;
+      s2.reserve(this->length() + r.length());
+		  s2 += *this;
+      s2 += r;
+      return s2;
+		}
+
+	  type operator + (const char_t* str) const
+		{	
+		  type s2;
+      s2.reserve(this->length() + strlen(str));
+		  s2 += *this;
+      s2 += str;
+      return s2;
+		}
+    
+    template <typename CHR>
+	  type operator + (const CHR* str) const
+		{	
+      type s2;
+      s2.reserve(this->length() + strlen(str));
+		  s2 += *this;
+      s2 += str;
+      return s2;
+		}
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
+    
+	  type& operator += (const type& r)
+		{	
+		  this->append(r);
+      return *this;
+		}
+
+	  type& operator += (const char_t* str)
+		{	
+		  this->append(str);
+      return *this;
+		}
+    
+    template <typename CHR>
+	  type& operator += (const CHR* str)
+		{	
+		  this->append(type(str).c_str());
+      return *this;
+		}
+
+	  type& operator += (char_t ch)
+		{	
+      this->append(1, ch);
+      return *this;
+		}
   };
 
 

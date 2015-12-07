@@ -17,6 +17,7 @@
 #include <wtl/windows/controls/Button.hpp>          //!< Button
 #include <wtl/windows/controls/CheckBox.hpp>        //!< CheckBox
 #include <wtl/windows/controls/Edit.hpp>            //!< Edit
+#include <wtl/windows/MessageWindow.hpp>            //!< MessageWindow
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -134,6 +135,7 @@ namespace wtl
       Button<encoding>::registerClass(this->handle());
       CheckBox<encoding>::registerClass(this->handle());
       Edit<encoding>::registerClass(this->handle());
+      MessageWindow<encoding>::registerClass(this->handle());
 
       // Execute
       return msgpump_base::run(mode);

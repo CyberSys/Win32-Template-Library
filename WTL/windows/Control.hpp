@@ -5,8 +5,8 @@
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_MESSAGE_WINDOW_HPP
-#define WTL_MESSAGE_WINDOW_HPP
+#ifndef WTL_CONTROL_HPP
+#define WTL_CONTROL_HPP
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Window.hpp>                 //!< Window
@@ -66,4 +66,4 @@ namespace wtl
 } // namespace wtl
 
 
-#endif // WTL_MESSAGE_WINDOW_HPP
+#endif // WTL_CONTROL_HPP
