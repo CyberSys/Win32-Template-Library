@@ -112,6 +112,66 @@ namespace wtl
     // Convert into underlying type then cast to enumeration
     return enum_cast<WindowId>( static_cast<std::underlying_type_t<WindowId>>(id) );
   }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \struct ChildWindowCollection - Define child window collection type
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  struct ChildWindowCollection : WindowIdCollection<ENC>
+  {
+    // ---------------------------------- TYPES & CONSTANTS ---------------------------------
+  
+    //! \alias base - Define base type
+    using base = WindowIdCollection<ENC>;
+  
+    //! \alias type - Define own type
+    using type = ChildWindowCollection;
+  
+    // ----------------------------------- REPRESENTATION -----------------------------------
+  protected:
+    Window<ENC>&  Parent;        //!< Parent/owner of collection
+      
+    // ------------------------------------ CONSTRUCTION ------------------------------------
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::ChildWindowCollection
+    //! Create empty collection
+    //! 
+    //! \param[in] &parent - Parent/owner of collection
+    /////////////////////////////////////////////////////////////////////////////////////////
+    ChildWindowCollection(Window<ENC>& parent) : Parent(parent)
+    {}
+      
+    // ----------------------------------- STATIC METHODS -----------------------------------
+
+    // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    // ----------------------------------- MUTATOR METHODS ----------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::create
+    //! Creates a child window and inserts it into the collection
+    //! 
+    //! \param[in,out] &child - Child window object  (Handle must not exist)
+    //! 
+    //! \throw wtl::logic_error - Window already exists
+    //! \throw wtl::platform_error - Unable to create window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void create(Window<ENC>& child);
+      
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::insert
+    //! Inserts an existing child window into the collection
+    //!
+    //! \param[in,out] &child - Child window object  (Handle must exist)
+    //! 
+    //! \throw wtl::logic_error - Window does not exist
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void insert(Window<ENC>& child);
+  };
+
   
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias ColourProperty - Define property type used to represent colours
@@ -155,78 +215,6 @@ namespace wtl
     //! \alias skin_t - Window skin type
     using skin_t = IWindowSkin<encoding>;
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //! \struct ChildWindowCollection - Define child window collection type
-    /////////////////////////////////////////////////////////////////////////////////////////
-    struct ChildWindowCollection : WindowIdCollection<encoding>
-    {
-      // ---------------------------------- TYPES & CONSTANTS ---------------------------------
-  
-      //! \alias base - Define base type
-      using base = WindowIdCollection<encoding>;
-  
-      //! \alias type - Define own type
-      using type = ChildWindowCollection;
-  
-      // ----------------------------------- REPRESENTATION -----------------------------------
-    protected:
-      Window<ENC>&  Parent;        //!< Parent/owner of collection
-      
-      // ------------------------------------ CONSTRUCTION ------------------------------------
-    public:
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ChildWindowCollection::ChildWindowCollection
-      //! Create empty collection
-      //! 
-      //! \param[in] &parent - Parent/owner of collection
-      /////////////////////////////////////////////////////////////////////////////////////////
-      ChildWindowCollection(Window<ENC>& parent) : Parent(parent)
-      {}
-      
-      // ----------------------------------- STATIC METHODS -----------------------------------
-
-      // ---------------------------------- ACCESSOR METHODS ----------------------------------
-
-      // ----------------------------------- MUTATOR METHODS ----------------------------------
-
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ChildWindowCollection::create
-      //! Creates a child window and inserts it into the collection
-      //! 
-      //! \param[in,out] &child - Child window object  (Handle must not exist)
-      //! 
-      //! \throw wtl::logic_error - Window already exists
-      //! \throw wtl::platform_error - Unable to create window
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void create(Window<ENC>& child)
-      {
-        // Ensure child doesn't already exist
-        if (child.exists())
-          throw logic_error(HERE, "Window already exists");
-
-        // Create child window  (calls 'insert()' if successful)
-        child.create(&Parent);
-      }
-      
-      /////////////////////////////////////////////////////////////////////////////////////////
-      // ChildWindowCollection::insert
-      //! Inserts an existing child window into the collection
-      //!
-      //! \param[in,out] &child - Child window object  (Handle must exist)
-      //! 
-      //! \throw wtl::logic_error - Window does not exist
-      /////////////////////////////////////////////////////////////////////////////////////////
-      void insert(Window<ENC>& child)
-      {
-        // Ensure child exists
-        if (!child.exists())
-          throw logic_error(HERE, "Window does not exist");
-
-        // Add to collection
-        this->emplace(child.Ident, &child);
-      }
-    };
-    
     // ----------------------------------- REPRESENTATION -----------------------------------
   public:
     //! \var ActiveWindows - Static collection of all existing WTL windows 
@@ -263,7 +251,7 @@ namespace wtl
     
     // Fields
     CommandQueue<encoding>          ActionQueue;    //!< GUI Command queue
-    ChildWindowCollection           Children;       //!< Child window collection
+    ChildWindowCollection<encoding> Children;       //!< Child window collection
     WindowMenu<encoding>            Menu;           //!< Window menu, possibly empty
 
     // Properties
@@ -1037,6 +1025,47 @@ namespace wtl
   template <Encoding ENC>
   WindowHandleCollection<ENC>   Window<ENC>::ActiveWindows;
 
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // ChildWindowCollection::create
+  //! Creates a child window and inserts it into the collection
+  //! 
+  //! \param[in,out] &child - Child window object  (Handle must not exist)
+  //! 
+  //! \throw wtl::logic_error - Window already exists
+  //! \throw wtl::platform_error - Unable to create window
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  void ChildWindowCollection<ENC>::create(Window<ENC>& child)
+  {
+    // Ensure child doesn't already exist
+    if (child.exists())
+      throw logic_error(HERE, "Window already exists");
+
+    // Create child window  (calls 'insert()' if successful)
+    child.create(&Parent);
+  }
+      
+  /////////////////////////////////////////////////////////////////////////////////////////
+  // ChildWindowCollection::insert
+  //! Inserts an existing child window into the collection
+  //!
+  //! \param[in,out] &child - Child window object  (Handle must exist)
+  //! 
+  //! \throw wtl::logic_error - Window does not exist
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  void ChildWindowCollection<ENC>::insert(Window<ENC>& child)
+  {
+    // Ensure child exists
+    if (!child.exists())
+      throw logic_error(HERE, "Window does not exist");
+
+    // Add to collection
+    this->emplace(child.Ident, &child);
+  }
+    
+  
   
 } // namespace wtl
 
