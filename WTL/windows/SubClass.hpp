@@ -9,7 +9,7 @@
 #define WTL_SUBCLASS_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/utils/List.hpp>                                     //!< List
+#include <wtl/utils/Stack.hpp>                                    //!< Stack
 #include <wtl/platform/WindowMessage.hpp>                         //!< WindowMesssage
 
 //! \namespace wtl - Windows template library
@@ -77,7 +77,7 @@ namespace wtl
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \alias SubClassCollection - Define subclassed windows collection
   /////////////////////////////////////////////////////////////////////////////////////////
-  using SubClassCollection = List<SubClass>;
+  using SubClassCollection = Stack<SubClass>;
     
   
 } // namespace wtl

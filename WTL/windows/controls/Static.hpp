@@ -63,7 +63,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard static control
-      this->SubClasses.push_back(getNativeSubClass());
+      this->SubClasses.push(getNativeSubClass());
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

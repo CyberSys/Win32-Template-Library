@@ -42,7 +42,7 @@ namespace wtl
     MessageWindow() 
     {
       // Compile-time subclass the window
-      this->SubClasses.push_back(getNativeSubClass());
+      this->SubClasses.push(getNativeSubClass());
     }
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
