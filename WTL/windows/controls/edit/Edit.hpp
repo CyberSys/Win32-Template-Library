@@ -11,7 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                    //!< Control
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
-#include <wtl/windows/controls/properties/EditSelectionProperty.h>    //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -221,6 +221,6 @@ namespace wtl
 
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/EditSelectionProperty.hpp>    //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditSelectionProperty.hpp>    //!< EditSelectionProperty
 
 #endif // WTL_EDIT_HPP

@@ -10,8 +10,8 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/casts/OpaqueCast.hpp>                                   //!< opaque_cast
-#include <wtl/windows/controls/properties/EditSelectionProperty.h>    //!< EditSelectionProperty
-#include <wtl/windows/controls/Edit.hpp>                              //!< Edit
+#include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/Edit.hpp>                         //!< Edit
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

@@ -253,7 +253,7 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
-#include <wtl/windows/controls/properties/ButtonStateProperty.hpp>     //!< StateProperty
+#include <wtl/windows/controls/button/ButtonIconProperty.hpp>      //!< IconProperty
+#include <wtl/windows/controls/button/ButtonStateProperty.hpp>     //!< StateProperty
 
 #endif // WTL_COMBOBOX_HPP

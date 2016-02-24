@@ -10,9 +10,9 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                //!< Control
-#include <wtl/windows/controls/events/ButtonClickEvent.hpp>       //!< ButtonClickEvent
-#include <wtl/windows/controls/properties/ButtonIconProperty.h>   //!< ButtonIconProperty
-#include <wtl/windows/controls/properties/ButtonStateProperty.h>  //!< ButtonStateProperty
+#include <wtl/windows/controls/button/ButtonClickEvent.hpp>       //!< ButtonClickEvent
+#include <wtl/windows/controls/button/ButtonIconProperty.h>       //!< ButtonIconProperty
+#include <wtl/windows/controls/button/ButtonStateProperty.h>      //!< ButtonStateProperty
 #include <wtl/gdi/Theme.hpp>                                      //!< Theme
 
 //! \namespace wtl - Windows template library
@@ -321,7 +321,7 @@ namespace wtl
 
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty
-#include <wtl/windows/controls/properties/ButtonStateProperty.hpp>     //!< StateProperty
+#include <wtl/windows/controls/button/ButtonIconProperty.hpp>      //!< IconProperty
+#include <wtl/windows/controls/button/ButtonStateProperty.hpp>     //!< StateProperty
 
 #endif // WTL_BUTTON_HPP

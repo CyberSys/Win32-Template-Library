@@ -9,8 +9,8 @@
 #define WTL_BUTTON_ICON_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/controls/properties/ButtonIconProperty.h>    //!< ButtonIconPropertyImpl
-#include <wtl/windows/controls/Button.hpp>                         //!< Button
+#include <wtl/windows/controls/button/ButtonIconProperty.h>    //!< ButtonIconPropertyImpl
+#include <wtl/windows/controls/button/Button.hpp>              //!< Button
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

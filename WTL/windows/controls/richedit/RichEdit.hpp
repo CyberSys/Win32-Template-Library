@@ -11,10 +11,10 @@
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                        //!< Control
 #include <wtl/gdi/Theme.hpp>                                              //!< Theme
-#include <wtl/windows/controls/properties/RichEditBackColourProperty.h>   //!< RichEditBackColourProperty
-#include <wtl/windows/controls/properties/RichEditCharFormatProperty.h>   //!< RichEditCharFormatProperty
-#include <wtl/windows/controls/properties/RichEditSelectedTextProperty.h> //!< RichEditSelectedTextProperty
-#include <wtl/windows/controls/properties/EditSelectionProperty.h>        //!< EditSelectionProperty
+#include <wtl/windows/controls/richedit/RichEditBackColourProperty.h>     //!< RichEditBackColourProperty
+#include <wtl/windows/controls/richedit/RichEditCharFormatProperty.h>     //!< RichEditCharFormatProperty
+#include <wtl/windows/controls/richedit/RichEditSelectedTextProperty.h>   //!< RichEditSelectedTextProperty
+#include <wtl/windows/controls/richedit/EditSelectionProperty.h>          //!< EditSelectionProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -295,9 +295,9 @@ namespace wtl
 
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/RichEditBackColourProperty.hpp>     //!< RichEditBackColourProperty
-#include <wtl/windows/controls/properties/RichEditCharFormatProperty.hpp>     //!< RichEditCharFormatProperty
-#include <wtl/windows/controls/properties/RichEditSelectedTextProperty.hpp>   //!< RichEditSelectedTextProperty
-#include <wtl/windows/controls/properties/EditSelectionProperty.hpp>          //!< EditSelectionProperty
+#include <wtl/windows/controls/richedit/RichEditBackColourProperty.hpp>     //!< RichEditBackColourProperty
+#include <wtl/windows/controls/richedit/RichEditCharFormatProperty.hpp>     //!< RichEditCharFormatProperty
+#include <wtl/windows/controls/richedit/RichEditSelectedTextProperty.hpp>   //!< RichEditSelectedTextProperty
+#include <wtl/windows/controls/richedit/EditSelectionProperty.hpp>          //!< EditSelectionProperty
 
 #endif // WTL_RICH_EDIT_HPP

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\controls\properties\RichEditBackColourProperty.hpp
-//! \brief Separate class declaration for the RichEdit control 'CharFormat' property
+//! \brief Separate class declaration for the RichEdit control 'BackColour' property
 //! \date 6 December 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.

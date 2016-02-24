@@ -9,15 +9,15 @@
 #define WTL_APPLICATION_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/modules/Module.h>                     //!< Module
-#include <wtl/threads/MessagePump.hpp>              //!< MessagePump
-#include <wtl/platform/DateTime.hpp>                //!< DateTime
-#include <wtl/platform/SystemVersion.hpp>           //!< SystemVersion
-#include <wtl/utils/String.hpp>                     //!< String
-#include <wtl/windows/controls/Button.hpp>          //!< Button
-#include <wtl/windows/controls/CheckBox.hpp>        //!< CheckBox
-#include <wtl/windows/controls/Edit.hpp>            //!< Edit
-#include <wtl/windows/MessageWindow.hpp>            //!< MessageWindow
+#include <wtl/modules/Module.h>                         //!< Module
+#include <wtl/threads/MessagePump.hpp>                  //!< MessagePump
+#include <wtl/platform/DateTime.hpp>                    //!< DateTime
+#include <wtl/platform/SystemVersion.hpp>               //!< SystemVersion
+#include <wtl/utils/String.hpp>                         //!< String
+#include <wtl/windows/controls/button/Button.hpp>       //!< Button
+#include <wtl/windows/controls/checkbox/CheckBox.hpp>   //!< CheckBox
+#include <wtl/windows/controls/edit/Edit.hpp>           //!< Edit
+#include <wtl/windows/MessageWindow.hpp>                //!< MessageWindow
 
 //! \namespace wtl - Windows template library
 namespace wtl

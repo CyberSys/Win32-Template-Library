@@ -9,9 +9,9 @@
 #define WTL_RADIOBUTTON_CHECKED_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/EnumCast.hpp>                                        //!< enum_cast
-#include <wtl/windows/controls/properties/RadioButtonCheckProperty.h>    //!< RadioButtonCheckPropertyImpl
-#include <wtl/windows/controls/RadioButton.hpp>                          //!< RadioButton
+#include <wtl/casts/EnumCast.hpp>                                         //!< enum_cast
+#include <wtl/windows/controls/radiobutton/RadioButtonCheckProperty.h>    //!< RadioButtonCheckPropertyImpl
+#include <wtl/windows/controls/radiobutton/RadioButton.hpp>               //!< RadioButton
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

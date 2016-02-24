@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\controls\properties\RichEditBackColourProperty.hpp
-//! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
+//! \brief Separate implementation for the RichEdit 'BackColour' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -9,8 +9,8 @@
 #define WTL_RICH_EDIT_BACK_COLOUR_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/controls/properties/RichEditBackColourProperty.h>    //!< RichEditBackColourPropertyImpl
-#include <wtl/windows/controls/RichEdit.hpp>                               //!< RichEdit
+#include <wtl/windows/controls/richedit/RichEditBackColourProperty.h>    //!< RichEditBackColourPropertyImpl
+#include <wtl/windows/controls/richedit/RichEdit.hpp>                    //!< RichEdit
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

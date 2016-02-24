@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\controls\properties\RichEditCharFormatProperty.hpp
-//! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
+//! \brief Separate implementation for the RichEdit control 'CharFormat' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
@@ -9,8 +9,8 @@
 #define WTL_RICH_EDIT_CHAR_FORMAT_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/controls/properties/RichEditCharFormatProperty.h>    //!< RichEditCharFormatPropertyImpl
-#include <wtl/windows/controls/RichEdit.hpp>                               //!< RichEdit
+#include <wtl/windows/controls/richedit/RichEditCharFormatProperty.h>    //!< RichEditCharFormatPropertyImpl
+#include <wtl/windows/controls/richedit/RichEdit.hpp>                    //!< RichEdit
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

@@ -9,17 +9,17 @@
 #define WTL_THEMED_SKIN_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/utils/Rectangle.hpp>                //!< Rect
-#include <wtl/utils/Size.hpp>                     //!< Size
-#include <WTL/platform/Metrics.hpp>               //!< Metrics
-#include <wtl/gdi/DeviceContext.hpp>              //!< DeviceContext
-#include <wtl/gdi/Theme.hpp>                      //!< Theme
-#include <WTL/windows/Window.hpp>                 //!< Window
-#include <WTL/windows/WindowSkin.hpp>             //!< IWindowSkin
-#include <WTL/windows/controls/Button.hpp>        //!< Button
-#include <WTL/windows/controls/CheckBox.hpp>      //!< CheckBox
-#include <WTL/windows/controls/ComboBox.hpp>      //!< ComboBox
-#include <WTL/windows/controls/Edit.hpp>          //!< Edit
+#include <wtl/utils/Rectangle.hpp>                      //!< Rect
+#include <wtl/utils/Size.hpp>                           //!< Size
+#include <WTL/platform/Metrics.hpp>                     //!< Metrics
+#include <wtl/gdi/DeviceContext.hpp>                    //!< DeviceContext
+#include <wtl/gdi/Theme.hpp>                            //!< Theme
+#include <WTL/windows/Window.hpp>                       //!< Window
+#include <WTL/windows/WindowSkin.hpp>                   //!< IWindowSkin
+#include <WTL/windows/controls/button/Button.hpp>       //!< Button
+#include <WTL/windows/controls/checkbox/CheckBox.hpp>   //!< CheckBox
+#include <WTL/windows/controls/combobox/ComboBox.hpp>   //!< ComboBox
+#include <WTL/windows/controls/edit/Edit.hpp>           //!< Edit
 
 //! \namespace wtl - Windows template library
 namespace wtl 

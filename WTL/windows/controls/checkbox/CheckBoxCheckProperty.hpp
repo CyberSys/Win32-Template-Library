@@ -9,8 +9,8 @@
 #define WTL_CHECKBOX_CHECKED_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/controls/properties/CheckBoxCheckProperty.h>    //!< CheckBoxCheckPropertyImpl
-#include <wtl/windows/controls/CheckBox.hpp>                          //!< CheckBox
+#include <wtl/windows/controls/checkbox/CheckBoxCheckProperty.h>    //!< CheckBoxCheckPropertyImpl
+#include <wtl/windows/controls/checkbox/CheckBox.hpp>               //!< CheckBox
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

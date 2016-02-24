@@ -9,10 +9,10 @@
 #define WTL_RADIOBUTTON_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Window.hpp>                                     //!< Window
-#include <wtl/windows/controls/Button.hpp>                            //!< Button
-#include <wtl/platform/Metrics.hpp>                                   //!< Metrics
-#include <wtl/windows/controls/properties/RadioButtonCheckProperty.h>    //!< RadioButtonCheckProperty
+#include <wtl/windows/Window.hpp>                                         //!< Window
+#include <wtl/windows/controls/button/Button.hpp>                         //!< Button
+#include <wtl/platform/Metrics.hpp>                                       //!< Metrics
+#include <wtl/windows/controls/radiobutton/RadioButtonCheckProperty.h>    //!< RadioButtonCheckProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -143,6 +143,6 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/RadioButtonCheckProperty.hpp>   //!< RadioButtonCheckProperty
+#include <wtl/windows/controls/radiobutton/RadioButtonCheckProperty.hpp>   //!< RadioButtonCheckProperty
 
 #endif // WTL_RADIOBUTTON_HPP

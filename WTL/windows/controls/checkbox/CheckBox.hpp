@@ -10,10 +10,10 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Window.hpp>                                     //!< Window
-#include <wtl/windows/controls/Button.hpp>                            //!< Button
+#include <wtl/windows/controls/button/Button.hpp>                     //!< Button
 #include <wtl/platform/Metrics.hpp>                                   //!< Metrics
-#include <wtl/windows/controls/events/CheckBoxCheckedEvent.hpp>       //!< CheckBoxCheckedEvent
-#include <wtl/windows/controls/properties/CheckBoxCheckProperty.h>    //!< CheckBoxCheckProperty
+#include <wtl/windows/controls/checkbox/CheckBoxCheckedEvent.hpp>     //!< CheckBoxCheckedEvent
+#include <wtl/windows/controls/checkbox/CheckBoxCheckProperty.h>      //!< CheckBoxCheckProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -141,6 +141,6 @@ namespace wtl
   };
 } // namespace wtl
 
-#include <wtl/windows/controls/properties/CheckBoxCheckProperty.hpp>   //!< CheckBoxCheckProperty
+#include <wtl/windows/controls/checkbox/CheckBoxCheckProperty.hpp>   //!< CheckBoxCheckProperty
 
 #endif // WTL_CHECKBOX_HPP
