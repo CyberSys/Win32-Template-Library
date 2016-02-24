@@ -10,6 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                //!< Control
+#include <wtl/windows/controls/button/ButtonConstants.hpp>        //!< (Constants)
 #include <wtl/windows/controls/button/ButtonClickEvent.hpp>       //!< ButtonClickEvent
 #include <wtl/windows/controls/button/ButtonIconProperty.h>       //!< ButtonIconProperty
 #include <wtl/windows/controls/button/ButtonStateProperty.h>      //!< ButtonStateProperty

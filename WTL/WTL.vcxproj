@@ -160,6 +160,7 @@
     <ClInclude Include="windows\ControlEventArgs.hpp" />
     <ClInclude Include="windows\controls\button\Button.hpp" />
     <ClInclude Include="windows\controls\button\ButtonClickEvent.hpp" />
+    <ClInclude Include="windows\controls\button\ButtonConstants.hpp" />
     <ClInclude Include="windows\controls\button\ButtonIconProperty.h" />
     <ClInclude Include="windows\controls\button\ButtonIconProperty.hpp" />
     <ClInclude Include="windows\controls\button\ButtonStateProperty.h" />
@@ -169,7 +170,9 @@
     <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.h" />
     <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.hpp" />
     <ClInclude Include="windows\controls\combobox\ComboBox.hpp" />
+    <ClInclude Include="windows\controls\combobox\ComboBoxConstants.hpp" />
     <ClInclude Include="windows\controls\edit\Edit.hpp" />
+    <ClInclude Include="windows\controls\edit\EditConstants.hpp" />
     <ClInclude Include="windows\controls\edit\EditSelectionProperty.h" />
     <ClInclude Include="windows\controls\edit\EditSelectionProperty.hpp" />
     <ClInclude Include="windows\controls\edit\EditTextProperty.h" />
@@ -182,11 +185,13 @@
     <ClInclude Include="windows\controls\richedit\RichEditBackColourProperty.hpp" />
     <ClInclude Include="windows\controls\richedit\RichEditCharFormatProperty.h" />
     <ClInclude Include="windows\controls\richedit\RichEditCharFormatProperty.hpp" />
+    <ClInclude Include="windows\controls\richedit\RichEditConstants.hpp" />
     <ClInclude Include="windows\controls\richedit\RichEditParagraphFormatProperty.h" />
     <ClInclude Include="windows\controls\richedit\RichEditParagraphFormatProperty.hpp" />
     <ClInclude Include="windows\controls\richedit\RichEditSelectedTextProperty.h" />
     <ClInclude Include="windows\controls\richedit\RichEditSelectedTextProperty.hpp" />
     <ClInclude Include="windows\controls\static\Static.hpp" />
+    <ClInclude Include="windows\controls\static\StaticConstants.hpp" />
     <ClInclude Include="windows\Delegate.hpp" />
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />

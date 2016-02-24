@@ -13,7 +13,7 @@
 //! \namespace wtl - Windows template library
 namespace wtl
 {
-  //! \enum WindowMessage - Windows message identifiers
+  //! \enum WindowMessage - Window message identifiers
   enum class WindowMessage : uint16_t
   {
     None = 0x0000,			        	              //!< WM_NULL
@@ -129,8 +129,7 @@ namespace wtl
     VScroll = 0x0115,			                      //!< 
     InitMenu = 0x0116,			                    //!< 
     InitMenuPopup = 0x0117,			                //!< 
-    Gusture = 0x0119,			                      //!< [Windows 6.01] 
-    GustureNotify = 0x011A,			                //!< [Windows 6.01] 
+    
     MenuSelect = 0x011F,			                  //!< 
     MenuChar = 0x0120,			                    //!< 
     EnterIdle = 0x0121,			                    //!< 
@@ -191,7 +190,7 @@ namespace wtl
     ExitSizeMove = 0x0232,			            		//!< 
     DropFiles = 0x0233,					            		//!< 
     MdiRefreshMenu = 0x0234,			              //!< 
-    Touch = 0x0240,					                    //!< [Windows 6.01] 
+    
     ImeSetContext = 0x0281,				              //!< 
     ImeNotify = 0x0282,				            	    //!< 
     ImeControl = 0x0283,				            	  //!< 
@@ -205,7 +204,7 @@ namespace wtl
     MouseLeave = 0x02A3,					              //!< 
     NonClientMouseHover = 0x02A0,					      //!< 
     NonClientMouseLeave = 0x02A2,					      //!< 
-    WtsSession_Change = 0x02B1,			            //!< [Windows 5.01] 
+    
     Cut = 0x0300,		                            //!< 
     Copy = 0x0301,                              //!< 
     Paste = 0x0302,                             //!< 
@@ -225,32 +224,49 @@ namespace wtl
     PaletteIsChanging = 0x0310,	              	//!< 
     PaletteChanged = 0x0311,			              //!< 
     HotKey = 0x0312,			                      //!< 
-    Print = 0x0317,			                        //!< 
-    PrintClient = 0x0318,			                  //!< 
+    Print = 0x0317,			                        //!< [Windows 4.00] 
+    PrintClient = 0x0318,			                  //!< [Windows 4.00] 
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WIN2K
     AppCommand = 0x0319,			                  //!< [Windows 5.00] 
+#endif
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WINXP
+    WtsSession_Change = 0x02B1,			            //!< [Windows 5.01] 
     ThemeChanged = 0x031A,			                //!< [Windows 5.01] 
     ClipboardUpdate = 0x031D,			              //!< [Windows 5.01] 
+#endif
+
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
     DwmCompositionChanged = 0x031E,			        //!< [Windows 6.00] 
     DwmNcRenderingChanged = 0x031F,			        //!< [Windows 6.00] 
     DwmColourizationColourChanged = 0x0320,			//!< [Windows 6.00] 
     DwmWindowMaximizedChange = 0x0321,			    //!< [Windows 6.00] 
+    GetTitleBarInfoEx = 0x033F,			            //!< [Windows 6.00] 
+#endif
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WIN7
+    Gesture = 0x0119,			                      //!< [Windows 6.01] 
+    GestureNotify = 0x011A,			                //!< [Windows 6.01] 
+    Touch = 0x0240,					                    //!< [Windows 6.01] 
     DwmSendIconIcThumbnail = 0x0323,			      //!< [Windows 6.01] 
     DwmSendIconICLivePreviewBitmap = 0x0326,		//!< [Windows 6.01] 
-    GetTitleBarInfoEx = 0x033F,			            //!< [Windows 6.00] 
-    HandHeldFirst = 0x0358,					            //!< 
-    HandHeldLast = 0x035F,					            //!< 
-    AfxFirst = 0x0360,					                //!< 
-    AfxLast = 0x037F,					                  //!< 
+#endif
+
+    HandHeldFirst = 0x0358,					            //!< [Windows 4.00] 
+    HandHeldLast = 0x035F,					            //!< [Windows 4.00] 
+    AfxFirst = 0x0360,					                //!< [Windows 4.00] 
+    AfxLast = 0x037F,					                  //!< [Windows 4.00] 
     PenWinFirst = 0x0380,					              //!< 
     PenWinLast = 0x038F,					              //!< 
-
+      
     Reflect = 0x2000,					            		  //!< [Custom] Reflection sentinel
     ReflectCommand = Reflect + Command,				  //!< [Custom] Reflected Command
     ReflectNotify = Reflect + Notify,					  //!< [Custom] Reflected Notify
     ReflectDrawItem = Reflect + DrawItem,			  //!< [Custom] Reflected DrawItem
     ReflectMeasureItem = Reflect + MeasureItem, //!< [Custom] Reflected MEASUREItem
 
-    App = 0x8000,					            		      //!< 
+    App = 0x8000,					            		      //!< [Windows 4.00] 
     MouseEnter,                                 //!< [Custom] Mouse entering window
     Socket,                                     //!< [Custom] Socket event
   };
@@ -276,6 +292,44 @@ namespace wtl
   //  // Convert into underlying type then cast to enumeration
   //  return enum_cast<WindowMessage>( static_cast<std::underlying_type_t<WindowMessage>>(msg) );
   //}
+
+  
+  //! \enum NotifyMessage - Standard common control notifications
+  enum class NotifyMessage : int16_t
+  {
+    First = NM_FIRST,
+    OutOfMemory = (First - 1),			        //!< Control has run out of memory
+    Click = (First - 2),			              //!< Control has been left clicked                (Uses ::NMCLICK)
+    DblClk = (First - 3),			              //!< Control has been left double-clicked
+    Return = (First - 4),			              //!< Control has received ENTER keypress
+    RClick = (First - 5),			              //!< Control has been right clicked               (Uses ::NMCLICK)
+    RDblClk = (First - 6),			            //!< Control has been right double-clicked
+    SetFocus = (First - 7),			            //!< Control has received the input focus
+    KillFocus = (First - 8),			          //!< Control has lost the input focus
+    CustomDraw = (First - 12),			        //!< Control requesting custom drawing
+    Hover = (First - 13),			              //!< Control is being hovered over
+    NcHitTest = (First - 14),			          //!< Sent by Rebars in response to WM_NCHITTEST   (Uses ::NMMOUSE)
+    KeyDown = (First - 15),			            //!< Control has received keypress                (Uses ::NMKEY)
+    ReleasedCapture = (First - 16),	        //!< Control has released mouse capture
+    SetCursor = (First - 17),			          //!< Control has set the cursor                   (Uses ::NMMOUSE)
+    Char = (First - 18),			              //!< Control has received character press         (Uses ::NMCHAR)
+    TooltipsCreated = (First - 19),	        //!< Notify when the tooltips window is create
+    LDown = (First - 20),			              //!< Control has been left clicked 
+    RDown = (First - 21),			              //!< Not supported
+    ThemeChanged = (First - 22),		        //!< Sent when user theme changes
+
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
+    FontChanged = (First - 23),			        //!< [Windows 6.00] Control font has changed
+    CustomText = (First - 24),			        //!< [Windows 6.00] Control performed custom text operation  (Uses ::NMCUSTOMTEXT)
+    TvStateImageChanging = (First - 24),		//!< [Windows 6.00] TreeView state image is changing         (Uses ::NMTVStateImageChanging)
+#endif
+  };
+  
+  
+  //! Define traits: Non-contiguous Attribute
+  template <> struct is_attribute<NotifyMessage>  : std::true_type  {};
+  template <> struct is_contiguous<NotifyMessage> : std::false_type {};
+  template <> struct default_t<NotifyMessage>     : std::integral_constant<NotifyMessage,NotifyMessage::First>   {};
 
 
 } //namespace wtl

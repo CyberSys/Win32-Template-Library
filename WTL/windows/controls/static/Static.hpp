@@ -10,6 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                    //!< Control
+#include <wtl/windows/controls/static/StaticConstants.hpp>            //!< (Constants)
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
 
 //! \namespace wtl - Windows template library

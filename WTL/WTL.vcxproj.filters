@@ -731,6 +731,21 @@
     <ClInclude Include="windows\controls\radiobutton\RadioButtonCheckProperty.hpp">
       <Filter>Windows\Controls\RadioButton</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\button\ButtonConstants.hpp">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditConstants.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\combobox\ComboBoxConstants.hpp">
+      <Filter>Windows\Controls\ComboBox</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\static\StaticConstants.hpp">
+      <Filter>Windows\Controls\Static</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditConstants.hpp">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

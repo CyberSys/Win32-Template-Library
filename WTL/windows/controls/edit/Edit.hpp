@@ -11,6 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                    //!< Control
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
+#include <wtl/windows/controls/edit/EditConstants.hpp>                //!< (Constants)
 #include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
 
 //! \namespace wtl - Windows template library

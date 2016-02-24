@@ -11,6 +11,7 @@
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Control.hpp>                                        //!< Control
 #include <wtl/gdi/Theme.hpp>                                              //!< Theme
+#include <wtl/windows/controls/richedit/RichEditConstants.hpp>            //!< (Constants)
 #include <wtl/windows/controls/richedit/RichEditBackColourProperty.h>     //!< RichEditBackColourProperty
 #include <wtl/windows/controls/richedit/RichEditCharFormatProperty.h>     //!< RichEditCharFormatProperty
 #include <wtl/windows/controls/richedit/RichEditSelectedTextProperty.h>   //!< RichEditSelectedTextProperty

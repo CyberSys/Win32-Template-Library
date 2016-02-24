@@ -9,7 +9,8 @@
 #define WTL_COMBOBOX_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Control.hpp>                        //!< Control
+#include <wtl/windows/Control.hpp>                                //!< Control
+#include <wtl/windows/controls/combobox/ComboBoxConstants.hpp>    //!< (Constants)
 
 //! \namespace wtl - Windows template library
 namespace wtl 
