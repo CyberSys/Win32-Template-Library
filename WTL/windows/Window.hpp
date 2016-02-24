@@ -18,9 +18,10 @@
 #include <wtl/utils/List.hpp>                                     //!< List
 #include <wtl/utils/Default.hpp>                                  //!< Default
 #include <wtl/utils/CharArray.hpp>                                //!< CharArray
+#include <wtl/utils/ScopeGuard.hpp>                               //!< ScopeGuard
 #include <wtl/utils/Zero.hpp>                                     //!< Zero
 #include <wtl/io/Console.hpp>                                     //!< Console
-#include <wtl/resources/ResourceId.hpp>                            //!< ResourceId
+#include <wtl/resources/ResourceId.hpp>                           //!< ResourceId
 #include <wtl/platform/WindowFlags.hpp>                           //!< WindowStyle
 #include <wtl/platform/CommonApi.hpp>                             //!< send_message
 #include <wtl/platform/WindowMessage.hpp>                         //!< WindowMesssage
@@ -272,7 +273,7 @@ namespace wtl
 
   protected:
     HWnd                            Handle;         //!< Window handle
-    SubClassCollection              SubClasses;     //!< Sub-classed windows collection
+    SubClassCollection<encoding>    SubClasses;     //!< Sub-classed windows collection
 
   private:
     bool                            IsMouseOver;    //!< True iff mouse is over the window while window has keyboard focus
@@ -363,13 +364,24 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static ::LRESULT WINAPI  WndProc(::HWND hWnd, uint32_t message, ::WPARAM wParam, ::LPARAM lParam)
     {
-      Window* wnd(nullptr);   //!< Window object associated with message, if any
-       
+      LResult            msg;                 //!< Result and routing
+      Window<encoding>*  wnd = nullptr;       //!< Window object associated with window handle
+      BasicScopeGuard    onExit = [&]()       
+      {
+        // Ensure window object is removed from 'Active Windows' collection when processing of creation message fails
+        if (msg.Result == -1 && (message == WM_CREATE || message == WM_NCCREATE))
+          Window<encoding>::ActiveWindows.erase(hWnd);
+      };
+ 
       try
       {
         // Attempt to lookup window object 
         switch (static_cast<WindowMessage>(message))
         {
+        // [WINDOW EXTENT] Unable to associate with window object at this stage
+        case WindowMessage::GetMinMaxInfo:
+          return WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
+
         // [CREATE/NCCREATE] Extract instance pointer from ::CreateWindow(..) call parameter data
         case WindowMessage::Create:
         case WindowMessage::NonClientCreate:
@@ -377,87 +389,49 @@ namespace wtl
           using CreationData = typename EventArgs<encoding,WindowMessage::Create>::CreationData;
 
           // Extract instance pointer
-          wnd = reinterpret_cast<Window*>( opaque_cast<CreationData>(lParam)->lpCreateParams );
+          wnd = reinterpret_cast<Window<encoding>*>( opaque_cast<CreationData>(lParam)->lpCreateParams );
 
           // Temporarily assign a weak handle reference for the duration of creation process
           wnd->Handle = HWnd(hWnd, AllocType::WeakRef);    // Overwritten by strong reference returned from ::CreateWindow over message is processed
 
           // Add to 'Active Windows' collection
-          ActiveWindows[hWnd] = wnd;
+          type::ActiveWindows[hWnd] = wnd;
           break;
-
-        // [WINDOW EXTENT] Unable to handle on first call in a thread-safe manner
-        case WindowMessage::GetMinMaxInfo:
-          return WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
 
         // [REMAINDER] Lookup native handle from the 'Active Windows' collection
         default:
           // Lookup window handle
-          if (ActiveWindows.find(hWnd) != ActiveWindows.end())
-            wnd = ActiveWindows[hWnd];
+          if (type::ActiveWindows.find(hWnd) != type::ActiveWindows.end())
+            wnd = type::ActiveWindows[hWnd];
           break;
         }
         
         // [ROUTE] Delegate to instance procedure
-        LResult msg = wnd->route(static_cast<WindowMessage>(message), wParam, lParam);
+        msg = wnd->route(static_cast<WindowMessage>(message), wParam, lParam);
 
-        // Query routing
-        switch (msg.Route)
+        // [UNHANDLED] 
+        if (msg == MsgRoute::Unhandled)
         {
-        // [HANDLED/REFLECTED] Return result
-        case MsgRoute::Handled:
-        case MsgRoute::Reflected:
-          return msg.Result;
-
-        // [UNHANDLED] Delegate to procedure of subclass (if any)
-        case MsgRoute::Unhandled:
+          // [SUB-CLASS] Delegate to subclass procedure
           if (!wnd->SubClasses.empty())
-          {
-            // [SUB-CLASSED] Query window type
-            SubClass& baseWnd = wnd->SubClasses.peek();
-            switch (baseWnd.Type)
-            {
-            // [WTL WINDOW] Delegate to instance procedure 
-            case SubClass::WindowType::Library:
-              // Delegate to instance window procedure
-              msg = baseWnd.WndProc.Library(static_cast<WindowMessage>(message), wParam, lParam);
-
-              // [HANDLED/REFLECTED] Return result & routing
-              if (msg.Route != MsgRoute::Unhandled)
-                return msg.Result;
-              break;
-
-            // [NATIVE WINDOW] Delegate to native window procedure 
-            case SubClass::WindowType::Native:
-              // Delegate to native class window procedure 
-              return WinAPI<encoding>::callWindowProc(baseWnd.WndProc.Native, wnd->handle(), message, wParam, lParam);
-            }
-          }
-          break;
+            msg = wnd->SubClasses.peek().route(*wnd, static_cast<WindowMessage>(message), wParam, lParam);
+          else
+            // [DEFAULT] Delegate to default window procedure
+            msg = WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
         }
+
+        // Return result
+        return msg.Result;
       }
       // [ERROR] Exception thrown by handler
       catch (std::exception& e)
       {
         cdebug << caught_exception("Unable to route message", HERE, e);
-      }
 
-      // [ERROR/UNHANDLED] Pass back to OS
-      ::LRESULT result = WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
-      
-      // [CREATE/NCCREATE] Cleanup
-      switch (auto msg = static_cast<WindowMessage>(message))
-      {
-      case WindowMessage::Create:
-      case WindowMessage::NonClientCreate:
-        // [FAILED] Remove from 'Active Windows' collection
-        if (result == -1)
-          ActiveWindows.erase(hWnd);
-        break;
+        // Delegate to the default procedure
+        msg = WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
+        return msg.Result;
       }
-
-      // [UNHANDLED/ERROR] Return result
-      return result;
     }
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
