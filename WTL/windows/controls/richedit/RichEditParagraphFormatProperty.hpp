@@ -1,78 +1,82 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\ButtonIconProperty.hpp
-//! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
+//! \file wtl\windows\controls\richedit\RichEditParagraphFormatProperty.hpp
+//! \brief Separate implementation for the RichEdit control 'ParagraphFormat' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
-#ifndef WTL_BUTTON_ICON_PROPERTY_HPP
-#define WTL_BUTTON_ICON_PROPERTY_HPP
+#ifndef WTL_RICH_EDIT_PARAGRAPH_FORMAT_PROPERTY_HPP
+#define WTL_RICH_EDIT_PARAGRAPH_FORMAT_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/controls/properties/ButtonIconProperty.h>    //!< ButtonIconPropertyImpl
-#include <wtl/windows/controls/Button.hpp>                         //!< Button
+#include <wtl/windows/controls/richedit/RichEditParagraphFormatProperty.h>    //!< RichEditParagraphFormatPropertyImpl
+#include <wtl/windows/controls/richedit/RichEdit.hpp>                         //!< RichEdit
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
 /////////////////////////////////////////////////////////////////////////////////////////
 namespace wtl 
 {
-  
   // ---------------------------------- ACCESSOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // ButtonIconPropertyImpl::get const
-  //! Get the button icon
+  // RichEditParagraphFormatPropertyImpl::get const
+  //! Get the current paragraph formatting
   //! 
-  //! \return value_t - Current icon if button exists, otherwise initial icon
+  //! \return value_t - Current formatting if control exists, otherwise initial formatting
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  typename ButtonIconPropertyImpl<ENC>::value_t  ButtonIconPropertyImpl<ENC>::get() const 
+  typename RichEditParagraphFormatPropertyImpl<ENC>::value_t  RichEditParagraphFormatPropertyImpl<ENC>::get() const 
   {
-    // Return shared handle
+    // [EXISTS] Get current formatting iff window exists
+    if (this->Window.exists())
+    {
+      value_t cf;
+      // TODO: this->Window.send(RichEditMessage::SetParagraphFormat, SCF_ALL, opaque_cast(cf));
+      return cf;
+    }
+
+    // Return initial formatting
     return base::get();
   }
 
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 
   /////////////////////////////////////////////////////////////////////////////////////////
-  // ButtonIconPropertyImpl::onCreate 
-  //! Called during button creation to set the initial icon
+  // RichEditParagraphFormatPropertyImpl::onCreate 
+  //! Called during control creation to set the initial paragraph formatting
   //! 
   //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Returns 0 to accept button creation
+  //! \return LResult - Returns 0 to accept window creation
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  LResult  ButtonIconPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
+  LResult  RichEditParagraphFormatPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
   {
-    // [EXISTS] Set icon iff button exists
-    if (this->exists() && this->Window.exists())
-      this->Window.send(ButtonMessage::SetImage, IMAGE_ICON, opaque_cast(this->Value.get())); 
+    // Set formatting iff window exists
+    // TODO: this->Window.send(RichEditMessage::SetParagraphFormat, SCF_ALL, opaque_cast(base::get())); 
 
-    // Accept button creation
+    // Accept window creation
     return 0;
   }
     
   /////////////////////////////////////////////////////////////////////////////////////////
-  // ButtonIconPropertyImpl::set 
-  //! Set the icon iff button exists, otherwise sets the initial icon
+  // RichEditParagraphFormatPropertyImpl::set 
+  //! Set the current paragraph formating iff control exists, otherwise sets the initial formatting
   //! 
-  //! \param[in] icon - Button icon
+  //! \param[in] format - Paragraphacter formatting
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  void  ButtonIconPropertyImpl<ENC>::set(value_t icon) 
+  void  RichEditParagraphFormatPropertyImpl<ENC>::set(const value_t& format) 
   {
-    // [EXISTS] Set icon iff button exists
+    // [EXISTS] Set formatting iff window exists
     if (this->Window.exists())
-      this->Window.send(ButtonMessage::SetImage, IMAGE_ICON, opaque_cast(icon.get())); 
+      // TODO: this->Window.send(RichEditMessage::SetParagraphFormat, SCF_SELECTION, opaque_cast(format)); 
     
-    // Updated ref-counted shared handle
-    base::set(icon);
-
-    // TODO: Clear the bitmap, if any
+    // Update 'initial' value
+    base::set(format);
   }
   
     
 } // namespace wtl
 
-#endif // WTL_BUTTON_ICON_PROPERTY_HPP
+#endif // WTL_RICH_EDIT_PARAGRAPH_FORMAT_PROPERTY_HPP
