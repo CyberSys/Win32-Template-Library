@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\SubClass.hpp
 //! \brief Represents a subclassed window
-//! \date 17 November 2015
+//! \date 24 February 2016
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -15,32 +15,29 @@
 //! \namespace wtl - Windows template library
 namespace wtl 
 {
-  
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \struct SubClass - Represents an element in the chain of subclassed windows.
-  //!
-  //! \remarks Encapsulates the window procedure of either a system or WTL window
+  //! \struct SubClass - Encapsulates the window procedure of a native or library window
+  //! 
+  //! \tparam ENC - Character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
   struct SubClass
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
       
+    //! \alias type - Define own type
+    using type = SubClass<ENC>;
+  
     //! \alias wndproc_t - Class window procedure signature
     using wndproc_t = LRESULT (__stdcall*)(::HWND, uint32_t, ::WPARAM, ::LPARAM);
 
-    //! \alias wtlproc_t - Instance window procedure signature
-    using wtlproc_t = LResult (__thiscall*)(WindowMessage, ::WPARAM, ::LPARAM);  
-
-    //! \union WindowProc - Window procedure
-    union WindowProc
-    {
-      WindowProc(wndproc_t n) : Native(n)  {}
-      WindowProc(wtlproc_t l) : Library(l) {}
-
-      wndproc_t  Native;     //!< Win32
-      wtlproc_t  Library;    //!< WTL
-    };
-      
+    //! \alias wtlproc_t - Window routing method signature
+    using wtlproc_t = LResult (Window<ENC>::*)(WindowMessage, ::WPARAM, ::LPARAM);  
+    
+    //! \var encoding - Inherit character encoding
+    static constexpr Encoding  encoding = ENC;
+    
+  private:
     //! \enum WindowType - Define window types
     enum class WindowType
     {
@@ -49,20 +46,34 @@ namespace wtl
     };
 
     // ----------------------------------- REPRESENTATION -----------------------------------
-
-    WindowProc  WndProc;    //!< Window procedure
-    WindowType  Type;       //!< Window type
+  private:
+    //! \union - Window procedure
+    union 
+    {
+      wtlproc_t  Library;    //!< WTL window procedure
+      wndproc_t  Native;     //!< Win32 window procedure
+    };    
+    
+    WindowType  Type;        //!< Window procedure type
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
-
+  public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // SubClass::SubClass
-    //! Create SubClass from a WTL or native window
+    //! Create SubClass from native window procedure
     //! 
-    //! \param[in] t - Window type (Whether WTL or native)
-    //! \param[in] p - Window procedure
+    //! \param[in] fn - Window procedure
     /////////////////////////////////////////////////////////////////////////////////////////
-    SubClass(WindowType t, WindowProc p) : WndProc(p), Type(t)
+    SubClass(wndproc_t fn) : Native(fn), Type(WindowType::Native)
+    {}
+      
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // SubClass::SubClass
+    //! Create SubClass from routing method of WTL window
+    //! 
+    //! \param[in] fn - Routing method of WTL window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    SubClass(wtlproc_t fn) : Library(fn), Type(WindowType::Library)
     {}
       
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -70,14 +81,36 @@ namespace wtl
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
+  public:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // SubClass::route const
+    //! Route message to the subclassed window procedure
+    //!
+    //! \param[in] message - Window message identifier
+    //! \param[in] w - [optional] First message parameter
+    //! \param[in] l - [optional] Second message parameter
+    //! \return LResult - Message routing and result 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    LResult route(Window<encoding>& wnd, WindowMessage message, ::WPARAM w, ::LPARAM l) const
+    {
+      // [LIBRARY] Delegate to instance procedure 
+      if (Type == WindowType::Library)
+        return (wnd.*Library)(message, w, l);
+
+      // [NATIVE] Delegate to native window procedure 
+      return WinAPI<encoding>::callWindowProc(Native, wnd.handle(), enum_cast(message), w, l);
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   };
     
   /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias SubClassCollection - Define subclassed windows collection
+  //! \alias SubClassCollection - Define stack-based collection of sub-classed window procedures
+  //! 
+  //! \tparam ENC - Character encoding 
   /////////////////////////////////////////////////////////////////////////////////////////
-  using SubClassCollection = Stack<SubClass>;
+  template <Encoding ENC>
+  using SubClassCollection = Stack<SubClass<ENC>>;
     
   
 } // namespace wtl
