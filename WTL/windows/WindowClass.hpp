@@ -69,8 +69,8 @@ namespace wtl
     //! 
     //! \param[in] id - System window class
     //! 
-    //! \throw wtl::invalid_argument - Unrecognised system window class
-    //! \throw wtl::platform_error - Unable to register class
+    //! \throw wtl::invalid_argument - Unrecognised system window class identifier
+    //! \throw wtl::platform_error - Unregistered system window class
     /////////////////////////////////////////////////////////////////////////////////////////
     WindowClass(SystemClass cls) : WindowClass(getSystemClassName(cls))
     {
