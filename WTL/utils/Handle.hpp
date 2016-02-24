@@ -237,7 +237,10 @@ namespace wtl
 
     //! \typedef traits_t - Define handle traits type
     using traits_t = TRAITS;
-
+    
+    //! \var npos - Invalid handle sentinel value
+    static constexpr native_t npos = traits_t::npos;
+    
   protected:    
     //! \typedef alloc_t - Define handle allocator type
     using alloc_t = ALLOCATOR;
@@ -262,7 +265,7 @@ namespace wtl
     // Handle::Handle
     //! Create an empty handle (A weak reference to the appropriate 'Invalid Handle' sentinel value)
     /////////////////////////////////////////////////////////////////////////////////////////
-    Handle() : Handle(alloc_t::npos, AllocType::WeakRef)
+    Handle() : Handle(npos, AllocType::WeakRef)
     {}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -332,7 +335,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     bool exists() const
     {
-      return (bool)Storage != false && get() != alloc_t::npos;
+      return (bool)Storage != false && get() != npos;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -451,7 +454,7 @@ namespace wtl
     bool safeDelete(native_t* ptr)
     {
       // Ensure both valid pointer and handle
-      if (ptr != nullptr && converter_t::toHandle(ptr) != alloc_t::npos)
+      if (ptr != nullptr && converter_t::toHandle(ptr) != npos)
         // Pass handle and method to factory destructor
         return alloc_t::destroy(Value);
 
