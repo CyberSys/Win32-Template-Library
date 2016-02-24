@@ -84,9 +84,70 @@ namespace wtl
     ENABLE_MOVE_ASSIGN(MsgResult);       //!< Can be move-assigned
     DISABLE_POLY(MsgResult);             //!< Cannot be polymorphic
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! MsgResult::operator=
+    //! Assign custom result  (Implicitly changes routing to 'Handled')
+    //! 
+    //! \param[in] res - Result value
+    /////////////////////////////////////////////////////////////////////////////////////////
+    type& operator=(result_t res) noexcept
+    {
+      Result = res;
+      Route = MsgRoute::Handled;
+      return *this;
+    }
+
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! MsgResult::operator== const
+    //! Compare routing and result against another instance of equal type
+    //! 
+    //! \param[in] const& r - Another instance
+    //! \return bool - True iff equal result and routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator == (const type& r) const noexcept
+    {
+      return Route == r.Route && Result == r.Result;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! MsgResult::operator!= const
+    //! Compare routing and result against another instance of equal type
+    //! 
+    //! \param[in] const& r - Another instance
+    //! \return bool - True iff unequal result or routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator != (const type& r) const noexcept
+    {
+      return Route != r.Route || Result != r.Result;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! MsgResult::operator== const
+    //! Compare routing 
+    //! 
+    //! \param[in] r - Routing to query
+    //! \return bool - True iff equal routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator == (MsgRoute r) const noexcept
+    {
+      return Route == r;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! MsgResult::operator!= const
+    //! Compare routing 
+    //! 
+    //! \param[in] r - Routing to query
+    //! \return bool - True iff equal routing
+    /////////////////////////////////////////////////////////////////////////////////////////
+    bool operator != (MsgRoute r) const noexcept
+    {
+      return Route != r;
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
     
