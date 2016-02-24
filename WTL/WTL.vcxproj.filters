@@ -707,6 +707,9 @@
     <ClInclude Include="windows\controls\Static.hpp">
       <Filter>Windows\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="utils\ScopeGuard.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">
