@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\ButtonStateProperty.hpp
+//! \file wtl\windows\controls\button\ButtonStateProperty.hpp
 //! \brief Separate implementation for the Button control 'State' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley

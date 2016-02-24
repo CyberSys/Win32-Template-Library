@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\EditTextProperty.hpp
+//! \file wtl\windows\controls\edit\EditTextProperty.hpp
 //! \brief Separate implementation for 'Text' window property (resolves circular dependency)
 //! \date 6 December 2015
 //! \author Nick Crowley
@@ -9,9 +9,9 @@
 #define WTL_EDIT_TEXT_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/EnumCast.hpp>                    //!< EnumCast
-#include <wtl/windows/properties/EditTextProperty.h>     //!< EditTextProperty
-#include <wtl/windows/Window.hpp>                //!< Window
+#include <wtl/casts/EnumCast.hpp>                         //!< EnumCast
+#include <wtl/windows/controls/edit/EditTextProperty.h>   //!< EditTextProperty
+#include <wtl/windows/Window.hpp>                         //!< Window
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library

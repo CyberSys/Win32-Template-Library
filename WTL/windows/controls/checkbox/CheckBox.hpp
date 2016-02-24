@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\CheckBox.hpp
+//! \file wtl\windows\controls\checkbox\CheckBox.hpp
 //! \brief Encapsulates the standard checkbox control
 //! \date 1 December 2015
 //! \author Nick Crowley

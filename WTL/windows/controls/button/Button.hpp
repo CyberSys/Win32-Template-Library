@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\Button.hpp
+//! \file wtl\windows\controls\button\Button.hpp
 //! \brief Encapsulates the standard button control
 //! \date 1 December 2015
 //! \author Nick Crowley

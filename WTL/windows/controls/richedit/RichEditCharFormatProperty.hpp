@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\RichEditCharFormatProperty.hpp
+//! \file wtl\windows\controls\richedit\RichEditCharFormatProperty.hpp
 //! \brief Separate implementation for the RichEdit control 'CharFormat' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\RichEditCharFormatProperty.hpp
+//! \file wtl\windows\controls\richedit\RichEditCharFormatProperty.hpp
 //! \brief Separate class declaration for the RichEdit control 'CharFormat' property
 //! \date 6 December 2015
 //! \author Nick Crowley

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\ButtonStateProperty.hpp
+//! \file wtl\windows\controls\button\ButtonStateProperty.hpp
 //! \brief Separate class declaration for the Button control 'State' property
 //! \date 29 October 2015
 //! \author Nick Crowley

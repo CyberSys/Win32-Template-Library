@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\ButtonIconProperty.hpp
+//! \file wtl\windows\controls\button\ButtonIconProperty.hpp
 //! \brief Separate class declaration for the Button control 'Icon' property
 //! \date 29 October 2015
 //! \author Nick Crowley

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\RichEditBackColourProperty.hpp
+//! \file wtl\windows\controls\richedit\RichEditBackColourProperty.hpp
 //! \brief Separate implementation for the RichEdit 'BackColour' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley

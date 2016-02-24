@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\CheckBoxCheckedEvent.hpp
+//! \file wtl\windows\controls\checkbox\CheckBoxCheckedEvent.hpp
 //! \brief Encapsulates the WM_COMMAND message sent when a checkbox is ticked in the 'Checked' event
 //! \date 1 December 2015
 //! \author Nick Crowley

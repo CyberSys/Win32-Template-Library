@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\Static.hpp
+//! \file wtl\windows\controls\static\Static.hpp
 //! \brief Encapsulates standard static controls
 //! \date 6 December 2015
 //! \author Nick Crowley

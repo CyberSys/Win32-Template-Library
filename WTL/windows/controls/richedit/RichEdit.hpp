@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\RichEdit.hpp
+//! \file wtl\windows\controls\richedit\RichEdit.hpp
 //! \brief Encapsulates standard rich-edit controls
 //! \date 6 December 2015
 //! \author Nick Crowley

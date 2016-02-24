@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\RadioButton.hpp
+//! \file wtl\windows\controls\radiobutton\RadioButton.hpp
 //! \brief Encapsulates the standard radio button control
 //! \date 6 December 2015
 //! \author Nick Crowley

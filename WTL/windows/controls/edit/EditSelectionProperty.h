@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\EditSelectionProperty.h
+//! \file wtl\windows\controls\edit\EditSelectionProperty.h
 //! \brief Separate class declaration for the 'SelectedRange' window property
 //! \date 6 December 2015
 //! \author Nick Crowley

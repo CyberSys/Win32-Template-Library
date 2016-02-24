@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\RadioButtonCheckProperty.hpp
+//! \file wtl\windows\controls\radiobutton\RadioButtonCheckProperty.hpp
 //! \brief Separate class declaration for the RadioButton control 'Check' property
 //! \date 6 December 2015
 //! \author Nick Crowley

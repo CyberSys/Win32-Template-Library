@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\EditSelectionProperty.hpp
+//! \file wtl\windows\controls\edit\EditSelectionProperty.hpp
 //! \brief Separate implementation for 'SelectedRange' window property (resolves circular dependency)
 //! \date 6 December 2015
 //! \author Nick Crowley

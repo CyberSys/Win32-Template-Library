@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\Edit.hpp
+//! \file wtl\windows\controls\edit\Edit.hpp
 //! \brief Encapsulates standard edit controls
 //! \date 1 December 2015
 //! \author Nick Crowley

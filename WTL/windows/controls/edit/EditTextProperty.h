@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\EditTextProperty.h
+//! \file wtl\windows\controls\edit\EditTextProperty.h
 //! \brief Separate class declaration for the 'Text' window property
 //! \date 6 December 2015
 //! \author Nick Crowley

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\ButtonIconProperty.hpp
+//! \file wtl\windows\controls\button\ButtonIconProperty.hpp
 //! \brief Separate implementation for the Button control 'Icon' property (resolves circular dependency)
 //! \date 29 October 2015
 //! \author Nick Crowley

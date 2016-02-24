@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\events\ButtonClickEvent.hpp
+//! \file wtl\windows\controls\button\ButtonClickEvent.hpp
 //! \brief Encapsulates the WM_COMMAND message in the 'ButtonClick' event
 //! \date 1 December 2015
 //! \author Nick Crowley

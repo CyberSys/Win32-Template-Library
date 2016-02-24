@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\ComboBox.hpp
+//! \file wtl\windows\controls\combobox\ComboBox.hpp
 //! \brief Encapsulates standard combobox control
 //! \date 23 November 2015
 //! \author Nick Crowley

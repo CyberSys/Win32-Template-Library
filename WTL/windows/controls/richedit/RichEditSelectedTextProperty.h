@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\properties\RichEditSelectedTextProperty.h
+//! \file wtl\windows\controls\richedit\RichEditSelectedTextProperty.h
 //! \brief Separate class declaration for the 'SelectedRange' window property
 //! \date 6 December 2015
 //! \author Nick Crowley

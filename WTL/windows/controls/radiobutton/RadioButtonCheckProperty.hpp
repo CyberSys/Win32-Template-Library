@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\RadioButtonCheckProperty.hpp
+//! \file wtl\windows\controls\radiobutton\RadioButtonCheckProperty.hpp
 //! \brief Separate implementation for the RadioButton control 'Check' property (resolves circular dependency)
 //! \date 6 December 2015
 //! \author Nick Crowley

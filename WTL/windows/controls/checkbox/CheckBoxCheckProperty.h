@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\CheckBoxCheckProperty.hpp
+//! \file wtl\windows\controls\checkbox\CheckBoxCheckProperty.hpp
 //! \brief Separate class declaration for the CheckBox control 'Check' property
 //! \date 22 November 2015
 //! \author Nick Crowley

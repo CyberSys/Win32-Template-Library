@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\properties\RichEditParagraphFormatProperty.hpp
+//! \file wtl\windows\controls\richedit\RichEditParagraphFormatProperty.hpp
 //! \brief Separate class declaration for the RichEdit control 'ParagraphFormat' property
 //! \date 29 October 2015
 //! \author Nick Crowley
