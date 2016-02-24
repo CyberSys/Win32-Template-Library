@@ -239,7 +239,7 @@ namespace wtl
     using traits_t = TRAITS;
     
     //! \var npos - Invalid handle sentinel value
-    static constexpr native_t npos = traits_t::npos;
+    static constexpr native_t npos = ALLOCATOR::npos;
     
   protected:    
     //! \typedef alloc_t - Define handle allocator type
