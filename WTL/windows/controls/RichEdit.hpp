@@ -288,6 +288,11 @@ namespace wtl
     
   private:
   };
+  
+  //! Explicitly instantiate
+  template RichEdit<Encoding::ANSI>;
+  template RichEdit<Encoding::UTF16>;
+
 } // namespace wtl
 
 #include <wtl/windows/controls/properties/RichEditBackColourProperty.hpp>     //!< RichEditBackColourProperty

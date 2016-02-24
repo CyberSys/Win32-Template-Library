@@ -209,6 +209,11 @@ namespace wtl
     
   private:
   };
+  
+  //! Explicitly instantiate
+  template Static<Encoding::ANSI>;
+  template Static<Encoding::UTF16>;
+
 } // namespace wtl
 
 

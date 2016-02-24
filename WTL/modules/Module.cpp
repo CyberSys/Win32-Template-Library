@@ -46,7 +46,4 @@ namespace wtl
   // ----------------------------------- MUTATOR METHODS ----------------------------------
 }
 
-// Debug
-#include <wtl/windows/Window.hpp>
-static wtl::MessageWindow<> wnd;      //!< Forced compilation of library
 

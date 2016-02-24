@@ -314,6 +314,11 @@ namespace wtl
       return {MsgRoute::Handled, 0};
     }
   };
+
+  //! Explicitly instantiate
+  template Button<Encoding::ANSI>;
+  template Button<Encoding::UTF16>;
+
 } // namespace wtl
 
 #include <wtl/windows/controls/properties/ButtonIconProperty.hpp>      //!< IconProperty

@@ -135,7 +135,11 @@ namespace wtl
     }
     
   };
-
+  
+  
+  //! Explicitly instantiate
+  template MessageWindow<Encoding::ANSI>;
+  template MessageWindow<Encoding::UTF16>;
   
 } // namespace wtl
 

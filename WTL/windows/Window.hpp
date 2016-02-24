@@ -1044,8 +1044,10 @@ namespace wtl
     // Add to collection
     this->emplace(child.Ident, &child);
   }
-    
-  
+   
+  //! Explicitly instantiate
+  template Window<Encoding::ANSI>;
+  template Window<Encoding::UTF16>;
   
 } // namespace wtl
 

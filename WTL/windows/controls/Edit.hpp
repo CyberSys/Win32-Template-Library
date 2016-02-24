@@ -64,7 +64,7 @@ namespace wtl
       this->StyleEx = WindowStyleEx::ClientEdge;
       
       // Clear paint handlers (Handled by subclass)
-      this->Paint.clear();
+      //this->Paint.clear();
 
       // Compile-time subclass the standard edit control
       this->SubClasses.push(getNativeSubClass());
@@ -213,6 +213,12 @@ namespace wtl
     
   private:
   };
+
+  
+  //! Explicitly instantiate
+  template Edit<Encoding::ANSI>;
+  template Edit<Encoding::UTF16>;
+
 } // namespace wtl
 
 #include <wtl/windows/controls/properties/EditSelectionProperty.hpp>    //!< EditSelectionProperty
