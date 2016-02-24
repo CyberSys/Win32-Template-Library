@@ -173,14 +173,14 @@ namespace wtl
     // RichEdit::getNativeSubClass 
     //! Get the window procedure for the standard rich-edit
     //! 
-    //! \return SubClass - SubClass representing the window procedure of the standard rich-edit
+    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard rich-edit
     /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass getNativeSubClass() 
+    static SubClass<encoding> getNativeSubClass() 
     {
       static WindowClass<encoding>  std(SystemClass::RichEdit);    //!< Lookup standard rich-edit window-class
       
       // Return native window proc
-      return { SubClass::WindowType::Native, std.WndProc };
+      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

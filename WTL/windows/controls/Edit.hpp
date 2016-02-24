@@ -114,14 +114,14 @@ namespace wtl
     // Edit::getNativeSubClass 
     //! Get the window procedure for the standard edit
     //! 
-    //! \return SubClass - SubClass representing the window procedure of the standard edit
+    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard edit
     /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass getNativeSubClass() 
+    static SubClass<encoding> getNativeSubClass() 
     {
       static WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
       
       // Return native window proc
-      return { SubClass::WindowType::Native, std.WndProc };
+      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

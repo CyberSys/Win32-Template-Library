@@ -128,14 +128,14 @@ namespace wtl
     // Button::getNativeSubClass 
     //! Get the window procedure for the standard button
     //! 
-    //! \return SubClass - SubClass representing the window procedure of the standard button
+    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard button
     /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass getNativeSubClass() 
+    static SubClass<encoding> getNativeSubClass() 
     {
       static WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button window-class
       
       // Return native window proc
-      return { SubClass::WindowType::Native, std.WndProc };
+      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

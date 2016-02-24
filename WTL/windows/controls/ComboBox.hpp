@@ -112,14 +112,14 @@ namespace wtl
     // ComboBox::getNativeSubClass 
     //! Get the window procedure for the standard combobox
     //! 
-    //! \return SubClass - SubClass representing the window procedure of the standard combobox
+    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard combobox
     /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass getNativeSubClass() 
+    static SubClass<encoding> getNativeSubClass() 
     {
       static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
       
       // Return native window proc
-      return { SubClass::WindowType::Native, std.WndProc };
+      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
