@@ -398,12 +398,43 @@ namespace wtl
           break;
         }
         
-        // Delegate to instance procedure
+        // [ROUTE] Delegate to instance procedure
         LResult msg = wnd->route(static_cast<WindowMessage>(message), wParam, lParam);
 
+        // Query routing
+        switch (msg.Route)
+        {
         // [HANDLED/REFLECTED] Return result
-        if (msg.Route != MsgRoute::Unhandled)
+        case MsgRoute::Handled:
+        case MsgRoute::Reflected:
           return msg.Result;
+
+        // [UNHANDLED] Delegate to procedure of subclass (if any)
+        case MsgRoute::Unhandled:
+          if (!wnd->SubClasses.empty())
+          {
+            // [SUB-CLASSED] Query window type
+            SubClass& baseWnd = wnd->SubClasses.peek();
+            switch (baseWnd.Type)
+            {
+            // [WTL WINDOW] Delegate to instance procedure 
+            case SubClass::WindowType::Library:
+              // Delegate to instance window procedure
+              msg = baseWnd.WndProc.Library(static_cast<WindowMessage>(message), wParam, lParam);
+
+              // [HANDLED/REFLECTED] Return result & routing
+              if (msg.Route != MsgRoute::Unhandled)
+                return msg.Result;
+              break;
+
+            // [NATIVE WINDOW] Delegate to native window procedure 
+            case SubClass::WindowType::Native:
+              // Delegate to native class window procedure 
+              return WinAPI<encoding>::callWindowProc(baseWnd.WndProc.Native, wnd->handle(), message, wParam, lParam);
+            }
+          }
+          break;
+        }
       }
       // [ERROR] Exception thrown by handler
       catch (std::exception& e)
@@ -411,7 +442,7 @@ namespace wtl
         cdebug << caught_exception("Unable to route message", HERE, e);
       }
 
-      // [UNHANDLED/ERROR] Pass back to OS
+      // [ERROR/UNHANDLED] Pass back to OS
       ::LRESULT result = WinAPI<encoding>::defWindowProc(hWnd, message, wParam, lParam);
       
       // [CREATE/NCCREATE] Cleanup
@@ -869,31 +900,6 @@ namespace wtl
           }
           break;
         }
-
-        // [SUB-CLASS] Offer message to each subclass in turn (if any)
-        for (auto& wnd : SubClasses)
-          switch (wnd.Type)
-          {
-          // [WTL WINDOW] Delegate to window object 
-          case SubClass::WindowType::Library:
-            // Delegate to instance window procedure
-            ret = wnd.WndProc.Library(message, w, l);
-
-            // [HANDLED/REFLECTED] Return result & routing
-            if (ret.Route == MsgRoute::Handled || ret.Route == MsgRoute::Reflected)
-              return ret;
-            break;
-
-          // [NATIVE WINDOW] Call window procedure via Win32 API and determine routing from result
-          case SubClass::WindowType::Native:
-            // Delegate to native class window procedure and infer routing
-            ret.Result = WinAPI<encoding>::callWindowProc(wnd.WndProc.Native, Handle, enum_cast(message), w, l);
-            ret.Route = message_traits<WindowMessage>::routing(message, ret.Result); 
-          
-            // [HANDLED] Return result & routing
-            if (ret.Route == MsgRoute::Handled)
-              return ret;
-          }
 
         // [UNHANDLED] Return result & routing
         return ret;
