@@ -51,11 +51,26 @@
     <Filter Include="Windows\Controls">
       <UniqueIdentifier>{91107341-b953-44d9-bad6-992eb6673761}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Controls\Events">
-      <UniqueIdentifier>{a41a9ffa-eda2-42b6-939f-3563aba9dedd}</UniqueIdentifier>
+    <Filter Include="Windows\Controls\Button">
+      <UniqueIdentifier>{cf76ca2e-3cdc-4671-9d56-c3202c9f7964}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Controls\Properties">
-      <UniqueIdentifier>{6ee4692e-0766-432d-b5c5-2321da693da6}</UniqueIdentifier>
+    <Filter Include="Windows\Controls\Edit">
+      <UniqueIdentifier>{66f467e5-0aea-487a-b099-64cfb70be63c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Controls\RadioButton">
+      <UniqueIdentifier>{dd6d8de3-fc98-4e83-98b8-3b41e0e80824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Controls\CheckBox">
+      <UniqueIdentifier>{9466c940-c401-4dac-9b51-b442951e8907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Controls\Static">
+      <UniqueIdentifier>{4fbd8e26-4664-4cd9-a42e-3cd2462567cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Controls\RichEdit">
+      <UniqueIdentifier>{f9207482-1ac3-4975-b769-e7d886beddad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Controls\ComboBox">
+      <UniqueIdentifier>{f68b24a6-93f2-4206-8c3f-017523edb531}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -593,27 +608,6 @@
     <ClInclude Include="utils\Path.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="windows\controls\Button.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\CheckBox.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\ComboBox.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\ButtonIconProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\ButtonIconProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\ButtonStateProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\ButtonStateProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
     <ClInclude Include="windows\properties\FocusProperty.h">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
@@ -622,21 +616,6 @@
     </ClInclude>
     <ClInclude Include="io\MemoryStream.hpp">
       <Filter>IO</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\CheckBoxCheckProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\Edit.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\events\ButtonClickEvent.hpp">
-      <Filter>Windows\Controls\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\events\CheckBoxCheckedEvent.hpp">
-      <Filter>Windows\Controls\Events</Filter>
     </ClInclude>
     <ClInclude Include="platform\MsgResult.hpp">
       <Filter>Platform</Filter>
@@ -662,53 +641,95 @@
     <ClInclude Include="io\Winsock.hpp">
       <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="windows\controls\RichEdit.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RichEditCharFormatProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\EditTextProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\EditTextProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\EditSelectionProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\EditSelectionProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RichEditSelectedTextProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RichEditBackColourProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RichEditBackColourProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\RadioButton.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RadioButtonCheckProperty.h">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\properties\RadioButtonCheckProperty.hpp">
-      <Filter>Windows\Controls\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\Static.hpp">
-      <Filter>Windows\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="utils\ScopeGuard.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\button\Button.hpp">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\button\ButtonClickEvent.hpp">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\button\ButtonIconProperty.h">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\button\ButtonIconProperty.hpp">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\button\ButtonStateProperty.h">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\button\ButtonStateProperty.hpp">
+      <Filter>Windows\Controls\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\Edit.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditSelectionProperty.h">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditSelectionProperty.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditTextProperty.h">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditTextProperty.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\checkbox\CheckBox.hpp">
+      <Filter>Windows\Controls\CheckBox</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\checkbox\CheckBoxCheckedEvent.hpp">
+      <Filter>Windows\Controls\CheckBox</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.h">
+      <Filter>Windows\Controls\CheckBox</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.hpp">
+      <Filter>Windows\Controls\CheckBox</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\combobox\ComboBox.hpp">
+      <Filter>Windows\Controls\ComboBox</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEdit.hpp">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditBackColourProperty.h">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditBackColourProperty.hpp">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditCharFormatProperty.h">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditCharFormatProperty.hpp">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditParagraphFormatProperty.h">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditParagraphFormatProperty.hpp">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditSelectedTextProperty.h">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\richedit\RichEditSelectedTextProperty.hpp">
+      <Filter>Windows\Controls\RichEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\static\Static.hpp">
+      <Filter>Windows\Controls\Static</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\radiobutton\RadioButton.hpp">
+      <Filter>Windows\Controls\RadioButton</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\radiobutton\RadioButtonCheckProperty.h">
+      <Filter>Windows\Controls\RadioButton</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\radiobutton\RadioButtonCheckProperty.hpp">
+      <Filter>Windows\Controls\RadioButton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
