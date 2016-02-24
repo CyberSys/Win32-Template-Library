@@ -58,7 +58,20 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-  
+  private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Control::onCreate
+    //! Called during window creation to modify window parameters and create child windows
+    //! 
+    //! \param[in,out] &args - Message arguments 
+    //! \return LResult - Routing indicating message was not handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    LResult  onCreate(CreateWindowEventArgs<encoding>& args) override
+    { 
+      // [Unhandled] Pass to base
+      return {MsgRoute::Unhandled, 0};
+    }
+    
   };
 
   
