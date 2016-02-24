@@ -71,7 +71,7 @@ namespace wtl
     this->Window.send(WindowMessage::SetFont, opaque_cast(this->Value.get()), boolean_cast(redraw)); 
 
     // [Accept window creation]
-    return {wtl::MsgRoute::Handled, 0};
+    return {MsgRoute::Handled, 0};
   }
 } // namespace wtl
 

@@ -94,7 +94,7 @@ namespace wtl
       Check = true;
     
       // Handled
-      return {wtl::MsgRoute::Handled, 0};
+      return {MsgRoute::Handled, 0};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

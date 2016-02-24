@@ -56,7 +56,7 @@ namespace wtl
       this->Window.focus(); 
     
     // [Accept window creation]
-    return {wtl::MsgRoute::Handled, 0};
+    return {MsgRoute::Handled, 0};
   }
       
 } // namespace wtl

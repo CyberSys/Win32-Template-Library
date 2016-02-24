@@ -64,7 +64,7 @@ namespace wtl
       this->StyleEx = WindowStyleEx::ClientEdge;
       
       // Clear paint handlers (Handled by subclass)
-      //this->Paint.clear();
+      this->Paint.clear();
 
       // Compile-time subclass the standard edit control
       this->SubClasses.push(getNativeSubClass());

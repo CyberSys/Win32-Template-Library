@@ -92,7 +92,7 @@ namespace wtl
       Checked.raise(CheckBoxCheckedEventArgs<encoding>(args));
     
       // Handled
-      return {wtl::MsgRoute::Handled, 0};
+      return {MsgRoute::Handled, 0};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
