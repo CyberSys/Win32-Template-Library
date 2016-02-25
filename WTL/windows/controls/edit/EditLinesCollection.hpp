@@ -79,6 +79,17 @@ namespace wtl
       // ---------------------------------- ACCESSOR METHODS ----------------------------------
     public:
       /////////////////////////////////////////////////////////////////////////////////////////
+      // LineProxy::index() const
+      //! Query line index
+      //! 
+      //! \return uint32_t - Zero-based line index
+      /////////////////////////////////////////////////////////////////////////////////////////
+      uint32_t index() const && noexcept  
+      {
+        return this->LineIndex;
+      }
+
+      /////////////////////////////////////////////////////////////////////////////////////////
       // LineProxy::value_t() const &&
       //! Get text as dynamic string
       //! 
@@ -180,6 +191,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // EditLinesCollection::bottom const
+    //! Retrieve the last line of text 
+    //! 
+    //! \return proxy_t - Proxy providing line text
+    //! 
+    //! \throw wtl::logic_error - Edit control does not exist
+    //! \throw wtl::platform_error - Unable to retrieve window text
+    /////////////////////////////////////////////////////////////////////////////////////////
+    proxy_t bottom() const
+    {
+      // Retrieve bottom line
+      return this->operator[](size()-1);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // EditLinesCollection::size() const
     //! Query whether collection is empty
     //! 
@@ -200,7 +226,7 @@ namespace wtl
     // EditLinesCollection::size() const
     //! Query number of lines
     //! 
-    //! \return uint32_t - Number of lines
+    //! \return uint32_t - Number of lines  (Never less than 1)
     //! 
     //! \throw wtl::logic_error - Edit control does not exist
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -211,6 +237,21 @@ namespace wtl
         throw logic_error(HERE, "Edit control does not exist");
 
       return Edit_GetLineCount(this->Control.handle());
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // EditLinesCollection::top const
+    //! Retrieve the top line of text 
+    //! 
+    //! \return proxy_t - Proxy providing line text
+    //! 
+    //! \throw wtl::logic_error - Edit control does not exist
+    //! \throw wtl::platform_error - Unable to retrieve window text
+    /////////////////////////////////////////////////////////////////////////////////////////
+    proxy_t top() const
+    {
+      // Retrieve top line
+      return this->operator[](0);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
