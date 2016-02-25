@@ -63,7 +63,7 @@ namespace wtl
     //! \tparam OBJ - Window object type
     //!
     //! \param[in] const& wndClass - Win32 Window class 
-    //! \param[in] object - WTL Window object
+    //! \param[in] *object - WTL Window object
     //! \param[in] owner - [optional] Parent/owner window
     //! \param[in] style - Window styles
     //! \param[in] ext - Extended styles
@@ -76,7 +76,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, typename OBJ>
-    static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
+    static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ* object, ::HWND owner, WindowStyle style, WindowStyleEx exStyle, ::HMENU menu, const String<ENC>& title, PointL pos, SizeL size)
     { 
       // Create window
       if (::HWND hwnd = WinAPI<ENC>::createWindowEx(enum_cast(exStyle),                        //!< Extended style
@@ -87,7 +87,7 @@ namespace wtl
                                                     owner,                                     //!< Owner/parent
                                                     menu,                                      //!< Menu or ChildID
                                                     wndClass.Instance,                         //!< Module containing class
-                                                    &object))                                  //!< Associate WTL window object
+                                                    object))                                   //!< Associate WTL window object
         // Success!
         return { hwnd, AllocType::Create };
       
@@ -103,7 +103,7 @@ namespace wtl
     //! \tparam OBJ - Window object type
     //!
     //! \param[in] const& wndClass - Win32 Window class 
-    //! \param[in] &object - WTL window object
+    //! \param[in] *object - WTL window object
     //! \param[in] parent - Parent window
     //! \param[in] id - Window id
     //! \param[in] style - Window styles
@@ -116,7 +116,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
     template <Encoding ENC, typename OBJ>
-    static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ& object, ::HWND parent, WindowId id, WindowStyle style, WindowStyleEx ext, const String<ENC>& title, PointL pos, SizeL size)
+    static NativeHandle<::HWND> create(const WindowClass<ENC>& wndClass, OBJ* object, ::HWND parent, WindowId id, WindowStyle style, WindowStyleEx ext, const String<ENC>& title, PointL pos, SizeL size)
     { 
       // Create child window
       return create(wndClass, object, parent, style, ext, reinterpret_cast<::HMENU>(enum_cast(id)), title, pos, size);

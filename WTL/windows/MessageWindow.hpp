@@ -113,14 +113,14 @@ namespace wtl
     void create(type* owner = nullptr) override
     {
       // Ensure window does not exist
-      if (Handle.exists())
+      if (this->exists())
         throw logic_error(HERE, "Window already exists");
 
       // Provide message-only sentinel unless owner window
       ::HWND parent = owner ? (::HWND)owner->handle() : HWND_MESSAGE;          //!< Use parent if any
 
       // Create as message only window
-      Handle = HWnd(wndclass(), *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), PointL{}, SizeL{});
+      this->Handle = HWnd(wndclass(), this, parent, this->Style, this->StyleEx, defvalue<::HMENU>(), this->Text(), PointL{}, SizeL{});
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //! \file wtl\windows\Window.hpp
 //! \brief Basis for all window classes
-//! \date 19 November 2015
+//! \date 25 February 2016
 //! \author Nick Crowley
 //! \copyright Nick Crowley. All rights reserved.
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,9 @@
 #define WTL_WINDOW_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/BooleanCast.hpp>                              //!< BooleanCast
-#include <wtl/casts/EnumCast.hpp>                                 //!< EnumCast
-#include <wtl/casts/OpaqueCast.hpp>                               //!< OpaqueCast
+#include <wtl/casts/BooleanCast.hpp>                              //!< boolean_cast
+#include <wtl/casts/EnumCast.hpp>                                 //!< enum_cast
+#include <wtl/casts/OpaqueCast.hpp>                               //!< opaque_cast
 #include <wtl/traits/EncodingTraits.hpp>                          //!< Encoding
 #include <wtl/traits/WindowTraits.hpp>                            //!< HWnd
 #include <wtl/utils/Exception.hpp>                                //!< exception
@@ -19,6 +19,7 @@
 #include <wtl/utils/Default.hpp>                                  //!< Default
 #include <wtl/utils/CharArray.hpp>                                //!< CharArray
 #include <wtl/utils/ScopeGuard.hpp>                               //!< ScopeGuard
+#include <wtl/utils/SFINAE.hpp>                                   //!< enable_if_numeric_t
 #include <wtl/utils/Zero.hpp>                                     //!< Zero
 #include <wtl/io/Console.hpp>                                     //!< Console
 #include <wtl/resources/ResourceId.hpp>                           //!< ResourceId
@@ -108,7 +109,7 @@ namespace wtl
   //! \param[in] id - Value representing window id
   //! \return WindowId - WindowId representation of 'id'
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <typename VALUE, typename = std::enable_if_t<std::is_integral<VALUE>::value || std::is_enum<VALUE>::value>>
+  template <typename VALUE, typename = enable_if_numeric_t<VALUE>>
   WindowId window_id(VALUE id)
   {
     // Convert into underlying type then cast to enumeration
@@ -121,19 +122,27 @@ namespace wtl
   //! \tparam ENC - Window character encoding
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  struct ChildWindowCollection : WindowIdCollection<ENC>
+  struct ChildWindowCollection 
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
-    //! \alias base - Define base type
-    using base = WindowIdCollection<ENC>;
-  
     //! \alias type - Define own type
     using type = ChildWindowCollection;
-  
+    
+    //! \alias ident_t - Define identifier type
+    using ident_t = WindowId;
+
+    //! \alias window_t - Define child window type
+    using window_t = Window<ENC>;
+
+  protected:
+    //! \alias collection_t - Define collection type
+    using collection_t = WindowIdCollection<ENC>;
+    
     // ----------------------------------- REPRESENTATION -----------------------------------
   protected:
-    Window<ENC>&  Parent;        //!< Parent/owner of collection
+    collection_t  Collection;   //!< Maps window Ids to window objects
+    Window<ENC>&  Owner;        //!< Window containing the collection
       
     // ------------------------------------ CONSTRUCTION ------------------------------------
   public:
@@ -141,37 +150,154 @@ namespace wtl
     // ChildWindowCollection::ChildWindowCollection
     //! Create empty collection
     //! 
-    //! \param[in] &parent - Parent/owner of collection
+    //! \param[in] &parent - Window containing the collection
     /////////////////////////////////////////////////////////////////////////////////////////
-    ChildWindowCollection(Window<ENC>& parent) : Parent(parent)
+    ChildWindowCollection(Window<ENC>& owner) : Owner(owner)
     {}
       
     // ----------------------------------- STATIC METHODS -----------------------------------
 
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::contains const
+    //! Query whether collection contains a child window
+    //! 
+    //! \tparam IDENT - Window id type 
+    //! 
+    //! \param[in] id - Child window Id
+    //! \return bool - True iff identifier is present
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename IDENT>
+    bool contains(IDENT id) const
+    {
+      // Lookup child window
+      return this->Collection.find(static_cast<ident_t>(id)) != this->Collection.end();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::find const
+    //! Find a child window by ID and cast to its dynamic type
+    //! 
+    //! \tparam CTRL - [optional] Child window type (Default is Window<encoding>)
+    //! \tparam IDENT - Window id type 
+    //! 
+    //! \param[in] id - Child window Id
+    //! \return CTRL& - Reference to child window
+    //! 
+    //! \throw wtl::domain_error - Unable to convert child window to specified type
+    //! \throw wtl::logic_error - Child window not found
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename CTRL = window_t, typename IDENT>
+    CTRL& find(IDENT id) const
+    {
+      // Lookup child window
+      auto pos = this->Collection.find(static_cast<ident_t>(id));
+      if (pos != this->Collection.end())
+      {
+        // [FOUND] Convert & return
+        if (CTRL* ctrl = dynamic_cast<CTRL*>(pos->second))
+          return *ctrl;
+
+        // [ERROR] Incorrect window type
+        throw domain_error(HERE, "Unable to convert child window to specified type");
+      }
+
+      // [ERROR] Unable to find child window
+      throw logic_error(HERE, "Child window not found");
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::operator[] const
+    //! Find a child window by ID
+    //!
+    //! \tparam IDENT - Window id type 
+    //!
+    //! \param[in] id - Child window id
+    //! \return window_t* - Pointer to child window
+    //! 
+    //! \throw wtl::logic_error - Child window not found
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename IDENT>
+    window_t* operator[](IDENT id) const
+    {
+      // Lookup child window
+      auto pos = this->Collection.find(static_cast<ident_t>(id));
+      if (pos != this->Collection.end())
+        return pos->second;
+
+      // [ERROR] Unable to find child window
+      throw logic_error(HERE, "Child window not found");
+    }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ChildWindowCollection::create
-    //! Creates a child window and inserts it into the collection
-    //! 
-    //! \param[in,out] &child - Child window object  (Handle must not exist)
-    //! 
+    // ChildWindowCollection::add
+    //! Creates and inserts a child window into the collection
+    //!
+    //! \param[in,out] &child - Window object representing child window to be created
+    //!
     //! \throw wtl::logic_error - Window already exists
     //! \throw wtl::platform_error - Unable to create window
     /////////////////////////////////////////////////////////////////////////////////////////
-    void create(Window<ENC>& child);
-      
+    void add(window_t& child)
+    {
+      // Ensure child window does not exist
+      if (child.exists())
+        throw logic_error(HERE, "Child window already exists");
+
+      // Ensure identifier is unique
+      else if (contains(child.Ident()))
+        throw logic_error(HERE, "Identifier already in use");
+
+      // Create as child of 'Owner' window
+      child.Handle = HWnd(child.wndclass(), &child, Owner.handle(), child.Ident, child.Style, child.StyleEx, child.Text(), child.Position, child.Size);
+
+      // Insert into collection iff successful
+      this->Collection[child.Ident] = &child;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
-    // ChildWindowCollection::insert
-    //! Inserts an existing child window into the collection
+    // ChildWindowCollection::clear
+    //! Clears and destroy all child windows from the collection
+    //!
+    //! \throw wtl::platform_error - Unable to destroy window
+    /////////////////////////////////////////////////////////////////////////////////////////
+    void clear()
+    {
+      // Lookup first/last
+      typename collection_t::iterator pos = this->Collection.begin(), 
+                                      last = this->Collection.end();
+
+      // Remove and destroy each child window individually
+      while (pos != last)
+      {
+        window_t* wnd = pos->second;
+
+        // Remove from collection before destroying
+        this->Collection.erase(pos++);
+        wnd->destroy();
+      }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // ChildWindowCollection::remove
+    //! Removes and destroys a child window from the collection
     //!
     //! \param[in,out] &child - Child window object  (Handle must exist)
     //! 
-    //! \throw wtl::logic_error - Window does not exist
+    //! \throw wtl::logic_error - Child window not found
     /////////////////////////////////////////////////////////////////////////////////////////
-    void insert(Window<ENC>& child);
+    void remove(window_t& child)
+    {
+      // Remove from collection and then destroy
+      if (this->Collection.erase(child.Ident) > 0)
+        child.destroy();
+      else
+        // [ERROR] Unable to find child window
+        throw logic_error(HERE, "Child window not found");
+    }
   };
 
   
@@ -191,6 +317,10 @@ namespace wtl
   template <Encoding ENC>
   struct Window 
   {
+    // Permit child window collection to modify 'this->Handle'
+    template <Encoding ENC>
+    friend struct ChildWindowCollection;
+
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
     //! \var encoding - Define window character encoding
@@ -582,11 +712,11 @@ namespace wtl
     //! \throw wtl::logic_error - Window already exists
     //! \throw wtl::platform_error - Unable to create window
     //! 
-    //! \remarks The window handle is first accessible during WM_CREATE (although not during WM_GETMINMAXINFO)
-    //! \remarks This is a weak-ref handle assigned by the class window procedure, a strong-ref is returned 
-    //! \remarks and saved here if the creation is successful.
+    //! \remarks The window handle is initialized twice during the construction process. When the ::CreateWindow() call sends a
+    //! \remarks WM_CREATE message, the wndproc saves a weak-ref in this->Handle that is later overwritten by the strong-ref returned
+    //! \remarks from the ::CreateWindow() call.
     //!
-    //! \remarks Child windows are automatically added to the ChildWindowCollection of the parent
+    //! \remarks When creating a child window, it is automatically added to the ChildWindowCollection of its owner
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual void create(type* owner = nullptr)
     {
@@ -594,34 +724,40 @@ namespace wtl
       if (Handle.exists())
         throw logic_error(HERE, "Window already exists");
 
-      // [CHILD] Create window  
-      if (Ident != zero<WindowId>())
+      try
       {
-        // Require parent window
-        if (!owner)
-          throw invalid_argument(HERE, "Missing parent window");
+        // [CHILD] Create window  
+        if (Ident != zero<WindowId>())
+        {
+          // Require parent window
+          if (!owner)
+            throw invalid_argument(HERE, "Missing parent window");
 
-        // Require existant parent window
-        if (!owner->exists())
-          throw logic_error(HERE, "Parent window does not exist");
+          // Ensure parent window exists
+          if (!owner->exists())
+            throw logic_error(HERE, "Parent window does not exist");
+          
+          // Add self to parent's child windows
+          owner->Children.add(*this);
+        }
+        // [POPUP/OVERLAPPED] Create window (possibly with menu)
+        else
+        {
+          ::HWND parent = owner ? (::HWND)owner->handle() : defvalue<::HWND>();          //!< Use parent if any
 
-        // Create as child 
-        Handle = HWnd(wndclass(), *this, owner->handle(), Ident, Style, StyleEx, Text(), Position, Size);
+          // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
+          this->Handle = HWnd(wndclass(), this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), Position, Size);
 
-        // Add to parent's collection of child windows
-        owner->Children.insert(*this);
+          // [MENU] Attach menu if populated during onCreate(..)
+          if (!Menu.empty())
+            ::SetMenu(Handle, Menu.handle());
+        }
       }
-      // [POPUP/OVERLAPPED] Create window (possibly with menu)
-      else
+      // [FAILED] Ensure weak-ref handle is cleared
+      catch (std::exception&)
       {
-        ::HWND parent = owner ? (::HWND)owner->handle() : defvalue<::HWND>();          //!< Use parent if any
-
-        // Create as popup/overlapped (Do not supply menu yet to allow client to populate it)
-        Handle = HWnd(wndclass(), *this, parent, Style, StyleEx, defvalue<::HMENU>(), Text(), Position, Size);
-
-        // [MENU] Attach menu if populated during onCreate(..)
-        if (!Menu.empty())
-          ::SetMenu(Handle, Menu.handle());
+        Handle.release();
+        throw;
       }
     }
       
@@ -661,38 +797,6 @@ namespace wtl
         ActionQueue.execute(cmd->clone());
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::find
-    //! Find a child window of any type
-    //! 
-    //! \tparam WINDOW - [optional] Child window type (Default is Window)
-    //! \tparam IDENT - [optional] Window id type (Default is WindowId)
-    //! 
-    //! \param[in] child - Child window Id
-    //! \return WINDOW& - Strongly-typed child window reference
-    //! 
-    //! \throw wtl::domain_error - Mismatched window type
-    //! \throw wtl::logic_error - Child not found
-    /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename WINDOW = type, typename IDENT = WindowId>
-    WINDOW& find(IDENT child) 
-    {
-      // Lookup child window
-      auto pos = Children.find(static_cast<WindowId>(child));
-      if (pos != Children.end())
-      {
-        // [FOUND] Convert & return
-        if (WINDOW* wnd = dynamic_cast<WINDOW*>(pos->second))
-          return *wnd;
-
-        // [ERROR] Incorrect window type
-        throw domain_error(HERE, "Mismatched child window type");
-      }
-
-      // [ERROR] Unable to find child window
-      throw logic_error(HERE, "Missing child window");
-    }
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::focus
     //! Sets keyboard focus to this window
@@ -859,7 +963,7 @@ namespace wtl
         case WindowMessage::MeasureItem: 
           // [CONTROL] Reflect to originator
           if (w != 0) 
-            ret = OwnerMeasureCtrlEventArgs<encoding>(find(window_id(w)).handle(), w, l).reflect();
+            ret = OwnerMeasureCtrlEventArgs<encoding>(Children.find(window_id(w)).handle(), w, l).reflect();
           
           // [MENU] Raise associated menu event  
           else {
@@ -1015,44 +1119,6 @@ namespace wtl
   WindowHandleCollection<ENC>   Window<ENC>::ActiveWindows;
 
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // ChildWindowCollection::create
-  //! Creates a child window and inserts it into the collection
-  //! 
-  //! \param[in,out] &child - Child window object  (Handle must not exist)
-  //! 
-  //! \throw wtl::logic_error - Window already exists
-  //! \throw wtl::platform_error - Unable to create window
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  void ChildWindowCollection<ENC>::create(Window<ENC>& child)
-  {
-    // Ensure child doesn't already exist
-    if (child.exists())
-      throw logic_error(HERE, "Window already exists");
-
-    // Create child window  (calls 'insert()' if successful)
-    child.create(&Parent);
-  }
-      
-  /////////////////////////////////////////////////////////////////////////////////////////
-  // ChildWindowCollection::insert
-  //! Inserts an existing child window into the collection
-  //!
-  //! \param[in,out] &child - Child window object  (Handle must exist)
-  //! 
-  //! \throw wtl::logic_error - Window does not exist
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  void ChildWindowCollection<ENC>::insert(Window<ENC>& child)
-  {
-    // Ensure child exists
-    if (!child.exists())
-      throw logic_error(HERE, "Window does not exist");
-
-    // Add to collection
-    this->emplace(child.Ident, &child);
-  }
    
   //! Explicitly instantiate
   template Window<Encoding::ANSI>;
