@@ -13,6 +13,9 @@
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
 #include <wtl/windows/controls/edit/EditConstants.hpp>                //!< (Constants)
 #include <wtl/windows/controls/edit/EditLinesCollection.hpp>          //!< EditLinesCollection
+#include <wtl/windows/controls/edit/EditChangedEvent.hpp>             //!< EditChangedEvent
+#include <wtl/windows/controls/edit/EditUpdatedEvent.hpp>             //!< EditUpdatedEvent
+#include <wtl/windows/controls/edit/EditMaxTextEvent.hpp>             //!< EditMaxTextEvent
 #include <wtl/windows/controls/edit/EditReadOnlyProperty.h>           //!< EditReadOnlyProperty
 #include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
 #include <wtl/windows/controls/edit/EditModifiedProperty.h>           //!< EditModifiedProperty
@@ -44,8 +47,10 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
-    // Events (TODO)
-    
+    // Events 
+    EditChangedEvent<encoding>       Changed;           //!< Text has changed
+    EditUpdatedEvent<encoding>       Updated;           //!< Text has been updated
+    EditMaxTextEvent<encoding>       MaxText;           //!< Text limit reached
 
     // Properties 
     EditLinesCollection<encoding>    Lines;             //!< Lines collection
@@ -194,7 +199,8 @@ namespace wtl
     {
       try
       {
-        LResult ret;       //!< Message result, defaults to unhandled
+        LResult ret;        //!< Message result, defaults to unhandled
+        uint16_t code;      //!< Notification code
 
         // Examine message
         switch (message)
@@ -202,19 +208,22 @@ namespace wtl
         // [COMMAND (REFLECTED)] Raise associated event
         case WindowMessage::Command | WindowMessage::Reflect:
           // Extract notification
-          switch (static_cast<EditNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
+          code = ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message;
+          switch (static_cast<EditNotification>(code))
           {
-          case EditNotification::Change:      /* TODO: Raise notification */            break;
-          case EditNotification::Update:      /* TODO: Raise notification */            break;
+          case EditNotification::Change:   return Changed.raise(EditChangedEventArgs<encoding>(w,l)); 
+          case EditNotification::Update:   return Updated.raise(EditUpdatedEventArgs<encoding>(w,l)); 
           case EditNotification::HScroll:     /* TODO: Raise notification */            break;
           case EditNotification::VScroll:     /* TODO: Raise notification */            break;
+          case EditNotification::MaxText:  return MaxText.raise(EditMaxTextEventArgs<encoding>(w,l)); 
           }
           break;
 
         // [CTLCOLOR (REFLECTED)] Raise 'Colourize' event
-        case WindowMessage::CtrlColourEdit | WindowMessage::Reflect:
-        case WindowMessage::CtrlColourStatic | WindowMessage::Reflect:  // (Ctrl is Disabled)
-          if (!Colourize.empty()) {
+        case WindowMessage::CtrlColourEdit | WindowMessage::Reflect:    // (Ctrl is enabled)
+        case WindowMessage::CtrlColourStatic | WindowMessage::Reflect:  // (Ctrl is disabled)
+          if (!Colourize.empty())
+          {
             ColourizeEventArgs<encoding> args(w,l);
             return Colourize.raise(args); 
           }

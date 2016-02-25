@@ -758,6 +758,15 @@
     <ClInclude Include="windows\controls\edit\EditLinesCollection.hpp">
       <Filter>Windows\Controls\Edit</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditChangedEvent.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditMaxTextEvent.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditUpdatedEvent.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">
