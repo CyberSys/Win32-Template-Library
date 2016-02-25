@@ -433,8 +433,9 @@ namespace wtl
                Visible(*this, false),
                WindowRect(*this)
     {
-      // Create events: Accept window creation parameters
+      // Create/destroy events: Accept window creation parameters and destroy children upon destruction
       Create += new CreateWindowEventHandler<encoding>(this, &Window::onCreate);
+      Destroy += new DestroyWindowEventHandler<encoding>(this, &Window::onDestroy);
       
       // Command events: Execute gui commands by default
       Command += new CommandEventHandler<encoding>(this, &Window::onCommand);
@@ -1014,6 +1015,21 @@ namespace wtl
       return {MsgRoute::Handled, 0};
     }
     
+    ///////////////////////////////////////////////////////////////////////////////
+    // MainWindow::onDestroy
+    //! Called during window destruction to destroy all child windows
+    //! 
+    //! \return wtl::LResult - Routing indicating message was handled
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onDestroy() 
+    { 
+      // Destroy child windows
+      this->Children.clear();
+
+      // [Handled] 
+      return {wtl::MsgRoute::Handled, 0};
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::onCommand
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
