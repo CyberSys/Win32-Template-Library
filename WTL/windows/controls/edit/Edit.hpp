@@ -12,6 +12,7 @@
 #include <wtl/windows/Control.hpp>                                    //!< Control
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
 #include <wtl/windows/controls/edit/EditConstants.hpp>                //!< (Constants)
+#include <wtl/windows/controls/edit/EditReadOnlyProperty.h>           //!< EditReadOnlyProperty
 #include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
 #include <wtl/windows/controls/edit/EditModifiedProperty.h>           //!< EditModifiedProperty
 
@@ -47,6 +48,7 @@ namespace wtl
 
     // Properties 
     EditModifiedProperty<encoding>   Modified;          //!< Whether text has been modified
+    EditReadOnlyProperty<encoding>   ReadOnly;          //!< Whether text is read-only
     EditSelectionProperty<encoding>  SelectionRange;    //!< Current text selection range
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
@@ -61,6 +63,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Edit(WindowId id) : base(id), 
                         Modified(*this),
+                        ReadOnly(*this),
                         SelectionRange(*this)
     {
       // Set properties
@@ -250,6 +253,7 @@ namespace wtl
 
 } // namespace wtl
 
+#include <wtl/windows/controls/edit/EditReadOnlyProperty.hpp>      //!< EditReadOnlyProperty
 #include <wtl/windows/controls/edit/EditSelectionProperty.hpp>     //!< EditSelectionProperty
 #include <wtl/windows/controls/edit/EditModifiedProperty.hpp>      //!< EditModifiedProperty
 

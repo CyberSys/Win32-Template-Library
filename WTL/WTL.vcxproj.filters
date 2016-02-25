@@ -755,6 +755,12 @@
     <ClInclude Include="windows\controls\edit\EditModifiedProperty.hpp">
       <Filter>Windows\Controls\Edit</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditReadOnlyProperty.h">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditReadOnlyProperty.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

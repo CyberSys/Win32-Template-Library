@@ -175,6 +175,8 @@
     <ClInclude Include="windows\controls\edit\EditConstants.hpp" />
     <ClInclude Include="windows\controls\edit\EditModifiedProperty.h" />
     <ClInclude Include="windows\controls\edit\EditModifiedProperty.hpp" />
+    <ClInclude Include="windows\controls\edit\EditReadOnlyProperty.h" />
+    <ClInclude Include="windows\controls\edit\EditReadOnlyProperty.hpp" />
     <ClInclude Include="windows\controls\edit\EditSelectionProperty.h" />
     <ClInclude Include="windows\controls\edit\EditSelectionProperty.hpp" />
     <ClInclude Include="windows\controls\edit\EditTextProperty.h" />
