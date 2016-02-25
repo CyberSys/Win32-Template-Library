@@ -12,6 +12,7 @@
 #include <wtl/windows/Control.hpp>                                    //!< Control
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
 #include <wtl/windows/controls/edit/EditConstants.hpp>                //!< (Constants)
+#include <wtl/windows/controls/edit/EditLinesCollection.hpp>          //!< EditLinesCollection
 #include <wtl/windows/controls/edit/EditReadOnlyProperty.h>           //!< EditReadOnlyProperty
 #include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
 #include <wtl/windows/controls/edit/EditModifiedProperty.h>           //!< EditModifiedProperty
@@ -47,6 +48,7 @@ namespace wtl
     
 
     // Properties 
+    EditLinesCollection<encoding>    Lines;             //!< Lines collection
     EditModifiedProperty<encoding>   Modified;          //!< Whether text has been modified
     EditReadOnlyProperty<encoding>   ReadOnly;          //!< Whether text is read-only
     EditSelectionProperty<encoding>  SelectionRange;    //!< Current text selection range
@@ -62,6 +64,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
     Edit(WindowId id) : base(id), 
+                        Lines(*this),
                         Modified(*this),
                         ReadOnly(*this),
                         SelectionRange(*this)

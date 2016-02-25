@@ -671,12 +671,6 @@
     <ClInclude Include="windows\controls\edit\EditSelectionProperty.hpp">
       <Filter>Windows\Controls\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="windows\controls\edit\EditTextProperty.h">
-      <Filter>Windows\Controls\Edit</Filter>
-    </ClInclude>
-    <ClInclude Include="windows\controls\edit\EditTextProperty.hpp">
-      <Filter>Windows\Controls\Edit</Filter>
-    </ClInclude>
     <ClInclude Include="windows\controls\checkbox\CheckBox.hpp">
       <Filter>Windows\Controls\CheckBox</Filter>
     </ClInclude>
@@ -759,6 +753,9 @@
       <Filter>Windows\Controls\Edit</Filter>
     </ClInclude>
     <ClInclude Include="windows\controls\edit\EditReadOnlyProperty.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditLinesCollection.hpp">
       <Filter>Windows\Controls\Edit</Filter>
     </ClInclude>
   </ItemGroup>
