@@ -67,6 +67,9 @@ namespace wtl
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
 
+      // Attempt to provide custom background
+      this->Colourize += new ColourizeEventHandler<encoding>(this, &Edit::onColourize);
+
       // Compile-time subclass the standard edit control
       this->SubClasses.push(getNativeSubClass());
     }
@@ -188,7 +191,7 @@ namespace wtl
         switch (message)
         {
         // [COMMAND (REFLECTED)] Raise associated event
-        case WindowMessage::ReflectCommand:  
+        case WindowMessage::Command | WindowMessage::Reflect:
           // Extract notification
           switch (static_cast<EditNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
@@ -196,6 +199,15 @@ namespace wtl
           case EditNotification::Update:      /* TODO: Raise notification */            break;
           case EditNotification::HScroll:     /* TODO: Raise notification */            break;
           case EditNotification::VScroll:     /* TODO: Raise notification */            break;
+          }
+          break;
+
+        // [CTLCOLOR (REFLECTED)] Raise 'Colourize' event
+        case WindowMessage::CtrlColourEdit | WindowMessage::Reflect:
+        case WindowMessage::CtrlColourStatic | WindowMessage::Reflect:  // (Ctrl is Disabled)
+          if (!Colourize.empty()) {
+            ColourizeEventArgs<encoding> args(w,l);
+            return Colourize.raise(args); 
           }
           break;
         }
@@ -213,6 +225,19 @@ namespace wtl
     }
     
   private:
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Edit::onColourize
+    //! Called to provide a background brush and set drawing colours
+    //! 
+    //! \param[in] args - Message arguments 
+    //! \return LResult - Routing indicating message was handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    LResult  onColourize(ColourizeEventArgs<encoding>& args) 
+    {
+      // Handle message
+      return {MsgRoute::Handled, opaque_cast(StockBrush::Leaves.get()) };
+    }
+    
   };
 
   
