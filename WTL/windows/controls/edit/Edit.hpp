@@ -13,6 +13,7 @@
 #include <wtl/gdi/Theme.hpp>                                          //!< Theme
 #include <wtl/windows/controls/edit/EditConstants.hpp>                //!< (Constants)
 #include <wtl/windows/controls/edit/EditSelectionProperty.h>          //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditModifiedProperty.h>           //!< EditModifiedProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -44,7 +45,8 @@ namespace wtl
     // Events (TODO)
     
 
-    // Properties (TODO)
+    // Properties 
+    EditModifiedProperty<encoding>   Modified;          //!< Whether text has been modified
     EditSelectionProperty<encoding>  SelectionRange;    //!< Current text selection range
 
     // ------------------------------------ CONSTRUCTION ------------------------------------
@@ -58,6 +60,7 @@ namespace wtl
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
     Edit(WindowId id) : base(id), 
+                        Modified(*this),
                         SelectionRange(*this)
     {
       // Set properties
@@ -247,6 +250,7 @@ namespace wtl
 
 } // namespace wtl
 
-#include <wtl/windows/controls/edit/EditSelectionProperty.hpp>    //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditSelectionProperty.hpp>     //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditModifiedProperty.hpp>      //!< EditModifiedProperty
 
 #endif // WTL_EDIT_HPP

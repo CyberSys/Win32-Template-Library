@@ -749,6 +749,12 @@
     <ClInclude Include="windows\events\ColourizeEvent.hpp">
       <Filter>Windows\Events</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditModifiedProperty.h">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\controls\edit\EditModifiedProperty.hpp">
+      <Filter>Windows\Controls\Edit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">
