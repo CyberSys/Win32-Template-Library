@@ -36,6 +36,7 @@
 #include <wtl/windows/SubClass.hpp>                               //!< SubClass
 #include <wtl/windows/events/AsyncSocketEvent.hpp>                //!< AsyncSocketEvent
 #include <wtl/windows/events/CommandEvent.hpp>                    //!< CommandEvent
+#include <wtl/windows/events/ColourizeEvent.hpp>                  //!< ColourizeEvent
 #include <wtl/windows/events/CloseWindowEvent.hpp>                //!< CloseWindowEvent
 #include <wtl/windows/events/CreateWindowEvent.hpp>               //!< CreateWindowEven
 #include <wtl/windows/events/DestroyWindowEvent.hpp>              //!< DestroyWindowEvent
@@ -237,6 +238,7 @@ namespace wtl
     // Events
     AsyncSocketEvent<encoding>      AsyncSocket;    //!< Raised in response to custom message from sockets
     CommandEvent<encoding>          Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
+    ColourizeEvent<encoding>        Colourize;      //!< Raised in response to WM_CTLCOLOR___ from controls/dialogs
     CreateWindowEvent<encoding>     Create;         //!< Raised in response to WM_CREATE
     CloseWindowEvent<encoding>      Close;          //!< Raised in response to WM_CLOSE
     DestroyWindowEvent<encoding>    Destroy;        //!< Raised in response to WM_DESTROY
@@ -819,7 +821,7 @@ namespace wtl
         case WindowMessage::MouseMove:        ret = MouseMove.raise(MouseMoveEventArgs<encoding>(w,l));             break;
 
         // [SHOW/MOVE] 
-        case WindowMessage::ShowWindow:       ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));                 break;
+        case WindowMessage::ShowWindow:            ret = Show.raise(ShowWindowEventArgs<encoding>(w,l));            break;
         case WindowMessage::WindowPositionChanged: ret = Reposition.raise(PositionChangedEventArgs<encoding>(w,l)); break;
 
         // [SOCKET]
@@ -873,6 +875,13 @@ namespace wtl
             ret = Paint.raise(args);                                      //!< [Pass arguments by reference]
           }
           break;
+
+        // [CONTROL-COLOUR] Reflect to sender
+        case WindowMessage::CtrlColourButton:     ret = ColourizeEventArgs<encoding,WindowMessage::CtrlColourButton>(w,l).reflect();     break;
+        case WindowMessage::CtrlColourEdit:       ret = ColourizeEventArgs<encoding,WindowMessage::CtrlColourEdit>(w,l).reflect();       break;
+        case WindowMessage::CtrlColourListbox:    ret = ColourizeEventArgs<encoding,WindowMessage::CtrlColourListbox>(w,l).reflect();    break;
+        case WindowMessage::CtrlColourScrollbar:  ret = ColourizeEventArgs<encoding,WindowMessage::CtrlColourScrollbar>(w,l).reflect();  break;
+        case WindowMessage::CtrlColourStatic:     ret = ColourizeEventArgs<encoding,WindowMessage::CtrlColourStatic>(w,l).reflect();     break;
         }
 
         // [UNHANDLED] Return result & routing
