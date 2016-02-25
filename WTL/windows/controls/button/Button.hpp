@@ -316,9 +316,9 @@ namespace wtl
     }
   };
 
-  //! Explicitly instantiate
-  template Button<Encoding::ANSI>;
-  template Button<Encoding::UTF16>;
+  //! Explicitly instantiate common encodings
+  template struct Button<Encoding::ANSI>;
+  template struct Button<Encoding::UTF16>;
 
 } // namespace wtl
 

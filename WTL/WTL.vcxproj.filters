@@ -799,5 +799,8 @@
     <ClCompile Include="io\Console.cpp">
       <Filter>IO</Filter>
     </ClCompile>
+    <ClCompile Include="WTL.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

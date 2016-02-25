@@ -190,7 +190,7 @@ namespace wtl
           // Extract notification
           switch (static_cast<ButtonNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
           {
-          //case ButtonNotification::Click:      ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));            break;
+          case ButtonNotification::Click:   /* TODO ret = Click.raise(ButtonClickEventArgs<encoding>(w,l));  */            break;
           }
           break;
 
@@ -215,7 +215,7 @@ namespace wtl
         cdebug << caught_exception("Unable to route message", HERE, e);
         
         // [ERROR] Unhandled
-        return MsgRoute::Unhandled;
+        return {MsgRoute::Unhandled, -1};
       }
     }
     
@@ -252,6 +252,11 @@ namespace wtl
       return {MsgRoute::Handled, 0};
     }
   };
+  
+  //! Explicitly instantiate common encodings
+  template struct ComboBox<Encoding::ANSI>;
+  template struct ComboBox<Encoding::UTF16>;
+
 } // namespace wtl
 
 #include <wtl/windows/controls/button/ButtonIconProperty.hpp>      //!< IconProperty

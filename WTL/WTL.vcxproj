@@ -272,6 +272,7 @@
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp" />
     <ClCompile Include="io\Console.cpp" />
+    <ClCompile Include="WTL.cpp" />
     <ClInclude Include="io\Winsock.hpp">
       <FileType>CppHeader</FileType>
     </ClInclude>

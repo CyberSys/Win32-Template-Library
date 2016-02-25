@@ -259,9 +259,9 @@ namespace wtl
   };
 
   
-  //! Explicitly instantiate
-  template Edit<Encoding::ANSI>;
-  template Edit<Encoding::UTF16>;
+  //! Explicitly instantiate common encodings
+  template struct Edit<Encoding::ANSI>;
+  template struct Edit<Encoding::UTF16>;
 
 } // namespace wtl
 

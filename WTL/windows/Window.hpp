@@ -902,8 +902,7 @@ namespace wtl
   WindowHandleCollection<ENC>   Window<ENC>::ActiveWindows;
 
   
-   
-  //! Explicitly instantiate
+  //! Explicitly instantiate common encodings
   template struct Window<Encoding::ANSI>;
   template struct Window<Encoding::UTF16>;
   

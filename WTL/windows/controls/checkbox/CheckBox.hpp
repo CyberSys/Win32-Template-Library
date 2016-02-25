@@ -139,6 +139,11 @@ namespace wtl
       return {MsgRoute::Handled, 0};
     }
   };
+
+  //! Explicitly instantiate common encodings
+  template struct CheckBox<Encoding::ANSI>;
+  template struct CheckBox<Encoding::UTF16>;
+
 } // namespace wtl
 
 #include <wtl/windows/controls/checkbox/CheckBoxCheckProperty.hpp>   //!< CheckBoxCheckProperty

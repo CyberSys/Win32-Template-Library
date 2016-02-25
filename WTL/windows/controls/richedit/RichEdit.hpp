@@ -15,7 +15,7 @@
 #include <wtl/windows/controls/richedit/RichEditBackColourProperty.h>     //!< RichEditBackColourProperty
 #include <wtl/windows/controls/richedit/RichEditCharFormatProperty.h>     //!< RichEditCharFormatProperty
 #include <wtl/windows/controls/richedit/RichEditSelectedTextProperty.h>   //!< RichEditSelectedTextProperty
-#include <wtl/windows/controls/richedit/EditSelectionProperty.h>          //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditSelectionProperty.h>              //!< EditSelectionProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -290,15 +290,15 @@ namespace wtl
   private:
   };
   
-  //! Explicitly instantiate
-  template RichEdit<Encoding::ANSI>;
-  template RichEdit<Encoding::UTF16>;
+  //! Explicitly instantiate common encodings
+  template struct RichEdit<Encoding::ANSI>;
+  template struct RichEdit<Encoding::UTF16>;
 
 } // namespace wtl
 
 #include <wtl/windows/controls/richedit/RichEditBackColourProperty.hpp>     //!< RichEditBackColourProperty
 #include <wtl/windows/controls/richedit/RichEditCharFormatProperty.hpp>     //!< RichEditCharFormatProperty
 #include <wtl/windows/controls/richedit/RichEditSelectedTextProperty.hpp>   //!< RichEditSelectedTextProperty
-#include <wtl/windows/controls/richedit/EditSelectionProperty.hpp>          //!< EditSelectionProperty
+#include <wtl/windows/controls/edit/EditSelectionProperty.hpp>              //!< EditSelectionProperty
 
 #endif // WTL_RICH_EDIT_HPP
