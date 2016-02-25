@@ -196,6 +196,7 @@
     <ClInclude Include="windows\Event.hpp" />
     <ClInclude Include="windows\events\CloseWindowEvent.hpp" />
     <ClInclude Include="windows\events\CommandEvent.hpp" />
+    <ClInclude Include="windows\events\ColourizeEvent.hpp" />
     <ClInclude Include="windows\events\GainFocusEvent.hpp" />
     <ClInclude Include="windows\events\LoseFocusEvent.hpp" />
     <ClInclude Include="windows\events\MouseEnterEvent.hpp" />

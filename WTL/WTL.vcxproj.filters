@@ -746,6 +746,9 @@
     <ClInclude Include="windows\controls\richedit\RichEditConstants.hpp">
       <Filter>Windows\Controls\RichEdit</Filter>
     </ClInclude>
+    <ClInclude Include="windows\events\ColourizeEvent.hpp">
+      <Filter>Windows\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">
