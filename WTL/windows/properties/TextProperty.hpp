@@ -35,7 +35,7 @@ namespace wtl
     // [EXISTS] Query window text
     if (this->Window.exists())
     {
-      int32_t length = WinAPI<encoding>::getWindowTextLength(this->Window);    //!< Length in chars
+      int32_t length = WinAPI<base::encoding>::getWindowTextLength(this->Window);    //!< Length in chars
 
       // [EMPTY] Return epsilon string
       if (!length)

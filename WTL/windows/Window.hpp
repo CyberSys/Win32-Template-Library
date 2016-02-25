@@ -318,7 +318,7 @@ namespace wtl
   struct Window 
   {
     // Permit child window collection to modify 'this->Handle'
-    template <Encoding ENC>
+    template <Encoding E2>
     friend struct ChildWindowCollection;
 
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
@@ -1121,8 +1121,8 @@ namespace wtl
   
    
   //! Explicitly instantiate
-  template Window<Encoding::ANSI>;
-  template Window<Encoding::UTF16>;
+  template struct Window<Encoding::ANSI>;
+  template struct Window<Encoding::UTF16>;
   
 } // namespace wtl
 

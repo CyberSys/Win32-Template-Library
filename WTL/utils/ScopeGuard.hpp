@@ -55,8 +55,8 @@ namespace wtl
 
     // ------------------------------------ COPY & MOVE -------------------------------------
   public:
-    ENABLE_COPY(type);        //!< Enable deep copy
-    ENABLE_MOVE(type);        //!< Enable move
+    ENABLE_COPY(BasicScopeGuard);        //!< Enable deep copy
+    ENABLE_MOVE(BasicScopeGuard);        //!< Enable move
 		
     // ----------------------------------- STATIC METHODS -----------------------------------
     

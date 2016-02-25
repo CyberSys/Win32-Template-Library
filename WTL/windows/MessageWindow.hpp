@@ -21,15 +21,18 @@ namespace wtl
   //! \tparam ENC - Window charactrer encoding (UTF16 if unspecified)
   ///////////////////////////////////////////////////////////////////////////////
   template <wtl::Encoding ENC = wtl::Encoding::UTF16>
-  struct MessageWindow : wtl::Window<ENC>
+  struct MessageWindow : Window<ENC>
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias type - Define own type
+    using type = MessageWindow<ENC>;
+
     //! \alias base - Define base type
-    using base = wtl::Window<ENC>;
+    using base = Window<ENC>;
 
     //! \var encoding - Inherit window character encoding
-    static constexpr wtl::Encoding  encoding = base::encoding;
+    static constexpr Encoding  encoding = base::encoding;
 
     // ----------------------------------- REPRESENTATION -----------------------------------
 
@@ -101,16 +104,16 @@ namespace wtl
     // MessageWindow::create
     //! Creates the window 
     //!
-    //! \param[in,out] *owner - [optional] Parent/owner window   (Must be a message-only window)
+    //! \param[in,out] *owner - [optional] Parent/owner window   (Must also be a message-only window)
     //! 
     //! \throw wtl::logic_error - Window already exists
     //! \throw wtl::platform_error - Unable to create window
     //! 
-    //! \remarks The window handle is first accessible during WM_CREATE (although not during WM_GETMINMAXINFO)
-    //! \remarks This is a weak-ref handle assigned by the class window procedure, a strong-ref is returned 
-    //! \remarks and saved here if the creation is successful.
+    //! \remarks The window handle is initialized twice during the construction process. When the ::CreateWindow() call sends a
+    //! \remarks WM_CREATE message, the wndproc saves a weak-ref in this->Handle that is later overwritten by the strong-ref returned
+    //! \remarks from the ::CreateWindow() call.
     /////////////////////////////////////////////////////////////////////////////////////////
-    void create(type* owner = nullptr) override
+    void create(Window<ENC>* owner = nullptr) override
     {
       // Ensure window does not exist
       if (this->exists())
@@ -138,8 +141,8 @@ namespace wtl
   
   
   //! Explicitly instantiate
-  template MessageWindow<Encoding::ANSI>;
-  template MessageWindow<Encoding::UTF16>;
+  template struct MessageWindow<Encoding::ANSI>;
+  template struct MessageWindow<Encoding::UTF16>;
   
 } // namespace wtl
 
