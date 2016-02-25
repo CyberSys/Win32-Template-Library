@@ -231,6 +231,7 @@
     <ClInclude Include="windows\PopupMenu.hpp" />
     <ClInclude Include="windows\properties\ClientRectProperty.h" />
     <ClInclude Include="windows\properties\ClientRectProperty.hpp" />
+    <ClInclude Include="windows\properties\ColourProperty.hpp" />
     <ClInclude Include="windows\properties\EnabledProperty.h" />
     <ClInclude Include="windows\properties\EnabledProperty.hpp" />
     <ClInclude Include="windows\properties\FocusProperty.h" />

@@ -55,6 +55,7 @@
 #include <wtl/windows/events/ShowWindowEvent.hpp>                 //!< ShowWindowEvent
 #include <wtl/windows/events/PositionChangedEvent.hpp>            //!< PositionChangedEvent
 #include <wtl/windows/properties/ClientRectProperty.h>            //!< ClientRectProperty
+#include <wtl/windows/properties/ColourProperty.hpp>              //!< ColourProperty
 #include <wtl/windows/properties/EnabledProperty.h>               //!< EnabledProperty
 #include <wtl/windows/properties/FontProperty.h>                  //!< FontProperty
 #include <wtl/windows/properties/FocusProperty.h>                 //!< FocusProperty
@@ -300,14 +301,6 @@ namespace wtl
     }
   };
 
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-  //! \alias ColourProperty - Define property type used to represent colours
-  //! 
-  //! \tparam ENC - Window encoding
-  /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC>
-  using ColourProperty = Property<PropertyImpl<ENC,Colour>>;
 
   /////////////////////////////////////////////////////////////////////////////////////////
   //! \struct Window - Base for all window types
