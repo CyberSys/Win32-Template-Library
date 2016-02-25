@@ -68,7 +68,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onCreate(CreateWindowEventArgs<encoding>& args) override
     { 
-      // [Unhandled] Pass to base
+      // [Unhandled] Default action is to route message to subclass
       return {MsgRoute::Unhandled, 0};
     }
     
