@@ -32,7 +32,7 @@ namespace wtl
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  WindowId messageBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags flags)
+  WindowId messageBox(::HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags flags)
   {
     return static_cast<WindowId>( WinAPI<ENC>::messageBox(parent, text.c_str(), title.c_str(), enum_cast(flags)) );
   }
@@ -51,7 +51,7 @@ namespace wtl
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  WindowId errorBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  WindowId errorBox(::HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconError);
   }
@@ -68,7 +68,7 @@ namespace wtl
   //! \return WindowId - Id of Button selected by user
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  WindowId errorBox(HWND parent, const caught_exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  WindowId errorBox(::HWND parent, const caught_exception& ex, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
     // Write to debug console
     cdebug << ex << std::flush;
@@ -90,7 +90,7 @@ namespace wtl
   //! \return WindowId - WindowId::Ok
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  WindowId infoBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
+  WindowId infoBox(::HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::Ok)
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconInformation);
   }
@@ -109,7 +109,7 @@ namespace wtl
   //! \return WindowId - WindowId::Yes or WindowId::No
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
-  WindowId questionBox(HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::YesNo)
+  WindowId questionBox(::HWND parent, const String<ENC>& title, const String<ENC>& text, MessageBoxFlags buttons = MessageBoxFlags::YesNo)
   {
     return messageBox(parent, title, text, buttons|MessageBoxFlags::IconQuestion);
   }
