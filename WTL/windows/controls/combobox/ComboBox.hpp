@@ -56,7 +56,7 @@ namespace wtl
     ComboBox(WindowId id) : base(id)
     {
       // Set properties
-      this->Style = WindowStyle::ChildWindow /*TODO*/;
+      this->Style = WindowStyle::ChildWindow | ComboBoxStyle::DropDownList;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
