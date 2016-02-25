@@ -272,7 +272,7 @@ namespace wtl
   };
   
   //! Define traits: Non-contiguous Attribute
-  template <> struct is_attribute<WindowMessage>  : std::false_type {};
+  template <> struct is_attribute<WindowMessage>  : std::true_type  {};
   template <> struct is_contiguous<WindowMessage> : std::false_type {};
   template <> struct default_t<WindowMessage>     : std::integral_constant<WindowMessage,WindowMessage::None>   {};
 
