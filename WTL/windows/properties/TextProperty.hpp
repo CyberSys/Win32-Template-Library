@@ -35,8 +35,7 @@ namespace wtl
     // [EXISTS] Query window text
     if (this->Window.exists())
     {
-      //int32_t length = choose<base::encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW)(this->Window);    //!< Length in chars
-      int32_t length = ::GetWindowTextLengthW(this->Window);    //!< Length in chars
+      int32_t length = WinAPI<encoding>::getWindowTextLength(this->Window);    //!< Length in chars
 
       // [EMPTY] Return epsilon string
       if (!length)
@@ -48,7 +47,7 @@ namespace wtl
         char_t  buffer[256];
 
         // Get window text
-        if (!choose<base::encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, &buffer[0], 256))
+        if (!WinAPI<base::encoding>::getWindowText(this->Window, &buffer[0], 256))
           throw platform_error(HERE, "Unable to retrieve window text");
 
         // Generate dynamic string
@@ -60,7 +59,7 @@ namespace wtl
         std::vector<char_t>  buffer(length+1);    //!< Encapsulates 'buffer = new char_t[length+1]'
 
         // Get window text
-        if (!choose<base::encoding>(::GetWindowTextA,::GetWindowTextW)(this->Window, buffer.data(), length+1))
+        if (!WinAPI<base::encoding>::getWindowText(this->Window, buffer.data(), length+1))
           throw platform_error(HERE, "Unable to retrieve window text");
 
         // Convert to string
@@ -86,7 +85,7 @@ namespace wtl
   void  TextPropertyImpl<ENC>::set(value_t text) 
   {
     // [EXISTS] Set window text
-    if (this->Window.exists() && !choose<base::encoding>(::SetWindowTextA,::SetWindowTextW)(this->Window, text.c_str()))
+    if (this->Window.exists() && !WinAPI<base::encoding>::setWindowText(this->Window, text.c_str()))
       throw platform_error(HERE, "Unable to set window text");
 
     // Store value

@@ -53,6 +53,8 @@ namespace wtl
     static constexpr auto getTempFileName = choose<encoding>(::GetTempFileNameA,::GetTempFileNameW);
     static constexpr auto getTextExtentPoint32 = choose<encoding>(::GetTextExtentPoint32A,::GetTextExtentPoint32W);
     static constexpr auto getVersion = choose<encoding>(::GetVersionExA,::GetVersionExW);
+    static constexpr auto getWindowText = choose<encoding>(::GetWindowTextA,::GetWindowTextW);
+    static constexpr auto getWindowTextLength = choose<encoding>(::GetWindowTextLengthA,::GetWindowTextLengthW);
     static constexpr auto getWindowLongPtr = choose<encoding>(::GetWindowLongPtrA,::GetWindowLongPtrW);
 
     //! Functions 'I'
@@ -87,6 +89,7 @@ namespace wtl
 
     //! Functions 'S'
     static constexpr auto sendMessage = choose<encoding>(::SendMessageA,::SendMessageW);
+    static constexpr auto setWindowText = choose<encoding>(::SetWindowTextA,::SetWindowTextW);
     static constexpr auto strCmpI = choose<encoding>(::StrCmpIA,::StrCmpIW);
 
     //! Functions 'T'
