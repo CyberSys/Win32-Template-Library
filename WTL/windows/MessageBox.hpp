@@ -9,12 +9,14 @@
 #define WTL_MESSAGE_BOX_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/traits/EncodingTraits.hpp>      //!< choose()
+#include <wtl/casts/EnumCast.hpp>             //!< enum_cast
+#include <wtl/traits/EncodingTraits.hpp>      //!< Encoding
 #include <wtl/utils/String.hpp>               //!< String
 #include <wtl/utils/Exception.hpp>            //!< caught_exception
+#include <wtl/io/Console.hpp>                 //!< Console
 #include <wtl/platform/WindowFlags.hpp>       //!< MessageBoxFlags
 #include <wtl/windows/WindowId.hpp>           //!< WindowId
-#include <stdexcept>                          //!< std::Exception
+#include <stdexcept>                          //!< std::exception
 
 //! \namespace wtl - Windows template library
 namespace wtl 
