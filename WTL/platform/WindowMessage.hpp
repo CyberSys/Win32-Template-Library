@@ -142,7 +142,7 @@ namespace wtl
     UpdateUIState = 0x0128,			                //!< 
     QueryUIState = 0x0129,			                //!< 
     CtrlColourMsgBox = 0x0132,			            //!< 
-    CtrlColourEdit = 0x0133,			              //!< 
+    CtrlColourEdit = 0x0133,			              //!< An edit control that is not read-only or disabled sends the WM_CTLCOLOREDIT message to its parent window when the control is about to be drawn
     CtrlColourListbox = 0x0134,			            //!< 
     CtrlColourButton = 0x0135,			            //!< 
     CtrlColourDialog = 0x0136,			            //!< 
