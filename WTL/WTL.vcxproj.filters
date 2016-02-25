@@ -770,6 +770,12 @@
     <ClInclude Include="windows\properties\ColourProperty.hpp">
       <Filter>Windows\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="windows\ChildWindowCollection.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowId.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

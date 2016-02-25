@@ -147,6 +147,7 @@
     <ClInclude Include="utils\Triangle.hpp" />
     <ClInclude Include="utils\Zero.hpp" />
     <ClInclude Include="WinAPI.h" />
+    <ClInclude Include="windows\ChildWindowCollection.hpp" />
     <ClInclude Include="windows\CommandId.hpp" />
     <ClInclude Include="windows\commands\AboutProgramCommand.hpp" />
     <ClInclude Include="windows\commands\CopyClipboardCommand.hpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="windows\SubClass.hpp" />
     <ClInclude Include="windows\Window.hpp" />
     <ClInclude Include="windows\WindowClass.hpp" />
+    <ClInclude Include="windows\WindowId.hpp" />
     <ClInclude Include="windows\WindowMenu.hpp" />
     <ClInclude Include="windows\WindowSkin.hpp" />
     <ClInclude Include="WTL.hpp" />
