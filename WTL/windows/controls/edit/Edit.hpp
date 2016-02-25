@@ -259,10 +259,6 @@ namespace wtl
   };
 
   
-  //! Explicitly instantiate common encodings
-  template struct Edit<Encoding::ANSI>;
-  template struct Edit<Encoding::UTF16>;
-
 } // namespace wtl
 
 #include <wtl/windows/controls/edit/EditReadOnlyProperty.hpp>      //!< EditReadOnlyProperty

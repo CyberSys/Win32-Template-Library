@@ -253,10 +253,6 @@ namespace wtl
     }
   };
   
-  //! Explicitly instantiate common encodings
-  template struct ComboBox<Encoding::ANSI>;
-  template struct ComboBox<Encoding::UTF16>;
-
 } // namespace wtl
 
 #include <wtl/windows/controls/button/ButtonIconProperty.hpp>      //!< IconProperty

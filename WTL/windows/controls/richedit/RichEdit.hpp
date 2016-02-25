@@ -290,10 +290,6 @@ namespace wtl
   private:
   };
   
-  //! Explicitly instantiate common encodings
-  template struct RichEdit<Encoding::ANSI>;
-  template struct RichEdit<Encoding::UTF16>;
-
 } // namespace wtl
 
 #include <wtl/windows/controls/richedit/RichEditBackColourProperty.hpp>     //!< RichEditBackColourProperty

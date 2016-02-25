@@ -139,9 +139,6 @@ namespace wtl
     
   };
   
-  //! Explicitly instantiate common encodings
-  template struct MessageWindow<Encoding::ANSI>;
-  template struct MessageWindow<Encoding::UTF16>;
   
 } // namespace wtl
 

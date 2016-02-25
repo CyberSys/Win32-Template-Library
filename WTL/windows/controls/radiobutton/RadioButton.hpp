@@ -142,10 +142,6 @@ namespace wtl
     }
   };
   
-  //! Explicitly instantiate common encodings
-  template struct RadioButton<Encoding::ANSI>;
-  template struct RadioButton<Encoding::UTF16>;
-
 } // namespace wtl
 
 #include <wtl/windows/controls/radiobutton/RadioButtonCheckProperty.hpp>   //!< RadioButtonCheckProperty

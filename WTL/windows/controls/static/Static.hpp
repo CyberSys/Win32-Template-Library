@@ -211,10 +211,6 @@ namespace wtl
   private:
   };
   
-  //! Explicitly instantiate common encodings
-  template struct Static<Encoding::ANSI>;
-  template struct Static<Encoding::UTF16>;
-
 } // namespace wtl
 
 
