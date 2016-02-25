@@ -74,7 +74,7 @@ namespace wtl
     //! \param[in] l - Originator window handle
     /////////////////////////////////////////////////////////////////////////////////////////
     ControlEventArgs(::WPARAM w, ::LPARAM l) : Ident(enum_cast<WindowId>(LOWORD(w))), 
-                                               Sender(reinterpret_cast<HWND>(l), AllocType::WeakRef), 
+                                               Sender(reinterpret_cast<::HWND>(l), AllocType::WeakRef), 
                                                Message(static_cast<EVENT>(HIWORD(w)))
     {}
     
