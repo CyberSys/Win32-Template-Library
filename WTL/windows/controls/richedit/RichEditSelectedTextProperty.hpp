@@ -9,9 +9,9 @@
 #define WTL_RICH_EDIT_SELECTED_TEXT_PROPERTY_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/casts/OpaqueCast.hpp>                                          //!< opaque_cast
-#include <wtl/windows/controls/properties/RichEditSelectedTextProperty.h>    //!< RichEditSelectedTextProperty
-#include <wtl/windows/controls/RichEdit.hpp>                                 //!< RichEdit
+#include <wtl/casts/OpaqueCast.hpp>                                         //!< opaque_cast
+#include <wtl/windows/controls/richedit/RichEditSelectedTextProperty.h>     //!< RichEditSelectedTextProperty
+#include <wtl/windows/controls/richedit/RichEdit.hpp>                       //!< RichEdit
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //! \namespace wtl - Windows template library
