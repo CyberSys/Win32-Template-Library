@@ -19,6 +19,7 @@
 #include <wtl/utils/Point.hpp>            //!< Point
 #include <wtl/utils/Size.hpp>             //!< Size
 #include <wtl/windows/WindowClass.hpp>    //!< WindowClass
+#include <wtl/windows/WindowId.hpp>       //!< WindowId
 
 //! \namespace wtl - Windows template library
 namespace wtl

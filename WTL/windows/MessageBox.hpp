@@ -13,6 +13,7 @@
 #include <wtl/utils/String.hpp>               //!< String
 #include <wtl/utils/Exception.hpp>            //!< caught_exception
 #include <wtl/platform/WindowFlags.hpp>       //!< MessageBoxFlags
+#include <wtl/windows/WindowId.hpp>           //!< WindowId
 #include <stdexcept>                          //!< std::Exception
 
 //! \namespace wtl - Windows template library

@@ -255,31 +255,6 @@ namespace wtl
   template <> struct is_contiguous<SystemClass> : std::true_type   {};
   template <> struct default_t<SystemClass>     : std::integral_constant<SystemClass,SystemClass::Animate>   {};
 
-  // ----------------------------------- WINDOW ID ----------------------------------
-  
-  //! \enum WindowId - Represents a Window Id
-  enum class WindowId : uint16_t
-  {
-    Ok = 1,			        //!< 'Ok' button
-    Cancel = 2,			    //!< 'Cancel' button
-    Abort = 3,			    //!< 'Abort' button
-    Retry = 4,			    //!< 'Retry' button
-    Ignore = 5,			    //!< 'Ignore' button
-    Yes = 6,			      //!< 'Yes' button
-    No = 7,			        //!< 'No' button
-    Close = 8,			    //!< 'Close' button
-    Help = 9,			      //!< 'Help' button
-    TryAgain = 10,			//!< [Windows 5.00] 'Try Again' button
-    Continue = 11,			//!< [Windows 5.00] 'Continue' button
-    User = 0x0100,      //!< User defined
-    Timeout = 32000,		//!< [Windows 5.01] Message box timed out
-  };
-  
-  //! Define traits: Non-Contiguous enumeration
-  template <> struct is_attribute<WindowId>  : std::false_type  {};
-  template <> struct is_contiguous<WindowId> : std::false_type  {};
-  template <> struct default_t<WindowId>     : std::integral_constant<WindowId,WindowId::Ok>   {};
-  
   // ----------------------------------- WINDOW STYLE ----------------------------------
   
   //! \enum WindowStyle - Defines basic window styles
