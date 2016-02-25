@@ -27,7 +27,7 @@ namespace wtl
   //! \tparam EVENT - [optional] Notification type (Default is uint16_t)
   //! \tparam CODE - [optional] Notification code (Default is zero)
   /////////////////////////////////////////////////////////////////////////////////////////
-  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>()>
+  template <Encoding ENC, WindowMessage WM, typename EVENT = uint16_t, EVENT CODE = defvalue<EVENT>(), typename = void>
   struct ControlEventArgs;
   /* Undefined */
 
