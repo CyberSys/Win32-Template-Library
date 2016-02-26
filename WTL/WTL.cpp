@@ -16,10 +16,26 @@
 #include <WTL/windows/controls/radiobutton/RadioButton.hpp>   //!< RadioButton
 #include <WTL/windows/controls/richedit/RichEdit.hpp>         //!< RichEdit
 #include <WTL/windows/controls/static/Static.hpp>             //!< Static
+#include <WTL/utils/Handle.hpp>                               //!< Handle
 #include <WTL/utils/String.hpp>                               //!< String
 #include <WTL/utils/Rectangle.hpp>                            //!< Rect
 #include <WTL/utils/Point.hpp>                                //!< Point
 #include <WTL/utils/Size.hpp>                                 //!< Size
+#include <WTL/traits/AcceleratorTraits.hpp>                   //!< HAccelerator
+#include <WTL/traits/BrushTraits.hpp>                         //!< HBrush
+#include <WTL/traits/CursorTraits.hpp>                        //!< HCursor
+#include <WTL/traits/DeviceContextTraits.hpp>                 //!< HDeviceContext
+#include <WTL/traits/FontTraits.hpp>                          //!< HFont
+#include <WTL/traits/GlobalTraits.hpp>                        //!< HGlobal
+#include <WTL/traits/IconTraits.hpp>                          //!< HIcon
+#include <WTL/traits/ImageListTraits.hpp>                     //!< HImageList
+#include <WTL/traits/MenuTraits.hpp>                          //!< HMenu
+#include <WTL/traits/ModuleTraits.hpp>                        //!< HModule
+#include <WTL/traits/PenTraits.hpp>                           //!< HPen
+#include <WTL/traits/ResourceTraits.hpp>                      //!< HResource
+#include <WTL/traits/ThemeTraits.hpp>                         //!< HTheme
+#include <WTL/traits/WindowClassTraits.hpp>                   //!< HAtom
+#include <WTL/traits/WindowTraits.hpp>                        //!< HWnd
 
 //! \namespace wtl - Windows template library
 namespace wtl
@@ -82,6 +98,23 @@ namespace wtl
   extern template Static<Encoding::ANSI>;
   extern template Static<Encoding::UTF16>;
   
+  // ----------------------------------- HANDLES -----------------------------------
+  
+  //! Explicitly instantiate types
+  extern template Handle<::HACCEL>;
+  extern template Handle<::HBRUSH>;
+  extern template Handle<::HCURSOR>;
+  extern template Handle<::HDC>;
+  extern template Handle<::HFONT>;
+  extern template Handle<::HGLOBAL,hglobal_allocator>;
+  extern template Handle<::HICON>;
+  extern template Handle<::HIMAGELIST>;
+  extern template Handle<::HMENU>;
+  extern template Handle<::HMODULE>;
+  extern template Handle<::HPEN>;
+  extern template Handle<::HTHEME,htheme_allocator>;
+  extern template Handle<::HWND>;
+  extern template Handle<::ATOM>;
 }
 
 
