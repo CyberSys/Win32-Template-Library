@@ -28,9 +28,6 @@ namespace wtl
     //! \alias base - Define base type
     using base = wtl::Window<ENC>;
 
-    //! \alias class_t - Inherit window class type
-    using class_t = typename base::class_t;
-    
     //! \alias resource_t - Inherit identifier type
     using resource_t = typename base::resource_t;
     
@@ -67,9 +64,9 @@ namespace wtl
     //! Get the window class
     //!
     //! \param[in] instance - Module owning the window class
-    //! \return class_t& - Reference to window class 
+    //! \return WindowClass<encoding>& - Reference to window class 
     ///////////////////////////////////////////////////////////////////////////////
-    class_t& getClass(::HINSTANCE instance) override
+    WindowClass<encoding>& getClass(::HINSTANCE instance) override
     {
       // Return specific class
       return NativeClass;

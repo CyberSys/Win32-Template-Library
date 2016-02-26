@@ -453,7 +453,7 @@ namespace wtl
     // Window::wndclass const
     //! Get the window class
     //! 
-    //! \return const class_t& - Shared window class
+    //! \return const WindowClass<encoding>& - Shared window class
     /////////////////////////////////////////////////////////////////////////////////////////
     virtual const WindowClass<encoding>& wndclass() const = 0;
     

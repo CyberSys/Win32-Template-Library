@@ -73,7 +73,7 @@ namespace wtl
     //! Registers the window-class 
     //! 
     //! \param[in] instance - Handle to registering module  [Used only during initial call]
-    //! \return const class_t& - Window class 
+    //! \return const WindowClass<encoding>& - Window class 
     //! 
     //! \throw wtl::platform_error - Unable to register window class
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ namespace wtl
     // MessageWindow::wndclass const
     //! Get the window class
     //! 
-    //! \return const class_t& - Shared window class
+    //! \return const WindowClass<encoding>& - Shared window class
     /////////////////////////////////////////////////////////////////////////////////////////
     const WindowClass<encoding>& wndclass() const override
     {

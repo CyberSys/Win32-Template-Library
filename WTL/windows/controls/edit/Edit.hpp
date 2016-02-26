@@ -39,9 +39,6 @@ namespace wtl
     //! \alias base - Define base type
     using base = Control<ENC>;
     
-    //! \alias class_t - Inherit class type
-    using class_t = typename base::class_t;
-    
     //! \var encoding - Inherit character encoding
     static constexpr Encoding  encoding = base::encoding;
     
@@ -101,7 +98,7 @@ namespace wtl
     //! Registers the window-class 
     //! 
     //! \param[in] instance - Handle to registering module  [Used only during initial call]
-    //! \return const class_t& - Window class 
+    //! \return const WindowClass<encoding>& - Window class 
     //! 
     //! \throw wtl::platform_error - Unable to register window class
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +175,7 @@ namespace wtl
     // Edit::wndclass const
     //! Get the window class
     //! 
-    //! \return const class_t& - Shared window class
+    //! \return const WindowClass<encoding>& - Shared window class
     /////////////////////////////////////////////////////////////////////////////////////////
     const WindowClass<encoding>& wndclass() const override
     {

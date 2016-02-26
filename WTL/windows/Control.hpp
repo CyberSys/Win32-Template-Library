@@ -26,11 +26,11 @@ namespace wtl
   {
     // ---------------------------------- TYPES & CONSTANTS ---------------------------------
   
+    //! \alias type - Define own type
+    using type = wtl::Control<ENC>;
+
     //! \alias base - Define base type
     using base = wtl::Window<ENC>;
-
-    //! \alias class_t - Inherit window class type
-    using class_t = typename base::class_t;
 
     //! \var encoding - Inherit window character encoding
     static constexpr wtl::Encoding  encoding = base::encoding;

@@ -33,9 +33,6 @@ namespace wtl
     //! \alias base - Define base type
     using base = Button<ENC>;
     
-    //! \alias class_t - Inherit class type
-    using class_t = typename base::class_t;
-    
     //! \var encoding - Inherit character encoding
     static constexpr Encoding  encoding = base::encoding;
     
