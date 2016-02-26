@@ -53,10 +53,10 @@ namespace wtl
   extern template MessageWindow<Encoding::UTF16>;
   
   // ----------------------------------- CONTROLS -----------------------------------
-
+  
   //! Explicitly instantiate common encodings
-  extern template RichEdit<Encoding::ANSI>;
-  extern template RichEdit<Encoding::UTF16>;
+  extern template Button<Encoding::ANSI>;
+  extern template Button<Encoding::UTF16>;
 
   //! Explicitly instantiate common encodings
   extern template CheckBox<Encoding::ANSI>;
@@ -73,6 +73,10 @@ namespace wtl
   //! Explicitly instantiate common encodings
   extern template RadioButton<Encoding::ANSI>;
   extern template RadioButton<Encoding::UTF16>;
+  
+  //! Explicitly instantiate common encodings
+  extern template RichEdit<Encoding::ANSI>;
+  extern template RichEdit<Encoding::UTF16>;
 
   //! Explicitly instantiate common encodings
   extern template Static<Encoding::ANSI>;
