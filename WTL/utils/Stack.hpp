@@ -127,6 +127,19 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Stack::emplace
+    //! Contruct new element on the top of the stack
+    //! 
+    //! \param[in] &&... args - Element c-tor arguments
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    void emplace(ARGS&&... args)
+    {
+      // Construct at back
+      Items.emplace_back(std::forward<ARGS>(args)...);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::peek
     //! Peek the top element in the stack
     //! 
@@ -146,17 +159,15 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::push
-    //! Push element onto the stack
+    //! Push element onto the top of the stack
     //! 
-    //! \param[in] &&... args - Element c-tor arguments
+    //! \param[in] const& obj - Element to copy
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    void push(ARGS&&... args)
+    void push(const value_type& obj)
     {
       // Construct at back
-      Items.emplace_back(std::forward<ARGS>(args)...);
+      emplace(obj);
     }
-    
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Stack::pop
