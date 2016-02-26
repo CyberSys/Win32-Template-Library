@@ -60,7 +60,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass<encoding> getNativeSubClass() 
     {
-      static WindowClass<encoding>  std(SystemClass::MessageOnly);    //!< Lookup message-only button window-class
+      static const WindowClass<encoding>  std(SystemClass::MessageOnly);    //!< Lookup message-only button window-class
       
       // Return native window proc
       return { std.WndProc };
@@ -79,21 +79,21 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
-      static String<encoding> name("WTL.MessageOnly");
+      static const String<encoding> name("WTL.MessageOnly");
       
       // Define WTL message-only window-class
-      static WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
-      static WindowClass<encoding>  msg(instance,
-                                        name.c_str(),
-                                        std.Style,
-                                        base::WndProc,              //!< Replace the window procedure 'Compile-time subclass'
-                                        std.Menu,
-                                        std.Cursor,
-                                        std.Background,
-                                        std.SmallIcon,
-                                        std.LargeIcon,
-                                        std.ClassStorage,
-                                        std.WindowStorage);    
+      static const WindowClass<encoding>  std(SystemClass::MessageOnly);  //!< Message-only system class
+      static const WindowClass<encoding>  msg(instance,
+                                              name.c_str(),
+                                              std.Style,
+                                              base::WndProc,              //!< Replace the window procedure 'Compile-time subclass'
+                                              std.Menu,
+                                              std.Cursor,
+                                              std.Background,
+                                              std.SmallIcon,
+                                              std.LargeIcon,
+                                              std.ClassStorage,
+                                              std.WindowStorage);    
       // Return singleton
       return msg;
     }

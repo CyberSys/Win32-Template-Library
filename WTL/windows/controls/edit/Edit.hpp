@@ -104,21 +104,21 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
-      static String<encoding> name("WTL.Edit");
+      static const String<encoding> name("WTL.Edit");
       
       // Define WTL edit window-class
-      static WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
-      static WindowClass<encoding>  ctrl(instance,
-                                         name.c_str(),
-                                         std.Style,
-                                         base::WndProc,           //!< Replace the window procedure 'Compile-time subclass'
-                                         std.Menu,
-                                         std.Cursor,
-                                         std.Background,
-                                         std.SmallIcon,
-                                         std.LargeIcon,
-                                         std.ClassStorage,
-                                         std.WindowStorage);    
+      static const WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
+      static const WindowClass<encoding>  ctrl(instance,
+                                               name.c_str(),
+                                               std.Style,
+                                               base::WndProc,           //!< Replace the window procedure 'Compile-time subclass'
+                                               std.Menu,
+                                               std.Cursor,
+                                               std.Background,
+                                               std.SmallIcon,
+                                               std.LargeIcon,
+                                               std.ClassStorage,
+                                               std.WindowStorage);    
 
       // Return WTL edit class
       return ctrl;
@@ -133,7 +133,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass<encoding> getNativeSubClass() 
     {
-      static WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
+      static const WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
       
       // Return native window proc
       return { std.WndProc };

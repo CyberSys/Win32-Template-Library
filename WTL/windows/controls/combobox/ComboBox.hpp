@@ -85,21 +85,21 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
     {
-      static String<encoding> name("WTL.ComboBox");
+      static const String<encoding> name("WTL.ComboBox");
       
       // Define WTL combobox window-class
-      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox windowclass
-      static WindowClass<encoding>  btn(instance,
-                                        name.c_str(),
-                                        std.Style,
-                                        base::WndProc,            //!< Replace the window procedure 'Compile-time subclass'
-                                        std.Menu,
-                                        std.Cursor,
-                                        std.Background,
-                                        std.SmallIcon,
-                                        std.LargeIcon,
-                                        std.ClassStorage,
-                                        std.WindowStorage);    
+      static const WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox windowclass
+      static const WindowClass<encoding>  btn(instance,
+                                              name.c_str(),
+                                              std.Style,
+                                              base::WndProc,            //!< Replace the window procedure 'Compile-time subclass'
+                                              std.Menu,
+                                              std.Cursor,
+                                              std.Background,
+                                              std.SmallIcon,
+                                              std.LargeIcon,
+                                              std.ClassStorage,
+                                              std.WindowStorage);    
 
       // Return WTL combobox class
       return btn;
@@ -114,7 +114,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     static SubClass<encoding> getNativeSubClass() 
     {
-      static WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
+      static const WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
       
       // Return native window proc
       return { std.WndProc };
