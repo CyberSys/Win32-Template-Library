@@ -313,9 +313,6 @@ namespace wtl
     }
   };
 
-  //! Explicitly instantiate common encodings
-  template struct Button<Encoding::ANSI>;
-  template struct Button<Encoding::UTF16>;
 
 } // namespace wtl
 
