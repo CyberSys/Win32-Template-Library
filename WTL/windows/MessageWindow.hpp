@@ -47,7 +47,7 @@ namespace wtl
       static const WindowClass<encoding>  std(SystemClass::MessageOnly);    //!< Lookup message-only button window-class
 
       // Compile-time subclass the window
-      this->SubClasses.emplace(std.WndProc);
+      this->SubClasses += std.WndProc;
     }
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

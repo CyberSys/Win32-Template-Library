@@ -84,7 +84,7 @@ namespace wtl
       this->Colourize += new ColourizeEventHandler<encoding>(this, &Edit::onColourize);
 
       // Compile-time subclass the standard edit control
-      this->SubClasses.emplace(std.WndProc);
+      this->SubClasses += std.WndProc;
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

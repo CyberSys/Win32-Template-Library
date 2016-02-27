@@ -63,7 +63,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard static control
-      this->SubClasses.emplace(std.WndProc);
+      this->SubClasses += std.WndProc;
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------

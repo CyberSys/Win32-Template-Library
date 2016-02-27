@@ -73,7 +73,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard button control
-      this->SubClasses.emplace(std.WndProc);
+      this->SubClasses += std.WndProc;
 
       // Owner draw handlers
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
