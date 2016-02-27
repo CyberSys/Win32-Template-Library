@@ -200,14 +200,14 @@ namespace wtl
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Draw' 
         case WindowMessage::ReflectDrawItem: 
-          { OwnerDrawCtrlEventArgs<encoding> args(w,l);  
-            ret = OwnerDraw.raise(args); }
+          if (!OwnerDraw.empty())
+            ret = OwnerDraw.raise( OwnerDrawCtrlEventArgs<encoding>(w,l) ); 
           break;
 
         // [OWNER-DRAW (REFLECTED)] Raise 'Owner Measure'
         case WindowMessage::ReflectMeasureItem:  
-          { OwnerMeasureCtrlEventArgs<encoding> args(this->Handle,w,l);  
-            ret = OwnerMeasure.raise(args); }
+          if (!OwnerMeasure.empty())
+            ret = OwnerMeasure.raise( OwnerMeasureCtrlEventArgs<encoding>(this->Handle,w,l) ); 
           break;
         }
 

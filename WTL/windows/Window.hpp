@@ -674,10 +674,10 @@ namespace wtl
         switch (message)
         {
         // [CREATE] Create window
-        case WindowMessage::Create: { 
-            CreateWindowEventArgs<encoding> args(w,l); //!< [Pass arguments by reference]
-            ret = Create.raise(args); 
-          } break;
+        case WindowMessage::Create:
+          if (!Create.empty()) 
+            ret = Create.raise( CreateWindowEventArgs<encoding>(w,l) ); 
+          break;
 
         // [CLOSE/DESTROY] 
         case WindowMessage::Close:            ret = Close.raise();                                                  break;
@@ -721,10 +721,8 @@ namespace wtl
             ret = OwnerDrawCtrlEventArgs<encoding>(w,l).reflect();
 
           // [MENU] Raise menu's OwnerDraw event
-          else  {
-            OwnerDrawMenuEventArgs<encoding> args(w,l);
-            ret = Menu.OwnerDraw.raise(args); 
-          }
+          else  
+            ret = Menu.OwnerDraw.raise( OwnerDrawMenuEventArgs<encoding>(w,l) ); 
           break;
         
         // [OWNER-MEASURE] Reflect to sender
@@ -734,18 +732,14 @@ namespace wtl
             ret = OwnerMeasureCtrlEventArgs<encoding>(Children.find(window_id(w)).handle(), w, l).reflect();
           
           // [MENU] Raise associated menu event  
-          else {
-            OwnerMeasureMenuEventArgs<encoding> args(Handle,w,l);
-            ret = Menu.OwnerMeasure.raise(args);                          //!< [Pass arguments by reference]
-          }
+          else 
+            ret = Menu.OwnerMeasure.raise( OwnerMeasureMenuEventArgs<encoding>(Handle,w,l) );   //!< [Pass arguments by reference]
           break;
 
         // [PAINT] Avoid instantiating arguments if event is empty (thereby leaving update region invalidated)
         case WindowMessage::Paint:          
-          if (!Paint.empty()) {
-            PaintWindowEventArgs<encoding> args(Handle,w,l);
-            ret = Paint.raise(args);                                      //!< [Pass arguments by reference]
-          }
+          if (!Paint.empty()) 
+            ret = Paint.raise( PaintWindowEventArgs<encoding>(Handle,w,l) );  //!< [Pass arguments by reference]
           break;
 
         // [CONTROL-COLOUR] Reflect to sender

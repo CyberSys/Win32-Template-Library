@@ -207,10 +207,7 @@ namespace wtl
         case WindowMessage::CtrlColourEdit | WindowMessage::Reflect:    // (Ctrl is enabled)
         case WindowMessage::CtrlColourStatic | WindowMessage::Reflect:  // (Ctrl is disabled)
           if (!this->Colourize.empty())
-          {
-            ColourizeEventArgs<encoding> args(w,l);
-            return this->Colourize.raise(args); 
-          }
+            return this->Colourize.raise( ColourizeEventArgs<encoding>(w,l) ); 
           break;
         }
 
