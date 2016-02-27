@@ -162,7 +162,8 @@ namespace wtl
     {
       try
       {
-        LResult ret;       //!< Message result, defaults to unhandled
+        LResult  ret;       //!< Message result, defaults to unhandled
+        uint16_t code;      //!< Notification code
 
         // Examine message
         switch (message)
@@ -170,7 +171,8 @@ namespace wtl
         // [COMMAND (REFLECTED)] Raise associated event
         case WindowMessage::ReflectCommand:  
           // Extract notification
-          switch (static_cast<StaticNotification>(ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message))
+          code = ControlEventArgs<encoding,WindowMessage::Command>(w,l).Message;
+          switch (static_cast<StaticNotification>(code))
           {
           case StaticNotification::Clicked:      /* TODO: Raise notification */           break;
           case StaticNotification::DblClick:      /* TODO: Raise notification */          break;
