@@ -55,9 +55,9 @@ namespace wtl
     // Queue::Queue
     //! Create queue and populate from initializer list
     //! 
-    //! \param[in] list - List of elements
+    //! \param[in] &&list - List of elements
     /////////////////////////////////////////////////////////////////////////////////////////
-    Queue(std::initializer_list<T> list) : Items(std::forward(list))
+    Queue(std::initializer_list<T>&& list) : Items(std::forward(list))
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -127,6 +127,21 @@ namespace wtl
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
+    // Queue::emplace
+    //! Construct element at the back of the queue
+    //! 
+    //! \tparam ARGS... - Constructor argument types
+    //!
+    //! \param[in] &&... args - Element constructor arguments
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename... ARGS>
+    void emplace(ARGS&&... args)
+    {
+      // Add to back
+      Items.emplace_back(std::forward<ARGS>(args)...);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::peek
     //! Peek the first element in the queue
     //! 
@@ -148,15 +163,14 @@ namespace wtl
     // Queue::push
     //! Construct element at the back of the queue
     //! 
-    //! \param[in] &&... args - Element constructor arguments
+    //! \param[in] &&val - Element constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... ARGS>
-    void push(ARGS&&... args)
+    template <typename ARG>
+    void push(ARG&& val)
     {
       // Add to back
-      Items.emplace_back(std::forward<ARGS>(args)...);
+      Items.emplace_back(std::forward<ARG>(val));
     }
-    
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Queue::pop
