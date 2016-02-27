@@ -15,8 +15,9 @@
 #include <wtl/platform/SystemVersion.hpp>               //!< SystemVersion
 #include <wtl/utils/String.hpp>                         //!< String
 #include <wtl/windows/controls/button/Button.hpp>       //!< Button
-#include <wtl/windows/controls/checkbox/CheckBox.hpp>   //!< CheckBox
+#include <wtl/windows/controls/combobox/ComboBox.hpp>   //!< ComboBox
 #include <wtl/windows/controls/edit/Edit.hpp>           //!< Edit
+#include <wtl/windows/controls/static/Static.hpp>       //!< Static
 #include <wtl/windows/MessageWindow.hpp>                //!< MessageWindow
 
 //! \namespace wtl - Windows template library
@@ -133,7 +134,8 @@ namespace wtl
 
       // Register library window classes
       Button<encoding>::registerClass(this->handle());
-      CheckBox<encoding>::registerClass(this->handle());
+      ComboBox<encoding>::registerClass(this->handle());
+      Static<encoding>::registerClass(this->handle());
       Edit<encoding>::registerClass(this->handle());
       MessageWindow<encoding>::registerClass(this->handle());
 

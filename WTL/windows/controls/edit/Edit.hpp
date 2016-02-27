@@ -95,14 +95,14 @@ namespace wtl
   public:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Edit::registerClass 
-    //! Registers the window-class 
+    //! Registers the window-class on the first call, retrieves the pre-registered class upon subsequent calls
     //! 
-    //! \param[in] instance - Handle to registering module  [Used only during initial call]
-    //! \return const WindowClass<encoding>& - Window class 
+    //! \param[in] instance - [optional] Module for which to register the window class [Necessary on first call]
+    //! \return const WindowClass<encoding>& - Registered window class 
     //! 
     //! \throw wtl::platform_error - Unable to register window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    static const WindowClass<encoding>&  registerClass(::HINSTANCE instance) 
+    static const WindowClass<encoding>&  registerClass(::HINSTANCE instance = nullptr)
     {
       static const String<encoding> name("WTL.Edit");
       
@@ -179,7 +179,7 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     const WindowClass<encoding>& wndclass() const override
     {
-      return registerClass(nullptr);
+      return registerClass();
     }
     
   protected:
