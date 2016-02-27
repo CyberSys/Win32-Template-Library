@@ -54,6 +54,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     Static(WindowId id) : base(id)
     {
+      static const WindowClass<encoding>  std(SystemClass::Static);    //!< Lookup standard static window-class
+
       // Set properties
       this->Style = WindowStyle::ChildWindow | StaticStyle::Left;
       
@@ -61,7 +63,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard static control
-      this->SubClasses.push(getNativeSubClass());
+      this->SubClasses.emplace(std.WndProc);
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -101,21 +103,6 @@ namespace wtl
 
       // Return WTL static class
       return ctrl;
-    }
-    
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Static::getNativeSubClass 
-    //! Get the window procedure for the standard static
-    //! 
-    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard static
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass<encoding> getNativeSubClass() 
-    {
-      static const WindowClass<encoding>  std(SystemClass::Static);    //!< Lookup standard static window-class
-      
-      // Return native window proc
-      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

@@ -52,6 +52,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     ComboBox(WindowId id) : base(id)
     {
+      static const WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
+
       // Set properties
       this->Style = WindowStyle::ChildWindow | ComboBoxStyle::DropDownList;
       
@@ -59,7 +61,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard combobox control
-      this->SubClasses.push(getNativeSubClass());
+      this->SubClasses.emplace(std.WndProc);
 
       // Owner draw handlers
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &ComboBox::onOwnerDraw);
@@ -104,22 +106,7 @@ namespace wtl
       // Return WTL combobox class
       return btn;
     }
-    
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // ComboBox::getNativeSubClass 
-    //! Get the window procedure for the standard combobox
-    //! 
-    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard combobox
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass<encoding> getNativeSubClass() 
-    {
-      static const WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
-      
-      // Return native window proc
-      return { std.WndProc };
-    }
-    
+        
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
     
     // ----------------------------------- MUTATOR METHODS ----------------------------------

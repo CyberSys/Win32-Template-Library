@@ -44,28 +44,16 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     MessageWindow() 
     {
+      static const WindowClass<encoding>  std(SystemClass::MessageOnly);    //!< Lookup message-only button window-class
+
       // Compile-time subclass the window
-      this->SubClasses.push(getNativeSubClass());
+      this->SubClasses.emplace(std.WndProc);
     }
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
     
     // ----------------------------------- STATIC METHODS -----------------------------------
-  private:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // MessageWindow::getNativeSubClass 
-    //! Get the window procedure for the standard Message-only window
-    //! 
-    //! \return SubClass<encoding> - SubClass representing the window procedure of a standard Message-only window
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass<encoding> getNativeSubClass() 
-    {
-      static const WindowClass<encoding>  std(SystemClass::MessageOnly);    //!< Lookup message-only button window-class
-      
-      // Return native window proc
-      return { std.WndProc };
-    }
-    
+  
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   public:
     ///////////////////////////////////////////////////////////////////////////////

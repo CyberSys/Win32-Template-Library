@@ -64,6 +64,8 @@ namespace wtl
                           Icon(*this),
                           State(*this)
     {
+      static const WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button window-class
+
       // Set properties
       this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop | ButtonStyle::PushButton|ButtonStyle::Centre|ButtonStyle::Notify|ButtonStyle::OwnerDraw;
       
@@ -71,7 +73,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard button control
-      this->SubClasses.push(getNativeSubClass());
+      this->SubClasses.emplace(std.WndProc);
 
       // Owner draw handlers
       OwnerDraw += new OwnerDrawCtrlEventHandler<encoding>(this, &Button::onOwnerDraw);
@@ -119,21 +121,6 @@ namespace wtl
 
       // Return WTL button class
       return btn;
-    }
-    
-  private:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Button::getNativeSubClass 
-    //! Get the window procedure for the standard button
-    //! 
-    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard button
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass<encoding> getNativeSubClass() 
-    {
-      static const WindowClass<encoding>  std(SystemClass::Button);    //!< Lookup standard button window-class
-      
-      // Return native window proc
-      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			

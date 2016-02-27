@@ -71,6 +71,8 @@ namespace wtl
                         ReadOnly(*this),
                         SelectionRange(*this)
     {
+      static const WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
+
       // Set properties
       this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop|WindowStyle::VScroll|WindowStyle::Border | EditStyle::Left;
       this->StyleEx = WindowStyleEx::ClientEdge;
@@ -82,7 +84,7 @@ namespace wtl
       this->Colourize += new ColourizeEventHandler<encoding>(this, &Edit::onColourize);
 
       // Compile-time subclass the standard edit control
-      this->SubClasses.push(getNativeSubClass());
+      this->SubClasses.emplace(std.WndProc);
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -122,21 +124,6 @@ namespace wtl
 
       // Return WTL edit class
       return ctrl;
-    }
-    
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Edit::getNativeSubClass 
-    //! Get the window procedure for the standard edit
-    //! 
-    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard edit
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass<encoding> getNativeSubClass() 
-    {
-      static const WindowClass<encoding>  std(SystemClass::Edit);    //!< Lookup standard edit window-class
-      
-      // Return native window proc
-      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
