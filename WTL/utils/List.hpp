@@ -224,7 +224,7 @@ namespace wtl
     template <typename OBJ>
 		iterator insert(const_iterator pos, OBJ&& val)
     { 
-      return Items.insert(pos, std::forward(val)); 
+      return Items.insert(pos, std::forward<OBJ>(val)); 
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ namespace wtl
     template <typename OBJ>
 	  iterator insert(const_iterator pos, uint32_t count, OBJ&& val)
 		{	
-      return Items.insert(pos, count, std::forward(val));
+      return Items.insert(pos, count, std::forward<OBJ>(val));
 		}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -280,7 +280,7 @@ namespace wtl
     template <typename OBJ>
     void push_back(OBJ&& val)
     { 
-      return Items.push_back(std::forward(val)); 
+      return Items.push_back(std::forward<OBJ>(val)); 
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -323,7 +323,7 @@ namespace wtl
     template <typename OBJ>
     List& operator += (OBJ&& value)
     { 
-      emplace_back(std::forward(value)); 
+      emplace_back(std::forward<OBJ>(value)); 
       return *this; 
     }
   };

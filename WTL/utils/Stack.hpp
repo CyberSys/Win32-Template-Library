@@ -55,9 +55,9 @@ namespace wtl
     // Stack::Stack
     //! Create stack and populate from initializer list
     //! 
-    //! \param[in] list - List of elements
+    //! \param[in] &&list - List of elements
     /////////////////////////////////////////////////////////////////////////////////////////
-    Stack(std::initializer_list<T> list) : Items(std::forward(list))
+    Stack(std::initializer_list<T>&& list) : Items(std::forward(list))
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -197,7 +197,7 @@ namespace wtl
     template <typename OBJ>
     type& operator += (OBJ&& value)
     { 
-      emplace(std::forward(value)); 
+      emplace(std::forward<OBJ>(value)); 
       return *this; 
     }
   };
