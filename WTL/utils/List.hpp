@@ -317,7 +317,8 @@ namespace wtl
     //!
     //! \tparam OBJ - Element initializer type
     //!
-    //! \param[in] &&value - Item
+    //! \param[in] &&value - Element initializer
+    //! \return type& - Reference to self containing new element
     /////////////////////////////////////////////////////////////////////////////////////////
     template <typename OBJ>
     List& operator += (OBJ&& value)
