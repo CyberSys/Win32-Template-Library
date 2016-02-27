@@ -185,6 +185,21 @@ namespace wtl
       Items.pop_front();
     }
       
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Stack::operator +=
+    //! Contruct new element on the top of the stack
+    //! 
+    //! \tparam OBJ - Element initializer type
+    //!
+    //! \param[in] &&value - Element initializer
+    //! \return type& - Reference to self containing new element
+    /////////////////////////////////////////////////////////////////////////////////////////
+    template <typename OBJ>
+    type& operator += (OBJ&& value)
+    { 
+      emplace(std::forward(value)); 
+      return *this; 
+    }
   };
 
 
