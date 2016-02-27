@@ -174,6 +174,8 @@ namespace wtl
     // List::emplace
     //! Contructs an element immediately preceding 'pos'
     //!
+    //! \tparam ARGS... - Constructor argument types
+    //!
     //! \param[in] pos - Insert position
     //! \param[in] &&... args - Constructor arguments
     //! \return iterator - Position of emplaced element
@@ -187,6 +189,8 @@ namespace wtl
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::emplace_back
     //! Contructs an element at the end of the list
+    //!
+    //! \tparam ARGS... - Constructor argument types
     //!
     //! \param[in] &&... args - Constructor arguments
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -208,28 +212,35 @@ namespace wtl
       return std::find_if(Items.begin(), Items.end(), pred);
     }
     
-    
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::insert
     //! Inserts an element immediately preceding a position
     //!
+    //! \tparam OBJ - Element initializer type
+    //!
     //! \param[in] pos - Position to insert
-    //! \param[in] const& val - Element to insert
+    //! \param[in] &&val - Element to insert
     /////////////////////////////////////////////////////////////////////////////////////////
-    iterator insert(const_iterator pos, const value_type& val)   { return Items.insert(pos, val);               }
-		iterator insert(const_iterator pos, value_type&& val)        { return Items.insert(pos, std::forward(val)); }
+    template <typename OBJ>
+		iterator insert(const_iterator pos, OBJ&& val)
+    { 
+      return Items.insert(pos, std::forward(val)); 
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::insert
     //! Inserts copies of an element immediately preceding a position
     //!
+    //! \tparam OBJ - Element initializer type
+    //!
     //! \param[in] pos - Position to insert
     //! \param[in] count - Number of insert
     //! \param[in] const& val - Element to insert
     /////////////////////////////////////////////////////////////////////////////////////////
-	  iterator insert(const_iterator pos, uint32_t count, const value_type& val)
+    template <typename OBJ>
+	  iterator insert(const_iterator pos, uint32_t count, OBJ&& val)
 		{	
-      return Items.insert(pos, count, val);
+      return Items.insert(pos, count, std::forward(val));
 		}
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -240,8 +251,8 @@ namespace wtl
     //! \param[in] first - Position of first element
     //! \param[in] last - Position immediately following last element
     /////////////////////////////////////////////////////////////////////////////////////////
-	  template <class ITERATOR>
-		iterator insert(const_iterator pos, ITERATOR first, ITERATOR last)
+	  template <class InputIterator>
+		iterator insert(const_iterator pos, InputIterator first, InputIterator last)
 		{	
       return Items.insert(pos, first, last);
 		}
@@ -262,10 +273,15 @@ namespace wtl
     // List::push_back
     //! Appends an element at the end of the list
     //!
-    //! \param[in] const& e - Element to append
+    //! \tparam OBJ - Element initializer type
+    //!
+    //! \param[in] &&val - Element to append
     /////////////////////////////////////////////////////////////////////////////////////////
-    void push_back(value_type&& e)        { return Items.push_back(e); }
-    void push_back(const value_type& e)   { return Items.push_back(e); }
+    template <typename OBJ>
+    void push_back(OBJ&& val)
+    { 
+      return Items.push_back(std::forward(val)); 
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::remove_if
@@ -297,12 +313,18 @@ namespace wtl
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // List::operator +=
-    //! Append an element to the list
+    //! Append an element to the list (via emplacement)
     //!
-    //! \param[in] const& value - Item
+    //! \tparam OBJ - Element initializer type
+    //!
+    //! \param[in] &&value - Item
     /////////////////////////////////////////////////////////////////////////////////////////
-    List& operator += (const value_type& value)  { push_back(value);               return *this; }
-    List& operator += (value_type&& value)       { push_back(std::forward(value)); return *this; }
+    template <typename OBJ>
+    List& operator += (OBJ&& value)
+    { 
+      emplace_back(std::forward(value)); 
+      return *this; 
+    }
   };
 
 
