@@ -49,9 +49,12 @@ namespace wtl
   
     //! \alias base - Define base type
     using base = std::function<RET (ARGS...)>;
+    
+    //! \alias result_t - Define delegate return type
+    using result_t = RET;
 
     //! \alias signature_t - Define signature
-    using signature_t = RET (ARGS...);
+    using signature_t = result_t (ARGS...);
 
     // ----------------------------------- REPRESENTATION -----------------------------------
     
@@ -62,14 +65,14 @@ namespace wtl
     //! Create from instance method pointer
     //! 
     //! \tparam OBJ - Class containing method
-    //! \tparam R - Delegate return type
-    //! \tparam ...A - [optional] Delegate argument types
+    //! \tparam DGT_RET - Delegate return type
+    //! \tparam ...DGT_ARGS - [optional] Delegate argument types
     //!
     //! \param[in] obj - Object instance
     //! \param[in] fn - Method pointer
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename OBJ, typename R, typename... A>
-    Delegate(OBJ* obj, R (OBJ::*fn)(A...)) : base(bind(obj,fn))   
+    template <typename OBJ, typename DGT_RET, typename... DGT_ARGS>
+    Delegate(OBJ* obj, DGT_RET (OBJ::*fn)(DGT_ARGS...)) : base(bind(obj,fn))   
     {}
     
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -81,20 +84,20 @@ namespace wtl
     //! Binds the handler to a function object. Also ensures it possesses the correct signature.
     //! 
     //! \tparam OBJ - Class containing method
-    //! \tparam R - Delegate return type
-    //! \tparam ...A - Delegate argument types
+    //! \tparam DGT_RET - Delegate return type
+    //! \tparam ...DGT_ARGS - Delegate argument types
     //!
     //! \param[in] obj - Object instance
     //! \param[in] fn - Method pointer
     //! \return std::function<signature_t> - Function object encapsulating the handler
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename OBJ, typename R, typename... A>
-    static std::function<signature_t>  bind(OBJ* obj, R (OBJ::*fn)(A...))
+    template <typename OBJ, typename DGT_RET, typename... DGT_ARGS>
+    static std::function<signature_t>  bind(OBJ* obj, DGT_RET (OBJ::*fn)(DGT_ARGS...))
     {
-      concept_check(R(A...),MatchingSignature<signature_t>);
+      concept_check(DGT_RET (DGT_ARGS...),MatchingSignature<signature_t>);
 
       //! Encapsulate invoking the delegate within a lambda  (Fix for std::bind(..) bug in TDM-GCC)
-      return [=](ARGS&&... args)->RET { return (obj->*fn)(args...); };
+      return [=](DGT_ARGS&&... args)->result_t { return (obj->*fn)(std::forward<DGT_ARGS>(args)...); };
     }
                                                           
     // ---------------------------------- ACCESSOR METHODS ----------------------------------
@@ -103,13 +106,15 @@ namespace wtl
     // Delegate::operator() const
     //! Execute delegate
     //! 
-    //! \param[in,out] &&arg - Argument
-    //! \return RET - Return value
+    //! \tparam ...CALL_ARGS - Calling argument types
+    //!
+    //! \param[in,out] &&arg - Calling arguments
+    //! \return result_t - Return value
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... VARGS>
-    RET operator()(VARGS&&... args) const
+    template <typename... CALL_ARGS>
+    result_t operator()(CALL_ARGS&&... args) const
     {
-      return base::operator()(std::forward<VARGS>(args)...);
+      return base::operator()(std::forward<CALL_ARGS>(args)...);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
