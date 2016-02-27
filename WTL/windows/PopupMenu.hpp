@@ -190,7 +190,7 @@ namespace wtl
         throw platform_error(HERE, "Unable to insert menu item");
 
       // Insert Command into collection 
-      Items.insert(Items.at(idx), cmd);
+      Items.emplace(Items.at(idx), cmd);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
