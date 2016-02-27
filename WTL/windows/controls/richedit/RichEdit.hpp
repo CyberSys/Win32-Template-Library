@@ -116,6 +116,8 @@ namespace wtl
                             SelectionRange(*this),
                             SelectedText(*this)
     {
+      static const WindowClass<encoding>  std(SystemClass::RichEdit);    //!< Lookup standard rich-edit window-class
+
       // Set properties
       this->Style = WindowStyle::ChildWindow|WindowStyle::TabStop|WindowStyle::VScroll|WindowStyle::Border | RichEditStyle::Left;
       this->StyleEx = WindowStyleEx::ClientEdge;
@@ -124,7 +126,7 @@ namespace wtl
       this->Paint.clear();
 
       // Compile-time subclass the standard rich-edit control
-      this->SubClasses.push(getNativeSubClass());
+      this->SubClasses += std.WndProc;
     }
 
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -164,21 +166,6 @@ namespace wtl
 
       // Return WTL rich-edit class
       return ctrl;
-    }
-    
-  protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // RichEdit::getNativeSubClass 
-    //! Get the window procedure for the standard rich-edit
-    //! 
-    //! \return SubClass<encoding> - SubClass representing the window procedure of the standard rich-edit
-    /////////////////////////////////////////////////////////////////////////////////////////
-    static SubClass<encoding> getNativeSubClass() 
-    {
-      static const WindowClass<encoding>  std(SystemClass::RichEdit);    //!< Lookup standard rich-edit window-class
-      
-      // Return native window proc
-      return { std.WndProc };
     }
     
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
