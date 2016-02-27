@@ -23,7 +23,7 @@ namespace wtl
   //! \struct Event - Provides an observeable event pattern with multiple subscribers
   //! 
   //! \tparam RET - [optional] Handler function return type (If unspecified, no return)
-  //! \tparam SIG - [optional] Handler function signature (If unspecified, no arguments)
+  //! \tparam ARGS... - [optional] Handler function signature (If unspecified, no arguments)
   /////////////////////////////////////////////////////////////////////////////////////////
   template <typename RET = void, typename... ARGS>
   struct Event 
@@ -45,7 +45,7 @@ namespace wtl
     using result_t = RET;
 
     //! \alias signature_t - Define delegate signature
-    using signature_t = RET (ARGS...);
+    using signature_t = result_t (ARGS...);
   
     //! \var arguments - Number of arguments
     static constexpr uint32_t  arguments = sizeof...(ARGS);
@@ -95,19 +95,21 @@ namespace wtl
     // Event::invoke()
     //! Raises the event, notifying each subscriber in the order in which they subscribed
     //! 
-    //! \param[in] &&... args - [optional] Event arguments
+    //! \tparam CALL_ARGS... - Argument types provided when raised
+    //!
+    //! \param[in] &&... args - [optional] Arguments for event handler
     //! \return result_t - Result of call to final subscriber. If no subscribers then a default constructed 'result_t'
     //! 
     //! \remarks This overload is selected if the event handler has a return type other than void
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_not_same_t<RET,void>>
-    RET invoke(ARGS&&... args) const
+    template <typename = enable_if_not_same_t<RET,void>, typename... CALL_ARGS>
+    result_t invoke(CALL_ARGS&&... args) const
     {
-      RET r(defvalue<RET>());
+      result_t r(defvalue<result_t>());
 
       // Forward arguments to each subscriber
       for (auto& fn : Subscribers)
-        r = (*fn)(std::forward<ARGS>(args)...);
+        r = (*fn)(std::forward<CALL_ARGS>(args)...);
 
       // Return result
       return r;
@@ -117,16 +119,18 @@ namespace wtl
     // Event::invoke() const
     //! Raises the event, notifying each subscriber in the order in which they subscribed
     //! 
-    //! \param[in] &&... args - [optional] Event arguments
+    //! \tparam CALL_ARGS... - Argument types provided when raised
+    //!
+    //! \param[in] &&... args - [optional] Arguments for event handler
     //! 
     //! \remarks This overload is selected if the event handler has no return type
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename = enable_if_same_t<RET,void>, typename = void>
-    void invoke(ARGS&&... args) const
+    template <typename = enable_if_same_t<result_t,void>, typename = void, typename... CALL_ARGS>
+    void invoke(CALL_ARGS&&... args) const
     {
       // Forward arguments to each subscriber
       for (auto& fn : Subscribers)
-        (*fn)(std::forward<ARGS>(args)...);
+        (*fn)(std::forward<CALL_ARGS>(args)...);
     }
 
     // ----------------------------------- MUTATOR METHODS ----------------------------------
@@ -144,31 +148,33 @@ namespace wtl
     // Event::raise()
     //! Raises the event, notifying each subscriber in the order in which they subscribed
     //! 
-    //! \param[in] &&... args - [optional] Event arguments
+    //! \tparam CALL_ARGS... - Argument types provided when raised
+    //!
+    //! \param[in] &&... args - [optional] Arguments for event handler
     //! \return result_t - [Returns value] Result of call to final subscriber. If no subscribers then a default constructed 'result_t'
     //!                    [Returns void] Nothing
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename... FN_ARGS>
-    result_t raise(FN_ARGS&&... args) 
+    template <typename... CALL_ARGS>
+    result_t raise(CALL_ARGS&&... args) 
     {
       // Forward arguments to each subscriber, and capture return value (iff function signature has a return type)
-      return invoke(std::forward<FN_ARGS>(args)...);
+      return invoke(std::forward<CALL_ARGS>(args)...);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
     // Event::operator +=
     //! Adds a subscriber to the collection. Also ensures it possesses the correct signature.
     //! 
-    //! \tparam R - Delegate return type
-    //! \tparam ...A - Delegate argument types
+    //! \tparam DGT_RET - Delegate return type
+    //! \tparam DGT_ARGS... - [optional] Delegate argument types
     //!
     //! \param[in] *ptr - Pointer to subscriber (Transfers ownership to the event)
     //! \return LPARAM - Unique subscriber identifier
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <typename R, typename... A>
-    LPARAM operator += (Delegate<R,A...>* ptr) 
+    template <typename DGT_RET, typename... DGT_ARGS>
+    LPARAM operator += (Delegate<DGT_RET,DGT_ARGS...>* ptr) 
     {
-      concept_check(R(A...),MatchingSignature<signature_t>);
+      concept_check(DGT_RET (DGT_ARGS...),MatchingSignature<signature_t>);
 
       // Append to subscriber list and return address as cookie
       Subscribers.emplace_back(ptr);
