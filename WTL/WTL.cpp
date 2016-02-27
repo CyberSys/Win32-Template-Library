@@ -12,7 +12,8 @@
 #include <WTL/windows/controls/button/Button.hpp>             //!< Button
 #include <WTL/windows/controls/checkbox/CheckBox.hpp>         //!< CheckBox
 #include <WTL/windows/controls/combobox/ComboBox.hpp>         //!< ComboBox
-#include <WTL/windows/controls/edit/Edit.hpp>                 //!< Button
+#include <WTL/windows/controls/edit/Edit.hpp>                 //!< Edit
+#include <WTL/windows/controls/edit/EditLinesCollection.hpp>  //!< EditLinesCollection
 #include <WTL/windows/controls/radiobutton/RadioButton.hpp>   //!< RadioButton
 #include <WTL/windows/controls/richedit/RichEdit.hpp>         //!< RichEdit
 #include <WTL/windows/controls/static/Static.hpp>             //!< Static
@@ -85,6 +86,9 @@ namespace wtl
   //! Explicitly instantiate common encodings
   extern template Edit<Encoding::ANSI>;
   extern template Edit<Encoding::UTF16>;
+  
+  extern template EditLinesCollection<Encoding::ANSI>;
+  extern template EditLinesCollection<Encoding::UTF16>;
 
   //! Explicitly instantiate common encodings
   extern template RadioButton<Encoding::ANSI>;

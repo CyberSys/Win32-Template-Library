@@ -138,16 +138,16 @@ namespace wtl
     // Static::send
     //! Sends a static message to the window
     //! 
-    //! \tparam EM - Static Message 
+    //! \tparam SM - Static Message 
     //!
     //! \param[in] w- [optional] First parameter
     //! \param[in] l - [optional] Second parameter
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    /*template <StaticMessage EM> 
+    /*template <StaticMessage SM> 
     LResult send(::WPARAM w = 0, ::LPARAM l = 0)
     {
-      return send_message<encoding>(EM, this->Handle, w, l);
+      return send_message<encoding>(SM, this->Handle, w, l);
     }*/
     
     /////////////////////////////////////////////////////////////////////////////////////////

@@ -291,8 +291,6 @@ namespace wtl
     }
   };
 
-  template EditLinesCollection<Encoding::ANSI>;
-  template EditLinesCollection<Encoding::UTF16>;
       
 } // namespace wtl
 

@@ -149,7 +149,7 @@ namespace wtl
     template <ButtonMessage BM> 
     LResult send(::WPARAM w = 0, ::LPARAM l = 0)
     {
-      return send_message<encoding,window_msg(BM)>(this->Handle, w, l);
+      return send_message<encoding>(BM, this->Handle, w, l);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

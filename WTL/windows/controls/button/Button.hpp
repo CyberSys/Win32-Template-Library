@@ -94,7 +94,7 @@ namespace wtl
     // Button::registerClass 
     //! Registers the window-class 
     //! 
-    //! \param[in] instance - Handle to registering module  [Used only during initial call]
+    //! \param[in] instance - Module in which to register the class
     //! \return const WindowClass<encoding>& - Window class 
     //! 
     //! \throw wtl::platform_error - Unable to register window class
@@ -165,7 +165,7 @@ namespace wtl
     template <ButtonMessage BM> 
     LResult send(::WPARAM w = 0, ::LPARAM l = 0)
     {
-      return send_message<encoding,window_msg(BM)>(this->Handle, w, l);
+      return send_message<encoding>(BM, this->Handle, w, l);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////
