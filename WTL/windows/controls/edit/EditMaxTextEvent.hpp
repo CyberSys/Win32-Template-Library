@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\edut\EditMaxTextEvent.hpp
+//! \file wtl\windows\controls\edit\EditMaxTextEvent.hpp
 //! \brief Encapsulates the WM_COMMAND notification sent when the text of an Edit control changes within the 'MaxText' event
 //! \date 25 February 2016
 //! \author Nick Crowley

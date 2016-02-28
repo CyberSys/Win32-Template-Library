@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\checkbox\EditModifiedProperty.hpp
+//! \file wtl\windows\controls\edit\EditModifiedProperty.hpp
 //! \brief Separate class declaration for the Edit control 'Modified' property
 //! \date 22 November 2015
 //! \author Nick Crowley

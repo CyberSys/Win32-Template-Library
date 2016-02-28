@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//! \file wtl\windows\controls\checkbox\EditModifiedProperty.hpp
+//! \file wtl\windows\controls\edit\EditModifiedProperty.hpp
 //! \brief Separate implementation for the edit control 'Modified' property (resolves circular dependency)
 //! \date 22 November 2015
 //! \author Nick Crowley
