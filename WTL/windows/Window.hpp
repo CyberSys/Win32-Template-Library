@@ -135,6 +135,7 @@ namespace wtl
     CommandEvent<encoding>          Command;        //!< Raised in response to WM_COMMAND from menu/accelerators
     ColourizeEvent<encoding>        Colourize;      //!< Raised in response to WM_CTLCOLOR___ from controls/dialogs
     CreateWindowEvent<encoding>     Create;         //!< Raised in response to WM_CREATE
+    WindowCreatedEvent<encoding>    Created;        //!< Raised after window successfully created
     CloseWindowEvent<encoding>      Close;          //!< Raised in response to WM_CLOSE
     DestroyWindowEvent<encoding>    Destroy;        //!< Raised in response to WM_DESTROY
     LoseFocusEvent<encoding>        LoseFocus;      //!< Raised in response to WM_KILLFOCUS
@@ -519,6 +520,9 @@ namespace wtl
           if (!Menu.empty())
             ::SetMenu(Handle, Menu.handle());
         }
+
+        // [CREATED] Raise 'Created' after successful creation
+        Created.raise();
       }
       // [FAILED] Ensure weak-ref handle is cleared
       catch (std::exception&)

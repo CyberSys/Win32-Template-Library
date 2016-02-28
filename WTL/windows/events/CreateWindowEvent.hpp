@@ -129,6 +129,24 @@ namespace wtl
   template <Encoding ENC>
   using CreateWindowEventHandler = handler_t<CreateWindowEvent<ENC>>;
   
+
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias WindowCreatedEvent - Defines the signature of the 'WindowCreated' event 
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using WindowCreatedEvent = Event<LResult>;
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  //! \alias WindowCreatedEventHandler - Defines the delegate type for the 'WindowCreated' event
+  //! 
+  //! \tparam ENC - Window character encoding
+  /////////////////////////////////////////////////////////////////////////////////////////
+  template <Encoding ENC>
+  using WindowCreatedEventHandler = handler_t<WindowCreatedEvent<ENC>>;
+  
 } // namespace wtl
 
 #endif // WTL_CREATE_WINDOW_EVENT_HPP

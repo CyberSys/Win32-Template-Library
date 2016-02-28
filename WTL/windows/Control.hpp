@@ -48,7 +48,9 @@ namespace wtl
     Control(WindowId id) 
     {
       //this->Font  = StockFont::Window; 
-      this->Ident = id;  
+      this->Ident = id;
+
+      this->Created += new WindowCreatedEventHandler<encoding>(this, &Control::postCreate);
     }
   
     // -------------------------------- COPY, MOVE & DESTROY --------------------------------
@@ -61,8 +63,7 @@ namespace wtl
   protected:
     ///////////////////////////////////////////////////////////////////////////////
     // Control::onDestroy
-    //! Called during window destruction. 
-    //!  Default implementation releases the window font.
+    //! Called during window destruction. Default implementation releases the window font.
     //! 
     //! \return wtl::LResult - Does not consume message
     ///////////////////////////////////////////////////////////////////////////////
@@ -75,7 +76,20 @@ namespace wtl
       return base::onDestroy();
     }
 
-    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Control::postCreate
+    //! Called after window creation. Default implementation sets the window font.
+    //! 
+    //! \return wtl::LResult - Does not consume message
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  postCreate()
+    {
+      //! Set default window font
+      this->Font  = StockFont::Window; 
+
+      //! Consume
+      return {MsgRoute::Unhandled};
+    }
   };
 
   
