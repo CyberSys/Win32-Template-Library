@@ -776,6 +776,9 @@
     <ClInclude Include="windows\WindowId.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="windows\controls\combobox\ComboBoxItemsCollection.hpp">
+      <Filter>Windows\Controls\ComboBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gdi\DeviceContext.cpp">

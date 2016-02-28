@@ -9,8 +9,9 @@
 #define WTL_COMBOBOX_HPP
 
 #include <wtl/WTL.hpp>
-#include <wtl/windows/Control.hpp>                                //!< Control
-#include <wtl/windows/controls/combobox/ComboBoxConstants.hpp>    //!< (Constants)
+#include <wtl/windows/Control.hpp>                                      //!< Control
+#include <wtl/windows/controls/combobox/ComboBoxConstants.hpp>          //!< (Constants)
+#include <wtl/windows/controls/combobox/ComboBoxItemsCollection.hpp>    //!< ComboBoxItemsCollection
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -127,16 +128,16 @@ namespace wtl
     // ComboBox::send
     //! Sends a combobox message to the window
     //! 
-    //! \tparam BM - ComboBox Message 
+    //! \tparam CM - ComboBox Message 
     //!
     //! \param[in] w- [optional] First parameter
     //! \param[in] l - [optional] Second parameter
     //! \return LResult - Message result and routing
     /////////////////////////////////////////////////////////////////////////////////////////
-    template <ButtonMessage BM> 
+    template <ComboBoxMessage CM> 
     LResult send(::WPARAM w = 0, ::LPARAM l = 0)
     {
-      return send_message<encoding>(BM, this->Handle, w, l);
+      return send_message<encoding>(CM, this->Handle, w, l);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////

@@ -172,6 +172,7 @@
     <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.hpp" />
     <ClInclude Include="windows\controls\combobox\ComboBox.hpp" />
     <ClInclude Include="windows\controls\combobox\ComboBoxConstants.hpp" />
+    <ClInclude Include="windows\controls\combobox\ComboBoxItemsCollection.hpp" />
     <ClInclude Include="windows\controls\edit\Edit.hpp" />
     <ClInclude Include="windows\controls\edit\EditChangedEvent.hpp" />
     <ClInclude Include="windows\controls\edit\EditConstants.hpp" />
