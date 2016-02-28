@@ -54,7 +54,17 @@ namespace wtl
     constexpr 
     MsgResult() noexcept : Route(MsgRoute::Unhandled), Result(-1)
     {}
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //! MsgResult::MsgResult
+    //! This overload only exists to enable handles to use a clearer syntax to indicate unhandled messages 
+    //! 
+    //! \param[in] - Ignored
+    /////////////////////////////////////////////////////////////////////////////////////////
+    constexpr 
+    MsgResult(MsgRoute) noexcept : Route(MsgRoute::Unhandled), Result(-1)
+    {}
+    
     /////////////////////////////////////////////////////////////////////////////////////////
     //! MsgResult::MsgResult
     //! Create 'handled' result from a value
