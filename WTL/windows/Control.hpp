@@ -10,7 +10,7 @@
 
 #include <wtl/WTL.hpp>
 #include <wtl/windows/Window.hpp>                 //!< Window
-#include <wtl/platform/ControlStyles.hpp>         //!< ()
+//#include <wtl/platform/ControlStyles.hpp>         //!< (various)
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -59,18 +59,22 @@ namespace wtl
   
     // ----------------------------------- MUTATOR METHODS ----------------------------------
   protected:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Control::onCreate
-    //! Called during window creation to modify window parameters and create child windows
+    ///////////////////////////////////////////////////////////////////////////////
+    // Control::onDestroy
+    //! Called during window destruction. 
+    //!  Default implementation releases the window font.
     //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Routing indicating message was not handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //LResult  onCreate(CreateWindowEventArgs<encoding>& args) override
-    //{ 
-    //  // [Unhandled] Default action is to route message to subclass
-    //  return {MsgRoute::Unhandled, 0};
-    //}
+    //! \return wtl::LResult - Does not consume message
+    ///////////////////////////////////////////////////////////////////////////////
+    LResult  onDestroy() override
+    { 
+      // Release custom font, if any
+      this->Font = StockFont::System;
+
+      // [Unhandled] Pass to base
+      return base::onDestroy();
+    }
+
     
   };
 
