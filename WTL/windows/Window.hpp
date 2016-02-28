@@ -786,7 +786,7 @@ namespace wtl
     //! Called during window destruction. 
     //!  Default implementation destroys all child windows.
     //! 
-    //! \return wtl::LResult - Routing indicating message was unhandled
+    //! \return wtl::LResult - Does not consume message
     ///////////////////////////////////////////////////////////////////////////////
     virtual LResult  onDestroy() 
     { 
@@ -794,7 +794,7 @@ namespace wtl
       this->Children.clear();
 
       // [Unhandled] Pass to subclass, if any
-      return {wtl::MsgRoute::Unhandled, 0};
+      return {wtl::MsgRoute::Unhandled};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
