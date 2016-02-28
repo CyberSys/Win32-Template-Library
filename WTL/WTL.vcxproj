@@ -170,6 +170,8 @@
     <ClInclude Include="windows\controls\checkbox\CheckBoxCheckedEvent.hpp" />
     <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.h" />
     <ClInclude Include="windows\controls\checkbox\CheckBoxCheckProperty.hpp" />
+    <ClInclude Include="windows\controls\combobox\ComboBoxMinVisibleProperty.h" />
+    <ClInclude Include="windows\controls\combobox\ComboBoxMinVisibleProperty.hpp" />
     <ClInclude Include="windows\controls\combobox\ComboBox.hpp" />
     <ClInclude Include="windows\controls\combobox\ComboBoxConstants.hpp" />
     <ClInclude Include="windows\controls\combobox\ComboBoxItemsCollection.hpp" />

@@ -12,6 +12,7 @@
 #include <wtl/windows/Control.hpp>                                      //!< Control
 #include <wtl/windows/controls/combobox/ComboBoxConstants.hpp>          //!< (Constants)
 #include <wtl/windows/controls/combobox/ComboBoxItemsCollection.hpp>    //!< ComboBoxItemsCollection
+#include <wtl/windows/controls/combobox/ComboBoxMinVisibleProperty.h>   //!< ComboBoxMinVisibleProperty
 
 //! \namespace wtl - Windows template library
 namespace wtl 
@@ -37,9 +38,15 @@ namespace wtl
     
     // ----------------------------------- REPRESENTATION -----------------------------------
     
+    // Data
+    ComboBoxItemsCollection<encoding>     Items;          //!< Items 
+
+    // Properties
+    ComboBoxMinVisibleProperty<encoding>  MinVisible;     //!< Minimum number of visible items
+
     // Events
-    OwnerDrawCtrlEvent<encoding>      OwnerDraw;     //!< OwnerDraw 
-    OwnerMeasureCtrlEvent<encoding>   OwnerMeasure;  //!< OwnerMeasure 
+    OwnerDrawCtrlEvent<encoding>          OwnerDraw;      //!< OwnerDraw 
+    OwnerMeasureCtrlEvent<encoding>       OwnerMeasure;   //!< OwnerMeasure 
     
     // ------------------------------------ CONSTRUCTION ------------------------------------
     
@@ -51,12 +58,14 @@ namespace wtl
     //! 
     //! \throw wtl::platform_error - Unrecognised system window class
     /////////////////////////////////////////////////////////////////////////////////////////
-    ComboBox(WindowId id) : base(id)
+    ComboBox(WindowId id) : base(id), 
+                            Items(*this),
+                            MinVisible(*this)
     {
       static const WindowClass<encoding>  std(SystemClass::ComboBox);    //!< Lookup standard combobox window-class
 
       // Set properties
-      this->Style = WindowStyle::ChildWindow | ComboBoxStyle::DropDownList;
+      this->Style = WindowStyle::ChildWindow | ComboBoxStyle::DropDownList|ComboBoxStyle::HasStrings;
       
       // Clear paint handlers (Handled by subclass)
       this->Paint.clear();
@@ -242,7 +251,7 @@ namespace wtl
   
 } // namespace wtl
 
-#include <wtl/windows/controls/button/ButtonIconProperty.hpp>      //!< IconProperty
-#include <wtl/windows/controls/button/ButtonStateProperty.hpp>     //!< StateProperty
+
+#include <wtl/windows/controls/combobox/ComboBoxMinVisibleProperty.hpp>   //!< ComboBoxMinVisibleProperty
 
 #endif // WTL_COMBOBOX_HPP
