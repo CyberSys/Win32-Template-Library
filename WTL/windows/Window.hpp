@@ -777,7 +777,7 @@ namespace wtl
     }
     
     ///////////////////////////////////////////////////////////////////////////////
-    // MainWindow::onDestroy
+    // Window::onDestroy
     //! Called during window destruction to destroy all child windows
     //! 
     //! \return wtl::LResult - Routing indicating message was handled
