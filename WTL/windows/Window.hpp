@@ -200,8 +200,7 @@ namespace wtl
                Visible(*this, false),
                WindowRect(*this)
     {
-      // Create/destroy events: Accept window creation parameters and destroy children upon destruction
-      Create += new CreateWindowEventHandler<encoding>(this, &Window::onCreate);
+      // Create/destroy events: Destroy children upon destruction
       Destroy += new DestroyWindowEventHandler<encoding>(this, &Window::onDestroy);
       
       // Command events: Execute gui commands by default
@@ -762,53 +761,60 @@ namespace wtl
       }
     }
     
-  private:
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::onCreate
-    //! Called during window creation to modify window parameters and create child windows
-    //! 
-    //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onCreate(CreateWindowEventArgs<encoding>& args) 
-    { 
-      // [Handled] Accept window parameters
-      return {MsgRoute::Handled, 0};
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    // Window::onDestroy
-    //! Called during window destruction to destroy all child windows
-    //! 
-    //! \return wtl::LResult - Routing indicating message was handled
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onDestroy() 
-    { 
-      // Destroy child windows
-      this->Children.clear();
-
-      // [Handled] 
-      return {wtl::MsgRoute::Handled, 0};
-    }
-
+  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::onCommand
     //! Called in response to a command raised by menu or accelerator (ie. WM_COMMAND)
+    //!  Default implementation executes associated GUI command
     //! 
     //! \param[in] args - Message arguments 
     //! \return LResult - Routing indicating message was handled
     //! 
     //! \throw wtl::logic_error - Gui command not recognised
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCommand(CommandEventArgs<encoding> args) 
+    virtual LResult  onCommand(CommandEventArgs<encoding> args) 
     { 
       // Execute associated command
       execute(args.Ident);
 
-      // Handled
+      // [Handled]
+      return {MsgRoute::Handled, 0};
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    // Window::onDestroy
+    //! Called during window destruction. 
+    //!  Default implementation destroys all child windows.
+    //! 
+    //! \return wtl::LResult - Routing indicating message was unhandled
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onDestroy() 
+    { 
+      // Destroy child windows
+      this->Children.clear();
+
+      // [Unhandled] Pass to subclass, if any
+      return {wtl::MsgRoute::Unhandled, 0};
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Window::onPaint
+    //! Called to paint the client area of the window
+    //!  Default implementation delegates to the current skin
+    //! 
+    //! \param[in,out] args - Message arguments containing drawing data
+    //! \return LResult - Routing indicating message was handled
+    /////////////////////////////////////////////////////////////////////////////////////////
+    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
+    { 
+      // Perform fallback drawing
+      SkinFactory<encoding>::get()->draw(*this, args.Graphics, args.Rect);
+
+      // [Handled]
       return {MsgRoute::Handled, 0};
     }
 
+  private:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Window::onMouseLeave
     //! Called to clear 'IsMouseOver' flag when cursor leaves window
@@ -852,23 +858,7 @@ namespace wtl
 
       // Pass-through message
       return {MsgRoute::Unhandled, -1};
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    // Window::onPaint
-    //! Called to paint the client area of the window
-    //! 
-    //! \param[in,out] args - Message arguments containing drawing data
-    //! \return LResult - Routing indicating message was handled
-    /////////////////////////////////////////////////////////////////////////////////////////
-    virtual LResult  onPaint(PaintWindowEventArgs<encoding>& args) 
-    { 
-      // Perform fallback drawing
-      SkinFactory<encoding>::get()->draw(*this, args.Graphics, args.Rect);
-
-      // Handle message
-      return {MsgRoute::Handled, 0};
-    }
+    }    
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////

@@ -47,7 +47,7 @@ namespace wtl
     ///////////////////////////////////////////////////////////////////////////////
     Control(WindowId id) 
     {
-      this->Font  = StockFont::Window; 
+      //this->Font  = StockFont::Window; 
       this->Ident = id;  
     }
   
@@ -58,7 +58,7 @@ namespace wtl
     // ---------------------------------- ACCESSOR METHODS ----------------------------------			
   
     // ----------------------------------- MUTATOR METHODS ----------------------------------
-  private:
+  protected:
     /////////////////////////////////////////////////////////////////////////////////////////
     // Control::onCreate
     //! Called during window creation to modify window parameters and create child windows
@@ -66,11 +66,11 @@ namespace wtl
     //! \param[in,out] &args - Message arguments 
     //! \return LResult - Routing indicating message was not handled
     /////////////////////////////////////////////////////////////////////////////////////////
-    LResult  onCreate(CreateWindowEventArgs<encoding>& args) override
-    { 
-      // [Unhandled] Default action is to route message to subclass
-      return {MsgRoute::Unhandled, 0};
-    }
+    //LResult  onCreate(CreateWindowEventArgs<encoding>& args) override
+    //{ 
+    //  // [Unhandled] Default action is to route message to subclass
+    //  return {MsgRoute::Unhandled, 0};
+    //}
     
   };
 
