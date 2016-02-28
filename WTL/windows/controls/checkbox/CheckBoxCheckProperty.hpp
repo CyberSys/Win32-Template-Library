@@ -52,7 +52,7 @@ namespace wtl
   //! Called during button creation to set the initial state
   //! 
   //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Routing indicating message was handled
+  //! \return LResult - Does not consume message
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   LResult  CheckBoxCheckPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
@@ -61,8 +61,8 @@ namespace wtl
     if (this->Window.exists())
       this->Window.send(ButtonMessage::SetCheck, enum_cast(base::get())); 
 
-    // Accept button creation
-    return {MsgRoute::Handled, 0};
+    // [Do not consume message]
+    return {MsgRoute::Unhandled};
   }
     
   /////////////////////////////////////////////////////////////////////////////////////////

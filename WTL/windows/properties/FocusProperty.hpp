@@ -44,7 +44,7 @@ namespace wtl
   //! Called during window creation to set the initial font
   //! 
   //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Routing indicating message was handled 
+  //! \return LResult - Does not consume message
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   LResult FocusPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
@@ -55,8 +55,8 @@ namespace wtl
     if (base::get())
       this->Window.focus(); 
     
-    // [Accept window creation]
-    return {MsgRoute::Handled, 0};
+    //! [Do not consume message]
+    return {MsgRoute::Unhandled};
   }
       
 } // namespace wtl

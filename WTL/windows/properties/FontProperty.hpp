@@ -60,7 +60,7 @@ namespace wtl
   //! Called during window creation to set the initial font
   //! 
   //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Routing indicating message was handled 
+  //! \return LResult - Does not consume message
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   LResult FontPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
@@ -70,8 +70,8 @@ namespace wtl
     // Set new window font 
     this->Window.send(WindowMessage::SetFont, opaque_cast(this->Value.get()), boolean_cast(redraw)); 
 
-    // [Accept window creation]
-    return {MsgRoute::Handled, 0};
+    // [Do not consume]
+    return {MsgRoute::Unhandled};
   }
 } // namespace wtl
 

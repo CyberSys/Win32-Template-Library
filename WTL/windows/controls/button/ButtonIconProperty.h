@@ -98,7 +98,7 @@ namespace wtl
     //! Called during button creation to set the initial icon
     //! 
     //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Returns 0 to accept button creation
+    //! \return LResult - Does not consume message
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onCreate(CreateWindowEventArgs<ENC>& args);
   };

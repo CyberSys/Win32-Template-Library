@@ -40,7 +40,7 @@ namespace wtl
   //! Called during button creation to set the initial icon
   //! 
   //! \param[in,out] &args - Message arguments 
-  //! \return LResult - Returns 0 to accept button creation
+  //! \return LResult - Does not consume message
   /////////////////////////////////////////////////////////////////////////////////////////
   template <Encoding ENC>
   LResult  ButtonIconPropertyImpl<ENC>::onCreate(CreateWindowEventArgs<ENC>& args)
@@ -49,8 +49,8 @@ namespace wtl
     if (this->exists() && this->Window.exists())
       this->Window.send(ButtonMessage::SetImage, IMAGE_ICON, opaque_cast(this->Value.get())); 
 
-    // Accept button creation
-    return 0;
+    // [Do not consume]
+    return {MsgRoute::Unhandled};
   }
     
   /////////////////////////////////////////////////////////////////////////////////////////

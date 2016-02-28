@@ -89,7 +89,7 @@ namespace wtl
     //! Called during window creation to set the initial font
     //! 
     //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Returns 0 to accept window creation
+    //! \return LResult - Does not consume message
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onCreate(CreateWindowEventArgs<ENC>& args);
   };

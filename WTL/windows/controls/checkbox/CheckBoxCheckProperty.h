@@ -86,7 +86,7 @@ namespace wtl
     //! Called during button creation to set the initial state
     //! 
     //! \param[in,out] &args - Message arguments 
-    //! \return LResult - Routing indicating message was handled
+    //! \return LResult - Does not consume message
     /////////////////////////////////////////////////////////////////////////////////////////
     LResult  onCreate(CreateWindowEventArgs<ENC>& args);
   };
